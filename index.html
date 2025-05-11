@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>Marks Upload Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f8f9fa;
+    }
+    h1 {
+      margin-top: 20px;
+      color: #2e5a9f;
+    }
+    h1 img {
+      height: 60px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    .date {
+      margin-bottom: 30px;
+      color: #333;
+      font-size: 18px;
+    }
+    .class-block {
+      background: white;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .class-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #444;
+    }
+    .exam-buttons button {
+      margin: 6px;
+      display: inline-block;
+      background: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .exam-buttons button:hover {
+      background: #388E3C;
+    }
+    .hidden-form {
+      display: none;
+    }
+    .form-popup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    .form-popup input {
+      margin: 5px;
+      padding: 8px;
+      width: 80%;
+    }
+    .form-popup button {
+      margin-top: 10px;
+      padding: 8px 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>
+  <img src="PHS-LOGO-JPEJ.jpg" alt="School Logo">
+  পাতপুর হাই স্কুল (উচ্চ. মা.)
+</h1>
+<div class="date">মার্কস আপলোডিং-এর তারিখ: ১১ মে ২০২৫</div>
+
+<script>
+  function openForm(link) {
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("targetLink").value = link;
+  }
+
+  function closeForm() {
+    document.getElementById("loginForm").style.display = "none";
+  }
+
+  function checkPassword() {
+    var id = document.getElementById("userId").value;
+    var pw = document.getElementById("password").value;
+    var link = document.getElementById("targetLink").value;
+    if (id === "Admin" && pw === "1234") {
+      window.open(link, "_blank");
+      closeForm();
+    } else {
+      alert("ভুল ID বা PASSWORD!");
+    }
+  }
+</script>
+
+<div class="form-popup" id="loginForm">
+  <h3>লিঙ্ক অ্যাক্সেস করার জন্য লগইন করুন</h3>
+  <input type="text" id="userId" placeholder="ID"><br>
+  <input type="password" id="password" placeholder="PASSWORD"><br>
+  <input type="hidden" id="targetLink">
+  <button onclick="checkPassword()">SUBMIT</button>
+  <button onclick="closeForm()">CANCEL</button>
+</div>
+
+    <div class="class-block">
+      <div class="class-title">CLASS 5</div>
+      <div class="exam-buttons">
+        <button onclick="openForm('https://example.com/class5_exam1')">1st Exam</button>
+        <button onclick="openForm('https://example.com/class5_exam2')">2nd Exam</button>
+        <button onclick="openForm('https://example.com/class5_exam3')">3rd Exam</button>
+      </div>
+    </div>
+    
+    <div class="class-block">
+      <div class="class-title">CLASS 6</div>
+      <div class="exam-buttons">
+        <button onclick="openForm('https://example.com/class6_exam1')">1st Exam</button>
+        <button onclick="openForm('https://example.com/class6_exam2')">2nd Exam</button>
+        <button onclick="openForm('https://example.com/class6_exam3')">3rd Exam</button>
+      </div>
+    </div>
+    
+    <div class="class-block">
+      <div class="class-title">CLASS 7</div>
+      <div class="exam-buttons">
+        <button onclick="openForm('https://example.com/class7_exam1')">1st Exam</button>
+        <button onclick="openForm('https://example.com/class7_exam2')">2nd Exam</button>
+        <button onclick="openForm('https://example.com/class7_exam3')">3rd Exam</button>
+      </div>
+    </div>
+    
+    <div class="class-block">
+      <div class="class-title">CLASS 8</div>
+      <div class="exam-buttons">
+        <button onclick="openForm('https://example.com/class8_exam1')">1st Exam</button>
+        <button onclick="openForm('https://example.com/class8_exam2')">2nd Exam</button>
+        <button onclick="openForm('https://example.com/class8_exam3')">3rd Exam</button>
+      </div>
+    </div>
+    
+    <div class="class-block">
+      <div class="class-title">CLASS 9</div>
+      <div class="exam-buttons">
+        <button onclick="openForm('https://example.com/class9_exam1')">1st Exam</button>
+        <button onclick="openForm('https://example.com/class9_exam2')">2nd Exam</button>
+        <button onclick="openForm('https://example.com/class9_exam3')">3rd Exam</button>
+      </div>
+    </div>
+    
+    <div class="class-block">
+      <div class="class-title">CLASS 10</div>
+      <div class="exam-buttons">
+        <button onclick="openForm('https://example.com/class10_exam1')">1st Exam</button>
+        <button onclick="openForm('https://example.com/class10_exam2')">2nd Exam</button>
+        <button onclick="openForm('https://example.com/class10_exam3')">3rd Exam</button>
+      </div>
+    </div>
+    
+</body>
+</html>
