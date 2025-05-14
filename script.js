@@ -1,4 +1,3 @@
-
 let credentials = {};
 
 fetch('config.json')
@@ -13,14 +12,19 @@ let currentKey = '';
 function renderButtons() {
     const container = document.getElementById('exam-buttons');
     container.innerHTML = '';
+
+    // Extract unique class names from the keys (before the first underscore)
     const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
+
     classes.forEach(cls => {
         const title = document.createElement('div');
         title.className = 'class-title';
-        title.textContent = 'CLASS ' + cls.replace('X_TEST', 'X');
+        title.textContent = 'CLASS ' + (cls === 'X' ? 'X' : cls); // Display CLASS X instead of X_TEST
         container.appendChild(title);
+
         Object.entries(credentials).forEach(([key, value]) => {
-            if (key.startsWith(cls)) {
+            // ✅ Corrected condition to prevent partial matches (e.g., V matching VI)
+            if (key.split('_')[0] === cls) {
                 const a = document.createElement('a');
                 a.className = 'exam-link';
                 a.textContent = key.split('_')[1].replace('TEST', 'TEST EXAM');
