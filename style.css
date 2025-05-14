@@ -1,4 +1,3 @@
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f8ff;
@@ -66,4 +65,31 @@ footer {
     margin-top: 50px;
     color: #555;
     font-size: 14px;
+}
+#adminDialog label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+#adminDialog input[type="text"],
+#adminDialog input[type="password"] {
+    width: calc(100% - 12px);
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+#adminDialog button {
+    padding: 10px 15px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: darkblue;
+    cursor: pointer;
+    font-weight: bold;
+}
+#adminDialog button:hover {
+    background-color: navy;
 }
