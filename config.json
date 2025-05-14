@@ -1,92 +1,122 @@
 {
-  "V_1ST": {
-    "id": "RESULT5",
-    "pass": "V@2025",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ESnjptIwCWNEuJWzlHOKsuMB5J28wLWxUb9P9sJdZVG6cA?e=55ArZJ"
-  },
-  "V_2ND": {
-    "id": "RESULT5",
-    "pass": "V@2025",
-    "url": "https://onedrive.com/demo2"
-  },
-  "V_3RD": {
-    "id": "RESULT5",
-    "pass": "V@2025",
-    "url": "https://onedrive.com/demo3"
-  },
-  "VI_1ST": {
-    "id": "RESULT6",
-    "pass": "VI@2025",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ER0B-GxPtLdIs1SVY2b6yPIBydQP_JQqOy94N_vP3v-IzQ?e=dZimBG"
-  },
-  "VI_2ND": {
-    "id": "RESULT6",
-    "pass": "VI@2025",
-    "url": "https://onedrive.com/demo5"
-  },
-  "VI_3RD": {
-    "id": "RESULT6",
-    "pass": "VI@2025",
-    "url": "https://onedrive.com/demo6"
-  },
-  "VII_1ST": {
-    "id": "RESULT7",
-    "pass": "VII@2025",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EQvcYO6acbtHs4WAI_5oXLABUrAJRwxG-vB1Aj5aq91Avg?e=iqED3A"
-  },
-  "VII_2ND": {
-    "id": "RESULT7",
-    "pass": "VII@2025",
-    "url": "https://onedrive.com/demo8"
-  },
-  "VII_3RD": {
-    "id": "RESULT7",
-    "pass": "VII@2025",
-    "url": "https://onedrive.com/demo9"
-  },
-  "VIII_1ST": {
-    "id": "RESULT8",
-    "pass": "VIII@2025",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EbrIrFPMf4hMhrarC-GRQzQBKAuaKRvaaEIXBL05FCF9PQ?e=jjjdvI"
-  },
-  "VIII_2ND": {
-    "id": "RESULT8",
-    "pass": "VIII@2025",
-    "url": "https://onedrive.com/demo11"
-  },
-  "VIII_3RD": {
-    "id": "RESULT8",
-    "pass": "VIII@2025",
-    "url": "https://onedrive.com/demo12"
-  },
-  "IX_1ST": {
-    "id": "RESULT9",
-    "pass": "IX@2025",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EWjWWnQWafBKuOq3bA4zZPkB3A6aHnR1lMIGZRtrrGN5zA?e=3Klnv8"
-  },
-  "IX_2ND": {
-    "id": "RESULT9",
-    "pass": "IX@2025",
-    "url": "https://onedrive.com/demo14"
-  },
-  "IX_3RD": {
-    "id": "RESULT9",
-    "pass": "IX@2025",
-    "url": "https://onedrive.com/demo15"
-  },
-  "X_1ST": {
-    "id": "RESULT10",
-    "pass": "X@2025",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EUz9bCpGbNNKt4WzYrDOlRwB7LsRKmQlx6tGy3FRu0CcVw?e=bJowKi"
-  },
-  "X_2ND": {
-    "id": "RESULT10",
-    "pass": "X@2025",
-    "url": "https://onedrive.com/demo17"
-  },
-  "X_TEST": {
-    "id": "RESULT10",
-    "pass": "X@2025",
-    "url": "https://onedrive.com/demo18"
-  }
+  "CLASS_V": [
+    {
+      "id": "V_1ST_ID",
+      "password": "V_1ST_PASS",
+      "link": "https://example.com/class_v/1st_exam",
+      "name": "1st Exam"
+    },
+    {
+      "id": "V_2ND_ID",
+      "password": "V_2ND_PASS",
+      "link": "https://example.com/class_v/2nd_exam",
+      "name": "2nd Exam"
+    },
+    {
+      "id": "V_3RD_ID",
+      "password": "V_3RD_PASS",
+      "link": "https://example.com/class_v/3rd_exam",
+      "name": "3rd Exam"
+    }
+  ],
+  "CLASS_VI": [
+    {
+      "id": "VI_1ST_ID",
+      "password": "VI_1ST_PASS",
+      "link": "https://example.com/class_vi/1st_exam",
+      "name": "1st Exam"
+    },
+    {
+      "id": "VI_2ND_ID",
+      "password": "VI_2ND_PASS",
+      "link": "https://example.com/class_vi/2nd_exam",
+      "name": "2nd Exam"
+    },
+    {
+      "id": "VI_3RD_ID",
+      "password": "VI_3RD_PASS",
+      "link": "https://example.com/class_vi/3rd_exam",
+      "name": "3rd Exam"
+    }
+  ],
+  "CLASS_VII": [
+    {
+      "id": "VII_1ST_ID",
+      "password": "VII_1ST_PASS",
+      "link": "https://example.com/class_vii/1st_exam",
+      "name": "1st Exam"
+    },
+    {
+      "id": "VII_2ND_ID",
+      "password": "VII_2ND_PASS",
+      "link": "https://example.com/class_vii/2nd_exam",
+      "name": "2nd Exam"
+    },
+    {
+      "id": "VII_3RD_ID",
+      "password": "VII_3RD_PASS",
+      "link": "https://example.com/class_vii/3rd_exam",
+      "name": "3rd Exam"
+    }
+  ],
+  "CLASS_VIII": [
+    {
+      "id": "VIII_1ST_ID",
+      "password": "VIII_1ST_PASS",
+      "link": "https://example.com/class_viii/1st_exam",
+      "name": "1st Exam"
+    },
+    {
+      "id": "VIII_2ND_ID",
+      "password": "VIII_2ND_PASS",
+      "link": "https://example.com/class_viii/2nd_exam",
+      "name": "2nd Exam"
+    },
+    {
+      "id": "VIII_3RD_ID",
+      "password": "VIII_3RD_PASS",
+      "link": "https://example.com/class_viii/3rd_exam",
+      "name": "3rd Exam"
+    }
+  ],
+  "CLASS_IX": [
+    {
+      "id": "IX_1ST_ID",
+      "password": "IX_1ST_PASS",
+      "link": "https://example.com/class_ix/1st_exam",
+      "name": "1st Exam"
+    },
+    {
+      "id": "IX_2ND_ID",
+      "password": "IX_2ND_PASS",
+      "link": "https://example.com/class_ix/2nd_exam",
+      "name": "2nd Exam"
+    },
+    {
+      "id": "IX_3RD_ID",
+      "password": "IX_3RD_PASS",
+      "link": "https://example.com/class_ix/3rd_exam",
+      "name": "3rd Exam"
+    }
+  ],
+  "CLASS_X": [
+    {
+      "id": "X_1ST_ID",
+      "password": "X_1ST_PASS",
+      "link": "https://example.com/class_x/1st_exam",
+      "name": "1st Exam"
+    },
+    {
+      "id": "X_2ND_ID",
+      "password": "X_2ND_PASS",
+      "link": "https://example.com/class_x/2nd_exam",
+      "name": "2nd Exam"
+    },
+    {
+      "id": "X_TEST_ID",
+      "password": "X_TEST_PASS",
+      "link": "https://example.com/class_x/test_exam",
+      "name": "Test Exam"
+    }
+  ]
 }
