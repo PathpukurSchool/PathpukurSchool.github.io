@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +7,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+    <img src="https://via.placeholder.com/150?text=School+Logo" alt="School Logo" class="logo">
     <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
     <h2>Welcome to the marks uploading portal</h2>
 
-    <div id="exam-buttons"></div>
+    <div id="classLinks">
+        </div>
 
     <dialog id="loginDialog">
         <h3>Login to access the marks uploading link</h3>
@@ -28,6 +28,16 @@
             <div id="loginError" class="error"></div>
             <button onclick="submitLogin()">LOGIN</button>
             <button onclick="closeLogin()">CANCEL</button>
+        </form>
+    </dialog>
+
+    <dialog id="adminDialog">
+        <h3>Admin Panel</h3>
+        <form id="adminForm">
+            <button type="button" onclick="saveConfig()">Save Changes</button>
+            <button type="button" onclick="closeAdmin()">Close</button>
+            <div id="adminError" class="error"></div>
+            <div id="adminSuccess" style="color: green; margin-top: 10px;"></div>
         </form>
     </dialog>
 
