@@ -1,24 +1,46 @@
 let credentials = {};
+let masterCredential = {};
 
-// config.json ফাইল লোড করে credentials ভরাট
-fetch('config.json')
+// মাস্টার লগইনের তথ্য লোড
+fetch('masterConfig.json')
     .then(response => response.json())
     .then(data => {
-        credentials = data;
-        renderButtons();
+        masterCredential = data;
     });
+
+// মাস্টার লগইন যাচাই
+function submitMasterLogin() {
+    const id = document.getElementById('masterId').value;
+    const pass = document.getElementById('masterPass').value;
+
+    if (id === masterCredential.id && pass === masterCredential.pass) {
+        document.getElementById('masterLoginOverlay').style.display = 'none';
+        loadExamLinks(); // মূল ডেটা লোড
+    } else {
+        document.getElementById('masterLoginError').innerText = 'Incorrect ID or Password!';
+    }
+}
+
+// এক্সাম লিংক লোড (মাস্টার লগইন সফল হলে)
+function loadExamLinks() {
+    fetch('config.json')
+        .then(response => response.json())
+        .then(data => {
+            credentials = data;
+            renderButtons();
+        });
+}
 
 let currentKey = '';
 
-// বোতাম তৈরির ফাংশন
+// এক্সাম লিংক তৈরি ও দেখানো
 function renderButtons() {
     const container = document.getElementById('exam-buttons');
     container.innerHTML = '';
 
-    // ইউনিক ক্লাস লিস্ট তৈরি করা
+    // ইউনিক ক্লাস তালিকা তৈরি
     const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
 
-    // প্রতিটি ক্লাসের জন্য হেডার ও বোতাম তৈরি করা
     classes.forEach(cls => {
         const title = document.createElement('div');
         title.className = 'class-title';
@@ -26,7 +48,6 @@ function renderButtons() {
         container.appendChild(title);
 
         const exams = ['1ST', '2ND', '3RD', 'TEST'];
-
         exams.forEach(exam => {
             const key = `${cls}_${exam}`;
             if (credentials[key]) {
@@ -41,7 +62,7 @@ function renderButtons() {
     });
 }
 
-// লগইন ডায়ালগ খুলে দেওয়া
+// প্রতিটি এক্সাম লিংকের জন্য সাব-লগইন
 function openLogin(key) {
     currentKey = key;
     document.getElementById('loginId').value = '';
@@ -50,12 +71,12 @@ function openLogin(key) {
     document.getElementById('loginDialog').showModal();
 }
 
-// লগইন ডায়ালগ বন্ধ করা
+// সাব-লগইন বন্ধ
 function closeLogin() {
     document.getElementById('loginDialog').close();
 }
 
-// লগইন যাচাই ও রিডাইরেকশন
+// সাব-লগইন যাচাই করে লিংক খোলা
 function submitLogin() {
     const id = document.getElementById('loginId').value;
     const pass = document.getElementById('loginPassword').value;
