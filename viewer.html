@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Exam Link</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="examFrame" src=""></iframe>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const examUrl = urlParams.get('url');
+    if (examUrl) {
+      document.getElementById('examFrame').src = decodeURIComponent(examUrl);
+    } else {
+      document.body.innerHTML = "<h2 style='text-align:center;'>Invalid Link</h2>";
+    }
+  </script>
+</body>
+</html>
