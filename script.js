@@ -89,3 +89,23 @@ function submitLogin() {
         document.getElementById('loginError').innerText = 'Incorrect ID or Password!';
     }
 }
+// NOTICE & HELP লোড করা
+fetch('files.json')
+    .then(response => response.json())
+    .then(data => {
+        populateList('notice-list', data.notices);
+        populateList('help-list', data.help);
+    });
+
+function populateList(elementId, items) {
+    const ul = document.getElementById(elementId);
+    items.forEach(item => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = item.url;
+        a.textContent = `${item.name} (${item.date})`;
+        a.target = '_blank';
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
+}
