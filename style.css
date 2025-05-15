@@ -87,3 +87,17 @@ footer {
     text-align: center;
     box-shadow: 0 0 10px black;
 }
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+ul li {
+    margin: 5px 0;
+}
+ul li a {
+    color: #004080;
+    text-decoration: underline;
+}
+ul li a:hover {
+    color: darkred;
+}
