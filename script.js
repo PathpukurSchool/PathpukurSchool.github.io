@@ -62,6 +62,30 @@ function renderButtons() {
     });
 }
 
-// প্রতিটি এক্সাম লিংকের জন্য সাginError').innerText = 'Incorrect ID or Password!';
+// প্রতিটি এক্সাম লিংকের জন্য সাব-লগইন
+function openLogin(key) {
+    currentKey = key;
+    document.getElementById('loginId').value = '';
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('loginError').innerText = '';
+    document.getElementById('loginDialog').showModal();
+}
+
+// সাব-লগইন বন্ধ
+function closeLogin() {
+    document.getElementById('loginDialog').close();
+}
+
+// সাব-লগইন যাচাই করে লিংক খোলা
+function submitLogin() {
+    const id = document.getElementById('loginId').value;
+    const pass = document.getElementById('loginPassword').value;
+    const credential = credentials[currentKey];
+
+    if (credential && credential.id === id && credential.pass === pass) {
+        window.open(credential.url, '_blank');
+        closeLogin();
+    } else {
+        document.getElementById('loginError').innerText = 'Incorrect ID or Password!';
     }
 }
