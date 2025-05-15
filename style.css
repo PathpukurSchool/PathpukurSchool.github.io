@@ -103,3 +103,18 @@ ul li a:hover {
     text-align: center;
     box-shadow: 0 0 10px black;
 }
+
+#masterLoginBox button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#masterLoginBox button:hover {
+    background-color: darkgreen;
+}
