@@ -1,0 +1,26 @@
+{
+  "notices": [
+    {
+      "name": "Madhyamik Routine 2025",
+      "date": "2025-05-15",
+      "url": "files/routine2025.pdf"
+    },
+    {
+      "name": "School Reopening Notice",
+      "date": "2025-05-12",
+      "url": "files/reopen.jpg"
+    }
+  ],
+  "help": [
+    {
+      "name": "How to Upload Marks",
+      "date": "2025-05-10",
+      "url": "files/help-upload.pdf"
+    },
+    {
+      "name": "Student Login Guide",
+      "date": "2025-05-05",
+      "url": "files/login-guide.txt"
+    }
+  ]
+}
