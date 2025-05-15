@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Instructions / Help</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>📖 Instructions / Help</h1>
+    <ul id="help-list"></ul>
+
+    <script>
+        fetch('files.json')
+            .then(response => response.json())
+            .then(data => {
+                const ul = document.getElementById('help-list');
+                data.help.forEach(item => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = item.url;
+                    a.target = '_blank';
+                    a.textContent = `${item.name} (${item.date})`;
+                    li.appendChild(a);
+                    ul.appendChild(li);
+                });
+            });
+    </script>
+</body>
+</html>
