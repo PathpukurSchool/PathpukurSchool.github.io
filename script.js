@@ -83,9 +83,7 @@ function submitLogin() {
     const credential = credentials[currentKey];
 
     if (credential && credential.id === id && credential.pass === pass) {
-        // মূল URL কে এনকোড করে viewer.html-এ পাঠানো হচ্ছে
-        const safeUrl = encodeURIComponent(credential.url);
-        window.open(`viewer.html?url=${safeUrl}`, '_blank');
+        window.open(credential.url, '_blank');
         closeLogin();
     } else {
         document.getElementById('loginError').innerText = 'Incorrect ID or Password!';
