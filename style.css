@@ -118,3 +118,29 @@ ul li a:hover {
 #masterLoginBox button:hover {
     background-color: darkgreen;
 }
+/* Exam Login Dialog Buttons */
+#loginDialog button {
+    padding: 8px 20px;
+    margin: 5px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* LOGIN button - সবুজ */
+#loginDialog button:first-of-type {
+    background-color: green;
+    color: white;
+}
+
+/* CANCEL button - লাল */
+#loginDialog button:last-of-type {
+    background-color: red;
+    color: white;
+}
+
+/* Hover effect */
+#loginDialog button:hover {
+    opacity: 0.9;
+}
