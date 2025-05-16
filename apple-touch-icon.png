@@ -1,0 +1,11 @@
+# বানানো apple-touch-icon.png
+from PIL import Image
+
+input_path = "/mnt/data/PHS-LOGO.png"
+output_path = "/mnt/data/apple-touch-icon.png"
+
+img = Image.open(input_path).convert("RGBA")
+img = img.resize((180, 180))  # iOS recommended size
+img.save(output_path, "PNG")
+
+output_path
