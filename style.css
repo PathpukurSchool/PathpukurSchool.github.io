@@ -16,7 +16,7 @@ font-weight: bold;
     margin: 28px;
   font-size: 22px;
     color: #fff;
-  background: linear-gradient(90deg, #800080, #FF1493, #FFA500, #800080);
+  background: linear-gradient(90deg, #DC143C, #FFD700, #B22222, #DC143C);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
