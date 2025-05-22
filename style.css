@@ -145,3 +145,9 @@ ul li a:hover {
 #loginDialog button:hover {
     opacity: 0.9;
 }
+
+/* Master Login text colour */
+.red-text {
+  color: darkred;
+  font-weight: bold;
+}
