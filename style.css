@@ -152,6 +152,25 @@ ul li a:hover {
   font-weight: bold;
 }
 
+.shine {
+  font-weight: bold;
+  font-size: 28px;
+  color: #fff;
+  background: linear-gradient(90deg, red, orange, red);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine-animation 2s linear infinite;
+}
+
+@keyframes shine-animation {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+    }
 
 /* Welcome to the marks uploading portal text colour */
 .blink {
