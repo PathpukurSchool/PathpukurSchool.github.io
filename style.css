@@ -187,7 +187,7 @@ ul li a:hover {
 
 /* Welcome to the marks uploading portal text colour */
 .blink {
-  color: darkblue;
+  color: blue;
   font-weight: bold;
   animation: blink-animation 1s steps(2, start) infinite;
 }
