@@ -151,3 +151,17 @@ ul li a:hover {
   color: darkred;
   font-weight: bold;
 }
+
+
+/* Welcome to the marks uploading portal text colour */
+.blink {
+  color: blue;
+  font-weight: bold;
+  animation: blink-animation 1s steps(2, start) infinite;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
