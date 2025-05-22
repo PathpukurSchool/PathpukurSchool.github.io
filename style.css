@@ -15,7 +15,7 @@ h2 {
 font-weight: bold;
     margin: 28px;
   font-size: 22px;
-  background: linear-gradient(90deg, violet, orange, violet);
+  background: linear-gradient(90deg, violet, red, violet);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -168,7 +168,6 @@ ul li a:hover {
 .shine {
   font-weight: bold;
   font-size: 28px;
-  color: #4169E1;
   background: linear-gradient(90deg, red, orange, red);
   background-size: 200% auto;
   -webkit-background-clip: text;
