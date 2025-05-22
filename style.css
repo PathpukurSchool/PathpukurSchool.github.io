@@ -15,8 +15,7 @@ h2 {
 font-weight: bold;
     margin: 28px;
   font-size: 22px;
-  color: black;
-  background: linear-gradient(90deg, red, orange, red);
+  background: linear-gradient(90deg, violet, orange, violet);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
