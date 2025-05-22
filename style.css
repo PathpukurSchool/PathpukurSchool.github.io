@@ -155,7 +155,7 @@ ul li a:hover {
 .shine {
   font-weight: bold;
   font-size: 28px;
-  color: #fff;
+  color: #4169E1;
   background: linear-gradient(90deg, red, orange, red);
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -174,7 +174,7 @@ ul li a:hover {
 
 /* Welcome to the marks uploading portal text colour */
 .blink {
-  color: #E6E6FA;
+  color: gold;
   font-weight: bold;
   animation: blink-animation 1s steps(2, start) infinite;
 }
