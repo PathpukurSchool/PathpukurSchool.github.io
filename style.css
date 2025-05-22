@@ -12,10 +12,23 @@ h2 {
     color: #333;
 }
 .class-title {
-    color: darkblue;
-    margin-top: 30px;
-    font-size: 20px;
-    font-weight: bold;
+font-weight: bold;
+  font-size: 28px;
+  color: #4169E1;
+  background: linear-gradient(90deg, red, orange, red);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine-animation 2s linear infinite;
+}
+
+@keyframes shine-animation {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 .exam-link {
     display: inline-block;
@@ -174,7 +187,7 @@ ul li a:hover {
 
 /* Welcome to the marks uploading portal text colour */
 .blink {
-  color: #FF1493;
+  color: darkblue;
   font-weight: bold;
   animation: blink-animation 1s steps(2, start) infinite;
 }
