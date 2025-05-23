@@ -9,7 +9,7 @@ h1 {
   color: #DC143C;
   font-size: 32px;
   font-weight: bold;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
     color: darkred;
 }
 h2 {
@@ -166,9 +166,10 @@ ul li a:hover {
 
 /* Master Login text colour */
 .red-text {
-  color: darkred;
+  color: #DC143C; 
   font-weight: bold;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
+    color: darkred;
 }
 
 .shine {
