@@ -1,7 +1,8 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #F0F0F0;
+    background: linear-gradient(to right, #1E3C72, #2A5298); /* Navy to Blue */
+  color: white;
     text-align: center;
     padding: 20px;
 }
