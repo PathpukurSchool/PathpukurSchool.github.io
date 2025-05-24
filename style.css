@@ -1,9 +1,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #1E3C72, #2A5298); /* Navy to Blue */
-  color: white;
-    text-align: center;
+    background-color: #F0F0F0;
     padding: 20px;
 }
 h1 {
