@@ -1,8 +1,13 @@
 
 body {
+    margin: 0;
+  padding: 0;
+  height: 100vh; /* পুরো স্ক্রিন উচ্চতা */
+  display: flex;
+  justify-content: center; /* অনুভূমিক মাঝখানে */
+  align-items: center;     /* উল্লম্ব মাঝখানে */
     font-family: Arial, sans-serif;
     background-color: #F0F0F0;
-    padding: 20px;
 }
 h1 {
   color: #DC143C;
