@@ -1,13 +1,13 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
+    background-color: #001f3f;
     text-align: center;
     padding: 20px;
 }
 h1 {
   color: #DC143C;
-  font-size: 30px;
+  font-size: 34px;
   font-weight: bold;
   text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
     color: darkred;
@@ -196,7 +196,7 @@ ul li a:hover {
 .blink {
   color: blue;
   font-weight: bold;
-    font-size: 16px;
+    font-size: 15px;
   animation: blink-animation 1s steps(2, start) infinite;
 }
 
