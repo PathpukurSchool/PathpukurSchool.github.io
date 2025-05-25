@@ -244,13 +244,17 @@ ul li a:hover {
 
 .emoji {
   display: inline-block;
-  animation: bounce 1s infinite;
-  margin-left: 8px;
-  font-size: 22px;
+  font-size: 24px;
+  animation: bounce 1s ease-in-out infinite;
+  transform-origin: center;
 }
 
-/* bounce animation */
+/* Bounce animation */
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(5px); }
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px); /* নিচে নড়ে উঠবে */
+  }
 }
