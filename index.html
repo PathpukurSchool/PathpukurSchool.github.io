@@ -31,31 +31,43 @@
     <h1>Pathpukur High School (HS)</h1>
     <h2 class="blink">Welcome to the Marks Uploading Portal</h2>
   
-    <title>Exam Dates</title>
-  <link rel="stylesheet" href="style.css"> <!-- ✔️ CSS লিংক -->
-</head>
-<body>
-
-  <!-- ✔️ Exam Dates Section -->
-  <div class="wrapper">
-    <div class="static-text">Last date of marks submission:</div>
-    <div class="marquee-container">
-      <div id="marquee" class="marquee-content"></div>
-    </div>
+    <div class="wrapper">
+  <div class="static-text">Last date of marks submission:</div>
+  <div class="marquee-container">
+    <div id="marquee" class="marquee-content"></div>
   </div>
+</div>
 
-  <!-- ✔️ JavaScript Part -->
-  <script src="dates.js"></script>
-  <script>
-    const marquee = document.getElementById("marquee");
-    examDates.forEach(exam => {
-      const span = document.createElement("span");
-      span.textContent = exam.text + " ";
-      span.style.color = exam.color;
-      span.style.fontWeight = "bold";
-      marquee.appendChild(span);
-    });
-  </script>
+<script src="dates.js"></script>
+<script>
+  const marquee = document.getElementById("marquee");
+
+  // Exam dates যুক্ত করা
+  examDates.forEach(exam => {
+    const span = document.createElement("span");
+    span.textContent = exam.text + " ";
+    span.style.color = exam.color;
+    span.style.fontWeight = "bold";
+    marquee.appendChild(span);
+  });
+
+  // Mouse hover করলে স্ক্রল থামানো
+  marquee.addEventListener("mouseover", () => {
+    marquee.classList.add("paused");
+  });
+  marquee.addEventListener("mouseout", () => {
+    marquee.classList.remove("paused");
+  });
+
+  // মোবাইলে touch করলে স্ক্রল থামানো
+  marquee.addEventListener("touchstart", () => {
+    marquee.classList.add("paused");
+  });
+  marquee.addEventListener("touchend", () => {
+    marquee.classList.remove("paused");
+  });
+</script>
+
   
     <div id="exam-buttons"></div>
 
