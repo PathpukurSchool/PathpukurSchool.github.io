@@ -205,3 +205,33 @@ ul li a:hover {
     visibility: hidden;
   }
     }
+/*Last date of marks submission */
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.static-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: scroll-left 15s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
