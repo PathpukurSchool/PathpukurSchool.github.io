@@ -206,10 +206,10 @@ ul li a:hover {
   }
     }
 /*Last date of marks submission */
-.wrapper {
+ .wrapper {
   display: flex;
-  align-items: center;
-  gap: 15px;
+  flex-direction: column;
+  gap: 8px;
   margin-top: 20px;
 }
 
@@ -223,15 +223,21 @@ ul li a:hover {
 .marquee-container {
   overflow: hidden;
   white-space: nowrap;
-  flex: 1;
+  width: 100%;
 }
 
 .marquee-content {
   display: inline-block;
+  padding-left: 100%;
   animation: scroll-left 15s linear infinite;
 }
 
+/* থামানোর জন্য */
+.marquee-content.paused {
+  animation-play-state: paused;
+}
+
 @keyframes scroll-left {
-  0% { transform: translateX(100%); }
+  0%   { transform: translateX(0%); }
   100% { transform: translateX(-100%); }
 }
