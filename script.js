@@ -42,6 +42,8 @@ async function submitMasterLogin() {
     const user = allCredentials[type.toLowerCase()];
 
     if (user && id === user.id && pass === user.pass) {
+        // Session set করুন
+    sessionStorage.setItem("userType", type.toLowerCase());
         // সফল লগইন
         successDiv.innerText = "✔️ Login Successful.";
         successDiv.style.display = "block";
