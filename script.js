@@ -44,6 +44,7 @@ async function submitMasterLogin() {
         } else {
             // Teacher login successful – hide the login overlay
             document.getElementById('masterLoginOverlay').style.display = "none";
+            loadExamLinks(); // মূল ডেটা লোড
         }
     } else {
         errorDiv.innerText = "Incorrect ID or Password!";
