@@ -1,5 +1,5 @@
 {
-  "school": { "id": "admin123", "pass": "adminpass", "redirect": "school.html" },
-  "teacher": { "id": "19181600802", "pass": "phs@1954", "redirect": "teacher.html" },
+  "school": { "id": "admin123", "pass": "adminpass", "redirect": "admin.html" },
+  "teacher": { "id": "19181600802", "pass": "phs@1954", "redirect": "index.html" },
   "student": { "id": "student123", "pass": "studentpass", "redirect": "student.html" }
 }
