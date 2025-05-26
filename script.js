@@ -41,6 +41,7 @@ async function submitMasterLogin() {
     if (user && id === user.id && pass === user.pass) {
         if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
             window.location.href = user.redirect;
+            successDiv.innerText = "✔️ Login Successful.";
         } else {
             // Teacher login successful – hide the login overlay
             document.getElementById('masterLoginOverlay').style.display = "none";
