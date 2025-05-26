@@ -20,10 +20,20 @@
         <div id="masterLoginBox">
     <h2 class="red-text">Pathpukur High School</h2>
             <h2 class="shine">Master Login</h2>
-            <input type="text" id="masterId" placeholder="Enter ID"><br><br>
-            <input type="password" id="masterPass" placeholder="Enter Password"><br>
-            <div id="masterLoginError" class="error"></div><br>
-            <button onclick="submitMasterLogin()">LOGIN</button>
+
+<!-- Dropdown menu added below -->
+<select id="loginType">
+  <option value="teacher">Teacher Login</option>
+  <option value="school">School Login</option>
+  <option value="student">Student Login</option>
+</select>
+<br><br>
+
+<input type="text" id="masterId" placeholder="Enter ID"><br><br>
+<input type="password" id="masterPass" placeholder="Enter Password"><br>
+<div id="masterLoginError" class="error"></div><br>
+<button onclick="submitMasterLogin()">LOGIN</button>
+
         </div>
     </div>
 
