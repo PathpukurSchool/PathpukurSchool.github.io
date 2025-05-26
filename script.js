@@ -16,7 +16,6 @@ async function getCredentials() {
     }
 }
 
-// মাস্টার লগইনের তথ্য যাচাই
 async function submitMasterLogin() {
     const type = document.getElementById('loginType').value;
     const id = document.getElementById('masterId').value.trim();
@@ -40,21 +39,18 @@ async function submitMasterLogin() {
     const user = allCredentials[type.toLowerCase()];
 
     if (user && id === user.id && pass === user.pass) {
-        // শুধু student এবং school login এ redirect হবে
         if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
             window.location.href = user.redirect;
         } else {
-            // teacher login সফল হলেও একই পেজে থাকবে
-            errorDiv.innerText = "Login successful (Teacher).";
-            errorDiv.style.color = "green";
-            // চাইলে এখানে তুমি অন্য কোনো UI পরিবর্তন করতে পারো
+            // Teacher login successful – hide the login overlay
+            document.getElementById('masterLoginOverlay').style.display = "none";
         }
     } else {
         errorDiv.innerText = "Incorrect ID or Password!";
         errorDiv.style.color = "red";
     }
 }
- 
+
 // এক্সাম লিংক লোড (মাস্টার লগইন সফল হলে)
 function loadExamLinks() {
     fetch('config.json')
