@@ -3,97 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>পাতপুকুর হাই স্কুল (উঃ মাঃ) - Student Panel</title>
 
-  <!-- Apple Touch Icon -->
+  <!-- Favicon & Touch Icon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="PHS-LOGO.png">
 
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-</head>
-  
-<script>
-  if (sessionStorage.getItem("studentLoggedIn") !== "true") {
-    window.location.href = "index.html"; // আপনার master login page
-  }
-</script>
-<button onclick="logoutStudent()">লগআউট</button>
 
-<script>
-  function logoutStudent() {
-    sessionStorage.removeItem("studentLoggedIn");
-    window.location.href = "index.html";
-  }
-</script>
+  <!-- ✅ সেশন চেক -->
+  <script>
+    if (sessionStorage.getItem("studentLoggedIn") !== "true") {
+      window.location.href = "index.html";
+    }
+  </script>
+</head>
 
 <body>
-  <!-- Master Login Box -->
-  <div id="masterLoginOverlay">
-    <div id="masterLoginBox">
-      <h2 class="red-text">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
-      <h2 class="shine">ছাত্র লগইন</h2>
+  <!-- ✅ Logout Button -->
+  <button onclick="logoutStudent()" style="position: absolute; top: 10px; right: 10px; padding: 6px 12px;">
+    লগআউট
+  </button>
+  <script>
+    function logoutStudent() {
+      sessionStorage.removeItem("studentLoggedIn");
+      sessionStorage.removeItem("userType");
+      window.location.href = "index.html";
+    }
+  </script>
 
-      <select id="loginType">
-        <option value="student">ছাত্র লগইন</option>
-      </select>
-      <br><br>
-
-      <input type="text" id="masterId" placeholder="ছাত্র আইডি লিখুন"><br><br>
-      <input type="password" id="masterPass" placeholder="পাসওয়ার্ড লিখুন"><br>
-      <div id="masterLoginError" class="error"></div><br>
-      <div id="masterLoginSuccess" class="success" style="display: none;"></div>
-
-      <button onclick="submitMasterLogin()">লগইন করুন</button>
-    </div>
-  </div>
-
-  <!-- School Branding -->
+  <!-- ✅ School Branding -->
   <img src="PHS-LOGO.png" alt="স্কুলের লোগো" class="logo">
   <h1>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
   <h2 class="blink">গুরুত্বপূর্ণ বিজ্ঞপ্তি <span class="emoji">📢</span></h2>
 
-  <!-- Scrolling Marquee Section -->
+  <!-- ✅ Scrolling Notice -->
   <div class="wrapper">
     <div class="marquee-container">
       <div id="marquee" class="marquee-content"></div>
     </div>
   </div>
 
-  <!-- JS: Notices from external file -->
+  <!-- ✅ External Notice File -->
   <script src="student_notice.js"></script>
   <script>
     const marquee = document.getElementById("marquee");
 
     studentNotices.forEach(notice => {
       const span = document.createElement("span");
-      span.textContent = notice.text + " ";
-      span.style.color = notice.color;
+      span.textContent = `${notice.date} - ${notice.text} `;
+      span.style.color = notice.color || "black";
       span.style.fontWeight = "bold";
+      span.style.marginRight = "30px";
       marquee.appendChild(span);
     });
 
-    marquee.addEventListener("mouseover", () => {
-      marquee.classList.add("paused");
-    });
-    marquee.addEventListener("mouseout", () => {
-      marquee.classList.remove("paused");
-    });
-    marquee.addEventListener("touchstart", () => {
-      marquee.classList.add("paused");
-    });
-    marquee.addEventListener("touchend", () => {
-      marquee.classList.remove("paused");
-    });
+    // Marquee pause on hover/touch
+    marquee.addEventListener("mouseover", () => marquee.classList.add("paused"));
+    marquee.addEventListener("mouseout", () => marquee.classList.remove("paused"));
+    marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
+    marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
   </script>
 
-  <!-- Footer -->
+  <!-- ✅ Footer -->
   <footer>
     বিদ্যালয় প্রধানের নির্দেশনায়, পাতপুকুর হাই স্কুল (উঃ মাঃ)
   </footer>
 
-  <!-- Main Script -->
+  <!-- Main JS -->
   <script src="script.js"></script>
 </body>
 </html>
