@@ -2,22 +2,47 @@ let credentials = {};
 let masterCredential = {};
 
 // মাস্টার লগইনের তথ্য লোড
-fetch('masterConfig.json')
-    .then(response => response.json())
-    .then(data => {
-        masterCredential = data;
-    });
 
-// মাস্টার লগইন যাচাই
-function submitMasterLogin() {
-    const id = document.getElementById('masterId').value;
-    const pass = document.getElementById('masterPass').value;
+async function getCredentials() {
+    try {
+        const response = await fetch('masterConfig.json');
+        if (!response.ok) {
+            throw new Error('Failed to load config');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching config:', error);
+        return null;
+    }
+}
+// masterConfig.json থেকে ডাটা ফেচ করার জন্য async ফাংশন
+async function submitMasterLogin() {
+    const type = document.getElementById('loginType').value;
+    const id = document.getElementById('masterId').value.trim();
+    const pass = document.getElementById('masterPass').value.trim();
+    const errorDiv = document.getElementById('masterLoginError');
 
-    if (id === masterCredential.id && pass === masterCredential.pass) {
-        document.getElementById('masterLoginOverlay').style.display = 'none';
-        loadExamLinks(); // মূল ডেটা লোড
+    errorDiv.innerText = "";
+
+    if (!type || !id || !pass) {
+        errorDiv.innerText = "Please select login type and fill ID & Password.";
+        return;
+    }
+
+    const allCredentials = await getCredentials();
+
+    if (!allCredentials) {
+        errorDiv.innerText = "Unable to load login configuration. Try again later.";
+        return;
+    }
+
+    const user = allCredentials[type.toLowerCase()];
+
+    if (user && id === user.id && pass === user.pass) {
+        window.location.href = user.redirect;
     } else {
-        document.getElementById('masterLoginError').innerText = 'Incorrect ID or Password!';
+        errorDiv.innerText = "Incorrect ID or Password!";
     }
 }
 
