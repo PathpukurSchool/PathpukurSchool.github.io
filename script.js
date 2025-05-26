@@ -154,14 +154,14 @@ function showAvailableSoonMessage(key) {
 
             const msg = document.createElement('div');
             msg.className = 'avail-msg';
-            msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে';
+            msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
 
             link.parentNode.insertBefore(msg, link.nextSibling);
 
-            // ২ সেকেন্ড পরে মুছে ফেল
+            // 3 সেকেন্ড পরে মুছে ফেল
             setTimeout(() => {
                 msg.remove();
-            }, 2000);
+            }, 3000);
 
             break;
         }
