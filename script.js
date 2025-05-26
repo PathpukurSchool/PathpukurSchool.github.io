@@ -21,9 +21,12 @@ async function submitMasterLogin() {
     const id = document.getElementById('masterId').value.trim();
     const pass = document.getElementById('masterPass').value.trim();
     const errorDiv = document.getElementById('masterLoginError');
+    const successDiv = document.getElementById('masterLoginSuccess'); // success ডিভ
 
     errorDiv.innerText = "";
-
+    successDiv.innerText = "";
+    successDiv.style.display = "none";
+    
     if (!type || !id || !pass) {
         errorDiv.innerText = "Please select login type and fill ID & Password.";
         return;
@@ -39,14 +42,19 @@ async function submitMasterLogin() {
     const user = allCredentials[type.toLowerCase()];
 
     if (user && id === user.id && pass === user.pass) {
-        if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
-            window.location.href = user.redirect;
-            successDiv.innerText = "✔️ Login Successful.";
-        } else {
-            // Teacher login successful – hide the login overlay
-            document.getElementById('masterLoginOverlay').style.display = "none";
-            loadExamLinks(); // মূল ডেটা লোড
-        }
+        // সফল লগইন
+        successDiv.innerText = "✔️ Login Successful.";
+        successDiv.style.display = "block";
+
+        setTimeout(() => {
+            if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
+                window.location.href = user.redirect;
+            } else {
+                // Teacher login successful – hide the login overlay
+                document.getElementById('masterLoginOverlay').style.display = "none";
+                loadExamLinks(); // মূল ডেটা লোড
+            }
+        }, 1500); // 1.5 সেকেন্ড পর রিডাইরেক্ট
     } else {
         errorDiv.innerText = "Incorrect ID or Password!";
         errorDiv.style.color = "red";
