@@ -35,26 +35,6 @@ font-weight: bold;
     background-position: 200% center;
   }
 }
-.logout-btn {
-  background-color: #5B0E2D; /* লাল রঙ */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 10px;
-}
-
-.logout-btn:hover {
-  background-color: #c0392b; /* হোভার করলে গাঢ় রঙ */
-}
-
-.logout-btn:active {
-  background-color: #a93226; /* ক্লিক করার সময় আরও হালকা রঙ */
-}
-
 .exam-link {
     display: inline-block;
     margin: 5px;
