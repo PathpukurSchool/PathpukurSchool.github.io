@@ -13,6 +13,20 @@
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
+  
+<script>
+  if (sessionStorage.getItem("studentLoggedIn") !== "true") {
+    window.location.href = "index.html"; // আপনার master login page
+  }
+</script>
+<button onclick="logoutStudent()">লগআউট</button>
+
+<script>
+  function logoutStudent() {
+    sessionStorage.removeItem("studentLoggedIn");
+    window.location.href = "index.html";
+  }
+</script>
 
 <body>
   <!-- Master Login Box -->
