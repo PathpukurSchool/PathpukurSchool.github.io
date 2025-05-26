@@ -1,14 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PATHPUKUR HIGH SCHOOL (HS)</title>
-
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -18,25 +13,8 @@
 
   <link rel="stylesheet" href="style.css">
 </head>
-  
-<script>
-  function logoutStudent() {
-    sessionStorage.removeItem("studentLoggedIn");
-    sessionStorage.removeItem("userType");
-    window.location.href = "index.html";
-  }
-</script>
 
 <body>
-  <!-- ✅ Logout Button -->
-<button class="logout-btn" id="logoutBtn" onclick="logoutStudent()">🚪 Logout</button>
-  window.addEventListener("DOMContentLoaded", () => {
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (sessionStorage.getItem("studentLoggedIn") || sessionStorage.getItem("userType")) {
-    logoutBtn.style.display = "inline-block";
-  }
-});
-
     <div id="masterLoginOverlay">
         <div id="masterLoginBox">
     <h2 class="red-text">Pathpukur High School</h2>
@@ -132,7 +110,6 @@
     📌 <a href="notice.html" target="_blank">NOTICE</a> 📌 |
     📖 <a href="help.html" target="_blank">HELP</a> 📖
 </p>
-  
 <script src="script.js"></script>
 </body>
 </html>
