@@ -54,7 +54,7 @@ async function submitMasterLogin() {
                 document.getElementById('masterLoginOverlay').style.display = "none";
                 loadExamLinks(); // মূল ডেটা লোড
             }
-        }, 1500); // 1.5 সেকেন্ড পর রিডাইরেক্ট
+        }, 1000); // 1.5 সেকেন্ড পর রিডাইরেক্ট
     } else {
         errorDiv.innerText = "Incorrect ID or Password!";
         errorDiv.style.color = "red";
