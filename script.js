@@ -44,6 +44,10 @@ async function submitMasterLogin() {
     if (user && id === user.id && pass === user.pass) {
         // Session set করুন
     sessionStorage.setItem("userType", type.toLowerCase());
+            if (type.toLowerCase() === "student") {
+        sessionStorage.setItem("studentLoggedIn", "true");
+    }
+
         // সফল লগইন
         successDiv.innerText = "✔️ Login Successful.";
         successDiv.style.display = "block";
