@@ -30,7 +30,13 @@
 <body>
   <!-- ✅ Logout Button -->
 <button class="logout-btn" id="logoutBtn" onclick="logoutStudent()">🚪 Logout</button>
-  
+  window.addEventListener("DOMContentLoaded", () => {
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (sessionStorage.getItem("studentLoggedIn") || sessionStorage.getItem("userType")) {
+    logoutBtn.style.display = "inline-block";
+  }
+});
+
     <div id="masterLoginOverlay">
         <div id="masterLoginBox">
     <h2 class="red-text">Pathpukur High School</h2>
