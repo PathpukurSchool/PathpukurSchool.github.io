@@ -55,6 +55,50 @@
     marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
   </script>
 
+<script src="student_notice.js"></script>
+<script>
+  // 📌 নোটিশ বোর্ড দেখানো
+  function renderStudentNotices() {
+    const container = document.getElementById('notice-board');
+    container.innerHTML = '';
+
+    if (!Array.isArray(studentNotices)) return;
+
+    studentNotices.forEach(notice => {
+      const item = document.createElement('div');
+      item.className = 'notice-item';
+      item.style.marginBottom = '10px';
+      item.style.fontSize = '16px';
+
+      const date = document.createElement('strong');
+      date.textContent = `📅 ${notice.date}: `;
+      item.appendChild(date);
+
+      const text = document.createElement('span');
+      text.textContent = notice.text;
+      item.appendChild(text);
+
+      if (notice.link && notice.link.trim() !== '') {
+        const a = document.createElement('a');
+        a.href = notice.link;
+        a.textContent = ' 🔗 লিঙ্ক';
+        a.target = '_blank';
+        a.style.marginLeft = '10px';
+        item.appendChild(a);
+      }
+
+      container.appendChild(item);
+    });
+  }
+
+  // 🔁 একসাথে সব কিছু লোড হবে
+  window.onload = () => {
+    renderStudentNotices();
+    loadStudentExamLinks(); // আগের exam link loader
+  };
+</script>
+
+  
   <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল 📄</h2>
   <div id="exam-buttons" style="text-align:center;"></div>
 
