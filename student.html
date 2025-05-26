@@ -54,6 +54,34 @@
     marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
     marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
   </script>
+
+<script>
+async function loadExamLinks() {
+  const response = await fetch("config_student.json");
+  const config = await response.json();
+
+  const container = document.getElementById("examLinks");
+
+  for (const key in config) {
+    const exam = config[key];
+    // শুধুমাত্র student panel এর জন্য বোতাম দেখাবো, তাই id/pass বাদ
+    const button = document.createElement("button");
+    button.innerText = key.replaceAll("_", " ") + " RESULT";
+    button.className = "exam-button";
+    button.onclick = () => {
+      window.open(exam.url, "_blank");
+    };
+    container.appendChild(button);
+  }
+}
+window.onload = loadExamLinks;
+</script>
+<body>
+  <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল</h2>
+  <div id="examLinks" style="text-align:center; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;"></div>
+</body>
+
+  
 <hr>
   <!-- ✅ Footer -->
   <footer>
