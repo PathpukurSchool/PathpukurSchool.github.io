@@ -129,12 +129,53 @@ function submitLogin() {
     const credential = credentials[currentKey];
 
     if (credential && credential.id === id && credential.pass === pass) {
-        window.open(credential.url, '_blank');
-        closeLogin();
+        if (credential.url && credential.url.trim() !== '') {
+            window.open(credential.url, '_blank');
+            closeLogin();
+        } else {
+            // শীঘ্রই উপলব্ধ হবে মেসেজ দেখানো
+            closeLogin(); // ডায়ালগ বন্ধ করব
+            showAvailableSoonMessage(currentKey); // বার্তা দেখাব
+        }
     } else {
         document.getElementById('loginError').innerText = 'Incorrect ID or Password!';
     }
 }
+
+function showAvailableSoonMessage(key) {
+    const container = document.getElementById('exam-buttons');
+    const links = container.getElementsByClassName('exam-link');
+
+    for (let link of links) {
+        if (link.textContent === getExamText(key)) {
+            // আগে থেকে কোন বার্তা থাকলে সরাও
+            const next = link.nextElementSibling;
+            if (next && next.classList.contains('avail-msg')) next.remove();
+
+            const msg = document.createElement('div');
+            msg.className = 'avail-msg';
+            msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে';
+
+            link.parentNode.insertBefore(msg, link.nextSibling);
+
+            // ২ সেকেন্ড পরে মুছে ফেল
+            setTimeout(() => {
+                msg.remove();
+            }, 2000);
+
+            break;
+        }
+    }
+}
+
+// পরীক্ষার টেক্সট ফেরত দেয় ('TEST EXAM', '1ST', ...)
+function getExamText(key) {
+    const parts = key.split('_');
+    const exam = parts[1];
+    if (exam === 'TEST') return 'TEST EXAM';
+    return exam;
+}
+
 // NOTICE & HELP লোড করা
 fetch('files.json')
     .then(response => response.json())
