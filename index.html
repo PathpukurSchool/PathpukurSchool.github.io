@@ -18,6 +18,14 @@
 
   <link rel="stylesheet" href="style.css">
 </head>
+  
+<script>
+  function logoutStudent() {
+    sessionStorage.removeItem("studentLoggedIn");
+    sessionStorage.removeItem("userType");
+    window.location.href = "index.html";
+  }
+</script>
 
 <body>
   <!-- ✅ Logout Button -->
@@ -39,7 +47,6 @@
 <input type="text" id="masterId" placeholder="Enter ID"><br><br>
 <input type="password" id="masterPass" placeholder="Enter Password"><br>
 <div id="masterLoginError" class="error"></div><br>
-<div id="masterLoginError"></div>
 <div id="masterLoginSuccess" class="success" style="display: none;"></div>
 
 <button onclick="submitMasterLogin()">LOGIN</button>
@@ -114,13 +121,12 @@
         With guidance from the Head of the Institute, Pathpukur High School (HS)
     </footer>
 
-    <script src="script.js"></script>
-</body>
-</html>
-
 <hr>
 <p>
     📌 <a href="notice.html" target="_blank">NOTICE</a> 📌 |
     📖 <a href="help.html" target="_blank">HELP</a> 📖
 </p>
+  
 <script src="script.js"></script>
+</body>
+</html>
