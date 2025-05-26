@@ -36,18 +36,41 @@ font-weight: bold;
   }
 }
 .exam-link {
-    display: inline-block;
-    margin: 5px;
-    padding: 10px 20px;
-    background-color: green;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
+  display: inline-block;
+  margin: 5px;
+  padding: 10px 20px;
+  background-color: green;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  position: relative;
 }
+
 .exam-link:hover {
-    background-color: darkgreen;
+  background-color: darkgreen;
 }
+
+.class-title {
+  font-size: 20px;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #800000;
+}
+
+/* শীঘ্রই উপলব্ধ বার্তা */
+.avail-msg {
+  color: red;
+  font-weight: bold;
+  margin-top: 5px;
+  animation: blink 1s step-start 0s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 .logo {
     max-width: 150px;
     margin-bottom: 20px;
