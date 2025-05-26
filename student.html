@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>পাতপুকুর হাই স্কুল (উঃ মাঃ) - Student Panel</title>
 
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-  
   <!-- Favicon & Touch Icon -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="PHS-LOGO.png">
@@ -23,26 +19,8 @@
     }
   </script>
 </head>
-   <!-- ✅ Logout Button -->
-  <button class="logout-btn" onclick="logoutStudent()">Logout</button>
-
+   
 <body>
- 
-  <script>
-    function logoutStudent() {
-  sessionStorage.removeItem("studentLoggedIn");
-
-  // লগআউটের পর পেজ বন্ধের চেষ্টা
-  window.open('', '_self'); // বর্তমান ট্যাবে খুলুন
-  window.close();
-
-  // যদি ব্রাউজার পেজ ক্লোজ না করে, index.html-এ পাঠান
-  setTimeout(() => {
-    window.location.href = "index.html";
-  }, 500);
-}
-
-  </script>
 
   <!-- ✅ School Branding -->
   <img src="PHS-LOGO.png" alt="স্কুলের লোগো" class="logo">
