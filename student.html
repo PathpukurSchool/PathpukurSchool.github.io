@@ -1,55 +1,86 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Panel</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>পাতপুকুর হাই স্কুল (উঃ মাঃ) - ছাত্র লগইন</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="PHS-LOGO.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container">
-        <!-- হেডার -->
-        <header>
-            <img src="logo.png" alt="School Logo" class="logo">
-            <h1>ABC উচ্চ বিদ্যালয়</h1>
-        </header>
+  <!-- Master Login Box -->
+  <div id="masterLoginOverlay">
+    <div id="masterLoginBox">
+      <h2 class="red-text">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
+      <h2 class="shine">ছাত্র লগইন</h2>
 
-        <!-- নোটিশ বোর্ড -->
-        <section class="notice-section">
-            <h2>🔔 নোটিশ বোর্ড</h2>
-            <ul id="notice-list">
-                <!-- Notice items will be populated by script -->
-            </ul>
-        </section>
+      <select id="loginType">
+        <option value="student">ছাত্র লগইন</option>
+      </select>
+      <br><br>
 
-        <!-- হেল্প ফাইল -->
-        <section class="help-section">
-            <h2>📂 সহায়তা ফাইল</h2>
-            <ul id="help-list">
-                <!-- Help items will be populated by script -->
-            </ul>
-        </section>
+      <input type="text" id="masterId" placeholder="ছাত্র আইডি লিখুন"><br><br>
+      <input type="password" id="masterPass" placeholder="পাসওয়ার্ড লিখুন"><br>
+      <div id="masterLoginError" class="error"></div><br>
+      <div id="masterLoginSuccess" class="success" style="display: none;"></div>
 
-        <!-- লগইন ফর্ম -->
-        <section class="login-section">
-            <h2>🔑 স্টুডেন্ট লগইন</h2>
-            <select id="loginType">
-                <option value="">লগইন টাইপ নির্বাচন করুন</option>
-                <option value="student">STUDENT</option>
-            </select>
-            <input type="text" id="masterId" placeholder="Student ID">
-            <input type="password" id="masterPass" placeholder="Password">
-            <button onclick="submitMasterLogin()">Login</button>
-            <div id="masterLoginError" class="error"></div>
-            <div id="masterLoginSuccess" class="success" style="display:none;"></div>
-        </section>
-
-        <!-- ফুটার -->
-        <footer>
-            <p>&copy; 2025 ABC উচ্চ বিদ্যালয়</p>
-        </footer>
+      <button onclick="submitMasterLogin()">লগইন করুন</button>
     </div>
+  </div>
 
-    <script src="script.js"></script>
+  <!-- School Branding -->
+  <img src="PHS-LOGO.png" alt="স্কুলের লোগো" class="logo">
+  <h1>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
+  <h2 class="blink">গুরুত্বপূর্ণ বিজ্ঞপ্তি <span class="emoji">📢</span></h2>
+
+  <!-- Scrolling Marquee Section -->
+  <div class="wrapper">
+    <div class="marquee-container">
+      <div id="marquee" class="marquee-content"></div>
+    </div>
+  </div>
+
+  <!-- JS: Notices from external file -->
+  <script src="student_notice.js"></script>
+  <script>
+    const marquee = document.getElementById("marquee");
+
+    studentNotices.forEach(notice => {
+      const span = document.createElement("span");
+      span.textContent = notice.text + " ";
+      span.style.color = notice.color;
+      span.style.fontWeight = "bold";
+      marquee.appendChild(span);
+    });
+
+    marquee.addEventListener("mouseover", () => {
+      marquee.classList.add("paused");
+    });
+    marquee.addEventListener("mouseout", () => {
+      marquee.classList.remove("paused");
+    });
+    marquee.addEventListener("touchstart", () => {
+      marquee.classList.add("paused");
+    });
+    marquee.addEventListener("touchend", () => {
+      marquee.classList.remove("paused");
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    বিদ্যালয় প্রধানের নির্দেশনায়, পাতপুকুর হাই স্কুল (উঃ মাঃ)
+  </footer>
+
+  <!-- Main Script -->
+  <script src="script.js"></script>
 </body>
 </html>
