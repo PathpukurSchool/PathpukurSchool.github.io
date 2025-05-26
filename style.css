@@ -213,6 +213,7 @@ ul li a:hover {
   margin-top: 5px;
      background-color: yellow;
       border-radius: 5px;
+     padding: 5px;
 }
 
 .static-text {
