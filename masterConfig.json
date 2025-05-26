@@ -1,5 +1,16 @@
 {
-  "school": { "id": "admin123", "pass": "adminpass", "redirect": "admin.html" },
-  "teacher": { "id": "Tr19181600802", "pass": "Phs@1954", "redirect": "" },
-  "student": { "id": "St19544591", "pass": "pass@PHS&25", "redirect": "student.html" }
+  "school": { 
+    "id": "admin123", 
+    "pass": "adminpass", 
+    "redirect": "admin.html" },
+  
+  "teacher": { 
+    "id": "Tr19181600802", "
+    pass": "Phs@1954", 
+    "redirect": "" },
+  
+  "student": { 
+    "id": "St19544591", 
+    "pass": "pass@PHS&25", 
+    "redirect": "student.html" }
 }
