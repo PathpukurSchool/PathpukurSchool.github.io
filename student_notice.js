@@ -9,7 +9,7 @@ const studentNotices = [
 
 
 
-const studentNotices = [
+const studentNoticebord = [
   {
     date: "2025-05-25",
     text: "একাদশ শ্রেণির রেজাল্ট প্রকাশিত হয়েছে।",
