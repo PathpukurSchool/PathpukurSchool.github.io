@@ -76,15 +76,69 @@ async function loadExamLinks() {
 }
 window.onload = loadExamLinks;
 </script>
-<body>
-  <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল</h2>
-  <div id="examLinks" style="text-align:center; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;"></div>
-</body>
 
+  <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল 📄</h2>
+  <div id="exam-buttons" style="text-align:center;"></div>
+
+  <script>
+    let studentData = {};
+
+    // লিঙ্ক লোড
+    function loadStudentExamLinks() {
+      fetch('config_student.json')
+        .then(response => response.json())
+        .then(data => {
+          studentData = data;
+          renderStudentButtons();
+        })
+        .catch(error => {
+          console.error('কনফিগারেশন লোডে সমস্যা:', error);
+        });
+    }
+
+    // বাটন তৈরি ও দেখানো
+    function renderStudentButtons() {
+      const container = document.getElementById('exam-buttons');
+      container.innerHTML = '';
+
+      // ইউনিক ক্লাস লিস্ট তৈরি
+      const classes = [...new Set(Object.keys(studentData).map(k => k.split('_')[0]))];
+
+      classes.forEach(cls => {
+        const title = document.createElement('div');
+        title.className = 'class-title';
+        title.textContent = 'CLASS ' + cls.replace('X_TEST', 'X');
+        container.appendChild(title);
+
+        const exams = ['1ST', '2ND', '3RD', 'TEST'];
+        exams.forEach(exam => {
+          const key = `${cls}_${exam}`;
+          if (studentData[key]) {
+            const link = studentData[key].url;
+            const a = document.createElement('a');
+            a.className = 'exam-link';
+            a.textContent = exam === 'TEST' ? 'TEST EXAM' : exam;
+            a.href = '#';
+            a.onclick = () => {
+              if (link && link.trim() !== '') {
+                window.open(link, '_blank');
+              } else {
+                alert('🔔 শীঘ্রই উপলব্ধ হবে');
+              }
+            };
+            container.appendChild(a);
+          }
+        });
+      });
+    }
+
+    window.onload = loadStudentExamLinks;
+  </script>
   
-<hr>
-  <!-- ✅ Footer -->
+
+  <!-- Footer -->
   <footer>
+    <hr>
     বিদ্যালয় প্রধানের নির্দেশনায়, পাতপুকুর হাই স্কুল (উঃ মাঃ)
   </footer>
 
