@@ -30,10 +30,18 @@
 
   <script>
     function logoutStudent() {
-      sessionStorage.removeItem("studentLoggedIn");
-      sessionStorage.removeItem("userType");
-      window.location.href = "index.html";
-    }
+  sessionStorage.removeItem("studentLoggedIn");
+
+  // লগআউটের পর পেজ বন্ধের চেষ্টা
+  window.open('', '_self'); // বর্তমান ট্যাবে খুলুন
+  window.close();
+
+  // যদি ব্রাউজার পেজ ক্লোজ না করে, index.html-এ পাঠান
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 500);
+}
+
   </script>
 
   <!-- ✅ School Branding -->
