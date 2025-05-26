@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATHPUKUR HIGH SCHOOL (HS) - Student Login</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="PHS-LOGO.png">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Master Login Box -->
+    <div id="masterLoginOverlay">
+        <div id="masterLoginBox">
+            <h2 class="red-text">Pathpukur High School</h2>
+            <h2 class="shine">Student Login</h2>
+
+            <select id="loginType">
+              <option value="student">Student Login</option>
+            </select>
+            <br><br>
+
+            <input type="text" id="masterId" placeholder="Enter Student ID"><br><br>
+            <input type="password" id="masterPass" placeholder="Enter Password"><br>
+            <div id="masterLoginError" class="error"></div><br>
+            <div id="masterLoginSuccess" class="success" style="display: none;"></div>
+
+            <button onclick="submitMasterLogin()">LOGIN</button>
+        </div>
+    </div>
+
+    <!-- School Branding -->
+    <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+    <h1>Pathpukur High School (HS)</h1>
+    <h2 class="blink">Welcome to the Student Portal</h2>
+
+    <!-- Scrolling Marquee Section -->
+    <div class="wrapper">
+        <div class="static-text">
+            Last date of marks submission
+            <span class="emoji">👇</span>
+        </div>
+        <div class="marquee-container">
+            <div id="marquee" class="marquee-content"></div>
+        </div>
+    </div>
+
+    <script src="dates.js"></script>
+    <script>
+      const marquee = document.getElementById("marquee");
+
+      examDates.forEach(exam => {
+        const span = document.createElement("span");
+        span.textContent = exam.text + " ";
+        span.style.color = exam.color;
+        span.style.fontWeight = "bold";
+        marquee.appendChild(span);
+      });
+
+      marquee.addEventListener("mouseover", () => {
+        marquee.classList.add("paused");
+      });
+      marquee.addEventListener("mouseout", () => {
+        marquee.classList.remove("paused");
+      });
+      marquee.addEventListener("touchstart", () => {
+        marquee.classList.add("paused");
+      });
+      marquee.addEventListener("touchend", () => {
+        marquee.classList.remove("paused");
+      });
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        With guidance from the Head of the Institute, Pathpukur High School (HS)
+    </footer>
+
+    <!-- JS -->
+    <script src="script.js"></script>
+</body>
+</html>
