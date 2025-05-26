@@ -36,6 +36,7 @@ font-weight: bold;
   }
 }
 .logout-btn {
+  display: none;
   background-color: #e74c3c; /* লাল রঙ */
   color: white;
   border: none;
