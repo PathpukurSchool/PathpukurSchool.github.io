@@ -290,3 +290,36 @@ ul li a:hover {
     transform: translateY(6px); /* নিচে নড়ে উঠবে */
   }
 }
+
+/* 🔽 Notice table design */
+#notice-table {
+  margin-top: 10px;      /* Notice বোর্ড ও টেবিলের মধ্যে কম ফাঁকা */
+  margin-bottom: 5px;    /* টেবিল ও পেজিনেশনের মধ্যে কম ফাঁকা */
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+/* 🔽 Table header styling */
+#notice-table thead {
+  background-color: #006400; /* ডীপ সবুজ ব্যাকগ্রাউন্ড */
+  color: white;              /* সাদা লেখা */
+}
+
+#notice-table th, #notice-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+/* 🔽 Pagination section spacing */
+.pagination {
+  margin-top: 5px;           /* টেবিলের সাথে কম ফাঁকা */
+  margin-bottom: 30px;       /* পরীক্ষার ফলাফল বোতামের সাথে বেশি ফাঁকা */
+  text-align: center;
+}
+
+/* 🔽 Exam buttons (পরীক্ষার ফলাফল) section spacing */
+#exam-buttons {
+  margin-top: 20px;          /* Page 1 of 1 এর নিচে ফাঁকা রাখার জন্য */
+}
