@@ -161,7 +161,8 @@
 
     // লিঙ্ক লোড
     function loadStudentExamLinks() {
-      fetch('config_student.json')
+      // fetch('config_student.json')
+      fetch('https://script.google.com/macros/s/AKfycbwwfRPjHO_S_nVIJPnC90G0jQkbeWRFMU6R2XmQWjpdLYyu7p56Xe7KKgHDdlioJiienQ/exec?sheet=StudentLink') // ← <-- আপনার Apps Script URL এখানে বসান
         .then(response => response.json())
         .then(data => {
           studentData = data;
