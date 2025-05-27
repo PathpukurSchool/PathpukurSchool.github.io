@@ -55,85 +55,89 @@
     marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
   </script>
 
+  
   <!-- ✅ টেবিল নোটিশ বোর্ড -->
-<h2 style="text-align:center; margin-top: 30px;">📋 নোটিশ বোর্ড 📋</h2>
-<div id="notice-board" style="margin: 220px auto; max-width: 800px;"></div>
-<div style="text-align:center; margin-bottom: 10px;">
-  <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-  <span id="pageNumber" style="margin: 0 10px;">Page 1</span>
-  <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
-</div>
-<!-- ✅ External Notice Bord -->
+  <h2>📋 নোটিশ বোর্ড 📋</h2>
+  <div id="notice-board"></div>
+
+  <div class="pagination">
+    <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+    <span id="pageNumber">Page 1</span>
+    <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+  </div>
+
+  <!-- ✅ External Notice Bord -->
   <script src="student_notice.js"></script>
-<script>
-  const noticesPerPage = 10;
-  let currentPage = 1;
+  <script>
+    const noticesPerPage = 10;
+    let currentPage = 1;
 
-  function renderNoticeTable() {
-    const container = document.getElementById('notice-board');
-    container.innerHTML = "";
+    function renderNoticeTable() {
+      const container = document.getElementById('notice-board');
+      container.innerHTML = "";
 
-    const start = (currentPage - 1) * noticesPerPage;
-    const end = start + noticesPerPage;
-    const paginatedNotices = studentTableNotices.slice(start, end);
+      const start = (currentPage - 1) * noticesPerPage;
+      const end = start + noticesPerPage;
+      const paginatedNotices = studentTableNotices.slice(start, end);
 
-    const table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.borderCollapse = 'collapse';
-    table.style.textAlign = 'center';
+      const table = document.createElement('table');
+      table.id = 'notice-table';
 
-    const thead = document.createElement('thead');
-    thead.innerHTML = `
-      <tr style="background-color: #f0f0f0;">
-        <th style="padding: 10px; border: 1px solid #ccc;">তারিখ</th>
-        <th style="padding: 10px; border: 1px solid #ccc;">নোটিশ</th>
-        <th style="padding: 10px; border: 1px solid #ccc;">লিংক</th>
-      </tr>
-    `;
-    table.appendChild(thead);
-
-    const tbody = document.createElement('tbody');
-    paginatedNotices.forEach(notice => {
-      const tr = document.createElement('tr');
-
-      tr.innerHTML = `
-        <td style="padding: 8px; border: 1px solid #ccc;">${notice.date}</td>
-        <td style="padding: 8px; border: 1px solid #ccc; color: ${notice.color || '#000'};">${notice.text}</td>
-        <td style="padding: 8px; border: 1px solid #ccc;">
-          ${
-            notice.link && notice.link.trim() !== ''
-              ? `<a href="${notice.link}" target="_blank">Open</a> |
-                 <a href="${notice.link}" download>Download</a>`
-              : "—"
-          }
-        </td>
+      const thead = document.createElement('thead');
+      thead.innerHTML = `
+        <tr>
+          <th>তারিখ</th>
+          <th>নোটিশ</th>
+          <th>লিংক</th>
+        </tr>
       `;
-      tbody.appendChild(tr);
-    });
+      table.appendChild(thead);
 
-    table.appendChild(tbody);
-    container.appendChild(table);
-    
-const totalPages = Math.ceil(studentTableNotices.length / noticesPerPage);
-document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
-document.getElementById('prevBtn').disabled = currentPage === 1;
-document.getElementById('nextBtn').disabled = currentPage === totalPages;
-  }
+      const tbody = document.createElement('tbody');
+      paginatedNotices.forEach(notice => {
+        const tr = document.createElement('tr');
 
-  function nextPage() {
-    if (currentPage < Math.ceil(studentTableNotices.length / noticesPerPage)) {
-      currentPage++;
-      renderNoticeTable();
+        tr.innerHTML = `
+          <td>${notice.date}</td>
+          <td style="color: ${notice.color || '#000'};">${notice.text}</td>
+          <td>
+            ${
+              notice.link && notice.link.trim() !== ''
+                ? `<a href="${notice.link}" target="_blank">Open</a> |
+                   <a href="${notice.link}" download>Download</a>`
+                : "—"
+            }
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      container.appendChild(table);
+
+      const totalPages = Math.ceil(studentTableNotices.length / noticesPerPage);
+      document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
+      document.getElementById('prevBtn').disabled = currentPage === 1;
+      document.getElementById('nextBtn').disabled = currentPage === totalPages;
     }
-  }
 
-  function prevPage() {
-    if (currentPage > 1) {
-      currentPage--;
-      renderNoticeTable();
+    function nextPage() {
+      if (currentPage < Math.ceil(studentTableNotices.length / noticesPerPage)) {
+        currentPage++;
+        renderNoticeTable();
+      }
     }
-  }
-</script>
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderNoticeTable();
+      }
+    }
+
+    // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
+    renderNoticeTable();
+  </script>
 
 <script>
   window.onload = () => {
