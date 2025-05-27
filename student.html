@@ -37,24 +37,33 @@
   <!-- ✅ External Notice File -->
   <script src="student_notice.js"></script>
   <script>
-    const marquee = document.getElementById("marquee");
+  const marquee = document.getElementById("marquee");
 
+  if (Array.isArray(studentNotices)) {
     studentNotices.forEach(notice => {
-      const span = document.createElement("span");
-      span.textContent = `${notice.date} - ${notice.text} `;
-      span.style.color = notice.color || "black";
-      span.style.fontWeight = "bold";
-      span.style.marginRight = "30px";
-      marquee.appendChild(span);
+      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
+      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
+
+      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
+      if (text.trim() !== "") {
+        const span = document.createElement("span");
+        span.textContent = `${date} - ${text}`;
+        span.style.color = notice.color || "black";
+        span.style.fontWeight = "bold";
+        span.style.marginRight = "30px";
+        marquee.appendChild(span);
+      }
     });
+  } else {
+    marquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
+  }
 
-    // Marquee pause on hover/touch
-    marquee.addEventListener("mouseover", () => marquee.classList.add("paused"));
-    marquee.addEventListener("mouseout", () => marquee.classList.remove("paused"));
-    marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
-    marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
-  </script>
-
+  // 🔁 Marquee pause on hover/touch
+  marquee.addEventListener("mouseover", () => marquee.classList.add("paused"));
+  marquee.addEventListener("mouseout", () => marquee.classList.remove("paused"));
+  marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
+  marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
+</script>
   
   <!-- ✅ টেবিল নোটিশ বোর্ড -->
   <div id="notice-board"></div>
