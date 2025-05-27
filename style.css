@@ -76,16 +76,24 @@ font-weight: bold;
     margin-bottom: 20px;
 }
 dialog {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    max-width: 300px;
+  padding: 20px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: sans-serif;
+  text-align: center;
+  max-width: 300px;
+  margin: auto;
 }
 dialog h3 {
-    color: green;
-    margin-top: 0;
+  margin-top: 0;
+  color: green;
+  margin-bottom: 15px;
+  font-size: 18px;
 }
+
 .input-group {
     display: flex;
     align-items: center;
