@@ -20,6 +20,12 @@ const studentTableNotices = [
     text: "রেজাল্ট লিঙ্ক সংযুক্ত করা হয়েছে",
     color: "#4444cc",
     link: "https://example.com/result.pdf"
+  },
+   {
+    date: "2025-05-26",
+    text: "একাদশ শ্রেণির রেজাল্ট প্রকাশিত হয়েছে",
+    color: "#0077cc",
+     link: ""
   }
   // আরও টেবিল নোটিশ এখানে দিন
 ];
