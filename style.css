@@ -300,12 +300,6 @@ ul li a:hover {
 }
 
 /*  Notice table design */
-/* 🔽 হেডিং স্টাইল */
-h4 {
-  text-align: center;
-  margin-top: 30px;
-}
-
 /* 🔽 নোটিশ বোর্ড কন্টেইনার */
 #notice-board {
   margin: 220px auto 0 auto;
@@ -318,7 +312,7 @@ h4 {
   width: 100%;
   border-collapse: collapse;
   font-size: 15px;
-  margin-top: 10px;
+  margin-top: 0px;
   margin-bottom: 5px;
   text-align: center;
 }
