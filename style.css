@@ -299,51 +299,95 @@ ul li a:hover {
   }
 }
 
-/*  Notice table design */
-/* 🔽 নোটিশ বোর্ড কন্টেইনার */
+/* 🔽 Notice Board Container */
 #notice-board {
-  margin: 220px auto 0 auto;
+  margin: 30px auto 10px auto;
   max-width: 800px;
-  margin-bottom: 0px; /* পরবর্তী অংশের দূরত্ব কমাতে */
+  padding: 10px;
+  background: #f8f8f8;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* 🔽 Notice table design */
+/* 🔽 Notice Table Design */
 #notice-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 15px;
-  margin-top: 0px;
-  margin-bottom: 5px;
+  margin: 0 auto;
   text-align: center;
 }
 
-/* 🔽 Table header styling */
+/* 🔽 Table Header Styling */
 #notice-table thead {
-  background-color: #006400; /* ডীপ সবুজ ব্যাকগ্রাউন্ড */
-  color: white;              /* সাদা লেখা */
+  background-color: #006400;
+  color: white;
 }
 
-/* 🔽 Table cell styling */
 #notice-table th,
 #notice-table td {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 10px;
 }
 
-/* 🔽 Pagination section styling */
+/* 🔽 Row hover effect */
+#notice-table tbody tr:hover {
+  background-color: #e6ffe6;
+  transition: background-color 0.3s ease;
+}
+
+/* 🔽 Pagination Styling */
 .pagination {
-  margin-top: 5px;
-  margin-bottom: 30px;
+  margin: 15px 0 40px;
   text-align: center;
 }
 
 .pagination button {
-  padding: 6px 12px;
+  padding: 8px 16px;
   margin: 0 5px;
   cursor: pointer;
+  background-color: #006400;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #228B22;
 }
 
 .pagination button:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  background-color: #999;
+  opacity: 0.6;
+}
+
+/* 🔽 ✅ Responsive Design for Mobile */
+@media (max-width: 600px) {
+  #notice-board {
+    padding: 5px;
+    margin: 10px;
+  }
+
+  #notice-table {
+    font-size: 13px;
+  }
+
+  #notice-table th,
+  #notice-table td {
+    padding: 6px;
+  }
+
+  .pagination button {
+    padding: 6px 10px;
+    margin: 3px;
+    font-size: 13px;
+  }
+
+  /* Optional: make table scrollable */
+  #notice-board {
+    overflow-x: auto;
+  }
 }
