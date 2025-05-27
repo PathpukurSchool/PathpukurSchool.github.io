@@ -113,10 +113,11 @@
 
     table.appendChild(tbody);
     container.appendChild(table);
-
-    document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${Math.ceil(studentTableNotices.length / noticesPerPage)}`;
-    document.getElementById('prevBtn').disabled = currentPage === 1;
-    document.getElementById('nextBtn').disabled = currentPage >= Math.ceil(studentTableNotices.length / noticesPerPage);
+    
+const totalPages = Math.ceil(studentTableNotices.length / noticesPerPage);
+document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
+document.getElementById('prevBtn').disabled = currentPage === 1;
+document.getElementById('nextBtn').disabled = currentPage === totalPages;
   }
 
   function nextPage() {
