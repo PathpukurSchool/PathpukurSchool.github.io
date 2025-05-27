@@ -154,7 +154,7 @@ function showAvailableSoonMessage(key) {
 
             const msg = document.createElement('div');
             msg.className = 'avail-msg';
-            msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
+            msg.textContent = '🔔 Available Soon 🔔';
 
             link.parentNode.insertBefore(msg, link.nextSibling);
 
