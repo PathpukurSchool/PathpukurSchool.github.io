@@ -57,13 +57,14 @@
 
   <!-- ✅ টেবিল নোটিশ বোর্ড -->
 <h2 style="text-align:center; margin-top: 30px;">📋 নোটিশ বোর্ড</h2>
-<div id="notice-board" style="margin: 20px;"></div>
-<div style="text-align:center; margin-bottom: 30px;">
-  <button onclick="prevPage()" id="prevBtn">⬅️ Back</button>
-  <span id="pageNumber" style="margin: 0 10px;"></span>
-  <button onclick="nextPage()" id="nextBtn">Next ➡️</button>
+<div id="notice-board" style="margin: 220px auto; max-width: 800px;"></div>
+<div style="text-align:center; margin-bottom: 10px;">
+  <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+  <span id="pageNumber" style="margin: 0 10px;">Page 1</span>
+  <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
 </div>
-
+<!-- ✅ External Notice Bord -->
+  <script src="student_notice.js"></script>
 <script>
   const noticesPerPage = 10;
   let currentPage = 1;
