@@ -54,7 +54,92 @@
     marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
     marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
   </script>
-  
+
+  <!-- ✅ টেবিল নোটিশ বোর্ড -->
+<h2 style="text-align:center; margin-top: 30px;">📋 নোটিশ বোর্ড</h2>
+<div id="notice-board" style="margin: 20px;"></div>
+<div style="text-align:center; margin-bottom: 30px;">
+  <button onclick="prevPage()" id="prevBtn">⬅️ Back</button>
+  <span id="pageNumber" style="margin: 0 10px;"></span>
+  <button onclick="nextPage()" id="nextBtn">Next ➡️</button>
+</div>
+
+<script>
+  const noticesPerPage = 10;
+  let currentPage = 1;
+
+  function renderNoticeTable() {
+    const container = document.getElementById('notice-board');
+    container.innerHTML = "";
+
+    const start = (currentPage - 1) * noticesPerPage;
+    const end = start + noticesPerPage;
+    const paginatedNotices = studentTableNotices.slice(start, end);
+
+    const table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.borderCollapse = 'collapse';
+    table.style.textAlign = 'center';
+
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+      <tr style="background-color: #f0f0f0;">
+        <th style="padding: 10px; border: 1px solid #ccc;">তারিখ</th>
+        <th style="padding: 10px; border: 1px solid #ccc;">নোটিশ</th>
+        <th style="padding: 10px; border: 1px solid #ccc;">লিংক</th>
+      </tr>
+    `;
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    paginatedNotices.forEach(notice => {
+      const tr = document.createElement('tr');
+
+      tr.innerHTML = `
+        <td style="padding: 8px; border: 1px solid #ccc;">${notice.date}</td>
+        <td style="padding: 8px; border: 1px solid #ccc; color: ${notice.color || '#000'};">${notice.text}</td>
+        <td style="padding: 8px; border: 1px solid #ccc;">
+          ${
+            notice.link && notice.link.trim() !== ''
+              ? `<a href="${notice.link}" target="_blank">Open</a> |
+                 <a href="${notice.link}" download>Download</a>`
+              : "—"
+          }
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    container.appendChild(table);
+
+    document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${Math.ceil(studentTableNotices.length / noticesPerPage)}`;
+    document.getElementById('prevBtn').disabled = currentPage === 1;
+    document.getElementById('nextBtn').disabled = currentPage >= Math.ceil(studentTableNotices.length / noticesPerPage);
+  }
+
+  function nextPage() {
+    if (currentPage < Math.ceil(studentTableNotices.length / noticesPerPage)) {
+      currentPage++;
+      renderNoticeTable();
+    }
+  }
+
+  function prevPage() {
+    if (currentPage > 1) {
+      currentPage--;
+      renderNoticeTable();
+    }
+  }
+</script>
+
+<script>
+  window.onload = () => {
+    loadStudentExamLinks();   // আগের পরীক্ষার রেজাল্ট বাটন লোড
+    renderNoticeTable();      // টেবিল নোটিশ লোড
+  };
+</script>
+
   <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল 📄</h2>
   <div id="exam-buttons" style="text-align:center;"></div>
 
