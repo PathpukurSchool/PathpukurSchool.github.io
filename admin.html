@@ -13,11 +13,11 @@
   <link rel="stylesheet" href="style.css">
 
   <!-- ✅ সেশন চেক -->
-  <script>
-    if (sessionStorage.getItem("studentLoggedIn") !== "true") {
-      window.location.replace("index.html");
-    }
-  </script>
+<script>
+  if (sessionStorage.getItem("userType") !== "school") {
+    window.location.replace("index.html");
+  }
+</script>
 </head>
    
 <body>
@@ -25,49 +25,7 @@
   <!-- ✅ School Branding -->
   <img src="PHS-LOGO.png" alt="SCHOOL LOGO" class="logo">
   <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
-  <h2 class="blink">গুরুত্বপূর্ণ বিজ্ঞপ্তি <span class="emoji">📢</span></h2>
-
-  <!-- ✅ Scrolling Notice -->
-  <div class="wrapper">
-    <div class="marquee-container">
-      <div id="marquee" class="marquee-content"></div>
-    </div>
-  </div>
-
-  <!-- ✅ External Notice File -->
-  <script src="student_notice.js"></script>
-  <script>
-  const marquee = document.getElementById("marquee");
-
-  if (Array.isArray(studentNotices)) {
-    studentNotices.forEach(notice => {
-      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
-      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
-
-      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
-      if (text.trim() !== "") {
-        const span = document.createElement("span");
-        span.textContent = `${date} - ${text}`;
-        span.style.color = notice.color || "black";
-        span.style.fontWeight = "bold";
-        span.style.marginRight = "30px";
-        marquee.appendChild(span);
-      }
-    });
-  } else {
-    marquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
-  }
-
-  // 🔁 Marquee pause on hover/touch
-  marquee.addEventListener("mouseover", () => marquee.classList.add("paused"));
-  marquee.addEventListener("mouseout", () => marquee.classList.remove("paused"));
-  marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
-  marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
-</script>
   
-
-
-     
   <!-- Footer -->
   <footer>
     <hr>
