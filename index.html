@@ -62,11 +62,20 @@
 
   // Exam dates যুক্ত করা
   examDates.forEach(exam => {
-    const span = document.createElement("span");
-    span.textContent = exam.text + " ";
-    span.style.color = exam.color;
-    span.style.fontWeight = "bold";
-    marquee.appendChild(span);
+    if (exam.date) {
+      const span = document.createElement("span");
+      span.textContent = `${exam.text} ${exam.date}, `;
+
+      // রং প্রয়োগ পুরো লাইনের জন্য
+      span.style.color = exam.color;
+      span.style.fontWeight = "bold";
+
+      if (exam.backgroundColor) {
+        span.style.backgroundColor = exam.backgroundColor;
+      }
+
+      marquee.appendChild(span);
+    }
   });
 
   // Mouse hover করলে স্ক্রল থামানো
