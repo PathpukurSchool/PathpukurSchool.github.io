@@ -1,8 +1,8 @@
 
 {
   "school": { 
-    "id": "admin123", 
-    "pass": "adminpass", 
+    "id": "reduniform", 
+    "pass": "School.Admin", 
     "redirect": "admin.html" },
 
   
