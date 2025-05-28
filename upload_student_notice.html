@@ -14,60 +14,46 @@
     <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
     <h1>🖊️ Upload Student Notice 🖊️</h1>
   <form id="noticeForm">
-    <input type="date" name="date" required>
-    <input type="text" name="subject" placeholder="বিষয়" required>
-    <textarea name="body" placeholder="নোটিশ টেক্সট বা লিংক" required></textarea>
-    <input type="file" name="file" accept=".pdf,.jpg,.png">
-    <select name="color">
-      <option value="black">কালো</option>
-      <option value="red">লাল</option>
-      <option value="blue">নীল</option>
-    </select>
-    <button type="submit">আপলোড করুন</button>
-  </form>
+  <input type="date" name="date" required />
+  <input type="text" name="subject" placeholder="Subject" required />
+  <textarea name="body" placeholder="Notice Body"></textarea>
+  <input type="color" name="color" />
+  <input type="file" name="file" required />
+  <button type="submit">Upload Notice</button>
+</form>
 
-  <p id="response"></p>
+<script>
+const scriptURL = 'YOUR_WEB_APP_URL';
 
-  <script>
-    document.getElementById("noticeForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
+document.getElementById('noticeForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const file = form.file.files[0];
+  const reader = new FileReader();
 
-      const form = e.target;
-      const file = form.file.files[0];
-      const reader = new FileReader();
+  reader.onload = async () => {
+    const base64 = reader.result.split(',')[1];
+    const data = {
+      date: form.date.value,
+      subject: form.subject.value,
+      body: form.body.value,
+      color: form.color.value,
+      fileName: file.name,
+      mimeType: file.type,
+      fileContent: base64
+    };
 
-      reader.onload = async function() {
-        const fileData = reader.result;
-        const notice = {
-          date: form.date.value,
-          subject: form.subject.value,
-          body: form.body.value,
-          file: file ? {
-            name: file.name,
-            type: file.type,
-            content: fileData
-          } : null,
-          color: form.color.value
-        };
-
-        // Step: 1 - POST to Netlify Function (to be created)
-        const res = await fetch("/.netlify/functions/uploadNotice", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(notice)
-        });
-
-        const result = await res.text();
-        document.getElementById("response").textContent = result;
-        form.reset();
-      };
-
-      if (file) {
-        reader.readAsDataURL(file);
-      } else {
-        reader.onload();
-      }
+    const res = await fetch(scriptURL, {
+      method: 'POST',
+      body: JSON.stringify(data)
     });
+    alert(await res.text());
+  };
+
+  reader.readAsDataURL(file);
+});
+</script>
+
   </script>
 </body>
 </html>
