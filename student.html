@@ -36,6 +36,9 @@
 
   <!-- ✅ External Notice File -->
   <script>
+    fetch('https://script.google.com/macros/s/AKfycbzBr2oFewPVoCJu9qyfbNduccJw2FhG7xEO9Ji0W4fXzkhuWZBV4aRDcCREMKcYeS6E/exec') // ← আপনার Apps Script লিংক দিন
+  .then(res => res.json())
+  .then(studentNotices => {
   const marquee = document.getElementById("marquee");
 
   if (Array.isArray(studentNotices)) {
