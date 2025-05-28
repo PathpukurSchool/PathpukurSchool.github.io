@@ -43,17 +43,27 @@ document.getElementById('noticeForm').addEventListener('submit', async (e) => {
       fileContent: base64
     };
 
-    const res = await fetch(scriptURL, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
-    alert(await res.text());
+    try {
+      const res = await fetch(scriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        alert(await res.text());
+        form.reset();  // ফর্ম রিসেট করে দিতে পারেন
+      } else {
+        alert('Upload failed: ' + res.statusText);
+      }
+    } catch (error) {
+      alert('Error: ' + error.message);
+    }
   };
 
   reader.readAsDataURL(file);
 });
 </script>
 
-  </script>
 </body>
 </html>
