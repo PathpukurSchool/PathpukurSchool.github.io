@@ -2,18 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Notice Board</title>
+    <title>Student Notice Admin Panel</title>
     <link rel="stylesheet" href="style.css">
+<style>
+    input, textarea, select { display: block; margin-bottom: 10px; width: 300px; }
+    table, th, td { border: 1px solid #000; border-collapse: collapse; padding: 5px; }
+  </style>
 </head>
 <body>
-</div>
-
-    <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+<img src="PHS-LOGO.png" alt="School Logo" class="logo">
     <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
-    
     <h1>🖊️ Upload Student Notice 🖊️</h1>
-    <ul id="notice-list"></ul>
+  <form id="noticeForm">
+    <input type="date" name="date" required>
+    <input type="text" name="subject" placeholder="বিষয়" required>
+    <textarea name="body" placeholder="নোটিশ টেক্সট বা লিংক" required></textarea>
+    <input type="file" name="file" accept=".pdf,.jpg,.png">
+    <select name="color">
+      <option value="black">কালো</option>
+      <option value="red">লাল</option>
+      <option value="blue">নীল</option>
+    </select>
+    <button type="submit">আপলোড করুন</button>
+  </form>
 
-    
+  <p id="response"></p>
+
+  <script>
+    document.getElementById("noticeForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const file = form.file.files[0];
+      const reader = new FileReader();
+
+      reader.onload = async function() {
+        const fileData = reader.result;
+        const notice = {
+          date: form.date.value,
+          subject: form.subject.value,
+          body: form.body.value,
+          file: file ? {
+            name: file.name,
+            type: file.type,
+            content: fileData
+          } : null,
+          color: form.color.value
+        };
+
+        // Step: 1 - POST to Netlify Function (to be created)
+        const res = await fetch("/.netlify/functions/uploadNotice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(notice)
+        });
+
+        const result = await res.text();
+        document.getElementById("response").textContent = result;
+        form.reset();
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      } else {
+        reader.onload();
+      }
+    });
+  </script>
 </body>
 </html>
