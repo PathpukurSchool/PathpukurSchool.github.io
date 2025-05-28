@@ -118,79 +118,65 @@
   </div>
 
   <script>
-async function uploadNotice(event) {
-  event.preventDefault();
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyfcWwZnEHm30sUKPUc-gjlLpoe9C5LTW8MnDQHWCLehizv8Mtb37wQCkaCoLci3oDEpw/exec';
 
-  const date = document.getElementById('date').value;
-  const subject = document.getElementById('subject').value;
-  const body = document.getElementById('body').value;
-  const color = document.getElementById('color').value;
-  const fileInput = document.getElementById('file');
+    document.getElementById('noticeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const file = form.file.files[0];
 
-  let fileContent = '';
-  let fileName = '';
-  let mimeType = '';
-
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    fileName = file.name;
-    mimeType = file.type;
-
-    // File → base64
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-      const base64 = e.target.result.split(',')[1]; // remove data:mime;base64,
-      
-      const postData = {
-        date,
-        subject,
-        body,
-        color,
-        fileName,
-        mimeType,
-        fileContent: base64
+      const data = {
+        date: form.date.value,
+        subject: form.subject.value,
+        body: form.body.value,
+        color: form.color.value
       };
 
-      const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbyfcWwZnEHm30sUKPUc-gjlLpoe9C5LTW8MnDQHWCLehizv8Mtb37wQCkaCoLci3oDEpw/exec',
-        {
-          method: 'POST',
-          body: JSON.stringify(postData),
-          headers: {
-            'Content-Type': 'application/json'
+      const uploadData = async (payload) => {
+        try {
+          const res = await fetch(scriptURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          const text = await res.text();
+          if (res.ok) {
+            form.reset();
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(() => {
+              document.getElementById('successMessage').style.display = 'none';
+            }, 4000);
+          } else {
+            alert('Upload failed: ' + text);
           }
+        } catch (error) {
+          alert('Error: ' + error.message);
         }
-      );
+      };
 
-      const result = await response.json();
-      alert(result.message);
-    };
-    reader.readAsDataURL(file);
-  } else {
-    // No file attached
-    const postData = {
-      date,
-      subject,
-      body,
-      color
-    };
-
-    const response = await fetch(
-      'https://script.google.com/macros/s/AKfycbyfcWwZnEHm30sUKPUc-gjlLpoe9C5LTW8MnDQHWCLehizv8Mtb37wQCkaCoLci3oDEpw/exec',
-      {
-        method: 'POST',
-        body: JSON.stringify(postData),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const base64 = reader.result.split(',')[1];
+          await uploadData({
+            ...data,
+            fileName: file.name,
+            mimeType: file.type,
+            fileContent: base64
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        await uploadData({
+          ...data,
+          fileName: '',
+          mimeType: '',
+          fileContent: ''
+        });
       }
-    );
-
-    const result = await response.json();
-    alert(result.message);
-  }
-}
-</script>
+    });
+  </script>
 
 </body>
 </html>
