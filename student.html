@@ -1,12 +1,15 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PATHPUKUR HIGH SCHOOL (HS)</title>
 
+  <!-- Favicon & Touch Icon -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="PHS-LOGO.png">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
   <!-- ✅ সেশন চেক -->
@@ -16,7 +19,7 @@
     }
   </script>
 </head>
-
+   
 <body>
 
   <!-- ✅ School Branding -->
@@ -30,31 +33,38 @@
       <div id="marquee" class="marquee-content"></div>
     </div>
   </div>
+
+  <!-- ✅ External Notice File -->
   <script src="student_notice.js"></script>
   <script>
-    const marquee = document.getElementById("marquee");
-    if (Array.isArray(studentScrollingNotices)) {
-      studentScrollingNotices.forEach(notice => {
-        const date = notice.date || "";
-        const text = notice.text || "";
-        if (text.trim() !== "") {
-          const span = document.createElement("span");
-          span.textContent = `${date} - ${text}`;
-          span.style.color = notice.color || "black";
-          span.style.fontWeight = "bold";
-          span.style.marginRight = "30px";
-          marquee.appendChild(span);
-        }
-      });
-    } else {
-      marquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
-    }
-    marquee.addEventListener("mouseover", () => marquee.classList.add("paused"));
-    marquee.addEventListener("mouseout", () => marquee.classList.remove("paused"));
-    marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
-    marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
-  </script>
+  const marquee = document.getElementById("marquee");
 
+  if (Array.isArray(studentNotices)) {
+    studentNotices.forEach(notice => {
+      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
+      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
+
+      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
+      if (text.trim() !== "") {
+        const span = document.createElement("span");
+        span.textContent = `${date} - ${text}`;
+        span.style.color = notice.color || "black";
+        span.style.fontWeight = "bold";
+        span.style.marginRight = "30px";
+        marquee.appendChild(span);
+      }
+    });
+  } else {
+    marquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
+  }
+
+  // 🔁 Marquee pause on hover/touch
+  marquee.addEventListener("mouseover", () => marquee.classList.add("paused"));
+  marquee.addEventListener("mouseout", () => marquee.classList.remove("paused"));
+  marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
+  marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
+</script>
+  
   <!-- ✅ টেবিল নোটিশ বোর্ড -->
   <div id="notice-board"></div>
   <div class="pagination">
@@ -63,10 +73,11 @@
     <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
   </div>
 
+  <!-- ✅ External Notice Bord -->
+  <script src="student_notice.js"></script>
   <script>
     const noticesPerPage = 10;
     let currentPage = 1;
-    let tableNotices = [];
 
     function renderNoticeTable() {
       const container = document.getElementById('notice-board');
@@ -74,7 +85,7 @@
 
       const start = (currentPage - 1) * noticesPerPage;
       const end = start + noticesPerPage;
-      const paginatedNotices = tableNotices.slice(start, end);
+      const paginatedNotices = studentTableNotices.slice(start, end);
 
       const table = document.createElement('table');
       table.id = 'notice-table';
@@ -92,6 +103,7 @@
       const tbody = document.createElement('tbody');
       paginatedNotices.forEach(notice => {
         const tr = document.createElement('tr');
+
         tr.innerHTML = `
           <td>${notice.date}</td>
           <td style="color: ${notice.color || '#000'};">${notice.text}</td>
@@ -110,14 +122,14 @@
       table.appendChild(tbody);
       container.appendChild(table);
 
-      const totalPages = Math.ceil(tableNotices.length / noticesPerPage);
+      const totalPages = Math.ceil(studentTableNotices.length / noticesPerPage);
       document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
       document.getElementById('prevBtn').disabled = currentPage === 1;
       document.getElementById('nextBtn').disabled = currentPage === totalPages;
     }
 
     function nextPage() {
-      if (currentPage < Math.ceil(tableNotices.length / noticesPerPage)) {
+      if (currentPage < Math.ceil(studentTableNotices.length / noticesPerPage)) {
         currentPage++;
         renderNoticeTable();
       }
@@ -130,18 +142,16 @@
       }
     }
 
-    // ✅ Google Apps Script থেকে নোটিশ লোড
-    fetch('https://script.google.com/macros/s/AKfycbyfcWwZnEHm30sUKPUc-gjlLpoe9C5LTW8MnDQHWCLehizv8Mtb37wQCkaCoLci3oDEpw/exec')
-      .then(res => res.json())
-      .then(data => {
-        tableNotices = data || [];
-        renderNoticeTable();
-      })
-      .catch(err => {
-        console.error("নোটিশ লোডে সমস্যা:", err);
-        document.getElementById('notice-board').innerHTML = "<p>নোটিশ লোড করা যায়নি।</p>";
-      });
+    // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
+    renderNoticeTable();
   </script>
+
+<script>
+  window.onload = () => {
+    loadStudentExamLinks();   // আগের পরীক্ষার রেজাল্ট বাটন লোড
+    renderNoticeTable();      // টেবিল নোটিশ লোড
+  };
+</script>
 
   <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল 📄</h2>
   <div id="exam-buttons" style="text-align:center;"></div>
@@ -149,8 +159,10 @@
   <script>
     let studentData = {};
 
+    // লিঙ্ক লোড
     function loadStudentExamLinks() {
       fetch('config_student.json')
+      // fetch('https://script.google.com/macros/s/AKfycbwwfRPjHO_S_nVIJPnC90G0jQkbeWRFMU6R2XmQWjpdLYyu7p56Xe7KKgHDdlioJiienQ/exec?sheet=StudentLink') // ← <-- আপনার Apps Script URL এখানে বসান
         .then(response => response.json())
         .then(data => {
           studentData = data;
@@ -161,10 +173,12 @@
         });
     }
 
+    // বাটন তৈরি ও দেখানো
     function renderStudentButtons() {
       const container = document.getElementById('exam-buttons');
       container.innerHTML = '';
 
+      // ইউনিক ক্লাস লিস্ট তৈরি
       const classes = [...new Set(Object.keys(studentData).map(k => k.split('_')[0]))];
 
       classes.forEach(cls => {
@@ -183,42 +197,42 @@
             a.textContent = exam === 'TEST' ? 'TEST EXAM' : exam;
             a.href = '#';
             a.onclick = (e) => {
-              e.preventDefault();
-              const oldMsg = a.nextElementSibling;
-              if (oldMsg && oldMsg.classList.contains('avail-msg')) {
-                oldMsg.remove();
-              }
+  e.preventDefault();
+  // আগের মেসেজ থাকলে সরিয়ে ফেলুন
+  const oldMsg = a.nextElementSibling;
+  if (oldMsg && oldMsg.classList.contains('avail-msg')) {
+    oldMsg.remove();
+  }
 
-              if (link && link.trim() !== '') {
-                window.open(link, '_blank');
-              } else {
-                const msg = document.createElement('div');
-                msg.className = 'avail-msg';
-                msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
+  if (link && link.trim() !== '') {
+    window.open(link, '_blank');
+  } else {
+    const msg = document.createElement('div');
+    msg.className = 'avail-msg';
+    msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
 
-                a.parentNode.insertBefore(msg, a.nextSibling);
-                setTimeout(() => {
-                  msg.remove();
-                }, 3000);
-              }
-            };
+    a.parentNode.insertBefore(msg, a.nextSibling);
+
+    // 3 সেকেন্ড পর বার্তাটি অটো গায়েব হবে
+    setTimeout(() => {
+      msg.remove();
+    }, 3000);
+  }
+};
             container.appendChild(a);
           }
         });
       });
     }
-
-    window.onload = () => {
-      loadStudentExamLinks();
-    };
   </script>
-
+  
   <!-- Footer -->
   <footer>
     <hr>
     বিদ্যালয় প্রধানের নির্দেশনায়, পাতপুকুর হাই স্কুল (উঃ মাঃ)
   </footer>
 
+  <!-- Main JS -->
   <script src="script.js"></script>
 </body>
 </html>
