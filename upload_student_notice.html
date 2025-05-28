@@ -1,182 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Student Notice Admin Panel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(to right, #c2e9fb, #a1c4fd);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      margin: 0;
-    }
-
-    .logo {
-      width: 100px;
-      height: auto;
-      margin-bottom: 10px;
-    }
-
-    h1 {
-      color: #003366;
-      text-align: center;
-      margin: 5px 0;
-    }
-
-    form {
-      background-color: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      width: 100%;
-      max-width: 400px;
-    }
-
-    input, textarea, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-
-    input[type="color"] {
-      height: 50px;
-      padding: 0;
-    }
-
-    input[type="file"] {
-      padding: 5px;
-    }
-
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .success {
-      background-color: #d4edda;
-      color: #155724;
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 15px;
-      text-align: center;
-    }
-
-    @media screen and (max-width: 480px) {
-      form {
-        padding: 15px;
-        width: 95%;
-      }
-
-      h1 {
-        font-size: 18px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Notice Board</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+</div>
 
-  <img src="PHS-LOGO.png" alt="School Logo" class="logo" />
-  <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
-  <h1>🖊️ Upload Student Notice 🖊️</h1>
+    <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+    <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
+    
+    <h1>📌 Notice Board 📌</h1>
+    <ul id="notice-list"></ul>
 
-  <form id="noticeForm">
-    <input type="date" name="date" required />
-    <input type="text" name="subject" placeholder="Subject" required />
-    <textarea name="body" placeholder="Notice Body" rows="4"></textarea>
-    <label>Select Color:</label>
-    <input type="color" name="color" value="#ffcc00" list="presetColors" />
-    <datalist id="presetColors">
-      <option value="#ffcc00"></option>
-      <option value="#00cc99"></option>
-      <option value="#3399ff"></option>
-      <option value="#ff6666"></option>
-      <option value="#cc33ff"></option>
-      <option value="#66cc33"></option>
-    </datalist>
-    <input type="file" name="file" />
-    <button type="submit">Upload Notice</button>
-  </form>
-
-  <div id="successMessage" class="success" style="display: none;">
-    ✅ Notice uploaded successfully!
-  </div>
-
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyfcWwZnEHm30sUKPUc-gjlLpoe9C5LTW8MnDQHWCLehizv8Mtb37wQCkaCoLci3oDEpw/exec';
-
-    document.getElementById('noticeForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const file = form.file.files[0];
-
-      const data = {
-        date: form.date.value,
-        subject: form.subject.value,
-        body: form.body.value,
-        color: form.color.value
-      };
-
-      const uploadData = async (payload) => {
-        try {
-          const res = await fetch(scriptURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          const text = await res.text();
-          if (res.ok) {
-            form.reset();
-            document.getElementById('successMessage').style.display = 'block';
-            setTimeout(() => {
-              document.getElementById('successMessage').style.display = 'none';
-            }, 4000);
-          } else {
-            alert('Upload failed: ' + text);
-          }
-        } catch (error) {
-          alert('Error: ' + error.message);
-        }
-      };
-
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = async () => {
-          const base64 = reader.result.split(',')[1];
-          await uploadData({
-            ...data,
-            fileName: file.name,
-            mimeType: file.type,
-            fileContent: base64
-          });
-        };
-        reader.readAsDataURL(file);
-      } else {
-        await uploadData({
-          ...data,
-          fileName: '',
-          mimeType: '',
-          fileContent: ''
-        });
-      }
-    });
-  </script>
-
+    
 </body>
 </html>
