@@ -7,6 +7,8 @@ const PUBLIC_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz6mD_rAUBTq
 let credentials = {}; // Google Sheet থেকে আনা এক্সাম লিংক ডাটা এখানে সংরক্ষণ করা হবে
 let masterCredential = {}; // masterConfig.json থেকে আনা মাস্টার লগইন ডাটা এখানে সংরক্ষণ করা হবে
 
+
+
 // DOM লোড হওয়ার পর প্রাথমিকভাবে কল হবে
 document.addEventListener('DOMContentLoaded', async () => {
     // সেশন চেক করুন যদি মাস্টার লগইন ইতিমধ্যেই হয়ে থাকে
@@ -28,20 +30,55 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
-// মাস্টার লগইনের তথ্য লোড (masterConfig.json থেকে)
-async function getMasterConfig() {
-    try {
-        const response = await fetch('masterConfig.json');
-        if (!response.ok) {
-            throw new Error('Failed to load masterConfig.json');
+// DOM লোড হওয়ার পর প্রাথমিকভাবে কল হবে
+document.addEventListener('DOMContentLoaded', async () => {
+    const userType = sessionStorage.getItem("userType");
+    const masterLoginOverlay = document.getElementById('masterLoginOverlay');
+
+    if (userType === "teacher" || userType === "student" || userType === "school") {
+        // যদি লগইন করা থাকে, তবে লগইন ওভারলে লুকান
+        if (masterLoginOverlay) {
+            masterLoginOverlay.style.display = "none";
         }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching masterConfig.json:', error);
-        return null;
+        await loadExamLinks(); // Google Sheet থেকে এক্সাম লিংক লোড করুন
+    } else {
+        // যদি সেশন না থাকে বা অবৈধ হয়, তাহলে লগআউট করুন এবং লগইন ওভারলে দেখান
+        logout(); // এখানে logout ফাংশন কল করুন
+    }
+
+    // ব্রাউজারে 'back' বাটন প্রেস করলে বা পেজ ফরওয়ার্ড হলে লগআউট নিশ্চিত করা
+    // এটি 'popstate' ইভেন্ট ব্যবহার করে
+    window.addEventListener('popstate', (event) => {
+        // যদি আপনি নির্দিষ্ট URL এ না থাকেন এবং সেশন না থাকে, তাহলে লগআউট করুন
+        // অথবা শুধুমাত্র প্রতিটি back/forward ইভেন্টে লগআউট করতে পারেন
+        // সরলতার জন্য, এখানে popstate এলেই লগআউট করা হচ্ছে।
+        const currentUserType = sessionStorage.getItem("userType");
+        if (!currentUserType) { // যদি userType না থাকে, মানে লগইন নেই
+            logout();
+        }
+    });
+});
+
+
+// নতুন লগআউট ফাংশন যোগ করুন
+function logout() {
+    sessionStorage.removeItem("userType"); // userType সেশন থেকে সরিয়ে দিন
+    sessionStorage.removeItem("studentLoggedIn"); // যদি studentLoggedIn ব্যবহার করেন, সেটিও সরান
+
+    const masterLoginOverlay = document.getElementById('masterLoginOverlay');
+    if (masterLoginOverlay) {
+        masterLoginOverlay.style.display = "flex"; // লগইন ওভারলে আবার দেখান
+    }
+
+    // প্রয়োজনে exam-buttons কন্টেইনারটি খালি করে দিন বা একটি মেসেজ দেখান
+    const examButtonsDiv = document.getElementById('exam-buttons');
+    if (examButtonsDiv) {
+        examButtonsDiv.innerHTML = '<p>লগইন করার জন্য অনুগ্রহ করে আইডি ও পাসওয়ার্ড দিন।</p>';
     }
 }
+
+
+
 
 // মাস্টার লগইন যাচাই করে
 async function submitMasterLogin() {
