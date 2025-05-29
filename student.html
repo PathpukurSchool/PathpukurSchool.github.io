@@ -160,38 +160,64 @@
   
   <script> // Student Table Notice popup handle
   function showPopup(titleText, date, link, subjText) {
-  document.getElementById('popupTitle').textContent = titleText;
-  document.getElementById('popupDate').textContent = "তারিখ: " + date;
+  // পপ-আপ কনটেইনার তৈরি
+  const popup = document.createElement('div');
+  popup.style.position = 'fixed';
+  popup.style.top = '50%';
+  popup.style.left = '50%';
+  popup.style.transform = 'translate(-50%, -50%)';
+  popup.style.background = '#f0f8ff'; // হালকা নীল রঙ
+  popup.style.padding = '20px';
+  popup.style.border = '2px solid #333';
+  popup.style.borderRadius = '10px';
+  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+  popup.style.zIndex = '9999';
+  popup.style.textAlign = 'center'; // মিডিল এলাইনমেন্ট
 
-  const body = document.getElementById('popupBody');
+  // তারিখ
+  const dateElem = document.createElement('div');
+  dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+  dateElem.style.marginBottom = '10px';
+  popup.appendChild(dateElem);
 
-  // যদি subj ফাঁকা না হয়, তবে বডিতে দেখাও
-  if (subjText && subjText.trim() !== "") {
-    body.innerHTML = `<p style="text-align:justify;">${subjText}</p>`;
-  } else {
-    body.innerHTML = ""; // পুরোপুরি ফাঁকা রাখো
+  // subj থাকলে তা দেখাও
+  if (subjText && subjText.trim() !== '') {
+    const subjElem = document.createElement('div');
+    subjElem.innerText = subjText;
+    subjElem.style.color = 'darkgreen';
+    subjElem.style.fontWeight = 'bold';
+    subjElem.style.marginBottom = '10px';
+    popup.appendChild(subjElem);
   }
 
-  const linkArea = document.getElementById('popupLinkArea');
-  linkArea.innerHTML = "";
+  // মূল বর্ণনা (text)
+  const bodyElem = document.createElement('div');
+  bodyElem.innerText = titleText;
+  bodyElem.style.marginBottom = '10px';
+  popup.appendChild(bodyElem);
 
-  if (link && link.trim() !== "") {
-    const a = document.createElement("a");
-    a.href = link;
-    a.target = "_blank";
-    a.textContent = "🔗 এখানে দেখুন";
-    a.style.display = "inline-block";
-    a.style.marginTop = "10px";
-    a.style.background = "#007bff";
-    a.style.color = "white";
-    a.style.padding = "6px 12px";
-    a.style.borderRadius = "5px";
-    a.style.textDecoration = "none";
-    linkArea.appendChild(a);
+  // লিঙ্ক থাকলে দেখাও
+  if (link && link.trim() !== '') {
+    const linkElem = document.createElement('a');
+    linkElem.href = link;
+    linkElem.innerText = 'ফাইল খুলুন';
+    linkElem.target = '_blank';
+    linkElem.style.display = 'inline-block';
+    linkElem.style.marginTop = '10px';
+    linkElem.style.color = 'blue';
+    popup.appendChild(linkElem);
   }
-  document.getElementById('popupModal').style.display = 'flex';
+
+  // ক্লোজ বাটন
+  const closeBtn = document.createElement('button');
+  closeBtn.innerText = 'বন্ধ করুন';
+  closeBtn.style.marginTop = '15px';
+  closeBtn.onclick = () => document.body.removeChild(popup);
+  popup.appendChild(closeBtn);
+
+  // স্ক্রিনে দেখাও
+  document.body.appendChild(popup);
 }
-
 
 function closeModal() {
   document.getElementById('popupModal').style.display = 'none';
