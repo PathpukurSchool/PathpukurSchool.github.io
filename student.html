@@ -116,7 +116,7 @@
           <td>${notice.date}</td>
           <td style="color: ${notice.color || '#000'};">${notice.text}</td>
 <td>
-  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}')" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+  <button onclick="showPopup(\`${notice.text}\`, \`${notice.date}\`, \`${notice.link || ''}\`, \`${notice.subj || ''}\`)" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
     View
   </button>
 </td>   
