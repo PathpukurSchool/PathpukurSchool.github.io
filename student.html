@@ -19,7 +19,16 @@
     }
   </script>
 </head>
-   
+   <!-- ✅ Popup Modal -->
+<div id="popupModal" style="display: none;" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" id="popupTitle">বিষয়</div>
+    <div class="modal-date" id="popupDate">তারিখ</div>
+    <div class="modal-body" id="popupBody">মুল বিজ্ঞপ্তি</div>
+    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+  </div>
+</div>
+
 <body>
 
   <!-- ✅ School Branding -->
@@ -107,14 +116,11 @@
         tr.innerHTML = `
           <td>${notice.date}</td>
           <td style="color: ${notice.color || '#000'};">${notice.text}</td>
-          <td>
-            ${
-              notice.link && notice.link.trim() !== ''
-                ? `<a href="${notice.link}" target="_blank">Open</a> |
-                   <a href="${notice.link}" download>Download</a>`
-                : "—"
-            }
-          </td>
+<td>
+  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}')" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+    View
+  </button>
+</td>   
         `;
         tbody.appendChild(tr);
       });
@@ -151,6 +157,32 @@
     loadStudentExamLinks();   // আগের পরীক্ষার রেজাল্ট বাটন লোড
     renderNoticeTable();      // টেবিল নোটিশ লোড
   };
+</script>
+  
+  <script> // Student Table Notice popup handle
+  function showPopup(text, date, link) {
+    const title = document.getElementById('popupTitle');
+    const dateElem = document.getElementById('popupDate');
+    const body = document.getElementById('popupBody');
+
+    title.textContent = text;
+    dateElem.textContent = date;
+
+    if (text.trim() === '' && (!link || link.trim() === '')) {
+      body.innerHTML = "<i>কোনো তথ্য উপলব্ধ নয়।</i>";
+    } else {
+      body.innerHTML = `
+        ${text ? `<p>${text}</p>` : ''}
+        ${link ? `<p><a href="${link}" target="_blank">লিংকে যান</a></p>` : ''}
+      `;
+    }
+
+    document.getElementById('popupModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('popupModal').style.display = 'none';
+  }
 </script>
 
   <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল 📄</h2>
