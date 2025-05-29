@@ -29,7 +29,7 @@
 
 
 
-<!-- HTML: Admin Panel Table -->
+<!-- টিচার এক্সাম লিঙ্ক ID PASSWORD।আপলোডের টেবিল -->
 <div class="table-container">
   <h2>Exam Link for Teachers</h2>
   <table id="examTable">
@@ -43,29 +43,33 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Example Rows -->
-      <tr>
-        <td class="fixed">V_1ST</td>
-        <td><input type="text" value="" disabled></td>
-        <td><input type="text" value="" disabled></td>
-        <td><input type="text" value="" disabled></td>
-        <td>
-          <button class="editBtn">Edit</button>
-          <button class="saveBtn" disabled>Save</button>
-        </td>
-      </tr>
-      <!-- Repeat for other classes -->
+      <!-- Auto-generated rows -->
+      <tr><td class="fixed">V_1ST</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
       <tr><td class="fixed">V_2ND</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
       <tr><td class="fixed">V_3RD</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
       <tr><td class="fixed">VI_1ST</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
-      <!-- Add more rows similarly... -->
+      <tr><td class="fixed">VI_2ND</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">VI_3RD</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">VII_1ST</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">VII_2ND</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">VII_3RD</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">VIII_1ST</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">VIII_2ND</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">VIII_3RD</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">IX_1ST</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">IX_2ND</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">IX_3RD</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">X_1ST</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">X_2ND</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">X_3RD</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
+      <tr><td class="fixed">X_TEST_EXAM</td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><input type="text" disabled></td><td><button class="editBtn">Edit</button><button class="saveBtn" disabled>Save</button></td></tr>
     </tbody>
   </table>
 </div>
 
 <!-- JavaScript -->
 <script>
-  document.querySelectorAll(".editBtn").forEach((btn, index) => {
+  document.querySelectorAll(".editBtn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const row = btn.closest("tr");
       row.querySelectorAll("input").forEach(input => input.disabled = false);
@@ -73,7 +77,7 @@
     });
   });
 
-  document.querySelectorAll(".saveBtn").forEach((btn, index) => {
+  document.querySelectorAll(".saveBtn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const row = btn.closest("tr");
       row.querySelectorAll("input").forEach(input => input.disabled = true);
@@ -84,6 +88,7 @@
 
 <!-- Link CSS -->
 <link rel="stylesheet" href="css/style.css">
+
   
 
 
