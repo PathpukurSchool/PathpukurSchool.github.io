@@ -209,18 +209,6 @@
     subjElem.style.marginBottom = '12px';
     popup.appendChild(subjElem);
   }
-
-  // লিঙ্ক থাকলে তা দেখাও
-  if (link && link.trim() !== '') {
-    const linkElem = document.createElement('a');
-    linkElem.href = link;
-    linkElem.innerText = 'ফাইল খুলুন';
-    linkElem.target = '_blank';
-    linkElem.style.display = 'inline-block';
-    linkElem.style.marginTop = '10px';
-    linkElem.style.color = 'blue';
-    popup.appendChild(linkElem);
-  }
 // বোতাম কন্টেইনার
 const buttonContainer = document.createElement('div');
 buttonContainer.style.marginTop = '20px';
@@ -228,7 +216,7 @@ buttonContainer.style.display = 'flex';
 buttonContainer.style.justifyContent = 'center';
 buttonContainer.style.gap = '20px'; // বোতামের মাঝে দূরত্ব
 
-// ফাইল খুলুন বোতাম
+// ফাইল খুলুন বোতাম লিঙ্ক থাকলে তা দেখাও
 if (link && link.trim() !== '') {
   const linkBtn = document.createElement('a');
   linkBtn.href = link;
