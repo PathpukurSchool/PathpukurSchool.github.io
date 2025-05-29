@@ -73,12 +73,14 @@
  <!-- ✅ Popup Modal -->
 <div id="popupModal" style="display: none;" class="modal-overlay">
   <div class="modal-content">
-    <div class="modal-header" id="popupTitle">বিষয়</div>
-    <div class="modal-date" id="popupDate">তারিখ</div>
-    <div class="modal-body" id="popupBody">মুল বিজ্ঞপ্তি</div>
+    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
+    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
+    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
+    <div id="popupLinkArea" style="margin-top: 10px;"></div>
     <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
   </div>
 </div>
+
   <!-- ✅ External Notice Bord -->
   <script src="student_notice.js"></script>
   <script>
@@ -157,29 +159,38 @@
 </script>
   
   <script> // Student Table Notice popup handle
-  function showPopup(text, date, link) {
-    const title = document.getElementById('popupTitle');
-    const dateElem = document.getElementById('popupDate');
-    const body = document.getElementById('popupBody');
+  function showPopup(titleText, date, link) {
+  document.getElementById('popupTitle').textContent = titleText;
+  document.getElementById('popupDate').textContent = date;
 
-    title.textContent = text;
-    dateElem.textContent = date;
+  const body = document.getElementById('popupBody');
+  body.innerHTML = `<p style="text-align:justify;">${titleText}</p>`;
 
-    if (text.trim() === '' && (!link || link.trim() === '')) {
-      body.innerHTML = "<i>কোনো তথ্য উপলব্ধ নয়।</i>";
-    } else {
-      body.innerHTML = `
-        ${text ? `<p>${text}</p>` : ''}
-        ${link ? `<p><a href="${link}" target="_blank">লিংকে যান</a></p>` : ''}
-      `;
-    }
+  const linkArea = document.getElementById('popupLinkArea');
+  linkArea.innerHTML = "";
 
-    document.getElementById('popupModal').style.display = 'flex';
+  if (link && link.trim() !== "") {
+    const a = document.createElement("a");
+    a.href = link;
+    a.target = "_blank";
+    a.textContent = "🔗 এখানে দেখুন";
+    a.style.display = "inline-block";
+    a.style.marginTop = "10px";
+    a.style.background = "#007bff";
+    a.style.color = "white";
+    a.style.padding = "6px 12px";
+    a.style.borderRadius = "5px";
+    a.style.textDecoration = "none";
+    linkArea.appendChild(a);
   }
 
-  function closeModal() {
-    document.getElementById('popupModal').style.display = 'none';
-  }
+  document.getElementById('popupModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('popupModal').style.display = 'none';
+}
+
 </script>
 
   <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল 📄</h2>
