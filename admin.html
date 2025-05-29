@@ -18,14 +18,316 @@
     window.location.replace("index.html");
   }
 </script>
+  <style>
+        /* Additional styles for dynamic content if needed */
+        .editable-cell {
+            background-color: #f0f0f0; /* হালকা ধূসর الخلفية যখন এডিট করা যাবে */
+        }
+        .fixed-class-cell {
+            font-weight: bold;
+        }
+        /* লোডিং স্পিনার */
+        .loader {
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* বার্তা প্রদর্শনের জন্য স্টাইল */
+        .message-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .message-toast.show {
+            opacity: 1;
+        }
+        .message-toast.success {
+            background-color: #28a745; /* সবুজ */
+        }
+        .message-toast.error {
+            background-color: #dc3545; /* লাল */
+        }
+    </style>
 </head>
-   
-<body>
+
+
+ 
+<body class="bg-gray-100 font-sans">
 
   <!-- ✅ School Branding -->
   <img src="PHS-LOGO.png" alt="SCHOOL LOGO" class="logo">
   <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
   <h2 class="blink">👤 <u>School login</u> 👤 </h2>
+
+
+    
+    
+
+    
+    
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="mb-6 text-center">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-700">শিক্ষকদের জন্য পরীক্ষার লিঙ্ক অ্যাডমিন প্যানেল</h1>
+        </header>
+
+        <div id="loader" class="loader" style="display: none;"></div>
+        <div id="messageToast" class="message-toast"></div>
+
+        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+            <table class="min-w-full leading-normal">
+                <thead>
+                    <tr class="custom-heading-bg text-white">
+                        <th class="px-3 sm:px-5 py-3 border-b-2 border-gray-200 text-left text-xs sm:text-sm font-semibold uppercase tracking-wider">CLASS</th>
+                        <th class="px-3 sm:px-5 py-3 border-b-2 border-gray-200 text-left text-xs sm:text-sm font-semibold uppercase tracking-wider">ID</th>
+                        <th class="px-3 sm:px-5 py-3 border-b-2 border-gray-200 text-left text-xs sm:text-sm font-semibold uppercase tracking-wider">PASSWORD</th>
+                        <th class="px-3 sm:px-5 py-3 border-b-2 border-gray-200 text-left text-xs sm:text-sm font-semibold uppercase tracking-wider">LINK</th>
+                        <th class="px-3 sm:px-5 py-3 border-b-2 border-gray-200 text-left text-xs sm:text-sm font-semibold uppercase tracking-wider">কার্যক্রম</th>
+                    </tr>
+                </thead>
+                <tbody id="linkTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Google Apps Script Web App URL (এটি ধাপ ২ থেকে পাবেন)
+        const WEB_APP_URL = 'আপনার_APPS_SCRIPT_WEB_APP_URL_এখানে_দিন';
+
+        const classes = [
+            "V_1ST", "V_2ND", "V_3RD",
+            "VI_1ST", "VI_2ND", "VI_3RD",
+            "VII_1ST", "VII_2ND", "VII_3RD",
+            "VIII_1ST", "VIII_2ND", "VIII_3RD",
+            "IX_1ST", "IX_2ND", "IX_3RD",
+            "X_1ST", "X_2ND", "X_3RD",
+            "X_TEST_EXAM"
+        ];
+
+        const tableBody = document.getElementById('linkTableBody');
+        const loader = document.getElementById('loader');
+        const messageToast = document.getElementById('messageToast');
+
+        // বার্তা দেখানোর জন্য ফাংশন
+        function showToast(message, type = 'success') {
+            messageToast.textContent = message;
+            messageToast.className = `message-toast ${type} show`;
+            setTimeout(() => {
+                messageToast.className = 'message-toast';
+            }, 3000); // ৩ সেকেন্ড পর মেসেজ লুকাতে
+        }
+
+        // ডেটা লোড করার ফাংশন
+        async function loadData() {
+            loader.style.display = 'block';
+            tableBody.innerHTML = ''; // পুরাতন ডেটা মুছে ফেলা
+
+            try {
+                const response = await fetch(`${WEB_APP_URL}?action=get`);
+                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const existingDataMap = new Map();
+                    if (Array.isArray(result.data)) {
+                        result.data.forEach(item => {
+                            if(item.CLASS) { // নিশ্চিত করুন CLASS আছে
+                                existingDataMap.set(item.CLASS.trim(), item);
+                            }
+                        });
+                    }
+                    
+                    classes.forEach(className => {
+                        const data = existingDataMap.get(className) || { CLASS: className, ID: '', PASSWORD: '', LINK: '' };
+                        createRow(data);
+                    });
+                } else {
+                    showToast(result.message || 'ডেটা লোড করতে ব্যর্থ হয়েছে', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showToast(`ডেটা লোড করার সময় ত্রুটি: ${error.message}`, 'error');
+                // ত্রুটির ক্ষেত্রে খালি রো তৈরি করা
+                classes.forEach(className => {
+                    createRow({ CLASS: className, ID: '', PASSWORD: '', LINK: '' });
+                });
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        // টেবিলের সারি তৈরি করার ফাংশন
+        function createRow(data) {
+            const row = tableBody.insertRow();
+            row.className = 'hover:bg-green-100 custom-row-hover'; // হোভার ইফেক্ট
+
+            // CLASS সেল ( পরিবর্তনযোগ্য নয় )
+            const classCell = row.insertCell();
+            classCell.textContent = data.CLASS;
+            classCell.className = 'px-3 sm:px-5 py-3 border-b border-gray-200 bg-green-400 text-white text-sm fixed-class-cell'; // হালকা সবুজ الخلفية, সাদা টেক্সট
+
+            // ID, Password, Link সেল ( পরিবর্তনযোগ্য )
+            const idCell = createEditableCell(data.ID || '');
+            row.appendChild(idCell);
+
+            const passwordCell = createEditableCell(data.PASSWORD || '');
+            row.appendChild(passwordCell);
+            
+            const linkCell = createEditableCell(data.LINK || '');
+            row.appendChild(linkCell);
+
+            // কার্যক্রম সেল
+            const actionCell = row.insertCell();
+            actionCell.className = 'px-3 sm:px-5 py-3 border-b border-gray-200 bg-white text-sm';
+            
+            const editButton = createButton('Edit', 'bg-blue-500 hover:bg-blue-700', () => enableEdit(row, editButton, saveButton));
+            const saveButton = createButton('Save', 'bg-green-500 hover:bg-green-700', () => saveData(row, data.CLASS, editButton, saveButton));
+            saveButton.style.display = 'none'; // প্রথমে সেভ বাটন লুকানো থাকবে
+            
+            const deleteButton = createButton('Delete', 'bg-red-500 hover:bg-red-700 ml-2', () => deleteData(data.CLASS, row));
+
+            actionCell.appendChild(editButton);
+            actionCell.appendChild(saveButton);
+            actionCell.appendChild(deleteButton);
+        }
+
+        function createEditableCell(text) {
+            const cell = document.createElement('td');
+            cell.textContent = text;
+            cell.className = 'px-3 sm:px-5 py-3 border-b border-gray-200 bg-white text-sm';
+            cell.setAttribute('data-original-text', text); // আসল টেক্সট সংরক্ষণ
+            return cell;
+        }
+        
+        function createButton(text, classes, onClick) {
+            const button = document.createElement('button');
+            button.textContent = text;
+            button.className = `text-white font-bold py-1 px-2 sm:py-2 sm:px-3 rounded text-xs sm:text-sm ${classes}`;
+            button.onclick = onClick;
+            return button;
+        }
+
+        // এডিট মোড সক্রিয় করা
+        function enableEdit(row, editBtn, saveBtn) {
+            // ID, PASSWORD, LINK সেলগুলো (index 1, 2, 3)
+            for (let i = 1; i <= 3; i++) {
+                const cell = row.cells[i];
+                cell.contentEditable = true;
+                cell.classList.add('editable-cell', 'border-blue-300', 'ring-1', 'ring-blue-300'); // এডিট করার সময় ইনডিকেটর
+                cell.focus();
+            }
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'inline-block';
+        }
+
+        // ডেটা সেভ করা
+        async function saveData(row, className, editBtn, saveBtn) {
+            loader.style.display = 'block';
+            const cells = row.cells;
+            const updatedData = {
+                CLASS: className,
+                ID: cells[1].textContent.trim(),
+                PASSWORD: cells[2].textContent.trim(),
+                LINK: cells[3].textContent.trim()
+            };
+
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8', // Apps Script এর জন্য text/plain ব্যবহার করা ভালো
+                    },
+                    body: JSON.stringify({ action: 'save', data: updatedData })
+                });
+                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('ডেটা সফলভাবে সেভ হয়েছে!');
+                    for (let i = 1; i <= 3; i++) { // ID, PASSWORD, LINK
+                        cells[i].contentEditable = false;
+                        cells[i].classList.remove('editable-cell', 'border-blue-300', 'ring-1', 'ring-blue-300');
+                        cells[i].setAttribute('data-original-text', cells[i].textContent.trim()); // নতুন আসল টেক্সট সেট করা
+                    }
+                    editBtn.style.display = 'inline-block';
+                    saveBtn.style.display = 'none';
+                } else {
+                    showToast(result.message || 'ডেটা সেভ করতে সমস্যা হয়েছে', 'error');
+                    // সেভ ব্যর্থ হলে আগের অবস্থায় ফিরিয়ে আনা
+                    for (let i = 1; i <= 3; i++) {
+                         cells[i].textContent = cells[i].getAttribute('data-original-text');
+                    }
+                }
+            } catch (error) {
+                console.error('Error saving data:', error);
+                showToast(`ডেটা সেভ করার সময় ত্রুটি: ${error.message}`, 'error');
+                 for (let i = 1; i <= 3; i++) {
+                     cells[i].textContent = cells[i].getAttribute('data-original-text');
+                 }
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+        
+        // ডেটা ডিলিট করা
+        async function deleteData(className, rowElement) {
+            if (!confirm(`আপনি কি "${className}" এর ডেটা মুছে ফেলতে চান?`)) {
+                return;
+            }
+            loader.style.display = 'block';
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
+                    body: JSON.stringify({ action: 'delete', class: className })
+                });
+                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('ডেটা সফলভাবে মুছে ফেলা হয়েছে!');
+                    // UI থেকে ডেটা মুছে ফেলা (সেলগুলো খালি করা)
+                    rowElement.cells[1].textContent = ''; // ID
+                    rowElement.cells[2].textContent = ''; // PASSWORD
+                    rowElement.cells[3].textContent = ''; // LINK
+                     for (let i = 1; i <= 3; i++) {
+                        rowElement.cells[i].setAttribute('data-original-text', ''); // আসল টেক্সট খালি করা
+                    }
+                } else {
+                    showToast(result.message || 'ডেটা মুছতে সমস্যা হয়েছে', 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting data:', error);
+                showToast(`ডেটা মোছার সময় ত্রুটি: ${error.message}`, 'error');
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        // পৃষ্ঠা লোড হওয়ার সাথে সাথে ডেটা লোড করা
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+  
+
+
   
   <!-- Footer -->
   <footer>
