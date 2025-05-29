@@ -20,16 +20,6 @@
   </script>
 </head>
   <body>
-   <!-- ✅ Popup Modal -->
-<div id="popupModal" style="display: none;" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header" id="popupTitle">বিষয়</div>
-    <div class="modal-date" id="popupDate">তারিখ</div>
-    <div class="modal-body" id="popupBody">মুল বিজ্ঞপ্তি</div>
-    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
-  </div>
-</div>
-
   <!-- ✅ School Branding -->
   <img src="PHS-LOGO.png" alt="SCHOOL LOGO" class="logo">
   <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
@@ -80,7 +70,15 @@
     <span id="pageNumber">Page 1</span>
     <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
   </div>
-
+ <!-- ✅ Popup Modal -->
+<div id="popupModal" style="display: none;" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" id="popupTitle">বিষয়</div>
+    <div class="modal-date" id="popupDate">তারিখ</div>
+    <div class="modal-body" id="popupBody">মুল বিজ্ঞপ্তি</div>
+    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+  </div>
+</div>
   <!-- ✅ External Notice Bord -->
   <script src="student_notice.js"></script>
   <script>
