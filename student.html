@@ -161,10 +161,16 @@
   <script> // Student Table Notice popup handle
   function showPopup(titleText, date, link, subjText) {
   document.getElementById('popupTitle').textContent = titleText;
-  document.getElementById('popupDate').textContent = date;
+  document.getElementById('popupDate').textContent = "তারিখ: " + date;
 
   const body = document.getElementById('popupBody');
-  body.innerHTML = `<p style="text-align:justify;">${subjText}</p>`;
+
+  // যদি subj ফাঁকা না হয়, তবে বডিতে দেখাও
+  if (subjText && subjText.trim() !== "") {
+    body.innerHTML = `<p style="text-align:justify;">${subjText}</p>`;
+  } else {
+    body.innerHTML = ""; // পুরোপুরি ফাঁকা রাখো
+  }
 
   const linkArea = document.getElementById('popupLinkArea');
   linkArea.innerHTML = "";
@@ -183,9 +189,9 @@
     a.style.textDecoration = "none";
     linkArea.appendChild(a);
   }
-
   document.getElementById('popupModal').style.display = 'flex';
 }
+
 
 function closeModal() {
   document.getElementById('popupModal').style.display = 'none';
