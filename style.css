@@ -391,3 +391,34 @@ ul li a:hover {
     overflow-x: auto;
   }
 }
+
+
+/* টেবিলের হেডিং এর জন্য কাস্টম সবুজ */
+.custom-heading-bg {
+    background-color: #10B981; /* Tailwind green-500 */
+}
+
+/* CLASS কলামের সেলের জন্য হালকা সবুজ (HTML এ Tailwind দিয়ে করা হয়েছে) */
+/* .custom-class-cell-bg {
+    background-color: #34D399; /* Tailwind green-400 */
+/* } */
+
+/* টেবিলের সারিতে হোভার ইফেক্ট (HTML এ Tailwind দিয়ে করা হয়েছে) */
+/* .custom-row-hover:hover {
+    background-color: #A7F3D0; /* Tailwind green-200 */
+/* } */
+
+/* ছোট স্ক্রিনের জন্য অতিরিক্ত স্টাইল (প্রয়োজন অনুযায়ী) */
+@media (max-width: 640px) {
+    /* উদাহরণ: ছোট স্ক্রিনে ফন্টের আকার কমানো */
+    /* th, td {
+        font-size: 0.8rem; 
+        padding: 8px 4px;
+    }
+    button {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    } */
+}
+
+/* আপনি এখানে আরও কাস্টম স্টাইল যোগ করতে পারেন */
