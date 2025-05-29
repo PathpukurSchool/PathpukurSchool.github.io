@@ -159,12 +159,12 @@
 </script>
   
   <script> // Student Table Notice popup handle
-  function showPopup(titleText, date, link) {
+  function showPopup(titleText, date, link, subjText) {
   document.getElementById('popupTitle').textContent = titleText;
   document.getElementById('popupDate').textContent = date;
 
   const body = document.getElementById('popupBody');
-  body.innerHTML = `<p style="text-align:justify;">${titleText}</p>`;
+  body.innerHTML = `<p style="text-align:justify;">${subjText}</p>`;
 
   const linkArea = document.getElementById('popupLinkArea');
   linkArea.innerHTML = "";
