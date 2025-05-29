@@ -170,13 +170,15 @@
   popup.style.transform = 'translate(-50%, -50%)';
   popup.style.background = '#f0f8ff'; // হালকা নীল
   popup.style.padding = '20px';
+  popup.style.margin = '0 auto';      // সেন্টারে রাখবে
   popup.style.border = '2px solid #333';
   popup.style.borderRadius = '10px';
   popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
   popup.style.zIndex = '9999';
   popup.style.textAlign = 'center';
-  popup.style.maxWidth = '90%';
-  popup.style.width = '400px';
+  popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
+  popup.style.minWidth = '240px'; // খুব ছোট না হয়
+  popup.style.width = '400px'; // সর্বোচ্চ চওড়া
 
   // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
   const titleElem = document.createElement('div');
@@ -184,7 +186,7 @@
   titleElem.style.backgroundColor = 'green';
   titleElem.style.color = 'white';
   titleElem.style.fontWeight = 'bold';
-  titleElem.style.fontSize = '20px';
+  titleElem.style.fontSize = '15px';
   titleElem.style.padding = '10px';
   titleElem.style.borderRadius = '5px';
   titleElem.style.marginBottom = '15px';
