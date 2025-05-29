@@ -1,121 +1,132 @@
-let credentials = {};
-let masterCredential = {};
-
-// মাস্টার লগইনের তথ্য লোড
-async function getCredentials() {
-    try {
-        const response = await fetch('masterConfig.json');
-        if (!response.ok) {
-            throw new Error('Failed to load config');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching config:', error);
-        return null;
-    }
-}
-
-async function submitMasterLogin() {
-    const type = document.getElementById('loginType').value;
-    const id = document.getElementById('masterId').value.trim();
-    const pass = document.getElementById('masterPass').value.trim();
-    const errorDiv = document.getElementById('masterLoginError');
-    const successDiv = document.getElementById('masterLoginSuccess'); // success ডিভ
-
-    errorDiv.innerText = "";
-    successDiv.innerText = "";
-    successDiv.style.display = "none";
-    
-    if (!type || !id || !pass) {
-        errorDiv.innerText = "Please select login type and fill ID & Password.";
-        return;
-    }
-
-    const allCredentials = await getCredentials();
-
-    if (!allCredentials) {
-        errorDiv.innerText = "Unable to load login configuration.";
-        return;
-    }
-
-    const user = allCredentials[type.toLowerCase()];
-
-    if (user && id === user.id && pass === user.pass) {
-        // Session set করুন
-    sessionStorage.setItem("userType", type.toLowerCase());
-            if (type.toLowerCase() === "student") {
-        sessionStorage.setItem("studentLoggedIn", "true");
-    }
-
-        // সফল লগইন
-        successDiv.innerText = "✔️ Login Successful.";
-        successDiv.style.display = "block";
-
-        setTimeout(() => {
-            if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
-                window.location.href = user.redirect;
-            } else {
-                // Teacher login successful – hide the login overlay
-                document.getElementById('masterLoginOverlay').style.display = "none";
-                loadExamLinks(); // মূল ডেটা লোড
-            }
-        }, 1000); // 1.5 সেকেন্ড পর রিডাইরেক্ট
-    } else {
-        errorDiv.innerText = "Incorrect ID or Password!";
-        errorDiv.style.color = "red";
-    }
-}
-
-// এক্সাম লিংক লোড (মাস্টার লগইন সফল হলে)
-function loadExamLinks() {
-    fetch('config.json')
-        .then(response => response.json())
-        .then(data => {
-            credentials = data;
-            renderButtons();
-        });
-}
-
-let currentKey = '';
-
-// এক্সাম লিংক তৈরি ও দেখানো
 // script.js (আপনার পাবলিক ওয়েবপেজের জন্য)
 
 // !!! গুরুত্বপূর্ণ: এখানে আপনার Google Apps Script ওয়েব অ্যাপ URL টি পেস্ট করুন !!!
 // এটি আপনার অ্যাডমিন প্যানেলের জন্য ব্যবহৃত একই URL হবে।
 const PUBLIC_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz6mD_rAUBTqOd9wvtnlTT26VozSDpr9oa8iFd8781OUCowvuYX57CM4gm1_8PCN6AbOQ/exec'; 
 
-let credentials = {}; // Google Sheet থেকে আনা ডাটা এখানে সংরক্ষণ করা হবে
+let credentials = {}; // Google Sheet থেকে আনা এক্সাম লিংক ডাটা এখানে সংরক্ষণ করা হবে
+let masterCredential = {}; // masterConfig.json থেকে আনা মাস্টার লগইন ডাটা এখানে সংরক্ষণ করা হবে
 
-// Google Sheet থেকে এক্সাম লিংক ডাটা ফেজ করা
+// DOM লোড হওয়ার পর প্রাথমিকভাবে কল হবে
+document.addEventListener('DOMContentLoaded', async () => {
+    // সেশন চেক করুন যদি মাস্টার লগইন ইতিমধ্যেই হয়ে থাকে
+    const userType = sessionStorage.getItem("userType");
+    if (userType === "teacher" || userType === "student" || userType === "school") {
+        // যদি লগইন করা থাকে, তাহলে লগইন ওভারলে লুকান এবং ডাটা লোড করুন
+        const masterLoginOverlay = document.getElementById('masterLoginOverlay');
+        if (masterLoginOverlay) {
+            masterLoginOverlay.style.display = "none";
+        }
+        await loadExamLinks(); // Google Sheet থেকে এক্সাম লিংক লোড করুন
+    } else {
+        // যদি লগইন করা না থাকে, তাহলে লগইন ওভারলে দেখান
+        const masterLoginOverlay = document.getElementById('masterLoginOverlay');
+        if (masterLoginOverlay) {
+            masterLoginOverlay.style.display = "flex"; // ডিফল্টভাবে ডিসপ্লে ফ্লেক্স বা ব্লক থাকতে পারে
+        }
+    }
+});
+
+
+// মাস্টার লগইনের তথ্য লোড (masterConfig.json থেকে)
+async function getMasterConfig() {
+    try {
+        const response = await fetch('masterConfig.json');
+        if (!response.ok) {
+            throw new Error('Failed to load masterConfig.json');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching masterConfig.json:', error);
+        return null;
+    }
+}
+
+// মাস্টার লগইন যাচাই করে
+async function submitMasterLogin() {
+    const type = document.getElementById('loginType').value;
+    const id = document.getElementById('masterId').value.trim();
+    const pass = document.getElementById('masterPass').value.trim();
+    const errorDiv = document.getElementById('masterLoginError');
+    const successDiv = document.getElementById('masterLoginSuccess');
+
+    errorDiv.innerText = "";
+    successDiv.innerText = "";
+    successDiv.style.display = "none";
+
+    if (!type || !id || !pass) {
+        errorDiv.innerText = "Please select login type and fill ID & Password.";
+        return;
+    }
+
+    masterCredential = await getMasterConfig(); // মাস্টার ক্রেডেনশিয়াল লোড
+
+    if (!masterCredential) {
+        errorDiv.innerText = "Unable to load login configuration.";
+        return;
+    }
+
+    const user = masterCredential[type.toLowerCase()];
+
+    if (user && id === user.id && pass === user.pass) {
+        // Session set করুন
+        sessionStorage.setItem("userType", type.toLowerCase());
+        if (type.toLowerCase() === "student") {
+            sessionStorage.setItem("studentLoggedIn", "true"); // যদি student এর জন্য আলাদা লগইন স্টেট রাখতে চান
+        }
+
+        // সফল লগইন
+        successDiv.innerText = "✔️ Login Successful.";
+        successDiv.style.display = "block";
+
+        setTimeout(async () => { // async ব্যবহার করুন কারণ loadExamLinks async ফাংশন
+            if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
+                window.location.href = user.redirect;
+            } else { // Teacher login
+                const masterLoginOverlay = document.getElementById('masterLoginOverlay');
+                if (masterLoginOverlay) {
+                    masterLoginOverlay.style.display = "none"; // লগইন ওভারলে লুকান
+                }
+                await loadExamLinks(); // টিচার লগইন সফল হলে এক্সাম লিংক লোড করুন
+            }
+        }, 1000); // 1 সেকেন্ড পর অ্যাকশন
+    } else {
+        errorDiv.innerText = "Incorrect ID or Password!";
+        errorDiv.style.color = "red";
+    }
+}
+
+// Google Sheet থেকে এক্সাম লিংক ডাটা ফেজ করা (মূল loadExamLinks ফাংশন)
 async function loadExamLinks() {
     try {
         const response = await fetch(`${PUBLIC_WEB_APP_URL}?action=getData`, {
-            method: 'POST', // Apps Script doPost ফাংশন POST রিকোয়েস্ট আশা করে
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-                action: 'getData' // Apps Script-কে getData অ্যাকশন কল করতে বলছি
+                action: 'getData'
             })
         });
         const result = await response.json();
 
         if (result.status === 'success' && result.data) {
-            // Google Sheet থেকে আনা ডাটা প্রক্রিয়াজাত করা
-            // আপনার বর্তমান renderButtons ফাংশনটি 'credentials' অবজেক্টের ফরম্যাটে ডাটা আশা করে।
-            // তাই Google Sheet এর অ্যারে ফরম্যাটকে সেই অবজেক্ট ফরম্যাটে রূপান্তর করতে হবে।
             credentials = transformSheetDataToCredentials(result.data);
             renderButtons();
         } else {
             console.error('Error fetching data for public page:', result.message);
-            // ব্যবহারকারীকে ত্রুটির মেসেজ দেখানোর জন্য কিছু একটা করা যেতে পারে
-            document.getElementById('exam-buttons').innerHTML = '<p style="color: red;">দুঃখিত, এক্সাম লিংক লোড করা যায়নি।</p>';
+            const examButtonsDiv = document.getElementById('exam-buttons');
+            if (examButtonsDiv) {
+                examButtonsDiv.innerHTML = '<p style="color: red;">দুঃখিত, এক্সাম লিংক লোড করা যায়নি।</p>';
+            }
         }
     } catch (error) {
         console.error('Network or parsing error for public page:', error);
-        document.getElementById('exam-buttons').innerHTML = '<p style="color: red;">সার্ভারের সাথে সংযোগ করা যায়নি। অনুগ্রহ করে পরে চেষ্টা করুন।</p>';
+        const examButtonsDiv = document.getElementById('exam-buttons');
+        if (examButtonsDiv) {
+            examButtonsDiv.innerHTML = '<p style="color: red;">সার্ভারের সাথে সংযোগ করা যায়নি। অনুগ্রহ করে পরে চেষ্টা করুন।</p>';
+        }
     }
 }
 
@@ -123,35 +134,24 @@ async function loadExamLinks() {
 function transformSheetDataToCredentials(sheetData) {
     const transformedData = {};
     sheetData.forEach(row => {
-        // ধরে নিচ্ছি Google Sheet-এর কলামগুলো 'CLASS', 'ID', 'PASSWORD', 'LINK'
-        // আপনার বর্তমান 'credentials' অবজেক্টের কী (key) যেমন 'V_1ST', 'VI_TEST' ইত্যাদি
-        // সে অনুযায়ী এখানে একটি কী তৈরি করতে হবে।
-
-        // 'CLASS' কলাম থেকে ক্লাস এবং পরীক্ষার ধরণ বের করা
         let className = row.CLASS;
-        let examType = ''; // যেমন 1ST, 2ND, 3RD, TEST
+        let examType = '';
 
-        // 'X_TEST EXAM' কে 'X_TEST' এ রূপান্তর
         if (className === 'X_TEST EXAM') {
-            className = 'X'; // শুধু ক্লাস নামটি রাখা
+            className = 'X';
             examType = 'TEST';
         } else {
-            // অন্যান্য ক্লাস যেমন 'V_1ST', 'V_2ND', 'VI_1ST' ইত্যাদি থেকে
-            // ক্লাস এবং পরীক্ষার ধরণ আলাদা করা
             const parts = className.split('_');
             if (parts.length > 1) {
                 className = parts[0];
                 examType = parts[1];
             } else {
-                // যদি শুধু ক্লাস থাকে, তাহলে examType ফাঁকা থাকবে বা ডিফল্ট কিছু
-                examType = '1ST'; // অথবা আপনার প্রয়োজন অনুযায়ী
+                // If only class, default to '1ST' or handle as needed
+                examType = '1ST'; // Adjust this default if necessary
             }
         }
-        
-        // সঠিক কী (key) তৈরি করা
-        // উদাহরণস্বরূপ, 'V_1ST' বা 'VI_TEST'
-        const key = `${className}_${examType}`;
 
+        const key = `${className}_${examType}`;
         transformedData[key] = {
             id: row.ID,
             pass: row.PASSWORD,
@@ -161,45 +161,40 @@ function transformSheetDataToCredentials(sheetData) {
     return transformedData;
 }
 
-
 let currentKey = '';
 
 // এক্সাম লিংক তৈরি ও দেখানো
 function renderButtons() {
     const container = document.getElementById('exam-buttons');
+    if (!container) {
+        console.error("Element with ID 'exam-buttons' not found.");
+        return;
+    }
     container.innerHTML = '';
 
-    // ইউনিক ক্লাস তালিকা তৈরি (এখানে credentials অবজেক্টের কীগুলো ব্যবহার হবে)
-    // নিশ্চিত করুন যে credentials অবজেক্টটি আপনার প্রত্যাশিত ফরম্যাটে আছে
     const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
-    
-    // ক্লাসগুলো একটি নির্দিষ্ট ক্রমে সাজানো
     const orderedClasses = ['V', 'VI', 'VII', 'VIII', 'IX', 'X'];
     classes.sort((a, b) => orderedClasses.indexOf(a) - orderedClasses.indexOf(b));
-
 
     classes.forEach(cls => {
         const title = document.createElement('div');
         title.className = 'class-title';
-        // 'X_TEST EXAM' কে শুধু 'X' দেখাতে চাইলে
-        title.textContent = 'CLASS ' + cls.replace('X_TEST', 'X'); 
+        title.textContent = 'CLASS ' + cls.replace('X_TEST', 'X');
         container.appendChild(title);
 
-        // এখানে পরীক্ষার ধরণগুলো একটি নির্দিষ্ট ক্রমে সাজানো
-        const exams = ['1ST', '2ND', '3RD', 'TEST']; // এখানে TEST পরে আছে, ঠিক আছে
-        
+        const exams = ['1ST', '2ND', '3RD', 'TEST'];
+
         exams.forEach(exam => {
             let key = `${cls}_${exam}`;
-            // যদি আপনার Google Sheet এ 'X_TEST EXAM' থাকে এবং আপনি এটিকে 'X_TEST' হিসেবে map করতে চান,
-            // তাহলে নিশ্চিত করুন transformSheetDataToCredentials ফাংশনটি সেই অনুযায়ী কাজ করছে।
-            // এখানে keyটি credentials অবজেক্টের সাথে মেলে কিনা তা পরীক্ষা করুন।
-
             if (credentials[key]) {
                 const a = document.createElement('a');
                 a.className = 'exam-link';
                 a.textContent = exam === 'TEST' ? 'TEST EXAM' : exam;
                 a.href = '#';
-                a.onclick = () => openLogin(key);
+                a.onclick = (e) => {
+                    e.preventDefault(); // Default লিঙ্ক আচরণ বন্ধ করুন
+                    openLogin(key);
+                };
                 container.appendChild(a);
             }
         });
@@ -209,11 +204,16 @@ function renderButtons() {
 // প্রতিটি এক্সাম লিংকের জন্য সাব-লগইন
 function openLogin(key) {
     currentKey = key;
-    document.getElementById('loginId').value = '';
-    document.getElementById('loginPassword').value = '';
-    document.getElementById('loginError').innerText = '';
+    const loginId = document.getElementById('loginId');
+    const loginPassword = document.getElementById('loginPassword');
+    const loginError = document.getElementById('loginError');
     const loginDialog = document.getElementById('loginDialog');
-    if (loginDialog) { // নিশ্চিত করুন loginDialog আছে
+
+    if (loginId) loginId.value = '';
+    if (loginPassword) loginPassword.value = '';
+    if (loginError) loginError.innerText = '';
+
+    if (loginDialog) {
         loginDialog.showModal();
     } else {
         console.error("Login dialog element not found!");
@@ -256,18 +256,16 @@ function submitLogin() {
 
 function showAvailableSoonMessage(key) {
     const container = document.getElementById('exam-buttons');
-    if (!container) return; // কন্টেইনার না থাকলে রিটার্ন করুন
+    if (!container) return;
 
-    // সরাসরি নির্দিষ্ট লিংকের পাশে বার্তা যোগ করা
-    // এখানে আপনার renderButtons ফাংশনটি যেমনভাবে key তৈরি করে, সেভাবে এখানেও key থেকে text বের করতে হবে।
-    const examText = getExamText(key); 
+    const examText = getExamText(key);
     const links = container.getElementsByClassName('exam-link');
-    
+
     for (let link of links) {
         if (link.textContent === examText) {
             const next = link.nextElementSibling;
             if (next && next.classList.contains('avail-msg')) {
-                next.remove(); // যদি আগে থেকে কোনো বার্তা থাকে তবে তা সরিয়ে দিন
+                next.remove();
             }
 
             const msg = document.createElement('div');
@@ -282,13 +280,12 @@ function showAvailableSoonMessage(key) {
                 font-size: 0.9em;
                 text-align: center;
                 animation: fadeOut 3s forwards;
-            `; // ইনলাইন স্টাইল যোগ করা
+            `;
 
             link.parentNode.insertBefore(msg, link.nextSibling);
 
-            // 3 সেকেন্ড পরে মুছে ফেলুন
             setTimeout(() => {
-                if (msg.parentNode) { // নিশ্চিত করুন যে উপাদানটি এখনও DOM এ আছে
+                if (msg.parentNode) {
                     msg.remove();
                 }
             }, 3000);
@@ -300,34 +297,37 @@ function showAvailableSoonMessage(key) {
 // পরীক্ষার টেক্সট ফেরত দেয় ('TEST EXAM', '1ST', ...)
 function getExamText(key) {
     const parts = key.split('_');
-    const exam = parts[parts.length - 1]; // শেষ অংশটি exam type
+    const exam = parts[parts.length - 1];
     if (exam === 'TEST') return 'TEST EXAM';
     return exam;
 }
 
 
-// পেজ লোড হওয়ার পর এক্সাম লিংক লোড করুন
-document.addEventListener('DOMContentLoaded', loadExamLinks);
-
-
-
-
-
-
-
-
-
-
 // NOTICE & HELP লোড করা
 fetch('files.json')
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to load files.json');
+        }
+        return response.json();
+    })
     .then(data => {
-        populateList('notice-list', data.notices);
-        populateList('help-list', data.help);
-    });
+        if (data.notices) {
+            populateList('notice-list', data.notices);
+        }
+        if (data.help) {
+            populateList('help-list', data.help);
+        }
+    })
+    .catch(error => console.error('Error fetching files.json:', error));
 
 function populateList(elementId, items) {
     const ul = document.getElementById(elementId);
+    if (!ul) {
+        console.warn(`Element with ID '${elementId}' not found.`);
+        return;
+    }
+    ul.innerHTML = ''; // তালিকা লোড করার আগে পরিষ্কার করুন
     items.forEach(item => {
         const li = document.createElement('li');
         const a = document.createElement('a');
