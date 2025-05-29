@@ -387,3 +387,162 @@ ul li a:hover {
 
 
 /* টিচার এক্সাম লিংক টেবিল */
+/* General Body and Container Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+}
+
+.table-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    overflow-x: auto; /* Ensures horizontal scrolling for small screens */
+    margin: 20px auto;
+}
+
+.table-title {
+    text-align: center;
+    color: #28a745;
+    margin-bottom: 25px;
+    font-size: 2em;
+    font-weight: 600;
+}
+
+/* Responsive Table Styles */
+.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 25px;
+    min-width: 600px; /* Ensures table doesn't get too squished */
+}
+
+.responsive-table th,
+.responsive-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap; /* Prevents text from wrapping in cells */
+}
+
+/* Table Header Styles */
+.responsive-table thead th {
+    background-color: #28a745; /* Darker green for header */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Fixed CLASS Column Styles */
+.responsive-table tbody .fixed-cell {
+    background-color: #4CAF50; /* Slightly lighter green for class column */
+    color: white;
+    font-weight: 500;
+}
+
+/* Hover Effect for Table Rows */
+.responsive-table tbody tr:hover {
+    background-color: #e6ffe6; /* Light green hover effect */
+}
+
+/* Editable Cell Styles */
+.responsive-table td[contenteditable="true"] {
+    background-color: #fffacd; /* Light yellow for editable cells */
+    border: 1px solid #ffeb8a;
+    padding: 11px 14px; /* Adjust padding for border */
+    outline: none; /* Remove default outline */
+}
+
+.responsive-table td[contenteditable="true"]:focus {
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.5); /* Green shadow on focus */
+}
+
+/* Button Group Styles */
+.button-group {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.action-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    margin: 0 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Edit Button Styles */
+.edit-button {
+    background-color: #007bff; /* Blue */
+    color: white;
+}
+
+.edit-button:hover {
+    background-color: #0056b3; /* Darker blue */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Save Button Styles */
+.save-button {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+
+.save-button:hover {
+    background-color: #218838; /* Darker green */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+    .table-container {
+        padding: 20px;
+    }
+
+    .responsive-table {
+        min-width: 100%; /* Allows horizontal scroll on smaller screens without fixed min-width */
+    }
+
+    .responsive-table th,
+    .responsive-table td {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .action-button {
+        padding: 10px 20px;
+        font-size: 1em;
+        margin: 0 5px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .table-title {
+        font-size: 1.5em;
+    }
+
+    .responsive-table th,
+    .responsive-table td {
+        padding: 8px;
+        font-size: 0.8em;
+    }
+
+    .action-button {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
