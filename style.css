@@ -51,13 +51,6 @@ font-weight: bold;
   background-color: darkgreen;
 }
 
-.class-title {
-  font-size: 20px;
-  margin-top: 20px;
-  font-weight: bold;
-  color: #800000;
-}
-
 /* শীঘ্রই উপলব্ধ বার্তা */
 .avail-msg {
   color: red;
