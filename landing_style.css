@@ -291,7 +291,8 @@ ul {
     border: 5px solid var(--primary-red);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     flex-shrink: 0; /* ছোট স্ক্রিনে সংকুচিত হওয়া আটকায় */
-    animation: rotateIn 1s ease-out forwards; /* অ্যানিমেশন যোগ করা হয়েছে */
+    animation: pulse 2s infinite alternate ease-in-out;
+    //* animation: rotateIn 1s ease-out forwards; /* অ্যানিমেশন যোগ করা হয়েছে */
 }
 
 @keyframes rotateIn {
