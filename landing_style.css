@@ -1,0 +1,202 @@
+/* General Body Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Section */
+.header {
+    background-color: #4CAF50; /* Primary school color */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 5px solid #388E3C; /* Darker shade for border */
+}
+
+.header .logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 50%; /* Make logo circular */
+    border: 3px solid white;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.8em;
+    letter-spacing: 1px;
+}
+
+.header p {
+    font-size: 1.2em;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* Hero Section (School Images) */
+.hero-section {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap; /* Allows images to wrap on smaller screens */
+}
+
+.hero-image {
+    width: 30%; /* Adjust as needed */
+    height: 200px; /* Fixed height for consistency */
+    object-fit: cover; /* Ensures images cover the area without distortion */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Section Styles */
+section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border-bottom: 1px dashed #ddd; /* Subtle separator */
+}
+
+section:last-child {
+    border-bottom: none;
+}
+
+h2 {
+    color: #4CAF50;
+    font-size: 2em;
+    margin-bottom: 15px;
+    border-left: 5px solid #4CAF50;
+    padding-left: 10px;
+}
+
+h3 {
+    color: #555;
+    font-size: 1.5em;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+ul li {
+    margin-bottom: 5px;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Map Container */
+.map-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.map-container iframe {
+    width: 100%;
+    max-width: 800px;
+    height: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Login Button */
+.login-button-container {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.login-button {
+    display: inline-block;
+    background-color: #007BFF; /* A vibrant blue for the button */
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.4em;
+    border-radius: 50px; /* Pill-shaped button */
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+}
+
+/* Footer */
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.9em;
+    margin-top: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2em;
+    }
+
+    .hero-image {
+        width: 45%; /* Two images per row on smaller screens */
+    }
+
+    .container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .login-button {
+        font-size: 1.2em;
+        padding: 12px 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.5em;
+    }
+
+    .hero-image {
+        width: 90%; /* One image per row on very small screens */
+    }
+
+    h2 {
+        font-size: 1.6em;
+    }
+
+    h3 {
+        font-size: 1.3em;
+    }
+}
