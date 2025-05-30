@@ -58,6 +58,7 @@ body {
     object-fit: cover;
     margin-bottom: 20px;
     animation: pulse 2s infinite alternate ease-in-out;
+    background-color: white
 }
 
 @keyframes pulse {
