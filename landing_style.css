@@ -292,13 +292,22 @@ ul {
     border: 5px solid var(--primary-red);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     flex-shrink: 0; /* ছোট স্ক্রিনে সংকুচিত হওয়া আটকায় */
-    animation: pulse 2s infinite alternate ease-in-out;
-    /* animation: rotateIn 1s ease-out forwards; /* অ্যানিমেশন যোগ করা হয়েছে */
+    /* আগের অ্যানিমেশন সরিয়ে নতুনটি যোগ করা হলো */
+    opacity: 0; /* শুরুতে লুকানো থাকবে */
+    transform: translateY(50px) scale(0.8); /* নিচ থেকে উপরে উঠবে ও জুম ইন করবে */
+    animation: zoomInSlideUp 1.2s ease-out forwards; /* নতুন অ্যানিমেশন */
+    animation-delay: 0.5s; /* অন্যান্য কন্টেন্টের পর অ্যানিমেশন শুরু হবে */
 }
 
-@keyframes rotateIn {
-    from { transform: rotateY(90deg) scale(0.8); opacity: 0; }
-    to { transform: rotateY(0deg) scale(1); opacity: 1; }
+@keyframes zoomInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.8); /* ছবির শুরু স্থিতি */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1); /* ছবির শেষ স্থিতি */
+    }
 }
 
 .principal-text h3 {
@@ -314,7 +323,6 @@ ul {
     line-height: 1.7;
     color: var(--black);
 }
-
 /* Quotes Section */
 .quotes {
     background: linear-gradient(135deg, #e6f7ff 0%, #cceeff 100%); /* হালকা নীল ব্যাকগ্রাউন্ড */
