@@ -92,7 +92,7 @@ body {
 /* Hero Section (Scrolling Images) */
 .hero-section {
     position: relative;
-    height: 500px; /* উচ্চতা বাড়ানো হয়েছে */
+    height: 400px; /* উচ্চতা বাড়ানো হয়েছে */
     overflow: hidden;
     margin-bottom: 40px;
     background-color: #eee;
@@ -292,7 +292,7 @@ ul {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     flex-shrink: 0; /* ছোট স্ক্রিনে সংকুচিত হওয়া আটকায় */
     animation: pulse 2s infinite alternate ease-in-out;
-    //* animation: rotateIn 1s ease-out forwards; /* অ্যানিমেশন যোগ করা হয়েছে */
+    /* animation: rotateIn 1s ease-out forwards; /* অ্যানিমেশন যোগ করা হয়েছে */
 }
 
 @keyframes rotateIn {
