@@ -1,202 +1,371 @@
-/* General Body Styles */
+/* General Body & Typography */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif; /* আধুনিক ফন্ট ব্যবহার */
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #f0f2f5; /* হালকা ধূসর ব্যাকগ্রাউন্ড */
     color: #333;
-    line-height: 1.6;
+    line-height: 1.7;
+    scroll-behavior: smooth; /* মসৃণ স্ক্রলিং */
 }
 
 .container {
-    max-width: 960px;
-    margin: 20px auto;
+    max-width: 1000px;
+    margin: 30px auto;
     padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    display: grid; /* গ্রিড লেআউট */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* কন্টেন্ট কার্ডের জন্য */
+    gap: 25px; /* কার্ডগুলোর মধ্যে ব্যবধান */
 }
 
 /* Header Section */
-.header {
-    background-color: #4CAF50; /* Primary school color */
+.main-header {
+    background: linear-gradient(135deg, #FF6B6B 0%, #E63946 100%); /* লোগোর লাল রঙ থেকে গাঢ় লাল */
     color: white;
-    padding: 20px 0;
+    padding: 40px 0;
     text-align: center;
-    border-bottom: 5px solid #388E3C; /* Darker shade for border */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden; /* ভেতরের অ্যানিমেশনের জন্য */
 }
 
-.header .logo {
-    width: 120px;
-    height: auto;
-    margin-bottom: 10px;
-    border-radius: 50%; /* Make logo circular */
-    border: 3px solid white;
+.header-content {
+    position: relative;
+    z-index: 2; /* কন্টেন্টকে উপরে রাখে */
 }
 
-.header h1 {
+.main-header .logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.8);
+    object-fit: cover;
+    margin-bottom: 15px;
+    animation: pulse 2s infinite alternate; /* লোগোতে পালস অ্যানিমেশন */
+}
+
+@keyframes pulse {
+    from { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+    to { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+}
+
+.main-header h1 {
     margin: 0;
-    font-size: 2.8em;
-    letter-spacing: 1px;
+    font-size: 3.5em;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.header p {
-    font-size: 1.2em;
+.main-header .tagline {
+    font-size: 1.4em;
     font-style: italic;
     opacity: 0.9;
+    margin-top: 10px;
 }
 
-/* Hero Section (School Images) */
+/* Hero Section */
 .hero-section {
+    position: relative;
+    height: 450px; /* উচ্চতা বাড়ানো হয়েছে */
+    overflow: hidden;
+    margin-bottom: 30px;
+    background-color: #eee;
+}
+
+.hero-images {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-    flex-wrap: wrap; /* Allows images to wrap on smaller screens */
+    width: 300%; /* তিনটি ছবির জন্য */
+    height: 100%;
+    animation: slideShow 15s infinite ease-in-out; /* স্লাইডশো অ্যানিমেশন */
 }
 
 .hero-image {
-    width: 30%; /* Adjust as needed */
-    height: 200px; /* Fixed height for consistency */
-    object-fit: cover; /* Ensures images cover the area without distortion */
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%; /* প্রতিটি ছবি পুরো প্রস্থ নেবে */
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8); /* ছবির উপর হালকা অন্ধকার */
+}
+
+@keyframes slideShow {
+    0%, 33% { transform: translateX(0%); }
+    36%, 66% { transform: translateX(-33.33%); }
+    69%, 100% { transform: translateX(-66.66%); }
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* কালো ওভারলে */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 2.5em;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    opacity: 0; /* শুরুতে লুকানো */
+    animation: fadeInOverlay 3s forwards 1s; /* দেরিতে ফেড ইন */
+}
+
+@keyframes fadeInOverlay {
+    to { opacity: 1; }
+}
+
+/* Card Styles for Sections */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 5px solid #8B0000; /* খয়েরি রঙের বর্ডার */
 }
 
-.hero-image:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-
-/* Section Styles */
-section {
-    margin-bottom: 30px;
-    padding: 20px;
-    border-bottom: 1px dashed #ddd; /* Subtle separator */
-}
-
-section:last-child {
-    border-bottom: none;
+.card:hover {
+    transform: translateY(-8px); /* হোভারে হালকা উপরে ওঠানো */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
 h2 {
-    color: #4CAF50;
-    font-size: 2em;
-    margin-bottom: 15px;
-    border-left: 5px solid #4CAF50;
-    padding-left: 10px;
+    color: #8B0000; /* গাঢ় খয়েরি */
+    font-size: 2.2em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #D9534F; /* হালকা লাল বর্ডার */
+    display: flex;
+    align-items: center;
+}
+
+h2 .icon {
+    margin-right: 15px;
+    color: #FF6B6B; /* লাল */
+    font-size: 1.2em;
 }
 
 h3 {
     color: #555;
-    font-size: 1.5em;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    font-size: 1.6em;
+    margin-top: 25px;
+    margin-bottom: 12px;
 }
 
-ul {
-    list-style-type: disc;
-    margin-left: 20px;
-}
-
-ul li {
-    margin-bottom: 5px;
+p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
 }
 
 a {
-    color: #007BFF;
+    color: #E63946; /* লিংক কালার */
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 a:hover {
+    color: #B22222; /* হোভারে গাঢ় লাল */
     text-decoration: underline;
+}
+
+ul {
+    list-style: none; /* ডিফল্ট বুলেট বাদ */
+    padding: 0;
+    margin: 0;
+}
+
+.class-list li {
+    background-color: #f9f9f9;
+    margin-bottom: 8px;
+    padding: 10px 15px;
+    border-left: 4px solid #8B0000; /* খয়েরি বর্ডার */
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    font-size: 1.05em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.check-icon {
+    color: #4CAF50; /* সবুজ টিক আইকন */
+    margin-right: 10px;
+}
+
+.subject-combo strong {
+    color: #8B0000;
+}
+
+.uniform-description p {
+    background-color: #fff3e0; /* হালকা কমলা ব্যাকগ্রাউন্ড */
+    padding: 12px 20px;
+    border-radius: 8px;
+    border-left: 5px solid #FF8C00; /* কমলা বর্ডার */
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.uniform-description .note {
+    font-size: 0.95em;
+    color: #777;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+/* Contact Info Icons */
+.contact-info p .icon {
+    color: #E63946;
+    margin-right: 10px;
+    font-size: 1.1em;
 }
 
 /* Map Container */
 .map-container {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .map-container iframe {
     width: 100%;
-    max-width: 800px;
-    height: 400px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    height: 450px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.map-container iframe:hover {
+    transform: scale(1.01);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Login Button */
 .login-button-container {
     text-align: center;
-    margin-top: 40px;
-    margin-bottom: 20px;
+    margin: 50px auto; /* উপরে ও নিচে বেশি মার্জিন */
 }
 
 .login-button {
     display: inline-block;
-    background-color: #007BFF; /* A vibrant blue for the button */
+    background-color: #E63946; /* লাল বোতাম */
     color: white;
-    padding: 15px 30px;
-    font-size: 1.4em;
-    border-radius: 50px; /* Pill-shaped button */
+    padding: 18px 40px;
+    font-size: 1.6em;
+    border-radius: 50px;
     text-decoration: none;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(230, 57, 70, 0.4);
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .login-button:hover {
-    background-color: #0056b3;
-    transform: translateY(-3px);
+    background-color: #B22222; /* হোভারে গাঢ় লাল */
+    transform: translateY(-5px) scale(1.02); /* উপরে ওঠানো ও হালকা বড় হওয়া */
+    box-shadow: 0 12px 25px rgba(230, 57, 70, 0.6);
+}
+
+.login-button .fas {
+    margin-right: 10px;
 }
 
 /* Footer */
-.footer {
+.main-footer {
     background-color: #333;
-    color: white;
+    color: #f0f2f5;
     text-align: center;
-    padding: 15px 0;
-    font-size: 0.9em;
-    margin-top: 30px;
+    padding: 25px 0;
+    font-size: 0.95em;
+    margin-top: 40px;
+    border-top: 5px solid #8B0000; /* খয়েরি বর্ডার */
+}
+
+.main-footer p {
+    margin: 5px 0;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-    .header h1 {
-        font-size: 2em;
-    }
-
-    .hero-image {
-        width: 45%; /* Two images per row on smaller screens */
-    }
-
+@media (max-width: 992px) {
     .container {
-        margin: 10px;
-        padding: 15px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
     }
-
-    .login-button {
-        font-size: 1.2em;
-        padding: 12px 25px;
+    .main-header h1 {
+        font-size: 3em;
+    }
+    .hero-section {
+        height: 400px;
+    }
+    .hero-overlay {
+        font-size: 2em;
     }
 }
 
-@media (max-width: 480px) {
-    .header h1 {
+@media (max-width: 768px) {
+    .main-header {
+        padding: 30px 0;
+    }
+    .main-header .logo {
+        width: 120px;
+        height: 120px;
+    }
+    .main-header h1 {
+        font-size: 2.5em;
+    }
+    .main-header .tagline {
+        font-size: 1.2em;
+    }
+    .hero-section {
+        height: 350px;
+    }
+    .hero-overlay {
+        font-size: 1.8em;
+    }
+    .card {
+        padding: 25px;
+    }
+    h2 {
+        font-size: 1.8em;
+    }
+    h3 {
+        font-size: 1.4em;
+    }
+    .login-button {
+        padding: 15px 30px;
+        font-size: 1.4em;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        grid-template-columns: 1fr; /* ছোট স্ক্রিনে একটি কলাম */
+        padding: 15px;
+    }
+    .main-header h1 {
+        font-size: 2em;
+    }
+    .hero-section {
+        height: 300px;
+    }
+    .hero-overlay {
         font-size: 1.5em;
     }
-
-    .hero-image {
-        width: 90%; /* One image per row on very small screens */
+    .card {
+        padding: 20px;
     }
-
     h2 {
         font-size: 1.6em;
     }
-
-    h3 {
-        font-size: 1.3em;
+    p {
+        font-size: 1em;
+    }
+    .login-button {
+        width: 90%; /* ছোট স্ক্রিনে বোতাম পুরো প্রস্থ নেবে */
+        box-sizing: border-box; /* প্যাডিং ও বর্ডার প্রস্থের মধ্যে অন্তর্ভুক্ত */
+    }
+    .map-container iframe {
+        height: 300px;
     }
 }
