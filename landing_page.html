@@ -4,66 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>আমাদের স্কুল - [আপনার স্কুলের নাম]</title>
-    <link rel="stylesheet" href="landing_style.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="header">
-        <img src="school_logo.png" alt="স্কুল লোগো" class="logo">
-        <h1>[আপনার স্কুলের পুরো নাম]</h1>
-        <p class="tagline">স্থাপিতঃ ১৯৫৪ | উচ্চ মাধ্যমিক বিদ্যালয় | পশ্চিমবঙ্গ সরকার অনুমোদিত</p>
-        <p>[আপনার স্কুলের স্লোগান, যদি থাকে]</p>
-    </div>
+    <header class="main-header">
+        <div class="header-content">
+            <img src="school_logo.png" alt="স্কুল লোগো" class="logo">
+            <h1>[আপনার স্কুলের পুরো নাম]</h1>
+            <p class="tagline">স্থাপিতঃ ১৯৫৪ | উচ্চ মাধ্যমিক বিদ্যালয় | পশ্চিমবঙ্গ সরকার অনুমোদিত</p>
+            <p class="tagline">[জ্ঞানের আলোয় আলোকিত হোক জীবন]</p>
+        </div>
+    </header>
 
-    <div class="hero-section">
-        <img src="school_pic1.jpg" alt="স্কুলের ছবি 1" class="hero-image">
-        <img src="school_pic2.jpg" alt="স্কুলের ছবি 2" class="hero-image">
-        <img src="school_pic3.jpg" alt="স্কুলের ছবি 3" class="hero-image">
-    </div>
+    <section class="hero-section">
+        <div class="hero-images">
+            <img src="school_pic1.jpg" alt="স্কুলের ছবি 1" class="hero-image">
+            <img src="school_pic2.jpg" alt="স্কুলের ছবি 2" class="hero-image">
+            <img src="school_pic3.jpg" alt="স্কুলের ছবি 3" class="hero-image">
+        </div>
+        <div class="hero-overlay">
+            <p class="overlay-text">শিক্ষা যেখানে ভবিষ্যতের বীজ বুনে</p>
+        </div>
+    </section>
 
-    <div class="container">
-        <section class="about-us">
-            <h2>আমাদের সম্পর্কে</h2>
-            <p>আমাদের স্কুল [প্রতিষ্ঠার সাল] সালে প্রতিষ্ঠিত হয়েছিল। আমরা [স্কুলের প্রকৃতি - যেমন, সহ-শিক্ষামূলক / শুধুমাত্র বালক / শুধুমাত্র বালিকা] একটি প্রতিষ্ঠান যা শিক্ষার্থীদের সার্বিক বিকাশে বিশ্বাসী। আমাদের লক্ষ্য শিক্ষার্থীদের জ্ঞান, দক্ষতা এবং নৈতিক মূল্যবোধের সঠিক সংমিশ্রণ দিয়ে ভবিষ্যতের জন্য প্রস্তুত করা।</p>
+    <main class="container">
+        <section class="about-us card">
+            <h2><i class="fas fa-school icon"></i> আমাদের সম্পর্কে</h2>
+            <p>আমাদের স্কুল [প্রতিষ্ঠার সাল] সালে প্রতিষ্ঠিত হয়েছিল, [প্রতিষ্ঠাতার নাম] এর হাত ধরে। আমরা [স্কুলের প্রকৃতি - যেমন, সহ-শিক্ষামূলক / শুধুমাত্র বালক / শুধুমাত্র বালিকা] একটি প্রতিষ্ঠান যা শিক্ষার্থীদের সার্বিক বিকাশে বিশ্বাসী। আমাদের লক্ষ্য শুধু পুঁথিগত বিদ্যা দান নয়, বরং তাদের মধ্যে সুপ্ত প্রতিভা জাগ্রত করা এবং মানবিক মূল্যবোধের বিকাশ ঘটানো।</p>
         </section>
 
-        <section class="contact-info">
-            <h2>যোগাযোগ</h2>
-            <p><strong>ঠিকানা:</strong> [আপনার স্কুলের ঠিকানা]</p>
-            <p><strong>ইমেল:</strong> <a href="mailto:info@yourschool.com">info@yourschool.com</a></p>
-            <p><strong>মোবাইল:</strong> [আপনার স্কুলের মোবাইল নম্বর]</p>
-        </section>
-
-        <section class="academics">
-            <h2>শিক্ষা কার্যক্রম</h2>
+        <section class="academics card">
+            <h2><i class="fas fa-book-open icon"></i> শিক্ষা কার্যক্রম</h2>
             <h3>পঠিত ক্লাসসমূহ:</h3>
-            <ul>
-                <li>[ক্লাস 1]</li>
-                <li>[ক্লাস 2]</li>
-                <li>[ক্লাস 3]</li>
+            <ul class="class-list">
+                <li><i class="fas fa-check-circle check-icon"></i> প্রথম শ্রেণী থেকে দশম শ্রেণী</li>
+                <li><i class="fas fa-check-circle check-icon"></i> একাদশ ও দ্বাদশ শ্রেণী (বিজ্ঞান, কলা, বাণিজ্য শাখা)</li>
                 </ul>
             <h3>বিষয় কম্বিনেশন:</h3>
-            <p>[উদাহরণ: বিজ্ঞান: পদার্থবিদ্যা, রসায়ন, গণিত, জীববিজ্ঞান। কলা: বাংলা, ইংরেজি, ইতিহাস, ভূগোল, অর্থনীতি। বাণিজ্য: হিসাববিজ্ঞান, ব্যবসায় শিক্ষা, অর্থনীতি।]</p>
+            <p class="subject-combo">
+                <strong>বিজ্ঞান:</strong> পদার্থবিদ্যা, রসায়ন, গণিত, জীববিজ্ঞান, কম্পিউটার বিজ্ঞান।<br>
+                <strong>কলা:</strong> বাংলা, ইংরেজি, ইতিহাস, ভূগোল, রাষ্ট্রবিজ্ঞান, অর্থনীতি, দর্শন।<br>
+                <strong>বাণিজ্য:</strong> হিসাববিজ্ঞান, ব্যবসায় শিক্ষা, অর্থনীতি, ফিন্যান্স।
+            </p>
         </section>
 
-        <section class="uniform-details">
-            <h2>ইউনিফর্ম</h2>
-            <p>[উদাহরণ: ছাত্র: সাদা শার্ট, নেভি ব্লু প্যান্ট, সাদা মোজা, কালো জুতো। ছাত্রী: সাদা সালোয়ার, নেভি ব্লু কামিজ, সাদা ওড়না। বিস্তারিত তথ্যের জন্য স্কুল অফিসে যোগাযোগ করুন।]</p>
+        <section class="uniform-details card">
+            <h2><i class="fas fa-tshirt icon"></i> ইউনিফর্ম</h2>
+            <div class="uniform-description">
+                <p><strong>ছাত্র:</strong> সাদা শার্ট, খয়েরি প্যান্ট, সাদা মোজা, কালো জুতো, খয়েরি টাই (শীতকালে খয়েরি সোয়েটার)।</p>
+                <p><strong>ছাত্রী:</strong> সাদা সালোয়ার, খয়েরি কামিজ, সাদা ওড়না, সাদা মোজা, কালো জুতো (শীতকালে খয়েরি সোয়েটার)।</p>
+                <p class="note">ইউনিফর্ম সংক্রান্ত বিস্তারিত তথ্যের জন্য অনুগ্রহ করে স্কুল অফিসে যোগাযোগ করুন অথবা আমাদের স্কুল গাইডলাইন দেখুন।</p>
+            </div>
         </section>
 
-        <section class="location">
-            <h2>আমাদের অবস্থান</h2>
+        <section class="contact-info card">
+            <h2><i class="fas fa-address-book icon"></i> যোগাযোগ</h2>
+            <p><i class="fas fa-map-marker-alt icon"></i> <strong>ঠিকানা:</strong> [আপনার স্কুলের সম্পূর্ণ ঠিকানা, জেলা, রাজ্য, পিন কোড]</p>
+            <p><i class="fas fa-envelope icon"></i> <strong>ইমেল:</strong> <a href="mailto:info@yourschool.com">info@yourschool.com</a></p>
+            <p><i class="fas fa-phone-alt icon"></i> <strong>মোবাইল:</strong> [আপনার স্কুলের মোবাইল নম্বর]</p>
+            <p><i class="fab fa-whatsapp icon"></i> <strong>হোয়াটসঅ্যাপ:</strong> [যদি থাকে, হোয়াটসঅ্যাপ নম্বর]</p>
+        </section>
+
+        <section class="location card">
+            <h2><i class="fas fa-map-marked-alt icon"></i> আমাদের অবস্থান</h2>
             <div class="map-container">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.67890!2d88.123456!3d22.987654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMhCsKzQwJzQyLjEiTiA4OMKwMTEnMDMuNCJF!5e0!3m2!1sen!2sin!4v1234567890123" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </section>
 
         <div class="login-button-container">
-            <a href="index.html" class="login-button">Login to School Website</a>
+            <a href="master_login.html" class="login-button"><i class="fas fa-sign-in-alt"></i> স্কুল ওয়েবসাইটে লগইন করুন</a>
         </div>
-    </div>
+    </main>
 
-    <div class="footer">
+    <footer class="main-footer">
         <p>&copy; [বর্তমান সাল] [আপনার স্কুলের নাম]. সর্বস্বত্ব সংরক্ষিত।</p>
-    </div>
+        <p>ডিজাইন ও ডেভেলপমেন্ট: [আপনার নাম বা টিমের নাম, যদি থাকে]</p>
+    </footer>
 </body>
 </html>
