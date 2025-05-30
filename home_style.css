@@ -1,0 +1,82 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f9ff;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+header {
+  background: #2e7d32;
+  color: white;
+  padding: 20px 10px;
+}
+
+.logo {
+  width: 80px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.tagline {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.intro {
+  padding: 30px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  background: white;
+}
+
+.school-image {
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ccc;
+}
+
+.details {
+  max-width: 500px;
+  text-align: left;
+}
+
+.details h2 {
+  color: #2e7d32;
+}
+
+.details ul {
+  list-style: none;
+  padding: 0;
+  line-height: 1.8em;
+}
+
+.login-section {
+  padding: 30px;
+  background: #e8f5e9;
+}
+
+.login-button {
+  background: #388e3c;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-button:hover {
+  background: #2e7d32;
+}
+
+footer {
+  background: #c8e6c9;
+  padding: 10px;
+  color: #1b5e20;
+  font-size: 14px;
+}
