@@ -306,21 +306,19 @@ ul {
     border: 5px solid var(--primary-red);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     flex-shrink: 0; /* ছোট স্ক্রিনে সংকুচিত হওয়া আটকায় */
-    /* আগের অ্যানিমেশন সরিয়ে নতুনটি যোগ করা হলো */
-    opacity: 0; /* শুরুতে লুকানো থাকবে */
-    transform: translateY(50px) scale(0.8); /* নিচ থেকে উপরে উঠবে ও জুম ইন করবে */
-    animation: zoomInSlideUp 1.2s ease-out forwards; /* নতুন অ্যানিমেশন */
-    animation-delay: 0.5s; /* অন্যান্য কন্টেন্টের পর অ্যানিমেশন শুরু হবে */
+    /* নতুন অ্যানিমেশন যোগ করা হলো */
+    animation: principalPulse 2.5s infinite alternate ease-in-out; /* লোগোর মত ক্রমাগত এনিমেটেড */
 }
 
-@keyframes zoomInSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px) scale(0.8); /* ছবির শুরু স্থিতি */
+/* নতুন @keyframes অ্যানিমেশন principalPulse */
+@keyframes principalPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(230, 57, 70, 0.7); /* প্রাথমিক শ্যাডো এবং বর্ডার গ্লো শুরু */
     }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1); /* ছবির শেষ স্থিতি */
+    100% {
+        transform: scale(1.03); /* হালকা জুম ইন */
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 0 15px rgba(230, 57, 70, 0); /* শ্যাডো বাড়বে এবং বর্ডার গ্লো অদৃশ্য হবে */
     }
 }
 
