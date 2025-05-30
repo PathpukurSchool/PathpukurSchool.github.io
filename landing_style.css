@@ -92,18 +92,20 @@ body {
 /* Hero Section (Scrolling Images) */
 .hero-section {
     position: relative;
-    height: 500px; /* উচ্চতা বাড়ানো হয়েছে */
+    height: 500px;
     overflow: hidden;
     margin-bottom: 40px;
     background-color: #eee;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    /* নতুন: ট্রানজিশন যোগ করা হয়েছে যাতে হোভার এফেক্ট স্মুথ হয় */
+    transition: all 0.5s ease;
 }
 
 .hero-images {
     display: flex;
     width: 400%; /* চারটি ছবির জন্য, প্রতিটি ছবি 100% প্রস্থের হয় */
     height: 100%;
-    animation: slideShow 20s infinite ease-in-out; /* স্লাইডশো অ্যানিমেশন সময় বাড়ানো হয়েছে */
+    animation: slideShow 20s infinite ease-in-out;
 }
 
 .hero-image {
@@ -111,19 +113,23 @@ body {
     height: 100%;
     object-fit: cover;
     filter: brightness(0.7); /* ছবির উপর গাঢ় অন্ধকার */
-    transition: filter 0.5s ease;
+    /* নতুন: ফিল্টার এবং ট্রান্সফর্মের জন্য ট্রানজিশন যোগ করা হয়েছে */
+    transition: filter 0.5s ease, transform 0.5s ease;
 }
 
-.hero-image:hover {
-    filter: brightness(0.9); /* হোভারে উজ্জ্বল হবে */
+/* যখন hero-section এর উপর হোভার করা হবে */
+.hero-section:hover .hero-image {
+    filter: brightness(1); /* ছবি সম্পূর্ণ স্পষ্ট হবে */
+    transform: scale(1.02); /* ছবিতে হালকা জুম এফেক্ট */
 }
 
+/* @keyframes slideShow অপরিবর্তিত থাকবে */
 @keyframes slideShow {
-    0%, 20% { transform: translateX(0%); } /* প্রথম ছবি */
-    25%, 45% { transform: translateX(-25%); } /* দ্বিতীয় ছবি */
-    50%, 70% { transform: translateX(-50%); } /* তৃতীয় ছবি */
-    75%, 95% { transform: translateX(-75%); } /* চতুর্থ ছবি */
-    100% { transform: translateX(0%); } /* লুপ করার জন্য আবার প্রথম ছবিতে ফিরে আসা */
+    0%, 20% { transform: translateX(0%); }
+    25%, 45% { transform: translateX(-25%); }
+    50%, 70% { transform: translateX(-50%); }
+    75%, 95% { transform: translateX(-75%); }
+    100% { transform: translateX(0%); }
 }
 
 .hero-overlay {
@@ -137,18 +143,26 @@ body {
     justify-content: center;
     align-items: center;
     color: var(--white);
-    font-size: 3em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
+    font-size: 3em;
     font-weight: 700;
     text-align: center;
     text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
     opacity: 0;
-    animation: fadeInOverlay 3s forwards 1.5s; /* দেরিতে ফেড ইন */
+    animation: fadeInOverlay 3s forwards 1.5s;
+    /* নতুন: অপাসিটি এবং ট্রান্সফর্মের জন্য ট্রানজিশন যোগ করা হয়েছে */
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
+/* যখন hero-section এর উপর হোভার করা হবে, তখন overlay-text সরে যাবে */
+.hero-section:hover .hero-overlay {
+    opacity: 0; /* লেখাটি অদৃশ্য হবে */
+    transform: translateY(-50px); /* লেখাটি উপরের দিকে সরে যাবে */
+}
+
+/* @keyframes fadeInOverlay অপরিবর্তিত থাকবে */
 @keyframes fadeInOverlay {
     to { opacity: 1; }
 }
-
 /* Card Styles for Sections */
 .card {
     background: var(--card-bg);
