@@ -97,12 +97,12 @@ body {
     margin-bottom: 40px;
     background-color: #eee;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    transition: all 0.5s ease;
+    /* ট্রানজিশন এখানে সরাসরি দরকার নেই, কারণ জাভাস্ক্রিপ্ট ক্লাস যোগ/বাদ দেবে */
 }
 
 .hero-images {
     display: flex;
-    width: 400%;
+    width: 400%; /* চারটি ছবির জন্য, প্রতিটি ছবি 100% প্রস্থের হয় */
     height: 100%;
     animation: slideShow 20s infinite ease-in-out;
 }
@@ -111,8 +111,9 @@ body {
     width: 25%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.7); /* ছবির উপর গাঢ় অন্ধকার */
-    transition: filter 0.5s ease, transform 0.5s ease;
+    filter: brightness(0.7); /* ডিফল্ট: ছবি অস্পষ্ট */
+    transform: scale(1); /* ডিফল্ট: স্বাভাবিক স্কেল */
+    transition: filter 0.5s ease, transform 0.5s ease; /* ফিল্টার এবং ট্রান্সফর্মের জন্য স্মুথ ট্রানজিশন */
 }
 
 /* যখন hero-section এর উপর হোভার করা হবে */
@@ -136,7 +137,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* গাঢ় কালো ওভারলে */
+    background: rgba(0, 0, 0, 0.6); /* ডিফল্ট: দৃশ্যমান ওভারলে */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -145,12 +146,13 @@ body {
     font-weight: 700;
     text-align: center;
     text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
-    opacity: 0;
-    animation: fadeInOverlay 3s forwards 1.5s;
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1; /* ডিফল্ট: দৃশ্যমান */
+    transform: translateY(0); /* ডিফল্ট: স্বাভাবিক অবস্থানে */
+    animation: fadeInOverlay 3s forwards 1.5s; /* প্রাথমিক ফেড ইন অ্যানিমেশন থাকবে */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* অপাসিটি এবং ট্রান্সফর্মের জন্য স্মুথ ট্রানজিশন */
 }
 
-/* যখন hero-section এর উপর হোভার করা হবে, তখন overlay-text ফ্রেমের বাইরে চলে যাবে */
+/* যখন hero-section এর উপর হোভার করা হবে */
 .hero-section:hover .hero-overlay {
     opacity: 0; /* লেখাটি সম্পূর্ণরূপে অদৃশ্য হবে */
     transform: translateY(-100%); /* লেখাটি সম্পূর্ণভাবে ফ্রেমের বাইরে উপরের দিকে সরে যাবে */
