@@ -101,8 +101,8 @@ body {
 
 .hero-images {
     display: flex;
-    width: 1600%; /* চারটি ছবির জন্য */
-    height: 900%;
+    width: 300%; /* চারটি ছবির জন্য */
+    height: 100%;
     animation: slideShow 20s infinite ease-in-out; /* স্লাইডশো অ্যানিমেশন সময় বাড়ানো হয়েছে */
 }
 
