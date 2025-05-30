@@ -92,7 +92,7 @@ body {
 /* Hero Section (Scrolling Images) */
 .hero-section {
     position: relative;
-    height: 400px; /* উচ্চতা বাড়ানো হয়েছে */
+    height: 500px; /* উচ্চতা বাড়ানো হয়েছে */
     overflow: hidden;
     margin-bottom: 40px;
     background-color: #eee;
@@ -101,13 +101,13 @@ body {
 
 .hero-images {
     display: flex;
-    width: 400%; /* চারটি ছবির জন্য */
+    width: 400%; /* চারটি ছবির জন্য, প্রতিটি ছবি 100% প্রস্থের হয় */
     height: 100%;
     animation: slideShow 20s infinite ease-in-out; /* স্লাইডশো অ্যানিমেশন সময় বাড়ানো হয়েছে */
 }
 
 .hero-image {
-    width: 100%;
+    width: 25%; /* প্রতিটি ছবি কন্টেইনারের 25% প্রস্থ নেবে */
     height: 100%;
     object-fit: cover;
     filter: brightness(0.7); /* ছবির উপর গাঢ় অন্ধকার */
@@ -119,10 +119,11 @@ body {
 }
 
 @keyframes slideShow {
-    0%, 25% { transform: translateX(0%); }
-    28%, 50% { transform: translateX(-25%); }
-    53%, 75% { transform: translateX(-50%); }
-    78%, 100% { transform: translateX(-75%); }
+    0%, 20% { transform: translateX(0%); } /* প্রথম ছবি */
+    25%, 45% { transform: translateX(-25%); } /* দ্বিতীয় ছবি */
+    50%, 70% { transform: translateX(-50%); } /* তৃতীয় ছবি */
+    75%, 95% { transform: translateX(-75%); } /* চতুর্থ ছবি */
+    100% { transform: translateX(0%); } /* লুপ করার জন্য আবার প্রথম ছবিতে ফিরে আসা */
 }
 
 .hero-overlay {
