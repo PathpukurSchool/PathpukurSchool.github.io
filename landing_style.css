@@ -97,23 +97,21 @@ body {
     margin-bottom: 40px;
     background-color: #eee;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    /* নতুন: ট্রানজিশন যোগ করা হয়েছে যাতে হোভার এফেক্ট স্মুথ হয় */
     transition: all 0.5s ease;
 }
 
 .hero-images {
     display: flex;
-    width: 400%; /* চারটি ছবির জন্য, প্রতিটি ছবি 100% প্রস্থের হয় */
+    width: 400%;
     height: 100%;
     animation: slideShow 20s infinite ease-in-out;
 }
 
 .hero-image {
-    width: 25%; /* প্রতিটি ছবি কন্টেইনারের 25% প্রস্থ নেবে */
+    width: 25%;
     height: 100%;
     object-fit: cover;
     filter: brightness(0.7); /* ছবির উপর গাঢ় অন্ধকার */
-    /* নতুন: ফিল্টার এবং ট্রান্সফর্মের জন্য ট্রানজিশন যোগ করা হয়েছে */
     transition: filter 0.5s ease, transform 0.5s ease;
 }
 
@@ -149,14 +147,13 @@ body {
     text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
     opacity: 0;
     animation: fadeInOverlay 3s forwards 1.5s;
-    /* নতুন: অপাসিটি এবং ট্রান্সফর্মের জন্য ট্রানজিশন যোগ করা হয়েছে */
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-/* যখন hero-section এর উপর হোভার করা হবে, তখন overlay-text সরে যাবে */
+/* যখন hero-section এর উপর হোভার করা হবে, তখন overlay-text ফ্রেমের বাইরে চলে যাবে */
 .hero-section:hover .hero-overlay {
-    opacity: 0; /* লেখাটি অদৃশ্য হবে */
-    transform: translateY(-50px); /* লেখাটি উপরের দিকে সরে যাবে */
+    opacity: 0; /* লেখাটি সম্পূর্ণরূপে অদৃশ্য হবে */
+    transform: translateY(-100%); /* লেখাটি সম্পূর্ণভাবে ফ্রেমের বাইরে উপরের দিকে সরে যাবে */
 }
 
 /* @keyframes fadeInOverlay অপরিবর্তিত থাকবে */
