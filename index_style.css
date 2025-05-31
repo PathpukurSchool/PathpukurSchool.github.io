@@ -703,7 +703,7 @@ ul {
 /* Important Links Section */
 .important-links {
     /* আগের ব্যাকগ্রাউন্ড এবং বক্স-শ্যাডো ঠিক আছে */
-    background: linear-gradient(135deg, #e6f7ff 0%, #cceeff 100%); /* হালকা নীল ব্যাকগ্রাউন্ড */
+    background: linear-gradient(135deg, #fefefe 0%, #fefefe 100%);
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
