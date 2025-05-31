@@ -662,3 +662,40 @@ ul {
         height: 300px;
     }
 }
+
+/* Sparkling Emoji Effect */
+.slogan .sparkle-emoji {
+    animation: sparkle 1.5s infinite alternate; /* অ্যানিমেশন প্রপার্টি: 1.5 সেকেন্ড ধরে চলবে, বারবার হবে এবং একবার জ্বলে আবার নিভে যাবে */
+    display: inline-block; /* ইমোজিকে অ্যানিমেট করার জন্য */
+    transform: scale(1); /* প্রাথমিক স্কেল */
+    transition: transform 0.3s ease; /* মসৃণ ট্রানজিশনের জন্য */
+}
+
+@keyframes sparkle {
+    0% {
+        opacity: 0.5; /* হালকা স্বচ্ছতা */
+        text-shadow: 0 0 5px rgba(255, 255, 0, 0.7); /* হালকা হলুদ গ্লো */
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1; /* সম্পূর্ণ অস্বচ্ছ */
+        text-shadow: 0 0 10px rgba(255, 255, 0, 0.9), /* উজ্জ্বল হলুদ গ্লো */
+                     0 0 20px rgba(255, 255, 200, 0.6); /* অতিরিক্ত উজ্জ্বলতা */
+        transform: scale(1.1); /* সামান্য জুম */
+    }
+    100% {
+        opacity: 0.5; /* আবার হালকা স্বচ্ছতা */
+        text-shadow: 0 0 5px rgba(255, 255, 0, 0.7); /* আবার হালকা হলুদ গ্লো */
+        transform: scale(1);
+    }
+}
+
+/* হোভার ইফেক্ট (ঐচ্ছিক): মাউস নিলে আরও উজ্জ্বল হবে */
+.slogan .sparkle-emoji:hover {
+    animation-play-state: paused; /* হোভার করলে অ্যানিমেশন থামবে না, বরং আরও উজ্জ্বল হবে */
+    opacity: 1;
+    text-shadow: 0 0 15px rgba(255, 255, 0, 1), 
+                 0 0 25px rgba(255, 255, 200, 0.8),
+                 0 0 35px rgba(255, 255, 255, 0.5);
+    transform: scale(1.2);
+        }
