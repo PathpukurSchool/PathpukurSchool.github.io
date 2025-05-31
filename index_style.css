@@ -759,7 +759,7 @@ ul {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
     text-decoration: none; /* আন্ডারলাইন সরান */
-    color: var(--text-color); /* টেক্সট কালার */
+    color: var(--dark-khaki); /* টেক্সট কালার */
     font-weight: 600;
 }
 
