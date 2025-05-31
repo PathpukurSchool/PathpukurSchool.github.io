@@ -702,12 +702,12 @@ ul {
 
 /* Important Links Section */
 .important-links {
-    background-color: var(--white);
+    background: linear-gradient(135deg, #e6f7ff 0%, #cceeff 100%); /* হালকা নীল ব্যাকগ্রাউন্ড */
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
-    border-left: 6px solid var(--accent-color);
+    border-left: 6px solid #0056b3; /* গাঢ় নীল বর্ডার */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -717,7 +717,7 @@ ul {
 }
 
 .important-links h2 {
-    color: var(--primary-color);
+    color: var(--dark-khaki);
     font-size: 2em;
     margin-bottom: 25px;
     text-align: center;
@@ -727,7 +727,7 @@ ul {
 
 .important-links h2 .icon {
     margin-right: 10px;
-    color: var(--accent-color);
+    color: var(--dark-khaki);
 }
 
 .important-links h2::after {
