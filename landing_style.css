@@ -699,3 +699,104 @@ ul {
                  0 0 35px rgba(255, 255, 255, 0.5);
     transform: scale(1.2);
         }
+
+/* Important Links Section */
+.important-links {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    border-left: 6px solid var(--accent-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.important-links:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.important-links h2 {
+    color: var(--primary-color);
+    font-size: 2em;
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.important-links h2 .icon {
+    margin-right: 10px;
+    color: var(--accent-color);
+}
+
+.important-links h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--accent-color);
+    margin: 10px auto 0;
+    border-radius: 5px;
+}
+
+.links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* 180px এর কম নয়, গ্রিড লেআউট */
+    gap: 20px; /* আইটেমগুলোর মধ্যে ব্যবধান */
+    justify-content: center;
+}
+
+.link-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    text-decoration: none; /* আন্ডারলাইন সরান */
+    color: var(--text-color); /* টেক্সট কালার */
+    font-weight: 600;
+}
+
+.link-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    background-color: var(--light-accent-color); /* হোভারে হালকা রং পরিবর্তন */
+}
+
+/* Icon Styling for Links */
+.link-item .link-icon {
+    font-size: 3em; /* আইকনের আকার */
+    color: var(--primary-color); /* আইকনের রং, আপনার থিম কালার অনুযায়ী */
+    margin-bottom: 10px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.link-item:hover .link-icon {
+    transform: scale(1.1); /* হোভার করলে আইকন সামান্য বড় হবে */
+    color: var(--accent-color); /* হোভারে আইকনের রং পরিবর্তন */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .links-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+    .link-item .link-icon {
+        font-size: 2.5em; /* ছোট স্ক্রিনে আইকনের আকার */
+    }
+    .link-text {
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: 480px) {
+    .links-grid {
+        grid-template-columns: 1fr; /* খুব ছোট স্ক্রিনে একটি কলামে দেখাবে */
+    }
+}
