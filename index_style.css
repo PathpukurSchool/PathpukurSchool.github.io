@@ -809,3 +809,45 @@ ul {
         grid-template-columns: 1fr; /* খুব ছোট স্ক্রিনে একটি কলামে দেখাবে */
     }
 }
+
+/* Top Login Button */
+.top-login-button {
+    position: absolute; /* পজিশনিং এর জন্য */
+    top: 20px; /* উপর থেকে দূরত্ব */
+    right: 20px; /* ডান দিক থেকে দূরত্ব */
+    background-color: var(--primary-color); /* হেডিং এর লাল রঙের সাথে সামঞ্জস্যপূর্ণ */
+    color: var(--white); /* সাদা টেক্সট */
+    padding: 8px 15px; /* বোতামের প্যাডিং */
+    border-radius: 5px; /* হালকা গোলাকার কোণা */
+    text-decoration: none; /* আন্ডারলাইন সরান */
+    font-weight: 600;
+    font-size: 0.9em; /* ছোট সাইজ */
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* অন্য এলিমেন্টের উপর রাখার জন্য */
+}
+
+.top-login-button:hover {
+    background-color: var(--accent-color); /* হোভারে একটু অন্য শেডের লাল */
+    transform: translateY(-2px); /* হোভারে সামান্য উপরে উঠবে */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* যখন স্ক্রিন ছোট হবে তখন লোগো এবং হেডিং এর সাথে ওভারল্যাপ এড়াতে পজিশন সামঞ্জস্য করা যেতে পারে */
+@media (max-width: 768px) {
+    .top-login-button {
+        top: 15px;
+        right: 15px;
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-login-button {
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+        font-size: 0.75em;
+    }
+}
