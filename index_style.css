@@ -772,14 +772,14 @@ ul {
 /* Icon Styling for Links */
 .link-item .link-icon {
     font-size: 3em; /* আইকনের আকার */
-    color: var(--primary-color); /* আইকনের রং, আপনার থিম কালার অনুযায়ী */
+    color: var(--dark-khaki); /* আইকনের রং, আপনার থিম কালার অনুযায়ী */
     margin-bottom: 10px;
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .link-item:hover .link-icon {
     transform: scale(1.1); /* হোভার করলে আইকন সামান্য বড় হবে */
-    color: var(--accent-color); /* হোভারে আইকনের রং পরিবর্তন */
+    color: var(--dark-khaki); /* হোভারে আইকনের রং পরিবর্তন */
 }
 
 /* Responsive adjustments for smaller screens */
