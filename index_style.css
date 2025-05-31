@@ -43,6 +43,8 @@ body {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
+    overflow: hidden; /* যদি কোন child বাইরে চলে যায়, তাহলে সেটি হাইড করবে */
+    padding-top: 30px; /* উপরের লগইন বোতামের জন্য একটু জায়গা */
 }
 
 .header-content {
@@ -815,22 +817,26 @@ ul {
     position: absolute; /* পজিশনিং এর জন্য */
     top: 20px; /* উপর থেকে দূরত্ব */
     right: 20px; /* ডান দিক থেকে দূরত্ব */
-    background-color: var(--primary-color); /* হেডিং এর লাল রঙের সাথে সামঞ্জস্যপূর্ণ */
+    background-color: var(--primary-red); /* হেডিং এর লাল রঙের সাথে সামঞ্জস্যপূর্ণ */
     color: var(--white); /* সাদা টেক্সট */
     padding: 8px 15px; /* বোতামের প্যাডিং */
+     border: 1px solid var(--white); /* সাদা বর্ডার যোগ করা হয়েছে */
     border-radius: 5px; /* হালকা গোলাকার কোণা */
     text-decoration: none; /* আন্ডারলাইন সরান */
     font-weight: 600;
     font-size: 0.9em; /* ছোট সাইজ */
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25); /* আরও স্পষ্ট শ্যাডো */
     z-index: 1000; /* অন্য এলিমেন্টের উপর রাখার জন্য */
+    display: inline-block; /* নিশ্চিত করতে যে এটি ব্লক লেভেলের আচরণ করছে না */
+    white-space: nowrap; /* টেক্সট যাতে এক লাইনে থাকে */
 }
 
 .top-login-button:hover {
     background-color: var(--accent-color); /* হোভারে একটু অন্য শেডের লাল */
-    transform: translateY(-2px); /* হোভারে সামান্য উপরে উঠবে */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px) scale(1.02); /* হোভারে সামান্য উপরে উঠবে এবং একটু বড় হবে */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* হোভারে শ্যাডো আরও গাঢ় হবে */
+    border-color: var(--light-gray); /* হোভারে বর্ডার কালার পরিবর্তন */
 }
 
 /* যখন স্ক্রিন ছোট হবে তখন লোগো এবং হেডিং এর সাথে ওভারল্যাপ এড়াতে পজিশন সামঞ্জস্য করা যেতে পারে */
@@ -849,5 +855,9 @@ ul {
         right: 10px;
         padding: 5px 10px;
         font-size: 0.75em;
+    }
+    /* ছোট স্ক্রিনে header-content এর padding কিছুটা বাড়ানো যেতে পারে, যাতে বোতামের সাথে না লাগে */
+    .main-header .header-content {
+        padding-right: 70px; /* বোতামের জন্য পর্যাপ্ত জায়গা */
     }
 }
