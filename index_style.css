@@ -287,7 +287,7 @@ ul {
 /* Principal Section */
 .principal-message {
     background: linear-gradient(135deg, #fefefe 0%, #fefefe 100%);
-    border-top: 8px solid var(--primary-red); /* লাল বর্ডার */
+    border-top: 8px solid var(--dark-khaki)); /* বর্ডার */
 }
 
 .principal-info {
@@ -381,7 +381,7 @@ ul {
 /* Gallery Section */
 .gallery {
     background: linear-gradient(135deg, #fdf6e3 0%, #fae6b5 100%); /* হালকা কমলা ব্যাকগ্রাউন্ড */
-    border-top: 8px solid #FF8C00; /* কমলা বর্ডার */
+    border-top: var(--dark-khaki); /* কমলা বর্ডার */
 }
 
 .gallery-grid {
@@ -766,7 +766,7 @@ ul {
 .link-item:hover {
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-    background-color: var(--light-accent-color); /* হোভারে হালকা রং পরিবর্তন */
+    background-color: #e3f2fd;; /* হোভারে হালকা রং পরিবর্তন */
 }
 
 /* Icon Styling for Links */
@@ -779,7 +779,7 @@ ul {
 
 .link-item:hover .link-icon {
     transform: scale(1.1); /* হোভার করলে আইকন সামান্য বড় হবে */
-    color: var(--primary-red); /* হোভারে আইকনের রং পরিবর্তন */
+    color: #e3f2fd; /* হোভারে আইকনের রং পরিবর্তন */
 }
 
 /* Responsive adjustments for smaller screens */
