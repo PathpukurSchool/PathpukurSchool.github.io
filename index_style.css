@@ -702,12 +702,13 @@ ul {
 
 /* Important Links Section */
 .important-links {
+    /* আগের ব্যাকগ্রাউন্ড এবং বক্স-শ্যাডো ঠিক আছে */
     background: linear-gradient(135deg, #e6f7ff 0%, #cceeff 100%); /* হালকা নীল ব্যাকগ্রাউন্ড */
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
-    border-left: none; /* বর্ডার */
+    border-left: none; /* সমগ্র সেকশনের বাম দিকের বর্ডার থাকবে না - নিশ্চিত করা হয়েছে */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -717,7 +718,8 @@ ul {
 }
 
 .important-links h2 {
-    color: var(--dark-khaki);
+    /* শিরোনামের রঙ --primary-red হবে */
+    color: var(--primary-color); /* আপনার --primary-color (লাল) ব্যবহার করা হয়েছে */
     font-size: 2em;
     margin-bottom: 25px;
     text-align: center;
@@ -726,8 +728,9 @@ ul {
 }
 
 .important-links h2 .icon {
+    /* শিরোনামের বাম পাশের ইমোজির রঙ --primary-red হবে */
     margin-right: 10px;
-    color: var(--dark-khaki);
+    color: var(--primary-color); /* আপনার --primary-color (লাল) ব্যবহার করা হয়েছে */
 }
 
 .important-links h2::after {
@@ -735,7 +738,8 @@ ul {
     display: block;
     width: 60px;
     height: 3px;
-    background-color: var(--accent-color);
+    /* এখানে অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে, যদি হেডারের নিচে বর্ডার অন্য কালার চান */
+    background-color: var(--accent-color); /* আপনার অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে */
     margin: 10px auto 0;
     border-radius: 5px;
 }
@@ -759,27 +763,32 @@ ul {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
     text-decoration: none; /* আন্ডারলাইন সরান */
-    color: var(--dark-khaki); /* টেক্সট কালার */
+    color: var(--text-color); /* লিঙ্কের লেখার জন্য সাধারণ টেক্সট কালার */
     font-weight: 600;
+    /* প্রতিটি লিঙ্কের বাম দিকে var(--dark-khaki) বর্ডার হবে */
+    border-left: 6px solid var(--dark-khaki); /* প্রতিটি লিঙ্কের বাম দিকের বর্ডার যোগ করা হয়েছে */
 }
 
 .link-item:hover {
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-    background-color: 6px solid #0056b3; /* হোভারে হালকা রং পরিবর্তন */
+    /* হোভারে হালকা রং পরিবর্তন - এটি ঠিক করা হয়েছে, আগেরটি ভুল প্রপার্টি ছিল */
+    background-color: var(--light-accent-color); /* আপনার থিমের হালকা অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে */
 }
 
 /* Icon Styling for Links */
 .link-item .link-icon {
     font-size: 3em; /* আইকনের আকার */
-    color: var(--primary-red); /* আইকনের রং, আপনার থিম কালার অনুযায়ী */
+    /* আইকনের রঙ --primary-red হবে */
+    color: var(--primary-color); /* আপনার --primary-color (লাল) ব্যবহার করা হয়েছে */
     margin-bottom: 10px;
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .link-item:hover .link-icon {
     transform: scale(1.1); /* হোভার করলে আইকন সামান্য বড় হবে */
-    color: #e3f2fd; /* হোভারে আইকনের রং পরিবর্তন */
+    /* হোভারে আইকনের রঙ পরিবর্তন - আগেরটি নির্দিষ্ট কালার ছিল, এখন থিম কালার */
+    color: var(--accent-color); /* আপনার অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে */
 }
 
 /* Responsive adjustments for smaller screens */
