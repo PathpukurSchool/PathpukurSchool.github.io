@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-   
 <head>
     <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instructions / Help</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,29 +11,64 @@
     <img src="PHS-LOGO.png" alt="School Logo" class="logo">
     <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
     <h2 class="blink">🙏 Instructions / Help 🙏</h2>
-    <ul id="help-list"></ul>
+
+    <div id="helpContent">
+        <div class="coming-soon-message">
+            <strong>Available Soon!</strong><br>
+            Please check back later for updates.
+        </div>
+        <ul id="help-list"></ul>
+    </div>
 
     <script>
-        fetch('help.json')
-            .then(response => response.json())
-            .then(data => {
-                const ul = document.getElementById('help-list');
-                data.help.forEach(item => {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.href = item.url;
-                    a.target = '_blank';
-                    a.textContent = `${item.name} (${item.date})`;
-                    li.appendChild(a);
-                    ul.appendChild(li);
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('help.json')
+                .then(response => response.json())
+                .then(data => {
+                    const ul = document.getElementById('help-list');
+                    const helpContentDiv = document.getElementById('helpContent');
+                    let hasContent = false; // To track if any valid content is found
+
+                    if (data && data.help && Array.isArray(data.help)) {
+                        data.help.forEach(item => {
+                            // Check if 'name' field is not empty or null
+                            if (item.name && item.name.trim() !== '') {
+                                const li = document.createElement('li');
+                                const a = document.createElement('a');
+                                a.href = item.url || '#'; // Fallback to '#' if URL is empty
+                                a.target = '_blank';
+                                a.textContent = `${item.name} (${item.date || 'তারিখ নেই'})`; // Fallback for date
+                                li.appendChild(a);
+                                ul.appendChild(li);
+                                hasContent = true; // Mark as having valid content
+                            }
+                        });
+                    }
+
+                    // If no valid help items were added, or if data.help was empty/invalid
+                    if (!hasContent) {
+                        // Keep the "coming-soon-message" visible
+                        ul.style.display = 'none'; // Hide the empty ul
+                    } else {
+                        // If content exists, hide the "coming-soon-message"
+                        const comingSoonMessage = helpContentDiv.querySelector('.coming-soon-message');
+                        if (comingSoonMessage) {
+                            comingSoonMessage.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching help.json:', error);
+                    // If there's an error fetching the file, the "coming-soon-message" will remain visible.
                 });
-            });
+        });
     </script>
+
 <footer>
     <hr>
     <p>The Website is Developed under the Instruction of the Headmaster.</p>
     <p>© Pathpukur High School (HS). All rights reserved.</p>
 </footer>
-   <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
