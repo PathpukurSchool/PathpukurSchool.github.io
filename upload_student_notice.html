@@ -4,57 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Notice</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
+
     <img src="PHS-LOGO.png" alt="School Logo" class="logo">
     <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
     <h2 class="blink">📝 Upload Student Notice 📝</h2>
-    <div id="noticeContainer">
-        <div class="coming-soon-message">
-            <strong>Available Soon!</strong><br>
-            Please check back later for updates.
-        </div>
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-        
-        </div>
+    
 <footer>
      <hr>
  <p>The Website is Developed under the Instruction of the Headmaster.</p>
     <p>© Pathpukur High School (HS). All rights reserved.</p>
 </footer>
 
-<script>
-    // JavaScript to check if content exists and hide "Available Soon"
-    document.addEventListener('DOMContentLoaded', function() {
-        const noticeContainer = document.getElementById('noticeContainer');
-        const comingSoonMessage = noticeContainer.querySelector('.coming-soon-message');
-
-        // Check if there are any child elements in noticeContainer other than the coming-soon-message
-        // This is a simple way to detect if actual content has been added
-        const hasActualContent = Array.from(noticeContainer.children).some(child =>
-            child !== comingSoonMessage && child.nodeType === 1 // Check if it's an element node
-        );
-
-        if (hasActualContent) {
-            noticeContainer.classList.add('content-available');
-        }
-    });
-</script>
-<script src="script.js"></script>
+<script src="script.js"></script>    
 </body>
 </html>
