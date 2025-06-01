@@ -18,65 +18,109 @@
 
 
 
-<div id="notice-board"></div>
-
-<!-- ✅ Popup Modal (পূর্বের মত) -->
-<div id="popupModal" style="display: none;" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
-    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
-    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
-    <div id="popupLinkArea" style="margin-top: 10px;"></div>
-    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
-  </div>
-</div>
-
-<script src="Help.js"></script>
-<script>
-  function renderNoticeList() {
-    const container = document.getElementById('notice-board');
-    container.innerHTML = '';
-
-    // studentTableNotices must be loaded from Helping.js
-    if (!Array.isArray(helping) || helping.length === 0) {
-      const msg = document.createElement('div');
-      msg.className = 'no-notice-hover';
-      msg.textContent = '🚫 Notices Available Soon!\nPlease check back later for updates.';
-      container.appendChild(msg);
-      return;
-    }
-
-    helping.forEach(notice => {
-      const item = document.createElement('div');
-      item.innerText = notice.text;
-      item.style.cursor = 'pointer';
-      item.style.margin = '10px 0';
-      item.style.padding = '10px';
-      item.style.border = '1px solid #ccc';
-      item.style.borderRadius = '6px';
-      item.style.backgroundColor = '#f9f9f9';
-      item.style.transition = 'background-color 0.3s';
-      item.style.color = notice.color || '#000';
-      item.onmouseover = () => item.style.backgroundColor = '#e6f2ff';
-      item.onmouseout = () => item.style.backgroundColor = '#f9f9f9';
-
-      item.onclick = () => showPopup(notice.text, notice.date, notice.link || '', notice.subj || '');
-      container.appendChild(item);
-    });
-  }
-
-  window.onload = () => {
-    loadStudentExamLinks();   // যদি আগের লিঙ্ক ফাংশন থাকে
-    renderNoticeList();       // নতুন লিস্ট রেন্ডার
-  };
-
-  function closeModal() {
-    document.getElementById('popupModal').style.display = 'none';
-  }
-</script>
 
 
+    <div id="notice-board"></div>
 
+    <script src="help.js"></script>
+
+    <script>
+        function renderNoticeList() {
+            const container = document.getElementById('notice-board');
+            container.innerHTML = ""; // Clear existing content
+
+            if (!Helping || Helping.length === 0) {
+                container.innerHTML = `
+                    <div class="no-notice-message">
+                        <strong>Available Soon!</strong>
+                        <p>Please check back later for updates.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const noticeListDiv = document.createElement('div');
+            noticeListDiv.classList.add('notice-list');
+
+            Helping.forEach(notice => {
+                const noticeItem = document.createElement('div');
+                noticeItem.classList.add('notice-item');
+                noticeItem.style.color = notice.color || '#000'; // Apply color from data
+
+                noticeItem.innerHTML = `
+                    <strong>${notice.date}</strong>
+                    <span>${notice.text}</span>
+                `;
+
+                noticeItem.onclick = () => showPopup(notice.text, notice.date, notice.link || '', notice.subj || '');
+                noticeListDiv.appendChild(noticeItem);
+            });
+            container.appendChild(noticeListDiv);
+        }
+
+        // Dynamically create and show the popup
+        function showPopup(titleText, date, link, subjText) {
+            // Remove any existing dynamic popup before creating a new one
+            const existingPopup = document.querySelector('.dynamic-popup');
+            if (existingPopup) {
+                document.body.removeChild(existingPopup);
+            }
+
+            const popup = document.createElement('div');
+            popup.classList.add('dynamic-popup');
+
+            // Heading (Text)
+            const titleElem = document.createElement('div');
+            titleElem.classList.add('popup-title');
+            titleElem.innerText = titleText;
+            popup.appendChild(titleElem);
+
+            // Date
+            const dateElem = document.createElement('div');
+            dateElem.classList.add('popup-date');
+            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+            popup.appendChild(dateElem);
+
+            // Subj if available
+            if (subjText && subjText.trim() !== '') {
+                const subjElem = document.createElement('div');
+                subjElem.classList.add('popup-subj');
+                subjElem.innerText = subjText;
+                popup.appendChild(subjElem);
+            }
+
+            // Button Container
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+
+            // Open Link button if link exists
+            if (link && link.trim() !== '') {
+                const linkBtn = document.createElement('a');
+                linkBtn.href = link;
+                linkBtn.innerText = 'Open Link';
+                linkBtn.target = '_blank';
+                buttonContainer.appendChild(linkBtn);
+            }
+
+            // Close button
+            const closeBtn = document.createElement('button');
+            closeBtn.innerText = 'Back';
+            closeBtn.onclick = () => document.body.removeChild(popup);
+            buttonContainer.appendChild(closeBtn);
+
+            popup.appendChild(buttonContainer);
+
+            // Append to body
+            document.body.appendChild(popup);
+        }
+
+        // Initial render on page load
+        window.onload = renderNoticeList;
+
+    </script>
+
+
+   
 
 
 
