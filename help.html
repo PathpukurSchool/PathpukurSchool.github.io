@@ -14,22 +14,86 @@
     <h2 class="blink">🙏 Instructions / Help 🙏</h2>
     <ul id="help-list"></ul>
 
-    <script>
-        fetch('help.json')
-            .then(response => response.json())
-            .then(data => {
-                const ul = document.getElementById('help-list');
-                data.help.forEach(item => {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.href = item.url;
-                    a.target = '_blank';
-                    a.textContent = `${item.name} (${item.date})`;
-                    li.appendChild(a);
-                    ul.appendChild(li);
-                });
-            });
-    </script>
+
+
+
+
+<!-- ✅ নোটিশ বোর্ড -->
+<div id="notice-board"></div>
+<div class="pagination">
+  <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+  <span id="pageNumber">Page 1</span>
+  <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+</div>
+
+<!-- ✅ External Notice Bord -->
+<script src="Helping.js"></script>
+<script>
+  const noticesPerPage = 10;
+  let currentPage = 1;
+
+  function renderNoticeList() {
+    const container = document.getElementById('notice-board');
+    container.innerHTML = "";
+
+    const start = (currentPage - 1) * noticesPerPage;
+    const end = start + noticesPerPage;
+    const paginatedNotices = studentTableNotices.slice(start, end);
+
+    paginatedNotices.forEach(notice => {
+      const item = document.createElement('div');
+      item.style.padding = '10px';
+      item.style.margin = '10px 0';
+      item.style.border = '1px solid #ccc';
+      item.style.borderRadius = '5px';
+      item.style.cursor = 'pointer';
+      item.style.backgroundColor = '#f9f9f9';
+      item.style.color = notice.color || '#000';
+      item.style.transition = 'background-color 0.3s';
+      item.onmouseover = () => item.style.backgroundColor = '#e6f7ff';
+      item.onmouseout = () => item.style.backgroundColor = '#f9f9f9';
+
+      item.innerHTML = `
+        <strong style="display:block;">${notice.date}</strong>
+        ${notice.text}
+      `;
+
+      item.onclick = () => showPopup(notice.text, notice.date, notice.link || '', notice.subj || '');
+      container.appendChild(item);
+    });
+
+    const totalPages = Math.ceil(studentTableNotices.length / noticesPerPage);
+    document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
+    document.getElementById('prevBtn').disabled = currentPage === 1;
+    document.getElementById('nextBtn').disabled = currentPage === totalPages;
+  }
+
+  function nextPage() {
+    if (currentPage < Math.ceil(studentTableNotices.length / noticesPerPage)) {
+      currentPage++;
+      renderNoticeList();
+    }
+  }
+
+  function prevPage() {
+    if (currentPage > 1) {
+      currentPage--;
+      renderNoticeList();
+    }
+  }
+
+  window.onload = () => {
+    loadStudentExamLinks();  // পুরনো পরীক্ষার লিঙ্ক লোড
+    renderNoticeList();      // নতুনভাবে লিস্ট রেন্ডার
+  };
+</script>
+
+
+
+
+
+
+   
 <footer>
     <hr>
     <p>The Website is Developed under the Instruction of the Headmaster.</p>
