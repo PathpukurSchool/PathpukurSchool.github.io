@@ -538,31 +538,6 @@ ul li a:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* আপনার অন্যান্য CSS কোড (যেমন, .logo, .blink, footer-এর স্টাইল) এখানে যোগ করতে পারেন */
-/* Example basic styles for other elements, assuming you have them */
-body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f0f2f5;
-    color: #333;
-}
-
-.logo {
-    display: block;
-    margin: 20px auto;
-    max-width: 150px;
-    height: auto;
-}
-
-h1, h2 {
-    text-align: center;
-    color: #0056b3;
-}
-
-.blink {
-    animation: blink-animation 1s infinite alternate;
-}
 
 @keyframes blink-animation {
     from { opacity: 1; }
