@@ -460,7 +460,7 @@ ul li a:hover {
     font-weight: bold; /* ফন্ট বোল্ড করে */
     transition: background-color 0.3s ease, transform 0.3s ease; /* হোভার ইফেক্টের জন্য মসৃণ ট্রানজিশন */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* হালকা শ্যাডো */
-    margin-top: 30px; /* উপরের এলিমেন্ট থেকে 30 পিক্সেল দূরত্ব */
+    margin-top: 20px; /* উপরের এলিমেন্ট থেকে 20 পিক্সেল দূরত্ব */
 }
 
 .student-notice-button:hover {
