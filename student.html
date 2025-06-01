@@ -5,42 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Page</title>
 
-
-
-
-  
-
-<script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-database-compat.js"></script>
-    <script>
-        // আপনার Firebase Configuration অবজেক্ট এখানে থাকবে
-        const firebaseConfig = {
-            apiKey: "AIzaSyDWHINMB7mOhHW4aePDBOMh_GQ_gEKTGIY",
-            authDomain: "uploadedstudentnotices.firebaseapp.com",
-            projectId: "uploadedstudentnotices",
-            storageBucket: "uploadedstudentnotices.firebasestorage.app",
-            messagingSenderId: "942324613890",
-            appId: "1:942324613890:web:3cc1ee508ac1298143781b",
-            measurementId: "G-4DGTTD2DHN"
-        };
-
-        // Firebase Initialize করুন
-        const app = firebase.initializeApp(firebaseConfig);
-
-        // প্রয়োজনীয় Firebase সার্ভিস ইনিশিয়ালাইজ করুন
-        const database = firebase.database();
-        // const auth = firebase.auth(); // যদি Authentication ব্যবহার করেন
-        // const storage = firebase.storage(); // যদি Storage ব্যবহার করেন
-    </script>
-
-
-
-
-
-  
-
-
-  
   <!-- Favicon & Touch Icon -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="PHS-LOGO.png">
@@ -99,230 +63,208 @@
   marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
 </script>
   
+  <!-- ✅ টেবিল নোটিশ বোর্ড -->
+  <div id="notice-board"></div>
+  <div class="pagination">
+    <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+    <span id="pageNumber">Page 1</span>
+    <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+  </div>
+ <!-- ✅ Popup Modal -->
+<div id="popupModal" style="display: none;" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
+    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
+    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
+    <div id="popupLinkArea" style="margin-top: 10px;"></div>
+    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+  </div>
+</div>
 
+  <!-- ✅ External Notice Bord -->
+  <script src="student_notice.js"></script>
+  <script>
+    const noticesPerPage = 10;
+    let currentPage = 1;
 
+    function renderNoticeTable() {
+      const container = document.getElementById('notice-board');
+      container.innerHTML = "";
 
+      const start = (currentPage - 1) * noticesPerPage;
+      const end = start + noticesPerPage;
+      const paginatedNotices = studentTableNotices.slice(start, end);
 
+      const table = document.createElement('table');
+      table.id = 'notice-table';
 
-    <div id="notice-board"></div>
-    <div class="pagination">
-        <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-        <span id="pageNumber">Page 1</span>
-        <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
-    </div>
-    <div id="popupModal" style="display: none;" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
-            <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
-            <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
-            <div id="popupLinkArea" style="margin-top: 10px;"></div>
-            <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
-        </div>
-    </div>
+      const thead = document.createElement('thead');
+      thead.innerHTML = `
+        <tr>
+          <th>তারিখ</th>
+          <th>বিষয়বস্তু</th>
+          <th>বিজ্ঞপ্তি</th>
+        </tr>
+      `;
+      table.appendChild(thead);
 
-    <script>
-        let allNotices = []; // সমস্ত নোটিশ Firebase থেকে লোড হবে
-        const noticesPerPage = 10;
-        let currentPage = 1;
+      const tbody = document.createElement('tbody');
+      paginatedNotices.forEach(notice => {
+        const tr = document.createElement('tr');
 
-        function renderNoticeTable() {
-            const container = document.getElementById('notice-board');
-            container.innerHTML = "";
+        tr.innerHTML = `
+          <td>${notice.date}</td>
+          <td style="color: ${notice.color || '#000'};">${notice.text}</td>
+<td>
+  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')" 
+          onmouseover="this.style.opacity=0.8" 
+          onmouseout="this.style.opacity=1">
+    View
+  </button>
+</td>
+        `;
+        tbody.appendChild(tr);
+      });
 
-            const start = (currentPage - 1) * noticesPerPage;
-            const end = start + noticesPerPage;
-            const paginatedNotices = allNotices.slice(start, end); // studentTableNotices এর বদলে allNotices
+      table.appendChild(tbody);
+      container.appendChild(table);
 
-            if (allNotices.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#777;">কোনো নোটিশ নেই।</p>';
-                document.getElementById('pageNumber').textContent = `Page 1 of 1`;
-                document.getElementById('prevBtn').disabled = true;
-                document.getElementById('nextBtn').disabled = true;
-                return;
-            }
+      const totalPages = Math.ceil(studentTableNotices.length / noticesPerPage);
+      document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
+      document.getElementById('prevBtn').disabled = currentPage === 1;
+      document.getElementById('nextBtn').disabled = currentPage === totalPages;
+    }
 
-            const table = document.createElement('table');
-            table.id = 'notice-table';
+    function nextPage() {
+      if (currentPage < Math.ceil(studentTableNotices.length / noticesPerPage)) {
+        currentPage++;
+        renderNoticeTable();
+      }
+    }
 
-            const thead = document.createElement('thead');
-            thead.innerHTML = `
-                <tr>
-                    <th>তারিখ</th>
-                    <th>বিষয়বস্তু</th>
-                    <th>বিজ্ঞপ্তি</th>
-                </tr>
-            `;
-            table.appendChild(thead);
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderNoticeTable();
+      }
+    }
 
-            const tbody = document.createElement('tbody');
-            paginatedNotices.forEach(notice => {
-                const tr = document.createElement('tr');
+    // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
+    renderNoticeTable();
+  </script>
 
-                // notice.text এর বদলে notice.title এবং notice.body এর জন্য notice.body ব্যবহার করুন
-                // showPopup ফাংশন কলের আর্গুমেন্টগুলো পরিবর্তন করুন
-                tr.innerHTML = `
-                    <td>${notice.date}</td>
-                    <td style="color: ${notice.color || '#000'};">${notice.title}</td>
-                    <td>
-                        <button onclick="showPopup('${escape(notice.body || '')}', '${notice.date}', '${notice.link || ''}', '${escape(notice.title || '')}')"
-                                onmouseover="this.style.opacity=0.8"
-                                onmouseout="this.style.opacity=1">
-                            View
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
+<script>
+  window.onload = () => {
+    loadStudentExamLinks();   // আগের পরীক্ষার রেজাল্ট বাটন লোড
+    renderNoticeTable();      // টেবিল নোটিশ লোড
+  };
+</script>
+  
+  <script> // Student Table Notice popup handle
+  function showPopup(titleText, date, link, subjText) {
+  // পপ-আপ কনটেইনার তৈরি
+  const popup = document.createElement('div');
+  popup.style.position = 'fixed';
+  popup.style.top = '50%';
+  popup.style.left = '50%';
+  popup.style.transform = 'translate(-50%, -50%)';
+  popup.style.background = '#f0f8ff'; // হালকা নীল
+  popup.style.padding = '20px';
+  popup.style.margin = '0 auto';      // সেন্টারে রাখবে
+  popup.style.border = '2px solid #333';
+  popup.style.borderRadius = '10px';
+  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+  popup.style.zIndex = '9999';
+  popup.style.textAlign = 'center';
+  popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
+  popup.style.minWidth = '240px'; // খুব ছোট না হয়
+  popup.style.width = '300px'; // সর্বোচ্চ চওড়া
 
-            table.appendChild(tbody);
-            container.appendChild(table);
+  // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
+  const titleElem = document.createElement('div');
+  titleElem.innerText = titleText;
+  titleElem.style.backgroundColor = 'green';
+  titleElem.style.color = 'white';
+  titleElem.style.fontWeight = 'bold';
+  titleElem.style.fontSize = '15px';
+  titleElem.style.padding = '10px';
+  titleElem.style.borderRadius = '5px';
+  titleElem.style.marginBottom = '15px';
+  popup.appendChild(titleElem);
 
-            const totalPages = Math.ceil(allNotices.length / noticesPerPage);
-            document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
-            document.getElementById('prevBtn').disabled = currentPage === 1;
-            document.getElementById('nextBtn').disabled = currentPage === totalPages;
-        }
+  // তারিখ (Date)
+  const dateElem = document.createElement('div');
+  dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+  dateElem.style.marginBottom = '10px';
+  popup.appendChild(dateElem);
 
-        function nextPage() {
-            if (currentPage < Math.ceil(allNotices.length / noticesPerPage)) { // studentTableNotices এর বদলে allNotices
-                currentPage++;
-                renderNoticeTable();
-            }
-        }
+  // subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
+  if (subjText && subjText.trim() !== '') {
+    const subjElem = document.createElement('div');
+    subjElem.innerText = subjText;
+    subjElem.style.color = 'darkgreen';
+    subjElem.style.backgroundColor = '#e6ffe6'; // হালকা সবুজ
+    subjElem.style.fontWeight = 'bold';
+    subjElem.style.fontSize = '14px';
+    subjElem.style.padding = '6px';
+    subjElem.style.borderRadius = '4px';
+    subjElem.style.marginBottom = '12px';
+    popup.appendChild(subjElem);
+  }
+// বোতাম কন্টেইনার
+const buttonContainer = document.createElement('div');
+buttonContainer.style.marginTop = '20px';
+buttonContainer.style.display = 'flex';
+buttonContainer.style.justifyContent = 'center';
+buttonContainer.style.gap = '20px'; // বোতামের মাঝে দূরত্ব
 
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderNoticeTable();
-            }
-        }
+// ফাইল খুলুন বোতাম লিঙ্ক থাকলে তা দেখাও
+if (link && link.trim() !== '') {
+  const linkBtn = document.createElement('a');
+  linkBtn.href = link;
+  linkBtn.innerText = 'Open Link';
+  linkBtn.target = '_blank';
+  linkBtn.style.backgroundColor = '#007bff';
+  linkBtn.style.color = 'white';
+  linkBtn.style.padding = '10px 16px';
+  linkBtn.style.border = 'none';
+  linkBtn.style.borderRadius = '5px';
+  linkBtn.style.textDecoration = 'none';
+  linkBtn.style.fontWeight = 'bold';
+  linkBtn.style.transition = 'background-color 0.3s';
+  linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+  linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+  buttonContainer.appendChild(linkBtn);
+}
 
-        // ✅ Firebase থেকে ডেটা লোড করুন (রিয়েল-টাইমে পরিবর্তন সনাক্ত করবে)
-        database.ref('notices').on('value', (snapshot) => {
-            allNotices = []; // ডেটাবেস থেকে নতুন ডেটা এলে অ্যারে রিসেট করুন
+// বন্ধ করুন বোতাম
+const closeBtn = document.createElement('button');
+closeBtn.innerText = 'Back';
+closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.style.color = 'white';
+closeBtn.style.padding = '10px 16px';
+closeBtn.style.border = 'none';
+closeBtn.style.borderRadius = '5px';
+closeBtn.style.fontWeight = 'bold';
+closeBtn.style.cursor = 'pointer';
+closeBtn.style.transition = 'background-color 0.3s';
+closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
+closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.onclick = () => document.body.removeChild(popup);
+buttonContainer.appendChild(closeBtn);
 
-            snapshot.forEach((childSnapshot) => {
-                const notice = childSnapshot.val();
-                allNotices.push(notice);
-            });
+// পপআপে বোতাম কন্টেইনার যোগ করুন
+popup.appendChild(buttonContainer);
 
-            // তারিখ অনুযায়ী নোটিশ সাজান (নতুন থেকে পুরানো)
-            allNotices.sort((a, b) => new Date(b.date) - new Date(a.date)); // বা b.timestamp - a.timestamp
+  // স্ক্রিনে দেখাও
+  document.body.appendChild(popup);
+}
 
-            // ডেটা লোড হওয়ার পর টেবিল রেন্ডার করুন
-            currentPage = 1; // ডেটা পরিবর্তন হলে প্রথম পেজে ফিরে আসুন
-            renderNoticeTable();
-        });
-    </script>
+function closeModal() {
+  document.getElementById('popupModal').style.display = 'none';
+}
 
-    <script>
-        // এখানে আপনার বর্তমান showPopup এবং closeModal ফাংশনগুলো থাকবে
-        // শুধুমাত্র showPopup ফাংশনে আর্গুমেন্টের নামগুলো পরিবর্তন হয়েছে (titleText, subjText)
-        // এবং escape ফাংশন যোগ করা হয়েছে যেন HTML কোডে সমস্যা না হয়।
-        function showPopup(bodyTextEncoded, date, link, titleTextEncoded) { // আর্গুমেন্ট পরিবর্তন
-            const titleText = unescape(titleTextEncoded); // ডিকোড করুন
-            const bodyText = unescape(bodyTextEncoded); // ডিকোড করুন
-
-            // পপ-আপ কনটেইনার তৈরি
-            const popup = document.createElement('div');
-            popup.style.position = 'fixed';
-            popup.style.top = '50%';
-            popup.style.left = '50%';
-            popup.style.transform = 'translate(-50%, -50%)';
-            popup.style.background = '#f0f8ff'; // হালকা নীল
-            popup.style.padding = '20px';
-            popup.style.margin = '0 auto';
-            popup.style.border = '2px solid #333';
-            popup.style.borderRadius = '10px';
-            popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-            popup.style.zIndex = '9999';
-            popup.style.textAlign = 'center';
-            popup.style.maxWidth = '90%';
-            popup.style.minWidth = '240px';
-            popup.style.width = '300px';
-
-            // হেডিং (Title) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
-            const titleElem = document.createElement('div');
-            titleElem.innerText = titleText; // এখন এটি titleText
-            titleElem.style.backgroundColor = 'green';
-            titleElem.style.color = 'white';
-            titleElem.style.fontWeight = 'bold';
-            titleElem.style.fontSize = '15px';
-            titleElem.style.padding = '10px';
-            titleElem.style.borderRadius = '5px';
-            titleElem.style.marginBottom = '15px';
-            popup.appendChild(titleElem);
-
-            // তারিখ (Date)
-            const dateElem = document.createElement('div');
-            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-            dateElem.style.marginBottom = '10px';
-            popup.appendChild(dateElem);
-
-            // নোটিশের বিবরণ (Body)
-            const bodyElem = document.createElement('div');
-            bodyElem.innerText = bodyText; // এখন এটি bodyText
-            bodyElem.style.marginBottom = '15px';
-            popup.appendChild(bodyElem);
-
-            // বোতাম কন্টেইনার
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.marginTop = '20px';
-            buttonContainer.style.display = 'flex';
-            buttonContainer.style.justifyContent = 'center';
-            buttonContainer.style.gap = '20px';
-
-            // ফাইল খুলুন বোতাম লিঙ্ক থাকলে তা দেখাও
-            if (link && link.trim() !== '') {
-                const linkBtn = document.createElement('a');
-                linkBtn.href = link;
-                linkBtn.innerText = 'Open Link';
-                linkBtn.target = '_blank';
-                linkBtn.style.backgroundColor = '#007bff';
-                linkBtn.style.color = 'white';
-                linkBtn.style.padding = '10px 16px';
-                linkBtn.style.border = 'none';
-                linkBtn.style.borderRadius = '5px';
-                linkBtn.style.textDecoration = 'none';
-                linkBtn.style.fontWeight = 'bold';
-                linkBtn.style.transition = 'background-color 0.3s';
-                linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
-                linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
-                buttonContainer.appendChild(linkBtn);
-            }
-
-            // বন্ধ করুন বোতাম
-            const closeBtn = document.createElement('button');
-            closeBtn.innerText = 'Back';
-            closeBtn.style.backgroundColor = '#dc3545';
-            closeBtn.style.color = 'white';
-            closeBtn.style.padding = '10px 16px';
-            closeBtn.style.border = 'none';
-            closeBtn.style.borderRadius = '5px';
-            closeBtn.style.fontWeight = 'bold';
-            closeBtn.style.cursor = 'pointer';
-            closeBtn.style.transition = 'background-color 0.3s';
-            closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
-            closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
-            closeBtn.onclick = () => document.body.removeChild(popup);
-            buttonContainer.appendChild(closeBtn);
-
-            // পপআপে বোতাম কন্টেইনার যোগ করুন
-            popup.appendChild(buttonContainer);
-
-            // স্ক্রিনে দেখাও
-            document.body.appendChild(popup);
-        }
-
-        function closeModal() {
-            // আপনার Popup Modal এর জন্য closeModal() ফাংশন
-            document.getElementById('popupModal').style.display = 'none';
-        }
-    </script>
-   
-
-
-    
+</script>
 
   <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল 📄</h2>
   <div id="exam-buttons" style="text-align:center;"></div>
