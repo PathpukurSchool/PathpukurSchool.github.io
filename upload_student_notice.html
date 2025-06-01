@@ -5,6 +5,29 @@
     <title>Student Notice</title>
     <link rel="stylesheet" href="style.css">
 </head>
+    <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-database-compat.js"></script>
+<script>
+  // এখানে আপনার Firebase Configuration পেস্ট হবে
+  const firebaseConfig = {
+    apiKey: "AIzaSyDWHINMB7mOhHW4aePDBOMh_GQ_gEKTGIY",
+    authDomain: "uploadedstudentnotices.firebaseapp.com",
+    projectId: "uploadedstudentnotices",
+    storageBucket: "uploadedstudentnotices.firebasestorage.app",
+    messagingSenderId: "942324613890",
+    appId: "1:942324613890:web:3cc1ee508ac1298143781b",
+    measurementId: "G-4DGTTD2DHN"
+  };
+
+  // Firebase Initialize করুন
+  const app = firebase.initializeApp(firebaseConfig);
+
+  // প্রয়োজনীয় Firebase সার্ভিসগুলো ইনিশিয়ালাইজ করুন
+  const database = firebase.database();
+  // const analytics = firebase.analytics(app); // যদি Google Analytics ব্যবহার করতে চান
+  // const auth = firebase.auth(); // যদি Authentication ব্যবহার করেন
+  // const storage = firebase.storage(); // যদি Storage ব্যবহার করেন
+</script>
 <body>
 
     <img src="PHS-LOGO.png" alt="School Logo" class="logo">
@@ -12,6 +35,91 @@
     <h2 class="blink">📝 Upload Student Notice 📝</h2>
     
 
+
+
+
+
+
+    <form id="noticeForm">
+        <label for="noticeTitle">নোটিশের বিষয়বস্তু:</label>
+        <input type="text" id="noticeTitle" required><br><br>
+
+        <label for="noticeBody">নোটিশের বিবরণ:</label>
+        <textarea id="noticeBody" rows="5" required></textarea><br><br>
+
+        <label for="noticeDate">তারিখ:</label>
+        <input type="date" id="noticeDate" required><br><br>
+
+        <label for="noticeColor">বর্ডারের রঙ:</label>
+        <input type="color" id="noticeColor" value="#CC0000"><br><br>
+
+        <label for="noticeLink">লিঙ্ক (ঐচ্ছিক):</label>
+        <input type="url" id="noticeLink"><br><br>
+
+        <button type="submit">নোটিশ আপলোড করুন</button>
+    </form>
+
+    <script>
+        // ধাপ ৪ থেকে Firebase SDKs (CDN লিঙ্ক) এখানে যোগ করুন
+        // আপনার Firebase Console থেকে পাওয়া সঠিক ভার্সন নাম্বার ব্যবহার করুন
+        <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-database-compat.js"></script>
+        // যদি Authentication বা Storage ব্যবহার করেন, তাদের SDK লিঙ্কও যোগ করুন
+        // <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-auth-compat.js"></script>
+        // <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-storage-compat.js"></script>
+
+        <script>
+            // আপনার Firebase Configuration অবজেক্ট এখানে থাকবে
+            const firebaseConfig = {
+                apiKey: "AIzaSyDWHINMB7mOhHW4aePDBOMh_GQ_gEKTGIY",
+                authDomain: "uploadedstudentnotices.firebaseapp.com",
+                projectId: "uploadedstudentnotices",
+                storageBucket: "uploadedstudentnotices.firebasestorage.app",
+                messagingSenderId: "942324613890",
+                appId: "1:942324613890:web:3cc1ee508ac1298143781b",
+                measurementId: "G-4DGTTD2DHN"
+            };
+
+            // Firebase Initialize করুন
+            const app = firebase.initializeApp(firebaseConfig);
+
+            // প্রয়োজনীয় Firebase সার্ভিস ইনিশিয়ালাইজ করুন
+            const database = firebase.database();
+        </script>
+
+        const noticeForm = document.getElementById('noticeForm');
+
+        noticeForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // ফর্ম সাবমিট আটকান
+
+            const title = document.getElementById('noticeTitle').value;
+            const body = document.getElementById('noticeBody').value;
+            const date = document.getElementById('noticeDate').value;
+            const color = document.getElementById('noticeColor').value;
+            const link = document.getElementById('noticeLink').value;
+
+            // ডেটাবেসে ডেটা যোগ করুন
+            database.ref('notices').push({
+                title: title,
+                body: body,
+                date: date,
+                color: color,
+                link: link,
+                timestamp: firebase.database.ServerValue.TIMESTAMP // আপলোডের সময় রেকর্ড করুন
+            })
+            .then(() => {
+                alert('নোটিশ সফলভাবে আপলোড হয়েছে!');
+                noticeForm.reset(); // ফর্ম রিসেট করুন
+            })
+            .catch((error) => {
+                console.error('নোটিশ আপলোডে ত্রুটি:', error);
+                alert('নোটিশ আপলোডে সমস্যা হয়েছে।');
+            });
+        });
+    </script>
+
+
+    
     
 <footer>
      <hr>
