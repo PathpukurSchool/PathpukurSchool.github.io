@@ -6,6 +6,31 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instructions / Help</title>
     <link rel="stylesheet" href="style.css">
+
+
+
+    <style>
+        /* CSS for the "Available Soon" message */
+        .no-notice-message {
+            text-align: center;
+            padding: 30px;
+            font-size: 18px;
+            color: #777;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px dashed #ccc;
+        }
+
+        .no-notice-message strong {
+            color: #555;
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+
+
+
 </head>
 <body>
 
@@ -13,6 +38,7 @@
     <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
     <h2 class="blink">🙏 Instructions / Help 🙏</h2>
     <ul id="help-list"></ul>
+
 
 
 
@@ -40,12 +66,12 @@
             }
 
             const noticeListDiv = document.createElement('div');
-            noticeListDiv.classList.add('notice-list');
+            noticeListDiv.classList.add('notice-list'); // Assuming style.css defines .notice-list
 
             Helping.forEach(notice => {
                 const noticeItem = document.createElement('div');
-                noticeItem.classList.add('notice-item');
-                noticeItem.style.color = notice.color || '#000'; // Apply color from data
+                noticeItem.classList.add('notice-item'); // Assuming style.css defines .notice-item
+                noticeItem.style.color = notice.color || '#000'; // Apply color from data if provided
 
                 noticeItem.innerHTML = `
                     <strong>${notice.date}</strong>
@@ -67,7 +93,7 @@
             }
 
             const popup = document.createElement('div');
-            popup.classList.add('dynamic-popup');
+            popup.classList.add('dynamic-popup'); // Assuming style.css defines .dynamic-popup and its children styles
 
             // Heading (Text)
             const titleElem = document.createElement('div');
@@ -119,8 +145,6 @@
 
     </script>
 
-
-   
 
 
 
