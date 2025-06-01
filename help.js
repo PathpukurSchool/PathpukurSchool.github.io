@@ -2,10 +2,10 @@ const Helping = [
 
    {
     date: "02-06-2025",
-    text: "",
-     subj: "",
+    text: "কীভাবে নম্বর আপলোড করবেন",
+     subj: "নিজে চেষ্টা করুন। অথবা বিদ্যলয়ের অফিস রুমে যোগাযোগ করুন।",
     color: "#008000",
-    link: "https://drive.google.com/file/d/1GXuIXR1qCO7dufseU5Obubz0nHkBWgtc/view?usp=drivesdk"
+    link: ""
   },
   {
     date: "02-06-2025",
