@@ -13,7 +13,7 @@ const TableNotices = [
    
    {
     date: "02-06-2025",
-    text: "মাধ্যমিক রুটিন",
+    text: "মাধ্যমিক রুটিন 2026",
      subj: "",
     color: "#008000",
     link: "https://drive.google.com/file/d/1GXuIXR1qCO7dufseU5Obubz0nHkBWgtc/view?usp=drivesdk"
@@ -27,7 +27,7 @@ const TableNotices = [
   },
    {
     date: "02-06-2025",
-    text: "উচ্চ মাধ্যমিক রুটিন (Old)",
+    text: "উচ্চ মাধ্যমিক রুটিন (Old) 2026",
      subj: "",
     color: "#0077cc",
      link: "https://drive.google.com/file/d/1G_aFIr6fv75wukwoGoQgJ1R6wf800nlH/view?usp=drivesdk"
