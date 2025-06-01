@@ -5,33 +5,7 @@
     <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instructions / Help</title>
-    <link rel="stylesheet" href="style.css">
-
-
-
-    <style>
-        /* CSS for the "Available Soon" message */
-        .no-notice-message {
-            text-align: center;
-            padding: 30px;
-            font-size: 18px;
-            color: #777;
-            background-color: #e9ecef;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px dashed #ccc;
-        }
-
-        .no-notice-message strong {
-            color: #555;
-            display: block;
-            margin-bottom: 10px;
-        }
-    </style>
-
-
-
-</head>
+    <link rel="stylesheet" href="style.css"></head>
 <body>
 
     <img src="PHS-LOGO.png" alt="School Logo" class="logo">
@@ -43,108 +17,133 @@
 
 
 
+<script src="help.js"></script>
+<script>
+  function renderHelpList() {
+    const container = document.getElementById('help-list');
+    container.innerHTML = "";
+
+    if (!Helping || Helping.length === 0 || !Helping[0].text) {
+      container.innerHTML = "<p style='color: red; font-weight: bold;'>তথ্য এখনও উপলব্ধ নয়।</p>";
+      return;
+    }
+
+    Helping.forEach(item => {
+      const itemDiv = document.createElement('div');
+      itemDiv.innerText = item.text;
+      itemDiv.style.cursor = 'pointer';
+      itemDiv.style.margin = '10px 0';
+      itemDiv.style.padding = '8px 10px';
+      itemDiv.style.backgroundColor = '#f9f9f9';
+      itemDiv.style.borderLeft = `6px solid ${item.color || '#333'}`;
+      itemDiv.style.borderRadius = '4px';
+      itemDiv.style.transition = 'background-color 0.3s';
+      itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
+      itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+      itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
+      container.appendChild(itemDiv);
+    });
+  }
+
+  window.onload = () => {
+    renderHelpList();
+  };
+</script>
+<script>
+function showPopup(titleText, date, link, subjText) {
+  const popup = document.createElement('div');
+  popup.style.position = 'fixed';
+  popup.style.top = '50%';
+  popup.style.left = '50%';
+  popup.style.transform = 'translate(-50%, -50%)';
+  popup.style.background = '#f0f8ff';
+  popup.style.padding = '20px';
+  popup.style.margin = '0 auto';
+  popup.style.border = '2px solid #333';
+  popup.style.borderRadius = '10px';
+  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+  popup.style.zIndex = '9999';
+  popup.style.textAlign = 'center';
+  popup.style.maxWidth = '90%';
+  popup.style.minWidth = '240px';
+  popup.style.width = '300px';
+
+  const titleElem = document.createElement('div');
+  titleElem.innerText = titleText;
+  titleElem.style.backgroundColor = 'green';
+  titleElem.style.color = 'white';
+  titleElem.style.fontWeight = 'bold';
+  titleElem.style.fontSize = '15px';
+  titleElem.style.padding = '10px';
+  titleElem.style.borderRadius = '5px';
+  titleElem.style.marginBottom = '15px';
+  popup.appendChild(titleElem);
+
+  const dateElem = document.createElement('div');
+  dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+  dateElem.style.marginBottom = '10px';
+  popup.appendChild(dateElem);
+
+  if (subjText && subjText.trim() !== '') {
+    const subjElem = document.createElement('div');
+    subjElem.innerText = subjText;
+    subjElem.style.color = 'darkgreen';
+    subjElem.style.backgroundColor = '#e6ffe6';
+    subjElem.style.fontWeight = 'bold';
+    subjElem.style.fontSize = '14px';
+    subjElem.style.padding = '6px';
+    subjElem.style.borderRadius = '4px';
+    subjElem.style.marginBottom = '12px';
+    popup.appendChild(subjElem);
+  }
+
+  const buttonContainer = document.createElement('div');
+  buttonContainer.style.marginTop = '20px';
+  buttonContainer.style.display = 'flex';
+  buttonContainer.style.justifyContent = 'center';
+  buttonContainer.style.gap = '20px';
+
+  if (link && link.trim() !== '') {
+    const linkBtn = document.createElement('a');
+    linkBtn.href = link;
+    linkBtn.innerText = 'Open Link';
+    linkBtn.target = '_blank';
+    linkBtn.style.backgroundColor = '#007bff';
+    linkBtn.style.color = 'white';
+    linkBtn.style.padding = '10px 16px';
+    linkBtn.style.border = 'none';
+    linkBtn.style.borderRadius = '5px';
+    linkBtn.style.textDecoration = 'none';
+    linkBtn.style.fontWeight = 'bold';
+    linkBtn.style.transition = 'background-color 0.3s';
+    linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+    linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+    buttonContainer.appendChild(linkBtn);
+  }
+
+  const closeBtn = document.createElement('button');
+  closeBtn.innerText = 'Back';
+  closeBtn.style.backgroundColor = '#dc3545';
+  closeBtn.style.color = 'white';
+  closeBtn.style.padding = '10px 16px';
+  closeBtn.style.border = 'none';
+  closeBtn.style.borderRadius = '5px';
+  closeBtn.style.fontWeight = 'bold';
+  closeBtn.style.cursor = 'pointer';
+  closeBtn.style.transition = 'background-color 0.3s';
+  closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
+  closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
+  closeBtn.onclick = () => document.body.removeChild(popup);
+  buttonContainer.appendChild(closeBtn);
+
+  popup.appendChild(buttonContainer);
+  document.body.appendChild(popup);
+}
+</script>
 
 
 
-    <div id="notice-board"></div>
-
-    <script src="help.js"></script>
-
-    <script>
-        function renderNoticeList() {
-            const container = document.getElementById('notice-board');
-            container.innerHTML = ""; // Clear existing content
-
-            if (!Helping || Helping.length === 0) {
-                container.innerHTML = `
-                    <div class="no-notice-message">
-                        <strong>Available Soon!</strong>
-                        <p>Please check back later for updates.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const noticeListDiv = document.createElement('div');
-            noticeListDiv.classList.add('notice-list'); // Assuming style.css defines .notice-list
-
-            Helping.forEach(notice => {
-                const noticeItem = document.createElement('div');
-                noticeItem.classList.add('notice-item'); // Assuming style.css defines .notice-item
-                noticeItem.style.color = notice.color || '#000'; // Apply color from data if provided
-
-                noticeItem.innerHTML = `
-                    <strong>${notice.date}</strong>
-                    <span>${notice.text}</span>
-                `;
-
-                noticeItem.onclick = () => showPopup(notice.text, notice.date, notice.link || '', notice.subj || '');
-                noticeListDiv.appendChild(noticeItem);
-            });
-            container.appendChild(noticeListDiv);
-        }
-
-        // Dynamically create and show the popup
-        function showPopup(titleText, date, link, subjText) {
-            // Remove any existing dynamic popup before creating a new one
-            const existingPopup = document.querySelector('.dynamic-popup');
-            if (existingPopup) {
-                document.body.removeChild(existingPopup);
-            }
-
-            const popup = document.createElement('div');
-            popup.classList.add('dynamic-popup'); // Assuming style.css defines .dynamic-popup and its children styles
-
-            // Heading (Text)
-            const titleElem = document.createElement('div');
-            titleElem.classList.add('popup-title');
-            titleElem.innerText = titleText;
-            popup.appendChild(titleElem);
-
-            // Date
-            const dateElem = document.createElement('div');
-            dateElem.classList.add('popup-date');
-            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-            popup.appendChild(dateElem);
-
-            // Subj if available
-            if (subjText && subjText.trim() !== '') {
-                const subjElem = document.createElement('div');
-                subjElem.classList.add('popup-subj');
-                subjElem.innerText = subjText;
-                popup.appendChild(subjElem);
-            }
-
-            // Button Container
-            const buttonContainer = document.createElement('div');
-            buttonContainer.classList.add('button-container');
-
-            // Open Link button if link exists
-            if (link && link.trim() !== '') {
-                const linkBtn = document.createElement('a');
-                linkBtn.href = link;
-                linkBtn.innerText = 'Open Link';
-                linkBtn.target = '_blank';
-                buttonContainer.appendChild(linkBtn);
-            }
-
-            // Close button
-            const closeBtn = document.createElement('button');
-            closeBtn.innerText = 'Back';
-            closeBtn.onclick = () => document.body.removeChild(popup);
-            buttonContainer.appendChild(closeBtn);
-
-            popup.appendChild(buttonContainer);
-
-            // Append to body
-            document.body.appendChild(popup);
-        }
-
-        // Initial render on page load
-        window.onload = renderNoticeList;
-
-    </script>
-
+    
 
 
 
