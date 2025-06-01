@@ -479,31 +479,31 @@ ul li a:hover {
 .coming-soon-message {
     text-align: center;
     font-family: 'Arial', sans-serif;
-    font-size: 1.8em;
-    color: #555;
-    padding: 50px 20px;
-    border: 2px dashed #ccc;
-    border-radius: 15px;
-    margin: 50px auto;
-    max-width: 600px;
-    background-color: #f9f9f9;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
+    font-size: 1.8em; /* ফন্টের আকার */
+    color: #555; /* টেক্সটের রঙ */
+    padding: 50px 20px; /* ভেতরের ফাঁকা স্থান */
+    border: 2px dashed #ccc; /* ড্যাশড বর্ডার */
+    border-radius: 15px; /* কোণাগুলোকে গোল করার জন্য */
+    margin: 50px auto; /* উপরে-নিচে মার্জিন এবং মাঝখানে আনার জন্য */
+    max-width: 600px; /* সর্বোচ্চ প্রস্থ */
+    background-color: #f9f9f9; /* ব্যাকগ্রাউন্ড রঙ */
+    transition: all 0.3s ease; /* হোভার ইফেক্টের জন্য স্মুথ ট্রানজিশন */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* হালকা শ্যাডো */
+    position: relative; /* ::before এবং ::after এর পজিশনের জন্য */
+    overflow: hidden; /* অতিরিক্ত অংশ লুকানোর জন্য */
 }
 
 .coming-soon-message::before {
-    content: '✨';
-    position: absolute;
+    content: '✨'; /* ইমোজি কন্টেন্ট */
+    position: absolute; /* বক্সের সাপেক্ষে পজিশন */
     top: 10px;
     left: 10px;
     font-size: 1.5em;
-    opacity: 0.3;
+    opacity: 0.3; /* হালকা দেখানোর জন্য */
 }
 
 .coming-soon-message::after {
-    content: '🚀';
+    content: '🚀'; /* ইমোজি কন্টেন্ট */
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -512,50 +512,13 @@ ul li a:hover {
 }
 
 .coming-soon-message:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    border-color: #888;
-    background-color: #fff;
+    transform: translateY(-5px) scale(1.02); /* হোভার করলে উপরে উঠবে এবং সামান্য বড় হবে */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* হোভার করলে শ্যাডো বাড়বে */
+    border-color: #888; /* বর্ডারের রঙ পরিবর্তন */
+    background-color: #fff; /* ব্যাকগ্রাউন্ড রঙ পরিবর্তন */
 }
 
 .coming-soon-message strong {
-    color: #333;
+    color: #333; /* বোল্ড টেক্সটের রঙ */
     font-weight: bold;
-}
-
-/* Hide the message if there's actual content */
-.content-available .coming-soon-message {
-    display: none;
-}
-
-/* Basic styling for content if it exists (example) */
-.notice-content {
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 800px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-
-@keyframes blink-animation {
-    from { opacity: 1; }
-    to { opacity: 0.5; }
-}
-
-footer {
-    text-align: center;
-    margin-top: 50px;
-    padding-top: 20px;
-    border-top: 1px solid #ccc;
-    color: #777;
-    font-size: 0.9em;
-}
-
-footer hr {
-    border: none;
-    border-top: 1px solid #eee;
-    margin: 10px auto;
-    width: 80%;
 }
