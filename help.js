@@ -1,5 +1,5 @@
 // ✅ Table নোটিশ বোর্ডের জন্য আলাদা নোটিশ লিস্ট
-const TableNotices = [
+const Helping = [
    
    {
     date: "02-06-2025",
