@@ -475,3 +475,23 @@ ul li a:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* ক্লিক করার সময় শ্যাডো কমে যায় */
 }
 
+ /* নোটিশ না থাকলে এটি দেখাবে*/
+.no-notice-hover {
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #fff7e6;
+  color: #555;
+  transition: all 0.3s;
+  white-space: pre-line; /* Newline রেস্পেক্ট করবে */
+}
+
+.no-notice-hover:hover {
+  background-color: #fff0cc;
+  color: #000;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
