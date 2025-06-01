@@ -18,74 +18,61 @@
 
 
 
-<!-- ✅ নোটিশ বোর্ড -->
 <div id="notice-board"></div>
-<div class="pagination">
-  <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-  <span id="pageNumber">Page 1</span>
-  <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+
+<!-- ✅ Popup Modal (পূর্বের মত) -->
+<div id="popupModal" style="display: none;" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
+    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
+    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
+    <div id="popupLinkArea" style="margin-top: 10px;"></div>
+    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+  </div>
 </div>
 
-<!-- ✅ External Notice Bord -->
 <script src="Help.js"></script>
 <script>
-  const noticesPerPage = 10;
-  let currentPage = 1;
-
   function renderNoticeList() {
     const container = document.getElementById('notice-board');
-    container.innerHTML = "";
+    container.innerHTML = '';
 
-    const start = (currentPage - 1) * noticesPerPage;
-    const end = start + noticesPerPage;
-    const paginatedNotices = studentTableNotices.slice(start, end);
+    // studentTableNotices must be loaded from Helping.js
+    if (!Array.isArray(helping) || helping.length === 0) {
+      const msg = document.createElement('div');
+      msg.className = 'no-notice-hover';
+      msg.textContent = '🚫 Notices Available Soon!\nPlease check back later for updates.';
+      container.appendChild(msg);
+      return;
+    }
 
-    paginatedNotices.forEach(notice => {
+    helping.forEach(notice => {
       const item = document.createElement('div');
-      item.style.padding = '10px';
-      item.style.margin = '10px 0';
-      item.style.border = '1px solid #ccc';
-      item.style.borderRadius = '5px';
+      item.innerText = notice.text;
       item.style.cursor = 'pointer';
+      item.style.margin = '10px 0';
+      item.style.padding = '10px';
+      item.style.border = '1px solid #ccc';
+      item.style.borderRadius = '6px';
       item.style.backgroundColor = '#f9f9f9';
-      item.style.color = notice.color || '#000';
       item.style.transition = 'background-color 0.3s';
-      item.onmouseover = () => item.style.backgroundColor = '#e6f7ff';
+      item.style.color = notice.color || '#000';
+      item.onmouseover = () => item.style.backgroundColor = '#e6f2ff';
       item.onmouseout = () => item.style.backgroundColor = '#f9f9f9';
-
-      item.innerHTML = `
-        <strong style="display:block;">${notice.date}</strong>
-        ${notice.text}
-      `;
 
       item.onclick = () => showPopup(notice.text, notice.date, notice.link || '', notice.subj || '');
       container.appendChild(item);
     });
-
-    const totalPages = Math.ceil(studentTableNotices.length / noticesPerPage);
-    document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
-    document.getElementById('prevBtn').disabled = currentPage === 1;
-    document.getElementById('nextBtn').disabled = currentPage === totalPages;
-  }
-
-  function nextPage() {
-    if (currentPage < Math.ceil(studentTableNotices.length / noticesPerPage)) {
-      currentPage++;
-      renderNoticeList();
-    }
-  }
-
-  function prevPage() {
-    if (currentPage > 1) {
-      currentPage--;
-      renderNoticeList();
-    }
   }
 
   window.onload = () => {
-    loadStudentExamLinks();  // পুরনো পরীক্ষার লিঙ্ক লোড
-    renderNoticeList();      // নতুনভাবে লিস্ট রেন্ডার
+    loadStudentExamLinks();   // যদি আগের লিঙ্ক ফাংশন থাকে
+    renderNoticeList();       // নতুন লিস্ট রেন্ডার
   };
+
+  function closeModal() {
+    document.getElementById('popupModal').style.display = 'none';
+  }
 </script>
 
 
