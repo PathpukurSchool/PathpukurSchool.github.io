@@ -77,7 +77,7 @@
 
       const start = (currentPage - 1) * noticesPerPage;
       const end = start + noticesPerPage;
-      const paginatedNotices = studentTableNotices.slice(start, end);
+      const paginatedNotices = TableNotices.slice(start, end);
 
       const table = document.createElement('table');
       table.id = 'notice-table';
