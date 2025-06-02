@@ -172,12 +172,27 @@ function showAvailableSoonMessage(key) {
     }
 }
 
-// পরীক্ষার টেক্সট ফেরত দেয় ('TEST EXAM', '1ST', ...)
+// পরীক্ষার টেক্সট ফেরত দেয় ('TEST EXAM', 'SEMESTER I', ...)
 function getExamText(key) {
     const parts = key.split('_');
     const exam = parts[1];
-    if (exam === 'TEST') return 'TEST EXAM';
-    return exam;
+
+    switch (exam) {
+        case 'TEST':
+            return 'TEST EXAM';
+        case 'SEM1':
+            return 'SEMESTER I';
+        case 'SEM2':
+            return 'SEMESTER II';
+        case '1ST':
+            return '1ST TERM';
+        case '2ND':
+            return '2ND TERM';
+        case '3RD':
+            return '3RD TERM';
+        default:
+            return exam; // fallback
+    }
 }
 
 // NOTICE & HELP লোড করা
