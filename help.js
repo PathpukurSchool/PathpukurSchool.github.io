@@ -8,7 +8,7 @@ const Helping = [
     link: ""
   },
   {
-    date: "02-06-2025",
+    date: "",
     text: "",
     subj: "",
     color: "#4444cc",
