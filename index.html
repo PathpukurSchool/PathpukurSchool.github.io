@@ -128,145 +128,213 @@
          <section class="important-links card animated-card fade-in delay-5">
     <h2><i class="fas fa-notice icon"></i> ডিজিটাল নোটিশ বোর্ড</h2>
 
-<script src="help.js"></script>
-<script>
-  function renderHelpList() {
-    const container = document.getElementById('help-list');
-    container.innerHTML = "";
+    <script src="help.js"></script>
+    <div id="help-list"></div>
+    <div id="pagination-controls" style="text-align: center; margin-top: 20px;"></div>
 
-    if (!Helping || Helping.length === 0 || !Helping[0].text) {
-      container.innerHTML = `
-  <div style="
-    border: 2px solid #ff9999;
-    background-color: #ffe6e6;
-    color: #cc0000;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 300px;
-    margin: 0 auto;
-  ">
-    <strong> Available Soon! </strong><br> Please check back later for updates.
-  </div>
-`;
-      return;
-    }
+    <script>
+        const NOTICES_PER_PAGE = 10;
+        let currentPage = 1;
+        let totalPages = 0;
 
-    Helping.forEach(item => {
-      const itemDiv = document.createElement('div');
-      itemDiv.innerText = item.text;
-      itemDiv.style.cursor = 'pointer';
-      itemDiv.style.margin = '10px 0';
-      itemDiv.style.padding = '8px 10px';
-      itemDiv.style.backgroundColor = '#f9f9f9';
-      itemDiv.style.borderLeft = `6px solid ${item.color || '#333'}`;
-      itemDiv.style.borderRadius = '4px';
-      itemDiv.style.transition = 'background-color 0.3s';
-      itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
-      itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
-      itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
-      container.appendChild(itemDiv);
-    });
-  }
+        function renderHelpList() {
+            const container = document.getElementById('help-list');
+            container.innerHTML = "";
 
-  window.onload = () => {
-    renderHelpList();
-  };
-</script>
-<script>
-function showPopup(titleText, date, link, subjText) {
-  const popup = document.createElement('div');
-  popup.style.position = 'fixed';
-  popup.style.top = '50%';
-  popup.style.left = '50%';
-  popup.style.transform = 'translate(-50%, -50%)';
-  popup.style.background = '#f0f8ff';
-  popup.style.padding = '20px';
-  popup.style.margin = '0 auto';
-  popup.style.border = '2px solid #333';
-  popup.style.borderRadius = '10px';
-  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-  popup.style.zIndex = '9999';
-  popup.style.textAlign = 'center';
-  popup.style.maxWidth = '90%';
-  popup.style.minWidth = '240px';
-  popup.style.width = '300px';
+            if (!Helping || Helping.length === 0 || !Helping[0].text) {
+                container.innerHTML = `
+                    <div style="
+                        border: 2px solid #ff9999;
+                        background-color: #ffe6e6;
+                        color: #cc0000;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px;
+                        border-radius: 8px;
+                        text-align: center;
+                        max-width: 300px;
+                        margin: 0 auto;
+                    ">
+                        <strong> Available Soon! </strong><br> Please check back later for updates.
+                    </div>
+                `;
+                return;
+            }
 
-  const titleElem = document.createElement('div');
-  titleElem.innerText = titleText;
-  titleElem.style.backgroundColor = 'green';
-  titleElem.style.color = 'white';
-  titleElem.style.fontWeight = 'bold';
-  titleElem.style.fontSize = '15px';
-  titleElem.style.padding = '10px';
-  titleElem.style.borderRadius = '5px';
-  titleElem.style.marginBottom = '15px';
-  popup.appendChild(titleElem);
+            totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
 
-  const dateElem = document.createElement('div');
-  dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-  dateElem.style.marginBottom = '10px';
-  popup.appendChild(dateElem);
+            const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
+            const endIndex = startIndex + NOTICES_PER_PAGE;
+            const noticesToRender = Helping.slice(startIndex, endIndex);
 
-  if (subjText && subjText.trim() !== '') {
-    const subjElem = document.createElement('div');
-    subjElem.innerText = subjText;
-    subjElem.style.color = 'darkgreen';
-    subjElem.style.backgroundColor = '#e6ffe6';
-    subjElem.style.fontWeight = 'bold';
-    subjElem.style.fontSize = '14px';
-    subjElem.style.padding = '6px';
-    subjElem.style.borderRadius = '4px';
-    subjElem.style.marginBottom = '12px';
-    popup.appendChild(subjElem);
-  }
+            noticesToRender.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.innerText = item.text;
+                itemDiv.style.cursor = 'pointer';
+                itemDiv.style.margin = '10px 0';
+                itemDiv.style.padding = '8px 10px';
+                itemDiv.style.backgroundColor = '#f9f9f9';
+                // গাড় বাদামী বর্ডার যোগ করা হয়েছে
+                itemDiv.style.borderLeft = `6px solid #8B4513`; // গাড় বাদামী রঙ
+                itemDiv.style.borderRadius = '4px';
+                itemDiv.style.transition = 'background-color 0.3s';
+                itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
+                itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+                itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
+                container.appendChild(itemDiv);
+            });
 
-  const buttonContainer = document.createElement('div');
-  buttonContainer.style.marginTop = '20px';
-  buttonContainer.style.display = 'flex';
-  buttonContainer.style.justifyContent = 'center';
-  buttonContainer.style.gap = '20px';
+            renderPaginationControls();
+        }
 
-  if (link && link.trim() !== '') {
-    const linkBtn = document.createElement('a');
-    linkBtn.href = link;
-    linkBtn.innerText = 'Open Link';
-    linkBtn.target = '_blank';
-    linkBtn.style.backgroundColor = '#007bff';
-    linkBtn.style.color = 'white';
-    linkBtn.style.padding = '10px 16px';
-    linkBtn.style.border = 'none';
-    linkBtn.style.borderRadius = '5px';
-    linkBtn.style.textDecoration = 'none';
-    linkBtn.style.fontWeight = 'bold';
-    linkBtn.style.transition = 'background-color 0.3s';
-    linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
-    linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
-    buttonContainer.appendChild(linkBtn);
-  }
+        function renderPaginationControls() {
+            const paginationContainer = document.getElementById('pagination-controls');
+            paginationContainer.innerHTML = '';
 
-  const closeBtn = document.createElement('button');
-  closeBtn.innerText = 'Back';
-  closeBtn.style.backgroundColor = '#dc3545';
-  closeBtn.style.color = 'white';
-  closeBtn.style.padding = '10px 16px';
-  closeBtn.style.border = 'none';
-  closeBtn.style.borderRadius = '5px';
-  closeBtn.style.fontWeight = 'bold';
-  closeBtn.style.cursor = 'pointer';
-  closeBtn.style.transition = 'background-color 0.3s';
-  closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
-  closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
-  closeBtn.onclick = () => document.body.removeChild(popup);
-  buttonContainer.appendChild(closeBtn);
+            if (totalPages <= 1) {
+                return;
+            }
 
-  popup.appendChild(buttonContainer);
-  document.body.appendChild(popup);
-}
-</script>
+            const backBtn = document.createElement('button');
+            backBtn.innerText = 'BACK';
+            backBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderHelpList();
+                }
+            };
+            backBtn.style.padding = '8px 15px';
+            backBtn.style.marginRight = '10px';
+            backBtn.style.backgroundColor = '#007bff';
+            backBtn.style.color = 'white';
+            backBtn.style.border = 'none';
+            backBtn.style.borderRadius = '5px';
+            backBtn.style.cursor = 'pointer';
+            backBtn.disabled = currentPage === 1;
+            paginationContainer.appendChild(backBtn);
 
+            const pageInfo = document.createElement('span');
+            pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
+            pageInfo.style.margin = '0 10px';
+            pageInfo.style.fontWeight = 'bold';
+            paginationContainer.appendChild(pageInfo);
+
+            const nextBtn = document.createElement('button');
+            nextBtn.innerText = 'NEXT';
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderHelpList();
+                }
+            };
+            nextBtn.style.padding = '8px 15px';
+            nextBtn.style.marginLeft = '10px';
+            nextBtn.style.backgroundColor = '#007bff';
+            nextBtn.style.color = 'white';
+            nextBtn.style.border = 'none';
+            nextBtn.style.borderRadius = '5px';
+            nextBtn.style.cursor = 'pointer';
+            nextBtn.disabled = currentPage === totalPages;
+            paginationContainer.appendChild(nextBtn);
+        }
+
+        window.onload = () => {
+            renderHelpList();
+        };
+    </script>
+
+    <script>
+        function showPopup(titleText, date, link, subjText) {
+            const popup = document.createElement('div');
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.background = '#f0f8ff';
+            popup.style.padding = '20px';
+            popup.style.margin = '0 auto';
+            popup.style.border = '2px solid #333';
+            popup.style.borderRadius = '10px';
+            popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+            popup.style.zIndex = '9999';
+            popup.style.textAlign = 'center';
+            popup.style.maxWidth = '90%';
+            popup.style.minWidth = '240px';
+            popup.style.width = '300px';
+
+            const titleElem = document.createElement('div');
+            titleElem.innerText = titleText;
+            titleElem.style.backgroundColor = 'green';
+            titleElem.style.color = 'white';
+            titleElem.style.fontWeight = 'bold';
+            titleElem.style.fontSize = '15px';
+            titleElem.style.padding = '10px';
+            titleElem.style.borderRadius = '5px';
+            titleElem.style.marginBottom = '15px';
+            popup.appendChild(titleElem);
+
+            const dateElem = document.createElement('div');
+            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+            dateElem.style.marginBottom = '10px';
+            popup.appendChild(dateElem);
+
+            if (subjText && subjText.trim() !== '') {
+                const subjElem = document.createElement('div');
+                subjElem.innerText = subjText;
+                subjElem.style.color = 'darkgreen';
+                subjElem.style.backgroundColor = '#e6ffe6';
+                subjElem.style.fontWeight = 'bold';
+                subjElem.style.fontSize = '14px';
+                subjElem.style.padding = '6px';
+                subjElem.style.borderRadius = '4px';
+                subjElem.style.marginBottom = '12px';
+                popup.appendChild(subjElem);
+            }
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.marginTop = '20px';
+            buttonContainer.style.display = 'flex';
+            buttonContainer.style.justifyContent = 'center';
+            buttonContainer.style.gap = '20px';
+
+            if (link && link.trim() !== '') {
+                const linkBtn = document.createElement('a');
+                linkBtn.href = link;
+                linkBtn.innerText = 'Open Link';
+                linkBtn.target = '_blank';
+                linkBtn.style.backgroundColor = '#007bff';
+                linkBtn.style.color = 'white';
+                linkBtn.style.padding = '10px 16px';
+                linkBtn.style.border = 'none';
+                linkBtn.style.borderRadius = '5px';
+                linkBtn.style.textDecoration = 'none';
+                linkBtn.style.fontWeight = 'bold';
+                linkBtn.style.transition = 'background-color 0.3s';
+                linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+                linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+                buttonContainer.appendChild(linkBtn);
+            }
+
+            const closeBtn = document.createElement('button');
+            closeBtn.innerText = 'Back';
+            closeBtn.style.backgroundColor = '#dc3545';
+            closeBtn.style.color = 'white';
+            closeBtn.style.padding = '10px 16px';
+            closeBtn.style.border = 'none';
+            closeBtn.style.borderRadius = '5px';
+            closeBtn.style.fontWeight = 'bold';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.style.transition = 'background-color 0.3s';
+            closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
+            closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
+            closeBtn.onclick = () => document.body.removeChild(popup);
+            buttonContainer.appendChild(closeBtn);
+
+            popup.appendChild(buttonContainer);
+            document.body.appendChild(popup);
+        }
+    </script>
+</section>
 
 
              
