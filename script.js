@@ -93,13 +93,17 @@ function renderButtons() {
         title.textContent = 'CLASS ' + cls.replace('X_TEST', 'X');
         container.appendChild(title);
 
-        const exams = ['1ST', '2ND', '3RD', 'TEST'];
+        const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
         exams.forEach(exam => {
             const key = `${cls}_${exam}`;
             if (credentials[key]) {
                 const a = document.createElement('a');
                 a.className = 'exam-link';
-                a.textContent = exam === 'TEST' ? 'TEST EXAM' : exam;
+                let label = exam;
+if (exam === 'TEST') label = 'TEST EXAM';
+else if (exam === 'SEM1') label = 'SEMESTER I';
+else if (exam === 'SEM2') label = 'SEMESTER II';
+a.textContent = label;
                 a.href = '#';
                 a.onclick = () => openLogin(key);
                 container.appendChild(a);
