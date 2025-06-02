@@ -90,8 +90,8 @@ function renderButtons() {
     classes.forEach(cls => {
         const title = document.createElement('div');
         title.className = 'class-title';
-        title.textContent = 'CLASS ' + cls.replace('X_TEST', 'X');
-        container.appendChild(title);
+       title.textContent = 'CLASS ' + cls.replace('X_TEST', 'X').replace('XI', 'XI').replace('XII', 'XII');
+    container.appendChild(title);
 
         const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
         exams.forEach(exam => {
