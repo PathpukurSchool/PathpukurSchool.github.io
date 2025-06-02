@@ -124,7 +124,155 @@
         </div>
     </div>
 </section>
-        <section class="quotes card animated-card fade-in delay-5">
+
+         <section class="important-links card animated-card fade-in delay-5">
+    <h2><i class="fas fa-notice icon"></i> ডিজিটাল নোটিশ বোর্ড</h2>
+
+<script src="help.js"></script>
+<script>
+  function renderHelpList() {
+    const container = document.getElementById('help-list');
+    container.innerHTML = "";
+
+    if (!Helping || Helping.length === 0 || !Helping[0].text) {
+      container.innerHTML = `
+  <div style="
+    border: 2px solid #ff9999;
+    background-color: #ffe6e6;
+    color: #cc0000;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 300px;
+    margin: 0 auto;
+  ">
+    <strong> Available Soon! </strong><br> Please check back later for updates.
+  </div>
+`;
+      return;
+    }
+
+    Helping.forEach(item => {
+      const itemDiv = document.createElement('div');
+      itemDiv.innerText = item.text;
+      itemDiv.style.cursor = 'pointer';
+      itemDiv.style.margin = '10px 0';
+      itemDiv.style.padding = '8px 10px';
+      itemDiv.style.backgroundColor = '#f9f9f9';
+      itemDiv.style.borderLeft = `6px solid ${item.color || '#333'}`;
+      itemDiv.style.borderRadius = '4px';
+      itemDiv.style.transition = 'background-color 0.3s';
+      itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
+      itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+      itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
+      container.appendChild(itemDiv);
+    });
+  }
+
+  window.onload = () => {
+    renderHelpList();
+  };
+</script>
+<script>
+function showPopup(titleText, date, link, subjText) {
+  const popup = document.createElement('div');
+  popup.style.position = 'fixed';
+  popup.style.top = '50%';
+  popup.style.left = '50%';
+  popup.style.transform = 'translate(-50%, -50%)';
+  popup.style.background = '#f0f8ff';
+  popup.style.padding = '20px';
+  popup.style.margin = '0 auto';
+  popup.style.border = '2px solid #333';
+  popup.style.borderRadius = '10px';
+  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+  popup.style.zIndex = '9999';
+  popup.style.textAlign = 'center';
+  popup.style.maxWidth = '90%';
+  popup.style.minWidth = '240px';
+  popup.style.width = '300px';
+
+  const titleElem = document.createElement('div');
+  titleElem.innerText = titleText;
+  titleElem.style.backgroundColor = 'green';
+  titleElem.style.color = 'white';
+  titleElem.style.fontWeight = 'bold';
+  titleElem.style.fontSize = '15px';
+  titleElem.style.padding = '10px';
+  titleElem.style.borderRadius = '5px';
+  titleElem.style.marginBottom = '15px';
+  popup.appendChild(titleElem);
+
+  const dateElem = document.createElement('div');
+  dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+  dateElem.style.marginBottom = '10px';
+  popup.appendChild(dateElem);
+
+  if (subjText && subjText.trim() !== '') {
+    const subjElem = document.createElement('div');
+    subjElem.innerText = subjText;
+    subjElem.style.color = 'darkgreen';
+    subjElem.style.backgroundColor = '#e6ffe6';
+    subjElem.style.fontWeight = 'bold';
+    subjElem.style.fontSize = '14px';
+    subjElem.style.padding = '6px';
+    subjElem.style.borderRadius = '4px';
+    subjElem.style.marginBottom = '12px';
+    popup.appendChild(subjElem);
+  }
+
+  const buttonContainer = document.createElement('div');
+  buttonContainer.style.marginTop = '20px';
+  buttonContainer.style.display = 'flex';
+  buttonContainer.style.justifyContent = 'center';
+  buttonContainer.style.gap = '20px';
+
+  if (link && link.trim() !== '') {
+    const linkBtn = document.createElement('a');
+    linkBtn.href = link;
+    linkBtn.innerText = 'Open Link';
+    linkBtn.target = '_blank';
+    linkBtn.style.backgroundColor = '#007bff';
+    linkBtn.style.color = 'white';
+    linkBtn.style.padding = '10px 16px';
+    linkBtn.style.border = 'none';
+    linkBtn.style.borderRadius = '5px';
+    linkBtn.style.textDecoration = 'none';
+    linkBtn.style.fontWeight = 'bold';
+    linkBtn.style.transition = 'background-color 0.3s';
+    linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+    linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+    buttonContainer.appendChild(linkBtn);
+  }
+
+  const closeBtn = document.createElement('button');
+  closeBtn.innerText = 'Back';
+  closeBtn.style.backgroundColor = '#dc3545';
+  closeBtn.style.color = 'white';
+  closeBtn.style.padding = '10px 16px';
+  closeBtn.style.border = 'none';
+  closeBtn.style.borderRadius = '5px';
+  closeBtn.style.fontWeight = 'bold';
+  closeBtn.style.cursor = 'pointer';
+  closeBtn.style.transition = 'background-color 0.3s';
+  closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
+  closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
+  closeBtn.onclick = () => document.body.removeChild(popup);
+  buttonContainer.appendChild(closeBtn);
+
+  popup.appendChild(buttonContainer);
+  document.body.appendChild(popup);
+}
+</script>
+
+
+
+             
+</section>
+        
+        <section class="quotes card animated-card fade-in delay-6">
             <h2><i class="fas fa-quote-left icon"></i> কিছু মহান উক্তি</h2>
             <div class="quote-item">
                 <p class="quote-text">"শিক্ষা হল মানুষের ভেতরের ঐশ্বর্য্যের প্রকাশ।"</p>
@@ -152,7 +300,7 @@
             </div>
         </section>
 
-        <section class="gallery card animated-card fade-in delay-6">
+        <section class="gallery card animated-card fade-in delay-7">
             <h2><i class="fas fa-images icon"></i> গ্যালারি</h2>
             <div class="gallery-grid">
                 <img src="photo/teacher_1.jpg" alt="শিক্ষক 1" class="gallery-image">
@@ -166,7 +314,7 @@
             </div>
         </section>
 
-        <section class="contact-info card animated-card fade-in delay-7">
+        <section class="contact-info card animated-card fade-in delay-8">
             <h2><i class="fas fa-address-book icon"></i> যোগাযোগ</h2>
             <p><i class="fas fa-map-marker-alt icon"></i> <strong>ঠিকানা:</strong> গ্রাম: পাতপুকুর, পোস্ট: বকুলতলা হাট, থানা: বকুলতলা, সার্কেল: জয়নগর II, জেলা: দক্ষিণ চব্বিশ পরগনা, রাজ্য: পশ্চিমবঙ্গ, পিন কোড: 743338</p>
             <p><i class="fas fa-phone-alt icon"></i> <strong>ল্যান্ড লাইন:</strong> <a href="tel:+913218248083">+91 3218248083</a></p>
@@ -174,7 +322,7 @@
             <p class="blinking-text"><i class="fas fa-bell"></i> যোগাযোগ করতে ফোন করুন!</p>
         </section>
 
-        <section class="important-links card animated-card fade-in delay-8">
+        <section class="important-links card animated-card fade-in delay-9">
     <h2><i class="fas fa-link icon"></i> গুরুত্বপূর্ণ ওয়েবসাইট ও লিঙ্ক</h2>
     <div class="links-grid">
         <a href="https://banglarshiksha.gov.in/" target="_blank" class="link-item">
@@ -224,14 +372,14 @@
         </div>
 </section>
 
-        <section class="location card animated-card fade-in delay-9">
+        <section class="location card animated-card fade-in delay-10">
             <h2><i class="fas fa-map-marked-alt icon"></i> আমাদের অবস্থান</h2>
             <div class="map-container">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3695.7657554878074!2d88.49233607413503!3d22.134905148872374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0238b4c0b17541%3A0x88e12a2d33998b38!2z4Kaq4Ka-4Kak4Kaq4KeB4KaV4KeB4KawIOCmueCmvuCmhyDgprjgp43gppXgp4HgprIo4KaJ4KaDIOCmruCmvuCmgyk!5e0!3m2!1sbn!2sin!4v1748601954798!5m2!1sbn!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </section>
 
-        <div class="login-button-container animated-button fade-in delay-10">
+        <div class="login-button-container animated-button fade-in delay-11">
             <a href="home.html" class="login-button"><i class="fas fa-sign-in-alt"></i> স্কুল ওয়েবসাইটে লগইন করুন</a>
         </div>
     </main>
