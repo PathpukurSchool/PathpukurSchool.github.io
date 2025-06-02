@@ -159,6 +159,21 @@ body {
     opacity: 0; /* লেখাটি সম্পূর্ণরূপে অদৃশ্য হবে */
     transform: translateY(-100%); /* লেখাটি সম্পূর্ণভাবে ফ্রেমের বাইরে উপরের দিকে সরে যাবে */
 }
+.hero-images {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.hero-image {
+    flex: 0 0 auto;
+    width: 300px; /* ইচ্ছেমতো সাইজ দিন */
+    height: auto;
+    border-radius: 8px; /* আপনার আগের স্টাইল অনুসারে */
+}
+
 
 /* @keyframes fadeInOverlay অপরিবর্তিত থাকবে */
 @keyframes fadeInOverlay {
