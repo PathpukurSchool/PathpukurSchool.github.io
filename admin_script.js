@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Re-add fixed rows based on the required CLASS values
         const requiredClasses = [
             'V_1ST', 'V_2ND', 'V_3RD', 'VI_1ST', 'VII_1ST',
-            'VIII_1ST', 'IX_1ST', 'X_1ST', 'X_2ND', 'X_TEST EXAM'
+            'VIII_1ST', 'IX_1ST', 'X_1ST', 'X_2ND', 'X_TEST EXAM', 
+            'XI_SEMESTER_I', 'XI_SEMESTER_II', 'XII_TEST EXAM'
         ];
 
         requiredClasses.forEach(className => {
