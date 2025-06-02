@@ -185,11 +185,11 @@ function getExamText(key) {
         case 'SEM2':
             return 'SEMESTER II';
         case '1ST':
-            return '1ST TERM';
+            return '1ST EXAM';
         case '2ND':
-            return '2ND TERM';
+            return '2ND EXAM';
         case '3RD':
-            return '3RD TERM';
+            return '3RD EXAM';
         default:
             return exam; // fallback
     }
