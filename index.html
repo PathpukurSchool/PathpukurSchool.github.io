@@ -243,76 +243,15 @@
         };
     </script>
 
-    <script>
-        function showPopup(titleText, date, link, subjText) {
-            const popup = document.createElement('div');
-            popup.style.position = 'fixed';
-            popup.style.top = '50%';
-            popup.style.left = '50%';
-            popup.style.transform = 'translate(-50%, -50%)';
-            popup.style.background = '#f0f8ff';
-            popup.style.padding = '20px';
-            popup.style.margin = '0 auto';
-            popup.style.border = '2px solid #333';
-            popup.style.borderRadius = '10px';
-            popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-            popup.style.zIndex = '9999';
-            popup.style.textAlign = 'center';
-            popup.style.maxWidth = '90%';
-            popup.style.minWidth = '240px';
-            popup.style.width = '300px';
-
-            const titleElem = document.createElement('div');
-            titleElem.innerText = titleText;
-            titleElem.style.backgroundColor = 'green';
-            titleElem.style.color = 'white';
-            titleElem.style.fontWeight = 'bold';
-            titleElem.style.fontSize = '15px';
-            titleElem.style.padding = '10px';
-            titleElem.style.borderRadius = '5px';
-            titleElem.style.marginBottom = '15px';
-            popup.appendChild(titleElem);
-
-            const dateElem = document.createElement('div');
-            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-            dateElem.style.marginBottom = '10px';
-            popup.appendChild(dateElem);
-
-            if (subjText && subjText.trim() !== '') {
-                const subjElem = document.createElement('div');
-                subjElem.innerText = subjText;
-                subjElem.style.color = 'darkgreen';
-                subjElem.style.backgroundColor = '#e6ffe6';
-                subjElem.style.fontWeight = 'bold';
-                subjElem.style.fontSize = '14px';
-                subjElem.style.padding = '6px';
-                subjElem.style.borderRadius = '4px';
-                subjElem.style.marginBottom = '12px';
-                popup.appendChild(subjElem);
-            }
-
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.marginTop = '20px';
-            buttonContainer.style.display = 'flex';
-            buttonContainer.style.justifyContent = 'center';
-            buttonContainer.style.gap = '20px';
-
-            if (link && link.trim() !== '') {
-                const linkBtn = document.createElement('a');
-                linkBtn.href = link;
-                linkBtn.innerText = 'Open Link';
-                linkBtn.target = '_blank';
-                linkBtn.style.backgroundColor = '#007bff';
-                linkBtn.style.color = 'white';
-                linkBtn.style.padding = '10px 16px';
-                linkBtn.style.border = 'none';
-                linkBtn.style.borderRadius = '5px';
-                linkBtn.style.textDecoration = 'none';
-<!-- Include html2canvas Library -->
+    <!-- Include html2canvas Library in <head> or before </body> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
 function showPopup(titleText, date, link, subjText) {
+    // Remove any existing popup
+    const existing = document.getElementById('notice-popup');
+    if (existing) existing.remove();
+
     const popup = document.createElement('div');
     popup.id = 'notice-popup';
     popup.style.position = 'fixed';
@@ -329,7 +268,9 @@ function showPopup(titleText, date, link, subjText) {
     popup.style.maxWidth = '90%';
     popup.style.minWidth = '240px';
     popup.style.width = '300px';
+    popup.style.fontFamily = 'Arial, sans-serif';
 
+    // Content
     const titleElem = document.createElement('div');
     titleElem.innerText = titleText;
     titleElem.style.backgroundColor = 'green';
@@ -359,6 +300,7 @@ function showPopup(titleText, date, link, subjText) {
         popup.appendChild(subjElem);
     }
 
+    // Buttons
     const buttonContainer = document.createElement('div');
     buttonContainer.style.marginTop = '20px';
     buttonContainer.style.display = 'flex';
@@ -381,7 +323,7 @@ function showPopup(titleText, date, link, subjText) {
         buttonContainer.appendChild(linkBtn);
     }
 
-    // ✅ PNG Download Button
+    // ✅ PNG Download Button (fixed)
     const downloadBtn = document.createElement('button');
     downloadBtn.innerText = 'Download (PNG)';
     downloadBtn.style.backgroundColor = '#28a745';
@@ -392,16 +334,19 @@ function showPopup(titleText, date, link, subjText) {
     downloadBtn.style.fontWeight = 'bold';
     downloadBtn.style.cursor = 'pointer';
     downloadBtn.onclick = () => {
-        html2canvas(popup).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'notice.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        });
+        // Ensure reflow before capturing
+        setTimeout(() => {
+            html2canvas(popup).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'notice.png';
+                link.click();
+            });
+        }, 100); // slight delay for reflow
     };
     buttonContainer.appendChild(downloadBtn);
 
-    // ❌ Back Button
     const closeBtn = document.createElement('button');
     closeBtn.innerText = 'Back';
     closeBtn.style.backgroundColor = '#dc3545';
@@ -411,7 +356,7 @@ function showPopup(titleText, date, link, subjText) {
     closeBtn.style.borderRadius = '5px';
     closeBtn.style.fontWeight = 'bold';
     closeBtn.style.cursor = 'pointer';
-    closeBtn.onclick = () => document.body.removeChild(popup);
+    closeBtn.onclick = () => popup.remove();
     buttonContainer.appendChild(closeBtn);
 
     popup.appendChild(buttonContainer);
@@ -419,7 +364,10 @@ function showPopup(titleText, date, link, subjText) {
 }
 </script>
 
- </section>
+
+</section>
+
+
              
 </section>
         
