@@ -860,3 +860,66 @@ ul {
         padding-right: 70px; /* বোতামের জন্য পর্যাপ্ত জায়গা */
     }
 }
+
+/* Section Content Wrapping and Hiding */
+.section-content-wrapper {
+    max-height: 120px; /* Adjust this value to set the desired initial height for small sections */
+    overflow: hidden;
+    position: relative;
+    transition: max-height 0.5s ease-out; /* Smooth transition for expansion/collapse */
+    padding-bottom: 30px; /* Space for the fade effect */
+}
+
+.section-content-wrapper.expanded {
+    max-height: fit-content; /* Allow full content to be shown */
+    max-height: 1000px; /* A large enough value to accommodate all content */
+    padding-bottom: 0;
+}
+
+.section-content-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px; /* Height of the fade effect */
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+    pointer-events: none; /* Allows clicks to pass through */
+}
+
+.section-content-wrapper.expanded::after {
+    display: none; /* Hide fade effect when expanded */
+}
+
+/* Toggle Button Styling */
+.toggle-button {
+    display: block;
+    width: fit-content;
+    margin: 15px auto 0;
+    padding: 8px 15px;
+    background-color: #4CAF50; /* Green color for "More..." */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-button:hover {
+    background-color: #45a049;
+}
+
+.toggle-button.less-btn {
+    background-color: #f44336; /* Red color for "Less..." */
+}
+
+.toggle-button.less-btn:hover {
+    background-color: #da190b;
+}
+
+/* Optional: Adjust card padding if needed to make space for the button */
+.card {
+    padding-bottom: 20px; /* Ensure there's enough space at the bottom of the card for the button */
+}
