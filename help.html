@@ -66,23 +66,26 @@
 </script>
 <script>
 function showPopup(titleText, date, link, subjText) {
+  // পপ-আপ কনটেইনার তৈরি
   const popup = document.createElement('div');
   popup.style.position = 'fixed';
   popup.style.top = '50%';
   popup.style.left = '50%';
   popup.style.transform = 'translate(-50%, -50%)';
-  popup.style.background = '#f0f8ff';
+  popup.style.background = '#f0f8ff'; // হালকা নীল
   popup.style.padding = '20px';
-  popup.style.margin = '0 auto';
+  popup.style.margin = '0 auto';      // সেন্টারে রাখবে
   popup.style.border = '2px solid #333';
   popup.style.borderRadius = '10px';
   popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
   popup.style.zIndex = '9999';
   popup.style.textAlign = 'center';
-  popup.style.maxWidth = '90%';
-  popup.style.minWidth = '240px';
-  popup.style.width = '300px';
+  popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
+  popup.style.minWidth = '240px'; // খুব ছোট না হয়
+  popup.style.width = '300px'; // সর্বোচ্চ চওড়া
+  popup.style.fontFamily = 'Arial, sans-serif';
 
+   // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
   const titleElem = document.createElement('div');
   titleElem.innerText = titleText;
   titleElem.style.backgroundColor = 'green';
@@ -94,11 +97,13 @@ function showPopup(titleText, date, link, subjText) {
   titleElem.style.marginBottom = '15px';
   popup.appendChild(titleElem);
 
+     // তারিখ (Date)
   const dateElem = document.createElement('div');
   dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
   dateElem.style.marginBottom = '10px';
   popup.appendChild(dateElem);
 
+   // subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
   if (subjText && subjText.trim() !== '') {
     const subjElem = document.createElement('div');
     subjElem.innerText = subjText;
@@ -112,56 +117,88 @@ function showPopup(titleText, date, link, subjText) {
     popup.appendChild(subjElem);
   }
 
-  const buttonContainer = document.createElement('div');
-  buttonContainer.style.marginTop = '20px';
-  buttonContainer.style.display = 'flex';
-  buttonContainer.style.justifyContent = 'center';
-  buttonContainer.style.gap = '20px';
+  // বোতাম কন্টেইনার
+const buttonContainer = document.createElement('div');
+buttonContainer.style.marginTop = '20px';
+buttonContainer.style.display = 'flex';
+buttonContainer.style.flexWrap = 'wrap';
+buttonContainer.style.justifyContent = 'center';
+buttonContainer.style.gap = '10px'; // বোতামের মাঝে দূরত্ব
 
-  if (link && link.trim() !== '') {
-    const linkBtn = document.createElement('a');
-    linkBtn.href = link;
-    linkBtn.innerText = 'Open Link';
-    linkBtn.target = '_blank';
-    linkBtn.style.backgroundColor = '#007bff';
-    linkBtn.style.color = 'white';
-    linkBtn.style.padding = '10px 16px';
-    linkBtn.style.border = 'none';
-    linkBtn.style.borderRadius = '5px';
-    linkBtn.style.textDecoration = 'none';
-    linkBtn.style.fontWeight = 'bold';
-    linkBtn.style.transition = 'background-color 0.3s';
-    linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
-    linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
-    buttonContainer.appendChild(linkBtn);
-  }
+// ফাইল খুলুন বোতাম লিঙ্ক থাকলে তা দেখাও
+if (link && link.trim() !== '') {
+  const linkBtn = document.createElement('a');
+  linkBtn.href = link;
+  linkBtn.innerText = 'Open Link';
+  linkBtn.target = '_blank';
+  linkBtn.style.backgroundColor = '#007bff';
+  linkBtn.style.color = 'white';
+  linkBtn.style.padding = '6px 10px';
+  linkBtn.style.border = 'none';
+  linkBtn.style.borderRadius = '5px';
+  linkBtn.style.textDecoration = 'none';
+  linkBtn.style.fontWeight = 'bold';
+  linkBtn.style.fontSize = '12px'; // ছোট ফন্ট
+  linkBtn.style.transition = 'background-color 0.3s';
+  linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+  linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+  buttonContainer.appendChild(linkBtn);
+}
 
-  const closeBtn = document.createElement('button');
-  closeBtn.innerText = 'Back';
-  closeBtn.style.backgroundColor = '#dc3545';
-  closeBtn.style.color = 'white';
-  closeBtn.style.padding = '10px 16px';
-  closeBtn.style.border = 'none';
-  closeBtn.style.borderRadius = '5px';
-  closeBtn.style.fontWeight = 'bold';
-  closeBtn.style.cursor = 'pointer';
-  closeBtn.style.transition = 'background-color 0.3s';
-  closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
-  closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
-  closeBtn.onclick = () => document.body.removeChild(popup);
-  buttonContainer.appendChild(closeBtn);
+// ✅ PNG Download Button (fixed)
+    const downloadBtn = document.createElement('button');
+    downloadBtn.innerText = 'Download';
+    downloadBtn.style.backgroundColor = '#28a745';
+    downloadBtn.style.color = 'white';
+    downloadBtn.style.padding = '6px 10px';
+    downloadBtn.style.border = 'none';
+    downloadBtn.style.borderRadius = '5px';
+    downloadBtn.style.fontWeight = 'bold';
+    downloadBtn.style.fontSize = '12px'; // ছোট ফন্ট
+    downloadBtn.style.cursor = 'pointer';
+    downloadBtn.onclick = () => {
+        // Ensure reflow before capturing
+        setTimeout(() => {
+            html2canvas(popup).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'notice.png';
+                link.click();
+            });
+        }, 100); // slight delay for reflow
+    };
+    buttonContainer.appendChild(downloadBtn);
+    
+// বন্ধ করুন বোতাম
+const closeBtn = document.createElement('button');
+closeBtn.innerText = 'Back';
+closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.style.color = 'white';
+closeBtn.style.padding = '6px 10px';
+closeBtn.style.border = 'none';
+closeBtn.style.borderRadius = '5px';
+closeBtn.style.fontWeight = 'bold';
+closeBtn.style.fontSize = '12px'; // ছোট ফন্ট
+closeBtn.style.cursor = 'pointer';
+closeBtn.style.transition = 'background-color 0.3s';
+closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
+closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.onclick = () => document.body.removeChild(popup);
+buttonContainer.appendChild(closeBtn);
 
-  popup.appendChild(buttonContainer);
+// পপআপে বোতাম কন্টেইনার যোগ করুন
+popup.appendChild(buttonContainer);
+
+  // স্ক্রিনে দেখাও
   document.body.appendChild(popup);
 }
+
+function closeModal() {
+  document.getElementById('popupModal').style.display = 'none';
+}
+
 </script>
-
-
-
-    
-
-
-
    
 <footer>
     <hr>
