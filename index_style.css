@@ -896,7 +896,7 @@ ul {
     display: block;
     width: fit-content;
     margin: 15px auto 0;
-    padding: 6px 10px;
+    padding: 4px 8px;
     background-color: #4CAF50; /* Green color for "More..." */
     color: white;
     border: none;
