@@ -490,5 +490,33 @@ function showPopup(titleText, date, link, subjText) {
         <p>বিদ্যালয় প্রধানের নির্দেশনায় ওয়েবসাইটটি নির্মিত।</p>
         <p>© পাতপুকুর হাই স্কুল (উ: মা:). সর্বস্বত্ব সংরক্ষিত।</p>
     </footer>
+    
+    <script> //More.... and Less.... option
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButtons = document.querySelectorAll('.toggle-button');
+
+        toggleButtons.forEach(button => {
+            const sectionContentWrapper = button.previousElementSibling; // Get the content wrapper div
+            
+            // Initially check if content overflows and show/hide button accordingly
+            if (sectionContentWrapper.scrollHeight <= sectionContentWrapper.clientHeight) {
+                button.style.display = 'none'; // Hide button if content is not overflowing
+            }
+
+            button.addEventListener('click', function() {
+                sectionContentWrapper.classList.toggle('expanded');
+                if (sectionContentWrapper.classList.contains('expanded')) {
+                    button.textContent = 'Less...';
+                    button.classList.remove('more-btn');
+                    button.classList.add('less-btn');
+                } else {
+                    button.textContent = 'More...';
+                    button.classList.remove('less-btn');
+                    button.classList.add('more-btn');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
