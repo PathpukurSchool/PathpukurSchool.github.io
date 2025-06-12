@@ -148,6 +148,9 @@
     <div id="help-list"></div>
     <div id="pagination-controls" style="text-align: center; margin-top: 20px;"></div>
 
+    </div>
+    <button class="toggle-button more-btn">More...</button>
+</section>
     <script>
         const NOTICES_PER_PAGE = 10;
         let currentPage = 1;
@@ -256,6 +259,7 @@
 
         window.onload = () => {
             renderHelpList();
+          // অন্যান্য সেকশনের জন্য More/Less স্ক্রিপ্ট এখানে যোগ করুন
         };
     </script>
 
@@ -381,15 +385,10 @@ function showPopup(titleText, date, link, subjText) {
     popup.appendChild(buttonContainer);
     document.body.appendChild(popup);
 }
+
+</section>
+</section>
 </script>
-
-</section>
-</div>
-    <button class="toggle-button more-btn">More...</button>
-
-
-             
-</section>
         
         <section class="quotes card animated-card fade-in delay-6">
             <h2><i class="fas fa-quote-left icon"></i> কিছু মহান উক্তি</h2>
