@@ -165,7 +165,7 @@
   popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
   popup.style.minWidth = '240px'; // খুব ছোট না হয়
   popup.style.width = '300px'; // সর্বোচ্চ চওড়া
-
+  popup.style.fontFamily = 'Arial, sans-serif';
   // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
   const titleElem = document.createElement('div');
   titleElem.innerText = titleText;
@@ -201,6 +201,7 @@
 const buttonContainer = document.createElement('div');
 buttonContainer.style.marginTop = '20px';
 buttonContainer.style.display = 'flex';
+buttonContainer.style.flexWrap = 'wrap';
 buttonContainer.style.justifyContent = 'center';
 buttonContainer.style.gap = '20px'; // বোতামের মাঝে দূরত্ব
 
@@ -217,21 +218,48 @@ if (link && link.trim() !== '') {
   linkBtn.style.borderRadius = '5px';
   linkBtn.style.textDecoration = 'none';
   linkBtn.style.fontWeight = 'bold';
+  linkBtn.style.fontSize = '12px'; // ছোট ফন্ট
   linkBtn.style.transition = 'background-color 0.3s';
   linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
   linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
   buttonContainer.appendChild(linkBtn);
 }
 
+// ✅ PNG Download Button (fixed) যোগ করা হয়েছে
+    const downloadBtn = document.createElement('button');
+    downloadBtn.innerText = 'Download';
+    downloadBtn.style.backgroundColor = '#28a745';
+    downloadBtn.style.color = 'white';
+    downloadBtn.style.padding = '6px 10px';
+    downloadBtn.style.border = 'none';
+    downloadBtn.style.borderRadius = '5px';
+    downloadBtn.style.fontWeight = 'bold';
+    downloadBtn.style.fontSize = '12px'; // ছোট ফন্ট
+    downloadBtn.style.cursor = 'pointer';
+    downloadBtn.onclick = () => {
+        // Ensure reflow before capturing
+        setTimeout(() => {
+            html2canvas(popup).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'notice.png';
+                link.click();
+            });
+        }, 100); // slight delay for reflow
+    };
+    buttonContainer.appendChild(downloadBtn);
+      
 // বন্ধ করুন বোতাম
 const closeBtn = document.createElement('button');
 closeBtn.innerText = 'Back';
 closeBtn.style.backgroundColor = '#dc3545';
 closeBtn.style.color = 'white';
-closeBtn.style.padding = '10px 16px';
+closeBtn.style.padding = '6px 10px';
 closeBtn.style.border = 'none';
 closeBtn.style.borderRadius = '5px';
 closeBtn.style.fontWeight = 'bold';
+closeBtn.style.fontSize = '12px'; // ছোট ফন্ট
 closeBtn.style.cursor = 'pointer';
 closeBtn.style.transition = 'background-color 0.3s';
 closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
