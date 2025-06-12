@@ -228,11 +228,12 @@ if (link && link.trim() !== '') {
   linkBtn.target = '_blank';
   linkBtn.style.backgroundColor = '#007bff';
   linkBtn.style.color = 'white';
-  linkBtn.style.padding = '10px 16px';
+  linkBtn.style.padding = '6px 10px';
   linkBtn.style.border = 'none';
   linkBtn.style.borderRadius = '5px';
   linkBtn.style.textDecoration = 'none';
   linkBtn.style.fontWeight = 'bold';
+  linkBtn.style.fontSize = '12px'; // ছোট ফন্ট
   linkBtn.style.transition = 'background-color 0.3s';
   linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
   linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
@@ -244,10 +245,11 @@ if (link && link.trim() !== '') {
     downloadBtn.innerText = 'Download';
     downloadBtn.style.backgroundColor = '#28a745';
     downloadBtn.style.color = 'white';
-    downloadBtn.style.padding = '10px 16px';
+    downloadBtn.style.padding = '6px 10px';
     downloadBtn.style.border = 'none';
     downloadBtn.style.borderRadius = '5px';
     downloadBtn.style.fontWeight = 'bold';
+    downloadBtn.style.fontSize = '12px'; // ছোট ফন্ট
     downloadBtn.style.cursor = 'pointer';
     downloadBtn.onclick = () => {
         // Ensure reflow before capturing
@@ -268,10 +270,11 @@ const closeBtn = document.createElement('button');
 closeBtn.innerText = 'Back';
 closeBtn.style.backgroundColor = '#dc3545';
 closeBtn.style.color = 'white';
-closeBtn.style.padding = '10px 16px';
+closeBtn.style.padding = '6px 10px';
 closeBtn.style.border = 'none';
 closeBtn.style.borderRadius = '5px';
 closeBtn.style.fontWeight = 'bold';
+closeBtn.style.fontSize = '12px'; // ছোট ফন্ট
 closeBtn.style.cursor = 'pointer';
 closeBtn.style.transition = 'background-color 0.3s';
 closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
