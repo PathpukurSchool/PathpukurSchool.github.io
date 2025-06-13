@@ -919,8 +919,3 @@ ul {
     background-color: #da190b;
 }
 
-/* Optional: Adjust card padding if needed to make space for the button */
-.card {
-    padding-bottom: 30px; /* কার্ডের নিচে প্যাডিং বাড়ানো হয়েছে, যাতে বোতামের জন্য পর্যাপ্ত স্থান থাকে */
-    
-}
