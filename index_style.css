@@ -292,47 +292,51 @@ ul {
 /* Principal Section */
 .principal-message {
     background: linear-gradient(135deg, #fefefe 0%, #fefefe 100%);
-    border-top: 8px solid var(--dark-khaki)); /* বর্ডার */
+    border-top: 8px solid var(--dark-khaki); /* বর্ডার */
 }
 
+/* এই অংশেই মূল পরিবর্তনগুলো করা হয়েছে */
 .principal-info {
     display: flex;
-    flex-direction: column; /* ছোট স্ক্রিনে কলামে সাজানো */
-    align-items: center; /* ছোট স্ক্রিনে কন্টেন্ট মাঝখানে */
-    text-align: center; /* ছোট স্ক্রিনে টেক্সট মাঝখানে */
-    gap: 30px;
+    flex-direction: column; /* ডিফল্ট: ছোট স্ক্রিনের জন্য কলাম লেআউট */
+    align-items: center;   /* ছোট স্ক্রিনে ছবি ও টেক্সটকে মাঝখানে রাখে */
+    text-align: center;    /* ছোট স্ক্রিনে টেক্সটকে মাঝখানে রাখে */
+    gap: 25px;             /* ছবি এবং টেক্সট ব্লক এর মধ্যে ব্যবধান */
     width: 100%;
-    flex-wrap: wrap; /* ছোট স্ক্রিনে মোড়ানোর জন্য */
 }
 
 /* For larger screens (Desktop/Tablet) */
 @media (min-width: 768px) {
     .principal-info {
-        flex-direction: row; /* Desktop: arrange items in a row */
-        text-align: left; /* Desktop: align text to left */
-        align-items: flex-start; /* Align items to the start of the cross-axis */
+        flex-direction: row;        /* ডেস্কটপে ছবি ও টেক্সটকে পাশাপাশি রাখে */
+        justify-content: flex-start; /* ডেস্কটপে কন্টেন্টকে বাম দিকে সারিবদ্ধ করে */
+        align-items: flex-start;    /* ডেস্কটপে ছবি ও টেক্সটকে উপরে সারিবদ্ধ করে */
+        text-align: left;           /* ডেস্কটপে টেক্সটকে বাম দিকে সারিবদ্ধ করে */
     }
 }
+
 .principal-photo {
-    width: 180px;/* ছবির প্রস্থ নির্দিষ্ট করুন */
-    height: 180px; /* ছবির উচ্চতা নির্দিষ্ট করুন - প্রস্থের সমান রাখা হয়েছে যাতে বর্গাকার থাকে */
-    border-radius: 50%; /* গোলাকার ছবি */
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
     object-fit: cover; /* ছবির অনুপাত ঠিক রেখে কন্টেইনার পূরণ করে */
-    /* object-position: center; */ /* ছবির মাঝখানের অংশ দেখানোর জন্য */
-    border: 3px solid #007bff;
-    margin-bottom: 15px; /* ছবির নিচে কিছুটা ফাঁকা জায়গা (মোবাইলের জন্য) */
+    /* object-position: center;  এটি সাধারণত ডিফল্ট, তবে প্রয়োজনে ব্যবহার করতে পারেন */
     border: 5px solid var(--primary-red);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    flex-shrink: 0; /* ছোট স্ক্রিনে সংকুচিত হওয়া আটকায় */
+    flex-shrink: 0; /* ছোট স্ক্রিনে ছবিকে সংকুচিত হওয়া থেকে আটকায় */
+    margin-bottom: 15px; /* ছোট স্ক্রিনের জন্য ছবির নিচে মার্জিন */
+
     /* নতুন অ্যানিমেশন যোগ করা হলো */
-    animation: principalPulse 2.5s infinite alternate ease-in-out; /* লোগোর মত ক্রমাগত এনিমেটেড */
+    animation: principalPulse 2.5s infinite alternate ease-in-out;
 }
+
 @media (min-width: 768px) {
     .principal-photo {
-        margin-right: 25px; /* ডেস্কটপে ছবির ডানদিকে ফাঁকা জায়গা */
-        margin-bottom: 0; /* ডেস্কটপে ছবির নিচে মার্জিন লাগবে না */
+        margin-right: 30px; /* ডেস্কটপে ছবির ডানদিকে ফাঁকা জায়গা (একটু বাড়ানো হয়েছে) */
+        margin-bottom: 0;   /* ডেস্কটপে ছবির নিচে অতিরিক্ত মার্জিন লাগবে না */
     }
 }
+
 /* নতুন @keyframes অ্যানিমেশন principalPulse */
 @keyframes principalPulse {
     0% {
@@ -343,6 +347,10 @@ ul {
         transform: scale(1.03); /* হালকা জুম ইন */
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 0 15px rgba(230, 57, 70, 0); /* শ্যাডো বাড়বে এবং বর্ডার গ্লো অদৃশ্য হবে */
     }
+}
+
+.principal-text {
+    flex-grow: 1; /* অবশিষ্ট স্থান পূরণ করার জন্য */
 }
 
 .principal-text h3 {
@@ -357,7 +365,6 @@ ul {
     font-size: 1.1em;
     line-height: 1.7;
     color: var(--black);
-    flex-grow: 1; /* অবশিষ্ট স্থান পূরণ করার জন্য */
 }
 /* Quotes Section */
 .quotes {
