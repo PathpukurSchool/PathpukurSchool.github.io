@@ -106,7 +106,16 @@ body {
     display: flex;
     width: 400%; /* চারটি ছবির জন্য, প্রতিটি ছবি 100% প্রস্থের হয় */
     height: 100%;
-    animation: slideShow 20s infinite ease-in-out;
+    overflow-x: scroll; /* অনুভূমিক স্ক্রলিং সক্ষম করে */
+            scroll-snap-type: x mandatory; /* স্মুথ স্ক্রলিং এর জন্য */
+            -webkit-overflow-scrolling: touch; /* iOS স্মুথ স্ক্রলিং */
+            animation: heroScroll 20s infinite linear; /* আগের অটোমেটিক স্ক্রল বজায় রাখা */
+            -ms-overflow-style: none;  /* Internet Explorer 10+ */
+            scrollbar-width: none;  /* Firefox */
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .hero-images::-webkit-scrollbar {
+            display: none;
 }
 
 .hero-image {
@@ -115,6 +124,7 @@ body {
     object-fit: cover;
     filter: brightness(0.7); /* ডিফল্ট: ছবি অস্পষ্ট */
     transform: scale(1); /* ডিফল্ট: স্বাভাবিক স্কেল */
+    scroll-snap-align: start; /* স্ক্রল করার পর ছবি ঠিক জায়গায় থামবে */
     transition: filter 0.5s ease, transform 0.5s ease; /* ফিল্টার এবং ট্রান্সফর্মের জন্য স্মুথ ট্রানজিশন */
 }
 
@@ -153,6 +163,22 @@ body {
     animation: fadeInOverlay 3s forwards 1.5s; /* প্রাথমিক ফেড ইন অ্যানিমেশন থাকবে */
     transition: opacity 0.5s ease, transform 0.5s ease; /* অপাসিটি এবং ট্রান্সফর্মের জন্য স্মুথ ট্রানজিশন */
 }
+ /* অটোমেটিক স্ক্রল অ্যানিমেশন */
+        @keyframes heroScroll {
+            0% { transform: translateX(0%); }
+            20% { transform: translateX(-100%); }
+            40% { transform: translateX(-200%); }
+            60% { transform: translateX(-300%); }
+            80% { transform: translateX(-200%); } /* রিভার্স করার জন্য */
+            100% { transform: translateX(0%); }
+        }
+
+        /* Media query for smaller screens - adjust hero image width if needed */
+        @media (max-width: 768px) {
+            .hero-image {
+                width: 100%; /* Ensures images scale down properly */
+            }
+        }
 
 /* যখন hero-section এর উপর হোভার করা হবে */
 .hero-section:hover .hero-overlay {
