@@ -404,12 +404,12 @@ ul {
 /* Gallery Section */
 .gallery {
     background: linear-gradient(135deg, #fdf6e3 0%, #fae6b5 100%); /* হালকা কমলা ব্যাকগ্রাউন্ড */
-    border-top: var(--dark-khaki); /* কমলা বর্ডার */
+    border-top: 8px solid var(--dark-khaki); /* কমলা বর্ডার */
 }
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* ছবির গ্রিড */
+    grid-template-columns: repeat(auto-fit, minmin(250px, 1fr)); /* ছবির গ্রিড */
     gap: 15px;
     margin-top: 20px;
 }
@@ -421,13 +421,67 @@ ul {
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
-    cursor: pointer;
+    cursor: pointer; /* ক্লিকযোগ্য বোঝাতে কার্সার পরিবর্তন */
 }
 
+/* এই হোভার ইফেক্টটি আগের মতই থাকবে */
 .gallery-image:hover {
     transform: scale(1.05) rotate(2deg); /* হোভারে জুম ও হালকা ঘোরানো */
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     filter: brightness(1.1);
+}
+
+/* Fullscreen Overlay Styles (নতুন যোগ করা হয়েছে) */
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* কালচে ব্যাকগ্রাউন্ড */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* অন্যান্য সব কিছুর উপরে রাখতে */
+    opacity: 0; /* প্রাথমিকভাবে অদৃশ্য */
+    visibility: hidden; /* প্রাথমিকভাবে লুকানো */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* স্মুথ ট্রানজিশন */
+    cursor: pointer; /* ক্লিক করে বন্ধ করার জন্য কার্সার পরিবর্তন */
+}
+
+.fullscreen-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.fullscreen-overlay img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain; /* ছবি পুরোটা দেখাবে, কাটবে না */
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    transform: scale(0.8); /* অ্যানিমেশনের জন্য প্রাথমিকভাবে ছোট */
+    transition: transform 0.3s ease;
+}
+
+.fullscreen-overlay.active img {
+    transform: scale(1); /* ফুল স্ক্রিনে বড় হবে */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* ছোট স্ক্রিনে ছবির গ্রিড */
+    }
+    .gallery-image {
+        height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        grid-template-columns: 1fr; /* খুব ছোট স্ক্রিনে একটি কলামে দেখাবে */
+    }
 }
 
 /* Contact Info Icons */
