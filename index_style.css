@@ -345,7 +345,7 @@ ul {
 
 .principal-text h3 {
     margin-top: 0;
-    font-size: 2em;
+    font-size: 1em;
     color: var(--dark-khaki);
     border-left: none; /* এই সেকশনের জন্য বর্ডার বাদ */
     padding-left: 0;
