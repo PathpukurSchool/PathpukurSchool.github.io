@@ -169,6 +169,10 @@ body {
     border-radius: 15px; /* বর্ডার রেডিয়াস বাড়ানো হয়েছে */
     box-shadow: 0 10px 30px var(--box-shadow-light); /* শ্যাডো বাড়ানো হয়েছে */
     padding: 35px; /* প্যাডিং বাড়ানো হয়েছে */
+    padding-bottom: 30px; /* কার্ডের নিচে প্যাডিং বাড়ানো হয়েছে, যাতে বোতামের জন্য পর্যাপ্ত স্থান থাকে */
+    padding-top: 25px; /* প্রয়োজনে উপরের প্যাডিংও বাড়ানো হলো */
+    padding-left: 20px;
+    padding-right: 20px;
     transition: transform 0.4s ease, box-shadow 0.4s ease;
     border-top: 8px solid var(--dark-khaki); /* খয়েরি রঙের বর্ডার */
     overflow: hidden;
@@ -293,23 +297,42 @@ ul {
 
 .principal-info {
     display: flex;
-    align-items: center;
+    flex-direction: column; /* ছোট স্ক্রিনে কলামে সাজানো */
+    align-items: center; /* ছোট স্ক্রিনে কন্টেন্ট মাঝখানে */
+    text-align: center; /* ছোট স্ক্রিনে টেক্সট মাঝখানে */
     gap: 30px;
+    width: 100%;
     flex-wrap: wrap; /* ছোট স্ক্রিনে মোড়ানোর জন্য */
 }
 
+/* For larger screens (Desktop/Tablet) */
+@media (min-width: 768px) {
+    .principal-info {
+        flex-direction: row; /* Desktop: arrange items in a row */
+        text-align: left; /* Desktop: align text to left */
+        align-items: flex-start; /* Align items to the start of the cross-axis */
+    }
+}
 .principal-photo {
-    width: 180px; /* ছবির মাপ বাড়ানো হয়েছে */
-    height: 180px;
-    border-radius: 50%;
-    object-fit: cover;
+    width: 180px;/* ছবির প্রস্থ নির্দিষ্ট করুন */
+    height: 180px; /* ছবির উচ্চতা নির্দিষ্ট করুন - প্রস্থের সমান রাখা হয়েছে যাতে বর্গাকার থাকে */
+    border-radius: 50%; /* গোলাকার ছবি */
+    object-fit: cover; /* ছবির অনুপাত ঠিক রেখে কন্টেইনার পূরণ করে */
+    /* object-position: center; */ /* ছবির মাঝখানের অংশ দেখানোর জন্য */
+    border: 3px solid #007bff;
+    margin-bottom: 15px; /* ছবির নিচে কিছুটা ফাঁকা জায়গা (মোবাইলের জন্য) */
     border: 5px solid var(--primary-red);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     flex-shrink: 0; /* ছোট স্ক্রিনে সংকুচিত হওয়া আটকায় */
     /* নতুন অ্যানিমেশন যোগ করা হলো */
     animation: principalPulse 2.5s infinite alternate ease-in-out; /* লোগোর মত ক্রমাগত এনিমেটেড */
 }
-
+@media (min-width: 768px) {
+    .principal-photo {
+        margin-right: 25px; /* ডেস্কটপে ছবির ডানদিকে ফাঁকা জায়গা */
+        margin-bottom: 0; /* ডেস্কটপে ছবির নিচে মার্জিন লাগবে না */
+    }
+}
 /* নতুন @keyframes অ্যানিমেশন principalPulse */
 @keyframes principalPulse {
     0% {
@@ -334,6 +357,7 @@ ul {
     font-size: 1.1em;
     line-height: 1.7;
     color: var(--black);
+    flex-grow: 1; /* অবশিষ্ট স্থান পূরণ করার জন্য */
 }
 /* Quotes Section */
 .quotes {
