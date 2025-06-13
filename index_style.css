@@ -305,16 +305,6 @@ ul {
     width: 100%;
 }
 
-/* For larger screens (Desktop/Tablet) */
-@media (min-width: 768px) {
-    .principal-info {
-        flex-direction: row;        /* ডেস্কটপে ছবি ও টেক্সটকে পাশাপাশি রাখে */
-        justify-content: flex-start; /* ডেস্কটপে কন্টেন্টকে বাম দিকে সারিবদ্ধ করে */
-        align-items: flex-start;    /* ডেস্কটপে ছবি ও টেক্সটকে উপরে সারিবদ্ধ করে */
-        text-align: left;           /* ডেস্কটপে টেক্সটকে বাম দিকে সারিবদ্ধ করে */
-    }
-}
-
 .principal-photo {
     width: 180px;
     height: 180px;
