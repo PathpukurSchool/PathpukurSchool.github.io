@@ -861,18 +861,18 @@ ul {
     }
 }
 
-/* Section Content Wrapping and Hiding */
+/* More..., Less... বোটাম তৈরি */
 .section-content-wrapper {
-    max-height: 120px; /* Adjust this value to set the desired initial height for small sections */
+    max-height: 180px; /* সেকশনের প্রাথমিক উচ্চতা বাড়ানো হয়েছে (আগে ছিল 120px) */
     overflow: hidden;
     position: relative;
-    transition: max-height 0.5s ease-out; /* Smooth transition for expansion/collapse */
-    padding-bottom: 30px; /* Space for the fade effect */
+    transition: max-height 0.5s ease-out; /* প্রসারণ/সংকোচনের জন্য মসৃণ ট্রানজিশন */
+    padding-bottom: 30px; /* Fade প্রভাবের জন্য স্থান */
 }
 
 .section-content-wrapper.expanded {
-    max-height: fit-content; /* Allow full content to be shown */
-    max-height: 1000px; /* A large enough value to accommodate all content */
+    max-height: fit-content; /* সম্পূর্ণ বিষয়বস্তু দেখানোর অনুমতি দেয় */
+    max-height: 1500px; /* যথেষ্ট বড় মান যাতে সমস্ত বিষয়বস্তু ধরে (আপনি প্রয়োজন অনুযায়ী এটি সামঞ্জস্য করতে পারেন) */
     padding-bottom: 0;
 }
 
@@ -882,13 +882,13 @@ ul {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 50px; /* Height of the fade effect */
+    height: 50px; /* Fade প্রভাবের উচ্চতা */
     background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
-    pointer-events: none; /* Allows clicks to pass through */
+    pointer-events: none; /* ক্লিককে এর মাধ্যমে যেতে দেয় */
 }
 
 .section-content-wrapper.expanded::after {
-    display: none; /* Hide fade effect when expanded */
+    display: none; /* যখন প্রসারিত হয় তখন Fade প্রভাব লুকানো হয় */
 }
 
 /* Toggle Button Styling */
@@ -896,13 +896,13 @@ ul {
     display: block;
     width: fit-content;
     margin: 15px auto 0;
-    padding: 4px 8px;
-    background-color: #4CAF50; /* Green color for "More..." */
+    padding: 4px 8px; /* বোতামের প্যাডিং কমানো হয়েছে (আগে ছিল 8px 15px) */
+    background-color: #4CAF50; /* "More..." এর জন্য সবুজ রঙ */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.85rem; /* ফন্ট সাইজ কমানো হয়েছে (আগে ছিল 1rem) */
     font-weight: 600;
     transition: background-color 0.3s ease;
 }
@@ -912,7 +912,7 @@ ul {
 }
 
 .toggle-button.less-btn {
-    background-color: #f44336; /* Red color for "Less..." */
+    background-color: #f44336; /* "Less..." এর জন্য লাল রঙ */
 }
 
 .toggle-button.less-btn:hover {
@@ -921,5 +921,8 @@ ul {
 
 /* Optional: Adjust card padding if needed to make space for the button */
 .card {
-    padding-bottom: 20px; /* Ensure there's enough space at the bottom of the card for the button */
+    padding-bottom: 30px; /* কার্ডের নিচে প্যাডিং বাড়ানো হয়েছে, যাতে বোতামের জন্য পর্যাপ্ত স্থান থাকে */
+    padding-top: 25px; /* প্রয়োজনে উপরের প্যাডিংও বাড়ানো হলো */
+    padding-left: 20px;
+    padding-right: 20px;
 }
