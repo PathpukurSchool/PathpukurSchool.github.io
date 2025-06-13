@@ -106,16 +106,7 @@ body {
     display: flex;
     width: 400%; /* চারটি ছবির জন্য, প্রতিটি ছবি 100% প্রস্থের হয় */
     height: 100%;
-    overflow-x: scroll; /* অনুভূমিক স্ক্রলিং সক্ষম করে */
-            scroll-snap-type: x mandatory; /* স্মুথ স্ক্রলিং এর জন্য */
-            -webkit-overflow-scrolling: touch; /* iOS স্মুথ স্ক্রলিং */
-            animation: heroScroll 20s infinite linear; /* আগের অটোমেটিক স্ক্রল বজায় রাখা */
-            -ms-overflow-style: none;  /* Internet Explorer 10+ */
-            scrollbar-width: none;  /* Firefox */
-        }
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .hero-images::-webkit-scrollbar {
-            display: none;
+    animation: slideShow 20s infinite ease-in-out;
 }
 
 .hero-image {
@@ -124,7 +115,6 @@ body {
     object-fit: cover;
     filter: brightness(0.7); /* ডিফল্ট: ছবি অস্পষ্ট */
     transform: scale(1); /* ডিফল্ট: স্বাভাবিক স্কেল */
-    scroll-snap-align: start; /* স্ক্রল করার পর ছবি ঠিক জায়গায় থামবে */
     transition: filter 0.5s ease, transform 0.5s ease; /* ফিল্টার এবং ট্রান্সফর্মের জন্য স্মুথ ট্রানজিশন */
 }
 
@@ -163,22 +153,6 @@ body {
     animation: fadeInOverlay 3s forwards 1.5s; /* প্রাথমিক ফেড ইন অ্যানিমেশন থাকবে */
     transition: opacity 0.5s ease, transform 0.5s ease; /* অপাসিটি এবং ট্রান্সফর্মের জন্য স্মুথ ট্রানজিশন */
 }
- /* অটোমেটিক স্ক্রল অ্যানিমেশন */
-        @keyframes heroScroll {
-            0% { transform: translateX(0%); }
-            20% { transform: translateX(-100%); }
-            40% { transform: translateX(-200%); }
-            60% { transform: translateX(-300%); }
-            80% { transform: translateX(-200%); } /* রিভার্স করার জন্য */
-            100% { transform: translateX(0%); }
-        }
-
-        /* Media query for smaller screens - adjust hero image width if needed */
-        @media (max-width: 768px) {
-            .hero-image {
-                width: 100%; /* Ensures images scale down properly */
-            }
-        }
 
 /* যখন hero-section এর উপর হোভার করা হবে */
 .hero-section:hover .hero-overlay {
@@ -1019,3 +993,136 @@ ul {
     background-color: #da190b;
 }
 
+
+
+
+
+
+/* Header changes to accommodate Menu button */
+.main-header {
+    display: flex;
+    justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #8B4513; /* বা আপনার হেডার কালার */
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* মেনু বারের জন্য পজিশন */
+    z-index: 1000; /* মেনু বারের উপরে থাকবে */
+    flex-wrap: wrap; /* ছোট স্ক্রিনের জন্য */
+}
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+    order: -1; /* বাম পাশে রাখার জন্য */
+}
+
+/* Menu এবং Login বোতামের জন্য একই স্টাইল */
+.top-login-button { /* Menu বোতামের জন্যও এই ক্লাসটি ব্যবহার করা হয়েছে */
+    background-color: #28a745; /* সবুজ ব্যাকগ্রাউন্ড */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none; /* লিঙ্ক হিসেবে থাকলে */
+    display: flex; /* আইকন এবং টেক্সট অ্যালাইন করার জন্য */
+    align-items: center;
+    gap: 8px; /* আইকন এবং টেক্সটের মধ্যে ফাঁকা */
+    transition: background-color 0.3s ease;
+}
+
+.top-login-button:hover {
+    background-color: #218838; /* হোভারে কালার পরিবর্তন */
+}
+
+/* Sidebar Menu Styles */
+.sidebar-menu {
+    height: 100%;
+    width: 0; /* প্রাথমিকভাবে লুকানো থাকবে */
+    position: fixed;
+    z-index: 999; /* অন্যান্য কন্টেন্টের উপরে থাকবে কিন্তু হেডার নিচে */
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* স্বচ্ছ কালো ব্যাকগ্রাউন্ড */
+    overflow-x: hidden;
+    transition: 0.5s; /* স্মুথ ট্রানজিশন */
+    padding-top: 60px; /* হেডার এর নিচে থেকে শুরু হবে */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px); /* স্বচ্ছতা ইফেক্ট */
+    -webkit-backdrop-filter: blur(5px); /* Safari সাপোর্ট */
+}
+
+.sidebar-menu.active {
+    width: 250px; /* খোলার পর চওড়া হবে */
+}
+
+.sidebar-menu a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #f1f1f1;
+    display: block;
+    transition: 0.3s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-menu a:last-child {
+    border-bottom: none;
+}
+
+.sidebar-menu a:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Overlay for when menu is open to click outside and close */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent; /* শুধু ক্লিক ইভেন্ট ধরার জন্য, দৃশ্যমান হবে না */
+    z-index: 998; /* মেনুর ঠিক নিচে */
+    display: none; /* প্রাথমিকভাবে লুকানো */
+}
+
+.overlay.active {
+    display: block; /* মেনু খুললে দেখাবে */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .header-buttons, .top-login-button { /* Menu এবং Login বোতামের জন্য একই স্টাইল */
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .header-buttons {
+        order: 0; /* ছোট স্ক্রিনে উপরে */
+    }
+
+    /* .top-login-button (login button) */
+    .main-header > .top-login-button { /* শুধু লগইন বোতামকে টার্গেট করতে */
+        order: 2; /* ছোট স্ক্রিনে নিচে */
+    }
+
+    .header-content {
+        order: 1; /* মাঝখানে */
+        margin-bottom: 10px;
+    }
+
+    .sidebar-menu.active {
+        width: 100%; /* ছোট স্ক্রিনে পুরো চওড়া হবে */
+    }
+}
