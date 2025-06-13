@@ -42,6 +42,11 @@
 </head>
 <body>
     <header class="main-header">
+        <div class="header-buttons">
+            <button id="menu-toggle-button" class="top-login-button">
+                <i class="fas fa-bars"></i> Menu
+            </button>
+        </div>
         <div class="header-content">
             <img src="PHS-LOGO.png" alt="স্কুল লোগো" class="logo">
             <h1>পাতপুকুর হাই স্কুল (উ: মা:)</h1>
@@ -50,7 +55,19 @@
         </div>
         <a href="home.html" class="top-login-button">Login</a>
     </header>
-
+<nav id="sidebar-menu" class="sidebar-menu">
+        <a href="#about-us-section">আমাদের সম্পর্কে</a>
+        <a href="#academics-section">শিক্ষা কার্যক্রম</a>
+        <a href="#uniform-details-section">ইউনিফর্ম</a>
+        <a href="#principal-message-section">বিদ্যালয় প্রধানের বার্তা</a>
+        <a href="#president-message-section">প্রেসিডেন্ট-এর বার্তা</a>
+        <a href="#important-links-section-notice">ডিজিটাল নোটিশ বোর্ড</a>
+        <a href="#quotes-section">কিছু মহান উক্তি</a>
+        <a href="#gallery-section">গ্যালারি</a>
+        <a href="#contact-info-section">যোগাযোগ</a>
+        <a href="#important-links-section-website">গুরুত্বপূর্ণ ওয়েবসাইট ও লিঙ্ক</a>
+        <a href="#location-section">আমাদের অবস্থান</a>
+    </nav>
     <section class="hero-section">
         <div class="hero-images">
             <img src="photo/phs.jpg" alt="স্কুলের ছবি 1" class="hero-image">
@@ -548,6 +565,9 @@
                     fullscreenOverlay.classList.add('active');
                     // Prevent scrolling when fullscreen is active
                     document.body.style.overflow = 'hidden';
+                    if (sidebarMenu.classList.contains('active')) { // মেনু খোলা থাকলে বন্ধ করো
+                        toggleMenu();
+                    }
                 });
             });
 
@@ -555,7 +575,53 @@
                 fullscreenOverlay.classList.remove('active');
                 fullscreenImage.src = ''; // ছবি সরিয়ে নেওয়া যাতে মেমরি খালি হয়
                 // Allow scrolling again
-                document.body.style.overflow = ''; // বা 'auto'
+                document.body.style.overflow = '';
+            });
+
+            // মেনু লজিক
+            const menuToggleButton = document.getElementById('menu-toggle-button');
+            const sidebarMenu = document.getElementById('sidebar-menu');
+            
+            // একটি অদৃশ্য ওভারলে তৈরি করুন
+            const overlay = document.createElement('div');
+            overlay.classList.add('overlay');
+            document.body.appendChild(overlay);
+
+            function toggleMenu() {
+                sidebarMenu.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = sidebarMenu.classList.contains('active') ? 'hidden' : '';
+            }
+
+            menuToggleButton.addEventListener('click', function(event) {
+                event.stopPropagation(); // বোতামে ক্লিক করলে ইভেন্ট বুবলিং বন্ধ করবে
+                toggleMenu();
+            });
+
+            // মেনু বারের ভেতরের লিঙ্কগুলিতে ক্লিক করলে মেনু বন্ধ হবে এবং সেই সেকশনে যাবে
+            sidebarMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Default scrolling behavior বন্ধ
+                    const targetId = this.getAttribute('href').substring(1); // # বাদ দিয়ে ID পাবে
+                    const targetSection = document.getElementById(targetId);
+
+                    if (targetSection) {
+                        // টার্গেট সেকশনে স্মুথ স্ক্রল, হেডার এর উচ্চতা বাদ দিয়ে
+                        const headerHeight = document.querySelector('.main-header').offsetHeight;
+                        window.scrollTo({
+                            top: targetSection.offsetTop - headerHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                    toggleMenu(); // মেনু বন্ধ করবে
+                });
+            });
+
+            // মেনুর বাইরে বা ওভারলেতে ক্লিক করলে মেনু বন্ধ হবে
+            overlay.addEventListener('click', function() {
+                if (sidebarMenu.classList.contains('active')) {
+                    toggleMenu();
+                }
             });
         });
     </script>
