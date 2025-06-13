@@ -890,6 +890,7 @@ ul {
     position: absolute; /* পজিশনিং এর জন্য */
     top: 20px; /* উপর থেকে দূরত্ব */
     right: 20px; /* ডান দিক থেকে দূরত্ব */
+    left: 20px; /* বাম দিক থেকে দূরত্ব */
     background-color: var(--primary-red); /* হেডিং এর লাল রঙের সাথে সামঞ্জস্যপূর্ণ */
     color: var(--white); /* সাদা টেক্সট */
     padding: 8px 15px; /* বোতামের প্যাডিং */
