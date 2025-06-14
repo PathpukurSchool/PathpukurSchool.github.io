@@ -1049,23 +1049,6 @@ ul {
     color: var(--white);
     background-color: rgba(255, 255, 255, 0.25);
 }
-
-/* Overlay for when menu is open to click outside and close */
-.overlay {
-    position: fixed; /* স্ক্রিনের সাপেক্ষে ফিক্সড রাখবে */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* মেনু খোলার সময় সামান্য ডার্ক ওভারলে */
-    z-index: 1000; /* মেনুর (1001) ঠিক নিচে এবং হেডারের (900) উপরে */
-    display: none; /* প্রাথমিকভাবে লুকানো */
-    transition: background-color 0.5s ease; /* স্মুথ ট্রানজিশন */
-}
-
-/* .overlay.active {
-    display: block; /* মেনু খুললে দেখাবে */
-}
 section[id] {
     scroll-margin-top: 300px;
 }
