@@ -317,346 +317,350 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="index_notice.js"></script>
     
-    <script>
-        // Digital Notice Board এর জন্য Pagination এবং rendering logic
-        const NOTICES_PER_PAGE = 10;
-        let currentPage = 1;
-        let totalPages = 0;
+<script>
+    // Digital Notice Board এর জন্য Pagination এবং rendering logic
+    const NOTICES_PER_PAGE = 10;
+    let currentPage = 1;
+    let totalPages = 0;
 
-        function renderHelpList() {
-            const container = document.getElementById('help-list');
-            container.innerHTML = "";
+    function renderHelpList() {
+        const container = document.getElementById('help-list');
+        if (!container) {
+            console.error("Error: 'help-list' container not found.");
+            return;
+        }
+        container.innerHTML = "";
 
-            // Assuming 'Helping' is a global array defined somewhere, e.g., in index_notice.js
-            // If Helping is not defined or is empty, show "Available Soon!" message.
-            // If you removed index_notice.js and Helping is not defined, you might need to define it here
-            // or remove this entire block if you don't need the notice board.
-            if (typeof Helping === 'undefined' || Helping.length === 0 || !Helping[0].text) {
-                container.innerHTML = `
-                    <div style="
-                        border: 2px solid #ff9999;
-                        background-color: #ffe6e6;
-                        color: #cc0000;
-                        font-size: 20px;
-                        font-weight: bold;
-                        padding: 10px;
-                        border-radius: 8px;
-                        text-align: center;
-                        max-width: 300px;
-                        margin: 0 auto;
-                    ">
-                        <strong> Available Soon! </strong><br> Please check back later for updates.
-                    </div>
-                `;
-                return;
+        // Assuming 'Helping' is a global array defined somewhere, e.g., in index_notice.js
+        // If Helping is not defined or is empty, show "Available Soon!" message.
+        if (typeof Helping === 'undefined' || !Array.isArray(Helping) || Helping.length === 0 || !Helping[0].text) {
+            container.innerHTML = `
+                <div style="
+                    border: 2px solid #ff9999;
+                    background-color: #ffe6e6;
+                    color: #cc0000;
+                    font-size: 20px;
+                    font-weight: bold;
+                    padding: 10px;
+                    border-radius: 8px;
+                    text-align: center;
+                    max-width: 300px;
+                    margin: 0 auto;
+                ">
+                    <strong> Available Soon! </strong><br> Please check back later for updates.
+                </div>
+            `;
+            return;
+        }
+
+        totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
+
+        const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
+        const endIndex = startIndex + NOTICES_PER_PAGE;
+        const noticesToRender = Helping.slice(startIndex, endIndex);
+
+        noticesToRender.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.innerText = item.text;
+            itemDiv.style.cursor = 'pointer';
+            itemDiv.style.margin = '10px 0';
+            itemDiv.style.padding = '8px 10px';
+            itemDiv.style.backgroundColor = '#f9f9f9';
+            itemDiv.style.borderLeft = `6px solid #8B4513`;
+            itemDiv.style.borderRadius = '4px';
+            itemDiv.style.transition = 'background-color 0.3s';
+            itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
+            itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+            itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
+            container.appendChild(itemDiv);
+        });
+
+        renderPaginationControls();
+    }
+
+    function renderPaginationControls() {
+        const paginationContainer = document.getElementById('pagination-controls');
+        if (!paginationContainer) return; // Add check
+
+        paginationContainer.innerHTML = '';
+
+        if (totalPages <= 1) {
+            return;
+        }
+
+        const backBtn = document.createElement('button');
+        backBtn.innerText = 'BACK';
+        backBtn.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderHelpList();
+            }
+        };
+        backBtn.style.padding = '8px 15px';
+        backBtn.style.marginRight = '10px';
+        backBtn.style.backgroundColor = '#007bff';
+        backBtn.style.color = 'white';
+        backBtn.style.border = 'none';
+        backBtn.style.borderRadius = '5px';
+        backBtn.style.cursor = 'pointer';
+        backBtn.disabled = currentPage === 1;
+        paginationContainer.appendChild(backBtn);
+
+        const pageInfo = document.createElement('span');
+        pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
+        pageInfo.style.margin = '0 10px';
+        pageInfo.style.fontWeight = 'bold';
+        paginationContainer.appendChild(pageInfo);
+
+        const nextBtn = document.createElement('button');
+        nextBtn.innerText = 'NEXT';
+        nextBtn.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderHelpList();
+            }
+        };
+        nextBtn.style.padding = '8px 15px';
+        nextBtn.style.marginLeft = '10px';
+        nextBtn.style.backgroundColor = '#007bff';
+        nextBtn.style.color = 'white';
+        nextBtn.style.border = 'none';
+        nextBtn.style.borderRadius = '5px';
+        nextBtn.style.cursor = 'pointer';
+        nextBtn.disabled = currentPage === totalPages;
+        paginationContainer.appendChild(nextBtn);
+    }
+
+    function showPopup(titleText, date, link, subjText) {
+        const existing = document.getElementById('notice-popup');
+        if (existing) existing.remove();
+
+        const popup = document.createElement('div');
+        popup.id = 'notice-popup';
+        popup.style.position = 'fixed';
+        popup.style.top = '50%';
+        popup.style.left = '50%';
+        popup.style.transform = 'translate(-50%, -50%)';
+        popup.style.background = '#f0f8ff';
+        popup.style.padding = '20px';
+        popup.style.border = '2px solid #333';
+        popup.style.borderRadius = '10px';
+        popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+        popup.style.zIndex = '9999';
+        popup.style.textAlign = 'center';
+        popup.style.maxWidth = '90%';
+        popup.style.minWidth = '240px';
+        popup.style.width = '300px';
+        popup.style.fontFamily = 'Arial, sans-serif';
+
+        const titleElem = document.createElement('div');
+        titleElem.innerText = titleText;
+        titleElem.style.backgroundColor = 'green';
+        titleElem.style.color = 'white';
+        titleElem.style.fontWeight = 'bold';
+        titleElem.style.fontSize = '15px';
+        titleElem.style.padding = '10px';
+        titleElem.style.borderRadius = '5px';
+        titleElem.style.marginBottom = '15px';
+        popup.appendChild(titleElem);
+
+        const dateElem = document.createElement('div');
+        dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+        dateElem.style.marginBottom = '10px';
+        popup.appendChild(dateElem);
+
+        if (subjText && subjText.trim() !== '') {
+            const subjElem = document.createElement('div');
+            subjElem.innerText = subjText;
+            subjElem.style.color = 'darkgreen';
+            subjElem.style.backgroundColor = '#e6ffe6';
+            subjElem.style.fontWeight = 'bold';
+            subjElem.style.fontSize = '14px';
+            subjElem.style.padding = '6px';
+            subjElem.style.borderRadius = '4px';
+            subjElem.style.marginBottom = '12px';
+            popup.appendChild(subjElem);
+        }
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.marginTop = '20px';
+        buttonContainer.style.display = 'flex';
+        buttonContainer.style.flexWrap = 'wrap';
+        buttonContainer.style.justifyContent = 'center';
+        buttonContainer.style.gap = '10px';
+
+        if (link && link.trim() !== '') {
+            const linkBtn = document.createElement('a');
+            linkBtn.href = link;
+            linkBtn.innerText = 'Open Link';
+            linkBtn.target = '_blank';
+            linkBtn.style.backgroundColor = '#007bff';
+            linkBtn.style.color = 'white';
+            linkBtn.style.padding = '6px 10px';
+            linkBtn.style.border = 'none';
+            linkBtn.style.borderRadius = '5px';
+            linkBtn.style.textDecoration = 'none';
+            linkBtn.style.fontWeight = 'bold';
+            linkBtn.style.fontSize = '12px';
+            buttonContainer.appendChild(linkBtn);
+        }
+
+        const downloadBtn = document.createElement('button');
+        downloadBtn.innerText = 'Download';
+        downloadBtn.style.backgroundColor = '#28a745';
+        downloadBtn.style.color = 'white';
+        downloadBtn.style.padding = '6px 10px';
+        downloadBtn.style.border = 'none';
+        downloadBtn.style.borderRadius = '5px';
+        downloadBtn.style.fontWeight = 'bold';
+        downloadBtn.style.fontSize = '12px';
+        downloadBtn.style.cursor = 'pointer';
+        downloadBtn.onclick = () => {
+            setTimeout(() => {
+                html2canvas(popup).then(canvas => {
+                    const image = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.href = image;
+                    link.download = 'notice.png';
+                    link.click();
+                });
+            }, 100);
+        };
+        buttonContainer.appendChild(downloadBtn);
+
+        const closeBtn = document.createElement('button');
+        closeBtn.innerText = 'Back';
+        closeBtn.style.backgroundColor = '#dc3545';
+        closeBtn.style.color = 'white';
+        closeBtn.style.padding = '6px 10px';
+        closeBtn.style.border = 'none';
+        closeBtn.style.borderRadius = '5px';
+        closeBtn.style.fontWeight = 'bold';
+        closeBtn.style.fontSize = '12px';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.onclick = () => popup.remove();
+        buttonContainer.appendChild(closeBtn);
+
+        popup.appendChild(buttonContainer);
+        document.body.appendChild(popup);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderHelpList(); // নোটিশ বোর্ড রেন্ডার করার জন্য
+
+        // --- More/Less Button Logic ---
+        const toggleButtons = document.querySelectorAll('.toggle-button');
+        toggleButtons.forEach(button => {
+            const sectionContentWrapper = button.previousElementSibling;
+
+            // Initially check if content overflows
+            if (sectionContentWrapper && sectionContentWrapper.scrollHeight <= sectionContentWrapper.clientHeight) {
+                button.style.display = 'none'; // Hide if no overflow
             }
 
-            totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
-
-            const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
-            const endIndex = startIndex + NOTICES_PER_PAGE;
-            const noticesToRender = Helping.slice(startIndex, endIndex);
-
-            noticesToRender.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.innerText = item.text;
-                itemDiv.style.cursor = 'pointer';
-                itemDiv.style.margin = '10px 0';
-                itemDiv.style.padding = '8px 10px';
-                itemDiv.style.backgroundColor = '#f9f9f9';
-                itemDiv.style.borderLeft = `6px solid #8B4513`;
-                itemDiv.style.borderRadius = '4px';
-                itemDiv.style.transition = 'background-color 0.3s';
-                itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
-                itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
-                itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
-                container.appendChild(itemDiv);
+            button.addEventListener('click', function() {
+                sectionContentWrapper.classList.toggle('expanded');
+                if (sectionContentWrapper.classList.contains('expanded')) {
+                    button.textContent = 'Less...';
+                    button.classList.remove('more-btn');
+                    button.classList.add('less-btn');
+                } else {
+                    button.textContent = 'More...';
+                    button.classList.remove('less-btn');
+                    button.classList.add('more-btn');
+                }
             });
+        });
 
-            renderPaginationControls();
+        // --- Menu Bar Logic ---
+        const menuToggleButton = document.getElementById('menu-toggle-button');
+        const sidebarMenu = document.getElementById('sidebar-menu');
+        const overlay = document.querySelector('.overlay'); // Make sure this element exists in your HTML!
+
+        // Function to toggle menu and overlay visibility
+        function toggleMenu() {
+            if (sidebarMenu) { // Check if sidebarMenu exists
+                sidebarMenu.classList.toggle('active');
+            }
+            if (overlay) { // Check if overlay exists
+                overlay.classList.toggle('active');
+            }
+            // Toggle body scroll based on sidebarMenu state
+            document.body.style.overflow = (sidebarMenu && sidebarMenu.classList.contains('active')) ? 'hidden' : '';
         }
 
-        function renderPaginationControls() {
-            const paginationContainer = document.getElementById('pagination-controls');
-            paginationContainer.innerHTML = '';
-
-            if (totalPages <= 1) {
-                return;
-            }
-
-            const backBtn = document.createElement('button');
-            backBtn.innerText = 'BACK';
-            backBtn.onclick = () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderHelpList();
-                }
-            };
-            backBtn.style.padding = '8px 15px';
-            backBtn.style.marginRight = '10px';
-            backBtn.style.backgroundColor = '#007bff';
-            backBtn.style.color = 'white';
-            backBtn.style.border = 'none';
-            backBtn.style.borderRadius = '5px';
-            backBtn.style.cursor = 'pointer';
-            backBtn.disabled = currentPage === 1;
-            paginationContainer.appendChild(backBtn);
-
-            const pageInfo = document.createElement('span');
-            pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
-            pageInfo.style.margin = '0 10px';
-            pageInfo.style.fontWeight = 'bold';
-            paginationContainer.appendChild(pageInfo);
-
-            const nextBtn = document.createElement('button');
-            nextBtn.innerText = 'NEXT';
-            nextBtn.onclick = () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderHelpList();
-                }
-            };
-            nextBtn.style.padding = '8px 15px';
-            nextBtn.style.marginLeft = '10px';
-            nextBtn.style.backgroundColor = '#007bff';
-            nextBtn.style.color = 'white';
-            nextBtn.style.border = 'none';
-            nextBtn.style.borderRadius = '5px';
-            nextBtn.style.cursor = 'pointer';
-            nextBtn.disabled = currentPage === totalPages;
-            paginationContainer.appendChild(nextBtn);
+        if (menuToggleButton) {
+            menuToggleButton.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevents click from bubbling up to document/overlay
+                toggleMenu();
+            });
+        } else {
+            console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
         }
 
-        function showPopup(titleText, date, link, subjText) {
-            const existing = document.getElementById('notice-popup');
-            if (existing) existing.remove();
+        // Close menu when clicking on a link inside the sidebar
+        if (sidebarMenu) {
+            sidebarMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(event) {
+                    toggleMenu(); // Close the menu
+                    // Smooth scrolling to the target section
+                    event.preventDefault(); // Prevent default link behavior
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
 
-            const popup = document.createElement('div');
-            popup.id = 'notice-popup';
-            popup.style.position = 'fixed';
-            popup.style.top = '50%';
-            popup.style.left = '50%';
-            popup.style.transform = 'translate(-50%, -50%)';
-            popup.style.background = '#f0f8ff';
-            popup.style.padding = '20px';
-            popup.style.border = '2px solid #333';
-            popup.style.borderRadius = '10px';
-            popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-            popup.style.zIndex = '9999';
-            popup.style.textAlign = 'center';
-            popup.style.maxWidth = '90%';
-            popup.style.minWidth = '240px';
-            popup.style.width = '300px';
-            popup.style.fontFamily = 'Arial, sans-serif';
-
-            const titleElem = document.createElement('div');
-            titleElem.innerText = titleText;
-            titleElem.style.backgroundColor = 'green';
-            titleElem.style.color = 'white';
-            titleElem.style.fontWeight = 'bold';
-            titleElem.style.fontSize = '15px';
-            titleElem.style.padding = '10px';
-            titleElem.style.borderRadius = '5px';
-            titleElem.style.marginBottom = '15px';
-            popup.appendChild(titleElem);
-
-            const dateElem = document.createElement('div');
-            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-            dateElem.style.marginBottom = '10px';
-            popup.appendChild(dateElem);
-
-            if (subjText && subjText.trim() !== '') {
-                const subjElem = document.createElement('div');
-                subjElem.innerText = subjText;
-                subjElem.style.color = 'darkgreen';
-                subjElem.style.backgroundColor = '#e6ffe6';
-                subjElem.style.fontWeight = 'bold';
-                subjElem.style.fontSize = '14px';
-                subjElem.style.padding = '6px';
-                subjElem.style.borderRadius = '4px';
-                subjElem.style.marginBottom = '12px';
-                popup.appendChild(subjElem);
-            }
-
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.marginTop = '20px';
-            buttonContainer.style.display = 'flex';
-            buttonContainer.style.flexWrap = 'wrap';
-            buttonContainer.style.justifyContent = 'center';
-            buttonContainer.style.gap = '10px';
-
-            if (link && link.trim() !== '') {
-                const linkBtn = document.createElement('a');
-                linkBtn.href = link;
-                linkBtn.innerText = 'Open Link';
-                linkBtn.target = '_blank';
-                linkBtn.style.backgroundColor = '#007bff';
-                linkBtn.style.color = 'white';
-                linkBtn.style.padding = '6px 10px';
-                linkBtn.style.border = 'none';
-                linkBtn.style.borderRadius = '5px';
-                linkBtn.style.textDecoration = 'none';
-                linkBtn.style.fontWeight = 'bold';
-                linkBtn.style.fontSize = '12px';
-                buttonContainer.appendChild(linkBtn);
-            }
-
-            const downloadBtn = document.createElement('button');
-            downloadBtn.innerText = 'Download';
-            downloadBtn.style.backgroundColor = '#28a745';
-            downloadBtn.style.color = 'white';
-            downloadBtn.style.padding = '6px 10px';
-            downloadBtn.style.border = 'none';
-            downloadBtn.style.borderRadius = '5px';
-            downloadBtn.style.fontWeight = 'bold';
-            downloadBtn.style.fontSize = '12px';
-            downloadBtn.style.cursor = 'pointer';
-            downloadBtn.onclick = () => {
-                setTimeout(() => {
-                    html2canvas(popup).then(canvas => {
-                        const image = canvas.toDataURL('image/png');
-                        const link = document.createElement('a');
-                        link.href = image;
-                        link.download = 'notice.png';
-                        link.click();
-                    });
-                }, 100);
-            };
-            buttonContainer.appendChild(downloadBtn);
-
-            const closeBtn = document.createElement('button');
-            closeBtn.innerText = 'Back';
-            closeBtn.style.backgroundColor = '#dc3545';
-            closeBtn.style.color = 'white';
-            closeBtn.style.padding = '6px 10px';
-            closeBtn.style.border = 'none';
-            closeBtn.style.borderRadius = '5px';
-            closeBtn.style.fontWeight = 'bold';
-            closeBtn.style.fontSize = '12px';
-            closeBtn.style.cursor = 'pointer';
-            closeBtn.onclick = () => popup.remove();
-            buttonContainer.appendChild(closeBtn);
-
-            popup.appendChild(buttonContainer);
-            document.body.appendChild(popup);
-        }
-        // More/Less বাটন এবং নোটিশ বোর্ডের রেন্ডারিং DOMContentLoaded ইভেন্টের মধ্যে
-        document.addEventListener('DOMContentLoaded', function() {
-            renderHelpList(); // নোটিশ বোর্ড রেন্ডার করার জন্য
-
-            const toggleButtons = document.querySelectorAll('.toggle-button');
-
-            toggleButtons.forEach(button => {
-                const sectionContentWrapper = button.previousElementSibling;
-                
-                // শুরুতে কন্টেন্ট overflow হচ্ছে কিনা তা চেক করুন
-                // scrollHeight > clientHeight মানে কন্টেন্ট বেশি আছে এবং স্ক্রল করা প্রয়োজন
-                if (sectionContentWrapper.scrollHeight <= sectionContentWrapper.clientHeight) {
-                    button.style.display = 'none'; // যদি কন্টেন্ট overflow না হয়, বাটন লুকান
-                }
-
-                button.addEventListener('click', function() {
-                    sectionContentWrapper.classList.toggle('expanded');
-                    if (sectionContentWrapper.classList.contains('expanded')) {
-                        button.textContent = 'Less...';
-                        button.classList.remove('more-btn');
-                        button.classList.add('less-btn');
-                    } else {
-                        button.textContent = 'More...';
-                        button.classList.remove('less-btn');
-                        button.classList.add('more-btn');
+                    if (targetSection) {
+                        const headerOffset = document.querySelector('.main-header') ? document.querySelector('.main-header').offsetHeight : 0;
+                        window.scrollTo({
+                            top: targetSection.offsetTop - headerOffset,
+                            behavior: 'smooth'
+                        });
                     }
                 });
             });
-
-
-
-
-
-            
-    // নতুন মেনু লজিক এখানে যোগ করুন
-    const menuToggleButton = document.getElementById('menu-toggle-button');
-    const sidebarMenu = document.getElementById('sidebar-menu');
-    const sections = document.querySelectorAll('main.container section'); // সমস্ত সেকশন ট্যাগ
-
-    // একটি অদৃশ্য ওভারলে তৈরি করুন
-    const overlay = document.querySelector('.overlay'); // overlay element টি সিলেক্ট করুন
-    overlay.classList.add('overlay');
-    document.body.appendChild(overlay);
-
-    function toggleMenu() {
-        sidebarMenu.classList.toggle('active');
-        overlay.classList.toggle('active'); // মেনু খুললে ওভারলে সক্রিয় হবে
-        document.body.style.overflow = sidebarMenu.classList.contains('active') ? 'hidden' : ''; // মেনু খুললে স্ক্রল বন্ধ
-    }
-
-    menuToggleButton.addEventListener('click', function(event) {
-        event.stopPropagation(); // বোতামে ক্লিক করলে ইভেন্ট বুবলিং বন্ধ করবে
-        toggleMenu();
-    });
-
-    // মেনু বারের ভেতরের লিঙ্কগুলিতে ক্লিক করলে মেনু বন্ধ হবে এবং সেই সেকশনে যাবে
-    sidebarMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function(event) {
-            toggleMenu(); // মেনু বন্ধ করার জন্য
-            // Smooth scrolling এর জন্য default behaviour বন্ধ
-            event.preventDefault();
-            const targetId = this.getAttribute('href').substring(1); // # বাদ দিয়ে ID পাবে
-            const targetSection = document.getElementById(targetId);
-
-            if (targetSection) {
-                // টার্গেট সেকশনে স্মুথ স্ক্রল
-                window.scrollTo({
-                    top: targetSection.offsetTop - document.querySelector('.main-header').offsetHeight, // হেডার উচ্চতা বাদ দিয়ে স্ক্রল
-                    behavior: 'smooth'
-                });
-            }
-            toggleMenu(); // মেনু বন্ধ করবে
-        });
-    });
-
-    // মেনুর বাইরে বা ওভারলেতে ক্লিক করলে মেনু বন্ধ হবে
-    overlay.addEventListener('click', function() {
-        if (sidebarMenu.classList.contains('active')) {
-            toggleMenu();
         }
-    // ESC key চাপলে মেনু বন্ধ হবে
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape' && sidebarMenu.classList.contains('active')) {
+
+        // Close menu when clicking outside (on the overlay)
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                if (sidebarMenu && sidebarMenu.classList.contains('active')) {
                     toggleMenu();
                 }
             });
+        }
+
+        // Close menu on ESC key press
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && sidebarMenu && sidebarMenu.classList.contains('active')) {
+                toggleMenu();
+            }
         });
 
+        // --- Gallery Fullscreen Logic ---
+        const galleryImages = document.querySelectorAll('.gallery-image');
+        const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+        const fullscreenImage = document.getElementById('fullscreen-image');
 
-
-
-            
-    
-
-            
-            // গ্যালারি ছবির ফুলস্ক্রিন লজিক এখানে যোগ করুন
-            const galleryImages = document.querySelectorAll('.gallery-image');
-            const fullscreenOverlay = document.getElementById('fullscreen-overlay');
-            const fullscreenImage = document.getElementById('fullscreen-image');
-
+        if (galleryImages.length > 0 && fullscreenOverlay && fullscreenImage) { // Check if all elements exist
             galleryImages.forEach(image => {
                 image.addEventListener('click', function() {
-                    const imageUrl = this.getAttribute('data-src') || this.src; // data-src ব্যবহার করবে, না থাকলে src
-                    fullscreenImage.src = imageUrl;
-                    fullscreenOverlay.classList.add('active');
-                    // Prevent scrolling when fullscreen is active
-                    document.body.style.overflow = 'hidden';
+                    const imageUrl = this.getAttribute('data-src') || this.src;
+                    if (imageUrl) { // Only open if there's a valid image URL
+                        fullscreenImage.src = imageUrl;
+                        fullscreenOverlay.classList.add('active');
+                        document.body.style.overflow = 'hidden'; // Prevent scrolling
+                    }
                 });
             });
 
             fullscreenOverlay.addEventListener('click', function() {
                 fullscreenOverlay.classList.remove('active');
-                fullscreenImage.src = ''; // ছবি সরিয়ে নেওয়া যাতে মেমরি খালি হয়
-                // Allow scrolling again
-                document.body.style.overflow = ''; // বা 'auto'
+                fullscreenImage.src = ''; // Clear image to free memory
+                document.body.style.overflow = ''; // Restore scrolling
             });
-        });
-    </script>
+        } else {
+            console.warn("Warning: Gallery elements (images, fullscreen overlay, or image) not found. Gallery fullscreen might not work.");
+        }
+    });
+</script>
 </body>
 </html>
