@@ -576,42 +576,29 @@
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const sidebarMenu = document.getElementById('sidebar-menu');
         const overlay = document.querySelector('.overlay'); // Make sure this element exists in your HTML!
-
-        // Function to toggle menu and overlay visibility
-        
-       function toggleMenu() { // Defined once in the global or script scope
-    const sidebarMenu = document.getElementById('sidebar-menu'); // Get elements inside the function or pass them as args
-
-    if (sidebarMenu) {
-        sidebarMenu.classList.toggle('active');
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // ... (other initialization code) ...
-
-    const menuToggleButton = document.getElementById('menu-toggle-button');
-    // No need to redeclare sidebarMenu and overlay here if toggleMenu() gets them
-    const sidebarMenu = document.getElementById('sidebar-menu');
-    // const overlay = document.querySelector('.overlay');
-function toggleMenu() {
-        if (sidebarMenu) {
-            sidebarMenu.classList.toggle('active');
-        } else {
-            console.error("Sidebar menu element not found!"); // ডিবাগিং এর জন্য
+// Function to toggle menu and overlay visibility - Defined ONCE and correctly
+        function toggleMenu() {
+            if (sidebarMenu) {
+                sidebarMenu.classList.toggle('active');
+            } else {
+                console.error("Sidebar menu element not found!"); // Debugging
+            }
+            if (overlay) {
+                overlay.classList.toggle('active'); // Toggle overlay's active class
+            } else {
+                console.error("Overlay element not found!"); // Debugging
+            }
         }
-    }
-    if (menuToggleButton) {
-        menuToggleButton.addEventListener('click', function(event) {
-            event.stopPropagation(); // Prevents click from bubbling up to document/overlay
-            toggleMenu(); // Call the globally defined toggleMenu()
-        });
-    } else {
-        console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
-    }
 
-    // ... (rest of your DOMContentLoaded code) ...
-});  
+        if (menuToggleButton) {
+            menuToggleButton.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevents click from bubbling up to document/overlay
+                toggleMenu(); // Call the correctly defined toggleMenu()
+            });
+        } else {
+            console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
+        }
+
         // Close menu when clicking on a link inside the sidebar
         if (sidebarMenu) {
             sidebarMenu.querySelectorAll('a').forEach(link => {
@@ -623,17 +610,17 @@ function toggleMenu() {
                     const targetSection = document.getElementById(targetId);
 
                     if (targetSection) {
-                // হেডারের আনুমানিক উচ্চতা (আপনার CSS অনুযায়ী)
-                const approximateHeaderHeight = 250; // এই মানটি আপনার হেডারের মোট উচ্চতা অনুযায়ী সেট করুন
+                        // হেডারের আনুমানিক উচ্চতা (আপনার CSS অনুযায়ী)
+                        const approximateHeaderHeight = 250; // এই মানটি আপনার হেডারের মোট উচ্চতা অনুযায়ী সেট করুন
 
-                window.scrollTo({
-                    top: targetSection.offsetTop - approximateHeaderHeight, // এটি ব্যবহার করুন
-                    behavior: 'smooth'
+                        window.scrollTo({
+                            top: targetSection.offsetTop - approximateHeaderHeight,
+                            behavior: 'smooth'
+                        });
+                    }
                 });
-            }
-        });
-    });
-}
+            });
+        }
 
         // Close menu when clicking outside (on the overlay)
         if (overlay) {
