@@ -1035,10 +1035,18 @@ ul {
     padding: 15px 25px;
     text-decoration: none;
     font-size: 18px;
-    color: #f1f1f1;
+    /* লেখার রঙ কালো */
+    color: var(--black); /* কালো রঙের জন্য আপনার ভেরিয়েবল --black ব্যবহার করা হয়েছে */
     display: block;
     transition: 0.3s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* এটি আগের মতই থাকবে */
+}
+    /* লেখার চারপাশে সাদা বর্ডার যোগ করতে text-shadow ব্যবহার করুন */
+    text-shadow:
+        -1px -1px 0 var(--white),  /* উপরের বামে */
+        1px -1px 0 var(--white),   /* উপরের ডানে */
+        -1px 1px 0 var(--white),   /* নিচের বামে */
+        1px 1px 0 var(--white);    /* নিচের ডানে */
 }
 
 .sidebar-menu a:last-child {
@@ -1046,8 +1054,11 @@ ul {
 }
 
 .sidebar-menu a:hover {
-    color: var(--white);
+    /* হোভার করলে লেখার রঙ সাদা হোক (বা আপনার পছন্দ অনুযায়ী) */
+    color: var(--white); /* হোভার করলে লেখার রঙ সাদা হবে */
     background-color: rgba(255, 255, 255, 0.25);
+    /* হোভার করলে টেক্সট শ্যাডো সরিয়ে ফেলতে পারেন বা রঙ পরিবর্তন করতে পারেন */
+    text-shadow: none; /* হোভার করলে সাদা বর্ডার সরিয়ে দেওয়া হয়েছে, প্রয়োজন না হলে এই লাইন বাদ দিন */
 }
 section[id] {
     scroll-margin-top: 300px;
