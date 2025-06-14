@@ -585,10 +585,6 @@
             if (overlay) { // Check if overlay exists
                 overlay.classList.toggle('active');
             }
-            // Toggle body scroll based on sidebarMenu state
-            document.body.style.overflow = (sidebarMenu && sidebarMenu.classList.contains('active')) ? 'hidden' : '';
-        }
-
         if (menuToggleButton) {
             menuToggleButton.addEventListener('click', function(event) {
                 event.stopPropagation(); // Prevents click from bubbling up to document/overlay
