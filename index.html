@@ -593,9 +593,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const menuToggleButton = document.getElementById('menu-toggle-button');
     // No need to redeclare sidebarMenu and overlay here if toggleMenu() gets them
-    // const sidebarMenu = document.getElementById('sidebar-menu');
+    const sidebarMenu = document.getElementById('sidebar-menu');
     // const overlay = document.querySelector('.overlay');
-
+function toggleMenu() {
+        if (sidebarMenu) {
+            sidebarMenu.classList.toggle('active');
+        } else {
+            console.error("Sidebar menu element not found!"); // ডিবাগিং এর জন্য
+        }
+    }
     if (menuToggleButton) {
         menuToggleButton.addEventListener('click', function(event) {
             event.stopPropagation(); // Prevents click from bubbling up to document/overlay
