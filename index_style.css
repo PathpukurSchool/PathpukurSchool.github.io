@@ -112,7 +112,6 @@ body {
     position: relative;
     height: 500px;
     overflow: hidden;
-    margin-bottom: 40px;
     background-color: #eee;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     z-index: 500; /* হেডারের চেয়ে কম কিন্তু অন্যান্য কন্টেন্টের উপরে */
@@ -1066,19 +1065,8 @@ ul {
     display: block; /* মেনু খুললে দেখাবে */
 }
 
-/* Body scroll control */
-body.menu-open {
-    overflow: hidden; /* মেনু খুললে বডির স্ক্রল বন্ধ করবে */
-}
 
-/* যদি আপনি Hero ইমেজ ব্যবহার করেন এবং সেটি Hero সেকশনের নিচে থাকে,
-তাহলে নিশ্চিত করুন যে Hero সেকশনের z-index হেডারের চেয়ে কম।
-যদি Hero ইমেজ সরাসরি body এর ব্যাকগ্রাউন্ড হয়, তাহলে এই নিয়ম প্রয়োজন নেই। */
-/*
-body {
-    position: relative; // যদি body এর মধ্যে কোন absolute বা fixed পজিশনের এলিমেন্ট থাকে
-}
-*/
+
 
 
 
