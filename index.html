@@ -300,7 +300,7 @@
             </div>
         </section>
 
-        <div class="login-button-container animated-button fade-in delay-11">
+        <div id="sidebar-login-link" class="login-button-container animated-button fade-in delay-11">
             <a href="home.html" class="login-button"><i class="fas fa-sign-in-alt"></i> স্কুল ওয়েবসাইটে লগইন করুন</a>
         </div>
     </main>
@@ -548,13 +548,14 @@
     document.addEventListener('DOMContentLoaded', function() {
         renderHelpList(); // নোটিশ বোর্ড রেন্ডার করার জন্য
 
-        // --- More/Less Button Logic --- (পূর্বের মতো থাকবে)
+        // --- More/Less Button Logic ---
         const toggleButtons = document.querySelectorAll('.toggle-button');
         toggleButtons.forEach(button => {
             const sectionContentWrapper = button.previousElementSibling;
 
+            // Initially check if content overflows
             if (sectionContentWrapper && sectionContentWrapper.scrollHeight <= sectionContentWrapper.clientHeight) {
-                button.style.display = 'none';
+                button.style.display = 'none'; // Hide if no overflow
             }
 
             button.addEventListener('click', function() {
@@ -571,55 +572,68 @@
             });
         });
 
-        // --- Menu Bar Logic --- (পরিবর্তিত অংশ)
+        // --- Menu Bar Logic ---
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const sidebarMenu = document.getElementById('sidebar-menu');
-        const overlay = document.querySelector('.overlay');
+        const overlay = document.querySelector('.overlay'); // Make sure this element exists in your HTML!
 
         // Function to toggle menu and overlay visibility
-        function toggleMenu() {
-            if (sidebarMenu) {
-                sidebarMenu.classList.toggle('active');
-            } else {
-                console.error("Sidebar menu element not found!");
-            }
-            if (overlay) {
-                overlay.classList.toggle('active');
-            } else {
-                console.error("Overlay element not found!");
-            }
-            // Toggle body scroll
-            document.body.classList.toggle('no-scroll', sidebarMenu.classList.contains('active'));
-        }
+        
+       function toggleMenu() { // Defined once in the global or script scope
+    const sidebarMenu = document.getElementById('sidebar-menu'); // Get elements inside the function or pass them as args
 
-        if (menuToggleButton) {
-            menuToggleButton.addEventListener('click', function(event) {
-                event.stopPropagation(); // Prevents click from bubbling up to document/overlay
-                toggleMenu();
-            });
+    if (sidebarMenu) {
+        sidebarMenu.classList.toggle('active');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ... (other initialization code) ...
+
+    const menuToggleButton = document.getElementById('menu-toggle-button');
+    // No need to redeclare sidebarMenu and overlay here if toggleMenu() gets them
+    const sidebarMenu = document.getElementById('sidebar-menu');
+    // const overlay = document.querySelector('.overlay');
+function toggleMenu() {
+        if (sidebarMenu) {
+            sidebarMenu.classList.toggle('active');
         } else {
-            console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
+            console.error("Sidebar menu element not found!"); // ডিবাগিং এর জন্য
         }
+    }
+    if (menuToggleButton) {
+        menuToggleButton.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevents click from bubbling up to document/overlay
+            toggleMenu(); // Call the globally defined toggleMenu()
+        });
+    } else {
+        console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
+    }
 
+    // ... (rest of your DOMContentLoaded code) ...
+});  
         // Close menu when clicking on a link inside the sidebar
         if (sidebarMenu) {
             sidebarMenu.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', function(event) {
-                    toggleMenu(); // Close the menu when a link is clicked
-                    event.preventDefault(); // Prevent default link behavior for smooth scroll
+                    toggleMenu(); // Close the menu
+                    // Smooth scrolling to the target section
+                    event.preventDefault(); // Prevent default link behavior
                     const targetId = this.getAttribute('href').substring(1);
                     const targetSection = document.getElementById(targetId);
 
                     if (targetSection) {
-                        const approximateHeaderHeight = 250; // Adjust based on your actual header height
-                        window.scrollTo({
-                            top: targetSection.offsetTop - approximateHeaderHeight,
-                            behavior: 'smooth'
-                        });
-                    }
+                // হেডারের আনুমানিক উচ্চতা (আপনার CSS অনুযায়ী)
+                const approximateHeaderHeight = 250; // এই মানটি আপনার হেডারের মোট উচ্চতা অনুযায়ী সেট করুন
+
+                window.scrollTo({
+                    top: targetSection.offsetTop - approximateHeaderHeight, // এটি ব্যবহার করুন
+                    behavior: 'smooth'
                 });
-            });
-        }
+            }
+        });
+    });
+}
 
         // Close menu when clicking outside (on the overlay)
         if (overlay) {
@@ -637,16 +651,16 @@
             }
         });
 
-        // --- Gallery Fullscreen Logic --- (পূর্বের মতো থাকবে)
+        // --- Gallery Fullscreen Logic ---
         const galleryImages = document.querySelectorAll('.gallery-image');
         const fullscreenOverlay = document.getElementById('fullscreen-overlay');
         const fullscreenImage = document.getElementById('fullscreen-image');
 
-        if (galleryImages.length > 0 && fullscreenOverlay && fullscreenImage) {
+        if (galleryImages.length > 0 && fullscreenOverlay && fullscreenImage) { // Check if all elements exist
             galleryImages.forEach(image => {
                 image.addEventListener('click', function() {
                     const imageUrl = this.getAttribute('data-src') || this.src;
-                    if (imageUrl) {
+                    if (imageUrl) { // Only open if there's a valid image URL
                         fullscreenImage.src = imageUrl;
                         fullscreenOverlay.classList.add('active');
                     }
@@ -655,8 +669,8 @@
 
             fullscreenOverlay.addEventListener('click', function() {
                 fullscreenOverlay.classList.remove('active');
-                fullscreenImage.src = '';
-                document.body.style.overflow = '';
+                fullscreenImage.src = ''; // Clear image to free memory
+                document.body.style.overflow = ''; // Restore scrolling
             });
         } else {
             console.warn("Warning: Gallery elements (images, fullscreen overlay, or image) not found. Gallery fullscreen might not work.");
