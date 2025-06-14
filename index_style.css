@@ -332,7 +332,7 @@ ul {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     flex-shrink: 0; /* ছোট স্ক্রিনে ছবিকে সংকুচিত হওয়া থেকে আটকায় */
     margin-bottom: 15px; /* ছোট স্ক্রিনের জন্য ছবির নিচে মার্জিন */
-    margin-top: 15px; /* ছবির উপরের অংশে 25px ফাঁকা জায়গা */
+    margin-top: 25px; /* ছবির উপরের অংশে 25px ফাঁকা জায়গা */
     /* নতুন অ্যানিমেশন যোগ করা হলো */
     animation: principalPulse 2.5s infinite alternate ease-in-out;
 }
