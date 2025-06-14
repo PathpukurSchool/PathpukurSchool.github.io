@@ -578,22 +578,38 @@
         const overlay = document.querySelector('.overlay'); // Make sure this element exists in your HTML!
 
         // Function to toggle menu and overlay visibility
-        function toggleMenu() {
-            if (sidebarMenu) { // Check if sidebarMenu exists
-                sidebarMenu.classList.toggle('active');
-            }
-            if (overlay) { // Check if overlay exists
-                overlay.classList.toggle('active');
-            }
-        if (menuToggleButton) {
-            menuToggleButton.addEventListener('click', function(event) {
-                event.stopPropagation(); // Prevents click from bubbling up to document/overlay
-                toggleMenu();
-            });
-        } else {
-            console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
-        }
+        
+       function toggleMenu() { // Defined once in the global or script scope
+    const sidebarMenu = document.getElementById('sidebar-menu'); // Get elements inside the function or pass them as args
+    const overlay = document.querySelector('.overlay');
 
+    if (sidebarMenu) {
+        sidebarMenu.classList.toggle('active');
+    }
+    if (overlay) {
+        overlay.classList.toggle('active');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ... (other initialization code) ...
+
+    const menuToggleButton = document.getElementById('menu-toggle-button');
+    // No need to redeclare sidebarMenu and overlay here if toggleMenu() gets them
+    // const sidebarMenu = document.getElementById('sidebar-menu');
+    // const overlay = document.querySelector('.overlay');
+
+    if (menuToggleButton) {
+        menuToggleButton.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevents click from bubbling up to document/overlay
+            toggleMenu(); // Call the globally defined toggleMenu()
+        });
+    } else {
+        console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
+    }
+
+    // ... (rest of your DOMContentLoaded code) ...
+});  
         // Close menu when clicking on a link inside the sidebar
         if (sidebarMenu) {
             sidebarMenu.querySelectorAll('a').forEach(link => {
