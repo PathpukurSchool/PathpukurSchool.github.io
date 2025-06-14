@@ -36,17 +36,28 @@ body {
 
 /* Header Section */
 .main-header {
+    display: flex;
+    justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
+    align-items: center;
+    background-color: #8B4513; /* বা আপনার হেডার কালার */
+    z-index: 1000; /* মেনু বারের উপরে থাকবে */
+    flex-wrap: wrap; /* ছোট স্ক্রিনের জন্য */
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-khaki) 100%);
     color: var(--white);
     padding: 40px 20px;
     text-align: center;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    position: relative;
+    position: relative; /* মেনু বারের জন্য পজিশন */
     overflow: hidden;
     overflow: hidden; /* যদি কোন child বাইরে চলে যায়, তাহলে সেটি হাইড করবে */
     padding-top: 30px; /* উপরের লগইন বোতামের জন্য একটু জায়গা */
 }
 
+.header-buttons {
+    display: flex;
+    align-items: center;
+    order: -1; /* বাম পাশে রাখার জন্য */
+}
 .header-content {
     position: relative;
     z-index: 2;
@@ -905,7 +916,7 @@ ul {
     white-space: nowrap; /* টেক্সট যাতে এক লাইনে থাকে */
 }
 
-.top-login-button:hover {
+.top-login-button:hover, .menu-button:hover {
     background-color: var(--accent-color); /* হোভারে একটু অন্য শেডের লাল */
     transform: translateY(-2px) scale(1.02); /* হোভারে সামান্য উপরে উঠবে এবং একটু বড় হবে */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* হোভারে শ্যাডো আরও গাঢ় হবে */
@@ -934,6 +945,122 @@ ul {
         padding-right: 70px; /* বোতামের জন্য পর্যাপ্ত জায়গা */
     }
 }
+
+
+
+
+.menu-button {
+   position: absolute; /* পজিশনিং এর জন্য */
+    top: 20px; /* উপর থেকে দূরত্ব */
+    left: 20px; /* বাম দিক থেকে দূরত্ব */
+    background-color: var(--primary-red); /* হেডিং এর লাল রঙের সাথে সামঞ্জস্যপূর্ণ */
+    color: var(--white); /* সাদা টেক্সট */
+    padding: 8px 15px; /* বোতামের প্যাডিং */
+     border: 1px solid var(--white); /* সাদা বর্ডার যোগ করা হয়েছে */
+    border-radius: 5px; /* হালকা গোলাকার কোণা */
+    text-decoration: none; /* আন্ডারলাইন সরান */
+    font-weight: 600;
+    font-size: 0.9em; /* ছোট সাইজ */
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25); /* আরও স্পষ্ট শ্যাডো */
+    z-index: 1000; /* অন্য এলিমেন্টের উপর রাখার জন্য */
+    display: inline-block; /* নিশ্চিত করতে যে এটি ব্লক লেভেলের আচরণ করছে না */
+    white-space: nowrap; /* টেক্সট যাতে এক লাইনে থাকে */
+    cursor: pointer;
+    align-items: center;
+    gap: 8px;
+    
+}
+
+
+
+
+/* Sidebar Menu Styles */
+.sidebar-menu {
+    height: 100%;
+    width: 0; /* প্রাথমিকভাবে লুকানো থাকবে */
+    position: fixed;
+    z-index: 999; /* অন্যান্য কন্টেন্টের উপরে থাকবে কিন্তু হেডার নিচে */
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* স্বচ্ছ কালো ব্যাকগ্রাউন্ড */
+    overflow-x: hidden;
+    transition: 0.5s; /* স্মুথ ট্রানজিশন */
+    padding-top: 60px; /* হেডার এর নিচে থেকে শুরু হবে */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px); /* স্বচ্ছতা ইফেক্ট */
+    -webkit-backdrop-filter: blur(5px); /* Safari সাপোর্ট */
+}
+
+.sidebar-menu.active {
+    width: 250px; /* খোলার পর চওড়া হবে */
+}
+
+.sidebar-menu a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #f1f1f1;
+    display: block;
+    transition: 0.3s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-menu a:last-child {
+    border-bottom: none;
+}
+
+.sidebar-menu a:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Overlay for when menu is open to click outside and close */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent; /* শুধু ক্লিক ইভেন্ট ধরার জন্য, দৃশ্যমান হবে না */
+    z-index: 998; /* মেনুর ঠিক নিচে */
+    display: none; /* প্রাথমিকভাবে লুকানো */
+}
+
+.overlay.active {
+    display: block; /* মেনু খুললে দেখাবে */
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .header-buttons {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .header-buttons {
+        order: 0; /* ছোট স্ক্রিনে উপরে */
+    }
+
+    .header-content {
+        order: 1; /* মাঝখানে */
+        margin-bottom: 10px;
+    }
+
+    .sidebar-menu.active {
+        width: 100%; /* ছোট স্ক্রিনে পুরো চওড়া হবে */
+    }
+}
+
+
 
 /* More..., Less... বোটাম তৈরি */
 .section-content-wrapper {
