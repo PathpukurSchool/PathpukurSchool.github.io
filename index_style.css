@@ -12,6 +12,7 @@
     --box-shadow-dark: rgba(0, 0, 0, 0.15);
     --animation-duration: 0.8s;
     --accent-color: #C82333; /* হোভারের জন্য একটু ভিন্ন শেডের লাল */
+    --light-accent-color: #f7e6e8; /* এটি যোগ করুন */
 }
 
 /* General Body & Typography */
