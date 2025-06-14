@@ -590,45 +590,12 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     // ... (other initialization code) ...
+
     const menuToggleButton = document.getElementById('menu-toggle-button');
     // No need to redeclare sidebarMenu and overlay here if toggleMenu() gets them
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-    
-    
-    
-    const sidebarMenu = document.getElementById('sidebar-menu');
+    // const sidebarMenu = document.getElementById('sidebar-menu');
     // const overlay = document.querySelector('.overlay');
-menuButton.addEventListener("click", function () {
-      sidebarMenu.classList.toggle("active");
-    });
 
-    // Close menu when clicking outside (optional)
-    window.addEventListener("click", function (e) {
-      if (!sidebarMenu.contains(e.target) && !menuButton.contains(e.target)) {
-        sidebarMenu.classList.remove("active");
-      }
-    });
-
-
-
-
-
-
-
-
-    
-
-
-    
     if (menuToggleButton) {
         menuToggleButton.addEventListener('click', function(event) {
             event.stopPropagation(); // Prevents click from bubbling up to document/overlay
@@ -652,7 +619,7 @@ menuButton.addEventListener("click", function () {
 
                     if (targetSection) {
                 // হেডারের আনুমানিক উচ্চতা (আপনার CSS অনুযায়ী)
-                const approximateHeaderHeight = 280; // এই মানটি আপনার হেডারের মোট উচ্চতা অনুযায়ী সেট করুন
+                const approximateHeaderHeight = 240; // এই মানটি আপনার হেডারের মোট উচ্চতা অনুযায়ী সেট করুন
 
                 window.scrollTo({
                     top: targetSection.offsetTop - approximateHeaderHeight, // এটি ব্যবহার করুন
@@ -671,12 +638,14 @@ menuButton.addEventListener("click", function () {
                 }
             });
         }
+
         // Close menu on ESC key press
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape' && sidebarMenu && sidebarMenu.classList.contains('active')) {
                 toggleMenu();
             }
         });
+
         // --- Gallery Fullscreen Logic ---
         const galleryImages = document.querySelectorAll('.gallery-image');
         const fullscreenOverlay = document.getElementById('fullscreen-overlay');
