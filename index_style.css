@@ -950,7 +950,7 @@ ul {
 
 
 .menu-button {
-   position: absolute; /* পজিশনিং এর জন্য */
+   position: fixed; /* পজিশনিং এর জন্য */
     top: 20px; /* উপর থেকে দূরত্ব */
     left: 20px; /* বাম দিক থেকে দূরত্ব */
     background-color: var(--primary-red); /* হেডিং এর লাল রঙের সাথে সামঞ্জস্যপূর্ণ */
@@ -980,7 +980,7 @@ ul {
     height: 100%;
     width: 0; /* প্রাথমিকভাবে লুকানো থাকবে */
     position: fixed;
-    z-index: 999; /* অন্যান্য কন্টেন্টের উপরে থাকবে কিন্তু হেডার নিচে */
+    z-index: 1001; /* অন্যান্য কন্টেন্টের উপরে থাকবে কিন্তু হেডার নিচে */
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.7); /* স্বচ্ছ কালো ব্যাকগ্রাউন্ড */
@@ -1023,21 +1023,30 @@ ul {
     width: 100%;
     height: 100%;
     background-color: transparent; /* শুধু ক্লিক ইভেন্ট ধরার জন্য, দৃশ্যমান হবে না */
-    z-index: 998; /* মেনুর ঠিক নিচে */
+    z-index: 1000; /* মেনুর ঠিক নিচে */
     display: none; /* প্রাথমিকভাবে লুকানো */
 }
 
 .overlay.active {
     display: block; /* মেনু খুললে দেখাবে */
 }
+body.menu-open {
+    overflow: hidden; // মেনু খুললে বডির স্ক্রল বন্ধ করতে পারেন
+}
+
+
+
+
 
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .main-header {
+        position: relative;
         flex-direction: column;
         text-align: center;
         padding: 10px;
+        z-index: 100;
     }
 
     .header-buttons {
