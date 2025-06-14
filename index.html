@@ -581,13 +581,9 @@
         
        function toggleMenu() { // Defined once in the global or script scope
     const sidebarMenu = document.getElementById('sidebar-menu'); // Get elements inside the function or pass them as args
-    const overlay = document.querySelector('.overlay');
 
     if (sidebarMenu) {
         sidebarMenu.classList.toggle('active');
-    }
-    if (overlay) {
-        overlay.classList.toggle('active');
     }
 }
 
