@@ -40,7 +40,7 @@ body {
     justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
     align-items: center;
     background-color: #8B4513; /* বা আপনার হেডার কালার */
-    z-index: 1000; /* মেনু বারের উপরে থাকবে */
+    z-index: 987; /* মেনু বারের উপরে থাকবে */
     flex-wrap: wrap; /* ছোট স্ক্রিনের জন্য */
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-khaki) 100%);
     color: var(--white);
