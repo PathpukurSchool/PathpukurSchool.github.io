@@ -207,10 +207,11 @@ h2 {
     margin-bottom: 25px;
     padding-bottom: 12px;
     border-bottom: 3px solid var(--primary-red); /* লাল বর্ডার */
-    display: flex;
-    align-items: center;
+    display: inline-block;
     position: relative;
     overflow: hidden;
+    width: 100%; /* যদি আপনি চান আন্ডারলাইনটি পুরো কন্টেইনার জুড়ে থাকুক */
+    text-align: center; /* হেডিং টেক্সটকে মাঝখানে রাখার জন্য */
 }
 
 h2 .icon {
@@ -218,6 +219,7 @@ h2 .icon {
     color: var(--primary-red);
     font-size: 1.4em; /* আইকনের সাইজ বাড়ানো হয়েছে */
     animation: iconBounce 1s infinite alternate; /* আইকনে বাউন্স অ্যানিমেশন */
+    vertical-align: middle;
 }
 
 @keyframes iconBounce {
@@ -828,11 +830,12 @@ ul {
 .important-links h2::after {
     content: '';
     display: block;
-    width: 60px;
+    width: 100%; /* এটি 100% রাখা আছে */
     height: 3px;
-    /* এখানে অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে, যদি হেডারের নিচে বর্ডার অন্য কালার চান */
-    background-color: var(--accent-color); /* আপনার অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে */
-    margin: 10px auto 0;
+    background-color: var(--accent-color);
+    margin-top: 10px;
+    margin-left: 0;
+    margin-right: 0;
     border-radius: 5px;
 }
 
