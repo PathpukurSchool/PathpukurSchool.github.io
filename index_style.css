@@ -102,7 +102,7 @@ html, body {
 }
 
 .main-header .slogan {
-    font-size: 1.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
+    font-size: 1.2em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
     margin-top: 25px;
     font-weight: 600;
     animation: fadeIn 2s ease-in-out forwards; /* স্লোগানে ফেড ইন অ্যানিমেশন */
