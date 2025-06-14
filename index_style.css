@@ -102,7 +102,7 @@ html, body {
 }
 
 .main-header .slogan {
-    font-size: 1.4em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
+    font-size: 1.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
     margin-top: 25px;
     font-weight: 600;
     animation: fadeIn 2s ease-in-out forwards; /* স্লোগানে ফেড ইন অ্যানিমেশন */
@@ -1002,6 +1002,11 @@ ul {
     }
 }
 
+---
+
+### **মেনু বার এবং ওভারলে স্টাইলস (সবচেয়ে গুরুত্বপূর্ণ পরিবর্তন)**
+
+```css
 /* Sidebar Menu Styles */
 .sidebar-menu {
     height: 100%; /* সম্পূর্ণ উচ্চতা নেবে */
@@ -1018,18 +1023,18 @@ ul {
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); /* আরো স্পষ্ট শ্যাডো */
     backdrop-filter: blur(8px); /* স্বচ্ছতা ইফেক্ট */
     -webkit-backdrop-filter: blur(8px); /* Safari সাপোর্ট */
-    color: var(--black); /* মেনুর ভেতরের টেক্সটের কালার */
+    color: var(--white); /* মেনুর ভেতরের টেক্সটের কালার */
 }
 
 .sidebar-menu.active {
-    width: 250px; /* খোলার পর চওড়া হবে, প্রয়োজনে মান পরিবর্তন করুন */
+    width: 280px; /* খোলার পর চওড়া হবে, প্রয়োজনে মান পরিবর্তন করুন */
     left: 0;
 }
 
 .sidebar-menu a {
-    padding: 12px 25px;
+    padding: 15px 25px;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 18px;
     color: #f1f1f1;
     display: block;
     transition: 0.3s ease;
@@ -1113,4 +1118,3 @@ section[id] {
 .toggle-button.less-btn:hover {
     background-color: #da190b;
 }
-
