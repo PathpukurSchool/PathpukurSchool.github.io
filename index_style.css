@@ -15,7 +15,7 @@
 }
 
 /* General Body & Typography */
-body {
+html, body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
@@ -1027,6 +1027,7 @@ ul {
 
 .sidebar-menu.active {
     width: 280px; /* খোলার পর চওড়া হবে, প্রয়োজনে মান পরিবর্তন করুন */
+    left: 0;
 }
 
 .sidebar-menu a {
