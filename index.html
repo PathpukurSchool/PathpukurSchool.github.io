@@ -580,7 +580,7 @@
     const sections = document.querySelectorAll('main.container section'); // সমস্ত সেকশন ট্যাগ
 
     // একটি অদৃশ্য ওভারলে তৈরি করুন
-    const overlay = document.createElement('div');
+    const overlay = document.querySelector('.overlay'); // overlay element টি সিলেক্ট করুন
     overlay.classList.add('overlay');
     document.body.appendChild(overlay);
 
@@ -598,6 +598,7 @@
     // মেনু বারের ভেতরের লিঙ্কগুলিতে ক্লিক করলে মেনু বন্ধ হবে এবং সেই সেকশনে যাবে
     sidebarMenu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', function(event) {
+            toggleMenu(); // মেনু বন্ধ করার জন্য
             // Smooth scrolling এর জন্য default behaviour বন্ধ
             event.preventDefault();
             const targetId = this.getAttribute('href').substring(1); // # বাদ দিয়ে ID পাবে
@@ -619,10 +620,18 @@
         if (sidebarMenu.classList.contains('active')) {
             toggleMenu();
         }
-    });
+    // ESC key চাপলে মেনু বন্ধ হবে
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && sidebarMenu.classList.contains('active')) {
+                    toggleMenu();
+                }
+            });
+        });
 
 
 
+
+            
     
 
             
