@@ -901,7 +901,9 @@ ul {
         grid-template-columns: 1fr; /* খুব ছোট স্ক্রিনে একটি কলামে দেখাবে */
     }
 }
-
+section[id] {
+    scroll-margin-top: 220px;
+}
 
 
 
