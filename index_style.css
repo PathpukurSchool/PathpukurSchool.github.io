@@ -828,11 +828,13 @@ ul {
 .important-links h2::after {
     content: '';
     display: block;
-    width: 60px;
+    width: 100%; /* সম্পূর্ণ প্রস্থ জুড়ে আন্ডারলাইন করার জন্য 100% সেট করুন */
     height: 3px;
     /* এখানে অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে, যদি হেডারের নিচে বর্ডার অন্য কালার চান */
     background-color: var(--accent-color); /* আপনার অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে */
-    margin: 10px auto 0;
+   margin-top: 5px; /* উপরের মার্জিন সেট করুন */
+    margin-left: 0; /* বাম মার্জিন 0 সেট করুন */
+    margin-right: 0; /* ডান মার্জিন 0 সেট করুন */
     border-radius: 5px;
 }
 
@@ -913,7 +915,7 @@ ul {
     right: 20px;
     background-color: var(--primary-red);
     color: var(--white);
-    padding: 8px 15px;
+    padding: 6px 15px;
     border: 1px solid var(--white);
     border-radius: 5px;
     text-decoration: none;
@@ -959,7 +961,7 @@ ul {
     left: 20px;
     background-color: var(--primary-red);
     color: var(--white);
-    padding: 8px 15px;
+    padding: 8px 12px;
     border: 1px solid var(--white);
     border-radius: 5px;
     text-decoration: none;
@@ -1002,11 +1004,6 @@ ul {
     }
 }
 
----
-
-### **মেনু বার এবং ওভারলে স্টাইলস (সবচেয়ে গুরুত্বপূর্ণ পরিবর্তন)**
-
-```css
 /* Sidebar Menu Styles */
 .sidebar-menu {
     height: 100%; /* সম্পূর্ণ উচ্চতা নেবে */
@@ -1020,7 +1017,7 @@ ul {
     overflow-y: auto; /* উল্লম্ব স্ক্রোলিং সক্রিয় করবে যদি মেনু আইটেম বেশি হয় */
     transition: left 0.5s ease, width 0.5s ease; /* মসৃণ ট্রানজিশন */
     padding-top: 80px; /* টপ বার বা হেডারের জন্য পর্যাপ্ত প্যাডিং, যাতে মেনু লিংকগুলো ঢাকা না পড়ে */
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); /* আরো স্পষ্ট শ্যাডো */
+    background-color: rgba(30, 30, 30, 0.9); /* আরো স্পষ্ট শ্যাডো */
     backdrop-filter: blur(8px); /* স্বচ্ছতা ইফেক্ট */
     -webkit-backdrop-filter: blur(8px); /* Safari সাপোর্ট */
     color: var(--white); /* মেনুর ভেতরের টেক্সটের কালার */
