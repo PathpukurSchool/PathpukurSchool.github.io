@@ -1014,7 +1014,8 @@ ul {
 /* Sidebar Menu Styles */
 .sidebar-menu {
     height: 100%; /* সম্পূর্ণ উচ্চতা নেবে */
-    width: 0; /* প্রাথমিকভাবে লুকানো থাকবে */
+    width: 250px; /* প্রাথমিকভাবে লুকানো থাকবে */
+    height: 100%;
     position: fixed; /* এটিকে স্ক্রিনের সাপেক্ষে ফিক্সড রাখবে, যাতে Hero ইমেজ বা অন্য কিছুর নিচে না যায় */
     z-index: 1001; /* অন্যান্য কন্টেন্টের উপরে থাকবে, Hero ইমেজ (যদি তার z-index 500 হয়) এবং হেডারের (900) উপরে */
     top: 0; /* স্ক্রিনের একদম উপর থেকে শুরু হবে */
@@ -1027,6 +1028,8 @@ ul {
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); /* আরো স্পষ্ট শ্যাডো */
     backdrop-filter: blur(8px); /* স্বচ্ছতা ইফেক্ট */
     -webkit-backdrop-filter: blur(8px); /* Safari সাপোর্ট */
+    display: flex;
+    flex-direction: column;
     color: var(--white); /* মেনুর ভেতরের টেক্সটের কালার */
 }
 
