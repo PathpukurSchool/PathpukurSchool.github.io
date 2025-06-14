@@ -901,9 +901,7 @@ ul {
         grid-template-columns: 1fr; /* খুব ছোট স্ক্রিনে একটি কলামে দেখাবে */
     }
 }
-section[id] {
-    scroll-margin-top: 220px;
-}
+
 
 
 
@@ -1065,10 +1063,12 @@ section[id] {
     transition: background-color 0.5s ease; /* স্মুথ ট্রানজিশন */
 }
 
-.overlay.active {
+/* .overlay.active {
     display: block; /* মেনু খুললে দেখাবে */
 }
-
+section[id] {
+    scroll-margin-top: 300px;
+}
 
 
 
