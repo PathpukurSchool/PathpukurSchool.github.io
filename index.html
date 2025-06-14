@@ -548,14 +548,13 @@
     document.addEventListener('DOMContentLoaded', function() {
         renderHelpList(); // নোটিশ বোর্ড রেন্ডার করার জন্য
 
-        // --- More/Less Button Logic ---
+        // --- More/Less Button Logic --- (পূর্বের মতো থাকবে)
         const toggleButtons = document.querySelectorAll('.toggle-button');
         toggleButtons.forEach(button => {
             const sectionContentWrapper = button.previousElementSibling;
 
-            // Initially check if content overflows
             if (sectionContentWrapper && sectionContentWrapper.scrollHeight <= sectionContentWrapper.clientHeight) {
-                button.style.display = 'none'; // Hide if no overflow
+                button.style.display = 'none';
             }
 
             button.addEventListener('click', function() {
@@ -572,28 +571,31 @@
             });
         });
 
-        // --- Menu Bar Logic ---
+        // --- Menu Bar Logic --- (পরিবর্তিত অংশ)
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const sidebarMenu = document.getElementById('sidebar-menu');
-        const overlay = document.querySelector('.overlay'); // Make sure this element exists in your HTML!
-// Function to toggle menu and overlay visibility - Defined ONCE and correctly
+        const overlay = document.querySelector('.overlay');
+
+        // Function to toggle menu and overlay visibility
         function toggleMenu() {
             if (sidebarMenu) {
                 sidebarMenu.classList.toggle('active');
             } else {
-                console.error("Sidebar menu element not found!"); // Debugging
+                console.error("Sidebar menu element not found!");
             }
             if (overlay) {
-                overlay.classList.toggle('active'); // Toggle overlay's active class
+                overlay.classList.toggle('active');
             } else {
-                console.error("Overlay element not found!"); // Debugging
+                console.error("Overlay element not found!");
             }
+            // Toggle body scroll
+            document.body.classList.toggle('no-scroll', sidebarMenu.classList.contains('active'));
         }
 
         if (menuToggleButton) {
             menuToggleButton.addEventListener('click', function(event) {
                 event.stopPropagation(); // Prevents click from bubbling up to document/overlay
-                toggleMenu(); // Call the correctly defined toggleMenu()
+                toggleMenu();
             });
         } else {
             console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
@@ -603,16 +605,13 @@
         if (sidebarMenu) {
             sidebarMenu.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', function(event) {
-                    toggleMenu(); // Close the menu
-                    // Smooth scrolling to the target section
-                    event.preventDefault(); // Prevent default link behavior
+                    toggleMenu(); // Close the menu when a link is clicked
+                    event.preventDefault(); // Prevent default link behavior for smooth scroll
                     const targetId = this.getAttribute('href').substring(1);
                     const targetSection = document.getElementById(targetId);
 
                     if (targetSection) {
-                        // হেডারের আনুমানিক উচ্চতা (আপনার CSS অনুযায়ী)
-                        const approximateHeaderHeight = 250; // এই মানটি আপনার হেডারের মোট উচ্চতা অনুযায়ী সেট করুন
-
+                        const approximateHeaderHeight = 250; // Adjust based on your actual header height
                         window.scrollTo({
                             top: targetSection.offsetTop - approximateHeaderHeight,
                             behavior: 'smooth'
@@ -638,16 +637,16 @@
             }
         });
 
-        // --- Gallery Fullscreen Logic ---
+        // --- Gallery Fullscreen Logic --- (পূর্বের মতো থাকবে)
         const galleryImages = document.querySelectorAll('.gallery-image');
         const fullscreenOverlay = document.getElementById('fullscreen-overlay');
         const fullscreenImage = document.getElementById('fullscreen-image');
 
-        if (galleryImages.length > 0 && fullscreenOverlay && fullscreenImage) { // Check if all elements exist
+        if (galleryImages.length > 0 && fullscreenOverlay && fullscreenImage) {
             galleryImages.forEach(image => {
                 image.addEventListener('click', function() {
                     const imageUrl = this.getAttribute('data-src') || this.src;
-                    if (imageUrl) { // Only open if there's a valid image URL
+                    if (imageUrl) {
                         fullscreenImage.src = imageUrl;
                         fullscreenOverlay.classList.add('active');
                     }
@@ -656,8 +655,8 @@
 
             fullscreenOverlay.addEventListener('click', function() {
                 fullscreenOverlay.classList.remove('active');
-                fullscreenImage.src = ''; // Clear image to free memory
-                document.body.style.overflow = ''; // Restore scrolling
+                fullscreenImage.src = '';
+                document.body.style.overflow = '';
             });
         } else {
             console.warn("Warning: Gallery elements (images, fullscreen overlay, or image) not found. Gallery fullscreen might not work.");
