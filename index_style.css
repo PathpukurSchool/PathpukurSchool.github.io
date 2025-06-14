@@ -50,6 +50,8 @@ body {
     padding-top: 60px; /* উপরের লগইন বোতামের জন্য একটু জায়গা নিশ্চিত করবে */
     padding-bottom: 20px; /* প্রয়োজন অনুযায়ী সামঞ্জস্য করুন */
     z-index: 900; /* মেনু বারের (1001) এবং ওভারলের (1000) নিচে রাখুন */
+    width: 100%; /* সম্পূর্ণ প্রস্থ নিশ্চিত করুন */
+    box-sizing: border-box; /* padding সহ প্রস্থ হিসাব করবে */
 }
 
 .header-buttons {
@@ -113,6 +115,7 @@ body {
     margin-bottom: 40px;
     background-color: #eee;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    z-index: 500; /* হেডারের চেয়ে কম কিন্তু অন্যান্য কন্টেন্টের উপরে */
     /* ট্রানজিশন এখানে সরাসরি দরকার নেই, কারণ জাভাস্ক্রিপ্ট ক্লাস যোগ/বাদ দেবে */
 }
 
@@ -903,12 +906,11 @@ ul {
 
 
 
-
 /* Top Login Button */
 .top-login-button {
-    position: absolute; /* পজিশনিং এর জন্য */
-    top: 20px; /* উপর থেকে দূরত্ব */
-    right: 20px; /* ডান দিক থেকে দূরত্ব */
+    position: absolute;
+    top: 20px;
+    right: 20px;
     background-color: var(--primary-red);
     color: var(--white);
     padding: 8px 15px;
@@ -919,7 +921,7 @@ ul {
     font-size: 0.9em;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-    z-index: 1002; /* মেনু বারের z-index (1001) থেকে বেশি, কারণ এটি মেনুর উপরে ভাসতে পারে */
+    z-index: 1002; /* মেনু বারের উপরে থাকবে */
     display: inline-block;
     white-space: nowrap;
 }
@@ -952,12 +954,9 @@ ul {
 
 /* Menu Button */
 .menu-button {
-    position: absolute; /* Fixed এর পরিবর্তে absolute ব্যবহার করুন যাতে এটি হেডারের সাথে থাকে */
-    /* যদি .menu-button হেডার div এর ভেতরে থাকে, তাহলে absolute ব্যবহার করা উচিত।
-       যদি এটি হেডার এর বাইরে থাকে এবং সর্বদা স্ক্রিনের বাম দিকে থাকতে চান, তাহলে fixed ব্যবহার করুন।
-       আপনার বর্ণনা অনুযায়ী, এটি হেডারের অংশ, তাই absolute বা relative to header ভাল। */
-    top: 20px; /* উপর থেকে দূরত্ব */
-    left: 20px; /* বাম দিক থেকে দূরত্ব */
+    position: absolute; /* হেডারের সাথে স্ক্রল করার জন্য absolute ব্যবহার করুন */
+    top: 20px;
+    left: 20px;
     background-color: var(--primary-red);
     color: var(--white);
     padding: 8px 15px;
@@ -968,15 +967,15 @@ ul {
     font-size: 0.9em;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-    z-index: 1002; /* মেনু বারের z-index (1001) থেকে বেশি, কারণ এটি মেনুর উপরে ভাসতে পারে */
-    display: flex; /* আইকন এবং টেক্সট থাকলে flex ব্যবহার করুন */
+    z-index: 1002; /* মেনু বারের উপরে থাকবে */
+    display: flex;
     align-items: center;
-    gap: 8px; /* আইকন এবং টেক্সটের মধ্যে ফাঁকা স্থান */
+    gap: 8px;
     cursor: pointer;
     white-space: nowrap;
 }
 
-/* যখন স্ক্রিন ছোট হবে তখন লোগো এবং হেডিং এর সাথে ওভারল্যাপ এড়াতে পজিশন সামঞ্জস্য করা যেতে পারে */
+/* Media Queries for Menu Button */
 @media (max-width: 768px) {
     .menu-button {
         top: 15px;
@@ -985,9 +984,8 @@ ul {
         font-size: 0.8em;
     }
     .main-header {
-        /* ছোট স্ক্রিনে হেডার এর প্যাডিং বাড়ানো যেতে পারে যাতে বাটনগুলো কন্টেন্টের উপর ওভারল্যাপ না করে */
-        padding-left: 70px; /* বাম মেনু বাটনের জন্য জায়গা */
-        padding-right: 70px; /* ডান লগইন বাটনের জন্য জায়গা */
+        padding-left: 70px;
+        padding-right: 70px;
     }
 }
 
@@ -1004,31 +1002,32 @@ ul {
     }
 }
 
-
 ---
 
-### **Sidebar Menu Styles**
+### **মেনু বার এবং ওভারলে স্টাইলস (সবচেয়ে গুরুত্বপূর্ণ পরিবর্তন)**
 
 ```css
+/* Sidebar Menu Styles */
 .sidebar-menu {
-    height: 100%;
+    height: 100%; /* সম্পূর্ণ উচ্চতা নেবে */
     width: 0; /* প্রাথমিকভাবে লুকানো থাকবে */
-    position: fixed; /* এটি অবশ্যই fixed থাকবে যাতে বডির স্ক্রল প্রভাবিত না হয় */
-    z-index: 1001; /* অন্যান্য কন্টেন্টের উপরে থাকবে, কিন্তু .menu-button ও .top-login-button এর নিচে (কারণ তাদের z-index 1002) */
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.8); /* একটু গাঢ় স্বচ্ছ কালো ব্যাকগ্রাউন্ড */
-    overflow-x: hidden;
-    transition: 0.5s ease; /* স্মুথ ট্রানজিশন - 'ease' যোগ করা হয়েছে */
-    padding-top: 60px; /* হেডার এর নিচে থেকে শুরু হবে, প্রয়োজন অনুযায়ী বাড়াতে পারেন */
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px); /* স্বচ্ছতা ইফেক্ট আরও স্পষ্ট করার জন্য ব্লার বাড়ানো হয়েছে */
+    position: fixed; /* এটিকে স্ক্রিনের সাপেক্ষে ফিক্সড রাখবে, যাতে Hero ইমেজ বা অন্য কিছুর নিচে না যায় */
+    z-index: 1001; /* অন্যান্য কন্টেন্টের উপরে থাকবে, Hero ইমেজ (যদি তার z-index 500 হয়) এবং হেডারের (900) উপরে */
+    top: 0; /* স্ক্রিনের একদম উপর থেকে শুরু হবে */
+    left: 0; /* স্ক্রিনের একদম বাম থেকে শুরু হবে */
+    background-color: rgba(0, 0, 0, 0.85); /* গাঢ় স্বচ্ছ কালো ব্যাকগ্রাউন্ড */
+    overflow-x: hidden; /* হরিজন্টাল স্ক্রোলিং লুকানো */
+    overflow-y: auto; /* উল্লম্ব স্ক্রোলিং সক্রিয় করবে যদি মেনু আইটেম বেশি হয় */
+    transition: 0.5s ease; /* মসৃণ ট্রানজিশন */
+    padding-top: 80px; /* টপ বার বা হেডারের জন্য পর্যাপ্ত প্যাডিং, যাতে মেনু লিংকগুলো ঢাকা না পড়ে */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); /* আরো স্পষ্ট শ্যাডো */
+    backdrop-filter: blur(8px); /* স্বচ্ছতা ইফেক্ট */
     -webkit-backdrop-filter: blur(8px); /* Safari সাপোর্ট */
-    color: var(--white); /* সাইডবার মেনুর ডিফল্ট টেক্সট কালার */
+    color: var(--white); /* মেনুর ভেতরের টেক্সটের কালার */
 }
 
 .sidebar-menu.active {
-    width: 250px; /* খোলার পর চওড়া হবে */
+    width: 280px; /* খোলার পর চওড়া হবে, প্রয়োজনে মান পরিবর্তন করুন */
 }
 
 .sidebar-menu a {
@@ -1037,33 +1036,28 @@ ul {
     font-size: 18px;
     color: #f1f1f1;
     display: block;
-    transition: 0.3s ease; /* 'ease' যোগ করা হয়েছে */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* বর্ডার লাইনকে একটু স্পষ্ট করা হয়েছে */
+    transition: 0.3s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .sidebar-menu a:last-child {
-    border-bottom: none; /* শেষ লিঙ্কে বর্ডার থাকবে না */
+    border-bottom: none;
 }
 
 .sidebar-menu a:hover {
-    color: var(--white); /* হোভারে সাদা */
-    background-color: rgba(255, 255, 255, 0.25); /* হোভারে একটু বেশি স্বচ্ছতা */
+    color: var(--white);
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
----
-
-### **Overlay Styles**
-
-```css
 /* Overlay for when menu is open to click outside and close */
 .overlay {
-    position: fixed;
+    position: fixed; /* স্ক্রিনের সাপেক্ষে ফিক্সড রাখবে */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3); /* মেনু খোলার সময় সামান্য ডার্ক ওভারলে */
-    z-index: 1000; /* মেনুর ঠিক নিচে (z-index 1001) এবং হেডারের (z-index 900) উপরে */
+    background-color: rgba(0, 0, 0, 0.4); /* মেনু খোলার সময় সামান্য ডার্ক ওভারলে */
+    z-index: 1000; /* মেনুর (1001) ঠিক নিচে এবং হেডারের (900) উপরে */
     display: none; /* প্রাথমিকভাবে লুকানো */
     transition: background-color 0.5s ease; /* স্মুথ ট্রানজিশন */
 }
@@ -1077,37 +1071,18 @@ body.menu-open {
     overflow: hidden; /* মেনু খুললে বডির স্ক্রল বন্ধ করবে */
 }
 
-
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .main-header {
-        position: relative;
-        flex-direction: column;
-        text-align: center;
-        padding: 10px;
-        z-index: 100;
-    }
-
-    .header-buttons {
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 10px;
-    }
-
-    .header-buttons {
-        order: 0; /* ছোট স্ক্রিনে উপরে */
-    }
-
-    .header-content {
-        order: 1; /* মাঝখানে */
-        margin-bottom: 10px;
-    }
-
-    .sidebar-menu.active {
-        width: 100%; /* ছোট স্ক্রিনে পুরো চওড়া হবে */
-    }
+/* যদি আপনি Hero ইমেজ ব্যবহার করেন এবং সেটি Hero সেকশনের নিচে থাকে,
+তাহলে নিশ্চিত করুন যে Hero সেকশনের z-index হেডারের চেয়ে কম।
+যদি Hero ইমেজ সরাসরি body এর ব্যাকগ্রাউন্ড হয়, তাহলে এই নিয়ম প্রয়োজন নেই। */
+/*
+body {
+    position: relative; // যদি body এর মধ্যে কোন absolute বা fixed পজিশনের এলিমেন্ট থাকে
 }
+*/
+
+
+
+
 
 
 
