@@ -1034,7 +1034,7 @@ ul {
     position: fixed; /* Fixed position so it overlays content */
     top: 0;
     left: -320px; /* Initially off-screen to the left (adjust based on your desired width) */
-    width: 80%; /* Width of your sidebar */
+    width: 300px; /* Width of your sidebar */
     height: 100%; /* Full height of the viewport */
     background-color: #fff; /* Background color of the sidebar */
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4); /* Shadow for depth */
