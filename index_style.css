@@ -1035,7 +1035,7 @@ ul {
     top: 0;
     left: -320px; /* Initially off-screen to the left (adjust based on your desired width) */
     width: 300px; /* Width of your sidebar */
-    height: 100%; /* Full height of the viewport */
+    height: 100vh; /* Full height of the viewport */
     background-color: #fff; /* Background color of the sidebar */
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4); /* Shadow for depth */
     transition: left 0.4s ease-in-out; /* Smooth transition for opening/closing */
@@ -1044,6 +1044,7 @@ ul {
     padding-top: 20px; /* Space from the top */
     display: flex; /* For vertical alignment of links */
     flex-direction: column; /* Stack links vertically */
+    box-sizing: border-box;
     /* Add any other styling for the sidebar links here */
 }
 .sidebar-menu.active {
@@ -1101,7 +1102,7 @@ section[id] {
 /* Sidebar Menu Styles - Mobile Specific */
 @media (max-width: 768px) { /* Applies to screens 768px wide or less */
     .sidebar-menu {
-        width: 80%; /* Takes 80% of the viewport width on mobile */
+        width: 60%; /* Takes 80% of the viewport width on mobile */
         /* You can also use a fixed smaller pixel value, e.g., width: 250px; */
         left: -80%; /* Adjust this to match the new width so it starts off-screen */
         /* If using width: 250px, then left: -250px; */
@@ -1115,15 +1116,6 @@ section[id] {
         font-size: 15px; /* Slightly smaller font size for links */
     }
 }
-
-/* If you have a tablet specific breakpoint, you might adjust it there too.
-@media (min-width: 769px) and (max-width: 1024px) {
-    .sidebar-menu {
-        width: 300px; // Or whatever you prefer for tablets
-        left: -300px;
-    }
-}
-*/
 
 /* More..., Less... বোটাম তৈরি */
 .section-content-wrapper {
