@@ -589,25 +589,32 @@
         }
 
         // Close menu when clicking on a link inside the sidebar
-        if (sidebarMenu) {
-            sidebarMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', function(event) {
-                    toggleMenu(); // Close the menu when a link is clicked
-                    // Smooth scrolling to the target section
-                    event.preventDefault(); // Prevent default link behavior
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetSection = document.getElementById(targetId);
+if (sidebarMenu) {
+    sidebarMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function(event) {
+            toggleMenu(); // Close the menu when a link is clicked
 
-                    if (targetSection) {
-                        const approximateHeaderHeight = 250; // Adjust based on your actual header height
-                        window.scrollTo({
-                            top: targetSection.offsetTop - approximateHeaderHeight,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-        }
+            const href = this.getAttribute('href');
+
+            // Check if the link is an internal section link (starts with '#')
+            if (href && href.startsWith('#')) {
+                event.preventDefault(); // Prevent default link behavior for internal links
+                const targetId = href.substring(1);
+                const targetSection = document.getElementById(targetId);
+
+                if (targetSection) {
+                    const approximateHeaderHeight = 250; // Adjust based on your actual header height
+                    window.scrollTo({
+                        top: targetSection.offsetTop - approximateHeaderHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+            // If it's not an internal section link (e.g., 'home.html'),
+            // let its default behavior (navigation) proceed.
+        });
+    });
+}
 
         // Close menu when clicking outside (on the overlay)
         if (overlay) {
