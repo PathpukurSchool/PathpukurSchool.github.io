@@ -959,7 +959,7 @@ ul {
     background-color: #007bff; /* Example background */
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
@@ -977,7 +977,7 @@ ul {
 
 /* Ensure header-buttons has a position context for the button */
 .header-buttons {
-    position: absolute; /* Or fixed, depending on where you want it visually */
+   position: fixed; /* Or fixed, depending on where you want it visually */
     top: 20px; /* Adjust as needed for padding from top */
     left: 20px; /* Adjust as needed for padding from left */
     z-index: 1001; /* Must be higher than overlay */
