@@ -904,10 +904,6 @@ ul {
     }
 }
 
-
-
-
-
 /* Top Login Button */
 .top-login-button {
     position: absolute;
@@ -1001,7 +997,7 @@ ul {
 /* Ensure header-buttons has a position context for the button */
 .header-buttons {
    position: fixed; /* Or fixed, depending on where you want it visually */
-    top: 20px; /* Adjust as needed for padding from top */
+    top: 10px; /* Adjust as needed for padding from top */
     left: 20px; /* Adjust as needed for padding from left */
     z-index: 1001; /* Must be higher than overlay */
 }
@@ -1057,9 +1053,9 @@ ul {
     padding: 15px 20px;
     text-decoration: none;
     color: #333;
-    font-size: 18px;
+    font-size: 16px;
     display: block; /* Make links take full width */
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.3s ease; /* Smooth transition for hover effects */
     border-bottom: 1px solid #eee; /* Separator between links */
 }
     /* লেখার চারপাশে সাদা বর্ডার যোগ করতে text-shadow ব্যবহার করুন */
@@ -1071,8 +1067,14 @@ ul {
 }
 
 .sidebar-menu a:hover {
-    background-color: #f0f0f0;
-    color: #007bff;
+    background-color: #e0f2f7; /* A light blue background on hover */
+    color: #0056b3; /* Darker blue text color on hover */
+    padding-left: 25px; /* Slight indent on hover for visual feedback */
+}
+.sidebar-menu a.active-link {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
 }
 section[id] {
     scroll-margin-top: 300px;
@@ -1095,13 +1097,6 @@ section[id] {
     opacity: 1; /* Fully visible when active */
     visibility: visible; /* Make it interactive */
 }
-
-
-
-
-
-
-
 
 /* More..., Less... বোটাম তৈরি */
 .section-content-wrapper {
