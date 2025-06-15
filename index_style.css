@@ -20,11 +20,15 @@ html, body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
+    width: 100%;
     background-color: var(--light-gray);
     color: var(--black);
     line-height: 1.7;
     scroll-behavior: smooth;
     overflow-x: hidden; /* অনুভূমিক স্ক্রলবার লুকান */
+}
+body.no-scroll {
+    overflow: hidden;
 }
 
 .container {
@@ -53,12 +57,6 @@ html, body {
     z-index: 900; /* মেনু বারের (1001) এবং ওভারলের (1000) নিচে রাখুন */
     width: 100%; /* সম্পূর্ণ প্রস্থ নিশ্চিত করুন */
     box-sizing: border-box; /* padding সহ প্রস্থ হিসাব করবে */
-}
-
-.header-buttons {
-    display: flex;
-    align-items: center;
-    order: -1; /* বাম পাশে রাখার জন্য */
 }
 .header-content {
     position: relative;
@@ -956,27 +954,33 @@ ul {
     }
 }
 
-/* Menu Button */
+/* Styles for the menu button itself */
 .menu-button {
-    position: absolute; /* হেডারের সাথে স্ক্রল করার জন্য absolute ব্যবহার করুন */
-    top: 20px;
-    left: 20px;
-    background-color: var(--primary-red);
-    color: var(--white);
-    padding: 8px 15px;
-    border: 1px solid var(--white);
+    background-color: #007bff; /* Example background */
+    color: white;
+    border: none;
+    padding: 10px 15px;
     border-radius: 5px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-    z-index: 1002; /* মেনু বারের উপরে থাকবে */
+    cursor: pointer;
+    font-size: 16px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    white-space: nowrap;
+    gap: 8px; /* Space between icon and text */
+    /* Position the button relative to its parent container */
+    position: relative; /* If you want to position it specifically in header */
+    z-index: 1001; /* Ensure button is clickable above the overlay when closed */
+}
+
+.menu-button i {
+    font-size: 20px;
+}
+
+/* Ensure header-buttons has a position context for the button */
+.header-buttons {
+    position: absolute; /* Or fixed, depending on where you want it visually */
+    top: 20px; /* Adjust as needed for padding from top */
+    left: 20px; /* Adjust as needed for padding from left */
+    z-index: 1001; /* Must be higher than overlay */
 }
 
 /* Media Queries for Menu Button */
@@ -1006,47 +1010,34 @@ ul {
     }
 }
 
----
-
-### **মেনু বার এবং ওভারলে স্টাইলস (সবচেয়ে গুরুত্বপূর্ণ পরিবর্তন)**
-
-```css
 /* Sidebar Menu Styles */
 .sidebar-menu {
-    height: 100%; /* সম্পূর্ণ উচ্চতা নেবে */
-    width: 250px; /* প্রাথমিকভাবে লুকানো থাকবে */
-    height: 100%;
-    position: fixed; /* এটিকে স্ক্রিনের সাপেক্ষে ফিক্সড রাখবে, যাতে Hero ইমেজ বা অন্য কিছুর নিচে না যায় */
-    z-index: 1001; /* অন্যান্য কন্টেন্টের উপরে থাকবে, Hero ইমেজ (যদি তার z-index 500 হয়) এবং হেডারের (900) উপরে */
-    top: 0; /* স্ক্রিনের একদম উপর থেকে শুরু হবে */
-    left: -280px; /* স্ক্রিনের একদম বাম থেকে শুরু হবে */
-    background-color: rgba(0, 0, 0, 0.85); /* গাঢ় স্বচ্ছ কালো ব্যাকগ্রাউন্ড */
-    overflow-x: hidden; /* হরিজন্টাল স্ক্রোলিং লুকানো */
-    overflow-y: auto; /* উল্লম্ব স্ক্রোলিং সক্রিয় করবে যদি মেনু আইটেম বেশি হয় */
-    transition: left 0.5s ease, width 0.5s ease; /* মসৃণ ট্রানজিশন */
-    padding-top: 80px; /* টপ বার বা হেডারের জন্য পর্যাপ্ত প্যাডিং, যাতে মেনু লিংকগুলো ঢাকা না পড়ে */
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5); /* আরো স্পষ্ট শ্যাডো */
-    backdrop-filter: blur(8px); /* স্বচ্ছতা ইফেক্ট */
-    -webkit-backdrop-filter: blur(8px); /* Safari সাপোর্ট */
-    display: flex;
-    flex-direction: column;
-    color: var(--white); /* মেনুর ভেতরের টেক্সটের কালার */
+    position: fixed; /* Fixed position so it overlays content */
+    top: 0;
+    left: -320px; /* Initially off-screen to the left (adjust based on your desired width) */
+    width: 300px; /* Width of your sidebar */
+    height: 100%; /* Full height of the viewport */
+    background-color: #fff; /* Background color of the sidebar */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4); /* Shadow for depth */
+    transition: left 0.4s ease-in-out; /* Smooth transition for opening/closing */
+    z-index: 1000; /* High z-index to be above all content (and overlay) */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    padding-top: 20px; /* Space from the top */
+    display: flex; /* For vertical alignment of links */
+    flex-direction: column; /* Stack links vertically */
+    /* Add any other styling for the sidebar links here */
 }
-
 .sidebar-menu.active {
-    width: 280px; /* খোলার পর চওড়া হবে, প্রয়োজনে মান পরিবর্তন করুন */
-    left: 0;
+    left: 0; /* Moves the sidebar into view when active */
 }
-
 .sidebar-menu a {
-    padding: 15px 25px;
+    padding: 15px 20px;
     text-decoration: none;
+    color: #333;
     font-size: 18px;
-    /* লেখার রঙ কালো */
-    color: var(--black); /* কালো রঙের জন্য আপনার ভেরিয়েবল --black ব্যবহার করা হয়েছে */
-    display: block;
-    transition: 0.3s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* এটি আগের মতই থাকবে */
+    display: block; /* Make links take full width */
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #eee; /* Separator between links */
 }
     /* লেখার চারপাশে সাদা বর্ডার যোগ করতে text-shadow ব্যবহার করুন */
     text-shadow:
@@ -1056,21 +1047,31 @@ ul {
         1px 1px 0 var(--white);    /* নিচের ডানে */
 }
 
-.sidebar-menu a:last-child {
-    border-bottom: none;
-}
-
 .sidebar-menu a:hover {
-    /* হোভার করলে লেখার রঙ সাদা হোক (বা আপনার পছন্দ অনুযায়ী) */
-    color: blue; /* হোভার করলে লেখার রঙ সাদা হবে */
-    background-color: rgba(255, 255, 255, 0.25);
-    /* হোভার করলে টেক্সট শ্যাডো সরিয়ে ফেলতে পারেন বা রঙ পরিবর্তন করতে পারেন */
-    text-shadow: none; /* হোভার করলে সাদা বর্ডার সরিয়ে দেওয়া হয়েছে, প্রয়োজন না হলে এই লাইন বাদ দিন */
+    background-color: #f0f0f0;
+    color: #007bff;
 }
 section[id] {
     scroll-margin-top: 300px;
 }
+/* Overlay for when the sidebar is open */
+.overlay {
+    position: fixed; /* Fixed position to cover the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    z-index: 999; /* Lower than sidebar (1000), but above main content */
+    opacity: 0; /* Initially invisible */
+    visibility: hidden; /* Hidden from screen readers and interactions */
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out; /* Smooth fade effect */
+}
 
+.overlay.active {
+    opacity: 1; /* Fully visible when active */
+    visibility: visible; /* Make it interactive */
+}
 
 
 
