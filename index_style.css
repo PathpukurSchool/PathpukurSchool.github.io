@@ -1067,14 +1067,19 @@ ul {
 }
 
 .sidebar-menu a:hover {
-    background-color: #e0f2f7; /* A light blue background on hover */
+    background-color: #E0FFFF; /* A light blue background on hover */
     color: #0056b3; /* Darker blue text color on hover */
     padding-left: 25px; /* Slight indent on hover for visual feedback */
 }
 .sidebar-menu a.active-link {
-    background-color: #007bff;
+    background-color: #00008B;
     color: white;
     font-weight: bold;
+}
+    .sidebar-menu a:last-child {
+    border-bottom: 2px solid #ccc; /* Ensure it has a border if you want it */
+    margin-bottom: 10px; /* Small margin to push it slightly from the bottom of the menu */
+    }
 }
 section[id] {
     scroll-margin-top: 300px;
