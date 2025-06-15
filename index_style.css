@@ -1067,13 +1067,26 @@ ul {
 }
 
 .sidebar-menu a:hover {
-    background-color: #e0f2f7; /* A light blue background on hover */
-    color: #0056b3; /* Darker blue text color on hover */
+    background-color: #007bff; /* A light blue background on hover */
+    color: sky blue; /* Darker blue text color on hover */
     padding-left: 25px; /* Slight indent on hover for visual feedback */
+}
+.sidebar-menu a:active {
+    background-color: #0056b3; /* Darker blue background when clicked/active */
+    color: #FFFFFF; /* White text color */
+    padding-left: 27px; /* A little more indent for deeper "pressed" look */
+    /* Optional: A slight scale down effect can be added for physical button feel */
+    transform: scale(0.99);
+}
+/* Styling for the very last link (e.g., Login) */
+.sidebar-menu a:last-child {
+    /* If you want a border on the last item, ensure it's not set to 'none' here */
+    border-bottom: 2px solid #ccc; /* Ensure it has a border if you want */
+    margin-bottom: 10px; /* Small margin to ensure content isn't flush with bottom */
 }
 .sidebar-menu a.active-link {
     background-color: #007bff;
-    color: white;
+    color: blue;
     font-weight: bold;
 }
 section[id] {
