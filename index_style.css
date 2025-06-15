@@ -1034,7 +1034,7 @@ ul {
     position: fixed; /* Fixed position so it overlays content */
     top: 0;
     left: -320px; /* Initially off-screen to the left (adjust based on your desired width) */
-    width: 300px; /* Width of your sidebar */
+    width: 80%; /* Width of your sidebar */
     height: 100%; /* Full height of the viewport */
     background-color: #fff; /* Background color of the sidebar */
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4); /* Shadow for depth */
@@ -1053,7 +1053,7 @@ ul {
     padding: 15px 20px;
     text-decoration: none;
     color: #333;
-    font-size: 16px;
+    font-size: 15px;
     display: block; /* Make links take full width */
     transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.3s ease; /* Smooth transition for hover effects */
     border-bottom: 1px solid #eee; /* Separator between links */
@@ -1086,7 +1086,7 @@ ul {
 }
 .sidebar-menu a.active-link {
     background-color: #007bff;
-    color: blue;
+    color: sky blue;
     font-weight: bold;
 }
 section[id] {
