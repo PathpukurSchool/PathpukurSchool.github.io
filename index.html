@@ -38,21 +38,12 @@
 </head>
 <body>
     <header class="main-header">
-
-
-
-
-
         <div class="overlay"></div>
         <div class="header-buttons">
             <button id="menu-toggle-button" class="menu-button">
                 <i class="fas fa-bars"></i> Menu
             </button>
         </div>
-
-
-
-
         
         <div class="header-content">
             <img src="PHS-LOGO.png" alt="স্কুল লোগো" class="logo">
@@ -75,10 +66,7 @@
         </div>
     </section>
 
-
-
-
-   <nav id="sidebar-menu" class="sidebar-menu">
+    <nav id="sidebar-menu" class="sidebar-menu">
         <a href="#about-us-section">আমাদের সম্পর্কে</a>
         <a href="#academics-section">শিক্ষা কার্যক্রম</a>
         <a href="#uniform-details-section">ইউনিফর্ম</a>
@@ -92,9 +80,6 @@
         <a href="#location-section">আমাদের অবস্থান</a>
         <a href="home.html" id="sidebar-login-link">Login</a> </nav>
 
-
-
-
     <main class="container">
         <section id="about-us-section" class="about-us card animated-card fade-in">
             <h2><i class="fas fa-school icon"></i> আমাদের সম্পর্কে</h2>
@@ -106,7 +91,7 @@
             <button class="toggle-button more-btn">More...</button>
         </section>
 
-          <section id="academics-section" class="academics card animated-card fade-in delay-1">
+        <section id="academics-section" class="academics card animated-card fade-in delay-1">
             <h2><i class="fas fa-book-open icon"></i> শিক্ষা কার্যক্রম</h2>
             <div class="section-content-wrapper">
                 <h3>পঠিত ক্লাসসমূহ:</h3>
@@ -129,12 +114,12 @@
                     <p><strong>পঞ্চম থেকে দশম শ্রেণী:</strong></p>
                     <ul>
                         <li><strong>ছাত্র:</strong> সাদা জামা, খয়েরি প্যান্ট।</li>
-                        <li><strong>ছাত্রী:</strong> খয়েরি পাড়ের সাদা শাড়ি ও খয়েরি ব্লাউস অথবা সাদা জামা বা চুড়িদার এবং খয়েরি স্কার্ট বা পায়জামা ও ওড়না।</li>
+                        <li><strong>ছাত্রী:</strong> খয়েরি পাড়ের সাদা শাড়ি ও খয়েরি ব্লাউস অথবা সাদা জামা বা চুড়িদার এবং খয়েরি স্কার্ট বা পায়জামা ও ওড়না।</li>
                     </ul>
                     <p><strong>উচ্চমাধ্যমিক সেকশন (একাদশ ও দ্বাদশ শ্রেণী):</strong></p>
                     <ul>
                         <li><strong>ছাত্র:</strong> সাদা জামা, কালো প্যান্ট।</li>
-                        <li><strong>ছাত্রী:</strong> কালো পাড়ের সাদা শাড়ি অথবা সাদা চুড়িদার, কালো পায়জামা ও ওড়না।</li>
+                        <li><strong>ছাত্রী:</strong> কালো পাড়ের সাদা শাড়ি অথবা সাদা চুড়িদার, কালো পায়জামা ও ওড়না।</li>
                     </ul>
                     <p class="note">সমস্ত ইউনিফর্মের সাথে মোজা ও জুতো বাধ্যতামূলক। শীতকালে উপযুক্ত শীতের পোশাক পরতে হবে।</p>
                 </div>
@@ -300,7 +285,7 @@
             </div>
         </section>
 
-        <div id="sidebar-login-link" class="login-button-container animated-button fade-in delay-11">
+        <div class="login-button-container animated-button fade-in delay-11">
             <a href="home.html" class="login-button"><i class="fas fa-sign-in-alt"></i> স্কুল ওয়েবসাইটে লগইন করুন</a>
         </div>
     </main>
@@ -315,8 +300,8 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="index_notice.js"></script>
-    
+<script src="index_notice.js"></script>
+
 <script>
     // Digital Notice Board এর জন্য Pagination এবং rendering logic
     const NOTICES_PER_PAGE = 10;
@@ -331,8 +316,6 @@
         }
         container.innerHTML = "";
 
-        // Assuming 'Helping' is a global array defined somewhere, e.g., in index_notice.js
-        // If Helping is not defined or is empty, show "Available Soon!" message.
         if (typeof Helping === 'undefined' || !Array.isArray(Helping) || Helping.length === 0 || !Helping[0].text) {
             container.innerHTML = `
                 <div style="
@@ -380,7 +363,7 @@
 
     function renderPaginationControls() {
         const paginationContainer = document.getElementById('pagination-controls');
-        if (!paginationContainer) return; // Add check
+        if (!paginationContainer) return;
 
         paginationContainer.innerHTML = '';
 
@@ -554,6 +537,9 @@
             const sectionContentWrapper = button.previousElementSibling;
 
             // Initially check if content overflows
+            // This is a rough check, CSS 'max-height' with 'overflow: hidden' is typically used
+            // and overflow check is done by comparing scrollHeight and clientHeight.
+            // If sectionContentWrapper is shorter than its content, then it overflows.
             if (sectionContentWrapper && sectionContentWrapper.scrollHeight <= sectionContentWrapper.clientHeight) {
                 button.style.display = 'none'; // Hide if no overflow
             }
@@ -575,69 +561,58 @@
         // --- Menu Bar Logic ---
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const sidebarMenu = document.getElementById('sidebar-menu');
-        const overlay = document.querySelector('.overlay'); // Make sure this element exists in your HTML!
+        const overlay = document.querySelector('.overlay');
 
         // Function to toggle menu and overlay visibility
-        
-       function toggleMenu() { // Defined once in the global or script scope
-    const sidebarMenu = document.getElementById('sidebar-menu'); // Get elements inside the function or pass them as args
-
-    if (sidebarMenu) {
-        sidebarMenu.classList.toggle('active');
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // ... (other initialization code) ...
-
-    const menuToggleButton = document.getElementById('menu-toggle-button');
-    // No need to redeclare sidebarMenu and overlay here if toggleMenu() gets them
-    const sidebarMenu = document.getElementById('sidebar-menu');
-    // const overlay = document.querySelector('.overlay');
-function toggleMenu() {
-        if (sidebarMenu) {
-            sidebarMenu.classList.toggle('active');
-        } else {
-            console.error("Sidebar menu element not found!"); // ডিবাগিং এর জন্য
+        function toggleMenu() {
+            if (sidebarMenu) {
+                sidebarMenu.classList.toggle('active');
+            } else {
+                console.error("Sidebar menu element not found!");
+            }
+            if (overlay) {
+                overlay.classList.toggle('active');
+            } else {
+                console.error("Overlay element not found!");
+            }
+            // Toggle body scroll. If sidebar is active, add 'no-scroll' to body.
+            document.body.classList.toggle('no-scroll', sidebarMenu.classList.contains('active'));
         }
-    }
-    if (menuToggleButton) {
-        menuToggleButton.addEventListener('click', function(event) {
-            event.stopPropagation(); // Prevents click from bubbling up to document/overlay
-            toggleMenu(); // Call the globally defined toggleMenu()
-        });
-    } else {
-        console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
-    }
 
-    // ... (rest of your DOMContentLoaded code) ...
-});  
+        if (menuToggleButton) {
+            menuToggleButton.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevents click from bubbling up to document/overlay
+                toggleMenu();
+            });
+        } else {
+            console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
+        }
+
         // Close menu when clicking on a link inside the sidebar
         if (sidebarMenu) {
             sidebarMenu.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', function(event) {
-                    toggleMenu(); // Close the menu
+                    toggleMenu(); // Close the menu when a link is clicked
                     // Smooth scrolling to the target section
                     event.preventDefault(); // Prevent default link behavior
                     const targetId = this.getAttribute('href').substring(1);
                     const targetSection = document.getElementById(targetId);
 
                     if (targetSection) {
-                // হেডারের আনুমানিক উচ্চতা (আপনার CSS অনুযায়ী)
-                const approximateHeaderHeight = 250; // এই মানটি আপনার হেডারের মোট উচ্চতা অনুযায়ী সেট করুন
-
-                window.scrollTo({
-                    top: targetSection.offsetTop - approximateHeaderHeight, // এটি ব্যবহার করুন
-                    behavior: 'smooth'
+                        const approximateHeaderHeight = 250; // Adjust based on your actual header height
+                        window.scrollTo({
+                            top: targetSection.offsetTop - approximateHeaderHeight,
+                            behavior: 'smooth'
+                        });
+                    }
                 });
-            }
-        });
-    });
-}
+            });
+        }
 
         // Close menu when clicking outside (on the overlay)
         if (overlay) {
             overlay.addEventListener('click', function() {
+                // Only close if the sidebar is currently active
                 if (sidebarMenu && sidebarMenu.classList.contains('active')) {
                     toggleMenu();
                 }
@@ -656,11 +631,11 @@ function toggleMenu() {
         const fullscreenOverlay = document.getElementById('fullscreen-overlay');
         const fullscreenImage = document.getElementById('fullscreen-image');
 
-        if (galleryImages.length > 0 && fullscreenOverlay && fullscreenImage) { // Check if all elements exist
+        if (galleryImages.length > 0 && fullscreenOverlay && fullscreenImage) {
             galleryImages.forEach(image => {
                 image.addEventListener('click', function() {
                     const imageUrl = this.getAttribute('data-src') || this.src;
-                    if (imageUrl) { // Only open if there's a valid image URL
+                    if (imageUrl) {
                         fullscreenImage.src = imageUrl;
                         fullscreenOverlay.classList.add('active');
                     }
@@ -669,8 +644,8 @@ function toggleMenu() {
 
             fullscreenOverlay.addEventListener('click', function() {
                 fullscreenOverlay.classList.remove('active');
-                fullscreenImage.src = ''; // Clear image to free memory
-                document.body.style.overflow = ''; // Restore scrolling
+                fullscreenImage.src = '';
+                document.body.style.overflow = '';
             });
         } else {
             console.warn("Warning: Gallery elements (images, fullscreen overlay, or image) not found. Gallery fullscreen might not work.");
