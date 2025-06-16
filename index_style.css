@@ -1036,7 +1036,7 @@ ul {
     left: -320px; /* Initially off-screen to the left (adjust based on your desired width) */
     width: 300px; /* Width of your sidebar */
     height: 100%; /* Full height of the viewport */
-    background-color: #fff; /* Background color of the sidebar */
+    background: linear-gradient(to bottom, #E6FFE6, #FFF0F5); /* Background color of the sidebar */
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4); /* Shadow for depth */
     transition: left 0.4s ease-in-out; /* Smooth transition for opening/closing */
     z-index: 1000; /* High z-index to be above all content (and overlay) */
@@ -1086,7 +1086,7 @@ ul {
     }
 }
 section[id] {
-    scroll-margin-top: 300px;
+    scroll-margin-top: 320px;
 }
 /* Overlay for when the sidebar is open */
 .overlay {
