@@ -1071,6 +1071,10 @@ ul {
     color: #0056b3; /* Darker blue text color on hover */
     padding-left: 25px; /* Slight indent on hover for visual feedback */
 }
+.sidebar-menu a:active {
+    background-color: #007bff; /* Bright Blue */
+    color: #FFFFFF; /* White text on click */
+}
 .sidebar-menu a.active-link {
     background-color: #00008B;
     color: white;
