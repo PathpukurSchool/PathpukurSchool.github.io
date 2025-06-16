@@ -595,6 +595,14 @@ if (sidebarMenu) {
             toggleMenu(); // Close the menu when a link is clicked
 
             const href = this.getAttribute('href');
+            // --- NEW CODE FOR ACTIVE LINK ---
+            // Remove 'active-link' class from all sidebar links first
+            sidebarMenu.querySelectorAll('a').forEach(otherLink => {
+                otherLink.classList.remove('active-link');
+            });
+            // Add 'active-link' class to the clicked link
+            this.classList.add('active-link');
+            // --- END NEW CODE ---
 
             // Check if the link is an internal section link (starts with '#')
             if (href && href.startsWith('#')) {
