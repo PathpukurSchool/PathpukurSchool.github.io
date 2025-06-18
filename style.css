@@ -275,10 +275,17 @@ ul li a:hover {
 
 /* Welcome to the marks uploading portal text colour */
 .blink {
-  color: blue;
-  font-weight: bold;
-    font-size: 22px;
-  animation: blink-animation 2s steps(4, start) infinite;
+    color: blue;
+    font-weight: 700;
+    font-size: 1.2em;
+    animation: blink 1s infinite alternate; /* ব্লিঙ্কিং অ্যানিমেশন */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 5px;
+    border: 2px dashed blue;
+    border-radius: 8px;
 }
 
 @keyframes blink-animation {
