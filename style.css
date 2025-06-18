@@ -290,8 +290,9 @@ ul li a:hover {
 
 @keyframes blink-animation {
   to {
-    visibility: hidden;
-  }
+    0% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
     }
 
 /*Last date of marks submission */
