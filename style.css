@@ -51,6 +51,21 @@ font-weight: bold;
   background-color: darkgreen;
 }
 
+/* Style for exam links that are not yet available */
+.exam-link.disabled-exam-link {
+    background-color: #cccccc; /* Grey background */
+    cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+    opacity: 0.7; /* Slightly transparent */
+    /* You might want to remove hover effects for these */
+    pointer-events: none; /* Disables all click events *after* the initial onclick */
+}
+
+/* Override hover for disabled links */
+.exam-link.disabled-exam-link:hover {
+    background-color: #cccccc; /* Keep grey on hover */
+    transform: none; /* No lift on hover */
+    box-shadow: none; /* No shadow change on hover */
+}
 /* শেডযুক্ত তথ্য বক্সের স্টাইল */
 .shaded-info-box {
     background-color: #f8f8f8; /* বক্সের জন্য খুব হালকা ধূসর ব্যাকগ্রাউন্ড */
