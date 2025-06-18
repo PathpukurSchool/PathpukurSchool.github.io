@@ -50,6 +50,15 @@ font-weight: bold;
   background-color: darkgreen;
 }
 
+/* Styles for the container holding exam buttons within each box */
+.exam-buttons-group {
+    display: flex; /* Use flexbox to arrange buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap to the next line if space runs out */
+    gap: 10px; /* Space between buttons */
+    justify-content: center; /* Center buttons horizontally within the box */
+    margin-top: 15px; /* Space above the button group */
+}
+
 .class-title {
   font-size: 20px;
   margin-top: 20px;
