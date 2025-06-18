@@ -82,12 +82,19 @@ let currentKey = '';
 // এক্সাম লিংক তৈরি ও দেখানো
 function renderButtons() {
     const mainContainer = document.getElementById('exam-buttons');
-    mainContainer.innerHTML = ''; // Clear previous content
+    mainContainer.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করা
 
-    // Unique class list তৈরি
+    // ইউনিক ক্লাস তালিকা তৈরি
+    // এখানে প্রতিটি 'cls' হবে 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'
     const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
 
-    classes.forEach(cls => {
+    // ক্লাসগুলিকে একটি নির্দিষ্ট ক্রমে সাজানো যাতে V, VI, VII... XII পর্যন্ত আসে
+    const sortedClasses = classes.sort((a, b) => {
+        const order = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        return order.indexOf(a) - order.indexOf(b);
+    });
+
+    sortedClasses.forEach(cls => {
         // প্রতিটি ক্লাসের জন্য একটি নতুন shaded-info-box তৈরি করা হচ্ছে
         const classBox = document.createElement('div');
         classBox.className = 'shaded-info-box'; // CSS ক্লাস যা বক্সের স্টাইল দেবে
@@ -95,45 +102,47 @@ function renderButtons() {
         // বক্সের হেডিং তৈরি করা হচ্ছে (ক্লাসের নাম)
         const boxHeading = document.createElement('h3');
         boxHeading.className = 'box-heading'; // CSS ক্লাস যা হেডিং এর স্টাইল দেবে
-        // 'CLASS X_TEST' কে 'CLASS X' এ রূপান্তর
-        let classDisplayName = 'CLASS ' + cls.replace('X_TEST', 'X').replace('XI', 'XI').replace('XII', 'XII');
-        // 'CLASS IX' কে 'CLASS IX' এ রাখবে, 'CLASS X' কে 'CLASS X' এ রাখবে
-        if (cls === 'IX') {
-            classDisplayName = 'CLASS IX';
-        } else if (cls === 'X') { // Assuming 'X' is for Class X, not X_TEST
-             classDisplayName = 'CLASS X';
-        } else if (cls === 'XI') {
-             classDisplayName = 'CLASS XI';
-        } else if (cls === 'XII') {
-             classDisplayName = 'CLASS XII';
-        }
-        boxHeading.textContent = classDisplayName;
+        boxHeading.textContent = 'CLASS ' + cls; // সরাসরি 'CLASS V', 'CLASS VI' ইত্যাদি হবে
         classBox.appendChild(boxHeading);
 
         // বোতামগুলির জন্য একটি কন্টেইনার তৈরি করা যাতে সেগুলো flexbox দিয়ে সাজানো যায়
         const buttonsContainer = document.createElement('div');
         buttonsContainer.className = 'exam-buttons-group'; // নতুন ক্লাস, এর জন্য CSS লাগবে
 
+        // প্রতিটি সম্ভাব্য পরীক্ষার প্রকারের জন্য বোতাম তৈরি
         const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
         exams.forEach(exam => {
-            const key = `${cls}_${exam}`;
-            if (credentials[key]) {
-                const button = document.createElement('button'); // 'a' ট্যাগ থেকে 'button' ট্যাগে পরিবর্তন
+            const key = `${cls}_${exam}`; // যেমন: "V_1ST", "IX_TEST", "XII_SEM1"
+            if (credentials[key]) { // যদি এই নির্দিষ্ট পরীক্ষার জন্য ডেটা config.json-এ থাকে
+                const button = document.createElement('button');
                 button.className = 'box-button exam-link'; // CSS ক্লাস যা বোতামের স্টাইল দেবে
                 
+                // বোতামের লেবেল নির্ধারণ
                 let label = exam;
-                if (exam === 'TEST') label = 'TEST EXAM';
-                else if (exam === 'SEM1') label = 'SEMESTER I';
-                else if (exam === 'SEM2') label = 'SEMESTER II';
+                switch (exam) {
+                    case 'TEST':
+                        label = 'TEST EXAM';
+                        break;
+                    case 'SEM1':
+                        label = 'SEMESTER I';
+                        break;
+                    case 'SEM2':
+                        label = 'SEMESTER II';
+                        break;
+                    // '1ST', '2ND', '3RD' লেবেলগুলো অপরিবর্তিত থাকবে
+                }
                 
                 button.textContent = label;
-                button.onclick = () => openLogin(key); // `onclick` লজিক একই থাকবে
+                button.onclick = () => openLogin(key); // সাব-লগইন ফাংশন কল করবে
                 buttonsContainer.appendChild(button);
             }
         });
         
-        classBox.appendChild(buttonsContainer); // বোতাম কন্টেইনারকে বক্সের মধ্যে যোগ করা
-        mainContainer.appendChild(classBox); // ক্লাস বক্সকে মূল কন্টেইনারে যোগ করা
+        // যদি কোন ক্লাসের জন্য কোন পরীক্ষার বোতাম না থাকে, তাহলে বক্সটি দেখাবে না
+        if (buttonsContainer.children.length > 0) {
+            classBox.appendChild(buttonsContainer); // বোতাম কন্টেইনারকে বক্সের মধ্যে যোগ করা
+            mainContainer.appendChild(classBox); // ক্লাস বক্সকে মূল কন্টেইনারে যোগ করা
+        }
     });
 }
 
