@@ -133,7 +133,14 @@ function renderButtons() {
                 }
                 
                 button.textContent = label;
-                button.onclick = () => openLogin(key); // সাব-লগইন ফাংশন কল করবে
+                // যদি URL না থাকে অথবা URL খালি হয়, তাহলে সরাসরি 'showAvailableSoonMessage' কল করব
+                // অন্যথায়, আইডি/পাসওয়ার্ড লগইন ডায়ালগ খুলব
+                if (credentials[key].url && credentials[key].url.trim() !== '') {
+                    button.onclick = () => openLogin(key); // URL থাকলে আইডি/পাসওয়ার্ড চাইবে
+                } else {
+                    button.onclick = () => showAvailableSoonMessage(key); // URL না থাকলে সরাসরি মেসেজ দেখাবে
+                    button.classList.add('disabled-exam-link'); // ঐচ্ছিক: বোতামটি নিষ্প্রভ করতে একটি ক্লাস যোগ করুন
+                }
                 buttonsContainer.appendChild(button);
             }
         });
