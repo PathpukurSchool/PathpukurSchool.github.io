@@ -101,7 +101,7 @@ function renderButtons() {
 
         // বক্সের হেডিং তৈরি করা হচ্ছে (ক্লাসের নাম)
         const boxHeading = document.createElement('h3');
-        boxHeading.className = 'box-heading'; // CSS ক্লাস যা হেডিং এর স্টাইল দেবে
+        boxHeading.className = 'box-heading shine'; // CSS ক্লাস যা হেডিং এর স্টাইল দেবে
         boxHeading.textContent = 'CLASS ' + cls; // সরাসরি 'CLASS V', 'CLASS VI' ইত্যাদি হবে
         classBox.appendChild(boxHeading);
 
