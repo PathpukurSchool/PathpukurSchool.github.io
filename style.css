@@ -273,7 +273,7 @@ ul li a:hover {
   }
     }
 
-/* Welcome to the marks uploading portal text colour */
+/* Welcome to the marks uploading portal text */
 .blink {
     color: blue;
     font-weight: 700;
@@ -290,8 +290,8 @@ ul li a:hover {
 
 @keyframes blink-animation {
   to {
-    0% { opacity: 1; }
-    100% { opacity: 0.4; }
+    0% { opacity: 2; }
+    100% { opacity: 0.5; }
 }
     }
 
