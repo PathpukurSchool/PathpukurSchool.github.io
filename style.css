@@ -277,7 +277,7 @@ ul li a:hover {
 .blink {
     color: blue;
     font-weight: 700;
-    font-size: 1.2em;
+    font-size: 24px;
     animation: blink 1s infinite alternate; /* ব্লিঙ্কিং অ্যানিমেশন */
     display: flex;
     align-items: center;
