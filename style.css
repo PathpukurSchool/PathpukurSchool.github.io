@@ -274,11 +274,8 @@ ul li a:hover {
     }
 
 /* Welcome to the marks uploading portal text */
+/*এখানে ব্লিংক টেক্সটটি সম্পূর্ণ অদৃশ্য হচ্ছে না */
 .blink {
-    color: blue;
-    font-weight: 700;
-    font-size: 24px;
-    animation: blink 1s infinite alternate; /* ব্লিঙ্কিং অ্যানিমেশন */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -286,14 +283,80 @@ ul li a:hover {
     padding: 5px;
     border: 2px dashed blue;
     border-radius: 8px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #fff; /* Fallback color */
+    background: linear-gradient(90deg, #FF6F61, #FFD166, #FF6F61); /* Light Red, Yellow, Light Red */
+    background-size: 300% auto; /* Make the gradient wider for a smoother shine movement */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine-blink-animation 3s linear infinite; /* Increased duration for subtlety */
 }
 
 @keyframes blink-animation {
-  to {
-    0% { opacity: 2; }
-    100% { opacity: 0.5; }
-}
+  0% {
+        background-position: 0% center;
+        opacity: 0.8; /* Start visible but slightly faded */
     }
+    50% {
+        background-position: 150% center; /* Move shine across */
+        opacity: 1; /* Fully visible at peak shine */
+    }
+    100% {
+        background-position: 300% center; /* Complete movement */
+        opacity: 0.8; /* Fade back slightly */
+    }
+}
+
+/* background-color অ্যানিমেটেড হচ্ছে, টেক্সট নয় */
+/* টেক্সটকে সর্বদা পঠনযোগ্য রাখে */
+/* rgba(255, 255, 0, 0.2) একটি আধা-স্বচ্ছ হলুদ রঙ, যা একটি হাইলাইট প্রভাব তৈরি করে */
+.highlight-blink {
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: inline-block; /* Adjust if it needs to take full width */
+    background-color: transparent; /* Start transparent */
+    animation: highlight-blink 2.5s ease-in-out infinite alternate;
+}
+
+.highlight-blink-text {
+    font-size: 20px;
+    color: #333; /* Keep text color static for readability */
+    font-weight: bold;
+}
+
+@keyframes highlight-blink {
+    0% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: rgba(255, 255, 0, 0.2); /* Light yellow highlight */
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+/* টেক্সটের চারপাশে একটি আলোকরশ্মির প্রভাব তৈরি করা হয় */
+/* অ্যানিমেশনের duration (যেমন 2s, 3s) এবং timing-function (ease, ease-in-out) সামঞ্জস্য করুন */
+.glow-blink {
+    font-size: 26px;
+    font-weight: bold;
+    color: #007bff; /* Blue text */
+    text-shadow: 0 0 5px rgba(0, 123, 255, 0); /* Initial transparent shadow */
+    animation: glow-fade 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow-fade {
+    0% {
+        text-shadow: 0 0 5px rgba(0, 123, 255, 0), /* No glow */
+                     0 0 10px rgba(0, 123, 255, 0);
+    }
+    100% {
+        text-shadow: 0 0 10px rgba(0, 123, 255, 0.8), /* Stronger glow */
+                     0 0 20px rgba(0, 123, 255, 0.6);
+    }
+}
 
 /*Last date of marks submission */
  .wrapper {
