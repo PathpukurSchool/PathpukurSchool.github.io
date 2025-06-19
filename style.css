@@ -276,12 +276,10 @@ ul li a:hover {
 /* Welcome to the marks uploading portal text */
 /*এখানে ব্লিংক টেক্সটটি সম্পূর্ণ অদৃশ্য হচ্ছে না */
 .blink {
-    align-items: center;
-    justify-content: center;
-    margin-top: 10px;
+    margin-top: 15px;
     padding: 5px;
-    border: 2px dashed blue;
-    border-radius: 8px;
+    border: 2px dashed #fff;
+    border-radius: 10px;
     font-weight: bold;
     font-size: 20px;
     color: #fff; /* Fallback color */
