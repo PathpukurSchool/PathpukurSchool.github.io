@@ -277,48 +277,33 @@ ul li a:hover {
 /*এখানে ব্লিংক টেক্সটটি সম্পূর্ণ অদৃশ্য হচ্ছে না */
 .blink {
     font-weight: bold;
-    font-size: 24px;
+    font-size: 24px; /* বা আপনার পছন্দ অনুযায়ী */
     font-family: 'Arial', sans-serif; /* একটি পঠনযোগ্য ফন্ট */
     
-    /* টেক্সট ফিল কালার ট্রানজিশন এর জন্য, এটি ব্যাকগ্রাউন্ড গ্রেডিয়েন্ট কে লেখার মধ্যে দৃশ্যমান করবে */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    /* শাইন ইফেক্টের জন্য গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
-    /* বাদামী থিমের সাথে সামঞ্জস্যপূর্ণ রঙের শেড */
-    background: linear-gradient(90deg, #A0522D, #CD853F, #A0522D); /* Sienna, Peruvian Red, Sienna */
-    background-size: 250% auto; /* গ্রেডিয়েন্টের প্রস্থ, শাইন ইফেক্টের জন্য */
-
-    /* অ্যানিমেশন প্রপার্টিজ */
-    animation: blink-shine-animation 3.5s linear infinite; /* অ্যানিমেশনের গতি এবং পুনরাবৃত্তি */
+    color: #8B4513; /* মূল টেক্সট কালার: আপনার হেডিংয়ের সাথে মানানসই বাদামী */
     
-    /* নিশ্চিত করুন যে টেক্সট সম্পূর্ণ অদৃশ্য না হয় */
-    /* অ্যানিমেশনের মাধ্যমে অপাসিটি ০.৮ থেকে ১ এর মধ্যে ওঠানামা করবে */
-    opacity: 0.8; /* বেস অপাসিটি, অ্যানিমেশন এটি পরিবর্তন করবে */
+    /* টেক্সট শ্যাডো: লেখার চারপাশে একটি হালকা শেড তৈরি করবে */
+    /* এটি অ্যানিমেট করা যেতে পারে একটি গ্লো ইফেক্ট তৈরি করতে */
+    text-shadow: 0 0 5px rgba(139, 69, 19, 0.3); /* হালকা বাদামী শ্যাডো, প্রায় অদৃশ্য */
+
+    /* অ্যানিমেশন */
+    animation: text-glow-blink 3s ease-in-out infinite alternate; /* অ্যানিমেশনের গতি এবং পুনরাবৃত্তি */
 }
 
-/* @keyframes rule for the blinking shine effect */
-@keyframes blink-shine-animation {
+/* @keyframes rule for the text glow blink effect */
+@keyframes text-glow-blink {
     0% {
-        background-position: 0% center; /* শাইন শুরু */
-        opacity: 0.8; /* 80% দৃশ্যমান */
-        transform: scale(1); /* কোন স্কেলিং নেই */
-    }
-    25% {
-        opacity: 1; /* 100% দৃশ্যমান (উজ্জ্বলতম) */
+        opacity: 0.7; /* 70% দৃশ্যমান - সম্পূর্ণ অদৃশ্য হবে না */
+        text-shadow: 0 0 5px rgba(139, 69, 19, 0.3); /* হালকা শ্যাডো */
     }
     50% {
-        background-position: 100% center; /* শাইন মাঝখানে */
-        opacity: 0.8; /* 80% দৃশ্যমান */
-        transform: scale(1.02); /* সামান্য বড় হবে */
-    }
-    75% {
         opacity: 1; /* 100% দৃশ্যমান (উজ্জ্বলতম) */
+        text-shadow: 0 0 15px rgba(139, 69, 19, 0.8), /* আরও স্পষ্ট শ্যাডো/গ্লো */
+                     0 0 25px rgba(139, 69, 19, 0.6); /* দ্বিতীয় হালকা গ্লো লেয়ার */
     }
     100% {
-        background-position: 200% center; /* শাইন শেষ */
-        opacity: 0.8; /* 80% দৃশ্যমান */
-        transform: scale(1); /* স্বাভাবিক অবস্থায় ফিরে আসবে */
+        opacity: 0.7; /* 70% দৃশ্যমান */
+        text-shadow: 0 0 5px rgba(139, 69, 19, 0.3); /* হালকা শ্যাডো */
     }
 }
 
