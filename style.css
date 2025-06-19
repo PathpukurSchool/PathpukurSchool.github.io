@@ -360,33 +360,20 @@ ul li a:hover {
 }
 
 /* Login to access the marks uploading link (h3) এর স্টাইল */
-/* এটি index.html এর <div id="exam-dashboard-section"> এর মধ্যে অবস্থিত <h3> ট্যাগের জন্য */
-/* অথবা, যদি এটি <dialog> এর বাইরে অন্য কোনো <h3> ট্যাগ হয় যা আপনি স্টাইল করতে চান */
-#exam-dashboard-section h3 { /* এটি যদি exam-dashboard-section এর সরাসরি child হয় */
+.login-instruction-heading {
     color: #6C5B7B; /* একটি সফট বেগুনি-ধূসর বা ব্রাউনিশ শেড, যা বাদামী থিমের সাথে মানিয়ে যায় */
-    font-size: 20px; /* ব্লিংকিং টেক্সটের চেয়ে কিছুটা ছোট, যাতে এটি প্রধান আকর্ষণ না হয় */
-    font-weight: normal; /* বোল্ড না করে নরমাল ফন্ট ওয়েট */
-    margin-top: 15px; /* ব্লিংকিং টেক্সট থেকে কিছুটা ফাঁকা স্থান */
-    margin-bottom: 20px; /* এর নিচের কন্টেন্ট থেকে ফাঁকা স্থান */
+    font-size: 20px; /* ব্লিংকিং টেক্সটের চেয়ে কিছুটা ছোট */
+    font-weight: normal; /* নরমাল ফন্ট ওয়েট */
+    margin-top: 15px; /* উপরের কন্টেন্ট থেকে ফাঁকা স্থান */
+    margin-bottom: 20px; /* নিচের কন্টেন্ট থেকে ফাঁকা স্থান */
     text-align: center; /* লেখাটিকে কেন্দ্রে স্থাপন */
     padding: 5px 10px; /* লেখাটির চারপাশে সামান্য প্যাডিং */
     border-bottom: 1px solid #DCDCDC; /* একটি খুব হালকা ধূসর বর্ডার, সূক্ষ্ম বিভাজক */
     display: inline-block; /* বর্ডারটি লেখার প্রস্থ অনুযায়ী হবে */
-    background-color: #F5F5DC; /* খুব হালকা ক্রিম/বেইজ কালার ব্যাকগ্রাউন্ড, আরামদায়ক */
+    background-color: #F5F5DC; /* খুব হালকা ক্রিম/বেইজ কালার ব্যাকগ্রাউন্ড */
     border-radius: 5px; /* হালকা গোলাকার কোণ */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* খুব সূক্ষ্ম শ্যাডো */
 }
-
-/* যদি এটি <dialog> এর ভিতরের <h4> ট্যাগ হয়, তাহলে তার জন্য আলাদা স্টাইল লাগবে */
-/* (যেটা আগে openLogin() ডায়ালগে যোগ করার কথা বলা হয়েছিল) */
-/*
-#loginDialog h4 {
-    color: #4A4A4A;
-    font-size: 18px;
-    margin-bottom: 15px;
-    text-align: center;
-}
-*/
 
 /*Last date of marks submission */
  .wrapper {
