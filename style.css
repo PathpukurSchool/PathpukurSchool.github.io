@@ -277,31 +277,22 @@ ul li a:hover {
 /*এখানে ব্লিংক টেক্সটটি সম্পূর্ণ অদৃশ্য হচ্ছে না */
 .blink {
     margin-top: 15px;
-    padding: 5px;
-    border: 2px dashed #fff;
-    border-radius: 10px;
     font-weight: bold;
-    font-size: 20px;
-    color: #fff; /* Fallback color */
+    font-size: 24px;
+    color: #4CAF50; /* A pleasant green color */
     background: linear-gradient(90deg, #FF6F61, #FFD166, #FF6F61); /* Light Red, Yellow, Light Red */
     background-size: 300% auto; /* Make the gradient wider for a smoother shine movement */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shine-blink-animation 3s linear infinite; /* Increased duration for subtlety */
+    animation: soft-fade 2s ease-in-out infinite alternate; /* Slower, smoother, alternates direction */
 }
 
 @keyframes blink-animation {
   0% {
-        background-position: 0% center;
-        opacity: 0.8; /* Start visible but slightly faded */
-    }
-    50% {
-        background-position: 150% center; /* Move shine across */
-        opacity: 1; /* Fully visible at peak shine */
+        opacity: 0.5; /* Never fully disappear */
     }
     100% {
-        background-position: 300% center; /* Complete movement */
-        opacity: 0.8; /* Fade back slightly */
+        opacity: 1; /* Fully visible */
     }
 }
 
