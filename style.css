@@ -276,23 +276,43 @@ ul li a:hover {
 /* Welcome to the marks uploading portal text */
 /*এখানে ব্লিংক টেক্সটটি সম্পূর্ণ অদৃশ্য হচ্ছে না */
 .blink {
-    margin-top: 15px;
     font-weight: bold;
-    font-size: 24px;
-    color: #4CAF50; /* A pleasant green color */
-    background: linear-gradient(90deg, #FF6F61, #FFD166, #FF6F61); /* Light Red, Yellow, Light Red */
-    background-size: 300% auto; /* Make the gradient wider for a smoother shine movement */
+    font-size: 24px; /* বা আপনার পছন্দ অনুযায়ী */
+    font-family: 'Arial', sans-serif; /* একটি পঠনযোগ্য ফন্ট */
+    color: #8B4513; /* ডিফল্ট টেক্সট কালার (বাদামী হেডিং এর সাথে মানানসই) */
+    text-shadow: 0 0 5px rgba(139, 69, 19, 0.3); /* হালকা টেক্সট শ্যাডো */
+
+    /* গ্রেডিয়েন্ট ওভারলে (আপনার শাইন ইফেক্টের জন্য) */
+    background: linear-gradient(90deg, #A0522D, #CD853F, #A0522D); /* বাদামী শেডগুলির একটি গ্রেডিয়েন্ট */
+    background-size: 250% auto; /* গ্রেডিয়েন্টের প্রস্থ, শাইন ইফেক্টের জন্য */
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: soft-fade 2s ease-in-out infinite alternate; /* Slower, smoother, alternates direction */
+    -webkit-text-fill-color: transparent; /* টেক্সটকে স্বচ্ছ করবে যাতে ব্যাকগ্রাউন্ড গ্রেডিয়েন্ট দেখা যায় */
+
+    /* অ্যানিমেশন */
+    animation: subtle-shine-blink 3.5s linear infinite; /* অ্যানিমেশনের গতি এবং পুনরাবৃত্তি */
 }
 
-@keyframes blink-animation {
-  0% {
-        opacity: 0.5; /* Never fully disappear */
+@keyframes blink {
+    0% {
+        background-position: 0% center; /* শাইন শুরু */
+        opacity: 0.8; /* 80% দৃশ্যমান, সম্পূর্ণ অদৃশ্য হবে না */
+        transform: scale(1); /* কোন স্কেলিং নেই */
+    }
+    25% {
+        opacity: 1; /* 100% দৃশ্যমান */
+    }
+    50% {
+        background-position: 100% center; /* শাইন মাঝখানে */
+        opacity: 0.8; /* 80% দৃশ্যমান */
+        transform: scale(1.02); /* সামান্য বড় হবে */
+    }
+    75% {
+        opacity: 1; /* 100% দৃশ্যমান */
     }
     100% {
-        opacity: 1; /* Fully visible */
+        background-position: 200% center; /* শাইন শেষ */
+        opacity: 0.8; /* 80% দৃশ্যমান */
+        transform: scale(1); /* স্বাভাবিক অবস্থায় ফিরে আসবে */
     }
 }
 
