@@ -276,7 +276,6 @@ ul li a:hover {
 /* Welcome to the marks uploading portal text */
 /*এখানে ব্লিংক টেক্সটটি সম্পূর্ণ অদৃশ্য হচ্ছে না */
 .blink {
-    display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 10px;
@@ -308,6 +307,7 @@ ul li a:hover {
     }
 }
 
+/* এই স্টাইল এখনো ওয়েব পেজে ব্যবহৃত হয়নি */
 /* background-color অ্যানিমেটেড হচ্ছে, টেক্সট নয় */
 /* টেক্সটকে সর্বদা পঠনযোগ্য রাখে */
 /* rgba(255, 255, 0, 0.2) একটি আধা-স্বচ্ছ হলুদ রঙ, যা একটি হাইলাইট প্রভাব তৈরি করে */
@@ -337,6 +337,7 @@ ul li a:hover {
     }
 }
 
+/* এই স্টাইল এখনো ওয়েব পেজে ব্যবহৃত হয়নি */
 /* টেক্সটের চারপাশে একটি আলোকরশ্মির প্রভাব তৈরি করা হয় */
 /* অ্যানিমেশনের duration (যেমন 2s, 3s) এবং timing-function (ease, ease-in-out) সামঞ্জস্য করুন */
 .glow-blink {
