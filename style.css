@@ -277,29 +277,35 @@ ul li a:hover {
 /*এখানে ব্লিংক টেক্সটটি সম্পূর্ণ অদৃশ্য হচ্ছে না */
 .blink {
     font-weight: bold;
-    font-size: 24px; /* বা আপনার পছন্দ অনুযায়ী */
+    font-size: 24px;
     font-family: 'Arial', sans-serif; /* একটি পঠনযোগ্য ফন্ট */
-    color: #8B4513; /* ডিফল্ট টেক্সট কালার (বাদামী হেডিং এর সাথে মানানসই) */
-    text-shadow: 0 0 5px rgba(139, 69, 19, 0.3); /* হালকা টেক্সট শ্যাডো */
-
-    /* গ্রেডিয়েন্ট ওভারলে (আপনার শাইন ইফেক্টের জন্য) */
-    background: linear-gradient(90deg, #A0522D, #CD853F, #A0522D); /* বাদামী শেডগুলির একটি গ্রেডিয়েন্ট */
-    background-size: 250% auto; /* গ্রেডিয়েন্টের প্রস্থ, শাইন ইফেক্টের জন্য */
+    
+    /* টেক্সট ফিল কালার ট্রানজিশন এর জন্য, এটি ব্যাকগ্রাউন্ড গ্রেডিয়েন্ট কে লেখার মধ্যে দৃশ্যমান করবে */
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent; /* টেক্সটকে স্বচ্ছ করবে যাতে ব্যাকগ্রাউন্ড গ্রেডিয়েন্ট দেখা যায় */
+    -webkit-text-fill-color: transparent;
 
-    /* অ্যানিমেশন */
-    animation: subtle-shine-blink 3.5s linear infinite; /* অ্যানিমেশনের গতি এবং পুনরাবৃত্তি */
+    /* শাইন ইফেক্টের জন্য গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
+    /* বাদামী থিমের সাথে সামঞ্জস্যপূর্ণ রঙের শেড */
+    background: linear-gradient(90deg, #A0522D, #CD853F, #A0522D); /* Sienna, Peruvian Red, Sienna */
+    background-size: 250% auto; /* গ্রেডিয়েন্টের প্রস্থ, শাইন ইফেক্টের জন্য */
+
+    /* অ্যানিমেশন প্রপার্টিজ */
+    animation: blink-shine-animation 3.5s linear infinite; /* অ্যানিমেশনের গতি এবং পুনরাবৃত্তি */
+    
+    /* নিশ্চিত করুন যে টেক্সট সম্পূর্ণ অদৃশ্য না হয় */
+    /* অ্যানিমেশনের মাধ্যমে অপাসিটি ০.৮ থেকে ১ এর মধ্যে ওঠানামা করবে */
+    opacity: 0.8; /* বেস অপাসিটি, অ্যানিমেশন এটি পরিবর্তন করবে */
 }
 
-@keyframes blink {
+/* @keyframes rule for the blinking shine effect */
+@keyframes blink-shine-animation {
     0% {
         background-position: 0% center; /* শাইন শুরু */
-        opacity: 0.8; /* 80% দৃশ্যমান, সম্পূর্ণ অদৃশ্য হবে না */
+        opacity: 0.8; /* 80% দৃশ্যমান */
         transform: scale(1); /* কোন স্কেলিং নেই */
     }
     25% {
-        opacity: 1; /* 100% দৃশ্যমান */
+        opacity: 1; /* 100% দৃশ্যমান (উজ্জ্বলতম) */
     }
     50% {
         background-position: 100% center; /* শাইন মাঝখানে */
@@ -307,7 +313,7 @@ ul li a:hover {
         transform: scale(1.02); /* সামান্য বড় হবে */
     }
     75% {
-        opacity: 1; /* 100% দৃশ্যমান */
+        opacity: 1; /* 100% দৃশ্যমান (উজ্জ্বলতম) */
     }
     100% {
         background-position: 200% center; /* শাইন শেষ */
