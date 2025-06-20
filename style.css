@@ -448,6 +448,7 @@ ul li a:hover {
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
+  background-color: #F5F5F5; /* বাদামী শেডের গাঢ় রঙ - আপনার থিমের সাথে সামঞ্জস্যপূর্ণ */
 }
 
 .marquee-content {
