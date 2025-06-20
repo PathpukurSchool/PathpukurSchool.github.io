@@ -448,14 +448,7 @@ ul li a:hover {
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
-  background-color: #F8F8F8; /* হালকা ধূসর ব্যাকগ্রাউন্ড, #F5F5F5 থেকে সামান্য হালকা */
-  border-radius: 5px; /* হালকা গোলাকার কোণ */
-
-  /* শ্যাডো ইফেক্ট যাতে মনে হয় নিচে নেমে গেছে */
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15), /* প্রধান শ্যাডো, y-অফসেট বেশি */
-              0 0 5px rgba(0, 0, 0, 0.05) inset; /* ঐচ্ছিক: ভেতরের দিকে হালকা শ্যাডো গভীরতা যোগ করার জন্য */
-  
-  padding: 5px; /* কন্টেইনারের ভেতরের প্যাডিং, শ্যাডো সহ কন্টেন্টকে একটু ফাঁকা রাখবে */
+  background-color: #F5F5F5;
 }
 
 .marquee-content {
