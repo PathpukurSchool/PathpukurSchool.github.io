@@ -384,11 +384,19 @@ ul li a:hover {
   width: 90%;
   margin: 0 auto;
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   background-color: #fffdd0;
   border-radius: 5px;
   padding: 5px;
- }
+  transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease; /* মসৃণ ট্রানজিশন যোগ করা হয়েছে */
+}
+
+/* .wrapper এর হোভার ইফেক্ট */
+.wrapper:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* হোভার করলে আরও স্পষ্ট শ্যাডো */
+    transform: translateY(-3px); /* সামান্য উপরে উঠবে */
+    background-color: #fffacd; /* হোভার করলে ব্যাকগ্রাউন্ড কালার হালকা পরিবর্তন */
+}
 
 .static-text {
   font-size: 18px;
