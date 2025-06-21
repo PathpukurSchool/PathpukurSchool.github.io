@@ -742,7 +742,6 @@ ul li a:hover {
     border-bottom: 1px solid #E0E0E0;
     color: #333;
     font-size: 14px;
-    border: 1px solid #E0E0E0;
     /* Removed white-space: nowrap; and overflow/text-overflow for data cells
        This allows content to wrap naturally within the cell by default.
        The table-wrapper's overflow-x handles overall table width. */
@@ -924,6 +923,7 @@ ul li a:hover {
                              এবং ভেঙে যেতে দেবে না। যদি লেখাটি সেলের প্রস্থের
                              চেয়ে বেশি হয়, তাহলে স্ক্রলবার কাজ করবে। */
     padding: 8px 10px; /* প্যাডিং সামঞ্জস্য করুন */
+    border: 1px solid #E0E0E0; /* প্রতিটি সেলকে আলাদা করতে বর্ডার */
 }
 
 /* Date কলামের জন্য ন্যূনতম প্রস্থ */
