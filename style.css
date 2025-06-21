@@ -922,9 +922,15 @@ ul li a:hover {
     }
 }
 
-/* --- New Styles for Date Picker Modal --- */
+
+
+
+
+
+
+/* --- Revised Styles for Date Picker Modal --- */
 .date-picker-content {
-    max-width: 320px; /* ক্যালেন্ডারের জন্য একটি নির্দিষ্ট প্রস্থ */
+    max-width: 340px; /* ক্যালেন্ডারের জন্য একটি নির্দিষ্ট প্রস্থ */
 }
 
 .date-picker-header {
@@ -932,7 +938,7 @@ ul li a:hover {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #4CAF50; /* সবুজ হেডার */
+    background-color: #4CAF50;
     color: white;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -945,6 +951,18 @@ ul li a:hover {
     font-size: 20px;
     cursor: pointer;
     padding: 5px;
+    margin: 0 5px;
+}
+
+.date-picker-header select {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 0 3px;
 }
 
 .date-picker-days {
@@ -953,7 +971,7 @@ ul li a:hover {
     text-align: center;
     font-weight: bold;
     padding: 10px 0;
-    background-color: #f2f2f2; /* হালকা ধূসর ব্যাকগ্রাউন্ড */
+    background-color: #f2f2f2;
     border-bottom: 1px solid #ddd;
 }
 
@@ -989,17 +1007,17 @@ ul li a:hover {
 }
 
 .date-picker-dates span.today-date {
-    background-color: #FFC107; /* আজকের দিনের জন্য হলুদ হাইলাইট */
+    background-color: #FFC107;
     color: white;
     font-weight: bold;
 }
 
 .date-picker-dates span.selected-date.today-date {
-    background-color: #28a745; /* যদি আজ সিলেক্টেড হয় */
+    background-color: #28a745;
 }
 
 .date-picker-dates span.empty {
-    visibility: hidden; /* ক্যালেন্ডারে ফাঁকা দিন */
+    visibility: hidden;
 }
 
 /* Close button for modals (shared style) */
@@ -1016,6 +1034,91 @@ ul li a:hover {
 .close-modal-btn:hover {
     background-color: #DA190B;
 }
+
+/* --- New Styles for Input Edit/New Entry Modal --- */
+.input-edit-content {
+    max-width: 600px;
+}
+
+#inputEditModalHeading {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+#inputEditTextArea {
+    width: calc(100% - 20px);
+    height: 180px; /* উচ্চতা বাড়ানো হয়েছে */
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical; /* উল্লম্বভাবে আকার পরিবর্তন করা যাবে */
+    font-family: Arial, sans-serif; /* সাধারণ ফন্ট */
+    box-sizing: border-box;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.modal-actions button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.modal-actions .store-btn {
+    background-color: #4CAF50; /* সবুজ */
+    color: white;
+}
+.modal-actions .store-btn:hover {
+    background-color: #45a049;
+}
+
+.modal-actions .cancel-btn {
+    background-color: #9E9E9E; /* ধূসর */
+    color: white;
+}
+.modal-actions .cancel-btn:hover {
+    background-color: #757575;
+}
+
+/* --- New Styles for Validation/Alert Modal --- */
+.validation-content {
+    max-width: 350px;
+    background-color: #FFF3E0; /* হালকা কমলা/হলুদ ব্যাকগ্রাউন্ড */
+    border: 1px solid #FFB74D; /* কমলা বর্ডার */
+}
+
+#validationMessage {
+    color: #E65100; /* গাঢ় কমলা লেখা */
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Specific styles for input fields in table when in editing mode (from prev response) */
+.data-table tbody tr.editing input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #8BC34A;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 38px;
+    cursor: pointer; /* ইনপুট ফিল্ডগুলোতে ক্লিক করার জন্য কার্সর দেখাবে */
+}
+
+
+
+
 
 /* --- New Styles for Live Input View Modal --- */
 .live-input-content {
