@@ -39,17 +39,16 @@ const validationMessage = document.getElementById('validationMessage');
 let rowToDelete = null; // Stores the HTML row element to be deleted
 let editingRowOriginalData = null; // Stores original data of a row when it's being edited
 
-
 // --- Global Event Listeners for Modals ---
-// This ensures that all modals can be closed by clicking their respective 'close-modal-btn'.
 document.querySelectorAll('.close-modal-btn').forEach(button => {
     button.addEventListener('click', (e) => {
-        e.target.closest('.modal').style.display = 'none';
+        // Find the closest parent with the NEW overlay class
+        e.target.closest('.table-modal-overlay').style.display = 'none'; // পরিবর্তিত লাইন
         // Specific cleanup when closing modals
-        if (e.target.closest('.modal').id === 'inputEditModal') {
+        if (e.target.closest('.table-modal-overlay').id === 'inputEditModal') { // id ঠিক আছে
             inputEditTextArea.value = '';
             currentEditInput = null;
-        } else if (e.target.closest('.modal').id === 'datePickerModal') {
+        } else if (e.target.closest('.table-modal-overlay').id === 'datePickerModal') { // id ঠিক আছে
             currentDatePickerInput = null;
         }
     });
@@ -57,24 +56,32 @@ document.querySelectorAll('.close-modal-btn').forEach(button => {
 
 // This handles closing modals when clicking outside their content.
 window.addEventListener('click', (e) => {
-    if (e.target === deleteConfirmModal) {
+    if (e.target === deleteConfirmModal) { // ID ব্যবহার করছে, তাই ঠিক আছে
         deleteConfirmModal.style.display = 'none';
         rowToDelete = null;
     }
-    if (e.target === datePickerModal) {
+    if (e.target === datePickerModal) { // ID ব্যবহার করছে, তাই ঠিক আছে
         datePickerModal.style.display = 'none';
         currentDatePickerInput = null;
     }
-    if (e.target === inputEditModal) {
-        // When clicking outside inputEditModal, we do NOT store the data.
+    if (e.target === inputEditModal) { // ID ব্যবহার করছে, তাই ঠিক আছে
         inputEditModal.style.display = 'none';
         inputEditTextArea.value = '';
         currentEditInput = null;
     }
-    if (e.target === validationModal) {
+    if (e.target === validationModal) { // ID ব্যবহার করছে, তাই ঠিক আছে
         validationModal.style.display = 'none';
     }
+
+    // অতিরিক্ত নিশ্চিতকরণ: যদি e.target একটি .table-modal-overlay হয় এবং এটি বন্ধ করা দরকার
+    // এটি সম্ভবত অপ্রয়োজনীয় যদি উপরের আইডি-ভিত্তিক বন্ধ কাজ করে, কিন্তু সুরক্ষার জন্য রাখতে পারেন
+    if (e.target.classList.contains('table-modal-overlay') && e.target !== deleteConfirmModal && e.target !== datePickerModal && e.target !== inputEditModal && e.target !== validationModal) {
+         e.target.style.display = 'none';
+    }
 });
+
+
+
 
 
 // --- Initial Setup on DOM Content Loaded ---
