@@ -683,83 +683,83 @@ ul li a:hover {
 }
 
 /* আপলোড স্টুডেন্ট নোটিশ */
-/* Table Section Container */
+/* Table Section Container and Table Wrapper remain mostly same */
 .table-section-container {
     margin: 20px auto;
-    max-width: 90%; /* অথবা আপনার পছন্দসই প্রস্থ */
+    max-width: 90%;
     padding: 15px;
-    background-color: #fcfcfc; /* হালকা ব্যাকগ্রাউন্ড */
+    background-color: #fcfcfc;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 .table-section-container h2 {
-    color: #4CAF50; /* সবুজ হেডিং */
+    color: #4CAF50;
     font-size: 28px;
     margin-bottom: 20px;
 }
 
-/* Table Wrapper for responsiveness */
 .table-wrapper {
-    overflow-x: auto; /* মোবাইলে টেবিল স্ক্রল করার জন্য */
-    -webkit-overflow-scrolling: touch; /* iOS এর জন্য মসৃণ স্ক্রলিং */
+    overflow-x: auto; /* For horizontal scrolling on small screens */
+    -webkit-overflow-scrolling: touch;
     margin-bottom: 15px;
 }
 
 /* Table Styling */
 .data-table {
     width: 100%;
-    border-collapse: collapse; /* বর্ডারগুলিকে একত্রিত করবে */
+    border-collapse: collapse;
     margin: 0 auto;
-    background-color: #FFFFFF; /* টেবিলের ব্যাকগ্রাউন্ড সাদা */
-    border-radius: 8px; /* টেবিলের কোণ গোলাকার */
-    overflow: hidden; /* বর্ডার-রেডিয়াস ঠিকভাবে কাজ করার জন্য */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* টেবিলের জন্য হালকা শ্যাডো */
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Table Header */
 .data-table thead th {
-    background-color: #4CAF50; /* সবুজ হেডিং ব্যাকগ্রাউন্ড */
-    color: #FFFFFF; /* সাদা লেখা */
+    background-color: #4CAF50;
+    color: #FFFFFF;
     padding: 12px 8px;
     text-align: left;
     font-size: 16px;
     font-weight: bold;
-    white-space: nowrap; /* হেডিং এক লাইনে রাখবে */
+    white-space: nowrap;
 }
 
 /* Table Body Cells */
 .data-table tbody td {
     padding: 10px 8px;
-    border-bottom: 1px solid #E0E0E0; /* হালকা বর্ডার */
-    color: #333; /* সাধারণ লেখার রঙ */
+    border-bottom: 1px solid #E0E0E0;
+    color: #333;
     font-size: 14px;
-    white-space: nowrap; /* কন্টেন্ট এক লাইনে রাখবে, প্রয়োজনে টেবিল স্ক্রল করবে */
-    overflow: hidden; /* অতিরিক্ত কন্টেন্ট লুকিয়ে রাখবে */
-    text-overflow: ellipsis; /* অতিরিক্ত কন্টেন্টের জন্য ... দেখাবে */
+    /* Removed white-space: nowrap; and overflow/text-overflow for data cells
+       This allows content to wrap naturally within the cell by default.
+       The table-wrapper's overflow-x handles overall table width. */
 }
 
 /* Table Row Hover Effect */
 .data-table tbody tr:hover {
-    background-color: #F5F5F5; /* হোভার করলে হালকা ধূসর ব্যাকগ্রাউন্ড */
+    background-color: #F5F5F5;
     cursor: pointer;
 }
 
 /* Editable Row Style */
 .data-table tbody tr.editing td {
     background-color: #FFFACD; /* এডিট মোডে দৃষ্টিনন্দন হালকা হলুদ */
-    color: #333; /* লেখার রঙ */
+    color: #333;
 }
 
 /* Input Fields in Editable Rows */
 .data-table tbody tr.editing input[type="text"] {
-    width: calc(100% - 16px); /* প্যাডিং বাদ দিয়ে পুরো প্রস্থ */
-    padding: 6px;
-    border: 1px solid #8BC34A; /* সবুজ বর্ডার */
+    width: 100%; /* ইনপুট ফিল্ডকে তার td এর পুরো প্রস্থ জুড়ে থাকতে দেবে */
+    padding: 8px; /* মোবাইলে বড় দেখানোর জন্য প্যাডিং বাড়ানো হয়েছে */
+    border: 1px solid #8BC34A;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 14px; /* মোবাইলে পঠনযোগ্য ফন্ট সাইজ */
     box-sizing: border-box; /* padding, border কে width এর মধ্যে রাখবে */
+    min-height: 38px; /* মোবাইলে ইনপুট ফিল্ডের ন্যূনতম উচ্চতা */
 }
 
 /* Action Buttons */
@@ -772,10 +772,11 @@ ul li a:hover {
     font-size: 13px;
     font-weight: bold;
     transition: background-color 0.2s ease, transform 0.2s ease;
+    white-space: nowrap; /* নিশ্চিত করে বাটন গুলো এক লাইনে থাকে */
 }
 
 .data-table .action-buttons .edit-btn {
-    background-color: #FFC107; /* হলুদ */
+    background-color: #FFC107;
     color: white;
 }
 .data-table .action-buttons .edit-btn:hover {
@@ -784,7 +785,7 @@ ul li a:hover {
 }
 
 .data-table .action-buttons .save-btn {
-    background-color: #4CAF50; /* সবুজ */
+    background-color: #4CAF50;
     color: white;
 }
 .data-table .action-buttons .save-btn:hover {
@@ -793,7 +794,7 @@ ul li a:hover {
 }
 
 .data-table .action-buttons .delete-btn {
-    background-color: #F44336; /* লাল */
+    background-color: #F44336;
     color: white;
 }
 .data-table .action-buttons .delete-btn:hover {
@@ -801,23 +802,30 @@ ul li a:hover {
     transform: translateY(-1px);
 }
 
+.data-table .action-buttons .cancel-btn {
+    background-color: #9E9E9E; /* ধূসর */
+    color: white;
+}
+.data-table .action-buttons .cancel-btn:hover {
+    background-color: #757575;
+    transform: translateY(-1px);
+}
+
 /* Empty Row (first row for input) */
 .data-table tbody tr.empty-row td {
-    background-color: #F8F8F8; /* হালকা ব্যাকগ্রাউন্ড */
+    background-color: #F8F8F8;
     font-style: italic;
     color: #777;
 }
 .data-table tbody tr.empty-row:hover {
-    background-color: #F8F8F8; /* হোভারে পরিবর্তন হবে না */
+    background-color: #F8F8F8;
     cursor: default;
 }
-/* Delete button should not be on the first empty row */
 .data-table tbody tr.empty-row .delete-btn {
-    display: none;
+    display: none; /* Delete button hidden on empty row */
 }
 
-
-/* Pagination Styles */
+/* Pagination Styles - Remains same */
 .pagination {
     margin-top: 20px;
     text-align: center;
@@ -851,26 +859,26 @@ ul li a:hover {
     margin: 0 8px;
 }
 
-/* Modal Styles */
+/* Modal Styles - Remains same */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    max-width: 400px; /* Max width for larger screens */
+    width: 80%;
+    max-width: 400px;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -894,4 +902,20 @@ ul li a:hover {
 
 .modal-content button:hover {
     opacity: 0.9;
+}
+
+/* Mobile specific styles for table cells - Make content wrap */
+@media (max-width: 768px) {
+    .data-table thead th,
+    .data-table tbody td {
+        white-space: normal; /* allow text to wrap */
+        word-break: break-word; /* ensure long words break */
+    }
+
+    /* Adjust padding for smaller screens if needed */
+    .data-table tbody td {
+        padding: 8px 5px;
+    }
+
+    /* Input fields can maintain their width: 100% and increased padding/min-height */
 }
