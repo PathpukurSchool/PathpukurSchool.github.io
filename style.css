@@ -916,12 +916,35 @@ ul li a:hover {
         word-break: break-word; /* ensure long words break */
     }
 
-    /* Adjust padding for smaller screens if needed */
-    .data-table tbody td {
-        padding: 8px 5px;
-    }
+    
+
+/* Existing styles remain as per previous response. */
+
+/* Add specific style for SI. column */
+.data-table thead th:first-child, /* SI. header */
+.data-table tbody td:first-child { /* SI. data cell */
+    width: 40px; /* Adjust as needed */
+    text-align: center;
+    font-weight: bold;
+    background-color: #f8f8f8; /* হালকা ব্যাকগ্রাউন্ড */
 }
 
+/* For editable rows, ensure SI. column does not show input */
+.data-table tbody tr.editing td:first-child {
+    background-color: #FFFACD; /* Match editing row background */
+    /* No input field, so no need to style it */
+}
+
+/* Ensure action buttons are compact enough with new SI column */
+.data-table .action-buttons button {
+    padding: 5px 8px; /* Slightly smaller padding */
+    font-size: 12px; /* Slightly smaller font */
+}
+
+/* Adjust cell padding if needed due to SI column */
+.data-table tbody td {
+    padding: 10px 6px; /* Slightly reduced horizontal padding */
+}
 
 
 
