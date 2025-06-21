@@ -14,7 +14,7 @@
     
 
     
-    `` <div style="
+    <div style="
     border: 2px solid #ff9999;
     background-color: #ffe6e6;
     color: #cc0000;
@@ -27,67 +27,73 @@
     margin: 0 auto;
   ">
     <strong> Available Soon! </strong><br> Please check back later for updates.
-    </div> ``
-
-
-
-    
-
-    
-<div class="table-section-container">
-    <h2>নোট/নোটিশ বোর্ড</h2>
-    <div class="table-wrapper">
-        <table id="data-table" class="data-table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Heading</th>
-                    <th>Subject</th>
-                    <th>Link</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                </tbody>
-        </table>
     </div>
-    
-    <div class="pagination" id="pagination-controls">
-        </div>
-</div>
 
-<div id="deleteConfirmModal" class="modal">
-    <div class="modal-content">
-        <p>Do you want to delete this row?</p>
-        <button id="confirmDeleteBtn">Yes</button>
-        <button id="cancelDeleteBtn">No</button>
-    </div>
-</div>
+
 
     
-<div id="datePickerModal" class="modal">
-    <div class="modal-content date-picker-content">
-        <div class="date-picker-header">
-            <button id="prevMonthBtn">&lt;</button>
-            <span id="currentMonthYear"></span>
-            <button id="nextMonthBtn">&gt;</button>
+
+    
+ <div class="table-section-container">
+        <h2>নোট/নোটিশ বোর্ড</h2>
+        <div class="table-wrapper">
+            <table id="data-table" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Heading</th>
+                        <th>Subject</th>
+                        <th>Link</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
         </div>
-        <div class="date-picker-days">
-            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-        </div>
-        <div id="calendarDates" class="date-picker-dates">
+        
+        <div class="pagination" id="pagination-controls">
             </div>
-        <button class="close-modal-btn">Close</button>
     </div>
-</div>
 
-<div id="liveInputViewModal" class="modal">
-    <div class="modal-content live-input-content">
-        <textarea id="liveInputTextArea" readonly></textarea>
-        <button class="close-modal-btn">Close</button>
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+            <p>Do you want to delete this row?</p>
+            <button id="confirmDeleteBtn">Yes</button>
+            <button id="cancelDeleteBtn">No</button>
+        </div>
     </div>
-</div>
 
+    <div id="datePickerModal" class="modal">
+        <div class="modal-content date-picker-content">
+            <div class="date-picker-header">
+                <button id="prevMonthBtn">&lt;</button>
+                <select id="monthSelect"></select> <select id="yearSelect"></select> <button id="nextMonthBtn">&gt;</button>
+            </div>
+            <div class="date-picker-days">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div id="calendarDates" class="date-picker-dates">
+                </div>
+            <button class="close-modal-btn">Close</button>
+        </div>
+    </div>
+
+    <div id="inputEditModal" class="modal">
+        <div class="modal-content input-edit-content">
+            <h3 id="inputEditModalHeading"></h3> <textarea id="inputEditTextArea"></textarea> <div class="modal-actions">
+                <button id="storeInputBtn" class="store-btn">Store</button>
+                <button id="cancelInputBtn" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="validationModal" class="modal">
+        <div class="modal-content validation-content">
+            <p id="validationMessage"></p>
+            <button class="close-modal-btn">OK</button>
+        </div>
+    </div>
 
 
     
