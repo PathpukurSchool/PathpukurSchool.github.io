@@ -703,9 +703,11 @@ ul li a:hover {
     margin-bottom: 20px;
 }
 
+/* --- টেবিল র‌্যাপিং এবং স্ক্রল করার জন্য পরিবর্তন --- */
 .table-wrapper {
-    overflow-x: auto; /* For horizontal scrolling on small screens */
-    -webkit-overflow-scrolling: touch;
+    overflow-x: auto; /* যদি কন্টেন্ট চওড়া হয় তাহলে অনুভূমিক স্ক্রলবার দেখাবে */
+    -webkit-overflow-scrolling: touch; /* iOS ডিভাইসের জন্য মসৃণ স্ক্রলিং */
+    width: 100%; /* সম্পূর্ণ উপলব্ধ প্রস্থ ব্যবহার করবে */
     margin-bottom: 15px;
 }
 
@@ -718,9 +720,68 @@ ul li a:hover {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px; /* পেজিনেশনের উপর ফাঁকা স্থান */
+    min-width: 700px; /* একটি উদাহরণ হিসেবে, টেবিলের মোট ন্যূনতম প্রস্থ।
+                         আপনার কলামের কন্টেন্টের উপর ভিত্তি করে এটি সামঞ্জস্য করুন।
+                         যদি আপনার কন্টেন্ট বেশি চওড়া হয়, তবে এই মান বাড়ান। */
 }
 
-/* ... (অন্যান্য স্টাইল) ... */
+
+
+
+
+
+
+
+
+
+
+
+/* Date কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(2),
+.data-table tbody td:nth-child(2) {
+    min-width: 120px; /* তারিখের জন্য উপযুক্ত প্রস্থ (DD-MM-YYYY) */
+}
+
+/* Heading কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(3),
+.data-table tbody td:nth-child(3) {
+    min-width: 150px; /* হেডিং এর জন্য উপযুক্ত প্রস্থ */
+}
+
+/* Subject কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(4),
+.data-table tbody td:nth-child(4) {
+    min-width: 200px; /* সাবজেক্টের জন্য উপযুক্ত প্রস্থ */
+}
+
+/* Link কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(5),
+.data-table tbody td:nth-child(5) {
+    min-width: 100px; /* লিংকের জন্য উপযুক্ত প্রস্থ */
+}
+
+/* Actions কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(6),
+.data-table tbody td:nth-child(6) {
+    min-width: 150px; /* অ্যাকশন বাটনের জন্য উপযুক্ত প্রস্থ */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Table Header */
 .data-table thead th {
@@ -730,37 +791,44 @@ ul li a:hover {
     text-align: left;
     font-size: 16px;
     font-weight: bold;
-    white-space: nowrap;
     border: 1px solid #E0E0E0; /* প্রতিটি সেলকে আলাদা করতে বর্ডার */
+    white-space: nowrap; /* এই প্রপার্টিটি সেলের ভিতরের লেখাকে এক লাইনে রাখবে
+                             এবং ভেঙে যেতে দেবে না। যদি লেখাটি সেলের প্রস্থের
+                             চেয়ে বেশি হয়, তাহলে স্ক্রলবার কাজ করবে। */
+    padding: 8px 10px;
 }
 
 /* FIX 2: Specific style for SI. column - Removed background-color */
 .data-table thead th:first-child { /* SI. header */
+    min-width: 40px; /* SI. কলামের জন্য ন্যূনতম প্রস্থ */
     width: 40px; /* Adjust as needed */
     text-align: center;
+     width: 40px;
     /* background-color: #f8f8f8; -- এই লাইনটি মুছে ফেলুন */
     font-weight: bold; /* ফন্ট বোল্ড থাকবে */
-}
+}  
 
 /* Ensure data cells for SI. are still styled as intended */
 .data-table tbody td:first-child { /* SI. data cell */
-    width: 40px; /* Adjust as needed */
+    min-width: 40px; /* SI. কলামের জন্য ন্যূনতম প্রস্থ */
+    width: 40px;
     text-align: center;
     font-weight: bold;
     background-color: #f8f8f8; /* ডেটা সেলের জন্য এই ব্যাকগ্রাউন্ড থাকবে */
 }
 
-
 /* Table Body Cells */
 .data-table tbody td {
-    padding: 10px 8px;
-    border-bottom: 1px solid #E0E0E0;
+    padding: 8px 10px;
     color: #333;
     font-size: 14px;
-    /* Removed white-space: nowrap; and overflow/text-overflow for data cells
-       This allows content to wrap naturally within the cell by default.
-       The table-wrapper's overflow-x handles overall table width. */
-}
+    border: 1px solid #E0E0E0;
+    vertical-align: top; /* কন্টেন্ট উপরের দিকে অ্যালাইন করবে */
+    background-color: #FFFFFF;
+    white-space: nowrap; /* এই প্রপার্টিটি সেলের ভিতরের লেখাকে এক লাইনে রাখবে
+                             এবং ভেঙে যেতে দেবে না। যদি লেখাটি সেলের প্রস্থের
+                             চেয়ে বেশি হয়, তাহলে স্ক্রলবার কাজ করবে। */
+    }
 
 /* Table Row Hover Effect */
 .data-table tbody tr:hover {
@@ -774,15 +842,16 @@ ul li a:hover {
     color: #333;
 }
 
-/* Input Fields in Editable Rows */
+/* এডিটিং মোডের জন্য ইনপুট ফিল্ড স্টাইল */
 .data-table tbody tr.editing input[type="text"] {
-    width: 100%; /* ইনপুট ফিল্ডকে তার td এর পুরো প্রস্থ জুড়ে থাকতে দেবে */
-    padding: 8px; /* মোবাইলে বড় দেখানোর জন্য প্যাডিং বাড়ানো হয়েছে */
+    width: 100%;
+    padding: 8px;
     border: 1px solid #8BC34A;
     border-radius: 4px;
-    font-size: 14px; /* মোবাইলে পঠনযোগ্য ফন্ট সাইজ */
-    box-sizing: border-box; /* padding, border কে width এর মধ্যে রাখবে */
-    min-height: 38px; /* মোবাইলে ইনপুট ফিল্ডের ন্যূনতম উচ্চতা */
+    font-size: 14px;
+    box-sizing: border-box; /* প্যাডিং এবং বর্ডার প্রস্থের মধ্যে অন্তর্ভুক্ত হবে */
+    min-height: 38px;
+    cursor: pointer;
 }
 
 /* Action Buttons */
@@ -1111,21 +1180,6 @@ ul li a:hover {
     font-weight: bold;
     margin-bottom: 15px;
 }
-
-/* Specific styles for input fields in table when in editing mode (from prev response) */
-.data-table tbody tr.editing input[type="text"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #8BC34A;
-    border-radius: 4px;
-    font-size: 14px;
-    box-sizing: border-box;
-    min-height: 38px;
-    cursor: pointer; /* ইনপুট ফিল্ডগুলোতে ক্লিক করার জন্য কার্সর দেখাবে */
-}
-
-
-
 
 
 /* --- New Styles for Live Input View Modal --- */
