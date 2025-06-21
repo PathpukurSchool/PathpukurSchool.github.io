@@ -1,18 +1,16 @@
+
 // Data Storage (localStorage for persistence)
 let tableData = JSON.parse(localStorage.getItem('tableData')) || [];
 let currentPage = 1;
 const rowsPerPage = 10;
 
-// Get DOM elements
 const dataTableBody = document.querySelector('#data-table tbody');
 const paginationControls = document.getElementById('pagination-controls');
-
-// Delete Confirmation Modal elements
 const deleteConfirmModal = document.getElementById('deleteConfirmModal');
 const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
-// Date Picker Modal elements
+// Date Picker elements
 const datePickerModal = document.getElementById('datePickerModal');
 const monthSelect = document.getElementById('monthSelect');
 const yearSelect = document.getElementById('yearSelect');
@@ -35,133 +33,56 @@ let currentEditInput = null; // To track which input field is being edited/newly
 const validationModal = document.getElementById('validationModal');
 const validationMessage = document.getElementById('validationMessage');
 
-// Variables for managing row state
-let rowToDelete = null; // Stores the HTML row element to be deleted
-let editingRowOriginalData = null; // Stores original data of a row when it's being edited
+let rowToDelete = null;
+let editingRowOriginalData = null; // Stores data before editing for cancel operation
 
-// --- Global Event Listeners for Modals ---
+// --- Global Setup ---
+// Close modal buttons (general)
 document.querySelectorAll('.close-modal-btn').forEach(button => {
     button.addEventListener('click', (e) => {
-        // Find the closest parent with the NEW overlay class
-        e.target.closest('.table-modal-overlay').style.display = 'none'; // পরিবর্তিত লাইন
-        // Specific cleanup when closing modals
-        if (e.target.closest('.table-modal-overlay').id === 'inputEditModal') { // id ঠিক আছে
+        e.target.closest('.modal').style.display = 'none';
+        // Specific cleanup for modals
+        if (e.target.closest('.modal').id === 'inputEditModal') {
             inputEditTextArea.value = '';
             currentEditInput = null;
-        } else if (e.target.closest('.table-modal-overlay').id === 'datePickerModal') { // id ঠিক আছে
+        } else if (e.target.closest('.modal').id === 'datePickerModal') {
             currentDatePickerInput = null;
         }
     });
 });
 
-// This handles closing modals when clicking outside their content.
-window.addEventListener('click', (e) => {
-    if (e.target === deleteConfirmModal) { // ID ব্যবহার করছে, তাই ঠিক আছে
-        deleteConfirmModal.style.display = 'none';
-        rowToDelete = null;
-    }
-    if (e.target === datePickerModal) { // ID ব্যবহার করছে, তাই ঠিক আছে
-        datePickerModal.style.display = 'none';
-        currentDatePickerInput = null;
-    }
-    if (e.target === inputEditModal) { // ID ব্যবহার করছে, তাই ঠিক আছে
-        inputEditModal.style.display = 'none';
-        inputEditTextArea.value = '';
-        currentEditInput = null;
-    }
-    if (e.target === validationModal) { // ID ব্যবহার করছে, তাই ঠিক আছে
-        validationModal.style.display = 'none';
-    }
-
-    // অতিরিক্ত নিশ্চিতকরণ: যদি e.target একটি .table-modal-overlay হয় এবং এটি বন্ধ করা দরকার
-    // এটি সম্ভবত অপ্রয়োজনীয় যদি উপরের আইডি-ভিত্তিক বন্ধ কাজ করে, কিন্তু সুরক্ষার জন্য রাখতে পারেন
-    if (e.target.classList.contains('table-modal-overlay') && e.target !== deleteConfirmModal && e.target !== datePickerModal && e.target !== inputEditModal && e.target !== validationModal) {
-         e.target.style.display = 'none';
-    }
-});
-
-
-
-
-
-// --- Initial Setup on DOM Content Loaded ---
-// Ensures all HTML elements are loaded before trying to attach event listeners or manipulate them.
+// Initial Render
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize month and year dropdowns in date picker
-    populateMonthYearSelects();
-    // Render the table with data
+    populateMonthYearSelects(); // Populate month and year dropdowns
     renderTable();
-    // Populate the calendar for the current month/year
-    populateCalendar(currentMonth, currentYear);
-
-    // Attach event listeners for the delete confirmation buttons
-    confirmDeleteBtn.addEventListener('click', () => {
-        if (rowToDelete) {
-            const index = parseInt(rowToDelete.dataset.index); // Get the original index from the data-index attribute
-            tableData.splice(index, 1); // Remove the row data from the array
-            localStorage.setItem('tableData', JSON.stringify(tableData)); // Update localStorage
-            rowToDelete = null; // Reset rowToDelete
-            deleteConfirmModal.style.display = 'none'; // Hide the modal
-            
-            // Adjust current page if the last row on a page was deleted
-            const totalPages = Math.ceil(tableData.length / rowsPerPage);
-            if (currentPage > totalPages && totalPages > 0) {
-                currentPage = totalPages;
-            } else if (totalPages === 0) { // If all data is deleted, reset to page 1
-                currentPage = 1;
-            }
-            renderTable(); // Re-render the table to reflect changes
-        }
-    });
-
-    cancelDeleteBtn.addEventListener('click', () => {
-        rowToDelete = null; // Reset rowToDelete
-        deleteConfirmModal.style.display = 'none'; // Hide the modal
-    });
+    populateCalendar(currentMonth, currentYear); // Initial calendar render
 });
 
-
-// --- Table Rendering Functions ---
-/**
- * Renders the entire data table, including the empty input row and paginated data.
- */
+// --- Table Rendering ---
 function renderTable() {
-    dataTableBody.innerHTML = ''; // Clear existing table rows
+    dataTableBody.innerHTML = '';
 
     // Always add the empty input row at the top
     dataTableBody.appendChild(createEmptyRow());
 
-    // Calculate start and end indices for pagination
     const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     const paginatedData = tableData.slice(startIndex, endIndex);
 
-    // Iterate over paginated data to create and append table rows
     paginatedData.forEach((rowData, index) => {
-        // Calculate SI. number for descending order
-        // Total actual data rows - (current index on page + rows on previous pages)
-        const siNumber = tableData.length - (startIndex + index);
-        // Pass the SI number and the original index in the 'tableData' array
-        const row = createTableRow(rowData, siNumber, startIndex + index); 
+        const row = createTableRow(rowData, startIndex + index);
         dataTableBody.appendChild(row);
     });
 
-    renderPaginationControls(); // Update pagination buttons
+    renderPaginationControls();
 }
 
-/**
- * Creates an HTML table row for existing data.
- * @param {Object} data - The data object for the row (date, heading, subject, link).
- * @param {number} siNumber - The calculated serial number for the row.
- * @param {number} originalIndex - The actual index of the data in the main tableData array.
- * @returns {HTMLElement} The created table row (<tr>).
- */
-function createTableRow(data, siNumber, originalIndex) {
+function createTableRow(data, index) {
     const tr = document.createElement('tr');
-    tr.dataset.index = originalIndex; // Store original index for update/delete operations
+    tr.dataset.index = index;
 
     tr.innerHTML = `
-        <td>${siNumber}.</td> <td>${data.date}</td>
+        <td>${data.date}</td>
         <td>${data.heading}</td>
         <td>${data.subject}</td>
         <td><a href="${data.link}" target="_blank" ${!data.link ? 'style="display:none;"' : ''}>${data.link || ''}</a></td>
@@ -173,107 +94,82 @@ function createTableRow(data, siNumber, originalIndex) {
         </td>
     `;
 
-    // Attach event listeners to action buttons within this row
-    tr.querySelector('.edit-btn').addEventListener('click', () => startEditing(tr, data));
-    tr.querySelector('.save-btn').addEventListener('click', () => saveRow(tr));
-    tr.querySelector('.cancel-btn').addEventListener('click', () => cancelEditing(tr));
-    tr.querySelector('.delete-btn').addEventListener('click', () => confirmDelete(tr));
+    tr.querySelector('.edit-btn').addEventListener('click', (e) => startEditing(tr, data));
+    tr.querySelector('.save-btn').addEventListener('click', (e) => saveRow(tr));
+    tr.querySelector('.cancel-btn').addEventListener('click', (e) => cancelEditing(tr));
+    tr.querySelector('.delete-btn').addEventListener('click', (e) => confirmDelete(tr));
 
     return tr;
 }
 
-/**
- * Creates the always-present empty row for new data input.
- * @returns {HTMLElement} The created table row (<tr>) with input fields.
- */
 function createEmptyRow() {
     const tr = document.createElement('tr');
-    tr.classList.add('empty-row', 'editing'); // Add 'editing' class to style input fields
-    tr.dataset.index = 'new'; // Indicate this is a new row, not an existing one
+    tr.classList.add('empty-row', 'editing');
+    tr.dataset.index = 'new';
 
     tr.innerHTML = `
-        <td></td> <td><input type="text" class="input-date" placeholder="Date" readonly></td>
+        <td><input type="text" class="input-date" placeholder="Date" readonly></td>
         <td><input type="text" class="input-heading" placeholder="Heading"></td>
         <td><input type="text" class="input-subject" placeholder="Subject"></td>
         <td><input type="text" class="input-link" placeholder="Link (Optional)"></td>
         <td class="action-buttons">
             <button class="save-btn">Save</button>
-            <button class="cancel-btn" style="display:none;">Cancel</button> 
-            <button class="delete-btn" style="display:none;">Delete</button>
+            <button class="cancel-btn" style="display:none;">Cancel</button> <button class="delete-btn" style="display:none;">Delete</button>
         </td>
     `;
     
-    // Attach input-specific event listeners (for date picker and input edit modal)
+    // Attach event listeners to newly created input fields in the empty row
     attachInputEventListeners(tr);
     
-    // Attach save button listener for this new row
-    tr.querySelector('.save-btn').addEventListener('click', () => saveRow(tr));
+    tr.querySelector('.save-btn').addEventListener('click', (e) => saveRow(tr));
     
     return tr;
 }
 
-
 // --- Edit/Save/Cancel Logic ---
-/**
- * Puts a table row into editing mode, replacing display text with input fields.
- * @param {HTMLElement} row - The table row (<tr>) to edit.
- * @param {Object} originalData - The original data of the row before editing.
- */
 function startEditing(row, originalData) {
-    editingRowOriginalData = { ...originalData }; // Save a copy of original data for 'Cancel'
-    row.classList.add('editing'); // Add class to apply editing styles
+    editingRowOriginalData = { ...originalData }; // Save original data for cancel
+    row.classList.add('editing');
     const cells = row.querySelectorAll('td');
 
     cells.forEach((cell, index) => {
-        if (index === 0) { // SI. column - not editable, skip
-            // Do nothing, SI. number is automatically handled
-        } else if (index >= 1 && index <= 4) { // Date, Heading, Subject, Link columns
-            // Determine which data key corresponds to this cell's content
-            const dataKeys = ['date', 'heading', 'subject', 'link'];
-            const dataKeyIndex = index - 1; // Adjust index because SI. is at 0
-            const currentContent = originalData[dataKeys[dataKeyIndex]];
-            
+        if (index < 4) { // Date, Heading, Subject, Link columns
+            const currentContent = originalData[Object.keys(originalData)[index]];
             let inputType = 'text';
             let inputClass = '';
             let placeholder = '';
 
-            if (dataKeyIndex === 0) { // Date column
+            if (index === 0) { // Date column
                 inputClass = 'input-date';
-                inputType = 'text'; // Use text for custom date picker
+                inputType = 'text'; // For custom date picker
                 placeholder = 'DD-MM-YYYY';
-            } else if (dataKeyIndex === 1) { // Heading
+            } else if (index === 1) { // Heading
                 inputClass = 'input-heading';
                 placeholder = 'Heading';
-            } else if (dataKeyIndex === 2) { // Subject
+            } else if (index === 2) { // Subject
                 inputClass = 'input-subject';
                 placeholder = 'Subject';
-            } else if (dataKeyIndex === 3) { // Link
+            } else if (index === 3) { // Link
                 inputClass = 'input-link';
                 placeholder = 'Link (Optional)';
             }
 
-            // Replace cell content with an input field
-            cell.innerHTML = `<input type="${inputType}" class="${inputClass}" value="${currentContent}" placeholder="${placeholder}" ${dataKeyIndex === 0 ? 'readonly' : ''}>`;
+            // Create input field. Date input is readonly, others are not.
+            cell.innerHTML = `<input type="${inputType}" class="${inputClass}" value="${currentContent}" placeholder="${placeholder}" ${index === 0 ? 'readonly' : ''}>`;
         }
     });
 
-    // Attach input-specific event listeners to the newly created input fields
+    // Attach event listeners to newly created input fields
     attachInputEventListeners(row);
 
-    // Show/hide action buttons
+    // Show/Hide buttons
     row.querySelector('.edit-btn').style.display = 'none';
     row.querySelector('.save-btn').style.display = 'inline-block';
     row.querySelector('.cancel-btn').style.display = 'inline-block';
     row.querySelector('.delete-btn').style.display = 'none';
 }
 
-/**
- * Saves the data from an edited or new table row.
- * Performs validation before saving.
- * @param {HTMLElement} row - The table row (<tr>) being saved.
- */
 function saveRow(row) {
-    // Retrieve values from input fields
     const dateInput = row.querySelector('.input-date');
     const headingInput = row.querySelector('.input-heading');
     const subjectInput = row.querySelector('.input-subject');
@@ -284,147 +180,134 @@ function saveRow(row) {
     const subject = subjectInput ? subjectInput.value.trim() : '';
     const link = linkInput ? linkInput.value.trim() : '';
 
-    // --- Validation ---
-    if (!date) { 
-        showValidationMessage('Please fill up the Date field.'); 
-        if (dateInput) dateInput.focus(); // Focus on the problematic input
-        return; 
-    }
-    if (!heading) { 
-        showValidationMessage('Please fill up the Heading field.'); 
-        if (headingInput) headingInput.focus();
-        return; 
-    }
-    if (!subject) { 
-        showValidationMessage('Please fill up the Subject field.'); 
-        if (subjectInput) subjectInput.focus();
-        return; 
-    }
+    // Validation using custom modal
+    if (!date) { showValidationMessage('Please fill up the Date field.'); dateInput.focus(); return; }
+    if (!heading) { showValidationMessage('Please fill up the Heading field.'); headingInput.focus(); return; }
+    if (!subject) { showValidationMessage('Please fill up the Subject field.'); subjectInput.focus(); return; }
 
     const newRowData = { date, heading, subject, link };
     const rowIndex = row.dataset.index;
 
-    if (rowIndex === 'new') { // If it's a new entry
-        tableData.unshift(newRowData); // Add to the beginning of the array
-        currentPage = 1; // Go to the first page to see the new entry
-    } else { // If it's an existing row being edited
-        tableData[parseInt(rowIndex)] = newRowData; // Update data at its original index
+    if (rowIndex === 'new') {
+        tableData.unshift(newRowData);
+        currentPage = 1;
+    } else {
+        tableData[parseInt(rowIndex)] = newRowData;
     }
 
-    localStorage.setItem('tableData', JSON.stringify(tableData)); // Persist data
-    row.classList.remove('editing'); // Remove editing class
-    editingRowOriginalData = null; // Clear original data
+    localStorage.setItem('tableData', JSON.stringify(tableData));
+    row.classList.remove('editing');
+    editingRowOriginalData = null; // Clear original data after save
 
-    renderTable(); // Re-render the table to show updated data
+    renderTable(); // Re-render the table
 }
 
-/**
- * Cancels editing for a row, reverting it to its original state or clearing it if new.
- * @param {HTMLElement} row - The table row (<tr>) on which editing is cancelled.
- */
 function cancelEditing(row) {
     const rowIndex = row.dataset.index;
     if (rowIndex === 'new') {
-        // If it was the empty row, simply clear inputs and re-render to reset
+        // If it was the empty row, clear inputs and re-render to reset
         row.querySelectorAll('input').forEach(input => input.value = '');
+        // Do not remove 'editing' class immediately for empty row, as it's meant to be editable
         renderTable(); // This will recreate the empty row in its initial state
     } else {
-        // Revert to original data for an existing row
+        // Revert to original data for existing row
         tableData[parseInt(rowIndex)] = { ...editingRowOriginalData };
         editingRowOriginalData = null; // Clear original data
-        row.classList.remove('editing'); // Remove editing class
+        row.classList.remove('editing');
         renderTable(); // Re-render to show original data
     }
 }
 
-
-// --- Delete Functionality ---
-/**
- * Shows the delete confirmation modal.
- * @param {HTMLElement} row - The table row (<tr>) to be deleted.
- */
+// --- Delete Functionality --- (Remains largely the same)
 function confirmDelete(row) {
-    rowToDelete = row; // Store the row element globally
-    deleteConfirmModal.style.display = 'block'; // Show the modal
+    rowToDelete = row;
+    deleteConfirmModal.style.display = 'block';
 }
 
+confirmDeleteBtn.addEventListener('click', () => {
+    if (rowToDelete) {
+        const index = parseInt(rowToDelete.dataset.index);
+        tableData.splice(index, 1);
+        localStorage.setItem('tableData', JSON.stringify(tableData));
+        rowToDelete = null;
+        deleteConfirmModal.style.display = 'none';
+        
+        const totalPages = Math.ceil(tableData.length / rowsPerPage);
+        if (currentPage > totalPages && totalPages > 0) {
+            currentPage = totalPages;
+        } else if (totalPages === 0) {
+            currentPage = 1;
+        }
+        renderTable();
+    }
+});
 
-// --- Pagination Functions ---
-/**
- * Renders the pagination controls (Previous, Next, and page number buttons).
- */
+cancelDeleteBtn.addEventListener('click', () => {
+    rowToDelete = null;
+    deleteConfirmModal.style.display = 'none';
+});
+
+// --- Pagination --- (Remains largely the same)
 function renderPaginationControls() {
-    paginationControls.innerHTML = ''; // Clear existing controls
+    paginationControls.innerHTML = '';
     const totalPages = Math.ceil(tableData.length / rowsPerPage);
 
-    // Don't show pagination if there's no data or only one page of data
     if (totalPages <= 1 && tableData.length <= rowsPerPage && dataTableBody.children.length <= 1) {
-        return;
-    }
-    if (totalPages <= 1 && tableData.length <= rowsPerPage) {
-         return; // If only 1 page or less data than rowsPerPage, no pagination needed
+        return; // No pagination if no data or only empty row
     }
 
-    // Create 'Back' button
     const prevBtn = document.createElement('button');
     prevBtn.textContent = 'Back';
-    prevBtn.disabled = currentPage === 1; // Disable if on the first page
+    prevBtn.disabled = currentPage === 1;
     prevBtn.addEventListener('click', () => {
-        currentPage--; // Decrement page number
-        renderTable(); // Re-render table
+        currentPage--;
+        renderTable();
     });
     paginationControls.appendChild(prevBtn);
 
-    // Create page number buttons
     for (let i = 1; i <= totalPages; i++) {
         const pageBtn = document.createElement('button');
         pageBtn.textContent = i;
-        pageBtn.classList.toggle('active', i === currentPage); // Highlight active page
+        pageBtn.classList.toggle('active', i === currentPage);
         pageBtn.addEventListener('click', () => {
-            currentPage = i; // Set current page
-            renderTable(); // Re-render table
+            currentPage = i;
+            renderTable();
         });
         paginationControls.appendChild(pageBtn);
     }
 
-    // Create 'Next' button
     const nextBtn = document.createElement('button');
     nextBtn.textContent = 'Next';
-    nextBtn.disabled = currentPage === totalPages; // Disable if on the last page
+    nextBtn.disabled = currentPage === totalPages;
     nextBtn.addEventListener('click', () => {
-        currentPage++; // Increment page number
-        renderTable(); // Re-render table
+        currentPage++;
+        renderTable();
     });
     paginationControls.appendChild(nextBtn);
 }
 
 
-// --- Date Picker Functions ---
-/**
- * Populates the month and year dropdowns in the date picker.
- */
+/* --- New Functions for Date Picker --- */
 function populateMonthYearSelects() {
     const currentYearFull = new Date().getFullYear();
-
-    // Populate years (e.g., from 5 years before to 5 years after current year)
+    // Populate years (e.g., currentYear - 5 to currentYear + 5)
     for (let i = currentYearFull - 5; i <= currentYearFull + 5; i++) {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = i;
         yearSelect.appendChild(option);
     }
-    yearSelect.value = currentYear; // Set initial selected year
+    yearSelect.value = currentYear; // Set initial year
 
-    // Populate months (January to December)
+    // Populate months
     for (let i = 0; i < 12; i++) {
         const option = document.createElement('option');
         option.value = i;
-        option.textContent = new Date(0, i).toLocaleString('en-US', { month: 'long' }); // Get full month name
+        option.textContent = new Date(0, i).toLocaleString('en-US', { month: 'long' });
         monthSelect.appendChild(option);
     }
-    monthSelect.value = currentMonth; // Set initial selected month
+    monthSelect.value = currentMonth; // Set initial month
 
-    // Add event listeners for month and year changes
     monthSelect.addEventListener('change', (e) => {
         currentMonth = parseInt(e.target.value);
         populateCalendar(currentMonth, currentYear);
@@ -435,68 +318,55 @@ function populateMonthYearSelects() {
     });
 }
 
-/**
- * Populates the calendar grid for a given month and year.
- * @param {number} month - The month (0-indexed: 0 for Jan, 11 for Dec).
- * @param {number} year - The full year (e.g., 2023).
- */
 function populateCalendar(month, year) {
-    // Update dropdowns to match current calendar view
+    // currentMonthYear.textContent = `${new Date(year, month).toLocaleString('en-US', { month: 'long' })} ${year}`; // No longer needed with dropdowns
     monthSelect.value = month;
     yearSelect.value = year;
 
-    calendarDates.innerHTML = ''; // Clear previous dates
+    calendarDates.innerHTML = '';
 
-    // Get the day of the week for the first day of the month (0=Sunday, 6=Saturday)
-    const firstDay = new Date(year, month, 1).getDay(); 
-    // Get the number of days in the current month
-    const daysInMonth = new Date(year, month + 1, 0).getDate(); 
+    const firstDay = new Date(year, month, 1).getDay(); // 0 for Sunday, 1 for Monday etc.
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); // Last day of month
 
-    // Add empty spans for days before the 1st of the month to align correctly
     for (let i = 0; i < firstDay; i++) {
         const span = document.createElement('span');
-        span.classList.add('empty'); // Hide these empty cells
+        span.classList.add('empty');
         calendarDates.appendChild(span);
     }
 
-    // Get today's date for highlighting
     const today = new Date();
     const todayDate = today.getDate();
     const todayMonth = today.getMonth();
     const todayYear = today.getFullYear();
 
-    // Populate days of the month
     for (let day = 1; day <= daysInMonth; day++) {
         const span = document.createElement('span');
-        // Format date as DD-MM-YYYY
+        // Date format DD-MM-YYYY
         const formattedDate = `${String(day).padStart(2, '0')}-${String(month + 1).padStart(2, '0')}-${year}`;
-        span.textContent = day; // Display just the day number
-        span.dataset.date = formattedDate; // Store full formatted date in data attribute
+        span.textContent = day;
+        span.dataset.date = formattedDate;
 
-        // Add 'today-date' class if it's today
         if (day === todayDate && month === todayMonth && year === todayYear) {
             span.classList.add('today-date');
         }
 
-        // Add 'selected-date' class if it matches the current input field's value
         if (currentDatePickerInput && currentDatePickerInput.value === formattedDate) {
             span.classList.add('selected-date');
         }
 
-        // Add click listener to select the date
         span.addEventListener('click', () => {
             if (currentDatePickerInput) {
-                currentDatePickerInput.value = formattedDate; // Set input field's value
-                datePickerModal.style.display = 'none'; // Close picker
+                currentDatePickerInput.value = formattedDate;
+                datePickerModal.style.display = 'none';
             }
         });
         calendarDates.appendChild(span);
     }
 }
-// Event listeners for month navigation buttons
+
 prevMonthBtn.addEventListener('click', () => {
     currentMonth--;
-    if (currentMonth < 0) { // If going back from January, go to December of previous year
+    if (currentMonth < 0) {
         currentMonth = 11;
         currentYear--;
     }
@@ -505,95 +375,102 @@ prevMonthBtn.addEventListener('click', () => {
 
 nextMonthBtn.addEventListener('click', () => {
     currentMonth++;
-    if (currentMonth > 11) { // If going forward from December, go to January of next year
+    if (currentMonth > 11) {
         currentMonth = 0;
         currentYear++;
     }
     populateCalendar(currentMonth, currentYear);
 });
 
-// --- Functions for Input Edit Modal (Pop-up) ---
-/**
- * Attaches event listeners to input fields within a row.
- * This includes opening the date picker for date fields and
- * opening the general input edit modal for other text fields.
- * @param {HTMLElement} rowElement - The table row (<tr>) containing input fields.
- */
+/* --- New Functions for Input Edit Modal (Pop-up) --- */
+
+// Attach event listeners to input fields
 function attachInputEventListeners(rowElement) {
     // Date input: opens date picker
     const dateInput = rowElement.querySelector('.input-date');
     if (dateInput) {
         dateInput.addEventListener('click', (e) => {
-            currentDatePickerInput = e.target; // Store reference to the clicked input
-            datePickerModal.style.display = 'block'; // Show date picker modal
-            
-            const inputDateStr = e.target.value; // Get current date string from the input field
+            currentDatePickerInput = e.target;
+            datePickerModal.style.display = 'block';
+            // Set calendar to current input date if available, or today
+            const inputDateStr = e.target.value; // Get DD-MM-YYYY
             if (inputDateStr) {
-                const parts = inputDateStr.split('-'); // Split DD-MM-YYYY
+                const parts = inputDateStr.split('-');
                 if (parts.length === 3) {
-                    // Update currentMonth and currentYear to show the input's date in calendar
-                    currentMonth = parseInt(parts[1]) - 1; // Month is 0-indexed
+                    currentDay = parseInt(parts[0]);
+                    currentMonth = parseInt(parts[1]) - 1; // Months are 0-indexed
                     currentYear = parseInt(parts[2]);
                 }
             } else {
-                // If input is empty, show today's date in calendar
                 const today = new Date();
                 currentMonth = today.getMonth();
                 currentYear = today.getFullYear();
             }
-            populateCalendar(currentMonth, currentYear); // Re-populate calendar based on determined month/year
+            populateCalendar(currentMonth, currentYear);
         });
     }
-    // Other inputs (Heading, Subject, Link): opens general edit modal
+
+    // Other inputs: opens general edit modal
     rowElement.querySelectorAll('input[type="text"]:not(.input-date)').forEach(input => {
         input.addEventListener('click', (e) => {
-            currentEditInput = e.target; // Store reference to the clicked input
+            currentEditInput = e.target;
+            // Set modal heading based on the column
+            const headerText = e.target.closest('td').previousElementSibling ? e.target.closest('td').previousElementSibling.querySelector('input') ? e.target.closest('td').previousElementSibling.querySelector('input').placeholder : e.target.closest('td').previousElementSibling.textContent : ''; // Get heading from placeholder or previous cell if not heading or subject
             
-            // Determine modal heading based on the table header of the clicked column
+            // Simpler way to get heading:
             const cellIndex = Array.from(e.target.closest('tr').children).indexOf(e.target.closest('td'));
-            const headerText = document.querySelector('#data-table thead th:nth-child(' + (cellIndex + 1) + ')').textContent;
-            inputEditModalHeading.textContent = headerText; // Set modal heading
+            const headerTitle = document.querySelector('#data-table thead th:nth-child(' + (cellIndex + 1) + ')').textContent;
+            inputEditModalHeading.textContent = headerTitle; // Set modal heading
 
-            inputEditTextArea.value = e.target.value; // Set textarea value to current input value
-            inputEditModal.style.display = 'block'; // Show input edit modal
-            inputEditTextArea.focus(); // Focus on the textarea for easy editing
+            inputEditTextArea.value = e.target.value;
+            inputEditModal.style.display = 'block';
+            inputEditTextArea.focus();
         });
     });
 }
-// Event listener for 'Store' button in the input edit modal
+
+// Store button in Input Edit Modal
 storeInputBtn.addEventListener('click', () => {
     if (currentEditInput) {
-        currentEditInput.value = inputEditTextArea.value.trim(); // Transfer edited text to the table input field
-        inputEditModal.style.display = 'none'; // Hide modal
+        currentEditInput.value = inputEditTextArea.value.trim(); // Store edited/new text
+        inputEditModal.style.display = 'none';
         inputEditTextArea.value = ''; // Clear textarea
         currentEditInput = null; // Reset
     }
 });
 
-// Event listener for 'Cancel' button in the input edit modal
+// Cancel button in Input Edit Modal
 cancelInputBtn.addEventListener('click', () => {
-    inputEditModal.style.display = 'none'; // Hide modal
+    inputEditModal.style.display = 'none';
     inputEditTextArea.value = ''; // Clear textarea
     currentEditInput = null; // Reset
-    // Note: The original input field's value is not changed here, ensuring 'Cancel' truly reverts.
+    // Note: No need to revert currentEditInput.value, as it wasn't changed yet
+    // The main Cancel button of the row handles reverting data if needed.
 });
-// Event listener for 'Cancel' button in the input edit modal
-cancelInputBtn.addEventListener('click', () => {
-    inputEditModal.style.display = 'none'; // Hide modal
-    inputEditTextArea.value = ''; // Clear textarea
-    currentEditInput = null; // Reset
-    // Note: The original input field's value is not changed here, ensuring 'Cancel' truly reverts.
-});
-
 
 // --- Validation Modal ---
-/**
- * Displays a custom validation/alert message in a modal.
- * @param {string} message - The message to display.
- */
 function showValidationMessage(message) {
-    validationMessage.textContent = message; // Set message content
-    validationModal.style.display = 'block'; // Show the validation modal
+    validationMessage.textContent = message;
+    validationModal.style.display = 'block';
 }
 
-        
+// Ensure modals close when clicking outside them
+window.addEventListener('click', (e) => {
+    if (e.target === deleteConfirmModal) {
+        deleteConfirmModal.style.display = 'none';
+        rowToDelete = null;
+    }
+    if (e.target === datePickerModal) {
+        datePickerModal.style.display = 'none';
+        currentDatePickerInput = null;
+    }
+    if (e.target === inputEditModal) {
+        // Do not store data if clicked outside and not explicitly stored
+        inputEditModal.style.display = 'none';
+        inputEditTextArea.value = '';
+        currentEditInput = null;
+    }
+    if (e.target === validationModal) {
+        validationModal.style.display = 'none';
+    }
+});
