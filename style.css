@@ -720,17 +720,36 @@ ul li a:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+/* ... (অন্যান্য স্টাইল) ... */
+
 /* Table Header */
 .data-table thead th {
-    background-color: #4CAF50;
+    background-color: #4CAF50; /* এটি অন্যান্য সকল হেডিংকে সবুজ করবে */
     color: #FFFFFF;
     padding: 12px 8px;
     text-align: left;
     font-size: 16px;
     font-weight: bold;
     white-space: nowrap;
-    border: 1px solid #E0E0E0;
+    border: 1px solid #E0E0E0; /* প্রতিটি সেলকে আলাদা করতে বর্ডার */
 }
+
+/* FIX 2: Specific style for SI. column - Removed background-color */
+.data-table thead th:first-child { /* SI. header */
+    width: 40px; /* Adjust as needed */
+    text-align: center;
+    /* background-color: #f8f8f8; -- এই লাইনটি মুছে ফেলুন */
+    font-weight: bold; /* ফন্ট বোল্ড থাকবে */
+}
+
+/* Ensure data cells for SI. are still styled as intended */
+.data-table tbody td:first-child { /* SI. data cell */
+    width: 40px; /* Adjust as needed */
+    text-align: center;
+    font-weight: bold;
+    background-color: #f8f8f8; /* ডেটা সেলের জন্য এই ব্যাকগ্রাউন্ড থাকবে */
+}
+
 
 /* Table Body Cells */
 .data-table tbody td {
@@ -915,41 +934,7 @@ ul li a:hover {
         white-space: normal; /* allow text to wrap */
         word-break: break-word; /* ensure long words break */
     }
-
-    
-
-/* Existing styles remain as per previous response. */
-
-/* Add specific style for SI. column */
-.data-table thead th:first-child, /* SI. header */
-.data-table tbody td:first-child { /* SI. data cell */
-    width: 40px; /* Adjust as needed */
-    text-align: center;
-    font-weight: bold;
-    background-color: #f8f8f8; /* হালকা ব্যাকগ্রাউন্ড */
 }
-
-/* For editable rows, ensure SI. column does not show input */
-.data-table tbody tr.editing td:first-child {
-    background-color: #FFFACD; /* Match editing row background */
-    /* No input field, so no need to style it */
-}
-
-/* Ensure action buttons are compact enough with new SI column */
-.data-table .action-buttons button {
-    padding: 5px 8px; /* Slightly smaller padding */
-    font-size: 12px; /* Slightly smaller font */
-}
-
-/* Adjust cell padding if needed due to SI column */
-.data-table tbody td {
-    padding: 10px 6px; /* Slightly reduced horizontal padding */
-}
-
-
-
-
-
 
 /* --- Revised Styles for Date Picker Modal --- */
 .date-picker-content {
