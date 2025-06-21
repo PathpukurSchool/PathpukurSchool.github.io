@@ -881,7 +881,6 @@ body {
     font-weight: bold;
 }
 
-
 /* --- Modal General Styles --- */
 .modal {
     display: none; /* Hidden by default */
@@ -925,7 +924,6 @@ body {
 .close-modal-btn:hover {
     background-color: #DA190B; /* Darker red on hover */
 }
-
 
 /* --- Date Picker Modal Specific Styles --- */
 .date-picker-content {
@@ -1019,7 +1017,6 @@ body {
     visibility: hidden; /* Hide empty cells in calendar */
 }
 
-
 /* --- Input Edit/New Entry Modal Specific Styles --- */
 .input-edit-content {
     max-width: 600px;
@@ -1074,7 +1071,6 @@ body {
 .modal-actions .cancel-btn:hover {
     background-color: #757575;
 }
-
 
 /* --- Validation/Alert Modal Specific Styles --- */
 .validation-content {
