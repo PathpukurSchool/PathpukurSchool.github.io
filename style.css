@@ -633,6 +633,8 @@ ul li a:hover {
   background-color: darkred;
 }
 
+
+
  /* uploda student notice বাটন */
 .student-notice-button {
     display: inline-block; /* বোতামকে ব্লক লেভেলের মতো আচরণ করায় যাতে padding কাজ করে */
@@ -915,6 +917,50 @@ ul li a:hover {
     }
 }
 
+.data-table thead th,
+.data-table tbody td {
+    white-space: nowrap; /* এই প্রপার্টিটি সেলের ভিতরের লেখাকে এক লাইনে রাখবে
+                             এবং ভেঙে যেতে দেবে না। যদি লেখাটি সেলের প্রস্থের
+                             চেয়ে বেশি হয়, তাহলে স্ক্রলবার কাজ করবে। */
+    padding: 8px 10px; /* প্যাডিং সামঞ্জস্য করুন */
+}
+
+/* Date কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(2),
+.data-table tbody td:nth-child(2) {
+    min-width: 120px; /* তারিখের জন্য উপযুক্ত প্রস্থ (DD-MM-YYYY) */
+}
+
+/* Heading কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(3),
+.data-table tbody td:nth-child(3) {
+    min-width: 150px; /* হেডিং এর জন্য উপযুক্ত প্রস্থ */
+}
+
+/* Subject কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(4),
+.data-table tbody td:nth-child(4) {
+    min-width: 200px; /* সাবজেক্টের জন্য উপযুক্ত প্রস্থ */
+}
+
+/* Link কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(5),
+.data-table tbody td:nth-child(5) {
+    min-width: 100px; /* লিংকের জন্য উপযুক্ত প্রস্থ */
+}
+
+/* Actions কলামের জন্য ন্যূনতম প্রস্থ */
+.data-table thead th:nth-child(6),
+.data-table tbody td:nth-child(6) {
+    min-width: 150px; /* অ্যাকশন বাটনের জন্য উপযুক্ত প্রস্থ */
+}
+
+/* ডেটা সেল স্টাইল */
+.data-table tbody td {
+    border: 1px solid #E0E0E0;
+    vertical-align: top; /* কন্টেন্ট উপরের দিকে অ্যালাইন করবে */
+    background-color: #FFFFFF;
+}
 
 
 
