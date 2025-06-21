@@ -870,38 +870,56 @@ ul li a:hover {
     font-weight: bold;
 }
 
-/* --- Modal General Styles --- */
-.modal {
+
+
+/* --- Table Modal General Styles --- */
+.table-modal-overlay { /* ক্লাস নাম পরিবর্তিত */
     display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    position: fixed;
+    z-index: 1000; /* নিশ্চিত করুন এটি স্টুডেন্ট নোটিশের z-index এর চেয়ে কম বা বেশি যাতে আপনি আপনার পছন্দ মতো লেয়ারিং পান। */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
     display: flex; /* Use flexbox for centering */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
 }
 
-.modal-content {
+.table-modal-content { /* ক্লাস নাম পরিবর্তিত */
     background-color: #fefefe;
-    margin: auto; /* Auto margin with flexbox for centering */
+    margin: auto;
     padding: 25px;
     border: 1px solid #888;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    max-width: 500px; /* Default max-width for modal content */
+    max-width: 500px; /* Default max-width for table modal content */
     width: 90%; /* Responsive width */
     text-align: center;
-    position: relative; /* For positioning close button if needed */
+    position: relative;
 }
 
-/* Close button (general for all modals) */
+/* --- Specific Modal Content Styles (এখনও table-modal-content এর সাথে যুক্ত) --- */
+/* আগে .modal-content এর সাথে সংযুক্ত ছিল, এখন .table-modal-content এর সাথে থাকবে */
+.table-modal-content.date-picker-content {
+    max-width: 340px;
+}
+
+.table-modal-content.input-edit-content {
+    max-width: 600px;
+}
+
+.table-modal-content.validation-content {
+    max-width: 350px;
+    background-color: #FFF3E0;
+    border: 1px solid #FFB74D;
+}
+
+/* Close button (general for all modals - এটি .close-modal-btn ক্লাস ব্যবহার করছে, যা পরিবর্তন করার প্রয়োজন নেই যদি অন্য মডাল এটি ব্যবহার না করে) */
 .close-modal-btn {
-    background-color: #F44336; /* Red color */
+    background-color: #F44336;
     color: white;
     padding: 8px 15px;
     border: none;
@@ -911,8 +929,16 @@ ul li a:hover {
     transition: background-color 0.2s ease;
 }
 .close-modal-btn:hover {
-    background-color: #DA190B; /* Darker red on hover */
+    background-color: #DA190B;
 }
+
+
+
+
+
+
+
+
 
 /* --- Date Picker Modal Specific Styles --- */
 .date-picker-content {
