@@ -742,6 +742,7 @@ ul li a:hover {
     border-bottom: 1px solid #E0E0E0;
     color: #333;
     font-size: 14px;
+    border: 1px solid #E0E0E0;
     /* Removed white-space: nowrap; and overflow/text-overflow for data cells
        This allows content to wrap naturally within the cell by default.
        The table-wrapper's overflow-x handles overall table width. */
