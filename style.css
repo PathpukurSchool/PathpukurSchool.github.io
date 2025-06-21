@@ -686,15 +686,6 @@ ul li a:hover {
 
 
 /* আপলোড স্টুডেন্ট নোটিশ */
-/* General Body and Container Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f7f6;
-    color: #333;
-}
-
 .table-section-container {
     background-color: #FFFFFF;
     padding: 25px;
@@ -738,8 +729,6 @@ body {
     white-space: nowrap; /* Prevents text wrapping in headers, enabling horizontal scroll */
     border: 1px solid #E0E0E0; /* Border for header cells */
 }
-
-/* --- Specific Column Widths and Styles --- */
 
 /* SI. (Serial Number) Column */
 .data-table thead th:first-child {
