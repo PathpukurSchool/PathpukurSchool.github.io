@@ -707,11 +707,13 @@ ul li a:hover {
     overflow-x: auto; /* For horizontal scrolling on small screens */
     -webkit-overflow-scrolling: touch;
     margin-bottom: 15px;
+    width: 100%;
 }
 
 /* Table Styling */
 .data-table {
     width: 100%;
+    min-width: 700px;
     border-collapse: collapse;
     margin: 0 auto;
     background-color: #FFFFFF;
@@ -755,16 +757,7 @@ ul li a:hover {
     color: #333;
 }
 
-/* Input Fields in Editable Rows */
-.data-table tbody tr.editing input[type="text"] {
-    width: 100%; /* ইনপুট ফিল্ডকে তার td এর পুরো প্রস্থ জুড়ে থাকতে দেবে */
-    padding: 8px; /* মোবাইলে বড় দেখানোর জন্য প্যাডিং বাড়ানো হয়েছে */
-    border: 1px solid #8BC34A;
-    border-radius: 4px;
-    font-size: 14px; /* মোবাইলে পঠনযোগ্য ফন্ট সাইজ */
-    box-sizing: border-box; /* padding, border কে width এর মধ্যে রাখবে */
-    min-height: 38px; /* মোবাইলে ইনপুট ফিল্ডের ন্যূনতম উচ্চতা */
-}
+
 
 /* Action Buttons */
 .data-table .action-buttons button {
@@ -1115,7 +1108,6 @@ ul li a:hover {
     min-height: 38px;
     cursor: pointer; /* ইনপুট ফিল্ডগুলোতে ক্লিক করার জন্য কার্সর দেখাবে */
 }
-
 
 
 
