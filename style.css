@@ -682,6 +682,9 @@ ul li a:hover {
   cursor: pointer;
 }
 
+
+
+
 /* আপলোড স্টুডেন্ট নোটিশ */
 /* Table Section Container and Table Wrapper remain mostly same */
 .table-section-container {
@@ -726,6 +729,7 @@ ul li a:hover {
     font-size: 16px;
     font-weight: bold;
     white-space: nowrap;
+    border: 1px solid #E0E0E0;
 }
 
 /* Table Body Cells */
@@ -916,6 +920,115 @@ ul li a:hover {
     .data-table tbody td {
         padding: 8px 5px;
     }
+}
 
-    /* Input fields can maintain their width: 100% and increased padding/min-height */
+/* --- New Styles for Date Picker Modal --- */
+.date-picker-content {
+    max-width: 320px; /* ক্যালেন্ডারের জন্য একটি নির্দিষ্ট প্রস্থ */
+}
+
+.date-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #4CAF50; /* সবুজ হেডার */
+    color: white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.date-picker-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.date-picker-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    padding: 10px 0;
+    background-color: #f2f2f2; /* হালকা ধূসর ব্যাকগ্রাউন্ড */
+    border-bottom: 1px solid #ddd;
+}
+
+.date-picker-days span {
+    color: #555;
+    font-size: 13px;
+}
+
+.date-picker-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    padding: 10px;
+}
+
+.date-picker-dates span {
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 14px;
+}
+
+.date-picker-dates span:hover:not(.empty) {
+    background-color: #e0e0e0;
+}
+
+.date-picker-dates span.selected-date {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.date-picker-dates span.today-date {
+    background-color: #FFC107; /* আজকের দিনের জন্য হলুদ হাইলাইট */
+    color: white;
+    font-weight: bold;
+}
+
+.date-picker-dates span.selected-date.today-date {
+    background-color: #28a745; /* যদি আজ সিলেক্টেড হয় */
+}
+
+.date-picker-dates span.empty {
+    visibility: hidden; /* ক্যালেন্ডারে ফাঁকা দিন */
+}
+
+/* Close button for modals (shared style) */
+.close-modal-btn {
+    background-color: #F44336;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.2s ease;
+}
+.close-modal-btn:hover {
+    background-color: #DA190B;
+}
+
+/* --- New Styles for Live Input View Modal --- */
+.live-input-content {
+    max-width: 600px; /* ইনপুট ভিউ এর জন্য বড় প্রস্থ */
+}
+
+#liveInputTextArea {
+    width: calc(100% - 20px); /* প্যাডিং এর জন্য 20px বাদ */
+    height: 150px; /* উচ্চতা */
+    padding: 10px;
+    font-size: 18px; /* বড় ফন্ট সাইজ */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical; /* উল্লম্বভাবে আকার পরিবর্তন করা যাবে */
+    font-family: monospace; /* কোডিং বা টেক্সট দেখার জন্য ভালো */
 }
