@@ -722,6 +722,7 @@ ul li a:hover {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px; /* পেজিনেশনের উপর ফাঁকা স্থান */
 }
 
 /* Table Header */
@@ -745,6 +746,9 @@ ul li a:hover {
     /* Removed white-space: nowrap; and overflow/text-overflow for data cells
        This allows content to wrap naturally within the cell by default.
        The table-wrapper's overflow-x handles overall table width. */
+border: 1px solid #E0E0E0;
+    vertical-align: top; /* কন্টেন্ট উপরের দিকে অ্যালাইন করবে */
+    background-color: #FFFFFF;
 }
 
 /* Table Row Hover Effect */
