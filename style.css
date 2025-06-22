@@ -720,7 +720,6 @@ ul li a:hover {
     margin: 0 auto;
     background-color: #FFFFFF;
     border-radius: 8px;
-    overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     margin-bottom: 20px; /* পেজিনেশনের উপর ফাঁকা স্থান */
 }
@@ -935,11 +934,11 @@ ul li a:hover {
 /* Heading কলামের জন্য ন্যূনতম প্রস্থ */
 .data-table thead th:nth-child(3),
 .data-table tbody td:nth-child(3) {
-    min-width: 100px; /* হেডিং এর জন্য উপযুক্ত প্রস্থ */
-    max-width: 200px; /* নতুন: এই কলামের সর্বোচ্চ প্রস্থ নির্ধারণ করে। প্রয়োজনে বাড়াতে পারেন। */
-    white-space: normal; /* **গুরুত্বপূর্ণ পরিবর্তন:** লেখা একাধিক লাইনে ভাঙবে */
-    word-wrap: break-word; /* লম্বা শব্দ ভাঙার জন্য */
-    overflow-wrap: break-word; /* আধুনিক ব্রাউজারগুলোর জন্য */
+    min-width: 120px; /* 150px থেকে 120px এ কমানো হলো */
+    max-width: 200px; /* এটি ঠিক রাখতে পারেন, বা প্রয়োজনে বাড়াতে পারেন */
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Subject কলামের জন্য ন্যূনতম প্রস্থ */
@@ -1152,7 +1151,7 @@ ul li a:hover {
     margin-bottom: 15px;
 }
 
-/* Specific styles for input fields in table when in editing mode (from prev response) */
+/* এডিটিং মোডের জন্য ইনপুট ফিল্ড স্টাইল */
 .data-table tbody tr.editing input[type="text"] {
     width: 100%;
     padding: 8px;
@@ -1162,7 +1161,7 @@ ul li a:hover {
     box-sizing: border-box;
     min-height: 38px;
     cursor: pointer;
-    white-space: normal; /* ইনপুট ফিল্ডের লেখাও ভাঙবে */
+    white-space: normal; /* **গুরুত্বপূর্ণ:** ইনপুট ফিল্ডের লেখাও ভাঙবে */
     word-wrap: break-word;
     overflow-wrap: break-word;
     height: auto; /* উচ্চতা স্বয়ংক্রিয়ভাবে কন্টেন্ট অনুযায়ী বাড়বে */
