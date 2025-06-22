@@ -40,12 +40,15 @@ let editingRowOriginalData = null; // Stores data before editing for cancel oper
 // Close modal buttons (general)
 document.querySelectorAll('.close-modal-btn').forEach(button => {
     button.addEventListener('click', (e) => {
-        e.target.closest('.modal').style.display = 'none';
+        // .modal এর পরিবর্তে .table-modal-overlay ব্যবহার করুন
+        e.target.closest('.table-modal-overlay').style.display = 'none'; 
+        
         // Specific cleanup for modals
-        if (e.target.closest('.modal').id === 'inputEditModal') {
+        // e.target.closest('.modal') এর পরিবর্তে e.target.closest('.table-modal-overlay') ব্যবহার করুন
+        if (e.target.closest('.table-modal-overlay').id === 'inputEditModal') {
             inputEditTextArea.value = '';
             currentEditInput = null;
-        } else if (e.target.closest('.modal').id === 'datePickerModal') {
+        } else if (e.target.closest('.table-modal-overlay').id === 'datePickerModal') {
             currentDatePickerInput = null;
         }
     });
