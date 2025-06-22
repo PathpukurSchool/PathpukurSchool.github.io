@@ -1070,8 +1070,8 @@ ul li a:hover {
 
     /* Ensure modals remain centered on small devices */
     .table-modal-overlay {
-        align-items: center; /* unchanged */
-        padding-top: 0;      /* unchanged */
+        align-items: center; /* আগের flex-start এর পরিবর্তে center */
+        padding-top: 0;      /* অতিরিক্ত padding-top সরিয়ে দেওয়া হয়েছে */
     }
     .table-modal-content {
         /* এই লাইনটি পরিবর্তন করা হয়েছে */
