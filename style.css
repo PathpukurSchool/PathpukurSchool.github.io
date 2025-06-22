@@ -684,13 +684,14 @@ ul li a:hover {
   cursor: pointer;
 }
 
-/* --- Notice Section Box Styles --- */
+/* --- আপলোড স্টুডেন্ট নোটিশ সেকশন বক্স স্টাইল --- */
 .notice-section-box {
     background-color: #E6F7E6; /* হালকা সবুজ আভা, আপনার থিমের সাথে মানানসই */
     border: 1px solid #C8E6C9; /* হালকা সবুজ বর্ডার */
     border-radius: 10px; /* কোণাগুলো গোলাকার */
     padding: 20px; /* ভিতরের লেখা থেকে বক্সের দূরত্ব */
     margin: 20px auto; /* উপরে-নিচে 20px মার্জিন, ডানে-বামে অটো (মাঝখানে আসবে) */
+    margin-top: 50px;
     max-width: 800px; /* বক্সের সর্বোচ্চ প্রস্থ, আপনার পছন্দ অনুযায়ী বাড়াতে বা কমাতে পারেন */
     text-align: center; /* ভেতরের লেখা মাঝখানে আনার জন্য */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* হালকা শেড */
@@ -704,31 +705,10 @@ ul li a:hover {
     background-color: #D9F0D9; /* হোভার করলে ব্যাকগ্রাউন্ড কালার একটু গাঢ় হবে */
 }
 
-/* হেডিং এর স্টাইল (আপনার existing .blink ক্লাস সহ) */
-.notice-section-box h2 {
-    color: #388E3C; /* একটু গাঢ় সবুজ রঙ */
-    font-size: 2em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
-    margin-top: 0; /* উপরের বাড়তি মার্জিন সরানো হয়েছে */
-    margin-bottom: 15px; /* নিচের লিঙ্ক থেকে দূরত্ব */
-}
-
-/* লিঙ্কের স্টাইল */
-.notice-section-box p a {
-    color: #1B5E20; /* গাঢ় সবুজ লিঙ্ক */
-    text-decoration: none; /* লিঙ্কের নিচে আন্ডারলাইন থাকবে না */
-    font-weight: bold;
-    padding: 5px 8px; /* লিঙ্কে প্যাডিং */
-    border-radius: 5px; /* লিঙ্কের কোণা গোলাকার */
-    transition: background-color 0.2s ease; /* হোভারের জন্য স্মুথ ট্রানজিশন */
-}
-
-.notice-section-box p a:hover {
-    background-color: #C8E6C9; /* হোভার করলে হালকা ব্যাকগ্রাউন্ড */
-    text-decoration: underline; /* হোভার করলে আন্ডারলাইন হবে */
-}
 
 
-/* Table Section Container */
+
+/* আপলোড স্টুডেন্ট নোটিশ */
 .table-section-container {
     margin: 20px auto;
     max-width: 90%; /* অথবা আপনার পছন্দসই প্রস্থ */
