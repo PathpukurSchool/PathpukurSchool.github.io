@@ -990,7 +990,7 @@ ul li a:hover {
 }
 .modal-actions {
     margin-top: 20px;
-    text-align: right;
+    text-align: center; /* আগের right (ডানদিক) এর পরিবর্তে মাঝখানে অ্যালাইন করার জন্য */
 }
 .modal-actions button {
     padding: 10px 20px;
@@ -1003,8 +1003,8 @@ ul li a:hover {
     margin-bottom: 0;
     transition: background-color 0.2s ease;
 }
-.modal-actions .store-btn { background-color: #4CAF50; color: white; }
-.modal-actions .store-btn:hover { background-color: #45a049; }
+.modal-actions .store-btn { background-color: blue; color: white; }
+.modal-actions .store-btn:hover { background-color: darkblue; }
 .modal-actions .cancel-btn { background-color: #9E9E9E; color: white; }
 .modal-actions .cancel-btn:hover { background-color: #757575; }
 
