@@ -935,7 +935,7 @@ ul li a:hover {
 /* Heading কলামের জন্য ন্যূনতম প্রস্থ */
 .data-table thead th:nth-child(3),
 .data-table tbody td:nth-child(3) {
-    min-width: 150px; /* হেডিং এর জন্য উপযুক্ত প্রস্থ */
+    min-width: 100px; /* হেডিং এর জন্য উপযুক্ত প্রস্থ */
     max-width: 200px; /* নতুন: এই কলামের সর্বোচ্চ প্রস্থ নির্ধারণ করে। প্রয়োজনে বাড়াতে পারেন। */
     white-space: normal; /* **গুরুত্বপূর্ণ পরিবর্তন:** লেখা একাধিক লাইনে ভাঙবে */
     word-wrap: break-word; /* লম্বা শব্দ ভাঙার জন্য */
