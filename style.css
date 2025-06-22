@@ -872,6 +872,7 @@ ul li a:hover {
     overflow: auto; /* Allows scrolling if modal content is too tall */
     background-color: rgba(0,0,0,0.4); /* Semi-transparent black background */
     /* Use flexbox to center the modal content */
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -1003,7 +1004,7 @@ ul li a:hover {
     margin-bottom: 0;
     transition: background-color 0.2s ease;
 }
-.modal-actions .store-btn { background-color: blue; color: white; }
+.modal-actions .store-btn { background-color: skyblue; color: white; }
 .modal-actions .store-btn:hover { background-color: darkblue; }
 .modal-actions .cancel-btn { background-color: #9E9E9E; color: white; }
 .modal-actions .cancel-btn:hover { background-color: #757575; }
