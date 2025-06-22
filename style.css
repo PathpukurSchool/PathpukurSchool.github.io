@@ -730,7 +730,7 @@ ul li a:hover {
 /* UPLOAD STUDENT NOTICE বাটনের স্টাইল */
 .notice-section-box .student-notice-button {
     display: inline-block; /* বাটন হিসেবে দেখানোর জন্য */
-    margin-top: 35px; /* উপরের কন্টেন্ট থেকে দূরত্ব */
+    margin-top: 15px; /* উপরের কন্টেন্ট থেকে দূরত্ব */
     background-color: #4CAF50; /* আপনার থিমের সবুজ বাটন */
     color: white;
     padding: 10px 20px;
