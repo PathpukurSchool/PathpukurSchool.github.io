@@ -727,32 +727,6 @@ ul li a:hover {
     text-decoration: underline; /* হোভার করলে আন্ডারলাইন হবে */
 }
 
-/* UPLOAD STUDENT NOTICE বাটনের স্টাইল */
-.notice-section-box .student-notice-button {
-    display: inline-block; /* বাটন হিসেবে দেখানোর জন্য */
-    margin-top: 15px; /* উপরের কন্টেন্ট থেকে দূরত্ব */
-    background-color: #4CAF50; /* আপনার থিমের সবুজ বাটন */
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.notice-section-box .student-notice-button:hover {
-    background-color: #45a049; /* হোভারে একটু গাঢ় সবুজ */
-    transform: translateY(-1px); /* সামান্য উপরে উঠবে */
-}
-
-.notice-section-box p {
-    line-height: 1.6; /* লাইনগুলির মধ্যে কিছুটা ফাঁকা স্থান */
-    font-size: 1.1em;
-}
-
-
-
-
 
 /* Table Section Container */
 .table-section-container {
