@@ -633,36 +633,6 @@ ul li a:hover {
   background-color: darkred;
 }
 
-
-
- /* uploda student notice বাটন */
-.student-notice-button {
-    display: inline-block; /* বোতামকে ব্লক লেভেলের মতো আচরণ করায় যাতে padding কাজ করে */
-    padding: 10px 20px; /* বোতামের ভেতরের স্থান */
-    background-color: #007bff; /* বোতামের ব্যাকগ্রাউন্ড রঙ (নীল) */
-    color: white; /* লেখার রঙ */
-    text-decoration: none; /* লিঙ্কের নিচে আন্ডারলাইন সরিয়ে দেয় */
-    border-radius: 5px; /* কোণাগুলোকে গোলাকার করে */
-    font-family: Arial, sans-serif; /* ফন্ট স্টাইল */
-    font-size: 16px; /* ফন্ট সাইজ */
-    font-weight: bold; /* ফন্ট বোল্ড করে */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* হোভার ইফেক্টের জন্য মসৃণ ট্রানজিশন */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* হালকা শ্যাডো */
-    margin-top: 10px; /* উপরের এলিমেন্ট থেকে 10 পিক্সেল দূরত্ব */
-}
-
-.student-notice-button:hover {
-    background-color: #0056b3; /* হোভার করার সময় ব্যাকগ্রাউন্ড রঙ পরিবর্তন */
-    transform: translateY(-2px); /* হোভার করার সময় বোতামটি সামান্য উপরে ওঠে */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* হোভার করার সময় শ্যাডো আরও স্পষ্ট হয় */
-}
-
-.student-notice-button:active {
-    background-color: #004085; /* ক্লিক করার সময় ব্যাকগ্রাউন্ড রঙ পরিবর্তন */
-    transform: translateY(0); /* ক্লিক করার সময় পূর্বের অবস্থায় ফিরে আসে */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* ক্লিক করার সময় শ্যাডো কমে যায় */
-}
-
  /* নোটিশ না থাকলে এটি দেখাবে*/
 .no-notice-hover {
   padding: 20px;
@@ -690,7 +660,7 @@ ul li a:hover {
     border: 1px solid #C8E6C9; /* হালকা সবুজ বর্ডার */
     border-radius: 10px; /* কোণাগুলো গোলাকার */
     padding: 20px; /* ভিতরের লেখা থেকে বক্সের দূরত্ব */
-    margin: 50px auto; /* উপরে-নিচে 20px মার্জিন, ডানে-বামে অটো (মাঝখানে আসবে) */
+    margin: 20px auto; /* উপরে-নিচে 20px মার্জিন, ডানে-বামে অটো (মাঝখানে আসবে) */
     max-width: 700px; /* বক্সের সর্বোচ্চ প্রস্থ, আপনার পছন্দ অনুযায়ী বাড়াতে বা কমাতে পারেন */
     text-align: center; /* ভেতরের লেখা মাঝখানে আনার জন্য */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* হালকা শেড */
