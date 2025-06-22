@@ -1081,10 +1081,11 @@ ul li a:hover {
         padding: 8px 5px;
     }
 
-    /* Ensure modals remain centered and full screen on small devices */
+    /* Ensure modals remain centered on small devices */
     .table-modal-overlay {
-        align-items: flex-start; /* Align to top to prevent virtual keyboard issues */
-        padding-top: 20px; /* Add some top padding */
+        /* এই দুটি লাইন পরিবর্তন করা হয়েছে */
+        align-items: center; /* আগের flex-start এর পরিবর্তে center */
+        padding-top: 0;      /* অতিরিক্ত padding-top সরিয়ে দেওয়া হয়েছে */
     }
     .table-modal-content {
         width: 95%; /* Make modal content slightly wider on small screens */
