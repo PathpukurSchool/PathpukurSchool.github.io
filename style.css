@@ -872,7 +872,6 @@ ul li a:hover {
     overflow: auto; /* Allows scrolling if modal content is too tall */
     background-color: rgba(0,0,0,0.4); /* Semi-transparent black background */
     /* Use flexbox to center the modal content */
-    display: flex;
     justify-content: center;
     align-items: center;
 }
