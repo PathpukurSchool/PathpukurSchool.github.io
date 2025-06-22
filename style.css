@@ -688,6 +688,8 @@ ul li a:hover {
 
 
 
+
+
 /* Table Section Container */
 .table-section-container {
     margin: 20px auto;
@@ -745,8 +747,6 @@ ul li a:hover {
     background-color: #FFFFFF;
     color: #333;
     font-size: 14px;
-    /* এখানে white-space: nowrap; থাকবে না, কারণ কিছু কলামে লেখা ভাঙবে। */
-    /* এটি কলাম-নির্দিষ্ট স্টাইলে নিয়ন্ত্রণ করা হবে। */
 }
 
 /* Table Row Hover Effect */
@@ -803,10 +803,9 @@ ul li a:hover {
 /* Actions Column (now the 5th column) */
 .data-table thead th:nth-child(5),
 .data-table tbody td:nth-child(5) {
-    min-width: 120px; /* অ্যাকশন কলামের ন্যূনতম প্রস্থ */
+    min-width: 120px;
     white-space: nowrap; /* অ্যাকশন বাটন এক লাইনেই থাকুক */
 }
-
 
 /* --- Action Buttons --- */
 .data-table .action-buttons button {
@@ -873,26 +872,26 @@ ul li a:hover {
 }
 
 
-/* --- TABLE MODALS (Changed Class Names to avoid conflicts) --- */
-/* This is for the table's delete confirmation, date picker, edit input, and validation modals. */
+/* --- TABLE MODALS (Crucial for Pop-up Behavior) --- */
+/* This is the overlay that covers the entire screen for modals */
 .table-modal-overlay { /* Changed from .modal */
-    display: none; /* **CRUCIAL: Hidden by default** */
-    position: fixed;
-    z-index: 1000; /* Ensure it's above other content */
+    display: none; /* **CRUCIAL: Hidden by default. JavaScript will change this to 'flex' or 'block' to show it.** */
+    position: fixed; /* **CRUCIAL: Positions relative to the viewport** */
+    z-index: 1000; /* **CRUCIAL: Ensures it appears above other content** */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-    display: flex; /* This will be applied by JS when modal is shown */
+    overflow: auto; /* Allows scrolling if modal content is too tall */
+    background-color: rgba(0,0,0,0.4); /* Semi-transparent black background */
+    /* Use flexbox to center the modal content */
     justify-content: center;
     align-items: center;
 }
 
+/* Styles for the actual modal content box */
 .table-modal-content { /* Changed from .modal-content */
     background-color: #fefefe;
-    margin: auto; /* Centering with flexbox */
     padding: 25px;
     border: 1px solid #888;
     width: 80%;
@@ -900,7 +899,8 @@ ul li a:hover {
     border-radius: 8px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    position: relative; /* For internal positioning if needed */
+    position: relative; /* Needed if you have absolutely positioned elements inside */
+    /* Remove 'margin: 15% auto;' as flexbox handles centering */
 }
 
 /* Close button (general for all table modals) */
@@ -919,7 +919,7 @@ ul li a:hover {
 /* --- Specific Table Modal Content Styles --- */
 
 /* Date Picker Content */
-.table-modal-content.date-picker-content { /* Updated selector */
+.table-modal-content.date-picker-content {
     max-width: 340px;
 }
 .date-picker-header {
@@ -982,7 +982,7 @@ ul li a:hover {
 .date-picker-dates span.empty { visibility: hidden; }
 
 /* Input Edit/New Entry Modal Content */
-.table-modal-content.input-edit-content { /* Updated selector */
+.table-modal-content.input-edit-content {
     max-width: 600px;
 }
 #inputEditModalHeading {
@@ -1022,7 +1022,7 @@ ul li a:hover {
 .modal-actions .cancel-btn:hover { background-color: #757575; }
 
 /* Validation/Alert Modal Content */
-.table-modal-content.validation-content { /* Updated selector */
+.table-modal-content.validation-content {
     max-width: 350px;
     background-color: #FFF3E0;
     border: 1px solid #FFB74D;
@@ -1067,4 +1067,27 @@ ul li a:hover {
     word-wrap: break-word;
     overflow-wrap: break-word;
     overflow-y: hidden; /* Hide vertical scrollbar initially for neatness */
+}
+
+/* Mobile specific styles for table cells - Make content wrap */
+@media (max-width: 768px) {
+    .data-table thead th,
+    .data-table tbody td {
+        white-space: normal; /* allow text to wrap */
+        word-break: break-word; /* ensure long words break */
+    }
+    /* Adjust padding for smaller screens if needed */
+    .data-table tbody td {
+        padding: 8px 5px;
+    }
+
+    /* Ensure modals remain centered and full screen on small devices */
+    .table-modal-overlay {
+        align-items: flex-start; /* Align to top to prevent virtual keyboard issues */
+        padding-top: 20px; /* Add some top padding */
+    }
+    .table-modal-content {
+        width: 95%; /* Make modal content slightly wider on small screens */
+        margin: 0 auto; /* Center horizontally */
+    }
 }
