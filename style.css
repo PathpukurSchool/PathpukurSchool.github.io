@@ -687,8 +687,8 @@ ul li a:hover {
 
 
 
-/* আপলোড স্টুডেন্ট নোটিশ */
-/* Table Section Container and Table Wrapper remain mostly same */
+
+/* আপলোড স্টুডেন্ট নোটিশ - (Original Section Name from your code) */
 .table-section-container {
     margin: 20px auto;
     max-width: 90%;
@@ -705,6 +705,7 @@ ul li a:hover {
     margin-bottom: 20px;
 }
 
+/* Table Wrapper for Horizontal Scrolling */
 .table-wrapper {
     overflow-x: auto; /* For horizontal scrolling on small screens */
     -webkit-overflow-scrolling: touch;
@@ -712,19 +713,19 @@ ul li a:hover {
     width: 100%;
 }
 
-/* Table Styling */
+/* --- Main Table Styling --- */
 .data-table {
     width: 100%;
-    min-width: 700px;
+    min-width: 700px; /* Overall minimum width for the table */
     border-collapse: collapse;
     margin: 0 auto;
     background-color: #FFFFFF;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    margin-bottom: 20px; /* পেজিনেশনের উপর ফাঁকা স্থান */
+    margin-bottom: 20px; /* Space above pagination */
 }
 
-/* Table Header */
+/* Table Header (thead) Cells */
 .data-table thead th {
     background-color: #4CAF50;
     color: #FFFFFF;
@@ -732,19 +733,18 @@ ul li a:hover {
     text-align: left;
     font-size: 16px;
     font-weight: bold;
-    white-space: nowrap;
+    white-space: nowrap; /* Header text should remain in one line */
     border: 1px solid #E0E0E0;
 }
 
-/* Table Body Cells */
+/* Table Body (tbody) Cells - General Styles */
 .data-table tbody td {
-    padding: 10px 8px;
-    border-bottom: 1px solid #E0E0E0;
+    padding: 8px 10px;
+    border: 1px solid #E0E0E0; /* Single border declaration */
+    vertical-align: top; /* Align content to the top */
+    background-color: #FFFFFF;
     color: #333;
     font-size: 14px;
-    border: 1px solid #E0E0E0;
-    vertical-align: top; /* কন্টেন্ট উপরের দিকে অ্যালাইন করবে */
-    background-color: #FFFFFF;
 }
 
 /* Table Row Hover Effect */
@@ -755,11 +755,74 @@ ul li a:hover {
 
 /* Editable Row Style */
 .data-table tbody tr.editing td {
-    background-color: #FFFACD; /* এডিট মোডে দৃষ্টিনন্দন হালকা হলুদ */
+    background-color: #FFFACD; /* Light yellow for editing mode */
     color: #333;
 }
 
-/* Action Buttons */
+/* --- Specific Column Styles --- */
+
+/* SI. (Serial Number) Column */
+.data-table thead th:first-child {
+    min-width: 30px;
+    width: 30px;
+    text-align: center;
+}
+.data-table tbody td:first-child {
+    min-width: 30px;
+    width: 30px; /* Fixed width for SI. */
+    background-color: #f8f8f8; /* Light gray for SI. cells */
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 5px;
+    white-space: nowrap; /* SI. number stays on one line */
+}
+
+/* Date Column */
+.data-table thead th:nth-child(2),
+.data-table tbody td:nth-child(2) {
+    min-width: 100px; /* Adjusted min-width for Date */
+    white-space: nowrap; /* Date stays on one line */
+}
+
+/* Heading Column */
+.data-table thead th:nth-child(3),
+.data-table tbody td:nth-child(3) {
+    min-width: 120px; /* Minimum width for Heading column */
+    max-width: 250px; /* Maximum width for Heading column - Adjust this as needed */
+    white-space: normal; /* **Crucial: Allows text to wrap** */
+    word-wrap: break-word; /* Breaks long words that don't fit */
+    overflow-wrap: break-word; /* Modern equivalent for word-wrap */
+}
+
+/* Subject Column */
+.data-table thead th:nth-child(4),
+.data-table tbody td:nth-child(4) {
+    min-width: 200px;
+    max-width: 350px; /* Maximum width for Subject column */
+    white-space: normal; /* Allows text to wrap */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Link Column */
+.data-table thead th:nth-child(5),
+.data-table tbody td:nth-child(5) {
+    min-width: 100px;
+    max-width: 180px; /* Maximum width for Link column */
+    white-space: normal; /* Allows text to wrap */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Actions Column */
+.data-table thead th:nth-child(6),
+.data-table tbody td:nth-child(6) {
+    min-width: 120px;
+    white-space: nowrap; /* Action buttons stay on one line */
+}
+
+
+/* --- Action Buttons --- */
 .data-table .action-buttons button {
     padding: 6px 10px;
     margin: 0 2px;
@@ -769,44 +832,20 @@ ul li a:hover {
     font-size: 13px;
     font-weight: bold;
     transition: background-color 0.2s ease, transform 0.2s ease;
-    white-space: nowrap; /* নিশ্চিত করে বাটন গুলো এক লাইনে থাকে */
+    white-space: nowrap; /* Ensures buttons stay on one line */
 }
 
-.data-table .action-buttons .edit-btn {
-    background-color: #FFC107;
-    color: white;
-}
-.data-table .action-buttons .edit-btn:hover {
-    background-color: #FFA000;
-    transform: translateY(-1px);
-}
+.data-table .action-buttons .edit-btn { background-color: #FFC107; color: white; }
+.data-table .action-buttons .edit-btn:hover { background-color: #FFA000; transform: translateY(-1px); }
 
-.data-table .action-buttons .save-btn {
-    background-color: #4CAF50;
-    color: white;
-}
-.data-table .action-buttons .save-btn:hover {
-    background-color: #45a049;
-    transform: translateY(-1px);
-}
+.data-table .action-buttons .save-btn { background-color: #4CAF50; color: white; }
+.data-table .action-buttons .save-btn:hover { background-color: #45a049; transform: translateY(-1px); }
 
-.data-table .action-buttons .delete-btn {
-    background-color: #F44336;
-    color: white;
-}
-.data-table .action-buttons .delete-btn:hover {
-    background-color: #DA190B;
-    transform: translateY(-1px);
-}
+.data-table .action-buttons .delete-btn { background-color: #F44336; color: white; }
+.data-table .action-buttons .delete-btn:hover { background-color: #DA190B; transform: translateY(-1px); }
 
-.data-table .action-buttons .cancel-btn {
-    background-color: #9E9E9E; /* ধূসর */
-    color: white;
-}
-.data-table .action-buttons .cancel-btn:hover {
-    background-color: #757575;
-    transform: translateY(-1px);
-}
+.data-table .action-buttons .cancel-btn { background-color: #9E9E9E; color: white; }
+.data-table .action-buttons .cancel-btn:hover { background-color: #757575; transform: translateY(-1px); }
 
 /* Empty Row (first row for input) */
 .data-table tbody tr.empty-row td {
@@ -822,7 +861,7 @@ ul li a:hover {
     display: none; /* Delete button hidden on empty row */
 }
 
-/* Pagination Styles - Remains same */
+/* Pagination Styles */
 .pagination {
     margin-top: 20px;
     text-align: center;
@@ -840,15 +879,8 @@ ul li a:hover {
     transition: background-color 0.2s ease;
 }
 
-.pagination button:hover:not(:disabled) {
-    background-color: #45a049;
-}
-
-.pagination button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
-
+.pagination button:hover:not(:disabled) { background-color: #45a049; }
+.pagination button:disabled { background-color: #cccccc; cursor: not-allowed; }
 .pagination span {
     font-size: 15px;
     font-weight: bold;
@@ -856,22 +888,27 @@ ul li a:hover {
     margin: 0 8px;
 }
 
-/* Modal Styles - Remains same */
-.modal {
-    display: none;
+/* --- Table Modals (Changed Class Names) --- */
+/* This is for the table's delete confirmation, date picker, edit input, and validation modals.
+   These class names are now distinct from your "Student Notice" modals. */
+.table-modal-overlay { /* Changed from .modal */
+    display: none; /* Hidden by default - crucial for initial state */
     position: fixed;
-    z-index: 1000;
+    z-index: 1000; /* Ensure it's above other content but possibly below student notice if that's z-index 9999 */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
+    display: flex; /* Use flexbox for centering when active */
+    justify-content: center;
+    align-items: center;
 }
 
-.modal-content {
+.table-modal-content { /* Changed from .modal-content */
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: auto; /* Centering with flexbox */
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
@@ -881,7 +918,7 @@ ul li a:hover {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.modal-content button {
+.table-modal-content button {
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
@@ -893,93 +930,15 @@ ul li a:hover {
     transition: background-color 0.2s ease;
 }
 
-.modal-content #cancelDeleteBtn {
-    background-color: #F44336;
+.table-modal-content #cancelDeleteBtn { background-color: #F44336; }
+.table-modal-content button:hover { opacity: 0.9; }
+
+/* --- Specific Table Modal Content Styles --- */
+
+/* Date Picker Content */
+.table-modal-content.date-picker-content { /* Updated selector */
+    max-width: 340px;
 }
-
-.modal-content button:hover {
-    opacity: 0.9;
-}
-
-/* Mobile specific styles for table cells - Make content wrap */
-@media (max-width: 768px) {
-    .data-table thead th,
-    .data-table tbody td {
-        white-space: normal; /* allow text to wrap */
-        word-break: break-word; /* ensure long words break */
-    }
-
-    /* Adjust padding for smaller screens if needed */
-    .data-table tbody td {
-        padding: 8px 5px;
-    }
-}
-
-.data-table thead th,
-.data-table tbody td {
-    white-space: nowrap; /* এই প্রপার্টিটি সেলের ভিতরের লেখাকে এক লাইনে রাখবে
-                             এবং ভেঙে যেতে দেবে না। যদি লেখাটি সেলের প্রস্থের
-                             চেয়ে বেশি হয়, তাহলে স্ক্রলবার কাজ করবে। */
-    padding: 8px 10px; /* প্যাডিং সামঞ্জস্য করুন */
-    border: 1px solid #E0E0E0; /* প্রতিটি সেলকে আলাদা করতে বর্ডার */
-}
-
-/* Date কলামের জন্য ন্যূনতম প্রস্থ */
-.data-table thead th:nth-child(2),
-.data-table tbody td:nth-child(2) {
-    min-width: 120px; /* তারিখের জন্য উপযুক্ত প্রস্থ (DD-MM-YYYY) */
-    white-space: nowrap; /* তারিখ এক লাইনেই থাকুক */
-}
-
-/* Heading কলামের জন্য ন্যূনতম প্রস্থ */
-.data-table thead th:nth-child(3),
-.data-table tbody td:nth-child(3) {
-    min-width: 120px; /* 150px থেকে 120px এ কমানো হলো */
-    max-width: 200px; /* এটি ঠিক রাখতে পারেন, বা প্রয়োজনে বাড়াতে পারেন */
-    white-space: normal;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-/* Subject কলামের জন্য ন্যূনতম প্রস্থ */
-.data-table thead th:nth-child(4),
-.data-table tbody td:nth-child(4) {
-    min-width: 200px;
-    max-width: 300px; /* নতুন: এই কলামের সর্বোচ্চ প্রস্থ নির্ধারণ করে। */
-    white-space: normal; /* **গুরুত্বপূর্ণ পরিবর্তন:** লেখা একাধিক লাইনে ভাঙবে */
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-/* Link কলামের জন্য ন্যূনতম প্রস্থ */
-.data-table thead th:nth-child(5),
-.data-table tbody td:nth-child(5) {
-    min-width: 100px;
-    max-width: 150px; /* নতুন: এই কলামের সর্বোচ্চ প্রস্থ নির্ধারণ করে। */
-    white-space: normal; /* **গুরুত্বপূর্ণ পরিবর্তন:** লেখা একাধিক লাইনে ভাঙবে */
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-/* Actions কলামের জন্য ন্যূনতম প্রস্থ */
-.data-table thead th:nth-child(6),
-.data-table tbody td:nth-child(6) {
-    min-width: 120px;
-    white-space: nowrap; /* অ্যাকশন বাটন এক লাইনেই থাকুক */
-}
-
-/* ডেটা সেল স্টাইল */
-.data-table tbody td {
-    border: 1px solid #E0E0E0;
-    vertical-align: top; /* কন্টেন্ট উপরের দিকে অ্যালাইন করবে */
-    background-color: #FFFFFF;
-}
-
-/* --- Revised Styles for Date Picker Modal --- */
-.date-picker-content {
-    max-width: 340px; /* ক্যালেন্ডারের জন্য একটি নির্দিষ্ট প্রস্থ */
-}
-
 .date-picker-header {
     display: flex;
     justify-content: space-between;
@@ -990,8 +949,7 @@ ul li a:hover {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 }
-
-.date-picker-header button {
+.date-picker-header button { /* This button is inside .date-picker-content, but style is specific */
     background: none;
     border: none;
     color: white;
@@ -1000,7 +958,6 @@ ul li a:hover {
     padding: 5px;
     margin: 0 5px;
 }
-
 .date-picker-header select {
     background-color: #4CAF50;
     color: white;
@@ -1011,7 +968,6 @@ ul li a:hover {
     cursor: pointer;
     margin: 0 3px;
 }
-
 .date-picker-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -1021,19 +977,13 @@ ul li a:hover {
     background-color: #f2f2f2;
     border-bottom: 1px solid #ddd;
 }
-
-.date-picker-days span {
-    color: #555;
-    font-size: 13px;
-}
-
+.date-picker-days span { color: #555; font-size: 13px; }
 .date-picker-dates {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
     padding: 10px;
 }
-
 .date-picker-dates span {
     padding: 8px;
     text-align: center;
@@ -1042,31 +992,64 @@ ul li a:hover {
     transition: background-color 0.2s ease, color 0.2s ease;
     font-size: 14px;
 }
+.date-picker-dates span:hover:not(.empty) { background-color: #e0e0e0; }
+.date-picker-dates span.selected-date { background-color: #4CAF50; color: white; font-weight: bold; }
+.date-picker-dates span.today-date { background-color: #FFC107; color: white; font-weight: bold; }
+.date-picker-dates span.selected-date.today-date { background-color: #28a745; }
+.date-picker-dates span.empty { visibility: hidden; }
 
-.date-picker-dates span:hover:not(.empty) {
-    background-color: #e0e0e0;
+/* Input Edit/New Entry Modal Content */
+.table-modal-content.input-edit-content { /* Updated selector */
+    max-width: 600px;
 }
-
-.date-picker-dates span.selected-date {
-    background-color: #4CAF50;
-    color: white;
+#inputEditModalHeading {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+#inputEditTextArea {
+    width: calc(100% - 20px);
+    height: 180px; /* Height increased */
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical; /* Allow vertical resizing */
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+.modal-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+.modal-actions button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
     font-weight: bold;
+    margin-bottom: 0; /* Removed unnecessary margin-bottom */
+    transition: background-color 0.2s ease;
 }
+.modal-actions .store-btn { background-color: #4CAF50; color: white; }
+.modal-actions .store-btn:hover { background-color: #45a049; }
+.modal-actions .cancel-btn { background-color: #9E9E9E; color: white; }
+.modal-actions .cancel-btn:hover { background-color: #757575; }
 
-.date-picker-dates span.today-date {
-    background-color: #FFC107;
-    color: white;
+/* Validation/Alert Modal Content (ensure this matches the HTML) */
+.table-modal-content.validation-content { /* Updated selector */
+    max-width: 350px;
+    background-color: #FFF3E0;
+    border: 1px solid #FFB74D;
+}
+#validationMessage {
+    color: #E65100;
+    font-size: 16px;
     font-weight: bold;
+    margin-bottom: 15px;
 }
-
-.date-picker-dates span.selected-date.today-date {
-    background-color: #28a745;
-}
-
-.date-picker-dates span.empty {
-    visibility: hidden;
-}
-
 /* Close button for modals (shared style) */
 .close-modal-btn {
     background-color: #F44336;
@@ -1078,80 +1061,11 @@ ul li a:hover {
     margin-top: 15px;
     transition: background-color 0.2s ease;
 }
-.close-modal-btn:hover {
-    background-color: #DA190B;
-}
+.close-modal-btn:hover { background-color: #DA190B; }
 
-/* --- New Styles for Input Edit/New Entry Modal --- */
-.input-edit-content {
-    max-width: 600px;
-}
 
-#inputEditModalHeading {
-    color: #4CAF50;
-    margin-bottom: 15px;
-    font-size: 24px;
-}
-
-#inputEditTextArea {
-    width: calc(100% - 20px);
-    height: 180px; /* উচ্চতা বাড়ানো হয়েছে */
-    padding: 10px;
-    font-size: 18px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    resize: vertical; /* উল্লম্বভাবে আকার পরিবর্তন করা যাবে */
-    font-family: Arial, sans-serif; /* সাধারণ ফন্ট */
-    box-sizing: border-box;
-}
-
-.modal-actions {
-    margin-top: 20px;
-    text-align: right;
-}
-
-.modal-actions button {
-    padding: 10px 20px;
-    margin-left: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.2s ease;
-}
-
-.modal-actions .store-btn {
-    background-color: #4CAF50; /* সবুজ */
-    color: white;
-}
-.modal-actions .store-btn:hover {
-    background-color: #45a049;
-}
-
-.modal-actions .cancel-btn {
-    background-color: #9E9E9E; /* ধূসর */
-    color: white;
-}
-.modal-actions .cancel-btn:hover {
-    background-color: #757575;
-}
-
-/* --- New Styles for Validation/Alert Modal --- */
-.validation-content {
-    max-width: 350px;
-    background-color: #FFF3E0; /* হালকা কমলা/হলুদ ব্যাকগ্রাউন্ড */
-    border: 1px solid #FFB74D; /* কমলা বর্ডার */
-}
-
-#validationMessage {
-    color: #E65100; /* গাঢ় কমলা লেখা */
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-/* এডিটিং মোডের জন্য ইনপুট ফিল্ড স্টাইল */
+/* --- Input Field Styles (for editing mode inside table cells) --- */
+/* This style applies when you're editing a cell directly in the table, not in the modal. */
 .data-table tbody tr.editing input[type="text"] {
     width: 100%;
     padding: 8px;
@@ -1161,24 +1075,44 @@ ul li a:hover {
     box-sizing: border-box;
     min-height: 38px;
     cursor: pointer;
-    white-space: normal; /* **গুরুত্বপূর্ণ:** ইনপুট ফিল্ডের লেখাও ভাঙবে */
+    /* For input type="text", white-space: normal won't force new lines.
+       You need to use <textarea> in JavaScript for multi-line input. */
+    white-space: nowrap; /* Keep input text on one line unless it's a textarea */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis for hidden text */
+}
+
+/* If you change the input to <textarea> in script.js for multi-line editing: */
+.data-table tbody tr.editing textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #8BC34A;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 38px;
+    height: auto; /* Height adapts to content */
+    resize: vertical; /* User can resize vertically */
+    font-family: Arial, sans-serif;
+    white-space: normal; /* Allow text to wrap */
     word-wrap: break-word;
     overflow-wrap: break-word;
-    height: auto; /* উচ্চতা স্বয়ংক্রিয়ভাবে কন্টেন্ট অনুযায়ী বাড়বে */
+    overflow-y: hidden; /* Hide vertical scrollbar initially */
 }
 
-/* --- New Styles for Live Input View Modal --- */
+
+/* --- Live Input View Modal (New section from your code) --- */
+/* Assuming this is a separate modal for viewing larger text, not for editing table cells */
 .live-input-content {
-    max-width: 600px; /* ইনপুট ভিউ এর জন্য বড় প্রস্থ */
+    max-width: 600px; /* Wider for viewing large text */
 }
-
 #liveInputTextArea {
-    width: calc(100% - 20px); /* প্যাডিং এর জন্য 20px বাদ */
-    height: 150px; /* উচ্চতা */
+    width: calc(100% - 20px);
+    height: 150px;
     padding: 10px;
-    font-size: 18px; /* বড় ফন্ট সাইজ */
+    font-size: 18px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    resize: vertical; /* উল্লম্বভাবে আকার পরিবর্তন করা যাবে */
-    font-family: monospace; /* কোডিং বা টেক্সট দেখার জন্য ভালো */
+    resize: vertical;
+    font-family: monospace;
 }
