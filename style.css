@@ -665,14 +665,26 @@ ul li a:hover {
     text-align: center; /* ভেতরের লেখা মাঝখানে আনার জন্য */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* হালকা শেড */
     transition: all 0.3s ease-in-out; /* হোভার এফেক্টের জন্য স্মুথ ট্রানজিশন */
+    animation: glowing-border 3s infinite alternate; /* গ্লো ইফেক্ট অ্যানিমেশন */
 }
 
-/* হোভার এফেক্ট */
+/* হোভার এফেক্ট (গ্লো সহ) */
 .notice-section-box:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* হোভার করলে শেড আরও গাঢ় হবে */
     transform: translateY(-3px); /* সামান্য উপরে উঠে আসবে */
     background-color: #D9F0D9; /* হোভার করলে ব্যাকগ্রাউন্ড কালার একটু গাঢ় হবে */
 }
+
+/* অ্যানিমেশনের কিফ্রেম */
+@keyframes glowing-border {
+    0% {
+        box-shadow: 0 0 10px -5px #8BC34A; /* হালকা সবুজ গ্লো শুরু */
+    }
+    100% {
+        box-shadow: 0 0 20px 0px #8BC34A; /* হালকা সবুজ গ্লো শেষ (ছড়িয়ে যাবে) */
+    }
+}
+
 
 
 
