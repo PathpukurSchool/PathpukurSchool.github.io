@@ -1083,12 +1083,12 @@ ul li a:hover {
 
     /* Ensure modals remain centered on small devices */
     .table-modal-overlay {
-        /* এই দুটি লাইন পরিবর্তন করা হয়েছে */
-        align-items: center; /* আগের flex-start এর পরিবর্তে center */
-        padding-top: 0;      /* অতিরিক্ত padding-top সরিয়ে দেওয়া হয়েছে */
+        align-items: center; /* unchanged */
+        padding-top: 0;      /* unchanged */
     }
     .table-modal-content {
-        width: 95%; /* Make modal content slightly wider on small screens */
-        margin: 0 auto; /* Center horizontally */
+        /* এই লাইনটি পরিবর্তন করা হয়েছে */
+        width: 80%; /* 95% থেকে 90% এ কমানো হয়েছে, অথবা আপনি 80% বা 85% ও চেষ্টা করতে পারেন */
+        margin: 0 auto; /* unchanged */
     }
 }
