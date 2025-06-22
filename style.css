@@ -38,7 +38,7 @@ font-weight: bold;
 .exam-link {
   display: inline-block;
   margin: 5px;
-  padding: 10px 20px;
+  padding: 8px 16px;
   background-color: green;
   color: white;
   text-decoration: none;
@@ -661,7 +661,7 @@ ul li a:hover {
     border-radius: 10px; /* কোণাগুলো গোলাকার */
     padding: 20px; /* ভিতরের লেখা থেকে বক্সের দূরত্ব */
     margin: 20px auto; /* উপরে-নিচে 20px মার্জিন, ডানে-বামে অটো (মাঝখানে আসবে) */
-    max-width: 700px; /* বক্সের সর্বোচ্চ প্রস্থ, আপনার পছন্দ অনুযায়ী বাড়াতে বা কমাতে পারেন */
+    max-width: 500px; /* বক্সের সর্বোচ্চ প্রস্থ, আপনার পছন্দ অনুযায়ী বাড়াতে বা কমাতে পারেন */
     text-align: center; /* ভেতরের লেখা মাঝখানে আনার জন্য */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* হালকা শেড */
     transition: all 0.3s ease-in-out; /* হোভার এফেক্টের জন্য স্মুথ ট্রানজিশন */
