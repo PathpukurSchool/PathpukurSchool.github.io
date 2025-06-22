@@ -834,12 +834,12 @@ ul li a:hover {
 
 /* Empty Row (first row for input) */
 .data-table tbody tr.empty-row td {
-    background-color: #F8F8F8;
+    background-color: #E0F2F1;
     font-style: italic;
     color: #777;
 }
 .data-table tbody tr.empty-row:hover {
-    background-color: #F8F8F8;
+    background-color: #F0FFF0, #E6F7E6;
     cursor: default;
 }
 .data-table tbody tr.empty-row .delete-btn {
