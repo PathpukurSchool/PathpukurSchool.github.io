@@ -743,10 +743,7 @@ ul li a:hover {
     border-bottom: 1px solid #E0E0E0;
     color: #333;
     font-size: 14px;
-    /* Removed white-space: nowrap; and overflow/text-overflow for data cells
-       This allows content to wrap naturally within the cell by default.
-       The table-wrapper's overflow-x handles overall table width. */
-border: 1px solid #E0E0E0;
+    border: 1px solid #E0E0E0;
     vertical-align: top; /* কন্টেন্ট উপরের দিকে অ্যালাইন করবে */
     background-color: #FFFFFF;
 }
@@ -762,8 +759,6 @@ border: 1px solid #E0E0E0;
     background-color: #FFFACD; /* এডিট মোডে দৃষ্টিনন্দন হালকা হলুদ */
     color: #333;
 }
-
-
 
 /* Action Buttons */
 .data-table .action-buttons button {
@@ -934,30 +929,44 @@ border: 1px solid #E0E0E0;
 .data-table thead th:nth-child(2),
 .data-table tbody td:nth-child(2) {
     min-width: 120px; /* তারিখের জন্য উপযুক্ত প্রস্থ (DD-MM-YYYY) */
+    white-space: nowrap; /* তারিখ এক লাইনেই থাকুক */
 }
 
 /* Heading কলামের জন্য ন্যূনতম প্রস্থ */
 .data-table thead th:nth-child(3),
 .data-table tbody td:nth-child(3) {
     min-width: 150px; /* হেডিং এর জন্য উপযুক্ত প্রস্থ */
+    max-width: 200px; /* নতুন: এই কলামের সর্বোচ্চ প্রস্থ নির্ধারণ করে। প্রয়োজনে বাড়াতে পারেন। */
+    white-space: normal; /* **গুরুত্বপূর্ণ পরিবর্তন:** লেখা একাধিক লাইনে ভাঙবে */
+    word-wrap: break-word; /* লম্বা শব্দ ভাঙার জন্য */
+    overflow-wrap: break-word; /* আধুনিক ব্রাউজারগুলোর জন্য */
 }
 
 /* Subject কলামের জন্য ন্যূনতম প্রস্থ */
 .data-table thead th:nth-child(4),
 .data-table tbody td:nth-child(4) {
-    min-width: 200px; /* সাবজেক্টের জন্য উপযুক্ত প্রস্থ */
+    min-width: 200px;
+    max-width: 300px; /* নতুন: এই কলামের সর্বোচ্চ প্রস্থ নির্ধারণ করে। */
+    white-space: normal; /* **গুরুত্বপূর্ণ পরিবর্তন:** লেখা একাধিক লাইনে ভাঙবে */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Link কলামের জন্য ন্যূনতম প্রস্থ */
 .data-table thead th:nth-child(5),
 .data-table tbody td:nth-child(5) {
-    min-width: 100px; /* লিংকের জন্য উপযুক্ত প্রস্থ */
+    min-width: 100px;
+    max-width: 150px; /* নতুন: এই কলামের সর্বোচ্চ প্রস্থ নির্ধারণ করে। */
+    white-space: normal; /* **গুরুত্বপূর্ণ পরিবর্তন:** লেখা একাধিক লাইনে ভাঙবে */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Actions কলামের জন্য ন্যূনতম প্রস্থ */
 .data-table thead th:nth-child(6),
 .data-table tbody td:nth-child(6) {
-    min-width: 150px; /* অ্যাকশন বাটনের জন্য উপযুক্ত প্রস্থ */
+    min-width: 120px;
+    white-space: nowrap; /* অ্যাকশন বাটন এক লাইনেই থাকুক */
 }
 
 /* ডেটা সেল স্টাইল */
@@ -966,11 +975,6 @@ border: 1px solid #E0E0E0;
     vertical-align: top; /* কন্টেন্ট উপরের দিকে অ্যালাইন করবে */
     background-color: #FFFFFF;
 }
-
-
-
-
-
 
 /* --- Revised Styles for Date Picker Modal --- */
 .date-picker-content {
@@ -1157,11 +1161,12 @@ border: 1px solid #E0E0E0;
     font-size: 14px;
     box-sizing: border-box;
     min-height: 38px;
-    cursor: pointer; /* ইনপুট ফিল্ডগুলোতে ক্লিক করার জন্য কার্সর দেখাবে */
+    cursor: pointer;
+    white-space: normal; /* ইনপুট ফিল্ডের লেখাও ভাঙবে */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    height: auto; /* উচ্চতা স্বয়ংক্রিয়ভাবে কন্টেন্ট অনুযায়ী বাড়বে */
 }
-
-
-
 
 /* --- New Styles for Live Input View Modal --- */
 .live-input-content {
@@ -1178,4 +1183,3 @@ border: 1px solid #E0E0E0;
     resize: vertical; /* উল্লম্বভাবে আকার পরিবর্তন করা যাবে */
     font-family: monospace; /* কোডিং বা টেক্সট দেখার জন্য ভালো */
 }
-    
