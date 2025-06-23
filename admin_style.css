@@ -1,0 +1,458 @@
+/* General Body and Container Styles */
+body {
+    font-family: 'Noto Sans Bengali', Arial, sans-serif; /* বাংলা ফন্ট সাপোর্ট */
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+.main-header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 1.8em;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.admin-panel-container {
+    margin: 20px auto;
+    max-width: 95%; /* কন্টেইনারের সর্বোচ্চ প্রস্থ */
+    padding: 20px;
+    background-color: #fcfcfc;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.admin-panel-container h2 {
+    color: #28a745;
+    font-size: 32px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Individual Section Styles */
+.admin-section {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    padding: 20px;
+    text-align: left; /* সেকশনের ভেতরের কন্টেন্ট বামদিকে অ্যালাইন হবে */
+}
+
+.admin-section .section-heading {
+    color: #4CAF50;
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center; /* হেডিং মাঝখানে থাকবে */
+}
+
+/* Table Wrapper for Horizontal Scrolling */
+.table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* --- Main Table Styling --- */
+.data-table {
+    width: 100%;
+    min-width: 700px; /* মোবাইল স্ক্রিনের জন্য সামঞ্জস্য করা হতে পারে */
+    border-collapse: collapse;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+/* Table Header (thead) Cells */
+.data-table thead th {
+    background-color: #4CAF50;
+    color: #FFFFFF;
+    padding: 12px 8px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    border: 1px solid #E0E0E0;
+}
+
+/* Table Body (tbody) Cells - General Styles */
+.data-table tbody td {
+    padding: 8px 10px;
+    border: 1px solid #E0E0E0;
+    vertical-align: top;
+    background-color: #FFFFFF;
+    color: #333;
+    font-size: 14px;
+}
+
+/* Table Row Hover Effect */
+.data-table tbody tr:hover {
+    background-color: #F5F5F5;
+    cursor: pointer;
+}
+
+/* Editable Row Style */
+.data-table tbody tr.editing td {
+    background-color: #FFFACD;
+    color: #333;
+}
+
+/* Fixed Column Styling */
+.data-table tbody td.fixed-column {
+    font-weight: bold;
+    background-color: #f0f0f0; /* ফিক্সড কলামের জন্য হালকা ধূসর ব্যাকগ্রাউন্ড */
+}
+
+/* --- Action Buttons --- */
+.data-table .action-buttons button {
+    padding: 4px 6px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.data-table .action-buttons .edit-btn { background-color: #FFC107; color: white; }
+.data-table .action-buttons .edit-btn:hover { background-color: #FFA000; transform: translateY(-1px); }
+
+.data-table .action-buttons .save-btn { background-color: #4CAF50; color: white; }
+.data-table .action-buttons .save-btn:hover { background-color: #45a049; transform: translateY(-1px); }
+
+.data-table .action-buttons .delete-btn { background-color: #F44336; color: white; }
+.data-table .action-buttons .delete-btn:hover { background-color: #DA190B; transform: translateY(-1px); }
+
+.data-table .action-buttons .cancel-btn { background-color: #9E9E9E; color: white; }
+.data-table .action-buttons .cancel-btn:hover { background-color: #757575; transform: translateY(-1px); }
+
+/* Empty Row (first row for input) */
+.data-table tbody tr.empty-row td {
+    background-color: #E0F2F1; /* হালকা নীলচে সবুজ */
+    font-style: italic;
+    color: #333;
+}
+.data-table tbody tr.empty-row:hover {
+    background-color: #E0F2F1; /* হোভারেও একই কালার থাকবে */
+    cursor: default;
+}
+.data-table tbody tr.empty-row .delete-btn {
+    display: none;
+}
+
+/* Pagination Styles */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) { background-color: #45a049; }
+.pagination button:disabled { background-color: #cccccc; cursor: not-allowed; }
+.pagination button.active {
+    background-color: #28a745;
+    font-weight: bold;
+}
+
+/* --- TABLE MODALS --- */
+.table-modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.table-modal-content {
+    background-color: #fefefe;
+    padding: 25px;
+    border: 1px solid #888;
+    max-width: 500px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    position: relative;
+    box-sizing: border-box; /* padding ও border কে width এর অংশ হিসেবে ধরবে */
+}
+
+/* Close button (general for all table modals) */
+.close-modal-btn {
+    background-color: #F44336;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.2s ease;
+}
+.close-modal-btn:hover { background-color: #DA190B; }
+
+/* Date Picker Content */
+.table-modal-content.date-picker-content {
+    max-width: 340px;
+}
+.date-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.date-picker-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0 5px;
+}
+.date-picker-header select {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 0 3px;
+}
+.date-picker-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    padding: 10px 0;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ddd;
+}
+.date-picker-days span { color: #555; font-size: 13px; }
+.date-picker-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    padding: 10px;
+}
+.date-picker-dates span {
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 14px;
+}
+.date-picker-dates span:hover:not(.empty) { background-color: #e0e0e0; }
+.date-picker-dates span.selected-date { background-color: #4CAF50; color: white; font-weight: bold; }
+.date-picker-dates span.today-date { background-color: #FFC107; color: white; font-weight: bold; }
+.date-picker-dates span.selected-date.today-date { background-color: #28a745; }
+.date-picker-dates span.empty { visibility: hidden; }
+
+/* Input Edit/New Entry Modal Content */
+.table-modal-content.input-edit-content {
+    max-width: 600px;
+}
+#inputEditModalHeading {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+#inputEditTextArea {
+    width: calc(100% - 20px);
+    height: 180px;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+.modal-actions {
+    margin-top: 20px;
+    text-align: center; /* মাঝখানে অ্যালাইন করার জন্য */
+}
+.modal-actions button {
+    padding: 10px 20px;
+    margin: 0 5px; /* বোতামগুলির মধ্যে ফাঁকা স্থান */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0;
+    transition: background-color 0.2s ease;
+}
+.modal-actions .store-btn { background-color: #4CAF50; color: white; }
+.modal-actions .store-btn:hover { background-color: #45a049; }
+.modal-actions .cancel-btn { background-color: #9E9E9E; color: white; }
+.modal-actions .cancel-btn:hover { background-color: #757575; }
+
+/* Validation/Alert Modal Content */
+.table-modal-content.validation-content {
+    max-width: 350px;
+    background-color: #FFF3E0;
+    border: 1px solid #FFB74D;
+}
+#validationMessage {
+    color: #E65100;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Color Picker Modal Content */
+.table-modal-content.color-picker-content {
+    max-width: 300px;
+}
+.color-palette {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6টি কলামে রঙ দেখাবে */
+    gap: 5px;
+    padding: 10px 0;
+}
+.color-palette .color-box {
+    width: 30px; /* রঙের বক্সের প্রস্থ */
+    height: 30px; /* রঙের বক্সের উচ্চতা */
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: transform 0.1s ease;
+}
+.color-palette .color-box:hover {
+    transform: scale(1.1); /* হোভার করলে কিছুটা বড় হবে */
+    border-color: #4CAF50;
+}
+.color-palette .color-box.selected {
+    border: 2px solid #4CAF50; /* সিলেক্টেড কালারে বর্ডার */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+
+/* --- Input Field Styles (for editing mode inside table cells) --- */
+.data-table tbody tr.editing input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #8BC34A;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 38px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.data-table tbody tr.editing textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #8BC34A;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 38px;
+    height: auto;
+    resize: vertical;
+    font-family: Arial, sans-serif;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow-y: hidden;
+}
+
+/* Calendar Icon for Scrolling Notice */
+.date-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.date-with-icon .calendar-icon {
+    font-size: 1.2em; /* আইকনের আকার */
+    color: #4CAF50; /* আইকনের রঙ */
+}
+
+
+/* Mobile specific styles */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    .admin-panel-container {
+        padding: 10px;
+    }
+    .admin-panel-container h2 {
+        font-size: 28px;
+    }
+    .admin-section .section-heading {
+        font-size: 20px;
+    }
+
+    .data-table thead th,
+    .data-table tbody td {
+        white-space: normal;
+        word-break: break-word;
+        padding: 8px 5px;
+    }
+    .data-table {
+        min-width: unset; /* ছোট স্ক্রিনে min-width সরিয়ে দেওয়া হলো */
+    }
+
+    .table-modal-overlay {
+        align-items: center;
+        padding-top: 0;
+    }
+    .table-modal-content {
+        width: 90%; /* মোবাইলে পপআপের প্রস্থ */
+        margin: 0 auto;
+        padding: 15px; /* প্যাডিং কমানো */
+    }
+    .date-picker-header button, .date-picker-header select {
+        font-size: 14px;
+        padding: 3px 5px;
+    }
+    .date-picker-days span, .date-picker-dates span {
+        font-size: 12px;
+        padding: 6px;
+    }
+    #inputEditTextArea {
+        font-size: 16px;
+        height: 150px;
+    }
+    .modal-actions button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+}
