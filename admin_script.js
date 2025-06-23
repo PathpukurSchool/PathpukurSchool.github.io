@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const colorPalette = document.getElementById('colorPalette');
 
     let currentEditingRow = null; // Currently selected row for edit/delete
-    let currentEditingColIndex = -1; // Currently selected column index for edit
+    let currentEditingColIndex = -1; // Currently selected column index for input edit modal
     let currentDatePickerInput = null; // The input field that opened the date picker
     let currentSelectedColorBox = null; // For color picker modal
     let currentColorInput = null; // The input field that opened the color picker
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Utility Functions (Reused from previous context) ---
+    // --- Utility Functions ---
 
     // Function to show validation message
     function showValidationMessage(message) {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         validationModal.style.display = 'flex';
     }
 
-    // Function to format date
+    // Function to format date (DD-MM-YYYY)
     function formatDate(date) {
         if (!date) return '';
         const d = new Date(date);
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
-    // --- Date Picker Logic (Reused) ---
+    // --- Date Picker Logic ---
     const monthSelect = document.getElementById('monthSelect');
     const yearSelect = document.getElementById('yearSelect');
     const calendarDates = document.getElementById('calendarDates');
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Generate calendar
+    // Generate calendar days
     function generateCalendar() {
         calendarDates.innerHTML = '';
         const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
@@ -138,15 +138,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentDatePickerInput) {
                     currentDatePickerInput.value = span.dataset.date;
                     // Add calendar icon for scrolling notice tables
-                    if (currentDatePickerInput.closest('table').id === 'table-scrolling-teacher' || currentDatePickerInput.closest('table').id === 'table-scrolling-student') {
+                    const tableId = currentDatePickerInput.closest('table').id;
+                    if (tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') {
                         const cell = currentDatePickerInput.parentElement;
-                        if (!cell.querySelector('.calendar-icon')) {
-                            const icon = document.createElement('span');
-                            icon.classList.add('calendar-icon');
-                            icon.textContent = '📆'; // Calendar emoji
-                            cell.prepend(icon);
-                            cell.classList.add('date-with-icon'); // Add class to manage flex display
-                        }
+                        // Remove existing icon if any
+                        const existingIcon = cell.querySelector('.calendar-icon');
+                        if (existingIcon) existingIcon.remove();
+
+                        const icon = document.createElement('span');
+                        icon.classList.add('calendar-icon');
+                        icon.textContent = '📆'; // Calendar emoji
+                        cell.prepend(icon);
+                        cell.classList.add('date-with-icon'); // Add class to manage flex display
+                        // Hide the input field, only show icon and date
+                        currentDatePickerInput.style.display = 'none';
                     }
                     datePickerModal.style.display = 'none';
                     currentDatePickerInput.dispatchEvent(new Event('change')); // Trigger change event
@@ -184,8 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         generateCalendar();
     });
 
-    populateDateSelects();
-    // generateCalendar() will be called when a date picker is opened.
+    populateDateSelects(); // Initial population
 
     // --- Color Picker Logic ---
     const colors = [
@@ -216,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (currentColorInput) {
                     currentColorInput.value = color; // Put color code in input
+                    currentColorInput.style.backgroundColor = color; // Update input background
                     colorPickerModal.style.display = 'none';
                     currentColorInput.dispatchEvent(new Event('change')); // Trigger change event
                 }
@@ -225,18 +230,81 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     populateColorPalette();
 
-    // --- Table Management Function (Main Logic) ---
-    function initializeTable(tableId, fixedData, initialRowsCount = 0, isInputRowRequired = false) {
+    // --- Table Management Function (Main Logic for each section) ---
+    function initializeTable(tableId, initialDataRows = [], isInputRowRequired = false) {
         const table = document.getElementById(tableId);
         const tbody = table.querySelector('tbody');
         const headerCells = Array.from(table.querySelector('thead tr').children);
         const columnNames = headerCells.map(th => th.textContent.trim());
 
-        // Function to create a table row
-        function createTableRow(rowData = {}, isInputRow = false) {
+        // Function to create an editable input/textarea based on column name
+        function createEditableInput(colName, currentValue, cell, isInputRow) {
+            let inputElement;
+
+            const isModalEditable = ['URL', 'Link', 'Subject', 'Heading', 'ID', 'Password'].includes(colName);
+
+            if (colName === 'Heading' || colName === 'Subject' || colName === 'URL' || colName === 'Link') {
+                inputElement = document.createElement('textarea');
+                inputElement.value = currentValue;
+                inputElement.classList.add('textarea-input'); // Custom class for textarea
+            } else {
+                inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.value = currentValue;
+            }
+
+            if (colName === 'Date') {
+                inputElement.readOnly = true;
+                inputElement.addEventListener('click', () => {
+                    currentDatePickerInput = inputElement;
+                    populateDateSelects(); // Reset selects to current date
+                    generateCalendar();
+                    datePickerModal.style.display = 'flex';
+                });
+            } else if (colName === 'Color') {
+                inputElement.readOnly = true;
+                inputElement.classList.add('color-input');
+                inputElement.style.backgroundColor = currentValue || 'transparent';
+                inputElement.addEventListener('click', () => {
+                    currentColorInput = inputElement;
+                    const selectedColor = inputElement.value;
+                    if (currentSelectedColorBox) {
+                        currentSelectedColorBox.classList.remove('selected');
+                    }
+                    const existingColorBox = colorPalette.querySelector(`[data-color-code="${selectedColor}"]`);
+                    if (existingColorBox) {
+                        existingColorBox.classList.add('selected');
+                        currentSelectedColorBox = existingColorBox;
+                    } else {
+                        currentSelectedColorBox = null;
+                    }
+                    colorPickerModal.style.display = 'flex';
+                });
+                // Ensure background color updates if value is set programmatically
+                inputElement.addEventListener('change', () => {
+                    inputElement.style.backgroundColor = inputElement.value || 'transparent';
+                });
+            } else if (isModalEditable && (isInputRow || currentEditingRow)) { // Only open modal for edit/new entry
+                inputElement.readOnly = true; // Make it read-only to force modal edit
+                inputElement.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Prevent row click from triggering
+                    inputEditModalHeading.textContent = `Edit ${colName}`;
+                    inputEditTextArea.value = inputElement.value;
+                    currentEditingRow = inputElement.closest('tr');
+                    currentEditingColIndex = columnNames.indexOf(colName);
+                    inputEditModal.style.display = 'flex';
+                });
+            }
+            return inputElement;
+        }
+
+        // Function to create a table row (for both display and input)
+        function createTableRow(rowData = {}, isInputRow = false, isEditing = false) {
             const row = document.createElement('tr');
             if (isInputRow) {
                 row.classList.add('empty-row');
+            } else if (isEditing) {
+                row.classList.add('editing');
             }
 
             columnNames.forEach((colName, index) => {
@@ -244,90 +312,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 let cellValue = rowData[colName] !== undefined ? rowData[colName] : '';
                 const isActionColumn = colName === 'Action';
 
-                // Handle fixed columns based on tableId
+                // Determine if a column is fixed (non-editable)
                 let isFixedColumn = false;
-                if (tableId === 'table-exam-link-teacher' && colName === 'Class') {
+                if ((tableId === 'table-exam-link-teacher' || tableId === 'table-exam-link-student') && colName === 'Class') {
                     isFixedColumn = true;
-                    cell.textContent = cellValue;
-                    cell.classList.add('fixed-column');
                 } else if (tableId === 'table-marks-submission-date' && colName === 'Exam') {
                     isFixedColumn = true;
-                    cell.textContent = cellValue;
-                    cell.classList.add('fixed-column');
-                } else if (tableId === 'table-exam-link-student' && colName === 'Class') {
-                    isFixedColumn = true;
-                    cell.textContent = cellValue;
-                    cell.classList.add('fixed-column');
-                } else if (tableId === 'table-scrolling-teacher' && colName === 'Date') {
-                    if (cellValue) {
-                        cell.classList.add('date-with-icon');
-                        cell.innerHTML = `<span class="calendar-icon">📆</span> ${cellValue}`;
-                    } else {
-                        cell.textContent = cellValue;
-                    }
-                } else if (tableId === 'table-scrolling-student' && colName === 'Date') {
-                    if (cellValue) {
-                        cell.classList.add('date-with-icon');
-                        cell.innerHTML = `<span class="calendar-icon">📆</span> ${cellValue}`;
-                    } else {
-                        cell.textContent = cellValue;
-                    }
                 }
 
+                if (isFixedColumn) {
+                    cell.textContent = cellValue;
+                    cell.classList.add('fixed-column');
+                } else if (!isActionColumn) {
+                    if (isInputRow || isEditing) { // If it's an input row or an editing row
+                        const editableInput = createEditableInput(colName, cellValue, cell, isInputRow);
+                        cell.appendChild(editableInput);
 
-                if (!isActionColumn && !isFixedColumn) {
-                    if (isInputRow || (colName !== 'Date' && colName !== 'Color' && colName !== 'Link' && colName !== 'URL' && colName !== 'ID' && colName !== 'Password' && colName !== 'Subject' && colName !== 'Heading')) {
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.value = cellValue;
-                        // Special handling for date and color inputs
-                        if (colName === 'Date') {
-                            input.readOnly = true; // Make it read-only
-                            input.addEventListener('click', () => {
-                                currentDatePickerInput = input;
-                                populateDateSelects(); // Reset selects to current date
-                                generateCalendar(); // Generate calendar for current month/year
-                                datePickerModal.style.display = 'flex';
-                            });
-                        } else if (colName === 'Color') {
-                            input.readOnly = true;
-                            input.classList.add('color-input');
-                            input.style.backgroundColor = cellValue || 'transparent'; // Display initial color
-                            input.addEventListener('click', () => {
-                                currentColorInput = input;
-                                const selectedColor = input.value;
-                                if (currentSelectedColorBox) {
-                                    currentSelectedColorBox.classList.remove('selected');
-                                }
-                                // Find and select the color box if a color is already chosen
-                                const existingColorBox = colorPalette.querySelector(`[data-color-code="${selectedColor}"]`);
-                                if (existingColorBox) {
-                                    existingColorBox.classList.add('selected');
-                                    currentSelectedColorBox = existingColorBox;
-                                } else {
-                                    currentSelectedColorBox = null;
-                                }
-                                colorPickerModal.style.display = 'flex';
-                            });
-                            // Update cell background when input changes
-                            input.addEventListener('change', () => {
-                                input.style.backgroundColor = input.value || 'transparent';
-                            });
-                        } else if (colName === 'URL' || colName === 'Link' || colName === 'Subject' || colName === 'Heading') {
-                            input.addEventListener('click', () => {
-                                inputEditModalHeading.textContent = `Edit ${colName}`;
-                                inputEditTextArea.value = input.value;
-                                currentEditingRow = row;
-                                currentEditingColIndex = index;
-                                inputEditModal.style.display = 'flex';
-                            });
-                            input.readOnly = true; // Make it read-only to force modal edit
+                        // Special handling for scrolling notice date icon
+                        if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && colName === 'Date' && cellValue) {
+                            const icon = document.createElement('span');
+                            icon.classList.add('calendar-icon');
+                            icon.textContent = '📆';
+                            cell.prepend(icon);
+                            cell.classList.add('date-with-icon');
+                            editableInput.style.display = 'none'; // Hide input if date is selected
                         }
-                        cell.appendChild(input);
-                    } else {
-                        cell.textContent = cellValue; // For URL, Link, Subject, Heading when not in input row
+                    } else { // Display mode (not input row, not editing)
+                        if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && colName === 'Date' && cellValue) {
+                            cell.innerHTML = `<span class="calendar-icon">📆</span> ${cellValue}`;
+                            cell.classList.add('date-with-icon');
+                        } else if (colName === 'Color' && cellValue) {
+                            // For color display, just show the text but can add a small color box later if desired
+                            cell.textContent = cellValue;
+                            cell.style.backgroundColor = cellValue; // Show color in cell background
+                            cell.style.color = getContrastYIQ(cellValue); // Text color for contrast
+                        }
+                        else {
+                            cell.textContent = cellValue;
+                        }
                     }
-                } else if (isActionColumn) {
+                } else { // Action column
                     const actionDiv = document.createElement('div');
                     actionDiv.classList.add('action-buttons');
 
@@ -342,6 +366,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         cancelBtn.classList.add('cancel-btn');
                         cancelBtn.textContent = 'Cancel';
                         cancelBtn.addEventListener('click', () => resetInputRow(row, tableId));
+                        actionDiv.appendChild(cancelBtn);
+                    } else if (isEditing) {
+                        const saveBtn = document.createElement('button');
+                        saveBtn.classList.add('save-btn');
+                        saveBtn.textContent = 'Save';
+                        saveBtn.addEventListener('click', () => saveRow(row, tableId, false));
+                        actionDiv.appendChild(saveBtn);
+
+                        const cancelBtn = document.createElement('button');
+                        cancelBtn.classList.add('cancel-btn');
+                        cancelBtn.textContent = 'Cancel';
+                        cancelBtn.addEventListener('click', () => cancelEdit(row, tableId));
                         actionDiv.appendChild(cancelBtn);
                     } else {
                         const editBtn = document.createElement('button');
@@ -361,13 +397,26 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             return row;
         }
+        
+        // Helper to determine text color for contrast
+        function getContrastYIQ(hexcolor){
+            if (!hexcolor || hexcolor.length !== 7) return '#333'; // Default for invalid or transparent
+            const r = parseInt(hexcolor.substr(1,2),16);
+            const g = parseInt(hexcolor.substr(3,2),16);
+            const b = parseInt(hexcolor.substr(5,2),16);
+            const yiq = ((r*299)+(g*587)+(b*114))/1000;
+            return (yiq >= 128) ? 'black' : 'white';
+        }
 
-        // Function to reset input row
+        // Reset input row after saving or canceling
         function resetInputRow(row, tableId) {
-            Array.from(row.querySelectorAll('input')).forEach(input => {
+            Array.from(row.querySelectorAll('input, textarea')).forEach(input => {
                 input.value = '';
                 if (input.classList.contains('color-input')) {
                     input.style.backgroundColor = 'transparent';
+                }
+                if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && input.type === 'text') {
+                    input.style.display = ''; // Show input again
                 }
             });
             Array.from(row.querySelectorAll('.calendar-icon')).forEach(icon => icon.remove());
@@ -387,31 +436,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (inputElement) {
                     cellValue = inputElement.value.trim();
                 } else {
+                    // For fixed columns or non-editable cells
                     cellValue = cells[index].textContent.trim();
                 }
-
                 rowData[colName] = cellValue;
 
                 // Validation rules
                 if (tableId === 'table-exam-link-teacher') {
-                    if (colName === 'ID' || colName === 'Password' || colName === 'URL') {
-                        if (!cellValue) {
-                            isValid = false;
-                            validationMessageText = `ID, Password, এবং URL ফিল্ডগুলো আবশ্যিক।`;
-                        }
+                    if (['ID', 'Password', 'URL'].includes(colName) && !cellValue) {
+                        isValid = false;
+                        validationMessageText = `Class: ${rowData['Class']}\nID, Password, এবং URL ফিল্ডগুলো আবশ্যিক।`;
                     }
                 } else if (tableId === 'table-marks-submission-date') {
                     if (colName === 'Date' && !cellValue) {
                         isValid = false;
-                        validationMessageText = `Date ফিল্ডটি আবশ্যিক।`;
+                        validationMessageText = `Exam: ${rowData['Exam']}\nDate ফিল্ডটি আবশ্যিক।`;
                     }
-                } else if (tableId === 'table-help-teacher' || tableId === 'table-notice-teacher' || tableId === 'table-notice-student') {
-                    if ((colName === 'Date' || colName === 'Heading' || colName === 'Subject') && !cellValue) {
+                } else if (tableId === 'table-exam-link-student') {
+                    if (colName === 'URL' && !cellValue) {
+                        isValid = false;
+                        validationMessageText = `Class: ${rowData['Class']}\nURL ফিল্ডটি আবশ্যিক।`;
+                    }
+                } else if (['table-help-teacher', 'table-notice-teacher', 'table-notice-student'].includes(tableId)) {
+                    if (['Date', 'Heading', 'Subject'].includes(colName) && !cellValue) {
                         isValid = false;
                         validationMessageText = `Date, Heading, এবং Subject ফিল্ডগুলো আবশ্যিক।`;
                     }
-                } else if (tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') {
-                    if ((colName === 'Date' || colName === 'Subject') && !cellValue) {
+                } else if (['table-scrolling-teacher', 'table-scrolling-student'].includes(tableId)) {
+                    if (['Date', 'Subject'].includes(colName) && !cellValue) {
                         isValid = false;
                         validationMessageText = `Date এবং Subject ফিল্ডগুলো আবশ্যিক।`;
                     }
@@ -425,157 +477,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Simulate Save operation (replace with actual API call)
             console.log(`Saving to ${tableId}:`, rowData);
-            // Example: try { await fetch('/api/saveData', { method: 'POST', body: JSON.stringify(rowData) }); } catch (error) { ... }
+            // Example: try { await fetch('/api/saveData', { method: 'POST', body: JSON.stringify(rowData) }); } catch (error) { console.error('Save failed:', error); showValidationMessage('সেভ করতে সমস্যা হয়েছে।'); return; }
 
             // After successful save, update the row to non-editing state
             if (isNewRow) {
-                const newRow = createTableRow(rowData, false); // Create a new non-input row
-                tbody.prepend(newRow); // Add new row at the top (or bottom, as per preference)
+                // If it's a new row, prepend the new data row and reset the input row
+                const newRow = createTableRow(rowData, false, false);
+                tbody.prepend(newRow); // Add new row at the top
                 resetInputRow(row, tableId); // Reset the input row
             } else {
-                row.classList.remove('editing');
-                Array.from(row.querySelectorAll('td')).forEach((cell, index) => {
-                    const inputElement = cell.querySelector('input') || cell.querySelector('textarea');
-                    if (inputElement) {
-                        let displayValue = inputElement.value;
-                        if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && columnNames[index] === 'Date') {
-                            // Re-add icon for scrolling notice dates
-                            cell.innerHTML = `<span class="calendar-icon">📆</span> ${displayValue}`;
-                            cell.classList.add('date-with-icon');
-                        } else {
-                            cell.textContent = displayValue;
-                        }
-                    }
-                });
-                const actionCell = row.querySelector('.action-buttons');
-                actionCell.innerHTML = `
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
-                `;
-                actionCell.querySelector('.edit-btn').addEventListener('click', () => editRow(row, tableId));
-                actionCell.querySelector('.delete-btn').addEventListener('click', () => deleteRow(row, tableId));
+                // For an edited row, replace the editing row with a new display row
+                const updatedRow = createTableRow(rowData, false, false);
+                row.replaceWith(updatedRow);
             }
 
             showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
-            // Re-render the pagination or specific rows if needed.
+            // Optionally re-render the pagination or specific rows if needed.
         }
 
+
         function editRow(row, tableId) {
-            row.classList.add('editing');
+            // Store original data before editing for cancel functionality
+            const originalData = {};
             Array.from(row.children).forEach((cell, index) => {
                 const colName = columnNames[index];
-                const isActionColumn = colName === 'Action';
-
-                // Fixed columns should not be editable
-                let isFixedColumn = false;
-                if (tableId === 'table-exam-link-teacher' && colName === 'Class') isFixedColumn = true;
-                else if (tableId === 'table-marks-submission-date' && colName === 'Exam') isFixedColumn = true;
-                else if (tableId === 'table-exam-link-student' && colName === 'Class') isFixedColumn = true;
-
-                if (!isActionColumn && !isFixedColumn) {
-                    const currentVal = cell.textContent.trim();
-                    cell.innerHTML = ''; // Clear cell content
-
-                    let input;
-                    if (colName === 'Heading' || colName === 'Subject' || colName === 'URL' || colName === 'Link') {
-                        input = document.createElement('textarea');
-                        input.value = currentVal;
-                    } else {
-                        input = document.createElement('input');
-                        input.type = 'text';
-                        input.value = currentVal;
-                    }
-
-                    if (colName === 'Date') {
-                        input.readOnly = true;
-                        input.addEventListener('click', () => {
-                            currentDatePickerInput = input;
-                            populateDateSelects(); // Reset selects to current date
-                            generateCalendar();
-                            datePickerModal.style.display = 'flex';
-                        });
-                        // Remove icon if present
-                        cell.classList.remove('date-with-icon');
-                    } else if (colName === 'Color') {
-                        input.readOnly = true;
-                        input.classList.add('color-input');
-                        input.style.backgroundColor = currentVal || 'transparent';
-                        input.addEventListener('click', () => {
-                            currentColorInput = input;
-                            const selectedColor = input.value;
-                            if (currentSelectedColorBox) {
-                                currentSelectedColorBox.classList.remove('selected');
-                            }
-                            const existingColorBox = colorPalette.querySelector(`[data-color-code="${selectedColor}"]`);
-                            if (existingColorBox) {
-                                existingColorBox.classList.add('selected');
-                                currentSelectedColorBox = existingColorBox;
-                            } else {
-                                currentSelectedColorBox = null;
-                            }
-                            colorPickerModal.style.display = 'flex';
-                        });
-                        input.addEventListener('change', () => {
-                            input.style.backgroundColor = input.value || 'transparent';
-                        });
-                    } else if (colName === 'ID' || colName === 'Password' || colName === 'URL' || colName === 'Link' || colName === 'Subject' || colName === 'Heading') {
-                        // For these columns, open the modal for edit if not already a textarea
-                        if (input.tagName === 'INPUT') { // Only if it's an input, not a textarea from initial edit setup
-                            input.readOnly = true; // Make it read-only
-                            input.addEventListener('click', () => {
-                                inputEditModalHeading.textContent = `Edit ${colName}`;
-                                inputEditTextArea.value = input.value;
-                                currentEditingRow = row;
-                                currentEditingColIndex = index;
-                                inputEditModal.style.display = 'flex';
-                            });
-                        }
-                    }
-                    cell.appendChild(input);
-                } else if (isActionColumn) {
-                    cell.innerHTML = `
-                        <button class="save-btn">Save</button>
-                        <button class="cancel-btn">Cancel</button>
-                    `;
-                    cell.querySelector('.save-btn').addEventListener('click', () => saveRow(row, tableId, false));
-                    cell.querySelector('.cancel-btn').addEventListener('click', () => cancelEdit(row, tableId));
+                if (colName !== 'Action') {
+                    originalData[colName] = cell.textContent.trim();
                 }
             });
+            row.dataset.originalData = JSON.stringify(originalData);
+
+            const editingRow = createTableRow(originalData, false, true); // Create a new row in editing mode
+            row.replaceWith(editingRow); // Replace the current row with the editing row
         }
 
         function cancelEdit(row, tableId) {
-            row.classList.remove('editing');
-            // Revert cells to original text content
             const originalData = row.dataset.originalData ? JSON.parse(row.dataset.originalData) : {};
-
-            Array.from(row.children).forEach((cell, index) => {
-                const colName = columnNames[index];
-                const isActionColumn = colName === 'Action';
-                const originalValue = originalData[colName] || '';
-
-                if (!isActionColumn) {
-                    if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && colName === 'Date' && originalValue) {
-                        cell.innerHTML = `<span class="calendar-icon">📆</span> ${originalValue}`;
-                        cell.classList.add('date-with-icon');
-                    } else {
-                        cell.textContent = originalValue;
-                    }
-                    if (colName === 'Color' && originalValue) {
-                        cell.style.backgroundColor = originalValue;
-                    } else {
-                        cell.style.backgroundColor = '';
-                    }
-                } else {
-                    cell.innerHTML = `
-                        <button class="edit-btn">Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    `;
-                    cell.querySelector('.edit-btn').addEventListener('click', () => editRow(row, tableId));
-                    cell.querySelector('.delete-btn').addEventListener('click', () => deleteRow(row, tableId));
-                }
-            });
+            const originalRow = createTableRow(originalData, false, false); // Recreate the original display row
+            row.replaceWith(originalRow); // Replace the editing row with the original display row
         }
-
 
         function deleteRow(row, tableId) {
             currentEditingRow = row;
@@ -602,13 +542,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Store Input from Modal ---
         storeInputBtn.addEventListener('click', () => {
             if (currentEditingRow && currentEditingColIndex !== -1) {
-                const newValue = inputEditTextArea.value.trim();
+                const newValue = inputEditTextArea.value; // Get value without trimming for multi-line
                 const cell = currentEditingRow.children[currentEditingColIndex];
                 const inputOrTextarea = cell.querySelector('input') || cell.querySelector('textarea');
 
                 if (inputOrTextarea) {
                     inputOrTextarea.value = newValue; // Update the input field in the table cell
-                    inputOrTextarea.dispatchEvent(new Event('change')); // Trigger change event if needed
+                    inputOrTextarea.dispatchEvent(new Event('change')); // Trigger change event
                 }
                 
                 inputEditModal.style.display = 'none';
@@ -633,18 +573,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 tbody.appendChild(createTableRow({}, true)); // Add the static input row first
             }
             data.forEach(rowData => {
-                const row = createTableRow(rowData, false);
-                row.dataset.originalData = JSON.stringify(rowData); // Store original data for cancel
+                const row = createTableRow(rowData, false, false); // Create as display row, not editing
                 tbody.appendChild(row);
             });
         }
 
-        // --- Data Definitions for each section ---
-        let initialData = [];
+        // --- Initial Data Definitions for each section ---
+        let sectionData = [];
 
         if (tableId === 'table-exam-link-teacher') {
             const classes = ["V_1ST", "V_2ND", "V_3RD", "VI_1ST", "VI_2ND", "VI_3RD", "VII_1ST", "VII_2ND", "VII_3RD", "VIII_1ST", "VIII_2ND", "VIII_3RD", "IX_1ST", "IX_2ND", "IX_3RD", "X_1ST", "X_2ND", "X_TEST", "XI_SEM1", "XI_SEM2", "XII_TEST"];
-            initialData = classes.map(cls => ({
+            sectionData = classes.map(cls => ({
                 Class: cls,
                 ID: '',
                 Password: '',
@@ -652,28 +591,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }));
         } else if (tableId === 'table-marks-submission-date') {
             const exams = ["1st Exam", "2nd Exam", "X Test", "3Rd Exam", "XI Semester I", "XI Semester II", "XII Test"];
-            initialData = exams.map(exam => ({
+            sectionData = exams.map(exam => ({
                 Exam: exam,
                 Date: '',
                 Color: ''
             }));
         } else if (tableId === 'table-exam-link-student') {
             const classes = ["V_1ST", "V_2ND", "V_3RD", "VI_1ST", "VI_2ND", "VI_3RD", "VII_1ST", "VII_2ND", "VII_3RD", "VIII_1ST", "VIII_2ND", "VIII_3RD", "IX_1ST", "IX_2ND", "IX_3RD", "X_1ST", "X_2ND", "X_TEST", "XI_SEM1", "XI_SEM2", "XII_TEST"];
-            initialData = classes.map(cls => ({
+            sectionData = classes.map(cls => ({
                 Class: cls,
                 URL: ''
             }));
         } else {
-            // For sections 4, 5, 6, 7, 8 which require input rows, start with empty data (or load from backend)
-            initialData = []; // These tables will mainly show data added via input row
+            // For sections 4, 5, 6, 7, 8 which require input rows, start with empty data.
+            // In a real app, you'd fetch existing data from a backend here.
+            sectionData = [
+                // Example initial data for tables with input rows
+                // { Date: '15-06-2025', Heading: 'New Notice', Subject: 'About Sports Day', Color: '#C8E6C9', Link: 'http://example.com/notice1' },
+                // { Date: '10-06-2025', Heading: 'Exam Schedule', Subject: 'Final Exams', Color: '', Link: '' }
+            ];
         }
 
-        populateTable(initialData);
+        populateTable(sectionData);
 
         // Pagination (simplified for this context, needs full implementation for dynamic data)
         const paginationContainer = document.getElementById(`pagination-${tableId.replace('table-', '')}`);
         if (paginationContainer) {
-            // Add basic next/prev buttons, or full page numbers if needed
             paginationContainer.innerHTML = `
                 <button disabled>Previous</button>
                 <button disabled>Next</button>
@@ -683,14 +626,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // --- Initialize all tables ---
-    initializeTable('table-exam-link-teacher', null, 21, false);
-    initializeTable('table-marks-submission-date', null, 7, false);
-    initializeTable('table-exam-link-student', null, 21, false);
-    initializeTable('table-help-teacher', null, 0, true); // Input row required
-    initializeTable('table-notice-teacher', null, 0, true); // Input row required
-    initializeTable('table-notice-student', null, 0, true); // Input row required
-    initializeTable('table-scrolling-teacher', null, 0, true); // Input row required
-    initializeTable('table-scrolling-student', null, 0, true); // Input row required
+    // --- Initialize all tables with their specific configurations ---
+    initializeTable('table-exam-link-teacher', [], false); // No input row, fixed data handled internally
+    initializeTable('table-marks-submission-date', [], false); // No input row, fixed data handled internally
+    initializeTable('table-exam-link-student', [], false); // No input row, fixed data handled internally
+    initializeTable('table-help-teacher', [], true); // Input row required
+    initializeTable('table-notice-teacher', [], true); // Input row required
+    initializeTable('table-notice-student', [], true); // Input row required
+    initializeTable('table-scrolling-teacher', [], true); // Input row required
+    initializeTable('table-scrolling-student', [], true); // Input row required
 
 });
