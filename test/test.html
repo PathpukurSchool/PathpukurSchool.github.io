@@ -1,70 +1,115 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Section 1 - Exam Link for Teachers</title>
-    <link rel="stylesheet" href="test_style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section 1 - Exam Link for Teachers</title>
+  <link rel="stylesheet" href="test_style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Optional quick modal styling if not in CSS */
+    .table-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .table-modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      position: relative;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .close-modal-btn {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <header class="main-header">
-        <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
-    </header>
+  <header class="main-header">
+    <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
+  </header>
 
-    <div class="admin-panel-container">
-        <h2>Admin Panel - Section 1 Only</h2>
+  <div class="admin-panel-container">
+    <h2>Admin Panel - Section 1 Only</h2>
 
-        <section id="exam-link-teachers" class="admin-section">
-            <h3 class="section-heading">Exam Link for Teachers</h3>
-            <div class="table-wrapper">
-                <table id="table-exam-link-teacher" class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Class</th>
-                            <th>ID</th>
-                            <th>Password</th>
-                            <th>URL</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        </tbody>
-                </table>
-            </div>
-            <div class="pagination" id="pagination-exam-link-teacher">
-                <button disabled>Previous</button>
-                <button disabled>Next</button>
-            </div>
-        </section>
+    <section id="exam-link-teachers" class="admin-section">
+      <h3 class="section-heading">Exam Link for Teachers</h3>
+      <div class="table-wrapper">
+        <table id="table-exam-link-teacher" class="data-table">
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>ID</th>
+              <th>Password</th>
+              <th>URL</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination-exam-link-teacher">
+        <button disabled>Previous</button>
+        <button disabled>Next</button>
+      </div>
+    </section>
+  </div>
 
-    </div> <div id="deleteConfirmModal" class="table-modal-overlay">
-        <div class="table-modal-content">
-            <p>আপনি কি এই রোটি ডিলিট করতে চান?</p>
-            <button id="confirmDeleteBtn">হ্যাঁ</button>
-            <button id="cancelDeleteBtn">না</button>
-        </div>
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteConfirmModal" class="table-modal-overlay">
+    <div class="table-modal-content">
+      <button class="close-modal-btn">&times;</button>
+      <p>আপনি কি এই রোটি ডিলিট করতে চান?</p>
+      <button id="confirmDeleteBtn">হ্যাঁ</button>
+      <button id="cancelDeleteBtn">না</button>
     </div>
+  </div>
 
-    <div id="inputEditModal" class="table-modal-overlay">
-        <div class="table-modal-content input-edit-content">
-            <h3 id="inputEditModalHeading"></h3>
-            <textarea id="inputEditTextArea"></textarea>
-            <div class="modal-actions">
-                <button id="storeInputBtn" class="store-btn">স্টোর করুন</button>
-                <button id="cancelInputBtn" class="cancel-btn">বাতিল করুন</button>
-            </div>
-        </div>
+  <!-- Input Edit Modal -->
+  <div id="inputEditModal" class="table-modal-overlay">
+    <div class="table-modal-content input-edit-content">
+      <button class="close-modal-btn">&times;</button>
+      <h3 id="inputEditModalHeading">Edit</h3>
+      <textarea id="inputEditTextArea" placeholder="এখানে তথ্য লিখুন..."></textarea>
+      <div class="modal-actions">
+        <button id="storeInputBtn" class="store-btn">স্টোর করুন</button>
+        <button id="cancelInputBtn" class="cancel-btn">বাতিল করুন</button>
+      </div>
     </div>
+  </div>
 
-    <div id="validationModal" class="table-modal-overlay">
-        <div class="table-modal-content validation-content">
-            <p id="validationMessage"></p>
-            <button class="close-modal-btn">ঠিক আছে</button>
-        </div>
+  <!-- Validation Modal -->
+  <div id="validationModal" class="table-modal-overlay">
+    <div class="table-modal-content validation-content">
+      <button class="close-modal-btn">&times;</button>
+      <p id="validationMessage">তথ্য সঠিকভাবে পূরণ করুন।</p>
     </div>
-    
-    <script src="test_script.js"></script>
+  </div>
+
+  <!-- Main JavaScript -->
+  <script src="test_script.js"></script>
 </body>
 </html>
