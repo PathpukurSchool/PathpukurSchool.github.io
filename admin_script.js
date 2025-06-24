@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     // --- Global Elements and Modals ---
     const inputEditModal = document.getElementById('inputEditModal');
@@ -680,4 +679,665 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Section 3: Exam Link for Student ---
-    
+    function initializeExamLinkStudentsTable() {
+        const table = document.getElementById('table-exam-link-student');
+        const tbody = table.querySelector('tbody');
+        const headerCells = Array.from(table.querySelector('thead tr').children);
+        const columnNames = headerCells.map(th => th.textContent.trim());
+
+        const classes = ["V_1ST", "V_2ND", "V_3RD", "VI_1ST", "VI_2ND", "VI_3RD", "VII_1ST", "VII_2ND", "VII_3RD", "VIII_1ST", "VIII_2ND", "VIII_3RD", "IX_1ST", "IX_2ND", "IX_3RD", "X_1ST", "X_2ND", "X_TEST", "XI_SEM1", "XI_SEM2", "XII_TEST"];
+        const initialDataRows = classes.map(cls => ({
+            Class: cls,
+            URL: ''
+        }));
+
+        function createEditableInput(colName, currentValue) {
+            const inputElement = document.createElement('input');
+            inputElement.type = 'text';
+            inputElement.value = currentValue;
+            inputElement.readOnly = true;
+
+            inputElement.addEventListener('click', (event) => {
+                event.stopPropagation();
+                inputEditModalHeading.textContent = `Edit ${colName}`;
+                inputEditTextArea.value = inputElement.value;
+                currentEditingRow = inputElement.closest('tr');
+                currentEditingColIndex = columnNames.indexOf(colName);
+                inputEditModal.style.display = 'flex';
+            });
+            return inputElement;
+        }
+
+        function createTableRow(rowData = {}, isEditing = false) {
+            const row = document.createElement('tr');
+            if (isEditing) row.classList.add('editing');
+
+            columnNames.forEach((colName) => {
+                const cell = document.createElement('td');
+                const value = rowData[colName] || '';
+
+                if (colName === 'Class') {
+                    cell.textContent = value;
+                    cell.classList.add('fixed-column');
+                } else if (colName === 'Action') {
+                    const actionDiv = document.createElement('div');
+                    actionDiv.classList.add('action-buttons');
+
+                    if (isEditing) {
+                        const saveBtn = document.createElement('button');
+                        saveBtn.classList.add('save-btn');
+                        saveBtn.textContent = 'Save';
+                        saveBtn.addEventListener('click', () => saveRow(row));
+                        actionDiv.appendChild(saveBtn);
+
+                        const cancelBtn = document.createElement('button');
+                        cancelBtn.classList.add('cancel-btn');
+                        cancelBtn.textContent = 'Cancel';
+                        cancelBtn.addEventListener('click', () => cancelEdit(row));
+                        actionDiv.appendChild(cancelBtn);
+                    } else {
+                        const editBtn = document.createElement('button');
+                        editBtn.classList.add('edit-btn');
+                        editBtn.textContent = 'Edit';
+                        editBtn.addEventListener('click', () => editRow(row));
+
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.textContent = 'Delete';
+                        deleteBtn.addEventListener('click', () => deleteRow(row));
+
+                        actionDiv.appendChild(editBtn);
+                        actionDiv.appendChild(deleteBtn);
+                    }
+                    cell.appendChild(actionDiv);
+                } else {
+                    if (isEditing) {
+                        const input = createEditableInput(colName, value);
+                        cell.appendChild(input);
+                    } else {
+                        cell.textContent = value;
+                    }
+                }
+                row.appendChild(cell);
+            });
+            return row;
+        }
+
+        function populateTable(data) {
+            tbody.innerHTML = '';
+            data.forEach(rowData => {
+                const row = createTableRow(rowData, false);
+                tbody.appendChild(row);
+            });
+        }
+
+        function saveRow(row) {
+            const cells = Array.from(row.children);
+            const rowData = {};
+            let isValid = true;
+            let validationMessageText = '';
+
+            columnNames.forEach((colName, index) => {
+                if (colName !== 'Action') {
+                    const inputElement = cells[index].querySelector('input');
+                    let cellValue = inputElement ? inputElement.value.trim() : cells[index].textContent.trim();
+                    rowData[colName] = cellValue;
+
+                    if (!cellValue && !['Class'].includes(colName)) {
+                        isValid = false;
+                        validationMessageText = `${colName} ফিল্ডটি আবশ্যিক।`;
+                    }
+                }
+            });
+
+            if (!isValid) {
+                showValidationMessage(validationMessageText);
+                return;
+            }
+
+            console.log(`Saving Exam Link Student data:`, rowData);
+            const updatedRow = createTableRow(rowData, false);
+            row.replaceWith(updatedRow);
+            showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
+        }
+
+        function editRow(row) {
+            const originalData = {};
+            Array.from(row.children).forEach((cell, index) => {
+                const colName = columnNames[index];
+                if (colName !== 'Action') {
+                    originalData[colName] = cell.textContent.trim();
+                }
+            });
+            row.dataset.originalData = JSON.stringify(originalData);
+
+            const editingRow = createTableRow(originalData, true);
+            row.replaceWith(editingRow);
+        }
+
+        function cancelEdit(row) {
+            const originalData = JSON.parse(row.dataset.originalData);
+            const originalRow = createTableRow(originalData, false);
+            row.replaceWith(originalRow);
+        }
+
+        function deleteRow(row) {
+            currentEditingRow = row;
+            deleteConfirmModal.style.display = 'flex';
+            confirmDeleteBtn.onclick = () => {
+                if (currentEditingRow) {
+                    console.log(`Deleting row from table-exam-link-student`);
+                    currentEditingRow.remove();
+                    currentEditingRow = null;
+                    deleteConfirmModal.style.display = 'none';
+                    showValidationMessage("ডেটা সফলভাবে ডিলিট হয়েছে!");
+                }
+            };
+        }
+        populateTable(initialDataRows);
+    }
+
+    // --- Sections 4, 5, 6: Tables with an Input Row ---
+    // Help for Teachers, Notice for Teachers, Notice for Students
+    function initializeInputRowTable(tableId, initialDataRows = []) {
+        const table = document.getElementById(tableId);
+        const tbody = table.querySelector('tbody');
+        const headerCells = Array.from(table.querySelector('thead tr').children);
+        const columnNames = headerCells.map(th => th.textContent.trim());
+
+        function createEditableInput(colName, currentValue) {
+            const inputElement = document.createElement(colName === 'Help Text' || colName === 'Notice Text' ? 'textarea' : 'input');
+            inputElement.type = 'text';
+            inputElement.value = currentValue;
+            inputElement.classList.add(colName === 'Help Text' || colName === 'Notice Text' ? 'textarea-input' : 'text-input');
+            // No readOnly for direct input in input row
+            return inputElement;
+        }
+
+        function createTableRow(rowData = {}, isInputRow = false, isEditing = false) {
+            const row = document.createElement('tr');
+            if (isInputRow) row.classList.add('input-row');
+            if (isEditing) row.classList.add('editing');
+
+            columnNames.forEach((colName) => {
+                const cell = document.createElement('td');
+                const value = rowData[colName] || '';
+
+                if (colName === 'Action') {
+                    const actionDiv = document.createElement('div');
+                    actionDiv.classList.add('action-buttons');
+
+                    if (isInputRow) {
+                        const saveBtn = document.createElement('button');
+                        saveBtn.classList.add('save-btn');
+                        saveBtn.textContent = 'Save';
+                        saveBtn.addEventListener('click', () => saveRow(row, true));
+                        actionDiv.appendChild(saveBtn);
+
+                        const cancelBtn = document.createElement('button');
+                        cancelBtn.classList.add('cancel-btn');
+                        cancelBtn.textContent = 'Cancel';
+                        cancelBtn.addEventListener('click', () => resetInputRow(row));
+                        actionDiv.appendChild(cancelBtn);
+                    } else if (isEditing) {
+                        const saveBtn = document.createElement('button');
+                        saveBtn.classList.add('save-btn');
+                        saveBtn.textContent = 'Save';
+                        saveBtn.addEventListener('click', () => saveRow(row, false));
+                        actionDiv.appendChild(saveBtn);
+
+                        const cancelBtn = document.createElement('button');
+                        cancelBtn.classList.add('cancel-btn');
+                        cancelBtn.textContent = 'Cancel';
+                        cancelBtn.addEventListener('click', () => cancelEdit(row));
+                        actionDiv.appendChild(cancelBtn);
+                    } else {
+                        const editBtn = document.createElement('button');
+                        editBtn.classList.add('edit-btn');
+                        editBtn.textContent = 'Edit';
+                        editBtn.addEventListener('click', () => editRow(row));
+
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.textContent = 'Delete';
+                        deleteBtn.addEventListener('click', () => deleteRow(row));
+
+                        actionDiv.appendChild(editBtn);
+                        actionDiv.appendChild(deleteBtn);
+                    }
+                    cell.appendChild(actionDiv);
+                } else {
+                    if (isInputRow || isEditing) {
+                        const input = createEditableInput(colName, value);
+                        cell.appendChild(input);
+                    } else {
+                        cell.textContent = value;
+                    }
+                }
+                row.appendChild(cell);
+            });
+            return row;
+        }
+
+        function populateTable(data) {
+            tbody.innerHTML = '';
+            tbody.appendChild(createTableRow({}, true, false)); // Add the input row first
+            data.forEach(rowData => {
+                const row = createTableRow(rowData, false, false);
+                tbody.appendChild(row);
+            });
+        }
+
+        function resetInputRow(row) {
+            Array.from(row.querySelectorAll('input, textarea')).forEach(input => input.value = '');
+        }
+
+        function saveRow(row, isNewRow) {
+            const cells = Array.from(row.children);
+            const rowData = {};
+            let isValid = true;
+            let validationMessageText = '';
+
+            columnNames.forEach((colName, index) => {
+                if (colName !== 'Action') {
+                    const inputElement = cells[index].querySelector('input, textarea');
+                    let cellValue = inputElement ? inputElement.value.trim() : '';
+                    rowData[colName] = cellValue;
+
+                    if (!cellValue) {
+                        isValid = false;
+                        validationMessageText = `${colName} ফিল্ডটি আবশ্যিক।`;
+                    }
+                }
+            });
+
+            if (!isValid) {
+                showValidationMessage(validationMessageText);
+                return;
+            }
+
+            console.log(`Saving to ${tableId}:`, rowData);
+            // Simulate save operation
+
+            if (isNewRow) {
+                const newDisplayRow = createTableRow(rowData, false, false);
+                tbody.prepend(newDisplayRow); // Add new row at the top (after input row)
+                resetInputRow(row); // Reset the input row
+            } else {
+                const updatedRow = createTableRow(rowData, false, false);
+                row.replaceWith(updatedRow);
+            }
+            showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
+        }
+
+        function editRow(row) {
+            const originalData = {};
+            Array.from(row.children).forEach((cell, index) => {
+                const colName = columnNames[index];
+                if (colName !== 'Action') {
+                    originalData[colName] = cell.textContent.trim();
+                }
+            });
+            row.dataset.originalData = JSON.stringify(originalData);
+
+            const editingRow = createTableRow(originalData, false, true);
+            row.replaceWith(editingRow);
+        }
+
+        function cancelEdit(row) {
+            const originalData = JSON.parse(row.dataset.originalData);
+            const originalRow = createTableRow(originalData, false, false);
+            row.replaceWith(originalRow);
+        }
+
+        function deleteRow(row) {
+            currentEditingRow = row;
+            deleteConfirmModal.style.display = 'flex';
+            confirmDeleteBtn.onclick = () => {
+                if (currentEditingRow) {
+                    console.log(`Deleting row from ${tableId}`);
+                    currentEditingRow.remove();
+                    currentEditingRow = null;
+                    deleteConfirmModal.style.display = 'none';
+                    showValidationMessage("ডেটা সফলভাবে ডিলিট হয়েছে!");
+                }
+            };
+        }
+        populateTable(initialDataRows);
+    }
+
+
+    // --- Sections 7 & 8: Tables with an External Input Form ---
+    // Scrolling Notice for Teachers, Scrolling Notice for Students
+    function initializeExternalFormTable(tableId, initialDataRows = []) {
+        const table = document.getElementById(tableId);
+        const tbody = table.querySelector('tbody');
+        const headerCells = Array.from(table.querySelector('thead tr').children);
+        const columnNames = headerCells.map(th => th.textContent.trim());
+
+        const formContainer = table.closest('.admin-section').querySelector('.input-form-container');
+        const dateInput = formContainer.querySelector('.date-input');
+        const subjectInput = formContainer.querySelector('textarea');
+        const colorInput = formContainer.querySelector('.color-input');
+        const colorPreviewForm = formContainer.querySelector('.color-preview'); // Preview specific to the form
+        const saveBtn = formContainer.querySelector('.save-btn');
+        const cancelBtn = formContainer.querySelector('.cancel-btn');
+
+        // Initialize form color preview
+        colorPreviewForm.style.backgroundColor = colorInput.value || 'transparent';
+        colorPreviewForm.style.borderColor = colorInput.value ? colorInput.value : '#ccc';
+
+
+        // Attach date picker to form's date input
+        dateInput.addEventListener('click', () => {
+            currentDatePickerInput = dateInput;
+            populateDateSelects();
+            generateCalendar();
+            datePickerModal.style.display = 'flex';
+        });
+
+        function createEditableInput(colName, currentValue) {
+            let inputElement;
+            const wrapper = document.createElement('div'); // Wrapper for date/color inputs inside cells
+
+            if (colName === 'Subject') {
+                inputElement = document.createElement('textarea');
+                inputElement.value = currentValue;
+                inputElement.classList.add('textarea-input');
+                inputElement.readOnly = true; // Force modal edit
+                inputElement.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    inputEditModalHeading.textContent = `Edit ${colName}`;
+                    inputEditTextArea.value = inputElement.value;
+                    currentEditingRow = inputElement.closest('tr');
+                    currentEditingColIndex = columnNames.indexOf(colName);
+
+                    // If Subject has date, also set up hidden date input for date picker
+                    const hiddenDateInput = currentEditingRow.querySelector('.hidden-date-for-scrolling-notice');
+                    if (hiddenDateInput) {
+                        // When modal opens for Subject, clicking on its textarea should also allow date picking
+                        inputEditTextArea.dataset.linkedDateInputId = hiddenDateInput.id; // Store link to hidden date input
+                        // Add an event listener to the modal's textarea to open date picker for linked input
+                        inputEditTextArea.addEventListener('click', handleSubjectTextAreaClick); // Add this listener only once.
+                    } else {
+                        delete inputEditTextArea.dataset.linkedDateInputId;
+                        inputEditTextArea.removeEventListener('click', handleSubjectTextAreaClick);
+                    }
+
+                    inputEditModal.style.display = 'flex';
+                });
+
+            } else if (colName === 'Color') {
+                inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.value = currentValue;
+                inputElement.readOnly = true;
+                inputElement.classList.add('color-input');
+                const colorPreviewDiv = document.createElement('div');
+                colorPreviewDiv.classList.add('color-preview');
+                colorPreviewDiv.style.backgroundColor = currentValue || 'transparent';
+                colorPreviewDiv.style.borderColor = currentValue ? currentValue : '#ccc';
+                wrapper.appendChild(colorPreviewDiv);
+                wrapper.classList.add('color-with-preview');
+            } else {
+                inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.value = currentValue;
+                inputElement.readOnly = true; // Default for modal editing
+                inputElement.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    inputEditModalHeading.textContent = `Edit ${colName}`;
+                    inputEditTextArea.value = inputElement.value;
+                    currentEditingRow = inputElement.closest('tr');
+                    currentEditingColIndex = columnNames.indexOf(colName);
+                    inputEditModal.style.display = 'flex';
+                });
+            }
+            wrapper.appendChild(inputElement);
+            return wrapper;
+        }
+
+        // Helper for handling click on Subject textarea in the modal
+        function handleSubjectTextAreaClick() {
+            if (inputEditTextArea.dataset.linkedDateInputId) {
+                const hiddenDateInput = document.getElementById(inputEditTextArea.dataset.linkedDateInputId);
+                if (hiddenDateInput) {
+                    currentDatePickerInput = hiddenDateInput;
+                    populateDateSelects();
+                    generateCalendar();
+                    datePickerModal.style.display = 'flex';
+                }
+            }
+        }
+
+
+        function createTableRow(rowData = {}, isEditing = false) {
+            const row = document.createElement('tr');
+            if (isEditing) row.classList.add('editing');
+
+            columnNames.forEach((colName) => {
+                const cell = document.createElement('td');
+                let value = rowData[colName] || '';
+
+                if (colName === 'Action') {
+                    const actionDiv = document.createElement('div');
+                    actionDiv.classList.add('action-buttons');
+
+                    if (isEditing) {
+                        const saveBtn = document.createElement('button');
+                        saveBtn.classList.add('save-btn');
+                        saveBtn.textContent = 'Save';
+                        saveBtn.addEventListener('click', () => saveRow(row));
+                        actionDiv.appendChild(saveBtn);
+
+                        const cancelBtn = document.createElement('button');
+                        cancelBtn.classList.add('cancel-btn');
+                        cancelBtn.textContent = 'Cancel';
+                        cancelBtn.addEventListener('click', () => cancelEdit(row));
+                        actionDiv.appendChild(cancelBtn);
+                    } else {
+                        const editBtn = document.createElement('button');
+                        editBtn.classList.add('edit-btn');
+                        editBtn.textContent = 'Edit';
+                        editBtn.addEventListener('click', () => editRow(row));
+
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.textContent = 'Delete';
+                        deleteBtn.addEventListener('click', () => deleteRow(row));
+
+                        actionDiv.appendChild(editBtn);
+                        actionDiv.appendChild(deleteBtn);
+                    }
+                    cell.appendChild(actionDiv);
+                } else {
+                    if (isEditing) {
+                        // For editing Subject column, extract just the subject text
+                        let displayValue = value;
+                        let hiddenDateVal = '';
+                        if (colName === 'Subject' && value.includes('📅')) {
+                            const match = value.match(/📅\s*(\d{1,2}(?:st|nd|rd|th)?\s*\w{3}\s*\d{4})\s*-\s*(.*)/);
+                            if (match) {
+                                displayValue = match[2]; // Only subject text for editing
+                                const dateParts = match[1].match(/(\d{1,2})(?:st|nd|rd|th)?\s*(\w{3})\s*(\d{4})/);
+                                if (dateParts) {
+                                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                    const monthIndex = monthNames.indexOf(dateParts[2]);
+                                    if (monthIndex !== -1) {
+                                        hiddenDateVal = `${String(dateParts[1]).padStart(2, '0')}-${String(monthIndex + 1).padStart(2, '0')}-${dateParts[3]}`;
+                                    }
+                                }
+                            }
+                        }
+                        const inputWrapper = createEditableInput(colName, displayValue);
+                        cell.appendChild(inputWrapper);
+
+                        if (colName === 'Subject') {
+                            const hiddenDateInput = document.createElement('input');
+                            hiddenDateInput.type = 'hidden';
+                            hiddenDateInput.classList.add('hidden-date-for-scrolling-notice');
+                            hiddenDateInput.value = hiddenDateVal;
+                            hiddenDateInput.id = `hidden-date-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`; // Unique ID
+                            cell.appendChild(hiddenDateInput);
+                        }
+
+                    } else {
+                        if (colName === 'Color' && value) {
+                            cell.textContent = value;
+                            cell.style.backgroundColor = value;
+                            cell.style.color = getContrastYIQ(value);
+                        } else {
+                            cell.textContent = value;
+                        }
+                    }
+                }
+                row.appendChild(cell);
+            });
+            return row;
+        }
+
+        function populateTable(data) {
+            tbody.innerHTML = '';
+            data.forEach(rowData => {
+                const row = createTableRow(rowData, false);
+                tbody.appendChild(row);
+            });
+        }
+
+        saveBtn.addEventListener('click', () => {
+            const date = dateInput.value.trim();
+            const subject = subjectInput.value.trim();
+            const color = colorInput.value.trim();
+
+            if (!date || !subject) {
+                showValidationMessage("Date এবং Subject ফিল্ডগুলো আবশ্যিক।");
+                return;
+            }
+
+            const formattedDate = formatDateForNotice(date);
+            const fullSubject = `📅 ${formattedDate} - ${subject}`;
+
+            const newEntry = {
+                Subject: fullSubject,
+                Color: color
+            };
+
+            console.log(`Saving new form entry to ${tableId}:`, newEntry);
+            // Simulate save
+            const newRowElement = createTableRow(newEntry, false);
+            tbody.prepend(newRowElement);
+
+            dateInput.value = '';
+            subjectInput.value = '';
+            colorInput.value = '';
+            colorPreviewForm.style.backgroundColor = 'transparent';
+            colorPreviewForm.style.borderColor = '#ccc';
+            showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            dateInput.value = '';
+            subjectInput.value = '';
+            colorInput.value = '';
+            colorPreviewForm.style.backgroundColor = 'transparent';
+            colorPreviewForm.style.borderColor = '#ccc';
+        });
+
+        function saveRow(row) {
+            const cells = Array.from(row.children);
+            const rowData = {};
+            let isValid = true;
+            let validationMessageText = '';
+
+            columnNames.forEach((colName, index) => {
+                if (colName !== 'Action') {
+                    let inputElement = cells[index].querySelector('input, textarea');
+                    let cellValue;
+
+                    if (colName === 'Subject') {
+                        const subjectText = inputElement ? inputElement.value.trim() : '';
+                        const hiddenDateInput = cells[index].querySelector('.hidden-date-for-scrolling-notice');
+                        const selectedDate = hiddenDateInput ? hiddenDateInput.value : '';
+
+                        if (!selectedDate || !subjectText) {
+                            isValid = false;
+                            validationMessageText = `Subject এর তারিখ এবং বিষয়বস্তু উভয়ই আবশ্যিক।`;
+                        } else {
+                            const formattedDate = formatDateForNotice(selectedDate);
+                            cellValue = `📅 ${formattedDate} - ${subjectText}`;
+                        }
+                    } else if (colName === 'Color') {
+                        cellValue = inputElement ? inputElement.value.trim() : '';
+                    } else {
+                        cellValue = inputElement ? inputElement.value.trim() : cells[index].textContent.trim();
+                    }
+                    rowData[colName] = cellValue;
+                }
+            });
+
+            if (!isValid) {
+                showValidationMessage(validationMessageText);
+                return;
+            }
+
+            console.log(`Saving updated row to ${tableId}:`, rowData);
+            const updatedRow = createTableRow(rowData, false);
+            row.replaceWith(updatedRow);
+            showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
+        }
+
+        function editRow(row) {
+            const originalData = {};
+            Array.from(row.children).forEach((cell, index) => {
+                const colName = columnNames[index];
+                if (colName !== 'Action') {
+                    originalData[colName] = cell.textContent.trim();
+                }
+            });
+            row.dataset.originalData = JSON.stringify(originalData);
+
+            const editingRow = createTableRow(originalData, true);
+            row.replaceWith(editingRow);
+        }
+
+        function cancelEdit(row) {
+            const originalData = JSON.parse(row.dataset.originalData);
+            const originalRow = createTableRow(originalData, false);
+            row.replaceWith(originalRow);
+        }
+
+        function deleteRow(row) {
+            currentEditingRow = row;
+            deleteConfirmModal.style.display = 'flex';
+            confirmDeleteBtn.onclick = () => {
+                if (currentEditingRow) {
+                    console.log(`Deleting row from ${tableId}`);
+                    currentEditingRow.remove();
+                    currentEditingRow = null;
+                    deleteConfirmModal.style.display = 'none';
+                    showValidationMessage("ডেটা সফলভাবে ডিলিট হয়েছে!");
+                }
+            };
+        }
+        populateTable(initialDataRows);
+    }
+
+    // --- Initialize All Tables ---
+    initializeExamLinkTeachersTable();
+    initializeMarksSubmissionDateTable();
+    initializeExamLinkStudentsTable();
+    initializeInputRowTable('table-help-teacher', []);
+    initializeInputRowTable('table-notice-teacher', []);
+    initializeInputRowTable('table-notice-student', []);
+    initializeExternalFormTable('table-scrolling-teacher', []);
+    initializeExternalFormTable('table-scrolling-student', []);
+
+
+    // Pagination (simplified for this context, needs full implementation for dynamic data)
+    document.querySelectorAll('.pagination').forEach(paginationContainer => {
+        paginationContainer.innerHTML = `
+            <button disabled>Previous</button>
+            <button disabled>Next</button>
+        `;
+    });
+});
