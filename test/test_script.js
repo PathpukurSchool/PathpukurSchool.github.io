@@ -1,25 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
     const table = document.getElementById('table-exam-link-teacher');
     const tbody = table.querySelector('tbody');
-    const deleteConfirmModal = document.getElementById('deleteConfirmModal');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const paginationContainer = document.getElementById('pagination-exam-link-teacher');
+
+    // Modals
     const inputEditModal = document.getElementById('inputEditModal');
     const inputEditTextArea = document.getElementById('inputEditTextArea');
     const inputEditModalHeading = document.getElementById('inputEditModalHeading');
     const storeInputBtn = document.getElementById('storeInputBtn');
     const cancelInputBtn = document.getElementById('cancelInputBtn');
+
     const validationModal = document.getElementById('validationModal');
     const validationMessage = document.getElementById('validationMessage');
+
     const clearConfirmModal = document.getElementById('clearConfirmModal');
     const confirmClearBtn = document.getElementById('confirmClearBtn');
     const cancelClearBtn = document.getElementById('cancelClearBtn');
-    let rowToClear = null; // Temporarily store the row needing to be cleared
 
-
-    const paginationContainer = document.getElementById('pagination-exam-link-teacher');
     let currentEditingRow = null;
     let currentEditingColIndex = -1;
+    let rowToClear = null;
+
+    const columnNames = ["Class", "ID", "Password", "URL", "Action"];
+    const rowsPerPage = 10;
+    let currentPage = 1;
 
     const classes = [
         "V_1ST", "V_2ND", "V_3RD", "VI_1ST", "VI_2ND", "VI_3RD",
@@ -27,11 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "IX_1ST", "IX_2ND", "IX_3RD", "X_1ST", "X_2ND", "X_TEST",
         "XI_SEM1", "XI_SEM2", "XII_TEST"
     ];
-    const columnNames = ["Class", "ID", "Password", "URL", "Action"];
-    let currentPage = 1;
-    const rowsPerPage = 10;
 
-    // Initial table data
     const allDataRows = classes.map(cls => ({
         Class: cls,
         ID: '',
@@ -39,22 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
         URL: ''
     }));
 
-    // Modal Close Button Handler
-    document.querySelectorAll('.close-modal-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.closest('.table-modal-overlay').style.display = 'none';
-        });
-    });
-
+    // Utility Functions
     function showValidationMessage(message) {
         validationMessage.textContent = message;
         validationModal.style.display = 'flex';
     }
 
-    function createEditableInput(colName, currentValue) {
+    function createEditableInput(colName, value) {
         const input = document.createElement('input');
         input.type = 'text';
-        input.value = currentValue;
+        input.value = value;
         input.readOnly = true;
 
         input.addEventListener('click', () => {
@@ -75,77 +69,47 @@ document.addEventListener('DOMContentLoaded', () => {
         columnNames.forEach(col => {
             const cell = document.createElement('td');
 
-            if (col === 'Class') {
-                cell.textContent = rowData[col];
+            if (col === "Class") {
+                cell.textContent = rowData.Class;
                 cell.classList.add('fixed-column');
-            } else if (col === 'Action') {
+            } else if (col === "Action") {
                 const div = document.createElement('div');
-                div.className = 'action-buttons';
+                div.classList.add('action-buttons');
 
                 if (isEditing) {
                     const saveBtn = document.createElement('button');
                     saveBtn.className = 'save-btn';
                     saveBtn.textContent = 'Save';
-                    saveBtn.addEventListener('click', () => saveRow(row));
+                    saveBtn.onclick = () => saveRow(row);
                     div.appendChild(saveBtn);
 
                     const cancelBtn = document.createElement('button');
                     cancelBtn.className = 'cancel-btn';
                     cancelBtn.textContent = 'Cancel';
-                    cancelBtn.addEventListener('click', () => renderTable());
+                    cancelBtn.onclick = () => renderTable();
                     div.appendChild(cancelBtn);
                 } else {
                     const editBtn = document.createElement('button');
                     editBtn.className = 'edit-btn';
                     editBtn.textContent = 'Edit';
-                    editBtn.addEventListener('click', () => {
-                        renderTable(true, rowData.Class); // only edit this row
-                    });
+                    editBtn.onclick = () => renderTable(true, rowData.Class);
                     div.appendChild(editBtn);
 
                     const clearBtn = document.createElement('button');
                     clearBtn.className = 'clear-btn';
                     clearBtn.textContent = 'Clear';
-                    clearBtn.addEventListener('click', () => {
-    const target = allDataRows.find(r => r.Class === rowData.Class);
-
-    if (!target.ID && !target.Password && !target.URL) {
-        showValidationMessage("এই রো-তে কোনও ডেটা নেই, তাই ক্লিয়ার করা যাবে না!");
-        return;
-    }
-
-    rowToClear = target;
-    clearConfirmModal.style.display = 'flex';
-});
-    const confirmClear = confirm(`আপনি কি ${rowData.Class} এর ডেটা ক্লিয়ার করতে চান?`);
-
-    if (confirmClear) {
-        const target = allDataRows.find(r => r.Class === rowData.Class);
-        if (target) {
-            target.ID = '';
-            target.Password = '';
-            target.URL = '';
-        }
-        confirmClearBtn.addEventListener('click', () => {
-    if (rowToClear) {
-        rowToClear.ID = '';
-        rowToClear.Password = '';
-        rowToClear.URL = '';
-        renderTable();
-        showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-        rowToClear = null;
-    }
-    clearConfirmModal.style.display = 'none';
-});
-
-cancelClearBtn.addEventListener('click', () => {
-    rowToClear = null;
-    clearConfirmModal.style.display = 'none';
-});
-    }
-});          
+                    clearBtn.onclick = () => {
+                        const target = allDataRows.find(r => r.Class === rowData.Class);
+                        if (!target.ID && !target.Password && !target.URL) {
+                            showValidationMessage("এই রো-তে কোনও ডেটা নেই, তাই ক্লিয়ার করা যাবে না!");
+                            return;
+                        }
+                        rowToClear = target;
+                        clearConfirmModal.style.display = 'flex';
+                    };
                     div.appendChild(clearBtn);
                 }
+
                 cell.appendChild(div);
             } else {
                 if (isEditing) {
@@ -155,6 +119,7 @@ cancelClearBtn.addEventListener('click', () => {
                     cell.textContent = rowData[col];
                 }
             }
+
             row.appendChild(cell);
         });
 
@@ -162,29 +127,76 @@ cancelClearBtn.addEventListener('click', () => {
     }
 
     function saveRow(row) {
-        const inputs = row.querySelectorAll('input');
-        const updatedData = {};
         const className = row.querySelector('td').textContent;
-
+        const inputs = row.querySelectorAll('input');
+        const updated = {};
         inputs.forEach((input, i) => {
-            updatedData[columnNames[i + 1]] = input.value.trim();
+            updated[columnNames[i + 1]] = input.value.trim();
         });
 
-        if (!updatedData.ID || !updatedData.Password || !updatedData.URL) {
-            const msg = `Class: ${className}\nID, Password ও URL ফিল্ডগুলো পূরণ করতে হবে।`;
-            showValidationMessage(msg);
+        if (!updated.ID || !updated.Password || !updated.URL) {
+            showValidationMessage(`Class: ${className}\nID, Password ও URL ফিল্ডগুলো পূরণ করতে হবে।`);
             return;
         }
 
         const index = allDataRows.findIndex(d => d.Class === className);
         if (index !== -1) {
-            allDataRows[index] = { Class: className, ...updatedData };
+            allDataRows[index] = { Class: className, ...updated };
+            showValidationMessage("সফলভাবে সেভ হয়েছে!");
         }
 
-        showValidationMessage("সফলভাবে সেভ হয়েছে!");
         renderTable();
     }
 
+    function renderTable(isEditing = false, editClass = "") {
+        tbody.innerHTML = "";
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        allDataRows.slice(start, end).forEach(rowData => {
+            const editMode = isEditing && rowData.Class === editClass;
+            const row = createTableRow(rowData, editMode);
+            tbody.appendChild(row);
+        });
+
+        renderPagination();
+    }
+
+    function renderPagination() {
+        paginationContainer.innerHTML = "";
+        const totalPages = Math.ceil(allDataRows.length / rowsPerPage);
+
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = "Previous";
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => {
+            currentPage--;
+            renderTable();
+        };
+        paginationContainer.appendChild(prevBtn);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = i;
+            if (i === currentPage) pageBtn.style.fontWeight = "bold";
+            pageBtn.onclick = () => {
+                currentPage = i;
+                renderTable();
+            };
+            paginationContainer.appendChild(pageBtn);
+        }
+
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = "Next";
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => {
+            currentPage++;
+            renderTable();
+        };
+        paginationContainer.appendChild(nextBtn);
+    }
+
+    // Modal Button Handlers
     storeInputBtn.onclick = () => {
         if (currentEditingRow && currentEditingColIndex !== -1) {
             const value = inputEditTextArea.value.trim();
@@ -207,56 +219,28 @@ cancelClearBtn.addEventListener('click', () => {
         currentEditingColIndex = -1;
     };
 
-    function renderTable(editClass = false, classToEdit = "") {
-        tbody.innerHTML = '';
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const rowsToShow = allDataRows.slice(start, end);
-
-        rowsToShow.forEach(rowData => {
-            const isEditing = editClass && rowData.Class === classToEdit;
-            const row = createTableRow(rowData, isEditing);
-            tbody.appendChild(row);
-        });
-
-        renderPagination();
-    }
-
-    function renderPagination() {
-        const totalPages = Math.ceil(allDataRows.length / rowsPerPage);
-        paginationContainer.innerHTML = '';
-
-        const prevBtn = document.createElement('button');
-        prevBtn.textContent = 'Previous';
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.onclick = () => {
-            currentPage--;
+    confirmClearBtn.onclick = () => {
+        if (rowToClear) {
+            rowToClear.ID = "";
+            rowToClear.Password = "";
+            rowToClear.URL = "";
             renderTable();
-        };
-        paginationContainer.appendChild(prevBtn);
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.textContent = i;
-            if (i === currentPage) {
-                pageBtn.style.fontWeight = 'bold';
-            }
-            pageBtn.onclick = () => {
-                currentPage = i;
-                renderTable();
-            };
-            paginationContainer.appendChild(pageBtn);
+            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+            rowToClear = null;
         }
+        clearConfirmModal.style.display = 'none';
+    };
 
-        const nextBtn = document.createElement('button');
-        nextBtn.textContent = 'Next';
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.onclick = () => {
-            currentPage++;
-            renderTable();
-        };
-        paginationContainer.appendChild(nextBtn);
-    }
+    cancelClearBtn.onclick = () => {
+        rowToClear = null;
+        clearConfirmModal.style.display = 'none';
+    };
+
+    document.querySelectorAll('.close-modal-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            btn.closest('.table-modal-overlay').style.display = 'none';
+        });
+    });
 
     renderTable();
 });
