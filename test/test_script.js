@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const table = document.getElementById('table-exam-link-teacher');
     const tbody = table.querySelector('tbody');
@@ -103,11 +102,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearBtn.className = 'clear-btn';
                     clearBtn.textContent = 'Clear';
                     clearBtn.addEventListener('click', () => {
-                        const target = allDataRows.find(r => r.Class === rowData.Class);
-                        target.ID = target.Password = target.URL = '';
-                        renderTable();
-                        showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-                    });
+    const confirmClear = confirm(`আপনি কি ${rowData.Class} এর ডেটা ক্লিয়ার করতে চান?`);
+
+    if (confirmClear) {
+        const target = allDataRows.find(r => r.Class === rowData.Class);
+        if (target) {
+            target.ID = '';
+            target.Password = '';
+            target.URL = '';
+        }
+        renderTable();
+        showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+    }
+});          
                     div.appendChild(clearBtn);
                 }
                 cell.appendChild(div);
