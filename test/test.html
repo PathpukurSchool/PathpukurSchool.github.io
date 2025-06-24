@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section 1 - Exam Link for Teachers</title>
+    <link rel="stylesheet" href="admin_style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
+    </header>
+
+    <div class="admin-panel-container">
+        <h2>Admin Panel - Section 1 Only</h2>
+
+        <section id="exam-link-teachers" class="admin-section">
+            <h3 class="section-heading">Exam Link for Teachers</h3>
+            <div class="table-wrapper">
+                <table id="table-exam-link-teacher" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>ID</th>
+                            <th>Password</th>
+                            <th>URL</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination-exam-link-teacher">
+                <button disabled>Previous</button>
+                <button disabled>Next</button>
+            </div>
+        </section>
+
+    </div> <div id="deleteConfirmModal" class="table-modal-overlay">
+        <div class="table-modal-content">
+            <p>আপনি কি এই রোটি ডিলিট করতে চান?</p>
+            <button id="confirmDeleteBtn">হ্যাঁ</button>
+            <button id="cancelDeleteBtn">না</button>
+        </div>
+    </div>
+
+    <div id="inputEditModal" class="table-modal-overlay">
+        <div class="table-modal-content input-edit-content">
+            <h3 id="inputEditModalHeading"></h3>
+            <textarea id="inputEditTextArea"></textarea>
+            <div class="modal-actions">
+                <button id="storeInputBtn" class="store-btn">স্টোর করুন</button>
+                <button id="cancelInputBtn" class="cancel-btn">বাতিল করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="validationModal" class="table-modal-overlay">
+        <div class="table-modal-content validation-content">
+            <p id="validationMessage"></p>
+            <button class="close-modal-btn">ঠিক আছে</button>
+        </div>
+    </div>
+    
+    <script src="test/test_script.js"></script>
+</body>
+</html>
