@@ -5,283 +5,264 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pathpukur High School (HS) Admin Panel</title>
     <link rel="stylesheet" href="admin_style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="main-header">
-        <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
-    </header>
+    <div class="admin-dashboard">
+        <h1>প্রশাসনিক প্যানেল</h1>
 
-    <div class="admin-panel-container">
-        <h2>Admin Panel</h2>
-
-        <section id="exam-link-teachers" class="admin-section">
-            <h3 class="section-heading">Exam Link for Teachers</h3>
-            <div class="table-wrapper">
-                <table id="table-exam-link-teacher" class="data-table">
+        <div class="admin-section">
+            <h2>শিক্ষকদের জন্য পরীক্ষার লিঙ্ক</h2>
+            <div class="data-table-container">
+                <table class="data-table" id="table-exam-link-teacher">
                     <thead>
                         <tr>
                             <th>Class</th>
                             <th>ID</th>
                             <th>Password</th>
                             <th>URL</th>
-                            <th>Action</th>
+                            <th class="action-buttons-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         </tbody>
                 </table>
+                <div class="pagination" id="pagination-exam-link-teacher">
+                    </div>
             </div>
-            <div class="pagination" id="pagination-exam-link-teacher">
-                <button disabled>Previous</button>
-                <button disabled>Next</button>
-            </div>
-        </section>
+        </div>
 
-        <section id="marks-submission-date" class="admin-section">
-            <h3 class="section-heading">Marks Submission Date for Teacher</h3>
-            <div class="table-wrapper">
-                <table id="table-marks-submission-date" class="data-table">
+        <div class="admin-section">
+            <h2>শিক্ষকদের জন্য নম্বর জমা দেওয়ার তারিখ</h2>
+            <div class="data-table-container">
+                <table class="data-table" id="table-marks-submission-date">
                     <thead>
                         <tr>
                             <th>Exam</th>
                             <th>Date</th>
                             <th>Color</th>
-                            <th>Action</th>
+                            <th class="action-buttons-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         </tbody>
                 </table>
+                <div class="pagination" id="pagination-marks-submission-date">
+                    </div>
             </div>
-            <div class="pagination" id="pagination-marks-submission-date">
-                <button disabled>Previous</button>
-                <button disabled>Next</button>
-            </div>
-        </section>
+        </div>
 
-        <section id="exam-link-student" class="admin-section">
-            <h3 class="section-heading">Exam Link for Student</h3>
-            <div class="table-wrapper">
-                <table id="table-exam-link-student" class="data-table">
+        <div class="admin-section">
+            <h2>শিক্ষার্থীদের জন্য পরীক্ষার লিঙ্ক</h2>
+            <div class="data-table-container">
+                <table class="data-table" id="table-exam-link-student">
                     <thead>
                         <tr>
                             <th>Class</th>
                             <th>URL</th>
-                            <th>Action</th>
+                            <th class="action-buttons-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         </tbody>
                 </table>
+                <div class="pagination" id="pagination-exam-link-student">
+                    </div>
             </div>
-            <div class="pagination" id="pagination-exam-link-student">
-                <button disabled>Previous</button>
-                <button disabled>Next</button>
-            </div>
-        </section>
+        </div>
 
-        <section id="help-teacher" class="admin-section">
-            <h3 class="section-heading">Help Desk for Teacher</h3>
-            <div class="table-wrapper">
-                <table id="table-help-teacher" class="data-table">
+        <div class="admin-section">
+            <h2>শিক্ষকদের জন্য সহায়তা</h2>
+            <div class="data-table-container">
+                <table class="data-table" id="table-help-teacher">
                     <thead>
                         <tr>
+                            <th>Help Text</th>
                             <th>Date</th>
-                            <th>Heading</th>
-                            <th>Subject</th>
-                            <th>Action</th>
+                            <th class="action-buttons-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         </tbody>
                 </table>
+                <div class="pagination" id="pagination-help-teacher">
+                    </div>
             </div>
-            <div class="pagination" id="pagination-help-teacher">
-                <button disabled>Previous</button>
-                <button disabled>Next</button>
-            </div>
-        </section>
+        </div>
 
-        <section id="notice-teacher" class="admin-section">
-            <h3 class="section-heading">Notice for Teacher</h3>
-            <div class="table-wrapper">
-                <table id="table-notice-teacher" class="data-table">
+        <div class="admin-section">
+            <h2>শিক্ষকদের জন্য নোটিশ</h2>
+            <div class="data-table-container">
+                <table class="data-table" id="table-notice-teacher">
                     <thead>
                         <tr>
+                            <th>Notice Text</th>
                             <th>Date</th>
-                            <th>Heading</th>
-                            <th>Subject</th>
-                            <th>Action</th>
+                            <th class="action-buttons-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         </tbody>
                 </table>
+                <div class="pagination" id="pagination-notice-teacher">
+                    </div>
             </div>
-            <div class="pagination" id="pagination-notice-teacher">
-                <button disabled>Previous</button>
-                <button disabled>Next</button>
-            </div>
-        </section>
+        </div>
 
-        <section id="notice-student" class="admin-section">
-            <h3 class="section-heading">Notice for Student</h3>
-            <div class="table-wrapper">
-                <table id="table-notice-student" class="data-table">
+        <div class="admin-section">
+            <h2>শিক্ষার্থীদের জন্য নোটিশ</h2>
+            <div class="data-table-container">
+                <table class="data-table" id="table-notice-student">
                     <thead>
                         <tr>
+                            <th>Notice Text</th>
                             <th>Date</th>
-                            <th>Heading</th>
-                            <th>Subject</th>
-                            <th>Action</th>
+                            <th class="action-buttons-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         </tbody>
                 </table>
+                <div class="pagination" id="pagination-notice-student">
+                    </div>
             </div>
-            <div class="pagination" id="pagination-notice-student">
-                <button disabled>Previous</button>
-                <button disabled>Next</button>
-            </div>
-        </section>
+        </div>
 
-        <section id="scrolling-teacher" class="admin-section">
-            <h3 class="section-heading">Scrolling Notice for Teacher</h3>
+        <div class="admin-section">
+            <h2>শিক্ষকদের জন্য স্ক্রলিং নোটিশ</h2>
             <div class="input-form-container">
-                <h4>নতুন নোটিশ যোগ করুন:</h4>
-                <div class="form-group">
-                    <label for="scrollingTeacherDate">Date:</label>
-                    <input type="text" id="scrollingTeacherDate" class="date-input" readonly placeholder="DD-MM-YYYY">
+                <label for="scrollingTeacherDate">Date:</label>
+                <input type="text" id="scrollingTeacherDate" class="date-input" readonly>
+                <span class="calendar-icon">📆</span>
+
+                <label for="scrollingTeacherSubject">Subject:</label>
+                <textarea id="scrollingTeacherSubject" class="textarea-input"></textarea>
+
+                <label for="scrollingTeacherColor">Color:</label>
+                <div class="color-input-group">
+                    <input type="text" id="scrollingTeacherColor" class="color-input" value="#D32F2F" readonly>
+                    <div class="color-preview" style="background-color: #D32F2F; border-color: #D32F2F;"></div>
                 </div>
-                <div class="form-group">
-                    <label for="scrollingTeacherSubject">Subject:</label>
-                    <textarea id="scrollingTeacherSubject" placeholder="আপনার নোটিশ লিখুন..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="scrollingTeacherColor">Color:</label>
-                    <input type="text" id="scrollingTeacherColor" class="color-input" readonly placeholder="Hex Color Code (Optional)">
-                    <div class="color-preview" style="background-color: transparent;"></div>
-                </div>
-                <div class="form-actions">
-                    <button id="saveScrollingTeacherForm" class="save-btn">Save</button>
-                    <button id="cancelScrollingTeacherForm" class="cancel-btn">Cancel</button>
-                </div>
+
+                <button class="save-btn" id="saveScrollingTeacherBtn">Add</button>
+                <button class="cancel-btn" id="cancelScrollingTeacherBtn">Clear Form</button>
             </div>
-            <div class="table-wrapper">
-                <table id="table-scrolling-teacher" class="data-table">
+            <div class="data-table-container">
+                <table class="data-table" id="table-scrolling-teacher">
                     <thead>
                         <tr>
                             <th>Subject</th>
                             <th>Color</th>
-                            <th>Action</th>
+                            <th class="action-buttons-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         </tbody>
                 </table>
+                <div class="pagination" id="pagination-scrolling-teacher">
+                    </div>
             </div>
-            <div class="pagination" id="pagination-scrolling-teacher">
-                <button disabled>Previous</button>
-                <button disabled>Next</button>
-            </div>
-        </section>
+        </div>
 
-        <section id="scrolling-student" class="admin-section">
-            <h3 class="section-heading">Scrolling Notice for Student</h3>
+        <div class="admin-section">
+            <h2>শিক্ষার্থীদের জন্য স্ক্রলিং নোটিশ</h2>
             <div class="input-form-container">
-                <h4>নতুন নোটিশ যোগ করুন:</h4>
-                <div class="form-group">
-                    <label for="scrollingStudentDate">Date:</label>
-                    <input type="text" id="scrollingStudentDate" class="date-input" readonly placeholder="DD-MM-YYYY">
+                <label for="scrollingStudentDate">Date:</label>
+                <input type="text" id="scrollingStudentDate" class="date-input" readonly>
+                <span class="calendar-icon">📆</span>
+
+                <label for="scrollingStudentSubject">Subject:</label>
+                <textarea id="scrollingStudentSubject" class="textarea-input"></textarea>
+
+                <label for="scrollingStudentColor">Color:</label>
+                <div class="color-input-group">
+                    <input type="text" id="scrollingStudentColor" class="color-input" value="#0D47A1" readonly>
+                    <div class="color-preview" style="background-color: #0D47A1; border-color: #0D47A1;"></div>
                 </div>
-                <div class="form-group">
-                    <label for="scrollingStudentSubject">Subject:</label>
-                    <textarea id="scrollingStudentSubject" placeholder="আপনার নোটিশ লিখুন..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="scrollingStudentColor">Color:</label>
-                    <input type="text" id="scrollingStudentColor" class="color-input" readonly placeholder="Hex Color Code (Optional)">
-                    <div class="color-preview" style="background-color: transparent;"></div>
-                </div>
-                <div class="form-actions">
-                    <button id="saveScrollingStudentForm" class="save-btn">Save</button>
-                    <button id="cancelScrollingStudentForm" class="cancel-btn">Cancel</button>
-                </div>
+
+                <button class="save-btn" id="saveScrollingStudentBtn">Add</button>
+                <button class="cancel-btn" id="cancelScrollingStudentBtn">Clear Form</button>
             </div>
-            <div class="table-wrapper">
-                <table id="table-scrolling-student" class="data-table">
+            <div class="data-table-container">
+                <table class="data-table" id="table-scrolling-student">
                     <thead>
                         <tr>
                             <th>Subject</th>
                             <th>Color</th>
-                            <th>Action</th>
+                            <th class="action-buttons-cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         </tbody>
                 </table>
+                <div class="pagination" id="pagination-scrolling-student">
+                    </div>
             </div>
-            <div class="pagination" id="pagination-scrolling-student">
-                <button disabled>Previous</button>
-                <button disabled>Next</button>
-            </div>
-        </section>
+        </div>
 
-    </div> <div id="deleteConfirmModal" class="table-modal-overlay">
+    </div>
+
+    <div class="table-modal-overlay" id="inputEditModal">
         <div class="table-modal-content">
-            <p>আপনি কি এই রোটি ডিলিট করতে চান?</p>
-            <button id="confirmDeleteBtn" class="close-modal-btn">হ্যাঁ</button>
-            <button id="cancelDeleteBtn" class="close-modal-btn">না</button>
-        </div>
-    </div>
-
-    <div id="inputEditModal" class="table-modal-overlay">
-        <div class="table-modal-content input-edit-content">
-            <h3 id="inputEditModalHeading"></h3>
+            <span class="close-modal-btn">&times;</span>
+            <h3 id="inputEditModalHeading">Edit Field</h3>
             <textarea id="inputEditTextArea"></textarea>
-            <div class="modal-actions">
-                <button id="storeInputBtn" class="store-btn">স্টোর করুন</button>
-                <button id="cancelInputBtn" class="cancel-btn close-modal-btn">বাতিল করুন</button>
+            <div class="modal-buttons">
+                <button id="storeInputBtn">Store</button>
+                <button id="cancelInputBtn">Cancel</button>
             </div>
         </div>
     </div>
 
-    <div id="validationModal" class="table-modal-overlay">
-        <div class="table-modal-content validation-content">
-            <p id="validationMessage"></p>
-            <button class="close-modal-btn">ঠিক আছে</button>
-        </div>
-    </div>
-
-    <div id="datePickerModal" class="table-modal-overlay">
-        <div class="table-modal-content datepicker-content">
-            <div class="date-header">
-                <button id="prevMonthBtn">&lt;</button>
+    <div class="table-modal-overlay" id="datePickerModal">
+        <div class="table-modal-content date-picker-modal">
+            <span class="close-modal-btn">&times;</span>
+            <h3>Select Date</h3>
+            <div class="calendar-header">
+                <button id="prevMonthBtn">◀</button>
                 <select id="monthSelect"></select>
                 <select id="yearSelect"></select>
-                <button id="nextMonthBtn">&gt;</button>
+                <button id="nextMonthBtn">▶</button>
             </div>
-            <div class="calendar-weekdays">
-                <span>Sun</span>
-                <span>Mon</span>
-                <span>Tue</span>
-                <span>Wed</span>
-                <span>Thu</span>
-                <span>Fri</span>
-                <span>Sat</span>
+            <div class="calendar-days">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
             </div>
-            <div class="calendar-dates" id="calendarDates"></div>
-            <button class="close-modal-btn">Close</button>
+            <div class="calendar-dates" id="calendarDates">
+                </div>
         </div>
     </div>
 
-    <div id="colorPickerModal" class="table-modal-overlay">
-        <div class="table-modal-content colorpicker-content">
-            <h4>Select Color</h4>
-            <div class="color-palette" id="colorPalette"></div>
-            <button class="close-modal-btn">Close</button>
+    <div class="table-modal-overlay" id="colorPickerModal">
+        <div class="table-modal-content color-picker-modal">
+            <span class="close-modal-btn">&times;</span>
+            <h3>Select Color</h3>
+            <div class="color-palette" id="colorPalette">
+                </div>
+        </div>
+    </div>
+
+    <div class="table-modal-overlay" id="validationModal">
+        <div class="table-modal-content">
+            <span class="close-modal-btn">&times;</span>
+            <h3>Validation Error</h3>
+            <p id="validationMessage"></p>
+            <div class="modal-buttons">
+                <button onclick="document.getElementById('validationModal').style.display='none'">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-modal-overlay" id="deleteConfirmModal">
+        <div class="table-modal-content">
+            <span class="close-modal-btn">&times;</span>
+            <h3>Confirm Action</h3>
+            <p id="confirmMessage">আপনি কি এই ডেটাগুলি ক্লিয়ার করতে চান?</p>
+            <div class="modal-buttons">
+                <button id="confirmDeleteBtn">Confirm</button>
+                <button id="cancelDeleteBtn">Cancel</button>
+            </div>
         </div>
     </div>
 
