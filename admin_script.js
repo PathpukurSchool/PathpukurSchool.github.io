@@ -173,26 +173,22 @@ document.addEventListener('DOMContentLoaded', () => {
             span.addEventListener('click', () => {
                 if (currentDatePickerInput) {
                     currentDatePickerInput.value = fullDate;
-                    currentDatePickerInput.dispatchEvent(new Event('change')); // Trigger change event
-
-                    // For scrolling notice tables, display as icon + date
-                    const tableId = currentDatePickerInput.closest('table')?.id; // Null-safe access
-                    const formId = currentDatePickerInput.closest('.input-form-container')?.id;
-
-                    if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && currentDatePickerInput.classList.contains('date-input') && !currentDatePickerInput.readOnly) {
-                        // This applies when editing a row in scrolling tables
+                    // Trigger change event to update value in the input field
+                    currentDatePickerInput.dispatchEvent(new Event('change')); 
+                    
+                    // Specific logic for tables using 'Date' as a direct column (not scrolling notices)
+                    if (currentDatePickerInput.classList.contains('date-input') && currentDatePickerInput.closest('.data-table')) {
                         const cell = currentDatePickerInput.parentElement;
-                        const existingIcon = cell.querySelector('.calendar-icon');
-                        if (existingIcon) existingIcon.remove();
-                        const icon = document.createElement('span');
-                        icon.classList.add('calendar-icon');
-                        icon.textContent = '📆';
-                        cell.prepend(icon);
-                        cell.classList.add('date-with-icon');
-                        currentDatePickerInput.style.display = 'none';
-                    } else if ((formId === 'scrolling-teacher' || formId === 'scrolling-student') && currentDatePickerInput.classList.contains('date-input')) {
-                        // This applies to the form's date input
-                        // No specific icon logic needed for form input, just set value
+                        // Add or update the calendar icon beside the date input
+                        let icon = cell.querySelector('.calendar-icon');
+                        if (!icon) {
+                            icon = document.createElement('span');
+                            icon.classList.add('calendar-icon');
+                            icon.textContent = '📆'; // Calendar emoji
+                            cell.prepend(icon);
+                            cell.classList.add('date-with-icon'); // Apply flex for alignment
+                        }
+                        currentDatePickerInput.style.display = 'inline-block'; // Ensure input is visible
                     }
                     datePickerModal.style.display = 'none';
                 }
@@ -229,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         generateCalendar();
     });
 
-    populateDateSelects(); // Initial population
+    populateDateSelects(); // Initial population for date picker
 
     // --- Color Picker Logic ---
     const colors = [
@@ -262,9 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentColorInput.value = color; // Put color code in input
                     if (currentColorPreview) {
                         currentColorPreview.style.backgroundColor = color; // Update input background
+                        currentColorPreview.style.borderColor = color; // Border for better visibility of light colors
                     } else {
-                        // Fallback if preview is not found, apply to input itself (less ideal)
-                        currentColorInput.style.backgroundColor = color;
+                        currentColorInput.style.backgroundColor = color; // Fallback
                     }
                     colorPickerModal.style.display = 'none';
                     currentColorInput.dispatchEvent(new Event('change')); // Trigger change event
@@ -275,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     populateColorPalette();
 
-    // Attach color picker to inputs dynamically
+    // Attach color picker to inputs dynamically when clicked
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('color-input')) {
             currentColorInput = e.target;
@@ -299,20 +295,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Handle color input change (e.g., if set programmatically)
+    // Handle color input change (e.g., if set programmatically or cleared)
     document.addEventListener('change', (e) => {
         if (e.target.classList.contains('color-input')) {
             const input = e.target;
             const preview = input.nextElementSibling;
             if (preview && preview.classList.contains('color-preview')) {
                 preview.style.backgroundColor = input.value || 'transparent';
+                preview.style.borderColor = input.value ? input.value : '#ccc'; // Set border based on color or default
             } else {
                 input.style.backgroundColor = input.value || 'transparent'; // Fallback
             }
         }
     });
 
-    // --- Global createTableRow Function (moved outside initializeTable) ---
+    // --- createTableRow Function (Globally accessible within DOMContentLoaded) ---
     // This function now handles creating rows for all table types based on parameters
     function createTableRow(tableId, columnNames, rowData = {}, isInputRow = false, isEditing = false) {
         const row = document.createElement('tr');
@@ -333,9 +330,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 isFixedColumn = true;
             } else if (tableId === 'table-marks-submission-date' && colName === 'Exam') {
                 isFixedColumn = true;
-            } else if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && colName === 'Date') {
-                // 'Date' is not a table column for scrolling notices, it's part of subject string
-                // But if it was, it would be fixed here.
             }
 
             if (isFixedColumn) {
@@ -365,6 +359,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             generateCalendar();
                             datePickerModal.style.display = 'flex';
                         });
+                        // Add calendar icon to the cell
+                        const icon = document.createElement('span');
+                        icon.classList.add('calendar-icon');
+                        icon.textContent = '📆';
+                        cell.appendChild(icon);
+                        cell.classList.add('date-with-icon'); // Apply flex for alignment
+                        inputElement.style.flexGrow = 1; // Allow input to grow
                     } else if (colName === 'Color') {
                         inputElement.readOnly = true;
                         inputElement.classList.add('color-input');
@@ -372,13 +373,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         const colorPreview = document.createElement('div');
                         colorPreview.classList.add('color-preview');
                         colorPreview.style.backgroundColor = cellValue || 'transparent';
+                        colorPreview.style.borderColor = cellValue ? cellValue : '#ccc'; // Initial border
                         cell.appendChild(colorPreview);
                         
                         // Set current value and update preview on change (manual trigger or via picker)
                         inputElement.value = cellValue;
-                        inputElement.addEventListener('change', () => {
-                            colorPreview.style.backgroundColor = inputElement.value || 'transparent';
-                        });
                     } else if (isModalEditable) {
                         inputElement.readOnly = true; // Make it read-only to force modal edit
                         inputElement.addEventListener('click', (event) => {
@@ -394,49 +393,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Special handling for scrolling notice dates when editing a row
                     // If colName is Subject, and it contains date icon, we need to extract date and subject
-                    if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && colName === 'Subject' && cellValue.includes('📅')) {
-                         // Extract date from the beginning of the subject string
-                         const match = cellValue.match(/📅\s*(\d{1,2}(?:st|nd|rd|th)?\s*\w{3}\s*\d{4})\s*-\s*(.*)/);
-                         if (match) {
-                             const originalDate = match[1]; // e.g., "23rd Jun 2025"
-                             const originalSubject = match[2]; // e.g., "Subject (যেমন - নির্ধারিত সময়ের মধ্যে নম্বর আপলোড করে দেবেন)"
-                             // Store this original subject in a data attribute for retrieval during save/cancel
-                             inputElement.dataset.originalFormattedSubject = originalSubject;
-                             inputElement.value = originalSubject; // Show only subject in editor
-                             
-                             // Add an invisible date input next to it for date picker to modify
-                             const hiddenDateInput = document.createElement('input');
-                             hiddenDateInput.type = 'hidden'; // Keep it hidden
-                             hiddenDateInput.classList.add('hidden-date-for-scrolling-notice');
-                             // Convert "23rd Jun 2025" back to "DD-MM-YYYY" for date picker
-                             const dateParts = originalDate.match(/(\d{1,2})(?:st|nd|rd|th)?\s*(\w{3})\s*(\d{4})/);
-                             if (dateParts) {
-                                 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                                 const monthIndex = monthNames.indexOf(dateParts[2]);
-                                 if (monthIndex !== -1) {
-                                     hiddenDateInput.value = `${String(dateParts[1]).padStart(2, '0')}-${String(monthIndex + 1).padStart(2, '0')}-${dateParts[3]}`;
-                                 }
-                             }
-                             cell.appendChild(hiddenDateInput);
-                             
-                             // When the Subject input is clicked for modal edit, handle date picker too
-                             inputElement.addEventListener('click', (e) => {
-                                 currentDatePickerInput = hiddenDateInput;
-                                 populateDateSelects();
-                                 generateCalendar();
-                                 datePickerModal.style.display = 'flex';
-                                 e.stopPropagation(); // Prevent modal from immediately opening if this is a textarea/input click
-                             });
-                             inputElement.readOnly = true; // Make it read-only to force modal edit for subject
+                    if (['table-scrolling-teacher', 'table-scrolling-student'].includes(tableId) && colName === 'Subject' && cellValue.includes('📅')) {
+                        const match = cellValue.match(/📅\s*(\d{1,2}(?:st|nd|rd|th)?\s*\w{3}\s*\d{4})\s*-\s*(.*)/);
+                        if (match) {
+                            const originalDateFormatted = match[1]; // e.g., "23rd Jun 2025"
+                            const originalSubjectText = match[2]; // e.g., "Subject (যেমন - নির্ধারিত সময়ের মধ্যে নম্বর আপলোড করে দেবেন)"
+                            
+                            // Store this original subject in a data attribute for retrieval during save/cancel
+                            inputElement.dataset.originalFormattedSubject = originalSubjectText;
+                            inputElement.value = originalSubjectText; // Show only subject in editor
+                            
+                            // Add an invisible date input next to it for date picker to modify
+                            const hiddenDateInput = document.createElement('input');
+                            hiddenDateInput.type = 'hidden'; // Keep it hidden
+                            hiddenDateInput.classList.add('hidden-date-for-scrolling-notice');
+                            // Convert "23rd Jun 2025" back to "DD-MM-YYYY" for date picker
+                            const dateParts = originalDateFormatted.match(/(\d{1,2})(?:st|nd|rd|th)?\s*(\w{3})\s*(\d{4})/);
+                            if (dateParts) {
+                                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                const monthIndex = monthNames.indexOf(dateParts[2]);
+                                if (monthIndex !== -1) {
+                                    hiddenDateInput.value = `${String(dateParts[1]).padStart(2, '0')}-${String(monthIndex + 1).padStart(2, '0')}-${dateParts[3]}`;
+                                }
+                            }
+                            cell.appendChild(hiddenDateInput);
+                            
+                            // When the Subject input is clicked for modal edit, handle date picker too
+                            inputElement.addEventListener('click', (e) => {
+                                currentDatePickerInput = hiddenDateInput; // Set the hidden input for date picker
+                                populateDateSelects();
+                                generateCalendar();
+                                datePickerModal.style.display = 'flex';
+                                e.stopPropagation(); // Prevent modal from immediately opening if this is a textarea/input click
+                            });
+                            inputElement.readOnly = true; // Make it read-only to force modal edit for subject
 
-                         } else {
-                             inputElement.value = cellValue; // Fallback if format doesn't match
-                         }
+                        } else {
+                            inputElement.value = cellValue; // Fallback if format doesn't match
+                        }
                     }
 
                 } else { // Display mode (not input row, not editing)
                     if (colName === 'Color' && cellValue) {
-                        cell.textContent = cellValue;
+                        cell.textContent = cellValue; // Display hex code
                         cell.style.backgroundColor = cellValue;
                         cell.style.color = getContrastYIQ(cellValue);
                     } else {
@@ -447,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const actionDiv = document.createElement('div');
                 actionDiv.classList.add('action-buttons');
 
-                if (isInputRow) { // This block for tables that use 'input rows' for new entries
+                if (isInputRow) { // This block for tables that use 'input rows' for new entries (sections 4,5,6)
                     const saveBtn = document.createElement('button');
                     saveBtn.classList.add('save-btn');
                     saveBtn.textContent = 'Save';
@@ -459,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     cancelBtn.textContent = 'Cancel';
                     cancelBtn.addEventListener('click', () => resetInputRow(row, tableId));
                     actionDiv.appendChild(cancelBtn);
-                } else if (isEditing) {
+                } else if (isEditing) { // This block for editing existing rows
                     const saveBtn = document.createElement('button');
                     saveBtn.classList.add('save-btn');
                     saveBtn.textContent = 'Save';
@@ -471,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     cancelBtn.textContent = 'Cancel';
                     cancelBtn.addEventListener('click', () => cancelEdit(row, tableId, columnNames));
                     actionDiv.appendChild(cancelBtn);
-                } else {
+                } else { // This block for display mode (default view)
                     const editBtn = document.createElement('button');
                     editBtn.classList.add('edit-btn');
                     editBtn.textContent = 'Edit';
@@ -496,21 +495,19 @@ document.addEventListener('DOMContentLoaded', () => {
         Array.from(row.querySelectorAll('input, textarea')).forEach(input => {
             input.value = '';
             if (input.classList.contains('color-input')) {
-                input.style.backgroundColor = 'transparent';
                 const preview = input.nextElementSibling;
                 if (preview && preview.classList.contains('color-preview')) {
                     preview.style.backgroundColor = 'transparent';
+                    preview.style.borderColor = '#ccc';
                 }
             }
-            if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && input.classList.contains('date-input')) {
-                input.style.display = ''; // Show input again
-            }
         });
+        // Remove icon and class from Date cell if present
         Array.from(row.querySelectorAll('.calendar-icon')).forEach(icon => icon.remove());
         Array.from(row.querySelectorAll('.date-with-icon')).forEach(cell => cell.classList.remove('date-with-icon'));
     }
 
-    // --- Save, Edit, Delete Row Functions ---
+    // --- Save, Edit, Delete Row Functions (Unified for all tables) ---
     async function saveRow(row, tableId, columnNames, isNewRow) {
         const cells = Array.from(row.children);
         const rowData = {};
@@ -519,48 +516,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         columnNames.forEach((colName, index) => {
             let cellValue;
-            const inputElement = cells[index].querySelector('input') || cells[index].querySelector('textarea');
+            let inputElement = cells[index].querySelector('input') || cells[index].querySelector('textarea');
             
             if (inputElement) {
+                // Special handling for scrolling notices: Subject and hidden Date
                 if (colName === 'Subject' && (tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student')) {
-                    // For scrolling notices, subject might be combined with date
+                    const subjectText = inputElement.value.trim();
+                    const hiddenDateInput = cells[index].querySelector('.hidden-date-for-scrolling-notice');
+                    const selectedDate = hiddenDateInput ? hiddenDateInput.value : ''; // Get date from hidden input
+
+                    if (!selectedDate || !subjectText) {
+                         isValid = false;
+                         validationMessageText = `Date এবং Subject ফিল্ডগুলো আবশ্যিক।`;
+                    } else {
+                         const formattedDate = formatDateForNotice(selectedDate);
+                         cellValue = `📅 ${formattedDate} - ${subjectText}`; // Combine for storage
+                    }
+                } else if (colName === 'Date' && inputElement.classList.contains('date-input')) {
                     cellValue = inputElement.value.trim();
+                    if (!cellValue) {
+                        isValid = false;
+                        validationMessageText = `Date ফিল্ডটি আবশ্যিক।`;
+                    }
                 } else {
                     cellValue = inputElement.value.trim();
                 }
             } else {
-                // For fixed columns or non-editable cells
+                // For fixed columns or non-editable cells, get text content
                 cellValue = cells[index].textContent.trim();
             }
             rowData[colName] = cellValue;
 
-            // Validation rules
-            if (tableId === 'table-exam-link-teacher') {
-                if (['ID', 'Password', 'URL'].includes(colName) && !cellValue) {
-                    isValid = false;
-                    validationMessageText = `Class: ${rowData['Class']}\nID, Password, এবং URL ফিল্ডগুলো আবশ্যিক।`;
-                }
-            } else if (tableId === 'table-marks-submission-date') {
-                if (colName === 'Date' && !cellValue) {
-                    isValid = false;
-                    validationMessageText = `Exam: ${rowData['Exam']}\nDate ফিল্ডটি আবশ্যিক।`;
-                }
-            } else if (tableId === 'table-exam-link-student') {
-                if (colName === 'URL' && !cellValue) {
-                    isValid = false;
-                    validationMessageText = `Class: ${rowData['Class']}\nURL ফিল্ডটি আবশ্যিক।`;
-                }
-            } else if (['table-help-teacher', 'table-notice-teacher', 'table-notice-student'].includes(tableId)) {
-                if (['Date', 'Heading', 'Subject'].includes(colName) && !cellValue) {
-                    isValid = false;
-                    validationMessageText = `Date, Heading, এবং Subject ফিল্ডগুলো আবশ্যিক।`;
-                }
-            } else if (['table-scrolling-teacher', 'table-scrolling-student'].includes(tableId)) {
-                // Validation for Scrolling notices (Date is from form, Subject is in table)
-                // Note: Actual date validation happens in form submission for sections 7&8
-                if (colName === 'Subject' && !cellValue) {
-                    isValid = false;
-                    validationMessageText = `Subject ফিল্ডটি আবশ্যিক।`;
+            // General validation for required fields
+            if (!cellValue && !['Action', 'Class', 'Exam', 'Color'].includes(colName)) { // Exclude specific columns from blanket required check
+                isValid = false;
+                if (!validationMessageText) { // Only set if not already set by specific rules
+                    validationMessageText = `${colName} ফিল্ডটি আবশ্যিক।`;
                 }
             }
         });
@@ -572,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Simulate Save operation (replace with actual API call)
         console.log(`Saving to ${tableId}:`, rowData);
-        // Example: try { await fetch('/api/saveData', { method: 'POST', body: JSON.stringify(rowData) }); } catch (error) { console.error('Save failed:', error); showValidationMessage('সেভ করতে সমস্যা হয়েছে।'); return; }
+        // Example: try { await fetch('/api/saveData', { method: 'POST', body: JSON.stringify(rowData) }); } catch (error) { console.error('Save failed:', error); showValidationMessage('সেভ করতে সমস্যা হয়েছে।'); return; return; }
 
         // After successful save, update the row to non-editing state
         if (isNewRow) {
@@ -587,7 +578,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
-        // Optionally re-render the pagination or specific rows if needed.
     }
 
 
@@ -598,10 +588,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const colName = columnNames[index];
             if (colName !== 'Action') {
                 // For scrolling notices, Subject needs special handling to extract original text
-                if ((tableId === 'table-scrolling-teacher' || tableId === 'table-scrolling-student') && colName === 'Subject' && cell.textContent.includes('📅')) {
+                if (['table-scrolling-teacher', 'table-scrolling-student'].includes(tableId) && colName === 'Subject' && cell.textContent.includes('📅')) {
                     const match = cell.textContent.match(/📅\s*(\d{1,2}(?:st|nd|rd|th)?\s*\w{3}\s*\d{4})\s*-\s*(.*)/);
                     if (match) {
-                        originalData['Date'] = match[1]; // Store formatted date part
+                        originalData['DatePart'] = match[1]; // Store formatted date part (e.g., "23rd Jun 2025")
                         originalData[colName] = match[2]; // Store only subject part
                     } else {
                         originalData[colName] = cell.textContent.trim();
@@ -620,8 +610,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function cancelEdit(row, tableId, columnNames) {
         const originalData = row.dataset.originalData ? JSON.parse(row.dataset.originalData) : {};
         // Special re-formatting for scrolling notices subject
-        if (['table-scrolling-teacher', 'table-scrolling-student'].includes(tableId) && originalData['Subject'] && originalData['Date']) {
-            originalData['Subject'] = `📅 ${originalData['Date']} - ${originalData['Subject']}`;
+        if (['table-scrolling-teacher', 'table-scrolling-student'].includes(tableId) && originalData['Subject'] && originalData['DatePart']) {
+            originalData['Subject'] = `📅 ${originalData['DatePart']} - ${originalData['Subject']}`;
         }
         const originalRow = createTableRow(tableId, columnNames, originalData, false, false); // Recreate the original display row
         row.replaceWith(originalRow); // Replace the editing row with the original display row
@@ -667,6 +657,13 @@ document.addEventListener('DOMContentLoaded', () => {
             currentEditingColIndex = -1;
         }
     });
+    cancelInputBtn.addEventListener('click', () => {
+        inputEditModal.style.display = 'none';
+        inputEditTextArea.value = '';
+        currentEditingRow = null;
+        currentEditingColIndex = -1;
+    });
+
 
     // --- Table Management Function (Main Logic for each section) ---
     // isInputRowRequired: If true, adds a dedicated input row inside the table (sections 4,5,6)
@@ -686,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tbody.innerHTML = ''; // Clear existing rows
             if (isInputRowRequired) {
                 // For tables with an input row, add it at the top
-                tbody.appendChild(createTableRow(tableId, columnNames, {}, true));
+                tbody.appendChild(createTableRow(tableId, columnNames, {}, true)); // true for isInputRow
             }
             data.forEach(rowData => {
                 const row = createTableRow(tableId, columnNames, rowData, false, false); // Create as display row
@@ -708,6 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Initialize color preview for the form
             colorPreview.style.backgroundColor = colorInput.value || 'transparent';
+            colorPreview.style.borderColor = colorInput.value ? colorInput.value : '#ccc';
 
             // Date picker for form
             dateInput.addEventListener('click', () => {
@@ -716,8 +714,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 generateCalendar();
                 datePickerModal.style.display = 'flex';
             });
-            
-            // Color picker for form (already handled by global click listener on .color-input)
             
             saveBtn.addEventListener('click', async () => {
                 const date = dateInput.value.trim();
@@ -729,7 +725,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Format the subject string as required
+                // Format the subject string as required: 📅 DDth Mon YYYY - Subject
                 const formattedDate = formatDateForNotice(date);
                 const fullSubject = `📅 ${formattedDate} - ${subject}`;
 
@@ -751,6 +747,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 subjectInput.value = '';
                 colorInput.value = '';
                 colorPreview.style.backgroundColor = 'transparent';
+                colorPreview.style.borderColor = '#ccc';
                 showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
             });
 
@@ -759,6 +756,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 subjectInput.value = '';
                 colorInput.value = '';
                 colorPreview.style.backgroundColor = 'transparent';
+                colorPreview.style.borderColor = '#ccc';
             });
         }
     }
@@ -806,6 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Pagination (simplified for this context, needs full implementation for dynamic data)
     document.querySelectorAll('.pagination').forEach(paginationContainer => {
+        // Simple placeholder buttons, full pagination logic needs backend/data handling
         paginationContainer.innerHTML = `
             <button disabled>Previous</button>
             <button disabled>Next</button>
