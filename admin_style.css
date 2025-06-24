@@ -1,264 +1,188 @@
+
+/* General Styling */
 body {
     font-family: 'Noto Sans Bengali', sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 0;
     background-color: #f4f7f6;
     color: #333;
     line-height: 1.6;
 }
 
-.admin-dashboard {
-    max-width: 1200px;
-    margin: 20px auto;
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.main-header {
+    background-color: #28a745; /* Green */
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 40px;
+.main-header h1 {
+    margin: 0;
     font-size: 2.2em;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
+}
+
+.admin-panel-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #28a745; /* Green */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
 }
 
 .admin-section {
-    background-color: #ecf0f1;
-    border: 1px solid #c9d6df;
-    border-radius: 6px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 25px;
     padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.admin-section h2 {
-    color: #34495e;
+.section-heading {
+    color: #306c3a; /* Darker green */
+    font-size: 1.6em;
     margin-top: 0;
     margin-bottom: 20px;
-    font-size: 1.8em;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed #b0c4de;
+    text-align: center;
 }
 
-.data-table-container {
+/* Table Styling */
+.table-wrapper {
     overflow-x: auto;
-    margin-top: 15px;
+    margin-bottom: 20px;
 }
 
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 15px;
-    min-width: 700px; /* Ensure table doesn't shrink too much */
+    margin-bottom: 15px;
 }
 
-.data-table thead th {
-    background-color: #3498db;
-    color: white;
+.data-table th, .data-table td {
+    border: 1px solid #ddd;
     padding: 12px 15px;
     text-align: left;
-    font-weight: bold;
-    border: 1px solid #2980b9;
 }
 
-.data-table tbody td {
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    vertical-align: middle;
-    word-wrap: break-word;
-    white-space: normal; /* Allow text to wrap */
+.data-table th {
+    background-color: #28a745; /* Green */
+    color: white;
+    font-weight: bold;
+    white-space: nowrap; /* Prevent wrapping in headers */
 }
 
 .data-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #f2f2f2;
 }
 
 .data-table tbody tr:hover {
-    background-color: #eef;
+    background-color: #e9e9e9;
 }
 
-/* Specific styling for action cell */
-.data-table th.action-buttons-cell,
-.data-table td.action-buttons-cell {
-    width: 120px; /* Fixed width for action cell */
-    min-width: 120px; /* Ensure it doesn't get smaller */
-    max-width: 120px;
-    text-align: center;
-    white-space: nowrap; /* Keep buttons on one line */
+/* Input Row Specific Styling */
+.data-table .empty-row td {
+    padding: 5px; /* Smaller padding for input elements */
 }
 
-
-/* Input fields within table cells */
-.data-table input[type="text"],
-.data-table textarea {
-    width: calc(100% - 10px);
-    padding: 6px;
-    margin: 0;
-    box-sizing: border-box;
+.data-table .empty-row input,
+.data-table .empty-row textarea {
+    width: calc(100% - 10px); /* Adjust for padding/border */
+    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-family: 'Noto Sans Bengali', sans-serif;
+    box-sizing: border-box; /* Include padding/border in width */
     font-size: 0.9em;
 }
 
-.data-table textarea {
-    min-height: 40px; /* Smaller height for textarea in tables */
+.data-table .empty-row textarea {
+    min-height: 40px;
     resize: vertical;
 }
 
-.data-table input[readonly] {
-    background-color: #f0f0f0;
-    cursor: pointer;
+/* Fixed Columns */
+.data-table td.fixed-column {
+    background-color: #e9e9e9; /* Light grey for fixed columns */
+    font-weight: bold;
 }
 
-.data-table tr.editing input[readonly] {
-    background-color: #fff;
-    cursor: text;
-}
-
-/* Action buttons */
-.action-buttons {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap; /* Keep buttons in one line */
-}
-
-.action-buttons button,
-.input-form-container button {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.85em;
-    transition: background-color 0.2s ease;
-    white-space: nowrap; /* Prevent text wrapping */
-}
-
-.edit-btn {
-    background-color: #28a745; /* Green */
-    color: white;
-}
-
-.edit-btn:hover {
-    background-color: #218838;
-}
-
-.delete-btn { /* This will be used for Input Row Tables */
-    background-color: #dc3545; /* Red */
-    color: white;
-}
-
-.delete-btn:hover {
-    background-color: #c82333;
-}
-
-.clear-btn { /* New button for Section 1,2,3 */
-    background-color: #ffc107; /* Yellow/Orange */
-    color: #333;
-}
-
-.clear-btn:hover {
-    background-color: #e0a800;
-}
-
-.save-btn {
+/* Action Buttons */
+.action-buttons button {
     background-color: #007bff; /* Blue */
     color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-right: 5px;
+    transition: background-color 0.2s ease;
 }
 
-.save-btn:hover {
+.action-buttons button.edit-btn { background-color: #ffc107; color: #333; } /* Yellow */
+.action-buttons button.edit-btn:hover { background-color: #e0a800; }
+
+.action-buttons button.delete-btn { background-color: #dc3545; } /* Red */
+.action-buttons button.delete-btn:hover { background-color: #c82333; }
+
+.action-buttons button.save-btn { background-color: #28a745; } /* Green */
+.action-buttons button.save-btn:hover { background-color: #218838; }
+
+.action-buttons button.cancel-btn { background-color: #6c757d; } /* Grey */
+.action-buttons button.cancel-btn:hover { background-color: #5a6268; }
+
+/* Editing Mode Styling */
+.data-table tr.editing input,
+.data-table tr.editing textarea {
+    width: calc(100% - 10px);
+    padding: 8px;
+    border: 1px solid #007bff; /* Blue border for active edit */
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+}
+
+.data-table tr.editing textarea {
+    min-height: 40px;
+    resize: vertical;
+}
+
+/* Pagination */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 0 5px;
+    transition: background-color 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
     background-color: #0056b3;
 }
 
-.cancel-btn {
-    background-color: #6c757d; /* Gray */
-    color: white;
+.pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
 }
 
-.cancel-btn:hover {
-    background-color: #5a6268;
-}
-
-/* Fixed column for 'Class' and 'Exam' */
-.fixed-column {
-    font-weight: bold;
-    background-color: #f0f0f0;
-}
-
-/* Input Row for Sections 4, 5, 6 */
-.data-table tr.input-row {
-    background-color: #e0f2f7; /* Light blue background for input row */
-}
-
-.data-table tr.input-row td {
-    padding: 8px 15px;
-}
-
-/* External Input Form for Sections 7, 8 */
-.input-form-container {
-    background-color: #eaf6fd;
-    padding: 20px;
-    border-radius: 6px;
-    border: 1px solid #b3e0ff;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: flex-end;
-    margin-bottom: 25px;
-}
-
-.input-form-container label {
-    font-weight: bold;
-    color: #34495e;
-    width: 100%; /* Take full width on small screens */
-    margin-bottom: 5px;
-}
-
-.input-form-container input[type="text"],
-.input-form-container textarea {
-    flex: 1; /* Allow inputs to grow */
-    padding: 8px 12px;
-    border: 1px solid #a8d4ee;
-    border-radius: 4px;
-    font-family: 'Noto Sans Bengali', sans-serif;
-    font-size: 1em;
-    min-width: 150px; /* Minimum width for inputs */
-}
-
-.input-form-container textarea {
-    min-height: 80px;
-    resize: vertical;
-}
-
-.input-form-container button {
-    flex-shrink: 0; /* Prevent buttons from shrinking */
-    padding: 10px 18px;
-    font-size: 1em;
-}
-
-.input-form-container .color-input-group {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    flex: 1;
-    min-width: 150px;
-}
-
-.input-form-container .color-preview {
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-/* Modals */
+/* --- Modals --- */
 .table-modal-overlay {
     position: fixed;
     top: 0;
@@ -274,124 +198,112 @@ h1 {
 }
 
 .table-modal-content {
-    background-color: #ffffff;
-    padding: 25px 30px;
+    background-color: #fff;
+    padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 400px;
     width: 90%;
-    max-width: 500px;
-    animation: fadeIn 0.3s ease-out;
+    position: relative; /* For close button positioning */
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+.table-modal-content p {
+    font-size: 1.1em;
+    margin-bottom: 20px;
 }
 
-.table-modal-content h3 {
+.table-modal-content button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+/* Delete Confirm Modal */
+#deleteConfirmModal button {
+    background-color: #dc3545;
+    color: white;
+}
+#deleteConfirmModal button:hover {
+    background-color: #c82333;
+}
+#deleteConfirmModal button#cancelDeleteBtn {
+    background-color: #6c757d;
+}
+#deleteConfirmModal button#cancelDeleteBtn:hover {
+    background-color: #5a6268;
+}
+
+/* Input Edit Modal */
+.input-edit-content h3 {
+    color: #28a745;
     margin-top: 0;
-    color: #34495e;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-.table-modal-content textarea {
-    width: calc(100% - 20px); /* Adjust for padding */
-    min-height: 120px;
+.input-edit-content textarea {
+    width: calc(100% - 20px);
+    height: 120px;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
     margin-bottom: 20px;
-    font-family: 'Noto Sans Bengali', sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     font-size: 1em;
     resize: vertical;
 }
 
-.modal-buttons {
-    text-align: right;
-}
-
-.modal-buttons button {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    margin-left: 10px;
-    transition: background-color 0.2s ease;
-}
-
-.modal-buttons button:first-child {
+.input-edit-content .modal-actions button {
     background-color: #28a745;
     color: white;
 }
-
-.modal-buttons button:first-child:hover {
+.input-edit-content .modal-actions button:hover {
     background-color: #218838;
 }
-
-.modal-buttons button:last-child {
+.input-edit-content .modal-actions button#cancelInputBtn {
     background-color: #6c757d;
-    color: white;
 }
-
-.modal-buttons button:last-child:hover {
+.input-edit-content .modal-actions button#cancelInputBtn:hover {
     background-color: #5a6268;
 }
 
+/* Validation Modal */
+.validation-content p {
+    color: #dc3545;
+    white-space: pre-wrap; /* Preserve new lines for multi-line messages */
+}
+
+.validation-content button {
+    background-color: #007bff;
+    color: white;
+}
+.validation-content button:hover {
+    background-color: #0056b3;
+}
+
+/* Close Modal Button - shared style */
 .close-modal-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
-    cursor: pointer;
-    color: #3498db; /* Blue color for close button */
-    background-color: #e7f3ff; /* Light background */
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 1;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.close-modal-btn:hover {
-    color: #1a5e95;
-    background-color: #cce7ff;
-}
-
-
-/* Validation Modal specific */
-#validationModal .table-modal-content {
-    max-width: 400px;
-    text-align: center;
-}
-
-#validationModal p {
-    font-size: 1.1em;
-    color: #d9534f; /* Red for errors */
-    margin-bottom: 20px;
+    /* Style for buttons that close modals, if not already styled by their specific IDs */
+    /* Ensuring they are styled consistently */
 }
 
 /* Date Picker Modal */
-.date-picker-modal {
+.datepicker-content {
     max-width: 320px;
     padding: 20px;
 }
 
-.calendar-header {
+.date-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
 }
 
-.calendar-header button {
-    background-color: #3498db;
+.date-header button {
+    background-color: #007bff;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -400,207 +312,202 @@ h1 {
     font-size: 1.1em;
 }
 
-.calendar-header select {
-    padding: 7px;
-    border-radius: 4px;
+.date-header select {
+    padding: 8px;
     border: 1px solid #ccc;
+    border-radius: 4px;
     font-size: 1em;
     margin: 0 5px;
 }
 
-.calendar-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #555;
-}
-
-.calendar-days span {
-    padding: 5px 0;
-}
-
-.calendar-dates {
+.calendar-weekdays, .calendar-dates {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
     text-align: center;
 }
 
-.calendar-dates span {
-    padding: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
+.calendar-weekdays span {
+    font-weight: bold;
+    color: #555;
+    padding: 5px;
 }
 
-.calendar-dates span:hover:not(.empty) {
-    background-color: #e0f0ff;
+.calendar-dates span {
+    padding: 10px;
+    border-radius: 50%; /* Make them circular */
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.calendar-dates span:hover {
+    background-color: #e0e0e0;
 }
 
 .calendar-dates span.empty {
-    background-color: #f0f0f0;
+    background-color: transparent;
     cursor: default;
 }
 
 .calendar-dates span.today-date {
-    background-color: #b3e0ff;
-    font-weight: bold;
-}
-
-.calendar-dates span.selected-date {
-    background-color: #3498db;
+    background-color: #28a745;
     color: white;
     font-weight: bold;
 }
 
-/* Date input with icon */
-.date-with-icon {
-    display: flex;
-    align-items: center;
-    width: calc(100% - 10px); /* Adjust for cell padding */
-}
-
-.date-with-icon input[type="text"] {
-    flex-grow: 1;
-    cursor: pointer;
-}
-
-.calendar-icon {
-    margin-left: 5px;
-    font-size: 1.2em;
-    cursor: pointer;
-    color: #3498db;
+.calendar-dates span.selected-date {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border: 2px solid #0056b3;
 }
 
 /* Color Picker Modal */
-.color-picker-modal {
-    max-width: 450px;
-    padding: 20px;
+.colorpicker-content {
+    max-width: 500px;
 }
 
 .color-palette {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr); /* 10 columns for colors */
+    display: flex;
+    flex-wrap: wrap;
     gap: 5px;
     margin-top: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 .color-box {
     width: 30px;
     height: 30px;
-    border-radius: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid #ccc;
     cursor: pointer;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    border-radius: 4px;
+    transition: transform 0.1s ease, border-color 0.1s ease;
 }
 
 .color-box:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    border-color: #007bff;
 }
 
 .color-box.selected {
-    border: 2px solid #3498db; /* Highlight selected color */
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.7);
-    transform: scale(1.15);
+    border: 2px solid #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
 }
 
-/* Color Input with Preview */
-.color-with-preview {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    width: calc(100% - 10px); /* Adjust for cell padding */
-}
-
-.color-with-preview input.color-input {
-    flex-grow: 1;
-    cursor: pointer;
+/* Styling for the color input in table and form */
+.color-input {
+    padding-left: 30px !important; /* Make space for the color preview */
+    position: relative;
 }
 
 .color-preview {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
+    width: 20px;
+    height: 20px;
     border: 1px solid #ccc;
-    flex-shrink: 0;
+    position: absolute;
+    top: 50%;
+    left: 8px; /* Adjust as needed */
+    transform: translateY(-50%);
+    border-radius: 3px;
+    pointer-events: none; /* Make it unclickable */
 }
 
-
-/* Pagination Styles */
-.pagination {
+/* Styling for date with icon in table */
+td.date-with-icon {
     display: flex;
-    justify-content: flex-end; /* Align to right */
     align-items: center;
-    margin-top: 20px;
-    gap: 10px;
-    padding: 10px 0;
-    border-top: 1px solid #eee;
+    gap: 5px; /* Space between icon and date text */
 }
 
-.pagination button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 8px 15px;
+.calendar-icon {
+    font-size: 1.2em; /* Adjust size of the emoji icon */
+}
+
+/* Section 7 & 8 Specific Input Form Styling */
+.input-form-container {
+    background-color: #e6f7ea; /* Light green background */
+    border: 1px solid #ccebcc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.input-form-container h4 {
+    color: #28a745;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.input-form-container .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.input-form-container .form-group label {
+    flex: 0 0 80px; /* Fixed width for labels */
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+}
+
+.input-form-container .form-group input[type="text"],
+.input-form-container .form-group textarea {
+    flex: 1; /* Take remaining space */
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.input-form-container .form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Specific styling for the color input within the form */
+.input-form-container .form-group .color-input {
+    width: calc(100% - 30px); /* Adjust width to fit preview icon */
+    padding-left: 35px; /* Space for icon */
+}
+
+.input-form-container .form-group .color-preview {
+    left: 10px; /* Adjust left position relative to input field */
+}
+
+.input-form-container .form-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.input-form-container .form-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 1em;
+    margin: 0 5px;
     transition: background-color 0.2s ease;
 }
 
-.pagination button:hover:not(:disabled) {
-    background-color: #2980b9;
+.input-form-container .form-actions button.save-btn {
+    background-color: #28a745;
+    color: white;
 }
 
-.pagination button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+.input-form-container .form-actions button.save-btn:hover {
+    background-color: #218838;
 }
 
-.pagination span {
-    font-size: 1em;
-    color: #555;
-    font-weight: bold;
+.input-form-container .form-actions button.cancel-btn {
+    background-color: #6c757d;
+    color: white;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .admin-dashboard {
-        padding: 15px;
-    }
-
-    .admin-section {
-        padding: 15px;
-    }
-
-    .data-table thead th,
-    .data-table tbody td {
-        padding: 8px 10px;
-    }
-
-    .action-buttons button,
-    .input-form-container button {
-        padding: 5px 8px;
-        font-size: 0.8em;
-    }
-
-    .input-form-container {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .input-form-container label,
-    .input-form-container input,
-    .input-form-container textarea,
-    .input-form-container .color-input-group {
-        width: 100%;
-        min-width: unset;
-    }
-
-    .table-modal-content {
-        padding: 20px;
-    }
+.input-form-container .form-actions button.cancel-btn:hover {
+    background-color: #5a6268;
 }
