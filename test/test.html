@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Section 1 - Exam Link for Teachers</title>
   <link rel="stylesheet" href="test_style.css">
+
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -16,45 +17,47 @@
     <h2>Admin Panel - Section 1 Only</h2>
 
     <section id="exam-link-teachers" class="admin-section">
-      <h3 class="section-heading">Exam Link for Teachers</h3>
-      <div class="table-wrapper">
-        <table id="table-exam-link-teacher" class="data-table">
-          <thead>
-            <tr>
-              <th>Class</th>
-              <th>ID</th>
-              <th>Password</th>
-              <th>URL</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <div class="pagination" id="pagination-exam-link-teacher">
-        <button disabled>Previous</button>
-        <button disabled>Next</button>
+      <div class="section-box">
+        <h3 class="section-heading">Exam Link for Teachers</h3>
+        <div class="table-wrapper">
+          <table id="table-exam-link-teacher" class="data-table">
+            <thead>
+              <tr>
+                <th>Class</th>
+                <th>ID</th>
+                <th>Password</th>
+                <th>URL</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination-exam-link-teacher">
+          <button id="prevBtn">Previous</button>
+          <span id="pageNumber">1</span>
+          <button id="nextBtn">Next</button>
+        </div>
       </div>
     </section>
   </div>
 
-  <!-- Delete Confirmation Modal -->
+  <!-- Modals -->
   <div id="deleteConfirmModal" class="table-modal-overlay">
     <div class="table-modal-content">
       <button class="close-modal-btn">&times;</button>
-      <p>আপনি কি এই রোটি ডিলিট করতে চান?</p>
+      <p>আপনি কি তথ্যগুলি মুছে ফেলতে চান?</p>
       <button id="confirmDeleteBtn">হ্যাঁ</button>
       <button id="cancelDeleteBtn">না</button>
     </div>
   </div>
 
-  <!-- Input Edit Modal -->
   <div id="inputEditModal" class="table-modal-overlay">
     <div class="table-modal-content input-edit-content">
       <button class="close-modal-btn">&times;</button>
-      <h3 id="inputEditModalHeading">Edit</h3>
-      <textarea id="inputEditTextArea" placeholder="এখানে তথ্য লিখুন..."></textarea>
+      <h3 id="inputEditModalHeading"></h3>
+      <textarea id="inputEditTextArea"></textarea>
       <div class="modal-actions">
         <button id="storeInputBtn" class="store-btn">স্টোর করুন</button>
         <button id="cancelInputBtn" class="cancel-btn">বাতিল করুন</button>
@@ -62,15 +65,13 @@
     </div>
   </div>
 
-  <!-- Validation Modal -->
   <div id="validationModal" class="table-modal-overlay">
     <div class="table-modal-content validation-content">
       <button class="close-modal-btn">&times;</button>
-      <p id="validationMessage">তথ্য সঠিকভাবে পূরণ করুন।</p>
+      <p id="validationMessage"></p>
     </div>
   </div>
-
-  <!-- Main JavaScript -->
+  
   <script src="test_script.js"></script>
 </body>
 </html>
