@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelInputBtn = document.getElementById('cancelInputBtn');
     const validationModal = document.getElementById('validationModal');
     const validationMessage = document.getElementById('validationMessage');
+    const clearConfirmModal = document.getElementById('clearConfirmModal');
+    const confirmClearBtn = document.getElementById('confirmClearBtn');
+    const cancelClearBtn = document.getElementById('cancelClearBtn');
+    let rowToClear = null; // Temporarily store the row needing to be cleared
+
 
     const paginationContainer = document.getElementById('pagination-exam-link-teacher');
     let currentEditingRow = null;
@@ -102,6 +107,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearBtn.className = 'clear-btn';
                     clearBtn.textContent = 'Clear';
                     clearBtn.addEventListener('click', () => {
+    const target = allDataRows.find(r => r.Class === rowData.Class);
+
+    if (!target.ID && !target.Password && !target.URL) {
+        showValidationMessage("এই রো-তে কোনও ডেটা নেই, তাই ক্লিয়ার করা যাবে না!");
+        return;
+    }
+
+    rowToClear = target;
+    clearConfirmModal.style.display = 'flex';
+});
     const confirmClear = confirm(`আপনি কি ${rowData.Class} এর ডেটা ক্লিয়ার করতে চান?`);
 
     if (confirmClear) {
@@ -111,8 +126,22 @@ document.addEventListener('DOMContentLoaded', () => {
             target.Password = '';
             target.URL = '';
         }
+        confirmClearBtn.addEventListener('click', () => {
+    if (rowToClear) {
+        rowToClear.ID = '';
+        rowToClear.Password = '';
+        rowToClear.URL = '';
         renderTable();
         showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+        rowToClear = null;
+    }
+    clearConfirmModal.style.display = 'none';
+});
+
+cancelClearBtn.addEventListener('click', () => {
+    rowToClear = null;
+    clearConfirmModal.style.display = 'none';
+});
     }
 });          
                     div.appendChild(clearBtn);
