@@ -554,6 +554,24 @@ document.addEventListener('DOMContentLoaded', () => {
         renderMarksTable();
     }
 
+    
+
+
+confirmClearBtn.onclick = () => {
+        if (rowToClear) {
+            rowToClear.Date = "";
+            rowToClear.Color = "";
+            renderTable();
+            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+            rowToClear = null;
+        }
+        clearConfirmModal.style.display = 'none';
+    };
+
+
+
+    
+
     renderMarksTable();
 });
 
