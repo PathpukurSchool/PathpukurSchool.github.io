@@ -101,7 +101,7 @@ h2 {
 }
 
 .data-table th {
-    background-color: darkblue; /* Green */
+    background-color: darkblue;
     color: white;
     font-weight: bold;
     white-space: nowrap; /* Prevent wrapping in headers */
@@ -117,7 +117,7 @@ h2 {
 
 /* Input Row Specific Styling */
 .data-table .empty-row td {
-    padding: 5px; /* Smaller padding for input elements */
+    padding: 10px; /* Smaller padding for input elements */
 }
 
 .data-table .empty-row input,
