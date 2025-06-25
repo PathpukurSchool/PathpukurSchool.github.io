@@ -38,12 +38,12 @@ h2 {
 }
 
 .admin-section {
-    background-color: #20B2AA; /* নীলচে সবুজ (Light Sea Green) */
+    background-color: #E0FFFF; /* খুব হালকা নীলচে সবুজ (Light Cyan) */
     border: 1px solid #1A8F87; /* বর্ডারের রঙ নীলচে সবুজের সাথে মানানসই গাঢ় শেড */
     border-radius: 8px;
     margin-bottom: 35px;
     padding: 20px;
-    box-shadow: 0 0 15px rgba(32, 178, 170, 0.6); /* হালকা আলোক রশ্মি বা গ্লো */
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.8); /* আরও স্পষ্ট এবং গাঢ় গ্লো */
 }
 
 /* টেক্সটের চারপাশে একটি আলোকরশ্মির প্রভাব তৈরি করা হয় */
