@@ -557,34 +557,51 @@ document.addEventListener('DOMContentLoaded', () => {
     renderMarksTable();
 });
 
+// -------------------- Clear Button Modal and Logic (Common for All Sections) --------------------
 
-// -------------------- Common Clear Confirmation Modal Logic --------------------
-let rowToClear = null; // Used by all sections
+let rowToClear = null;
 
-document.getElementById('confirmClearBtn').addEventListener('click', () => {
-    if (rowToClear) {
-        if (rowToClear.ID !== undefined) rowToClear.ID = "";
-        if (rowToClear.Password !== undefined) rowToClear.Password = "";
-        if (rowToClear.URL !== undefined) rowToClear.URL = "";
-        if (rowToClear.Date !== undefined) rowToClear.Date = "";
-        if (rowToClear.Color !== undefined) rowToClear.Color = "";
+const clearConfirmModal = document.createElement('div');
+clearConfirmModal.className = 'table-modal-overlay';
+clearConfirmModal.id = 'clearConfirmModal';
+clearConfirmModal.innerHTML = `
+    <div class="table-modal-content">
+        <p>আপনি কি ক্লিয়ার করতে চান?</p>
+        <div class="modal-actions">
+            <button id="confirmClearBtn">হ্যাঁ</button>
+            <button id="cancelClearBtn">না</button>
+        </div>
+    </div>
+`;
+document.body.appendChild(clearConfirmModal);
 
-        showValidationMessage("রো-এর তথ্য মুছে ফেলা হয়েছে।");
+const confirmClearBtn = document.getElementById('confirmClearBtn');
+const cancelClearBtn = document.getElementById('cancelClearBtn');
 
-        // রিফ্রেশ করে সংশ্লিষ্ট টেবিলটি পুনরায় দেখান
-        if (rowToClear.Class) {
-            renderStudentTable(); // Section 2
-        } else if (rowToClear.Exam) {
-            renderMarksTable(); // Section 3
-        }
-        rowToClear = null;
-        clearConfirmModal.style.display = 'none';
+confirmClearBtn.addEventListener('click', () => {
+    if (!rowToClear) return;
+
+    // Clear appropriate fields based on the structure
+    if ('ID' in rowToClear && 'Password' in rowToClear && 'URL' in rowToClear) {
+        rowToClear.ID = '';
+        rowToClear.Password = '';
+        rowToClear.URL = '';
+        if (typeof renderExamLinkTeachersTable === 'function') renderExamLinkTeachersTable();
+    } else if ('URL' in rowToClear && Object.keys(rowToClear).length === 2) {
+        rowToClear.URL = '';
+        if (typeof renderStudentTable === 'function') renderStudentTable();
+    } else if ('Date' in rowToClear || 'Color' in rowToClear) {
+        rowToClear.Date = '';
+        rowToClear.Color = '';
+        if (typeof renderMarksTable === 'function') renderMarksTable();
     }
-});
 
-document.getElementById('cancelClearBtn').addEventListener('click', () => {
     rowToClear = null;
     clearConfirmModal.style.display = 'none';
 });
 
+cancelClearBtn.addEventListener('click', () => {
+    rowToClear = null;
+    clearConfirmModal.style.display = 'none';
+});
 
