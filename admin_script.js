@@ -439,20 +439,19 @@ document.addEventListener('DOMContentLoaded', () => {
             row.replaceWith(updatedRow);
             showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
         }
-
+        
         function editRow(row) {
-            const originalData = {};
-            Array.from(row.children).forEach((cell, index) => {
-                const colName = columnNames[index];
-                if (colName !== 'Action') {
-                    originalData[colName] = cell.textContent.trim();
-                }
-            });
-            row.dataset.originalData = JSON.stringify(originalData); // Store original data
-
-            const editingRow = createTableRow(originalData, true);
-            row.replaceWith(editingRow);
+    const originalData = {};
+    Array.from(row.children).forEach((cell, index) => {
+        const colName = columnNames[index];
+        if (colName !== 'Action') { // 'Action' কলাম বাদ দিন
+            originalData[colName] = cell.textContent.trim();
         }
+    });
+    row.dataset.originalData = JSON.stringify(originalData); // মূল ডেটা JSON স্ট্রিং হিসাবে সংরক্ষণ করা
+    const editingRow = createTableRow(originalData, true); // true মানে এডিটিং মোড
+    row.replaceWith(editingRow);
+}
 
         function cancelEdit(row) {
             const originalData = JSON.parse(row.dataset.originalData);
@@ -643,18 +642,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function editRow(row) {
-            const originalData = {};
-            Array.from(row.children).forEach((cell, index) => {
-                const colName = columnNames[index];
-                if (colName !== 'Action') {
-                    originalData[colName] = cell.textContent.trim();
-                }
-            });
-            row.dataset.originalData = JSON.stringify(originalData);
-
-            const editingRow = createTableRow(originalData, true);
-            row.replaceWith(editingRow);
+    const originalData = {};
+    Array.from(row.children).forEach((cell, index) => {
+        const colName = columnNames[index];
+        if (colName !== 'Action') { // 'Action' কলাম বাদ দিন
+            originalData[colName] = cell.textContent.trim();
         }
+    });
+    row.dataset.originalData = JSON.stringify(originalData); // মূল ডেটা JSON স্ট্রিং হিসাবে সংরক্ষণ করা
+    const editingRow = createTableRow(originalData, true); // true মানে এডিটিং মোড
+    row.replaceWith(editingRow);
+}
 
         function cancelEdit(row) {
             const originalData = JSON.parse(row.dataset.originalData);
@@ -802,18 +800,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function editRow(row) {
-            const originalData = {};
-            Array.from(row.children).forEach((cell, index) => {
-                const colName = columnNames[index];
-                if (colName !== 'Action') {
-                    originalData[colName] = cell.textContent.trim();
-                }
-            });
-            row.dataset.originalData = JSON.stringify(originalData);
-
-            const editingRow = createTableRow(originalData, true);
-            row.replaceWith(editingRow);
+    const originalData = {};
+    Array.from(row.children).forEach((cell, index) => {
+        const colName = columnNames[index];
+        if (colName !== 'Action') { // 'Action' কলাম বাদ দিন
+            originalData[colName] = cell.textContent.trim();
         }
+    });
+    row.dataset.originalData = JSON.stringify(originalData); // মূল ডেটা JSON স্ট্রিং হিসাবে সংরক্ষণ করা
+    const editingRow = createTableRow(originalData, true); // true মানে এডিটিং মোড
+    row.replaceWith(editingRow);
+}
 
         function cancelEdit(row) {
             const originalData = JSON.parse(row.dataset.originalData);
@@ -971,18 +968,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function editRow(row) {
-            const originalData = {};
-            Array.from(row.children).forEach((cell, index) => {
-                const colName = columnNames[index];
-                if (colName !== 'Action') {
-                    originalData[colName] = cell.textContent.trim();
-                }
-            });
-            row.dataset.originalData = JSON.stringify(originalData);
-
-            const editingRow = createTableRow(originalData, false, true);
-            row.replaceWith(editingRow);
+    const originalData = {};
+    Array.from(row.children).forEach((cell, index) => {
+        const colName = columnNames[index];
+        if (colName !== 'Action') { // 'Action' কলাম বাদ দিন
+            originalData[colName] = cell.textContent.trim();
         }
+    });
+    row.dataset.originalData = JSON.stringify(originalData); // মূল ডেটা JSON স্ট্রিং হিসাবে সংরক্ষণ করা
+    const editingRow = createTableRow(originalData, true); // true মানে এডিটিং মোড
+    row.replaceWith(editingRow);
+}
 
         function cancelEdit(row) {
             const originalData = JSON.parse(row.dataset.originalData);
@@ -1286,19 +1282,18 @@ document.addEventListener('DOMContentLoaded', () => {
             showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
         }
 
-        function editRow(row) {
-            const originalData = {};
-            Array.from(row.children).forEach((cell, index) => {
-                const colName = columnNames[index];
-                if (colName !== 'Action') {
-                    originalData[colName] = cell.textContent.trim();
-                }
-            });
-            row.dataset.originalData = JSON.stringify(originalData);
-
-            const editingRow = createTableRow(originalData, true);
-            row.replaceWith(editingRow);
+       function editRow(row) {
+    const originalData = {};
+    Array.from(row.children).forEach((cell, index) => {
+        const colName = columnNames[index];
+        if (colName !== 'Action') { // 'Action' কলাম বাদ দিন
+            originalData[colName] = cell.textContent.trim();
         }
+    });
+    row.dataset.originalData = JSON.stringify(originalData); // মূল ডেটা JSON স্ট্রিং হিসাবে সংরক্ষণ করা
+    const editingRow = createTableRow(originalData, true); // true মানে এডিটিং মোড
+    row.replaceWith(editingRow);
+}
 
         function cancelEdit(row) {
             const originalData = JSON.parse(row.dataset.originalData);
