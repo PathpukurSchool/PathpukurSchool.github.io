@@ -249,7 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-function initializeStudentLinkSection() {
+
+    
+
+    function initializeStudentLinkSection() {
     const table = document.getElementById('table-link-student');
     const tbody = table.querySelector('tbody');
     const pagination = document.getElementById('pagination-link-student');
@@ -382,9 +385,11 @@ function initializeStudentLinkSection() {
         clearConfirmModal.style.display = 'none';
     };
 
-
-
-    });
-
     showTablePage(currentPage);
 }
+
+
+
+
+    
+});
