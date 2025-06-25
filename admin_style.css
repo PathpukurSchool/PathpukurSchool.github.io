@@ -31,31 +31,19 @@ body {
 }
 
 h2 {
-    color: darkblue; /* Green */
+    color: darkblue;
     text-align: center;
     margin-bottom: 30px;
     font-size: 2em;
 }
 
 .admin-section {
-    background-color: #E0FFFF; /* খুব হালকা নীলচে সবুজ (Light Cyan) */
+    background-color: #E8FFFF; /* খুব হালকা নীলচে সবুজ (Light Cyan) */
     border: 1px solid #1A8F87; /* বর্ডারের রঙ নীলচে সবুজের সাথে মানানসই গাঢ় শেড */
     border-radius: 8px;
     margin-bottom: 35px;
     padding: 20px;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0);
-    animation: glow-fade 2s ease-in-out infinite alternate;
-}
-
-@keyframes glow-fade {
-    0% {
-        text-shadow: 0 0 5px rgba(0, 123, 255, 0), /* No glow */
-                     0 0 10px rgba(0, 123, 255, 0);
-    }
-    100% {
-        text-shadow: 0 0 10px rgba(0, 123, 255, 0.8), /* Stronger glow */
-                     0 0 20px rgba(0, 123, 255, 0.6);
-    }
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.8); /* আরও স্পষ্ট এবং গাঢ় গ্লো */
 }
 
 /* টেক্সটের চারপাশে একটি আলোকরশ্মির প্রভাব তৈরি করা হয় */
@@ -65,7 +53,7 @@ h2 {
     margin-bottom: 20px;
     font-size: 26px;
     font-size: 1.6em;
-    color: darkblue; /* Blue text */
+    color: #007bff; /* Blue text */
     text-align: center;
     text-shadow: 0 0 5px rgba(0, 123, 255, 0); /* Initial transparent shadow */
     animation: glow-fade 2s ease-in-out infinite alternate;
@@ -101,7 +89,7 @@ h2 {
 }
 
 .data-table th {
-    background-color: darkblue;
+    background-color: darkblue; /* Green */
     color: white;
     font-weight: bold;
     white-space: nowrap; /* Prevent wrapping in headers */
@@ -117,7 +105,7 @@ h2 {
 
 /* Input Row Specific Styling */
 .data-table .empty-row td {
-    padding: 10px; /* Smaller padding for input elements */
+    padding: 5px; /* Smaller padding for input elements */
 }
 
 .data-table .empty-row input,
