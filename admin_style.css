@@ -304,37 +304,16 @@ h2 {
 
 /* Close Modal Button - shared style */
 .close-modal-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px; /* ফন্ট সাইজ একটু বড় */
+    background-color: #F44336;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    color: #3498db; /* নীল রঙ */
-    background-color: #e7f3ff; /* হালকা নীল ব্যাকগ্রাউন্ড */
-    border-radius: 50%; /* গোলাকার করা */
-    width: 35px; /* ফিক্সড উইড্থ */
-    height: 35px; /* ফিক্সড হাইট */
-    display: flex; /* ফ্লেক্সবক্স ব্যবহার করে আইকনকে সেন্টারে আনা */
-    justify-content: center;
-    align-items: center;
-    line-height: 1; /* লাইনের হাইট ঠিক করা */
-    transition: background-color 0.2s, color 0.2s; /* হোভার ইফেক্টের জন্য ট্রানজিশন */
+    margin-top: 15px;
+    transition: background-color 0.2s ease;
 }
-
-.close-modal-btn:hover {
-    color: #1a5e95; /* হোভারে গাঢ় নীল */
-    background-color: #cce7ff; /* হোভারে হালকা নীল */
-}
-
-/* clear btn */
-.clear-btn { /* New button for Section 1,2,3 */
-    background-color: #ffc107; /* Yellow/Orange */
-    color: #333; /* Dark text for contrast */
-}
-
-.clear-btn:hover {
-    background-color: #e0a800;
-}
+.close-modal-btn:hover { background-color: #DA190B; }
 
 /* Date Picker Modal */
 .datepicker-content {
@@ -467,23 +446,8 @@ td.date-with-icon {
     gap: 5px; /* Space between icon and date text */
 }
 
-/* Date input with icon */
-.date-with-icon {
-    display: flex;
-    align-items: center;
-    width: calc(100% - 10px); /* Adjust for cell padding */
-}
-
-.date-with-icon input[type="text"] {
-    flex-grow: 1;
-    cursor: pointer; /* To indicate it's clickable */
-}
-
 .calendar-icon {
-    margin-left: 5px;
-    font-size: 1.2em;
-    cursor: pointer;
-    color: #3498db; /* A distinct color */
+    font-size: 1.2em; /* Adjust size of the emoji icon */
 }
 
 /* Section 7 & 8 Specific Input Form Styling */
