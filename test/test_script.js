@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-// ✅ Section 1: Exam Link for Teachers
     const table = document.getElementById('table-exam-link-teacher');
     const tbody = table.querySelector('tbody');
     const paginationContainer = document.getElementById('pagination-exam-link-teacher');
@@ -246,248 +244,159 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderTable();
 
-    // ✅ Section 2: Link for Student
-    function initializeStudentLinkSection() {
-const table = document.getElementById('table-link-student');
-    const tbody = table?.querySelector('tbody');
-    const paginationContainer = document.getElementById('pagination-link-student');
+// -------------------- Section 2: Link for Students --------------------
+document.addEventListener('DOMContentLoaded', () => {
+    const studentTable = document.getElementById('table-link-student');
+    const studentTbody = studentTable.querySelector('tbody');
+    const studentPagination = document.getElementById('pagination-link-student');
 
-    const inputEditModal = document.getElementById('inputEditModal');
-    const inputEditTextArea = document.getElementById('inputEditTextArea');
-    const inputEditModalHeading = document.getElementById('inputEditModalHeading');
-    const storeInputBtn = document.getElementById('storeInputBtn');
-    const cancelInputBtn = document.getElementById('cancelInputBtn');
+    const studentColumnNames = ["Class", "URL", "Action"];
+    const studentRowsPerPage = 10;
+    let studentCurrentPage = 1;
 
-    const validationModal = document.getElementById('validationModal');
-    const validationMessage = document.getElementById('validationMessage');
-
-    const clearConfirmModal = document.getElementById('clearConfirmModal');
-    const confirmClearBtn = document.getElementById('confirmClearBtn');
-    const cancelClearBtn = document.getElementById('cancelClearBtn');
-
-    let currentEditingRow = null;
-    let currentEditingColIndex = -1;
-    let rowToClear = null;
-
-    const rowsPerPage = 10;
-    let currentPage = 1;
-
-    const columnNames = ["Class", "URL", "Action"];
-    const classes = [
+    const studentClasses = [
         "V_1ST", "V_2ND", "V_3RD", "VI_1ST", "VI_2ND", "VI_3RD",
         "VII_1ST", "VII_2ND", "VII_3RD", "VIII_1ST", "VIII_2ND", "VIII_3RD",
         "IX_1ST", "IX_2ND", "IX_3RD", "X_1ST", "X_2ND", "X_TEST",
         "XI_SEM1", "XI_SEM2", "XII_TEST"
     ];
-    const allDataRows = classes.map(cls => ({ Class: cls, URL: '' }));
 
-    function showValidationMessage(message) {
-        validationMessage.textContent = message;
-        validationModal.style.display = 'flex';
-    }
+    const studentDataRows = studentClasses.map(cls => ({
+        Class: cls,
+        URL: ""
+    }));
 
-    function createEditableInput(colName, value) {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = value;
-        input.readOnly = true;
+    function renderStudentTable(isEditing = false, editClass = "") {
+        studentTbody.innerHTML = "";
+        const start = (studentCurrentPage - 1) * studentRowsPerPage;
+        const end = start + studentRowsPerPage;
 
-        input.addEventListener('click', () => {
-            inputEditModalHeading.textContent = `Edit ${colName}`;
-            inputEditTextArea.value = input.value;
-            currentEditingRow = input.closest('tr');
-            currentEditingColIndex = columnNames.indexOf(colName);
-            inputEditModal.style.display = 'flex';
+        studentDataRows.slice(start, end).forEach(rowData => {
+            const row = document.createElement('tr');
+            if (isEditing && rowData.Class === editClass) row.classList.add('editing');
+
+            studentColumnNames.forEach(col => {
+                const cell = document.createElement('td');
+                if (col === "Class") {
+                    cell.textContent = rowData.Class;
+                    cell.classList.add('fixed-column');
+                } else if (col === "Action") {
+                    const div = document.createElement('div');
+                    div.classList.add('action-buttons');
+
+                    if (isEditing && rowData.Class === editClass) {
+                        const saveBtn = document.createElement('button');
+                        saveBtn.className = 'save-btn';
+                        saveBtn.textContent = 'Save';
+                        saveBtn.onclick = () => saveStudentRow(row);
+                        div.appendChild(saveBtn);
+
+                        const cancelBtn = document.createElement('button');
+                        cancelBtn.className = 'cancel-btn';
+                        cancelBtn.textContent = 'Cancel';
+                        cancelBtn.onclick = () => renderStudentTable();
+                        div.appendChild(cancelBtn);
+                    } else {
+                        const editBtn = document.createElement('button');
+                        editBtn.className = 'edit-btn';
+                        editBtn.textContent = 'Edit';
+                        editBtn.onclick = () => renderStudentTable(true, rowData.Class);
+                        div.appendChild(editBtn);
+
+                        const clearBtn = document.createElement('button');
+                        clearBtn.className = 'clear-btn';
+                        clearBtn.textContent = 'Clear';
+                        clearBtn.onclick = () => {
+                            const target = studentDataRows.find(r => r.Class === rowData.Class);
+                            if (!target.URL) {
+                                showValidationMessage("এই রো-তে কোনও URL নেই, তাই ক্লিয়ার করা যাবে না!");
+                                return;
+                            }
+                            rowToClear = target;
+                            clearConfirmModal.style.display = 'flex';
+                        };
+                        div.appendChild(clearBtn);
+                    }
+                    cell.appendChild(div);
+                } else {
+                    if (isEditing && rowData.Class === editClass) {
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = rowData[col];
+                        input.readOnly = true;
+                        input.addEventListener('click', () => {
+                            inputEditModalHeading.textContent = `Edit ${col}`;
+                            inputEditTextArea.value = input.value;
+                            currentEditingRow = input.closest('tr');
+                            currentEditingColIndex = studentColumnNames.indexOf(col);
+                            inputEditModal.style.display = 'flex';
+                        });
+                        cell.appendChild(input);
+                    } else {
+                        cell.textContent = rowData[col];
+                    }
+                }
+                row.appendChild(cell);
+            });
+
+            studentTbody.appendChild(row);
         });
 
-        return input;
+        renderStudentPagination();
     }
 
-    function createTableRow(rowData, isEditing = false) {
-        const row = document.createElement('tr');
-        if (isEditing) row.classList.add('editing');
+    function renderStudentPagination() {
+        studentPagination.innerHTML = "";
+        const totalPages = Math.ceil(studentDataRows.length / studentRowsPerPage);
 
-        columnNames.forEach(col => {
-            const cell = document.createElement('td');
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = "Previous";
+        prevBtn.disabled = studentCurrentPage === 1;
+        prevBtn.onclick = () => {
+            studentCurrentPage--;
+            renderStudentTable();
+        };
+        studentPagination.appendChild(prevBtn);
 
-            if (col === "Class") {
-                cell.textContent = rowData.Class;
-                cell.classList.add('fixed-column');
-            } else if (col === "Action") {
-                const div = document.createElement('div');
-                div.classList.add('action-buttons');
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = i;
+            if (i === studentCurrentPage) pageBtn.style.fontWeight = "bold";
+            pageBtn.onclick = () => {
+                studentCurrentPage = i;
+                renderStudentTable();
+            };
+            studentPagination.appendChild(pageBtn);
+        }
 
-                if (isEditing) {
-                    const saveBtn = document.createElement('button');
-                    saveBtn.className = 'save-btn';
-                    saveBtn.textContent = 'Save';
-                    saveBtn.onclick = () => saveRow(row);
-                    div.appendChild(saveBtn);
-
-                    const cancelBtn = document.createElement('button');
-                    cancelBtn.className = 'cancel-btn';
-                    cancelBtn.textContent = 'Cancel';
-                    cancelBtn.onclick = () => renderTable();
-                    div.appendChild(cancelBtn);
-                } else {
-                    const editBtn = document.createElement('button');
-                    editBtn.className = 'edit-btn';
-                    editBtn.textContent = 'Edit';
-                    editBtn.onclick = () => renderTable(true, rowData.Class);
-                    div.appendChild(editBtn);
-
-                    const clearBtn = document.createElement('button');
-                    clearBtn.className = 'clear-btn';
-                    clearBtn.textContent = 'Clear';
-                    clearBtn.onclick = () => {
-                        if (!rowData.URL) {
-                            showValidationMessage("এই রো-তে কোনও URL নেই, তাই ক্লিয়ার করা যাবে না!");
-                            return;
-                        }
-                        rowToClear = rowData;
-                        clearConfirmModal.style.display = 'flex';
-                    };
-                    div.appendChild(clearBtn);
-                }
-
-                cell.appendChild(div);
-            } else {
-                if (isEditing) {
-                    const input = createEditableInput(col, rowData[col]);
-                    cell.appendChild(input);
-                } else {
-                    cell.textContent = rowData[col];
-                }
-            }
-
-            row.appendChild(cell);
-        });
-
-        return row;
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = "Next";
+        nextBtn.disabled = studentCurrentPage === totalPages;
+        nextBtn.onclick = () => {
+            studentCurrentPage++;
+            renderStudentTable();
+        };
+        studentPagination.appendChild(nextBtn);
     }
 
-    function saveRow(row) {
+    function saveStudentRow(row) {
         const className = row.querySelector('td').textContent;
         const input = row.querySelector('input');
         const url = input.value.trim();
 
         if (!url) {
-            showValidationMessage(`Class: ${className}\nURL ফিল্ডটি পূরণ করুন`);
+            showValidationMessage(`Class: ${className} এর URL ফাঁকা রাখা যাবে না।`);
             return;
         }
 
-        const index = allDataRows.findIndex(d => d.Class === className);
+        const index = studentDataRows.findIndex(r => r.Class === className);
         if (index !== -1) {
-            allDataRows[index].URL = url;
-            showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
+            studentDataRows[index].URL = url;
+            showValidationMessage("সফলভাবে সেভ হয়েছে!");
         }
-
-        renderTable();
+        renderStudentTable();
     }
 
-    function renderTable(isEditing = false, editClass = "") {
-        tbody.innerHTML = "";
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-
-        allDataRows.slice(start, end).forEach(rowData => {
-            const editMode = isEditing && rowData.Class === editClass;
-            const row = createTableRow(rowData, editMode);
-            tbody.appendChild(row);
-        });
-
-        renderPagination();
-    }
-
-    function renderPagination() {
-        paginationContainer.innerHTML = "";
-        const totalPages = Math.ceil(allDataRows.length / rowsPerPage);
-
-        const prevBtn = document.createElement('button');
-        prevBtn.textContent = "Previous";
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.onclick = () => {
-            currentPage--;
-            renderTable();
-        };
-        paginationContainer.appendChild(prevBtn);
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.textContent = i;
-            if (i === currentPage) pageBtn.style.fontWeight = "bold";
-            pageBtn.onclick = () => {
-                currentPage = i;
-                renderTable();
-            };
-            paginationContainer.appendChild(pageBtn);
-        }
-
-        const nextBtn = document.createElement('button');
-        nextBtn.textContent = "Next";
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.onclick = () => {
-            currentPage++;
-            renderTable();
-        };
-        paginationContainer.appendChild(nextBtn);
-    }
-
-    // Modal Button Events
-    storeInputBtn.onclick = () => {
-        if (currentEditingRow && currentEditingColIndex !== -1) {
-            const value = inputEditTextArea.value.trim();
-            const cell = currentEditingRow.children[currentEditingColIndex];
-            const input = cell.querySelector('input');
-            if (input) {
-                input.value = value;
-            }
-            inputEditModal.style.display = 'none';
-            inputEditTextArea.value = '';
-            currentEditingRow = null;
-            currentEditingColIndex = -1;
-        }
-    };
-
-    cancelInputBtn.onclick = () => {
-        inputEditModal.style.display = 'none';
-        inputEditTextArea.value = '';
-        currentEditingRow = null;
-        currentEditingColIndex = -1;
-    };
-
-    confirmClearBtn.onclick = () => {
-        if (rowToClear) {
-            rowToClear.URL = '';
-            renderTable();
-            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear = null;
-        }
-        clearConfirmModal.style.display = 'none';
-    };
-
-    cancelClearBtn.onclick = () => {
-        rowToClear = null;
-        clearConfirmModal.style.display = 'none';
-    };
-
-    document.querySelectorAll('.close-modal-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.closest('.table-modal-overlay').style.display = 'none';
-        });
-    });
-
-    showTablePage(currentPage);
-}
-initializeStudentLinkSection(); // এটি Section 2 এর টেবিল তৈরি করবে
-
-
-
-    
-    // ✅ ভবিষ্যতের সেকশন যোগ করতে চাইলে নিচের মত কল করুন:
-    // initSection3_XXXX();
-    // initSection4_XXXX();
-    // ...
-    // initSection9_XXXX();
+    renderStudentTable();
     
 });
