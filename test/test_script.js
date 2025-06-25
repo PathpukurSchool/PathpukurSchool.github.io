@@ -558,5 +558,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+// -------------------- Common Clear Confirmation Modal Logic --------------------
+let rowToClear = null; // Used by all sections
+
+document.getElementById('confirmClearBtn').addEventListener('click', () => {
+    if (rowToClear) {
+        if (rowToClear.ID !== undefined) rowToClear.ID = "";
+        if (rowToClear.Password !== undefined) rowToClear.Password = "";
+        if (rowToClear.URL !== undefined) rowToClear.URL = "";
+        if (rowToClear.Date !== undefined) rowToClear.Date = "";
+        if (rowToClear.Color !== undefined) rowToClear.Color = "";
+
+        showValidationMessage("রো-এর তথ্য মুছে ফেলা হয়েছে।");
+
+        // রিফ্রেশ করে সংশ্লিষ্ট টেবিলটি পুনরায় দেখান
+        if (rowToClear.Class) {
+            renderStudentTable(); // Section 2
+        } else if (rowToClear.Exam) {
+            renderMarksTable(); // Section 3
+        }
+        rowToClear = null;
+        clearConfirmModal.style.display = 'none';
+    }
+});
+
+document.getElementById('cancelClearBtn').addEventListener('click', () => {
+    rowToClear = null;
+    clearConfirmModal.style.display = 'none';
+});
 
 
