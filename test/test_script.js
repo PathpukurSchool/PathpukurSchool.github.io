@@ -243,9 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderTable();
-});
+    
 // -------------------- Section 2: Link for Students --------------------
-document.addEventListener('DOMContentLoaded', () => {
+
     const studentTable = document.getElementById('table-link-student');
     const studentTbody = studentTable.querySelector('tbody');
     const studentPagination = document.getElementById('pagination-link-student');
