@@ -1,3 +1,25 @@
+const ROWS_PER_PAGE = 10;
+// আপনার সকল গ্লোবাল ডেটা অ্যারে এবংPagination অবজেক্ট ডিক্লেয়ার করুন এখানে
+let examLinkTeachersTableData = [];
+let examLinkTeachersPagination = null;
+let marksSubmissionDateTableData = [];
+let marksSubmissionDatePagination = null;
+let examLinkStudentsTableData = [];
+let examLinkStudentsPagination = null;
+let helpTeacherTableData = []; // এটিও এখানে থাকবে
+let helpTeacherPagination = null;
+let noticeTeacherTableData = []; // এটিও এখানে থাকবে
+let noticeTeacherPagination = null;
+let noticeStudentTableData = []; // এটিও এখানে থাকবে
+let noticeStudentPagination = null;
+let scrollingTeacherTableData = [];
+let scrollingTeacherPagination = null;
+let scrollingStudentTableData = [];
+let scrollingStudentPagination = null;
+let currentEditingRow = null; // গ্লোবাল
+let currentTableId = null; // গ্লোবাল
+
+// --- গ্লোবাল হেল্পার ফাংশন ---
 function getColumnNamesForTable(tableId) {
     if (tableId === 'table-exam-link-teacher') return ['Class', 'ID', 'Password', 'URL', 'Action'];
     if (tableId === 'table-marks-submission-date') return ['Exam', 'Date', 'Color', 'Action'];
@@ -7,7 +29,7 @@ function getColumnNamesForTable(tableId) {
     if (tableId === 'table-notice-student') return ['Notice Text', 'Date', 'Action'];
     if (tableId === 'table-scrolling-teacher') return ['Subject', 'Color', 'Action'];
     if (tableId === 'table-scrolling-student') return ['Subject', 'Color', 'Action'];
-    return []; // যদি আইডি মিলে না যায় তবে একটি খালি অ্যারে ফিরিয়ে দিন
+    return [];
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -847,216 +869,125 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Sections 4, 5, 6: Tables with an Input Row ---
-    // Help for Teachers, Notice for Teachers, Notice for Students
-    function initializeInputRowTable(tableId, initialDataRows = []) {
-        const table = document.getElementById(tableId);
-        const tbody = table.querySelector('tbody');
-        const columnNames = getColumnNamesForTable(tableId);
-        const headerCells = Array.from(table.querySelector('thead tr').children);
-        const columnNames = headerCells.map(th => th.textContent.trim());
+// Help for Teachers, Notice for Teachers, Notice for Students
+function initializeInputRowTable(tableId, initialDataRows = []) {
+    const table = document.getElementById(tableId);
+    const tbody = table.querySelector('tbody');
+    const columnNames = getColumnNamesForTable(tableId); // Correct way to get column names
 
-        function createEditableInput(colName, currentValue) {
-            const inputElement = document.createElement(colName === 'Help Text' || colName === 'Notice Text' ? 'textarea' : 'input');
-            inputElement.type = 'text';
-            inputElement.value = currentValue;
-            inputElement.classList.add(colName === 'Help Text' || colName === 'Notice Text' ? 'textarea-input' : 'text-input');
-            // No readOnly for direct input in input row
-            return inputElement;
-        }
+    // (আপনার আগের createEditableInput ফাংশনটি এখান থেকে সরান যদি এটি গ্লোবালি থাকে)
 
-function createTableRow(rowData = {}, isEditing = false, isInputRow = false) {
-    const row = document.createElement('tr');
-    if (isEditing) row.classList.add('editing');
-    if (isInputRow) row.classList.add('input-row');
+    let currentTableData; // function-scoped variable for this table's data
+    let currentPagination; // function-scoped variable for this table's pagination object
 
-    // এখানে পরিবর্তন: columnNames এখন getColumnNamesForTable থেকে আসবে
-    // নিশ্চিত করুন যে row.closest('table') null নয়।
-    const tableId = row.closest('table') ? row.closest('table').id : null;
-    const columnNames = getColumnNamesForTable(tableId);
-
-    // যদি tableId না পাওয়া যায় বা columnNames খালি হয়, তবে এটি সমস্যার কারণ হতে পারে।
-    if (!tableId || columnNames.length === 0) {
-        console.error("Error: Could not determine column names for table:", tableId, "or table not found.");
-        // একটি ফলব্যাক হিসেবে একটি খালি রো বা ত্রুটি মেসেজ যোগ করতে পারেন
-        return row;
+    if (tableId === 'table-help-teacher') {
+        helpTeacherTableData = [...initialDataRows];
+        currentTableData = helpTeacherTableData;
+    } else if (tableId === 'table-notice-teacher') {
+        noticeTeacherTableData = [...initialDataRows];
+        currentTableData = noticeTeacherTableData;
+    } else if (tableId === 'table-notice-student') {
+        noticeStudentTableData = [...initialDataRows];
+        currentTableData = noticeStudentTableData;
     }
 
-    columnNames.forEach((colName) => {
-        const cell = document.createElement('td');
-        const value = rowData[colName] || '';
+    // Pagination setup
+    currentPagination = setupPagination(tableId, currentTableData, createTableRow);
 
-        // ... (বাকি createTableRow লজিক - এটি আগের মতোই থাকবে)
-        if (colName === 'Class' || colName === 'Exam') { // Fixed columns like Class/Exam
-            cell.textContent = value;
-            cell.classList.add('fixed-column');
-        } else if (colName === 'Action') {
-            const actionDiv = document.createElement('div');
-            actionDiv.classList.add('action-buttons');
+    function resetInputRow(row) {
+        Array.from(row.querySelectorAll('input, textarea')).forEach(input => input.value = '');
+    }
 
-            if (isInputRow) { // Input row এর জন্য শুধুমাত্র Save বোতাম
-                const saveBtn = document.createElement('button');
-                saveBtn.classList.add('save-btn');
-                saveBtn.textContent = 'Save';
-                saveBtn.addEventListener('click', () => saveRow(row, true)); // true means new row
-                actionDiv.appendChild(saveBtn);
-            } else if (isEditing) {
-                const saveBtn = document.createElement('button');
-                saveBtn.classList.add('save-btn');
-                saveBtn.textContent = 'Save';
-                saveBtn.addEventListener('click', () => saveRow(row, false)); // false means existing row
-                actionDiv.appendChild(saveBtn);
+    // saveRow ফাংশনের পরিবর্তন
+    function saveRow(row, isNewRow, saveTableId) { // saveTableId প্যারামিটার যোগ করুন
+        const rowData = {};
+        let isValid = true;
+        let validationMessageText = '';
 
-                const cancelBtn = document.createElement('button');
-                cancelBtn.classList.add('cancel-btn');
-                cancelBtn.textContent = 'Cancel';
-                cancelBtn.addEventListener('click', () => cancelEdit(row));
-                actionDiv.appendChild(cancelBtn);
-            } else {
-                // ক্লিয়ার বা ডিলিট বোতামের লজিক (যা আপনার পূর্ববর্তী নির্দেশনায় ছিল)
-                // Section 1, 2, 3 এর জন্য Clear বোতাম
-                if (tableId === 'table-exam-link-teacher' || tableId === 'table-marks-submission-date' || tableId === 'table-exam-link-student') {
-                    const clearBtn = document.createElement('button');
-                    clearBtn.classList.add('clear-btn');
-                    clearBtn.textContent = 'Clear';
-                    clearBtn.addEventListener('click', () => clearRow(row, tableId)); // tableId পাস করুন
-                    actionDiv.appendChild(clearBtn);
-                } else { // অন্যান্য টেবিলের জন্য Delete বোতাম
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.classList.add('delete-btn');
-                    deleteBtn.textContent = 'Delete';
-                    deleteBtn.addEventListener('click', () => deleteRow(row, tableId)); // tableId পাস করুন
-                    actionDiv.appendChild(deleteBtn);
-                }
-                const editBtn = document.createElement('button'); // Edit বোতাম সর্বদা থাকবে
-                editBtn.classList.add('edit-btn');
-                editBtn.textContent = 'Edit';
-                editBtn.addEventListener('click', () => editRow(row));
-                actionDiv.appendChild(editBtn); // Edit বোতাম ডিলিট/ক্লিয়ার বোতামের পর যোগ করুন
-            }
-            cell.appendChild(actionDiv);
-        } else {
-            if (isEditing || isInputRow) { // Editing or Input Row will have editable inputs
-                const input = createEditableInput(colName, value);
-                cell.appendChild(input);
-            } else {
-                if (colName === 'Color' && value) {
-                    cell.textContent = value;
-                    cell.style.backgroundColor = value;
-                    cell.style.color = getContrastYIQ(value);
-                } else {
-                    cell.textContent = value;
-                }
-            }
-        }
-        row.appendChild(cell);
-    });
-    return row;
-}
-        
-        function populateTable(data) {
-            tbody.innerHTML = '';
-            tbody.appendChild(createTableRow({}, true, false)); // Add the input row first
-            data.forEach(rowData => {
-                const row = createTableRow(rowData, false, false);
-                tbody.appendChild(row);
-            });
-        }
+        // columnNames এখন initializeInputRowTable এর স্কোপ থেকে বা getColumnNamesForTable থেকে আসবে
+        const cols = getColumnNamesForTable(saveTableId); // সঠিক টেবিলের কলাম আনুন
 
-        function resetInputRow(row) {
-            Array.from(row.querySelectorAll('input, textarea')).forEach(input => input.value = '');
-        }
-
-        function saveRow(row, isNewRow) {
-            const cells = Array.from(row.children);
-            const rowData = {};
-            let isValid = true;
-            let validationMessageText = '';
-            
-            Array.from(row.children).forEach((cell, index) => {
+        Array.from(row.children).forEach((cell, index) => {
             const input = cell.querySelector('input, textarea');
             if (input) {
-                rowData[columnNames[index]] = input.value.trim(); // এখানে columnNames ব্যবহার করুন
+                rowData[cols[index]] = input.value.trim();
             } else {
-                rowData[columnNames[index]] = cell.textContent.trim(); // Fallback for fixed columns
+                rowData[cols[index]] = cell.textContent.trim(); // Fallback for fixed columns
             }
         });
-            
-            columnNames.forEach((colName, index) => {
-                if (colName !== 'Action') {
-                    const inputElement = cells[index].querySelector('input, textarea');
-                    let cellValue = inputElement ? inputElement.value.trim() : '';
-                    rowData[colName] = cellValue;
 
-                    if (!cellValue) {
-                        isValid = false;
-                        validationMessageText = `${colName} ফিল্ডটি আবশ্যিক।`;
-                    }
-                }
-            });
-
-            if (!isValid) {
-                showValidationMessage(validationMessageText);
-                return;
-            }
-
-            console.log(`Saving to ${tableId}:`, rowData);
-            // Simulate save operation
-
-            if (isNewRow) {
-                const newDisplayRow = createTableRow(rowData, false, false);
-                tbody.prepend(newDisplayRow); // Add new row at the top (after input row)
-                resetInputRow(row); // Reset the input row
-            } else {
-                const updatedRow = createTableRow(rowData, false, false);
-                row.replaceWith(updatedRow);
-            }
-            showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
-        }
-
-        function editRow(row) {
-    const originalData = {};
-    Array.from(row.children).forEach((cell, index) => {
-        const colName = columnNames[index];
-        if (colName !== 'Action') { // 'Action' কলাম বাদ দিন
-            originalData[colName] = cell.textContent.trim();
-        }
-    });
-    row.dataset.originalData = JSON.stringify(originalData); // মূল ডেটা JSON স্ট্রিং হিসাবে সংরক্ষণ করা
-    const editingRow = createTableRow(originalData, true); // true মানে এডিটিং মোড
-    row.replaceWith(editingRow);
-}
-
-        function cancelEdit(row) {
-            const originalData = JSON.parse(row.dataset.originalData);
-            const originalRow = createTableRow(originalData, false, false);
-            row.replaceWith(originalRow);
-        }
-
-        function deleteRow(row) {
-            const originalRowData = {};
-        Array.from(row.children).forEach((cell, index) => {
-            // columnNamesMap[tableId] ব্যবহার করুন, অথবা getColumnNamesForTable(tableId)
-            const cols = getColumnNamesForTable(tableId);
-            const colName = cols[index];
+        cols.forEach((colName, index) => {
             if (colName !== 'Action') {
-                originalRowData[colName] = cell.textContent.trim();
+                const cellValue = rowData[colName]; // Use the collected rowData
+                if (!cellValue) {
+                    isValid = false;
+                    validationMessageText = `${colName} ফিল্ডটি আবশ্যিক।`;
+                }
             }
         });
-            currentEditingRow = row;
-            deleteConfirmModal.style.display = 'flex';
-            confirmDeleteBtn.onclick = () => {
-                if (currentEditingRow) {
-                    console.log(`Deleting row from ${tableId}`);
-                    currentEditingRow.remove();
-                    currentEditingRow = null;
-                    deleteConfirmModal.style.display = 'none';
-                    showValidationMessage("ডেটা সফলভাবে ডিলিট হয়েছে!");
-                }
-            };
+
+        if (!isValid) {
+            showValidationMessage(validationMessageText);
+            return;
         }
-        populateTable(initialDataRows);
+
+        console.log(`Saving to ${saveTableId}:`, rowData);
+
+        if (isNewRow) {
+            currentTableData.unshift(rowData); // Add new row at the beginning of the data array
+            showValidationMessage("নতুন ডেটা সফলভাবে যোগ হয়েছে!");
+            resetInputRow(row); // Reset the input row after saving
+        } else {
+            // Find and update the existing row in the data array
+            const originalRowData = JSON.parse(row.dataset.originalData);
+            const rowIndex = currentTableData.findIndex(item =>
+                Object.keys(originalRowData).every(key => originalRowData[key] === item[key])
+            );
+            if (rowIndex !== -1) {
+                currentTableData[rowIndex] = { ...currentTableData[rowIndex], ...rowData };
+            }
+            showValidationMessage("ডেটা সফলভাবে আপডেট হয়েছে!");
+        }
+
+        // After data is saved/updated, refresh the display and pagination buttons
+        currentPagination.displayPage(currentPagination.currentPage); // Stay on current page, or displayPage(1) if new data pushes current off
+        currentPagination.updatePaginationButtons();
     }
 
+    function editRow(row) {
+        const originalData = {};
+        const cols = getColumnNamesForTable(tableId); // Ensure correct column names
+        Array.from(row.children).forEach((cell, index) => {
+            const colName = cols[index]; // Use dynamic column name
+            if (colName !== 'Action') {
+                originalData[colName] = cell.textContent.trim();
+            }
+        });
+        row.dataset.originalData = JSON.stringify(originalData);
+        const editingRow = createTableRow(originalData, true, false);
+        row.replaceWith(editingRow);
+    }
+
+    function cancelEdit(row) {
+        if (!row.dataset.originalData) {
+            console.warn("No original data found to cancel edit.");
+            return;
+        }
+        const originalData = JSON.parse(row.dataset.originalData);
+        const originalRow = createTableRow(originalData, false, false);
+        row.replaceWith(originalRow);
+    }
+
+    // deleteRow ফাংশন পরিবর্তন
+    function deleteRow(row, deleteTableId) { // deleteTableId প্যারামিটার গ্রহণ করুন
+        currentEditingRow = row; // Store the row to be deleted globally
+        currentTableId = deleteTableId; // Store the tableId globally for confirmDeleteBtn
+
+        confirmMessage.textContent = "আপনি কি এই ডেটা ডিলিট করতে চান?";
+        deleteConfirmModal.style.display = 'flex';
+       
+    }
+}
 
     // --- Sections 7 & 8: Tables with an External Input Form ---
     // Scrolling Notice for Teachers, Scrolling Notice for Students
