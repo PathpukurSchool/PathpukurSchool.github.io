@@ -1,3 +1,15 @@
+function getColumnNamesForTable(tableId) {
+    if (tableId === 'table-exam-link-teacher') return ['Class', 'ID', 'Password', 'URL', 'Action'];
+    if (tableId === 'table-marks-submission-date') return ['Exam', 'Date', 'Color', 'Action'];
+    if (tableId === 'table-exam-link-student') return ['Class', 'URL', 'Action'];
+    if (tableId === 'table-help-teacher') return ['Help Text', 'Date', 'Action'];
+    if (tableId === 'table-notice-teacher') return ['Notice Text', 'Date', 'Action'];
+    if (tableId === 'table-notice-student') return ['Notice Text', 'Date', 'Action'];
+    if (tableId === 'table-scrolling-teacher') return ['Subject', 'Color', 'Action'];
+    if (tableId === 'table-scrolling-student') return ['Subject', 'Color', 'Action'];
+    return []; // যদি আইডি মিলে না যায় তবে একটি খালি অ্যারে ফিরিয়ে দিন
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Global Elements and Modals ---
     const inputEditModal = document.getElementById('inputEditModal');
@@ -839,6 +851,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function initializeInputRowTable(tableId, initialDataRows = []) {
         const table = document.getElementById(tableId);
         const tbody = table.querySelector('tbody');
+        const columnNames = getColumnNamesForTable(tableId);
         const headerCells = Array.from(table.querySelector('thead tr').children);
         const columnNames = headerCells.map(th => th.textContent.trim());
 
@@ -851,71 +864,95 @@ document.addEventListener('DOMContentLoaded', () => {
             return inputElement;
         }
 
-        function createTableRow(rowData = {}, isInputRow = false, isEditing = false) {
-            const row = document.createElement('tr');
-            if (isInputRow) row.classList.add('input-row');
-            if (isEditing) row.classList.add('editing');
+function createTableRow(rowData = {}, isEditing = false, isInputRow = false) {
+    const row = document.createElement('tr');
+    if (isEditing) row.classList.add('editing');
+    if (isInputRow) row.classList.add('input-row');
 
-            columnNames.forEach((colName) => {
-                const cell = document.createElement('td');
-                const value = rowData[colName] || '';
+    // এখানে পরিবর্তন: columnNames এখন getColumnNamesForTable থেকে আসবে
+    // নিশ্চিত করুন যে row.closest('table') null নয়।
+    const tableId = row.closest('table') ? row.closest('table').id : null;
+    const columnNames = getColumnNamesForTable(tableId);
 
-                if (colName === 'Action') {
-                    const actionDiv = document.createElement('div');
-                    actionDiv.classList.add('action-buttons');
+    // যদি tableId না পাওয়া যায় বা columnNames খালি হয়, তবে এটি সমস্যার কারণ হতে পারে।
+    if (!tableId || columnNames.length === 0) {
+        console.error("Error: Could not determine column names for table:", tableId, "or table not found.");
+        // একটি ফলব্যাক হিসেবে একটি খালি রো বা ত্রুটি মেসেজ যোগ করতে পারেন
+        return row;
+    }
 
-                    if (isInputRow) {
-                        const saveBtn = document.createElement('button');
-                        saveBtn.classList.add('save-btn');
-                        saveBtn.textContent = 'Save';
-                        saveBtn.addEventListener('click', () => saveRow(row, true));
-                        actionDiv.appendChild(saveBtn);
+    columnNames.forEach((colName) => {
+        const cell = document.createElement('td');
+        const value = rowData[colName] || '';
 
-                        const cancelBtn = document.createElement('button');
-                        cancelBtn.classList.add('cancel-btn');
-                        cancelBtn.textContent = 'Cancel';
-                        cancelBtn.addEventListener('click', () => resetInputRow(row));
-                        actionDiv.appendChild(cancelBtn);
-                    } else if (isEditing) {
-                        const saveBtn = document.createElement('button');
-                        saveBtn.classList.add('save-btn');
-                        saveBtn.textContent = 'Save';
-                        saveBtn.addEventListener('click', () => saveRow(row, false));
-                        actionDiv.appendChild(saveBtn);
+        // ... (বাকি createTableRow লজিক - এটি আগের মতোই থাকবে)
+        if (colName === 'Class' || colName === 'Exam') { // Fixed columns like Class/Exam
+            cell.textContent = value;
+            cell.classList.add('fixed-column');
+        } else if (colName === 'Action') {
+            const actionDiv = document.createElement('div');
+            actionDiv.classList.add('action-buttons');
 
-                        const cancelBtn = document.createElement('button');
-                        cancelBtn.classList.add('cancel-btn');
-                        cancelBtn.textContent = 'Cancel';
-                        cancelBtn.addEventListener('click', () => cancelEdit(row));
-                        actionDiv.appendChild(cancelBtn);
-                    } else {
-                        const editBtn = document.createElement('button');
-                        editBtn.classList.add('edit-btn');
-                        editBtn.textContent = 'Edit';
-                        editBtn.addEventListener('click', () => editRow(row));
+            if (isInputRow) { // Input row এর জন্য শুধুমাত্র Save বোতাম
+                const saveBtn = document.createElement('button');
+                saveBtn.classList.add('save-btn');
+                saveBtn.textContent = 'Save';
+                saveBtn.addEventListener('click', () => saveRow(row, true)); // true means new row
+                actionDiv.appendChild(saveBtn);
+            } else if (isEditing) {
+                const saveBtn = document.createElement('button');
+                saveBtn.classList.add('save-btn');
+                saveBtn.textContent = 'Save';
+                saveBtn.addEventListener('click', () => saveRow(row, false)); // false means existing row
+                actionDiv.appendChild(saveBtn);
 
-                        const deleteBtn = document.createElement('button');
-                        deleteBtn.classList.add('delete-btn');
-                        deleteBtn.textContent = 'Delete';
-                        deleteBtn.addEventListener('click', () => deleteRow(row));
-
-                        actionDiv.appendChild(editBtn);
-                        actionDiv.appendChild(deleteBtn);
-                    }
-                    cell.appendChild(actionDiv);
-                } else {
-                    if (isInputRow || isEditing) {
-                        const input = createEditableInput(colName, value);
-                        cell.appendChild(input);
-                    } else {
-                        cell.textContent = value;
-                    }
+                const cancelBtn = document.createElement('button');
+                cancelBtn.classList.add('cancel-btn');
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.addEventListener('click', () => cancelEdit(row));
+                actionDiv.appendChild(cancelBtn);
+            } else {
+                // ক্লিয়ার বা ডিলিট বোতামের লজিক (যা আপনার পূর্ববর্তী নির্দেশনায় ছিল)
+                // Section 1, 2, 3 এর জন্য Clear বোতাম
+                if (tableId === 'table-exam-link-teacher' || tableId === 'table-marks-submission-date' || tableId === 'table-exam-link-student') {
+                    const clearBtn = document.createElement('button');
+                    clearBtn.classList.add('clear-btn');
+                    clearBtn.textContent = 'Clear';
+                    clearBtn.addEventListener('click', () => clearRow(row, tableId)); // tableId পাস করুন
+                    actionDiv.appendChild(clearBtn);
+                } else { // অন্যান্য টেবিলের জন্য Delete বোতাম
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.classList.add('delete-btn');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.addEventListener('click', () => deleteRow(row, tableId)); // tableId পাস করুন
+                    actionDiv.appendChild(deleteBtn);
                 }
-                row.appendChild(cell);
-            });
-            return row;
+                const editBtn = document.createElement('button'); // Edit বোতাম সর্বদা থাকবে
+                editBtn.classList.add('edit-btn');
+                editBtn.textContent = 'Edit';
+                editBtn.addEventListener('click', () => editRow(row));
+                actionDiv.appendChild(editBtn); // Edit বোতাম ডিলিট/ক্লিয়ার বোতামের পর যোগ করুন
+            }
+            cell.appendChild(actionDiv);
+        } else {
+            if (isEditing || isInputRow) { // Editing or Input Row will have editable inputs
+                const input = createEditableInput(colName, value);
+                cell.appendChild(input);
+            } else {
+                if (colName === 'Color' && value) {
+                    cell.textContent = value;
+                    cell.style.backgroundColor = value;
+                    cell.style.color = getContrastYIQ(value);
+                } else {
+                    cell.textContent = value;
+                }
+            }
         }
-
+        row.appendChild(cell);
+    });
+    return row;
+}
+        
         function populateTable(data) {
             tbody.innerHTML = '';
             tbody.appendChild(createTableRow({}, true, false)); // Add the input row first
@@ -934,7 +971,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const rowData = {};
             let isValid = true;
             let validationMessageText = '';
-
+            
+            Array.from(row.children).forEach((cell, index) => {
+            const input = cell.querySelector('input, textarea');
+            if (input) {
+                rowData[columnNames[index]] = input.value.trim(); // এখানে columnNames ব্যবহার করুন
+            } else {
+                rowData[columnNames[index]] = cell.textContent.trim(); // Fallback for fixed columns
+            }
+        });
+            
             columnNames.forEach((colName, index) => {
                 if (colName !== 'Action') {
                     const inputElement = cells[index].querySelector('input, textarea');
@@ -987,6 +1033,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function deleteRow(row) {
+            const originalRowData = {};
+        Array.from(row.children).forEach((cell, index) => {
+            // columnNamesMap[tableId] ব্যবহার করুন, অথবা getColumnNamesForTable(tableId)
+            const cols = getColumnNamesForTable(tableId);
+            const colName = cols[index];
+            if (colName !== 'Action') {
+                originalRowData[colName] = cell.textContent.trim();
+            }
+        });
             currentEditingRow = row;
             deleteConfirmModal.style.display = 'flex';
             confirmDeleteBtn.onclick = () => {
