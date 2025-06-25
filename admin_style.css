@@ -43,7 +43,19 @@ h2 {
     border-radius: 8px;
     margin-bottom: 35px;
     padding: 20px;
-    box-shadow: 0 0 20px rgba(0, 191, 255, 0.8); /* আরও স্পষ্ট এবং গাঢ় গ্লো */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0);
+    animation: glow-fade 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow-fade {
+    0% {
+        text-shadow: 0 0 5px rgba(0, 123, 255, 0), /* No glow */
+                     0 0 10px rgba(0, 123, 255, 0);
+    }
+    100% {
+        text-shadow: 0 0 10px rgba(0, 123, 255, 0.8), /* Stronger glow */
+                     0 0 20px rgba(0, 123, 255, 0.6);
+    }
 }
 
 /* টেক্সটের চারপাশে একটি আলোকরশ্মির প্রভাব তৈরি করা হয় */
@@ -53,7 +65,7 @@ h2 {
     margin-bottom: 20px;
     font-size: 26px;
     font-size: 1.6em;
-    color: #007bff; /* Blue text */
+    color: darkblue; /* Blue text */
     text-align: center;
     text-shadow: 0 0 5px rgba(0, 123, 255, 0); /* Initial transparent shadow */
     animation: glow-fade 2s ease-in-out infinite alternate;
