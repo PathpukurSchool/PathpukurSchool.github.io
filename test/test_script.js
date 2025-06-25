@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    
+    // Section 2: Link for Student
 
     function initializeStudentLinkSection() {
     const table = document.getElementById('table-link-student');
@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showTablePage(currentPage);
 }
-
+initializeStudentLinkSection(); // এটি Section 2 এর টেবিল তৈরি করবে
 
 
 
