@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderTable();
-
+});
 // -------------------- Section 2: Link for Students --------------------
 document.addEventListener('DOMContentLoaded', () => {
     const studentTable = document.getElementById('table-link-student');
