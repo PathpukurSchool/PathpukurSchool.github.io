@@ -400,6 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderStudentTable();
 
     // -------------------- Section 3: Marks Submission Date for Teachers --------------------
+
     const marksTable = document.getElementById('table-marks-submission');
     const marksTbody = marksTable.querySelector('tbody');
     const marksPagination = document.getElementById('pagination-marks-submission');
@@ -408,13 +409,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const marksRowsPerPage = 10;
     let marksCurrentPage = 1;
 
-    const exams = [
+    const examList = [
         "1st Exam", "2nd Exam", "X Test", "3rd Exam",
         "XI Semester I", "XI Semester II", "XII Test"
     ];
 
-    const today = new Date().toISOString().split("T")[0];
-    const marksDataRows = exams.map(exam => ({ Exam: exam, Date: today, Color: "" }));
+    const marksDataRows = examList.map(exam => ({
+        Exam: exam,
+        Date: new Date().toISOString().split('T')[0], // Default today
+        Color: ""
+    }));
 
     function renderMarksTable(isEditing = false, editExam = "") {
         marksTbody.innerHTML = "";
@@ -468,25 +472,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         div.appendChild(clearBtn);
                     }
                     cell.appendChild(div);
-                } else if (col === "Date") {
+                } else {
                     if (isEditing && rowData.Exam === editExam) {
                         const input = document.createElement('input');
-                        input.type = 'date';
-                        input.value = rowData.Date || today;
-                        input.className = 'date-input';
+                        input.value = rowData[col];
+                        input.readOnly = false;
+
+                        if (col === "Date") input.type = 'date';
+                        if (col === "Color") input.type = 'color';
+
+                        input.addEventListener('change', () => {
+                            input.setAttribute('data-modified', 'true');
+                        });
+
                         cell.appendChild(input);
                     } else {
-                        cell.textContent = rowData.Date;
-                    }
-                } else if (col === "Color") {
-                    if (isEditing && rowData.Exam === editExam) {
-                        const input = document.createElement('input');
-                        input.type = 'color';
-                        input.value = rowData.Color || "#ffffff";
-                        input.className = 'color-input';
-                        cell.appendChild(input);
-                    } else {
-                        cell.textContent = rowData.Color;
+                        cell.textContent = rowData[col];
                     }
                 }
                 row.appendChild(cell);
@@ -505,45 +506,57 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevBtn = document.createElement('button');
         prevBtn.textContent = "Previous";
         prevBtn.disabled = marksCurrentPage === 1;
-        prevBtn.onclick = () => { marksCurrentPage--; renderMarksTable(); };
+        prevBtn.onclick = () => {
+            marksCurrentPage--;
+            renderMarksTable();
+        };
         marksPagination.appendChild(prevBtn);
 
         for (let i = 1; i <= totalPages; i++) {
             const pageBtn = document.createElement('button');
             pageBtn.textContent = i;
             if (i === marksCurrentPage) pageBtn.style.fontWeight = "bold";
-            pageBtn.onclick = () => { marksCurrentPage = i; renderMarksTable(); };
+            pageBtn.onclick = () => {
+                marksCurrentPage = i;
+                renderMarksTable();
+            };
             marksPagination.appendChild(pageBtn);
         }
 
         const nextBtn = document.createElement('button');
         nextBtn.textContent = "Next";
         nextBtn.disabled = marksCurrentPage === totalPages;
-        nextBtn.onclick = () => { marksCurrentPage++; renderMarksTable(); };
+        nextBtn.onclick = () => {
+            marksCurrentPage++;
+            renderMarksTable();
+        };
         marksPagination.appendChild(nextBtn);
     }
 
     function saveMarksRow(row) {
-        const examName = row.querySelector('td').textContent;
+        const exam = row.querySelector('td').textContent;
         const inputs = row.querySelectorAll('input');
-        const dateInput = inputs[0];
-        const colorInput = inputs[1];
+        const date = inputs[0].value.trim();
+        const color = inputs[1].value.trim();
 
-        if (!dateInput.value) {
-            showValidationMessage(`Exam: ${examName} এর Date ফাঁকা রাখা যাবে না।`);
+        if (!date) {
+            showValidationMessage(`Exam: ${exam} এর Date ফাঁকা রাখা যাবে না।`);
             return;
         }
 
-        const index = marksDataRows.findIndex(r => r.Exam === examName);
+        const index = marksDataRows.findIndex(r => r.Exam === exam);
         if (index !== -1) {
-            marksDataRows[index].Date = dateInput.value;
-            marksDataRows[index].Color = colorInput ? colorInput.value : "";
+            marksDataRows[index].Date = date;
+            marksDataRows[index].Color = color;
             showValidationMessage("সফলভাবে সেভ হয়েছে!");
         }
+
         renderMarksTable();
     }
 
     renderMarksTable();
 });
+
+
 
 
