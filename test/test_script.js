@@ -256,7 +256,12 @@ function initializeStudentLinkSection() {
     const rowsPerPage = 10;
     let currentPage = 1;
 
-    const classes = ["V", "VI", "VII", "VIII", "IX", "X", "XI_SCI", "XI_ART", "XII_SCI", "XII_ART"];
+    const classes = [
+        "V_1ST", "V_2ND", "V_3RD", "VI_1ST", "VI_2ND", "VI_3RD",
+        "VII_1ST", "VII_2ND", "VII_3RD", "VIII_1ST", "VIII_2ND", "VIII_3RD",
+        "IX_1ST", "IX_2ND", "IX_3RD", "X_1ST", "X_2ND", "X_TEST",
+        "XI_SEM1", "XI_SEM2", "XII_TEST"
+    ];
     const dataRows = classes.map(cls => ({ Class: cls, URL: '' }));
 
     function showTablePage(page) {
