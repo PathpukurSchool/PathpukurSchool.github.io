@@ -244,3 +244,138 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderTable();
 });
+
+
+
+
+
+function initializeStudentLinkSection() {
+    const table = document.getElementById('table-link-student');
+    const tbody = table.querySelector('tbody');
+    const pagination = document.getElementById('pagination-link-student');
+    const rowsPerPage = 10;
+    let currentPage = 1;
+
+    const classes = ["V", "VI", "VII", "VIII", "IX", "X", "XI_SCI", "XI_ART", "XII_SCI", "XII_ART"];
+    const dataRows = classes.map(cls => ({ Class: cls, URL: '' }));
+
+    function showTablePage(page) {
+        tbody.innerHTML = '';
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const slice = dataRows.slice(start, end);
+
+        slice.forEach(rowData => {
+            const row = document.createElement('tr');
+
+            // Class Column
+            const tdClass = document.createElement('td');
+            tdClass.textContent = rowData.Class;
+            row.appendChild(tdClass);
+
+            // URL Column
+            const tdURL = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = rowData.URL;
+            input.readOnly = true;
+            input.addEventListener('click', () => {
+                inputEditModalHeading.textContent = `Edit URL for ${rowData.Class}`;
+                inputEditTextArea.value = input.value;
+                currentEditingRow = input.closest('tr');
+                currentEditingColIndex = 1; // URL column
+                inputEditModal.style.display = 'flex';
+            });
+            tdURL.appendChild(input);
+            row.appendChild(tdURL);
+
+            // Action Column
+            const tdAction = document.createElement('td');
+            const div = document.createElement('div');
+            div.className = 'action-buttons';
+
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'save-btn';
+            saveBtn.textContent = 'Save';
+            saveBtn.onclick = () => {
+                const val = input.value.trim();
+                if (!val) {
+                    showValidationMessage(`Class: ${rowData.Class}\nURL ফিল্ডটি পূরণ করুন`);
+                    return;
+                }
+                rowData.URL = val;
+                showValidationMessage("ডেটা সফলভাবে সেভ হয়েছে!");
+            };
+
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'clear-btn';
+            clearBtn.textContent = 'Clear';
+            clearBtn.onclick = () => {
+                if (!rowData.URL) {
+                    showValidationMessage("এই রো-তে কোনও URL নেই, তাই ক্লিয়ার করা যাবে না!");
+                    return;
+                }
+                rowToClear = rowData;
+                clearConfirmModal.style.display = 'flex';
+            };
+
+            div.appendChild(saveBtn);
+            div.appendChild(clearBtn);
+            tdAction.appendChild(div);
+            row.appendChild(tdAction);
+
+            tbody.appendChild(row);
+        });
+
+        // Pagination
+        pagination.innerHTML = '';
+        const totalPages = Math.ceil(dataRows.length / rowsPerPage);
+
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = 'Previous';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => {
+            currentPage--;
+            showTablePage(currentPage);
+        };
+
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = 'Next';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => {
+            currentPage++;
+            showTablePage(currentPage);
+        };
+
+        pagination.appendChild(prevBtn);
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = i;
+            pageBtn.onclick = () => {
+                currentPage = i;
+                showTablePage(currentPage);
+            };
+            if (i === currentPage) pageBtn.style.fontWeight = 'bold';
+            pagination.appendChild(pageBtn);
+        }
+        pagination.appendChild(nextBtn);
+    }
+
+    // Clear Modal Logic
+    confirmClearBtn.onclick = () => {
+        if (rowToClear) {
+            rowToClear.URL = '';
+            showTablePage(currentPage);
+            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+            rowToClear = null;
+        }
+        clearConfirmModal.style.display = 'none';
+    };
+
+    cancelClearBtn.onclick = () => {
+        rowToClear = null;
+        clearConfirmModal.style.display = 'none';
+    };
+
+    showTablePage(currentPage);
+}
