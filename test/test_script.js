@@ -398,5 +398,152 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     renderStudentTable();
-    
+
+    // -------------------- Section 3: Marks Submission Date for Teachers --------------------
+    const marksTable = document.getElementById('table-marks-submission');
+    const marksTbody = marksTable.querySelector('tbody');
+    const marksPagination = document.getElementById('pagination-marks-submission');
+
+    const marksColumnNames = ["Exam", "Date", "Color", "Action"];
+    const marksRowsPerPage = 10;
+    let marksCurrentPage = 1;
+
+    const exams = [
+        "1st Exam", "2nd Exam", "X Test", "3rd Exam",
+        "XI Semester I", "XI Semester II", "XII Test"
+    ];
+
+    const today = new Date().toISOString().split("T")[0];
+    const marksDataRows = exams.map(exam => ({ Exam: exam, Date: today, Color: "" }));
+
+    function renderMarksTable(isEditing = false, editExam = "") {
+        marksTbody.innerHTML = "";
+        const start = (marksCurrentPage - 1) * marksRowsPerPage;
+        const end = start + marksRowsPerPage;
+
+        marksDataRows.slice(start, end).forEach(rowData => {
+            const row = document.createElement('tr');
+            if (isEditing && rowData.Exam === editExam) row.classList.add('editing');
+
+            marksColumnNames.forEach(col => {
+                const cell = document.createElement('td');
+                if (col === "Exam") {
+                    cell.textContent = rowData.Exam;
+                    cell.classList.add('fixed-column');
+                } else if (col === "Action") {
+                    const div = document.createElement('div');
+                    div.classList.add('action-buttons');
+
+                    if (isEditing && rowData.Exam === editExam) {
+                        const saveBtn = document.createElement('button');
+                        saveBtn.className = 'save-btn';
+                        saveBtn.textContent = 'Save';
+                        saveBtn.onclick = () => saveMarksRow(row);
+                        div.appendChild(saveBtn);
+
+                        const cancelBtn = document.createElement('button');
+                        cancelBtn.className = 'cancel-btn';
+                        cancelBtn.textContent = 'Cancel';
+                        cancelBtn.onclick = () => renderMarksTable();
+                        div.appendChild(cancelBtn);
+                    } else {
+                        const editBtn = document.createElement('button');
+                        editBtn.className = 'edit-btn';
+                        editBtn.textContent = 'Edit';
+                        editBtn.onclick = () => renderMarksTable(true, rowData.Exam);
+                        div.appendChild(editBtn);
+
+                        const clearBtn = document.createElement('button');
+                        clearBtn.className = 'clear-btn';
+                        clearBtn.textContent = 'Clear';
+                        clearBtn.onclick = () => {
+                            const target = marksDataRows.find(r => r.Exam === rowData.Exam);
+                            if (!target.Date && !target.Color) {
+                                showValidationMessage("এই রো-তে কোনও তথ্য নেই, তাই ক্লিয়ার করা যাবে না!");
+                                return;
+                            }
+                            rowToClear = target;
+                            clearConfirmModal.style.display = 'flex';
+                        };
+                        div.appendChild(clearBtn);
+                    }
+                    cell.appendChild(div);
+                } else if (col === "Date") {
+                    if (isEditing && rowData.Exam === editExam) {
+                        const input = document.createElement('input');
+                        input.type = 'date';
+                        input.value = rowData.Date || today;
+                        input.className = 'date-input';
+                        cell.appendChild(input);
+                    } else {
+                        cell.textContent = rowData.Date;
+                    }
+                } else if (col === "Color") {
+                    if (isEditing && rowData.Exam === editExam) {
+                        const input = document.createElement('input');
+                        input.type = 'color';
+                        input.value = rowData.Color || "#ffffff";
+                        input.className = 'color-input';
+                        cell.appendChild(input);
+                    } else {
+                        cell.textContent = rowData.Color;
+                    }
+                }
+                row.appendChild(cell);
+            });
+
+            marksTbody.appendChild(row);
+        });
+
+        renderMarksPagination();
+    }
+
+    function renderMarksPagination() {
+        marksPagination.innerHTML = "";
+        const totalPages = Math.ceil(marksDataRows.length / marksRowsPerPage);
+
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = "Previous";
+        prevBtn.disabled = marksCurrentPage === 1;
+        prevBtn.onclick = () => { marksCurrentPage--; renderMarksTable(); };
+        marksPagination.appendChild(prevBtn);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = i;
+            if (i === marksCurrentPage) pageBtn.style.fontWeight = "bold";
+            pageBtn.onclick = () => { marksCurrentPage = i; renderMarksTable(); };
+            marksPagination.appendChild(pageBtn);
+        }
+
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = "Next";
+        nextBtn.disabled = marksCurrentPage === totalPages;
+        nextBtn.onclick = () => { marksCurrentPage++; renderMarksTable(); };
+        marksPagination.appendChild(nextBtn);
+    }
+
+    function saveMarksRow(row) {
+        const examName = row.querySelector('td').textContent;
+        const inputs = row.querySelectorAll('input');
+        const dateInput = inputs[0];
+        const colorInput = inputs[1];
+
+        if (!dateInput.value) {
+            showValidationMessage(`Exam: ${examName} এর Date ফাঁকা রাখা যাবে না।`);
+            return;
+        }
+
+        const index = marksDataRows.findIndex(r => r.Exam === examName);
+        if (index !== -1) {
+            marksDataRows[index].Date = dateInput.value;
+            marksDataRows[index].Color = colorInput ? colorInput.value : "";
+            showValidationMessage("সফলভাবে সেভ হয়েছে!");
+        }
+        renderMarksTable();
+    }
+
+    renderMarksTable();
 });
+
+
