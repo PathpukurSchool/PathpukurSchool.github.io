@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderTable();
-});
+
 
 
 
@@ -381,6 +381,10 @@ function initializeStudentLinkSection() {
         rowToClear = null;
         clearConfirmModal.style.display = 'none';
     };
+
+
+
+    });
 
     showTablePage(currentPage);
 }
