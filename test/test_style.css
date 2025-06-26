@@ -1,237 +1,179 @@
-
-/* General styles */
+/* Base fonts and layout */
 body {
-  font-family: 'Noto Sans Bengali', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f4fa;
-  color: #222;
+    font-family: 'Noto Sans Bengali', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f9;
+    color: #333;
 }
 
-/* Header */
 .main-header {
-  background-color: #1e88e5;
-  padding: 20px;
-  text-align: center;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
+    background-color: #00587a;
+    color: white;
+    padding: 20px;
+    text-align: center;
 }
 
-/* Admin Panel Box with light shade and hover effect */
 .admin-panel-container {
-  padding: 20px;
-  max-width: 1100px;
-  margin: auto;
+    padding: 20px;
 }
 
-#exam-link-teachers {
-  background: #e3f2fd;
-  border-radius: 10px;
-  padding: 20px;
-  transition: box-shadow 0.3s ease;
+/* Section Container */
+.admin-section {
+    margin: 30px 0;
+    padding: 20px;
+    background-color: #e0ffff;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
-#exam-link-teachers:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.admin-section:hover {
+    background-color: #d0f0f0;
 }
 
-/* Section Heading */
 .section-heading {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #0d47a1;
-  border-left: 6px solid #1e88e5;
-  padding-left: 10px;
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #004050;
+    border-bottom: 2px solid #008080;
+    padding-bottom: 5px;
 }
 
-/* Table Wrapper */
-.table-wrapper {
-  overflow-x: auto;
-  background-color: #fff;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-/* Table styles */
+/* Table Styling */
 .data-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 600px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    table-layout: fixed;
 }
 
 .data-table th,
 .data-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border: 1px solid #ccc;
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    word-wrap: break-word;
 }
 
-.data-table thead {
-  background-color: #1976d2;
-  color: white;
-  position: sticky;
-  top: 0;
+.data-table th {
+    background-color: #006d77;
+    color: white;
 }
 
-/* Row hover */
-.data-table tbody tr:hover {
-  background-color: #e3f2fd;
+.data-table tr:hover {
+    background-color: #f1f1f1;
 }
 
-/* Row in edit mode */
-tr.editing {
-  background-color: #fff9c4 !important;
+.data-table tr.editing {
+    background-color: #fff6d5 !important;
 }
 
-/* Fixed column */
 .fixed-column {
-  font-weight: bold;
-  color: #333;
+    font-weight: bold;
+    color: #003344;
 }
 
-/* Action buttons container */
-.action-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-/* Button Base Style */
+/* Button Styling */
 button {
-  padding: 8px 14px;
-  font-size: 14px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.25s;
+    padding: 5px 10px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
 }
 
-/* Button Colors */
 .edit-btn {
-  background-color: #4caf50;
-  color: white;
+    background-color: #007bff;
+    color: white;
 }
 .edit-btn:hover {
-  background-color: #388e3c;
+    background-color: #0056b3;
 }
 
 .save-btn {
-  background-color: #2196f3;
-  color: white;
+    background-color: #28a745;
+    color: white;
 }
 .save-btn:hover {
-  background-color: #1565c0;
+    background-color: #1e7e34;
 }
 
 .cancel-btn {
-  background-color: #9e9e9e;
-  color: white;
+    background-color: #6c757d;
+    color: white;
 }
 .cancel-btn:hover {
-  background-color: #616161;
+    background-color: #5a6268;
 }
 
 .clear-btn {
-  background-color: #ff7043;
-  color: white;
+    background-color: #ff5722;
+    color: white;
 }
 .clear-btn:hover {
-  background-color: #e64a19;
+    background-color: #e64a19;
 }
 
-.store-btn {
-  background-color: #673ab7;
-  color: white;
+/* Modal Styling */
+.table-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
-.store-btn:hover {
-  background-color: #512da8;
+
+.table-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.input-edit-content textarea,
+.input-edit-content input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 16px;
 }
 
 /* Pagination */
 .pagination {
-  margin-top: 15px;
-  text-align: right;
+    text-align: center;
+    margin-top: 10px;
 }
 
 .pagination button {
-  margin: 0 2px;
-  background-color: #1e88e5;
-  color: white;
+    padding: 6px 12px;
+    margin: 0 3px;
+    background-color: #ddd;
 }
 .pagination button:hover {
-  background-color: #1565c0;
+    background-color: #bbb;
 }
 .pagination button:disabled {
-  background-color: #b0bec5;
-  cursor: not-allowed;
+    background-color: #eee;
+    color: #aaa;
 }
 
-/* Modal Styles */
-.table-modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-}
-
-.table-modal-content {
-  background-color: white;
-  padding: 20px 25px;
-  border-radius: 10px;
-  min-width: 300px;
-  max-width: 90%;
-  position: relative;
-  text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.input-edit-content textarea {
-  width: 100%;
-  min-height: 80px;
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 16px;
-  font-family: 'Noto Sans Bengali', sans-serif;
-}
-
-.modal-actions {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.close-modal-btn {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-  color: #555;
-}
-.close-modal-btn:hover {
-  color: #000;
-}
-
-/* Responsive */
-@media screen and (max-width: 768px) {
-  .data-table th,
-  .data-table td {
-    padding: 8px 10px;
-  }
-
-  .main-header {
-    font-size: 20px;
-    padding: 15px;
-  }
-
-  .section-heading {
-    font-size: 18px;
-  }
+/* Inputs */
+.data-table input[type="text"],
+.data-table input[type="date"],
+.data-table input[type="color"] {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
