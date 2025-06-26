@@ -25,6 +25,8 @@ body {
   margin: auto;
 }
 
+#marks-submission,
+#student-link-section,
 #exam-link-teachers {
   background: #e3f2fd;
   border-radius: 10px;
@@ -32,6 +34,8 @@ body {
   transition: box-shadow 0.3s ease;
 }
 
+#marks-submission:hover,
+#student-link-section:hover,
 #exam-link-teachers:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
