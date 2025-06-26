@@ -553,68 +553,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderMarksTable();
     }
-renderMarksTable();
-});
+
+
+
+
+
+    
+confirmClearBtn.onclick = () => {
+        if (rowToClear) {
+            rowToClear.Date = "";
+            rowToClear.Color = "";
+            renderMarksTable();
+            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+            rowToClear = null;
+        }
+        clearConfirmModal.style.display = 'none';
+    };
+
+
 
     
-
-
-
-
-                
-                
-
-
-// -------------------- Clear Modal Setup --------------------
-
-let rowToClear = null;
-
-const clearConfirmModal = document.createElement('div');
-clearConfirmModal.className = 'table-modal-overlay';
-clearConfirmModal.id = 'clearConfirmModal';
-clearConfirmModal.innerHTML = `
-    <div class="table-modal-content">
-        <p>আপনি কি ক্লিয়ার করতে চান?</p>
-        <div class="modal-actions">
-            <button id="confirmClearBtn">হ্যাঁ</button>
-            <button id="cancelClearBtn">না</button>
-        </div>
-    </div>
-`;
-document.body.appendChild(clearConfirmModal);
-
-const confirmClearBtn = document.getElementById('confirmClearBtn');
-const cancelClearBtn = document.getElementById('cancelClearBtn');
-
-confirmClearBtn.addEventListener('click', () => {
-    if (!rowToClear) return;
-
-    // Section 3 structure
-    if ('Date' in rowToClear || 'Color' in rowToClear) {
-        rowToClear.Date = '';
-        rowToClear.Color = '';
-        renderMarksTable();
-        showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-    }
-
-    rowToClear = null;
-    clearConfirmModal.style.display = 'none';
-});
-
-cancelClearBtn.addEventListener('click', () => {
-    rowToClear = null;
-    clearConfirmModal.style.display = 'none';
-});
-
-// -------------------- Validation Message Modal --------------------
-
-function showValidationMessage(message) {
-    const validationMessage = document.getElementById('validationMessage');
-    const validationModal = document.getElementById('validationModal');
-    validationMessage.textContent = message;
-    validationModal.style.display = 'flex';
-}
-
-// -------------------- Initial Table Load --------------------
-
 renderMarksTable();
+});
