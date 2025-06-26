@@ -148,7 +148,7 @@
 
      <!-- Section 5,  ......  -->
 
-
+  
     <section id="scrolling-student" class="admin-section">
       <h3 class="section-heading">Scrolling Notice for Students</h3>
       <div class="table-wrapper">
@@ -184,6 +184,145 @@
     </div>
   </div>
 
+  <script>
+  // --- স্ক্রোলিং স্টুডেন্ট JS কোড ---
+
+  const ROWS_PER_PAGE = 10;
+  let data = [];
+  let pagination = null;
+  let rowToDelete = null;
+
+  const valModal = document.getElementById('validationModal');
+  const valMsg = document.getElementById('validationMessage');
+  const valCloseBtn = document.getElementById('validationCloseBtn');
+  const delModal = document.getElementById('deleteConfirmModal');
+  const delMsg = document.getElementById('confirmMessage');
+  const delOk = document.getElementById('confirmDeleteBtn');
+  const delCancel = document.getElementById('cancelDeleteBtn');
+
+  function showMsg(m) { valMsg.textContent = m; valModal.style.display = 'flex'; }
+
+  function createRow(obj={}, isInput=false, isEdit=false) {
+    const tr = document.createElement('tr');
+    if(isEdit) tr.classList.add('editing');
+    if(isInput) tr.classList.add('input-row');
+
+    ['Subject','Color','Action'].forEach(col => {
+      const td = document.createElement('td');
+      if(col==='Action') {
+        const div = document.createElement('div'); div.classList.add('action-buttons');
+        if(isInput) {
+          const add = document.createElement('button');
+          add.textContent='Add'; add.className='save-btn';
+          add.onclick = ()=>save(tr,true);
+          div.appendChild(add);
+        } else if(isEdit) {
+          const save = document.createElement('button');
+          save.textContent='Save'; save.className='save-btn';
+          save.onclick = ()=>save(tr,false);
+          const cancel = document.createElement('button');
+          cancel.textContent='Cancel'; cancel.className='cancel-btn';
+          cancel.onclick = ()=>renderCurr();
+          div.append(save,cancel);
+        } else {
+          const edit = document.createElement('button');
+          edit.textContent='Edit'; edit.className='edit-btn';
+          edit.onclick = ()=>editRow(tr);
+          const del = document.createElement('button');
+          del.textContent='Delete'; del.className='clear-btn';
+          del.onclick = ()=>{
+            rowToDelete = tr;
+            delModal.style.display = 'flex';
+          };
+          div.append(edit,del);
+        }
+        td.appendChild(div);
+      } else {
+        if(isInput||isEdit) {
+          const inp = document.createElement('input');
+          inp.type = col==='Color' ? 'color' : 'text';
+          inp.value = obj[col]||'';
+          td.appendChild(inp);
+        } else td.textContent = obj[col]||'';
+      }
+      tr.appendChild(td);
+    });
+    return tr;
+  }
+
+  function setup() {
+    const tbody = document.querySelector('#table-scrolling-student tbody');
+    const pag = document.getElementById('pagination-table-scrolling-student');
+    let curr=1, total=()=>Math.ceil(data.length/ROWS_PER_PAGE);
+    
+    function renderPage(p=1) {
+      curr=p; tbody.innerHTML='';
+      tbody.appendChild(createRow({},{},true));
+      let start=(p-1)*ROWS_PER_PAGE;
+      data.slice(start,start+ROWS_PER_PAGE).forEach(o=>tbody.appendChild(createRow(o,false,false)));
+      renderPag();
+    }
+    function renderPag() {
+      pag.innerHTML='';
+      if(total()==0) return;
+      const prev=document.createElement('button');
+      prev.textContent='Prev'; prev.disabled=curr===1;
+      prev.onclick=()=>renderPage(curr-1); pag.append(prev);
+      for(let i=1;i<=total();i++){
+        const b=document.createElement('button');
+        b.textContent=i; if(i===curr)b.style.fontWeight='bold';
+        b.onclick=()=>renderPage(i); pag.append(b);
+      }
+      const next=document.createElement('button');
+      next.textContent='Next'; next.disabled=curr===total();
+      next.onclick=()=>renderPage(curr+1); pag.append(next);
+    }
+
+    renderCurr = () => renderPage(curr);
+    pagination = {renderPage};
+
+    renderPage(1);
+  }
+
+  function save(tr,isNew) {
+    const inputs=tr.querySelectorAll('input');
+    const obj={Subject:inputs[0].value.trim(),Color:inputs[1].value};
+    if(!obj.Subject) { showMsg('Subject ফাঁকা যাবে না'); return; }
+    if(isNew) data.unshift(obj); else {
+      const orig = JSON.parse(tr.dataset.orig);
+      const idx=data.findIndex(o=>o.Subject===orig.Subject && o.Color===orig.Color);
+      if(idx>=0) data[idx]=obj;
+    }
+    setup();
+  }
+
+  function editRow(tr) {
+    const orig={};
+    tr.querySelectorAll('td').forEach((td,i)=>{
+      if(i<2) orig[['Subject','Color'][i]] = td.textContent.trim();
+    });
+    tr.dataset.orig = JSON.stringify(orig);
+    tr.replaceWith(createRow(orig,false,true));
+  }
+
+  delCancel.onclick = ()=>{ delModal.style.display='none'; rowToDelete=null; };
+  valCloseBtn.onclick = ()=>valModal.style.display='none';
+  delOk.onclick = ()=>{
+    if(rowToDelete){
+      const orig=JSON.parse(rowToDelete.dataset.orig);
+      data=data.filter(o=>!(o.Subject===orig.Subject&&o.Color===orig.Color));
+      setup();
+      showMsg('সফল ভাবে ডিলেট হয়েছে');
+    }
+    delModal.style.display='none'; rowToDelete=null;
+  };
+
+  document.addEventListener('DOMContentLoaded', setup);
+  </script>
+
+
+    
+
 
 
 
@@ -193,7 +332,7 @@
 
 
     <script src="scrolling_teacher.js"></script>
-    <script src="scrolling_student.js"></script>
+  
 
 
 
