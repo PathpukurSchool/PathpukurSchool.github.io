@@ -553,6 +553,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderMarksTable();
     }
+renderMarksTable();
+});
 
     
 
@@ -616,5 +618,3 @@ function showValidationMessage(message) {
 // -------------------- Initial Table Load --------------------
 
 renderMarksTable();
-
-});
