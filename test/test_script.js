@@ -557,25 +557,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
 
-confirmClearBtn.onclick = () => {
-        if (rowToClear) {
-            rowToClear.Date = "";
-            rowToClear.Color = "";
-            renderTable();
-            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear = null;
-        }
-        clearConfirmModal.style.display = 'none';
-    };
 
 
+                
+                
 
-    
 
-    renderMarksTable();
-});
-
-// -------------------- Clear Button Modal and Logic (Common for All Sections) --------------------
+// -------------------- Clear Modal Setup --------------------
 
 let rowToClear = null;
 
@@ -599,19 +587,12 @@ const cancelClearBtn = document.getElementById('cancelClearBtn');
 confirmClearBtn.addEventListener('click', () => {
     if (!rowToClear) return;
 
-    // Clear appropriate fields based on the structure
-    if ('ID' in rowToClear && 'Password' in rowToClear && 'URL' in rowToClear) {
-        rowToClear.ID = '';
-        rowToClear.Password = '';
-        rowToClear.URL = '';
-        if (typeof renderExamLinkTeachersTable === 'function') renderExamLinkTeachersTable();
-    } else if ('URL' in rowToClear && Object.keys(rowToClear).length === 2) {
-        rowToClear.URL = '';
-        if (typeof renderStudentTable === 'function') renderStudentTable();
-    } else if ('Date' in rowToClear || 'Color' in rowToClear) {
+    // Section 3 structure
+    if ('Date' in rowToClear || 'Color' in rowToClear) {
         rowToClear.Date = '';
         rowToClear.Color = '';
-        if (typeof renderMarksTable === 'function') renderMarksTable();
+        renderMarksTable();
+        showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
     }
 
     rowToClear = null;
@@ -623,3 +604,17 @@ cancelClearBtn.addEventListener('click', () => {
     clearConfirmModal.style.display = 'none';
 });
 
+// -------------------- Validation Message Modal --------------------
+
+function showValidationMessage(message) {
+    const validationMessage = document.getElementById('validationMessage');
+    const validationModal = document.getElementById('validationModal');
+    validationMessage.textContent = message;
+    validationModal.style.display = 'flex';
+}
+
+// -------------------- Initial Table Load --------------------
+
+renderMarksTable();
+
+});
