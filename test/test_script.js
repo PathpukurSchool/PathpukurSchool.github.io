@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const studentTbody = studentTable.querySelector('tbody');
     const studentPagination = document.getElementById('pagination-link-student');
 
-    const studentColumnNames = ["Class", "URL", "Action"];
+    const studentColumnNames = ["Class", "Student_URL", "Action"];
     const studentRowsPerPage = 10;
     let studentCurrentPage = 1;
 
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const studentDataRows = studentClasses.map(cls => ({
         Class: cls,
-        URL: ""
+        Student_URL: ""
     }));
 
     function renderStudentTable(isEditing = false, editClass = "") {
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         clearBtn.textContent = 'Clear';
                         clearBtn.onclick = () => {
                             const target = studentDataRows.find(r => r.Class === rowData.Class);
-                            if (!target.URL) {
+                            if (!target.Student_URL) {
                                 showValidationMessage("এই রো-তে কোনও URL নেই, তাই ক্লিয়ার করা যাবে না!");
                                 return;
                             }
@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const index = studentDataRows.findIndex(r => r.Class === className);
         if (index !== -1) {
-            studentDataRows[index].URL = url;
+            studentDataRows[index].Student_URL = url;
             showValidationMessage("সফলভাবে সেভ হয়েছে!");
         }
         renderStudentTable();
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ------- Clear Modal Setup, Section 2 ------ 
 confirmClearBtn.onclick = () => {
         if (rowToClear) {
-            rowToClear.URL = "";
+            rowToClear.Student_URL = "";
             renderStudentTable();
             showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
             rowToClear = null;
