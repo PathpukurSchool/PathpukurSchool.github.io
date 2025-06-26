@@ -143,39 +143,53 @@
         <div id="pagination-table-scrolling-teacher" class="pagination-controls"></div>
     </section>
 
-    <section id="scrolling-student-section">
-        <h2>Scrolling Notice for Student</h2>
+
+
+
+     <!-- Section 5,  ......  -->
+
+
+    <section id="scrolling-student" class="admin-section">
+      <h3 class="section-heading">Scrolling Notice for Students</h3>
+      <div class="table-wrapper">
         <table id="table-scrolling-student" class="data-table">
-            <thead>
-                <tr>
-                    <th>Subject</th>
-                    <th>Color</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                </tbody>
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Color</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
         </table>
-        <div id="pagination-table-scrolling-student" class="pagination-controls"></div>
+      </div>
+      <div class="pagination" id="pagination-table-scrolling-student"></div>
     </section>
+  </div>
 
-
-    <div id="validationModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="validationCloseBtn">&times;</span>
-            <p id="validationMessage"></p>
-        </div>
+  <!-- Validation Modal -->
+  <div id="validationModal" class="table-modal-overlay">
+    <div class="table-modal-content">
+      <p id="validationMessage"></p>
+      <button id="validationCloseBtn" class="cancel-btn">ঠিক আছে</button>
     </div>
+  </div>
 
-    <div id="deleteConfirmModal" class="modal">
-        <div class="modal-content">
-            <p id="confirmMessage"></p>
-            <div class="modal-buttons">
-                <button id="confirmDeleteBtn">Yes</button>
-                <button id="cancelDeleteBtn">No</button>
-            </div>
-        </div>
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteConfirmModal" class="table-modal-overlay">
+    <div class="table-modal-content">
+      <p id="confirmMessage">আপনি কি ডিলেট করতে চান?</p>
+      <button id="confirmDeleteBtn" class="clear-btn">হ্যাঁ</button>
+      <button id="cancelDeleteBtn" class="cancel-btn">না</button>
     </div>
+  </div>
+
+
+
+
+
+
+  
 
 
     <script src="scrolling_teacher.js"></script>
