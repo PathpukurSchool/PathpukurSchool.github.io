@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
 
-// ------- Clear Modal Setup, Section 2 -------
+// ------- Clear Modal Setup, Section 2 ------ 
 confirmClearBtn.onclick = () => {
         if (rowToClear) {
             rowToClear.URL = "";
@@ -428,7 +428,7 @@ confirmClearBtn.onclick = () => {
 
     const marksDataRows = examList.map(exam => ({
         Exam: exam,
-        Date: new Date().toISOString().split('T')[0], // Default today
+        Date: "",
         Color: ""
     }));
 
@@ -566,11 +566,6 @@ confirmClearBtn.onclick = () => {
         renderMarksTable();
     }
 
-
-
-
-
-   
 // ------- Clear Modal Setup, Section 3 ------ 
 confirmClearBtn.onclick = () => {
         if (rowToClear) {
@@ -582,9 +577,8 @@ confirmClearBtn.onclick = () => {
         }
         clearConfirmModal.style.display = 'none';
     };
-
-
-
     
 renderMarksTable();
+
+    
 });
