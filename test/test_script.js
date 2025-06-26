@@ -396,7 +396,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         renderStudentTable();
     }
+    
 
+// ------- Clear Modal Setup, Section 2 -------
+confirmClearBtn.onclick = () => {
+        if (rowToClear) {
+            rowToClear.URL = "";
+            renderStudentTable();
+            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+            rowToClear = null;
+        }
+        clearConfirmModal.style.display = 'none';
+    };
+    
     renderStudentTable();
 
     // -------------------- Section 3: Marks Submission Date for Teachers --------------------
@@ -558,7 +570,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    
+   
+// ------- Clear Modal Setup, Section 3 ------ 
 confirmClearBtn.onclick = () => {
         if (rowToClear) {
             rowToClear.Date = "";
