@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Section 1 - Exam Link for Teachers</title>
+  <title>Admin Panel - Pathpukur High School (HS)</title>
   <link rel="stylesheet" href="test_style.css">
 
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
@@ -14,8 +15,6 @@
   </header>
   <div class="admin-panel-container">
     <h2>Institution Admin Panel</h2>
-
-      <!-- Section 1, Exam Link for Teachers -->
 
     <section id="exam-link-teachers" class="admin-section">
       <div class="section-box">
@@ -42,17 +41,46 @@
         </div>
       </div>
     </section>
-  </div>
 
-  <!-- Modals -->
-  <div id="deleteConfirmModal" class="table-modal-overlay">
-    <div class="table-modal-content">
-      <button class="close-modal-btn">&times;</button>
-      <p>আপনি কি তথ্যগুলি মুছে ফেলতে চান?</p>
-      <button id="confirmDeleteBtn">হ্যাঁ</button>
-      <button id="cancelDeleteBtn">না</button>
+    <section id="student-link-section" class="admin-section">
+      <h3 class="section-heading">Exam Link for Students</h3>
+      <div class="table-wrapper">
+        <table id="table-link-student" class="data-table">
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>URL</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination-link-student">
+        <button disabled>Previous</button>
+        <button disabled>Next</button>
+      </div>
+    </section>
+
+    <section id="marks-submission" class="admin-section">
+      <h3 class="section-heading">Marks Submission Date for Teacher</h3>
+      <div class="table-wrapper">
+        <table id="table-marks-submission" class="data-table">
+          <thead>
+            <tr>
+              <th>Exam</th>
+              <th>Date</th>
+              <th>Color</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination-marks-submission"></div>
+    </section>
+
     </div>
-  </div>
 
   <div id="inputEditModal" class="table-modal-overlay">
     <div class="table-modal-content input-edit-content">
@@ -73,70 +101,30 @@
     </div>
   </div>
 
-  <!-- Clear Confirmation Modal -->
-<div id="clearConfirmModal" class="table-modal-overlay">
-  <div class="table-modal-content">
-    <p id="clearConfirmMessage">আপনি কি এই রো-এর ডেটা ক্লিয়ার করতে চান?</p>
-    <button id="confirmClearBtn" class="clear-btn">হ্যাঁ</button>
-    <button id="cancelClearBtn" class="cancel-btn">না</button>
+  <div id="clearConfirmModalSection1" class="table-modal-overlay">
+    <div class="table-modal-content">
+      <p id="clearConfirmMessageSection1">আপনি কি এই রো-এর ডেটা ক্লিয়ার করতে চান?</p>
+      <button id="confirmClearBtnSection1" class="clear-btn">হ্যাঁ</button>
+      <button id="cancelClearBtnSection1" class="cancel-btn">না</button>
+    </div>
   </div>
-</div>
+
+  <div id="clearConfirmModalSection2" class="table-modal-overlay">
+    <div class="table-modal-content">
+      <p id="clearConfirmMessageSection2">আপনি কি এই রো-এর ডেটা ক্লিয়ার করতে চান?</p>
+      <button id="confirmClearBtnSection2" class="clear-btn">হ্যাঁ</button>
+      <button id="cancelClearBtnSection2" class="cancel-btn">না</button>
+    </div>
+  </div>
+
+  <div id="clearConfirmModalSection3" class="table-modal-overlay">
+    <div class="table-modal-content">
+      <p id="clearConfirmMessageSection3">আপনি কি এই রো-এর ডেটা ক্লিয়ার করতে চান?</p>
+      <button id="confirmClearBtnSection3" class="clear-btn">হ্যাঁ</button>
+      <button id="cancelClearBtnSection3" class="cancel-btn">না</button>
+    </div>
+  </div>
   
-  <!-- Section 2, Exam Link for Students -->
-
-<section id="student-link-section" class="admin-section">
-  <h3 class="section-heading">Exam Link for Students</h3>
-  <div class="table-wrapper">
-    <table id="table-link-student" class="data-table">
-      <thead>
-        <tr>
-          <th>Class</th>
-          <th>URL</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-  <div class="pagination" id="pagination-link-student">
-    <button disabled>Previous</button>
-    <button disabled>Next</button>
-  </div>
-</section>
-  
-  
-<!-- Clear Confirmation Modal -->
-<div id="clearConfirmModalStudentLink" class="table-modal-overlay">
-  <div class="table-modal-content">
-    <p id="clearConfirmMessage">আপনি কি এই রো-এর ডেটা ক্লিয়ার করতে চান?</p>
-    <button id="confirmClearBtn" class="clear-btn">হ্যাঁ</button>
-    <button id="cancelClearBtn" class="cancel-btn">না</button>
-  </div>
-</div>
- <!-- Section 3,  Marks Submission Date for Teachers -->
-
-<section id="marks-submission" class="admin-section">
-  <h3 class="section-heading">Marks Submission Date for Teacher</h3>
-  <div class="table-wrapper">
-    <table id="table-marks-submission" class="data-table">
-      <thead>
-        <tr>
-          <th>Exam</th>
-          <th>Date</th>
-          <th>Color</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-  <div class="pagination" id="pagination-marks-submission"></div>
-</section>
-
-    <!-- Section 4,  ......  -->
-  
-
-
   <script src="test_script.js"></script>
 </body>
 </html>
