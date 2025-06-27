@@ -1,5 +1,9 @@
-
 document.addEventListener('DOMContentLoaded', () => {
+    // নিশ্চিত করুন যে সব মোডাল প্রাথমিকভাবে লুকানো আছে
+    document.querySelectorAll('.table-modal-overlay').forEach(modal => {
+        modal.style.display = 'none';
+    });
+
     // Common Modals (if they are truly shared and you manage visibility per section)
     // NOTE: For clarity and independent control, it's highly recommended to have
     // separate modal HTML elements for each section, as per the example above.
