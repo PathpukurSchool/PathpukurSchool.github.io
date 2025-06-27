@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 return;
                             }
                             rowToClear = target;
-                            clearConfirmModal.style.display = 'flex';
+                            clearConfirmModalStudentLink.style.display = 'flex';
                         };
                         div.appendChild(clearBtn);
                     }
@@ -405,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
             rowToClear = null;
         }
-        clearConfirmModal.style.display = 'none';
+        clearConfirmModalStudentLink.style.display = 'none';
     };
     
     renderStudentTable();
