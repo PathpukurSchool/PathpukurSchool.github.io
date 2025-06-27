@@ -1,604 +1,389 @@
 
-/* General Body and Container Styles */
+
+/* General styles */
 body {
-    font-family: 'Noto Sans Bengali', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f7f6;
-    color: #333;
-    line-height: 1.6;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f4fa; /* A very light blue-gray */
+  color: #333; /* Darker text for better readability */
+  line-height: 1.6; /* Improved line spacing */
 }
 
-.container {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 20px;
+/* Header */
+.main-header {
+  background-color: #1e88e5; /* Primary blue */
+  padding: 25px 20px; /* More vertical padding */
+  text-align: center;
+  color: white;
+  font-size: 28px; /* Slightly larger heading */
+  font-weight: 700; /* Bold */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow */
 }
 
-/* Section Box and Heading Styles */
-.admin-section {
-    margin-bottom: 40px;
+/* Admin Panel Container */
+.admin-panel-container {
+  padding: 30px 20px; /* Increased padding */
+  max-width: 1200px; /* Slightly wider container */
+  margin: 20px auto; /* Add margin top/bottom */
+  background-color: #ffffff; /* White background for the whole panel */
+  border-radius: 12px; /* Softer rounded corners */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08); /* More prominent shadow */
 }
 
-.section-box {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    margin-top: 25px;
+/* Individual Section Boxes with light shade and hover effect */
+#marks-submission,
+#student-link-section,
+#exam-link-teachers {
+  background: #e3f2fd; /* Light blue background for sections */
+  border-radius: 10px;
+  padding: 25px; /* Consistent padding */
+  margin-bottom: 25px; /* Space between sections */
+  transition: box-shadow 0.3s ease, transform 0.2s ease; /* Add transform for subtle lift */
+  border: 1px solid #c5e1fd; /* Light border */
 }
 
+#marks-submission:hover,
+#student-link-section:hover,
+#exam-link-teachers:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15); /* More pronounced shadow on hover */
+  transform: translateY(-3px); /* Subtle lift effect */
+}
+
+/* Section Heading */
 .section-heading {
-    font-size: 26px;
-    color: #1e88e5; /* Primary blue */
-    margin-top: 0;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 10px;
+  font-size: 24px; /* Larger heading for sections */
+  font-weight: 700;
+  margin-bottom: 20px; /* More space below heading */
+  color: #0d47a1; /* Dark blue */
+  border-left: 8px solid #1e88e5; /* Thicker border */
+  padding-left: 15px; /* More padding */
+  letter-spacing: 0.5px; /* Slightly spaced letters */
 }
 
-/* Table Styles */
+/* Table Wrapper */
 .table-wrapper {
-    overflow-x: auto; /* Ensures horizontal scrolling for small screens */
-    margin-top: 20px;
+  overflow-x: auto;
+  background-color: #fff;
+  border-radius: 8px; /* Slightly more rounded */
+  border: 1px solid #e0e0e0; /* Lighter border */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* Soft shadow */
 }
 
+/* Table styles */
 .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    min-width: 700px; /* Ensures table doesn't get too narrow */
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px; /* Ensure table doesn't get too small */
 }
 
 .data-table th,
 .data-table td {
-    border: 1px solid #e0e0e0;
-    padding: 12px 15px;
-    text-align: left;
-    white-space: nowrap; /* Prevents text from wrapping in cells */
+  padding: 15px 18px; /* More padding in cells */
+  text-align: left;
+  border: 1px solid #ddd; /* Lighter cell borders */
 }
 
-.data-table thead th {
-    background-color: #f0f4fa; /* Light blue header */
-    color: #444;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 14px;
+.data-table thead {
+  background-color: #1976d2; /* Darker blue for header */
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1; /* Ensure header stays above content */
 }
 
-.data-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+.data-table th {
+  font-weight: 700;
+  text-transform: uppercase; /* Uppercase table headers */
+  font-size: 14px;
 }
 
+/* Row hover */
 .data-table tbody tr:hover {
-    background-color: #f1f1f1;
+  background-color: #cde7ff; /* Lighter blue on hover */
+  cursor: pointer;
 }
 
-/* Fixed Column for Class/Exam Names */
-.data-table .fixed-column {
-    font-weight: 500;
-    color: #333;
+/* Row in edit mode */
+tr.editing {
+  background-color: #fffde7 !important; /* Very light yellow for editing */
+  box-shadow: inset 0 0 0 2px #ffc107; /* Highlight with a border-like shadow */
 }
 
-/* Input Fields within Table Cells (for editing) */
-.data-table input[type="text"],
-.data-table input[type="url"],
-.data-table input[type="password"],
-.data-table input[type="date"],
-.data-table input[type="color"] {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    font-family: 'Noto Sans Bengali', sans-serif;
-    background-color: #fff;
-    transition: border-color 0.2s;
+/* Fixed column */
+.fixed-column {
+  font-weight: 600; /* Slightly less bold */
+  color: #222; /* Darker color for fixed column */
 }
 
-.data-table input[type="text"]:focus,
-.data-table input[type="url"]:focus,
-.data-table input[type="password"]:focus,
-.data-table input[type="date"]:focus,
-.data-table input[type="color"]:focus,
-.data-table textarea:focus {
-    border-color: #1e88e5;
-    box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.2);
-    outline: none;
-}
-
-/* Textarea in table cells */
-.data-table .textarea-input {
-    width: 100%;
-    min-height: 50px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    box-sizing: border-box;
-    resize: vertical;
-    background-color: #f9f9f9;
-}
-
-/* Action Buttons within Table Cells */
+/* Action buttons container */
 .action-buttons {
-    display: flex;
-    gap: 8px; /* Space between buttons */
-    flex-wrap: wrap; /* Allow buttons to wrap to next line if space is limited */
-    justify-content: center; /* Center buttons horizontally */
-    align-items: center;
+  display: flex;
+  gap: 10px; /* Increased gap between buttons */
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
 }
 
-.action-buttons button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s, transform 0.1s;
-    white-space: nowrap; /* Prevent button text from wrapping */
+/* Button Base Style */
+button {
+  padding: 10px 18px; /* More generous button padding */
+  font-size: 15px; /* Slightly larger font */
+  border: none;
+  border-radius: 6px; /* Slightly more rounded corners */
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease; /* Add transform and box-shadow */
+  font-weight: 500;
+}
+button:active {
+  transform: translateY(1px); /* Slight press effect */
 }
 
 /* Button Colors */
 .edit-btn {
-    background-color: #2196f3; /* Blue */
-    color: white;
+  background-color: #4caf50; /* Green */
+  color: white;
 }
 .edit-btn:hover {
-    background-color: #1976d2;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(33, 150, 243, 0.3);
+  background-color: #388e3c;
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
 }
 
 .save-btn {
-    background-color: #4caf50; /* Green */
-    color: white;
+  background-color: #2196f3; /* Blue */
+  color: white;
 }
 .save-btn:hover {
-    background-color: #388e3c;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
+  background-color: #1565c0;
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
 }
 
 .cancel-btn {
-    background-color: #fbc02d; /* Yellow */
-    color: white;
+  background-color: #9e9e9e; /* Gray */
+  color: white;
 }
 .cancel-btn:hover {
-    background-color: #f9a825;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(251, 192, 45, 0.3);
-}
-
-.delete-btn {
-    background-color: #f44336; /* Red */
-    color: white;
-}
-.delete-btn:hover {
-    background-color: #d32f2f;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(244, 67, 54, 0.3);
+  background-color: #616161;
+  box-shadow: 0 4px 8px rgba(158, 158, 158, 0.3);
 }
 
 .clear-btn {
-    background-color: #ff9800; /* Orange */
-    color: white;
+  background-color: #ff7043; /* Orange */
+  color: white;
 }
 .clear-btn:hover {
-    background-color: #fb8c00;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(255, 152, 0, 0.3);
+  background-color: #e64a19;
+  box-shadow: 0 4px 8px rgba(255, 112, 67, 0.3);
 }
 
-
-/* Pagination Styles */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 25px;
-    padding: 10px 0;
-    border-top: 1px solid #e0e0e0;
+.store-btn {
+  background-color: #673ab7; /* Deep Purple */
+  color: white;
+}
+.store-btn:hover {
+  background-color: #512da8;
+  box-shadow: 0 4px 8px rgba(103, 58, 183, 0.3);
 }
 
-.pagination-container button {
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    cursor: pointer;
-    font-size: 15px;
-    transition: background-color 0.2s, border-color 0.2s;
+/* Pagination */
+.pagination {
+  margin-top: 20px; /* More space above pagination */
+  text-align: right;
+  display: flex; /* Use flexbox for better alignment */
+  justify-content: flex-end; /* Align to the right */
+  align-items: center;
+  gap: 8px; /* Gap between buttons and page number */
 }
 
-.pagination-container button:hover:not(:disabled) {
-    background-color: #e0e0e0;
-    border-color: #a0a0a0;
+.pagination button {
+  background-color: #1e88e5;
+  color: white;
+  padding: 8px 15px; /* Slightly smaller padding for pagination buttons */
+  font-size: 14px;
+}
+.pagination button:hover {
+  background-color: #1565c0;
+}
+.pagination button:disabled {
+  background-color: #b0bec5;
+  cursor: not-allowed;
+  opacity: 0.7; /* Slightly transparent when disabled */
 }
 
-.pagination-container button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background-color: #f1f1f1;
+.pagination span#pageNumber {
+    font-weight: bold;
+    color: #1e88e5;
+    margin: 0 5px; /* Space around page number */
 }
 
-/* Modal Overlay Styles (Black screen issue solution) */
+/* Input fields within table cells */
+.data-table input[type="text"],
+.data-table input[type="date"],
+.data-table input[type="color"] {
+  width: calc(100% - 10px); /* Adjust width for padding */
+  padding: 8px 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box; /* Include padding in width */
+  background-color: #f9f9f9;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.data-table input[type="text"]:focus,
+.data-table input[type="date"]:focus,
+.data-table input[type="color"]:focus {
+  border-color: #1e88e5;
+  box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.2);
+  outline: none;
+  background-color: #ffffff;
+}
+
+/* Modal Styles */
 .table-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* Darker overlay for better focus */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it's on top of everything */
-    opacity: 0; /* Initially hidden */
-    visibility: hidden; /* Initially hidden */
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-}
-
-.table-modal-overlay.show-modal { /* Use a class to show/hide with transition */
-    opacity: 1;
-    visibility: visible;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+  z-index: 1000;
+  display: flex; /* Always display flex, hide with JS */
+  justify-content: center;
+  align-items: center;
 }
 
 .table-modal-content {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    position: relative; /* For close button positioning */
-    max-width: 500px;
-    width: 90%;
-    box-sizing: border-box;
-    transform: translateY(-20px); /* Initial slight offset */
-    transition: transform 0.3s ease-in-out;
+  background-color: white;
+  padding: 30px; /* More padding */
+  border-radius: 12px; /* More rounded corners */
+  min-width: 350px; /* Slightly wider modal */
+  max-width: 95%; /* Adjust max-width for smaller screens */
+  position: relative;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+  transform: scale(0.95); /* Initial scale for animation */
+  opacity: 0; /* Initial opacity for animation */
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
-.table-modal-overlay.show-modal .table-modal-content {
-    transform: translateY(0); /* Slide in effect */
+/* Modal show animation */
+.table-modal-overlay[style*="display: flex;"] .table-modal-content {
+    transform: scale(1);
+    opacity: 1;
 }
 
 
+.input-edit-content textarea {
+  width: calc(100% - 20px); /* Adjust for padding within textarea */
+  min-height: 100px; /* Taller textarea */
+  margin-top: 15px; /* More space above textarea */
+  padding: 12px; /* More padding */
+  font-size: 16px;
+  font-family: 'Noto Sans Bengali', sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical; /* Allow vertical resizing */
+}
+
+.input-edit-content textarea:focus {
+  border-color: #1e88e5;
+  box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.2);
+  outline: none;
+}
+
+.modal-actions {
+  margin-top: 20px; /* More space above actions */
+  display: flex;
+  justify-content: space-around; /* Distribute buttons evenly */
+  gap: 15px; /* Gap between buttons */
+}
+
+/* Specific modal text styling */
 .table-modal-content p {
     font-size: 18px;
-    margin-bottom: 25px;
-    color: #555;
-}
-
-.table-modal-content button {
-    padding: 10px 20px;
-    margin: 0 8px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.2s;
-}
-
-/* Close button for modals */
-.close-modal-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #888;
-    transition: color 0.2s;
-    padding: 5px;
-    line-height: 1;
-}
-
-.close-modal-btn:hover {
-    color: #333;
-}
-
-/* Validation Modal specific styles */
-#validationModal .table-modal-content {
-    background-color: #fffde7; /* Light yellow background */
-    border: 1px solid #ffd700; /* Gold border */
-    color: #333;
-}
-
-#validationModal p {
-    color: #d32f2f; /* Red text for error message */
-    font-weight: 500;
-}
-
-/* Input Edit Modal specific styles */
-#inputEditModal .table-modal-content {
-    text-align: left;
-}
-
-#inputEditModal h3 {
-    text-align: center;
-    font-size: 22px;
     margin-bottom: 20px;
-    color: #1e88e5;
+    color: #444;
 }
 
-#inputEditModal textarea,
-#inputEditModal input[type="color"] { /* Make color input larger in modal */
-    width: calc(100% - 20px); /* Account for padding */
-    min-height: 120px; /* Larger textarea */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    resize: vertical;
-    box-sizing: border-box;
-    font-family: 'Noto Sans Bengali', sans-serif;
+/* Close modal button */
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  font-size: 28px; /* Larger close button */
+  cursor: pointer;
+  color: #777;
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+.close-modal-btn:hover {
+  color: #d32f2f; /* Red on hover for close */
+  transform: rotate(90deg); /* Spin on hover */
 }
 
-#inputEditModal input[type="color"] {
-    min-height: 40px; /* Default height for color input */
-    width: 100%;
-}
-
-#inputEditModal .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-/* External Input Form (for Sections 7 & 8) */
-.input-form-container {
-    background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+/* Responsive adjustments */
+@media screen and (max-width: 900px) {
+  .admin-panel-container {
+    padding: 20px 15px;
+  }
+  #marks-submission,
+  #student-link-section,
+  #exam-link-teachers {
     padding: 20px;
-    margin-bottom: 25px;
-    display: flex;
-    flex-wrap: wrap; /* Allow items to wrap */
-    gap: 15px; /* Space between form elements */
-    align-items: flex-end; /* Align items to the bottom */
+  }
+  .section-heading {
+    font-size: 22px;
+  }
+  .data-table th,
+  .data-table td {
+    padding: 12px 15px;
+  }
 }
 
-.input-form-container input[type="text"],
-.input-form-container textarea {
-    flex: 1; /* Allow inputs to grow */
-    min-width: 150px; /* Minimum width for inputs */
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    font-family: 'Noto Sans Bengali', sans-serif;
-    box-sizing: border-box;
-}
-
-.input-form-container textarea.subject-input {
-    min-height: 80px; /* Adjust height for textarea */
-    resize: vertical; /* Allow vertical resizing */
-}
-
-.input-form-container .date-input {
-    min-width: 120px;
-}
-
-.color-input-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.input-form-container input[type="color"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 40px; /* Size of the color picker */
-    height: 40px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-.input-form-container input[type="color"]::-webkit-color-swatch-wrapper {
-    padding: 0;
-}
-.input-form-container input[type="color"]::-webkit-color-swatch {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-.input-form-container input[type="color"]::-moz-color-swatch-wrapper {
-    padding: 0;
-}
-.input-form-container input[type="color"]::-moz-color-swatch {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* Common color preview for form and table cells */
-.color-preview {
-    width: 30px; /* Size of the color preview box */
-    height: 30px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: transparent;
-    flex-shrink: 0; /* Prevent it from shrinking */
-}
-
-/* Specific styling for color inputs in table cells */
-.data-table .color-with-preview {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-.data-table .color-with-preview input[type="text"] {
-    flex-grow: 1;
-}
-.data-table .color-with-preview .color-preview {
-    width: 20px;
-    height: 20px;
-    border-radius: 2px;
-}
-
-/* Inline color preview for Marks Submission Table (Section 3) */
-.color-preview-inline {
-    width: 20px;
-    height: 20px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    flex-shrink: 0;
-}
-
-
-/* Date Picker Modal specific styles */
-.date-picker-content {
-    min-width: 320px;
-    max-width: 350px;
-    padding: 25px;
-}
-
-.date-picker-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.date-picker-header h3 {
-    margin: 0;
+@media screen and (max-width: 600px) {
+  .main-header {
+    font-size: 22px;
+    padding: 18px;
+  }
+  .admin-panel-container {
+    padding: 15px 10px;
+  }
+  .section-heading {
     font-size: 20px;
-    color: #1e88e5;
-}
-
-.date-picker-selects {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 15px;
-    gap: 10px;
-}
-
-.date-picker-selects select {
+    border-left-width: 5px;
+    padding-left: 10px;
+  }
+  .data-table th,
+  .data-table td {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+  .action-buttons {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 5px;
+  }
+  .action-buttons button {
+    width: 100%; /* Full width buttons */
     padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    flex-grow: 1;
-}
-
-.calendar-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 15px;
-}
-
-.calendar-table th, .calendar-table td {
-    text-align: center;
+    font-size: 13px;
+  }
+  .pagination {
+    justify-content: center; /* Center pagination on small screens */
+    flex-wrap: wrap;
+  }
+  .table-modal-content {
+    min-width: unset;
+    width: 90%;
+    padding: 20px;
+  }
+  .input-edit-content textarea {
+    min-height: 80px;
     padding: 10px;
-    border: 1px solid #eee;
-    cursor: pointer;
-}
-
-.calendar-table th {
-    background-color: #f0f4fa;
-    color: #555;
-    font-weight: 600;
-}
-
-.calendar-table td:hover:not(:empty) {
-    background-color: #e3f2fd;
-}
-
-.calendar-table td.selected-date {
-    background-color: #1e88e5;
-    color: white;
-    font-weight: bold;
-    border-radius: 50%; /* Make selected date circular */
-}
-
-.date-picker-actions {
-    display: flex;
-    justify-content: space-around;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .container {
-        margin: 20px auto;
-        padding: 0 15px;
-    }
-
-    .section-box {
-        padding: 20px;
-    }
-
-    .section-heading {
-        font-size: 22px;
-        margin-bottom: 15px;
-    }
-
-    .data-table th,
-    .data-table td {
-        padding: 10px;
-        font-size: 13px;
-    }
-
-    .action-buttons button {
-        padding: 6px 10px;
-        font-size: 13px;
-    }
-
-    .pagination-container {
-        flex-wrap: wrap;
-    }
-
-    .pagination-container button {
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-
-    .table-modal-content {
-        padding: 20px;
-    }
-
-    .table-modal-content p {
-        font-size: 16px;
-        margin-bottom: 20px;
-    }
-
-    #inputEditModal textarea,
-    #inputEditModal input[type="color"] {
-        min-height: 100px;
-        font-size: 15px;
-    }
-
-    .input-form-container {
-        flex-direction: column; /* Stack form elements vertically on small screens */
-        align-items: stretch;
-    }
-
-    .input-form-container input[type="text"],
-    .input-form-container textarea,
-    .input-form-container .color-input-wrapper,
-    .input-form-container button {
-        width: 100%; /* Full width for stacked elements */
-        min-width: unset; /* Remove min-width constraint */
-    }
-
-    .date-picker-content {
-        min-width: unset;
-        width: 95%;
-        padding: 15px;
-    }
-
-    .date-picker-selects {
-        flex-direction: column;
-    }
-
-    .calendar-table th, .calendar-table td {
-        padding: 8px;
-    }
+  }
+  .close-modal-btn {
+    font-size: 24px;
+    top: 10px;
+    right: 10px;
+  }
 }
