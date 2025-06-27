@@ -243,8 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderTable();
-    
-// -------------------- Section 2: Link for Students --------------------
+
+    // -------------------- Section 2: Link for Students --------------------
 
     const studentTable = document.getElementById('table-link-student');
     const studentTbody = studentTable.querySelector('tbody');
@@ -265,6 +265,40 @@ document.addEventListener('DOMContentLoaded', () => {
         Class: cls,
         Student_URL: ""
     }));
+
+    // এই ভেরিয়েবলটি গ্লোবাল স্কোপে আছে ধরে নিচ্ছি, কারণ এটি ক্লিয়ার কনফার্মেশন মডালে ব্যবহৃত হয়।
+    // যদি না থাকে, তাহলে এটি আপনার HTML ফাইলের script ট্যাগের শুরুতে যোগ করুন।
+    let rowToClear = null; // নিশ্চিত করুন যে এটি এখানে বা গ্লোবাল স্কোপে সংজ্ঞায়িত আছে
+    const clearConfirmModal = document.getElementById('clearConfirmModal'); // আপনার HTML-এ এই আইডি সহ modal থাকতে হবে
+    const confirmClearBtn = document.getElementById('confirmClearBtn'); // আপনার HTML-এ এই আইডি সহ একটি নিশ্চিতকরণ বোতাম থাকতে হবে
+    const cancelClearBtn = document.getElementById('cancelClearBtn'); // আপনার HTML-এ এই আইডি সহ একটি বাতিল বোতাম থাকতে হবে
+
+    // Assuming these elements also exist in your HTML
+    const validationMessageModal = document.getElementById('validationMessageModal');
+    const validationMessageText = document.getElementById('validationMessageText');
+    const closeValidationMessage = document.querySelector('#validationMessageModal .close-button');
+
+
+    function showValidationMessage(message) {
+        validationMessageText.textContent = message;
+        validationMessageModal.style.display = 'flex';
+    }
+
+    // Close validation message modal
+    if (closeValidationMessage) {
+        closeValidationMessage.onclick = () => {
+            validationMessageModal.style.display = 'none';
+        };
+    }
+    window.onclick = (event) => {
+        if (event.target == validationMessageModal) {
+            validationMessageModal.style.display = 'none';
+        }
+        if (event.target == clearConfirmModal) {
+            clearConfirmModal.style.display = 'none';
+        }
+    };
+
 
     function renderStudentTable(isEditing = false, editClass = "") {
         studentTbody.innerHTML = "";
@@ -312,6 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 showValidationMessage("এই রো-তে কোনও URL নেই, তাই ক্লিয়ার করা যাবে না!");
                                 return;
                             }
+                            // `rowToClear` এ সরাসরি `studentDataRows` এর অবজেক্ট রেফারেন্স সেট করুন
                             rowToClear = target;
                             clearConfirmModal.style.display = 'flex';
                         };
@@ -325,11 +360,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         input.value = rowData[col];
                         input.readOnly = true;
                         input.addEventListener('click', () => {
-                            inputEditModalHeading.textContent = `Edit ${col}`;
-                            inputEditTextArea.value = input.value;
-                            currentEditingRow = input.closest('tr');
-                            currentEditingColIndex = studentColumnNames.indexOf(col);
-                            inputEditModal.style.display = 'flex';
+                            // Assuming inputEditModal related elements are defined elsewhere
+                            // inputEditModalHeading.textContent = `Edit ${col}`;
+                            // inputEditTextArea.value = input.value;
+                            // currentEditingRow = input.closest('tr');
+                            // currentEditingColIndex = studentColumnNames.indexOf(col);
+                            // inputEditModal.style.display = 'flex';
+                            alert('Edit functionality not fully implemented in this snippet. Please connect to your inputEditModal logic.');
                         });
                         cell.appendChild(input);
                     } else {
@@ -396,22 +433,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         renderStudentTable();
     }
-    
 
-// ------- Clear Modal Setup, Section 2 ------ 
-confirmClearBtn.onclick = () => {
-        if (rowToClear) {
-            rowToClear.Student_URL = "";
-            renderStudentTable();
-            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear = null;
-        }
-        clearConfirmModal.style.display = 'none';
-    };
-    
+    // ------- Clear Modal Setup, Section 2 ------
+    if (confirmClearBtn && cancelClearBtn && clearConfirmModal) {
+        confirmClearBtn.onclick = () => {
+            if (rowToClear) {
+                // সরাসরি rowToClear অবজেক্টের Student_URL প্রপার্টি খালি করুন
+                rowToClear.Student_URL = "";
+                renderStudentTable(); // আপডেট হওয়া ডেটা দিয়ে টেবিল রেন্ডার করুন
+                showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+                rowToClear = null; // rowToClear রিসেট করুন
+            }
+            clearConfirmModal.style.display = 'none';
+        };
+
+        cancelClearBtn.onclick = () => {
+            rowToClear = null; // বাতিল করলে rowToClear রিসেট করুন
+            clearConfirmModal.style.display = 'none';
+        };
+    } else {
+        console.warn("Clear confirmation modal elements not found. Please ensure 'clearConfirmModal', 'confirmClearBtn', and 'cancelClearBtn' exist in your HTML.");
+    }
+
     renderStudentTable();
 
-    // -------------------- Section 3: Marks Submission Date for Teachers --------------------
+// -------------------- Section 3: Marks Submission Date for Teachers --------------------
 
     const marksTable = document.getElementById('table-marks-submission');
     const marksTbody = marksTable.querySelector('tbody');
