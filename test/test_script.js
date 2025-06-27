@@ -417,7 +417,7 @@ confirmClearBtn.onclick = () => {
     clearConfirmModal.style.display = 'none';
 };
 
-
+renderStudentTable();
     
 
 
