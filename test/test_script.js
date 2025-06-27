@@ -397,29 +397,18 @@ document.addEventListener('DOMContentLoaded', () => {
         renderStudentTable();
     }
     
-// ------- Clear Modal Setup, Section 2 ------
-confirmClearBtn.onclick = () => {
-    if (rowToClear) {
-        // Find the index of the row to clear in the studentDataRows array
-        const indexToClear = studentDataRows.findIndex(r => r.Class === rowToClear.Class);
-
-        if (indexToClear !== -1) {
-            // Clear the Student_URL for the found row
-            studentDataRows[indexToClear].Student_URL = "";
-            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-        } else {
-            showValidationMessage("ক্লিয়ার করার জন্য রো খুঁজে পাওয়া যায়নি।");
-        }
-
-        renderStudentTable(); // Re-render the table with the updated data
-        rowToClear = null; // Reset rowToClear
-    }
-    clearConfirmModal.style.display = 'none';
-};
-
-renderStudentTable();
-    
-
+// ------- Clear Modal Setup, Section 2 ------ 
+ confirmClearBtn.onclick = () => {
+        if (rowToClear) {
+            rowToClear.Student_URL = "";
+            renderStudentTable();
+            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+            rowToClear = null;
+        }
+        clearConfirmModal.style.display = 'none';
+    };
+    
+    renderStudentTable();
 
 
 // -------------------- Section 3: Marks Submission Date for Teachers --------------------
