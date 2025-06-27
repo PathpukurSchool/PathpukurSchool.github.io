@@ -1,25 +1,42 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const table = document.getElementById('table-exam-link-teacher');
-    const tbody = table.querySelector('tbody');
-    const paginationContainer = document.getElementById('pagination-exam-link-teacher');
 
-    // Modals
+document.addEventListener('DOMContentLoaded', () => {
+    // Common Modals (if they are truly shared and you manage visibility per section)
+    // NOTE: For clarity and independent control, it's highly recommended to have
+    // separate modal HTML elements for each section, as per the example above.
+    // If you only have one 'clearConfirmModal' HTML element,
+    // you'll need more complex logic inside its single confirm button handler.
+    const validationModal = document.getElementById('validationModal');
+    const validationMessage = document.getElementById('validationMessage');
     const inputEditModal = document.getElementById('inputEditModal');
     const inputEditTextArea = document.getElementById('inputEditTextArea');
     const inputEditModalHeading = document.getElementById('inputEditModalHeading');
     const storeInputBtn = document.getElementById('storeInputBtn');
     const cancelInputBtn = document.getElementById('cancelInputBtn');
 
-    const validationModal = document.getElementById('validationModal');
-    const validationMessage = document.getElementById('validationMessage');
+    // Utility Functions (Shared across sections)
+    function showValidationMessage(message) {
+        validationMessage.textContent = message;
+        validationModal.style.display = 'flex';
+    }
 
-    const clearConfirmModal = document.getElementById('clearConfirmModal');
-    const confirmClearBtn = document.getElementById('confirmClearBtn');
-    const cancelClearBtn = document.getElementById('cancelClearBtn');
+    // This variable will now be set by each section's clear button
+    // and consumed by its *specific* confirm clear button handler.
+    let rowToClear = null; // This can remain global or be managed within each section's scope
 
-    let currentEditingRow = null;
-    let currentEditingColIndex = -1;
-    let rowToClear = null;
+
+    // --- Section 1: Exam Link for Teachers ---
+    const table = document.getElementById('table-exam-link-teacher');
+    const tbody = table.querySelector('tbody');
+    const paginationContainer = document.getElementById('pagination-exam-link-teacher');
+
+    // Section 1 Specific Modals (assuming separate HTML modals)
+    const clearConfirmModalSection1 = document.getElementById('clearConfirmModalSection1');
+    const confirmClearBtnSection1 = document.getElementById('confirmClearBtnSection1');
+    const cancelClearBtnSection1 = document.getElementById('cancelClearBtnSection1');
+
+
+    let currentEditingRow = null; // Potentially rename to currentEditingRowSection1 for clarity
+    let currentEditingColIndex = -1; // Potentially rename to currentEditingColIndexSection1 for clarity
 
     const columnNames = ["Class", "ID", "Password", "URL", "Action"];
     const rowsPerPage = 10;
@@ -38,12 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         Password: '',
         URL: ''
     }));
-
-    // Utility Functions
-    function showValidationMessage(message) {
-        validationMessage.textContent = message;
-        validationModal.style.display = 'flex';
-    }
 
     function createEditableInput(colName, value) {
         const input = document.createElement('input');
@@ -104,12 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             showValidationMessage("এই রো-তে কোনও ডেটা নেই, তাই ক্লিয়ার করা যাবে না!");
                             return;
                         }
-                        rowToClear = target;
-                        clearConfirmModal.style.display = 'flex';
+                        rowToClear = target; // Set the global rowToClear
+                        clearConfirmModalSection1.style.display = 'flex'; // Show section 1's modal
                     };
                     div.appendChild(clearBtn);
                 }
-
                 cell.appendChild(div);
             } else {
                 if (isEditing) {
@@ -119,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     cell.textContent = rowData[col];
                 }
             }
-
             row.appendChild(cell);
         });
 
@@ -196,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationContainer.appendChild(nextBtn);
     }
 
-    // Modal Button Handlers
+    // Modal Button Handlers for Section 1
     storeInputBtn.onclick = () => {
         if (currentEditingRow && currentEditingColIndex !== -1) {
             const value = inputEditTextArea.value.trim();
@@ -219,36 +228,37 @@ document.addEventListener('DOMContentLoaded', () => {
         currentEditingColIndex = -1;
     };
 
-    confirmClearBtn.onclick = () => {
-        if (rowToClear) {
+    // --- Section 1: Clear Confirmation Logic ---
+    confirmClearBtnSection1.onclick = () => {
+        if (rowToClear && allDataRows.includes(rowToClear)) { // Check if rowToClear belongs to this section
             rowToClear.ID = "";
             rowToClear.Password = "";
             rowToClear.URL = "";
-            renderTable();
+            renderTable(); // Call Section 1's renderTable
             showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear = null;
         }
-        clearConfirmModal.style.display = 'none';
+        rowToClear = null; // Reset rowToClear
+        clearConfirmModalSection1.style.display = 'none';
     };
 
-    cancelClearBtn.onclick = () => {
+    cancelClearBtnSection1.onclick = () => {
         rowToClear = null;
-        clearConfirmModal.style.display = 'none';
+        clearConfirmModalSection1.style.display = 'none';
     };
 
-    document.querySelectorAll('.close-modal-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.closest('.table-modal-overlay').style.display = 'none';
-        });
-    });
+    renderTable(); // Initial render for Section 1
 
-    renderTable();
 
-// -------------------- Section 2: Link for Students --------------------
+    // -------------------- Section 2: Link for Students --------------------
 
     const studentTable = document.getElementById('table-link-student');
     const studentTbody = studentTable.querySelector('tbody');
     const studentPagination = document.getElementById('pagination-link-student');
+
+    // Section 2 Specific Modals (assuming separate HTML modals)
+    const clearConfirmModalSection2 = document.getElementById('clearConfirmModalSection2');
+    const confirmClearBtnSection2 = document.getElementById('confirmClearBtnSection2');
+    const cancelClearBtnSection2 = document.getElementById('cancelClearBtnSection2');
 
     const studentColumnNames = ["Class", "Student_URL", "Action"];
     const studentRowsPerPage = 10;
@@ -312,8 +322,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 showValidationMessage("এই রো-তে কোনও URL নেই, তাই ক্লিয়ার করা যাবে না!");
                                 return;
                             }
-                            rowToClear = target;
-                            clearConfirmModalStudentLink.style.display = 'flex';
+                            rowToClear = target; // Set the global rowToClear
+                            clearConfirmModalSection2.style.display = 'flex'; // Show section 2's modal
                         };
                         div.appendChild(clearBtn);
                     }
@@ -327,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         input.addEventListener('click', () => {
                             inputEditModalHeading.textContent = `Edit ${col}`;
                             inputEditTextArea.value = input.value;
-                            currentEditingRow = input.closest('tr');
+                            currentEditingRow = input.closest('tr'); // This needs to be specific to student section if currentEditingRow is also global
                             currentEditingColIndex = studentColumnNames.indexOf(col);
                             inputEditModal.style.display = 'flex';
                         });
@@ -396,26 +406,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         renderStudentTable();
     }
-    
-// ------- Clear Modal Setup, Section 2 ------ 
- confirmClearBtn.onclick = () => {
-        if (rowToClear) {
-            rowToClear.Student_URL = "";
-            renderStudentTable();
-            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear = null;
-        }
-        clearConfirmModalStudentLink.style.display = 'none';
-    };
-    
-    renderStudentTable();
+
+    // --- Section 2: Clear Confirmation Logic ---
+    confirmClearBtnSection2.onclick = () => {
+        if (rowToClear && studentDataRows.includes(rowToClear)) { // Check if rowToClear belongs to this section
+            // Find the actual object in studentDataRows and update it
+            const indexToClear = studentDataRows.findIndex(r => r.Class === rowToClear.Class);
+            if (indexToClear !== -1) {
+                studentDataRows[indexToClear].Student_URL = "";
+                showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
+            } else {
+                showValidationMessage("ক্লিয়ার করার জন্য রো খুঁজে পাওয়া যায়নি!");
+            }
+            renderStudentTable(); // Call Section 2's renderStudentTable
+        }
+        rowToClear = null; // Reset rowToClear
+        clearConfirmModalSection2.style.display = 'none';
+    };
+
+    cancelClearBtnSection2.onclick = () => {
+        rowToClear = null;
+        clearConfirmModalSection2.style.display = 'none';
+    };
+
+    renderStudentTable(); // Initial render for Section 2
 
 
-// -------------------- Section 3: Marks Submission Date for Teachers --------------------
+    // -------------------- Section 3: Marks Submission Date for Teachers --------------------
 
     const marksTable = document.getElementById('table-marks-submission');
     const marksTbody = marksTable.querySelector('tbody');
     const marksPagination = document.getElementById('pagination-marks-submission');
+
+    // Section 3 Specific Modals (assuming separate HTML modals)
+    const clearConfirmModalSection3 = document.getElementById('clearConfirmModalSection3');
+    const confirmClearBtnSection3 = document.getElementById('confirmClearBtnSection3');
+    const cancelClearBtnSection3 = document.getElementById('cancelClearBtnSection3');
 
     const marksColumnNames = ["Exam", "Date", "Color", "Action"];
     const marksRowsPerPage = 10;
@@ -478,8 +504,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 showValidationMessage("এই রো-তে কোনও তথ্য নেই, তাই ক্লিয়ার করা যাবে না!");
                                 return;
                             }
-                            rowToClear = target;
-                            clearConfirmModal.style.display = 'flex';
+                            rowToClear = target; // Set the global rowToClear
+                            clearConfirmModalSection3.style.display = 'flex'; // Show section 3's modal
                         };
                         div.appendChild(clearBtn);
                     }
@@ -566,19 +592,29 @@ document.addEventListener('DOMContentLoaded', () => {
         renderMarksTable();
     }
 
-// ------- Clear Modal Setup, Section 3 ------ 
-confirmClearBtn.onclick = () => {
-        if (rowToClear) {
+    // --- Section 3: Clear Confirmation Logic ---
+    confirmClearBtnSection3.onclick = () => {
+        if (rowToClear && marksDataRows.includes(rowToClear)) { // Check if rowToClear belongs to this section
             rowToClear.Date = "";
             rowToClear.Color = "";
-            renderMarksTable();
+            renderMarksTable(); // Call Section 3's renderMarksTable
             showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear = null;
         }
-        clearConfirmModal.style.display = 'none';
+        rowToClear = null; // Reset rowToClear
+        clearConfirmModalSection3.style.display = 'none';
     };
-    
-renderMarksTable();
 
-    
+    cancelClearBtnSection3.onclick = () => {
+        rowToClear = null;
+        clearConfirmModalSection3.style.display = 'none';
+    };
+
+    renderMarksTable(); // Initial render for Section 3
+
+    // Common close modal button logic (if you have one common close button class)
+    document.querySelectorAll('.close-modal-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            btn.closest('.table-modal-overlay').style.display = 'none';
+        });
+    });
 });
