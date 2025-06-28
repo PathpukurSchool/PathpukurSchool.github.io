@@ -412,9 +412,6 @@ confirmClearBtn.onclick = () => {
     renderStudentTable();
 
     // -------------------- Section 3: Marks Submission Date for Teachers --------------------
-    const clearConfirmModal3 = document.getElementById('clearConfirmModal3');
-    const confirmClearBtn3 = document.getElementById('confirmClearBtn3');
-    const cancelClearBtn3 = document.getElementById('cancelClearBtn3');
 
     const marksTable = document.getElementById('table-marks-submission');
     const marksTbody = marksTable.querySelector('tbody');
@@ -482,7 +479,7 @@ confirmClearBtn.onclick = () => {
                                 return;
                             }
                             rowToClear = target;
-                            clearConfirmModal3.style.display = 'flex';
+                            clearConfirmModal.style.display = 'flex';
                         };
                         div.appendChild(clearBtn);
                     }
@@ -570,20 +567,17 @@ confirmClearBtn.onclick = () => {
     }
 
 // ------- Clear Modal Setup, Section 3 ------ 
-confirmClearBtn3.onclick = () => {
+confirmClearBtn.onclick = () => {
         if (rowToClear) {
             rowToClear.Date = "";
             rowToClear.Color = "";
             renderMarksTable();
             showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear3 = null;
+            rowToClear = null;
         }
-        clearConfirmModal3.style.display = 'none';
+        clearConfirmModal.style.display = 'none';
     };
-    cancelClearBtn3.onclick = () => {
-    rowToClear3 = null;
-    clearConfirmModal3.style.display = 'none';
-};
+    
 renderMarksTable();
 
     
