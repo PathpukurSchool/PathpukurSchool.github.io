@@ -16,15 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearConfirmModal = document.getElementById('clearConfirmModal');
     const confirmClearBtn = document.getElementById('confirmClearBtn');
     const cancelClearBtn = document.getElementById('cancelClearBtn');
-    
-
-
-    // ------------------ Section 3: Marks Submission Clear Modal ------------------
-    const clearConfirmModal3 = document.getElementById('clearConfirmModal3');
-    const confirmClearBtn3 = document.getElementById('confirmClearBtn3');
-    const cancelClearBtn3 = document.getElementById('cancelClearBtn3');
-
-
 
     let currentEditingRow = null;
     let currentEditingColIndex = -1;
@@ -421,6 +412,9 @@ confirmClearBtn.onclick = () => {
     renderStudentTable();
 
     // -------------------- Section 3: Marks Submission Date for Teachers --------------------
+    const clearConfirmModal3 = document.getElementById('clearConfirmModal3');
+    const confirmClearBtn3 = document.getElementById('confirmClearBtn3');
+    const cancelClearBtn3 = document.getElementById('cancelClearBtn3');
 
     const marksTable = document.getElementById('table-marks-submission');
     const marksTbody = marksTable.querySelector('tbody');
