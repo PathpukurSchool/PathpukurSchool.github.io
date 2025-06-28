@@ -16,6 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearConfirmModal = document.getElementById('clearConfirmModal');
     const confirmClearBtn = document.getElementById('confirmClearBtn');
     const cancelClearBtn = document.getElementById('cancelClearBtn');
+    
+
+
+    // ------------------ Section 3: Marks Submission Clear Modal ------------------
+    const clearConfirmModal3 = document.getElementById('clearConfirmModal3');
+    const confirmClearBtn3 = document.getElementById('confirmClearBtn3');
+    const cancelClearBtn3 = document.getElementById('cancelClearBtn3');
+
+
 
     let currentEditingRow = null;
     let currentEditingColIndex = -1;
@@ -479,7 +488,7 @@ confirmClearBtn.onclick = () => {
                                 return;
                             }
                             rowToClear = target;
-                            clearConfirmModal.style.display = 'flex';
+                            clearConfirmModal3.style.display = 'flex';
                         };
                         div.appendChild(clearBtn);
                     }
@@ -567,7 +576,7 @@ confirmClearBtn.onclick = () => {
     }
 
 // ------- Clear Modal Setup, Section 3 ------ 
-confirmClearBtn.onclick = () => {
+confirmClearBtn3.onclick = () => {
         if (rowToClear) {
             rowToClear.Date = "";
             rowToClear.Color = "";
@@ -575,9 +584,12 @@ confirmClearBtn.onclick = () => {
             showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
             rowToClear = null;
         }
-        clearConfirmModal.style.display = 'none';
+        clearConfirmModal3.style.display = 'none';
     };
-    
+    cancelClearBtn3.onclick = () => {
+    rowToClear = null;
+    clearConfirmModal3.style.display = 'none';
+};
 renderMarksTable();
 
     
