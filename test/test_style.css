@@ -183,7 +183,7 @@ button {
 }
 
 .table-modal-content {
-  background-color: white;
+  background-color: #e3f2fd;
   padding: 20px 25px;
   border-radius: 10px;
   min-width: 300px;
@@ -194,11 +194,11 @@ button {
 }
 
 .input-edit-content textarea {
-  background-color: #98FB98;
-  width: 80%;
-  min-height: 80px;
+  background-color: white;
+  width: 90%;
+  min-height: 90px;
   margin-top: 5px;
-  padding: 5px;
+  padding: 15px;
   font-size: 16px;
   font-family: 'Noto Sans Bengali', sans-serif;
 }
