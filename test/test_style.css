@@ -171,6 +171,33 @@ button {
 }
 
 /* Modal Styles */
+
+/* validationModal এর ব্যাকগ্রাউন্ড এবং টেক্সট কালার */
+#validationModal .table-modal-content {
+    background-color: #28a745; /* সফল মেসেজের জন্য সবুজ ব্যাকগ্রাউন্ড */
+    color: #ffffff; /* সাদা টেক্সট */
+    border-radius: 8px; /* কোণাগুলো সামান্য গোলাকার হবে */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* হালকা শ্যাডো */
+}
+
+/* যদি এরর মেসেজ হয় (যখন showValidationMessage(message, true) কল করা হয়) */
+#validationModal.error .table-modal-content {
+    background-color: #dc3545; /* এরর মেসেজের জন্য লাল ব্যাকগ্রাউন্ড */
+}
+
+/* মোডাল কন্টেন্টের সর্বোচ্চ প্রস্থ */
+#validationModal .table-modal-content {
+    max-width: 400px; /* মোডালের সর্বোচ্চ প্রস্থ */
+    padding: 20px; /* মোডাল কন্টেন্টের ভেতরের প্যাডিং */
+}
+
+
+
+
+
+
+
+
 .table-modal-overlay {
   display: none;
   position: fixed;
