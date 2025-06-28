@@ -576,12 +576,12 @@ confirmClearBtn3.onclick = () => {
             rowToClear.Color = "";
             renderMarksTable();
             showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear = null;
+            rowToClear3 = null;
         }
         clearConfirmModal3.style.display = 'none';
     };
     cancelClearBtn3.onclick = () => {
-    rowToClear = null;
+    rowToClear3 = null;
     clearConfirmModal3.style.display = 'none';
 };
 renderMarksTable();
