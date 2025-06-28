@@ -1,6 +1,3 @@
-
-
-/* General styles */
 body {
   font-family: 'Noto Sans Bengali', sans-serif;
   margin: 0;
@@ -52,13 +49,17 @@ body {
 
 /* Section Heading */
 .section-heading {
-  font-size: 24px; /* Larger heading for sections */
-  font-weight: 700;
-  margin-bottom: 20px; /* More space below heading */
-  color: #0d47a1; /* Dark blue */
-  border-left: 8px solid #1e88e5; /* Thicker border */
-  padding-left: 15px; /* More padding */
-  letter-spacing: 0.5px; /* Slightly spaced letters */
+    font-size: 1.8em; /* Slightly larger heading for these specific sections */
+    color: #333; /* Darker text */
+    margin-bottom: 20px;
+    text-align: center; /* Centered heading */
+    border-bottom: 2px solid #eee; /* Bottom border instead of left */
+    padding-bottom: 10px;
+    font-weight: 700; /* Keep bold */
+    /* font-weight: 700;
+    /* border-left: 8px solid #1e88e5; Remove left border */
+    /* padding-left: 15px; Remove left padding */
+    /* letter-spacing: 0.5px; Remove letter spacing if not desired */
 }
 
 /* Table Wrapper */
@@ -245,11 +246,17 @@ button:active {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
-  z-index: 1000;
-  display: flex; /* Always display flex, hide with JS */
+  background-color: rgba(0, 0, 0, 0.6); /* Dim background */
   justify-content: center;
   align-items: center;
+  z-index: 1000; /* Ensure it's on top of other content */
+  opacity: 0;
+  transition: opacity 0.3s ease; /* Smooth fade-in/out */
+}
+
+.table-modal-overlay.show-modal {
+    opacity: 1;
+    display: flex; /* Ensure it becomes flex when 'show-modal' class is added */
 }
 
 .table-modal-content {
@@ -260,10 +267,14 @@ button:active {
   max-width: 95%; /* Adjust max-width for smaller screens */
   position: relative;
   text-align: center;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Deeper shadow */
-  transform: scale(0.95); /* Initial scale for animation */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+  transform: translateY(-20px); /* Initial slight move up */
   opacity: 0; /* Initial opacity for animation */
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.table-modal-overlay.show-modal .table-modal-content {
+    transform: translateY(0); /* Move to original position */
 }
 
 /* Modal show animation */
@@ -271,7 +282,6 @@ button:active {
     transform: scale(1);
     opacity: 1;
 }
-
 
 .input-edit-content textarea {
   width: calc(100% - 20px); /* Adjust for padding within textarea */
@@ -307,19 +317,20 @@ button:active {
 
 /* Close modal button */
 .close-modal-btn {
-  position: absolute;
-  top: 15px;
-  right: 18px;
-  background: transparent;
-  border: none;
-  font-size: 28px; /* Larger close button */
-  cursor: pointer;
-  color: #777;
-  transition: color 0.2s ease, transform 0.1s ease;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2em; /* Adjusted size */
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+    background: none; /* Ensure no background from other button styles */
+    border: none; /* Ensure no border from other button styles */
 }
+
 .close-modal-btn:hover {
   color: #d32f2f; /* Red on hover for close */
-  transform: rotate(90deg); /* Spin on hover */
 }
 
 /* Responsive adjustments */
@@ -386,4 +397,319 @@ button:active {
     top: 10px;
     right: 10px;
   }
+}
+
+/* --- Input Form Container for Sections 7 & 8 --- */
+.input-form-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: flex-end; /* Aligns items to the bottom, useful for different input heights */
+    background-color: #eef;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.input-form-container input[type="text"],
+.input-form-container textarea {
+    flex: 1; /* Allows inputs to grow and shrink */
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    min-width: 150px; /* Minimum width before wrapping */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.input-form-container textarea.subject-input {
+    min-height: 80px; /* Adjust height for textarea */
+    resize: vertical; /* Allow vertical resizing */
+}
+
+.input-form-container .date-input {
+    min-width: 180px; /* Slightly wider for date */
+}
+
+/* --- Color Input with Preview (in form) --- */
+.color-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0; /* Prevents it from shrinking too much */
+}
+
+.color-input-wrapper .color-input {
+    -webkit-appearance: none; /* Remove default browser styling for color input */
+    -moz-appearance: none;
+    appearance: none;
+    width: 40px; /* Fixed width for the color picker */
+    height: 40px; /* Fixed height for the color picker */
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background: none; /* Transparent background to show custom preview */
+}
+
+.color-input-wrapper .color-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-input-wrapper .color-input::-webkit-color-swatch {
+    border: 2px solid #ccc; /* Custom border for the swatch */
+    border-radius: 4px;
+}
+
+.color-input-wrapper .color-input::-moz-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-input-wrapper .color-input::-moz-color-swatch {
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+.color-preview {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: transparent; /* Will be set by JS */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+
+/* --- Editable Inputs in Table Cells --- */
+.data-table td .textarea-input,
+.data-table td input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+    background-color: #fff; /* Ensure white background */
+    cursor: pointer; /* Indicates it's clickable */
+}
+
+.data-table td .textarea-input {
+    min-height: 60px; /* Adjust height for textarea in table */
+    resize: vertical;
+}
+
+.data-table td .color-with-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.data-table td .color-input-in-table {
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+.data-table td .color-with-preview .color-preview {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* --- Validation Modal Specific --- */
+#validationModal .table-modal-content {
+    background-color: #d4edda; /* Light green for success */
+    border: 1px solid #28a745;
+    color: #155724;
+    padding: 15px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    max-width: 350px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#validationModal.error .table-modal-content {
+    background-color: #f8d7da; /* Light red for error */
+    border-color: #dc3545;
+    color: #721c24;
+}
+/* No close button for validation modal if auto-hiding */
+#validationModal .close-modal-btn {
+    display: none;
+}
+
+
+/* --- Input Edit Modal (for Subject/Color/Other Text) --- */
+#inputEditModal .table-modal-content {
+    padding: 25px;
+    text-align: left;
+}
+
+#inputEditModal h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5em;
+}
+
+#inputEditModal #inputEditTextArea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1.1em;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#inputEditModal #inputEditTextArea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+#inputEditModal .modal-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px;
+}
+
+#inputEditModal .modal-actions button {
+    flex: 0 0 auto; /* Prevent buttons from growing/shrinking */
+}
+
+/* --- Date Picker Modal Specific --- */
+#datePickerModal .table-modal-content {
+    padding: 20px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.date-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.date-picker-header h3 {
+    font-size: 1.4em;
+    color: #333;
+    margin: 0;
+}
+
+.date-picker-header button {
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    cursor: pointer;
+    color: #555;
+    padding: 5px 10px;
+    transition: color 0.2s ease;
+}
+
+.date-picker-header button:hover {
+    color: #000;
+}
+
+.date-picker-selects {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.date-picker-selects select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.95em;
+    flex: 1;
+}
+
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+.calendar-table th,
+.calendar-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #eee;
+    cursor: pointer;
+}
+
+.calendar-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #555;
+}
+
+.calendar-table td {
+    background-color: #fff;
+    transition: background-color 0.2s ease;
+}
+
+.calendar-table td:hover {
+    background-color: #e0e0e0;
+}
+
+.calendar-table td.selected-date {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border-color: #007bff;
+}
+
+.date-picker-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.date-picker-actions button {
+    padding: 8px 15px;
+    font-size: 0.9em;
+}
+
+/* --- Responsive Adjustments specific to these sections and modals --- */
+@media (max-width: 768px) {
+    .input-form-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .input-form-container input[type="text"],
+    .input-form-container textarea,
+    .input-form-container .color-input-wrapper,
+    .input-form-container button {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .action-buttons button {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .table-modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .date-picker-selects {
+        flex-direction: column;
+    }
 }
