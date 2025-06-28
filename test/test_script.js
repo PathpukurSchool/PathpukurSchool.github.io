@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentEditingRow = null;
     let currentEditingColIndex = -1;
-    let rowToClear = null;
+    let rowToClear = null; // This will hold the data object (from allDataRows, studentDataRows, or marksDataRows)
 
     const columnNames = ["Class", "ID", "Password", "URL", "Action"];
     const rowsPerPage = 10;
@@ -130,9 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const className = row.querySelector('td').textContent;
         const inputs = row.querySelectorAll('input');
         const updated = {};
-        inputs.forEach((input, i) => {
-            updated[columnNames[i + 1]] = input.value.trim();
-        });
+        // Adjust index for columnNames because "Class" is skipped for input creation
+        updated[columnNames[1]] = inputs[0].value.trim(); // ID
+        updated[columnNames[2]] = inputs[1].value.trim(); // Password
+        updated[columnNames[3]] = inputs[2].value.trim(); // URL
 
         if (!updated.ID || !updated.Password || !updated.URL) {
             showValidationMessage(`Class: ${className}\nID, Password ও URL ফিল্ডগুলো পূরণ করতে হবে।`);
@@ -196,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationContainer.appendChild(nextBtn);
     }
 
-    // Modal Button Handlers
+    // Modal Button Handlers for general input modal
     storeInputBtn.onclick = () => {
         if (currentEditingRow && currentEditingColIndex !== -1) {
             const value = inputEditTextArea.value.trim();
@@ -219,32 +220,19 @@ document.addEventListener('DOMContentLoaded', () => {
         currentEditingColIndex = -1;
     };
 
-    confirmClearBtn.onclick = () => {
-        if (rowToClear) {
-            rowToClear.ID = "";
-            rowToClear.Password = "";
-            rowToClear.URL = "";
-            renderTable();
-            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear = null;
-        }
-        clearConfirmModal.style.display = 'none';
-    };
-
-    cancelClearBtn.onclick = () => {
-        rowToClear = null;
-        clearConfirmModal.style.display = 'none';
-    };
-
     document.querySelectorAll('.close-modal-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             btn.closest('.table-modal-overlay').style.display = 'none';
+            // Also reset currentEditingRow and currentEditingColIndex if modal is closed without saving
+            currentEditingRow = null;
+            currentEditingColIndex = -1;
+            rowToClear = null; // Clear rowToClear as well
         });
     });
 
     renderTable();
-    
-// -------------------- Section 2: Link for Students --------------------
+
+    // -------------------- Section 2: Link for Students --------------------
 
     const studentTable = document.getElementById('table-link-student');
     const studentTbody = studentTable.querySelector('tbody');
@@ -396,19 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         renderStudentTable();
     }
-    
 
-// ------- Clear Modal Setup, Section 2 ------ 
-confirmClearBtn.onclick = () => {
-        if (rowToClear) {
-            rowToClear.Student_URL = "";
-            renderStudentTable();
-            showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
-            rowToClear = null;
-        }
-        clearConfirmModal.style.display = 'none';
-    };
-    
     renderStudentTable();
 
     // -------------------- Section 3: Marks Submission Date for Teachers --------------------
@@ -490,8 +466,11 @@ confirmClearBtn.onclick = () => {
                         input.value = rowData[col];
                         input.readOnly = false;
 
-                        if (col === "Date") input.type = 'date';
-                        if (col === "Color") input.type = 'color';
+                        if (col === "Date") {
+                            input.type = 'date';
+                        } else if (col === "Color") { // Changed from 'if' to 'else if' for clarity
+                            input.type = 'color';
+                        }
 
                         input.addEventListener('change', () => {
                             input.setAttribute('data-modified', 'true');
@@ -566,19 +545,33 @@ confirmClearBtn.onclick = () => {
         renderMarksTable();
     }
 
-// ------- Clear Modal Setup, Section 3 ------ 
-confirmClearBtn.onclick = () => {
+    renderMarksTable();
+
+    // Consolidated Clear Modal Setup
+    confirmClearBtn.onclick = () => {
         if (rowToClear) {
-            rowToClear.Date = "";
-            rowToClear.Color = "";
-            renderMarksTable();
+            // Check which data source rowToClear belongs to
+            if (allDataRows.includes(rowToClear)) {
+                rowToClear.ID = "";
+                rowToClear.Password = "";
+                rowToClear.URL = "";
+                renderTable();
+            } else if (studentDataRows.includes(rowToClear)) {
+                rowToClear.Student_URL = "";
+                renderStudentTable();
+            } else if (marksDataRows.includes(rowToClear)) {
+                rowToClear.Date = "";
+                rowToClear.Color = "";
+                renderMarksTable();
+            }
             showValidationMessage("ডেটা সফলভাবে ক্লিয়ার হয়েছে!");
             rowToClear = null;
         }
         clearConfirmModal.style.display = 'none';
     };
-    
-renderMarksTable();
 
-    
+    cancelClearBtn.onclick = () => {
+        rowToClear = null;
+        clearConfirmModal.style.display = 'none';
+    };
 });
