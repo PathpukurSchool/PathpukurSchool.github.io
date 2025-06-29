@@ -21,30 +21,26 @@
   "url": "https://pathpukurschool.github.io/"
 }
 </script>
-  
+
   <meta name="description" content="Pathpukur High School - A Government-Sponsored Higher Secondary School in South 24 Parganas, West Bengal. official website. Access teacher and student panels, view exam dates, results and notices.">
   <meta name="keywords" content="Pathpukur High School, Pathpukur High School(H.S.), Pathpukur High School(HS), পাতপুকুর হাই স্কুল, পাতপুকুর স্কুল, পাত পুকুর হাই স্কুল, পাতপুকুর হাই স্কুল (উঃ মাঃ), Pathpukur School, pathpukurschool, Jaynagar school, Joynagar school, High School, Government School, Student Panel, Teacher Panel, Exam Link, School Notice">
   <meta name="author" content="Pathpukur High School">
   <meta name="robots" content="index, follow">
   <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-  <!-- Apple Touch Icon (Base64 embedded) -->
   <link rel="apple-touch-icon" href="PHS-LOGO.png">
 
   <link rel="stylesheet" href="style.css">
   <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
 </head>
 
-<!-- Dropdown menu added below -->
-
 <body>
     <div id="masterLoginOverlay">
         <div id="masterLoginBox">
     <h2 class="red-text">Pathpukur High School</h2>
-            <h2 class="shine">Master Login</h2>
+          <h2 class="shine">Master Login</h2>
 
 
 <select id="loginType">
@@ -68,22 +64,22 @@
     <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
     <h2 class="blink">Welcome to the Marks Uploading Portal</h2>
     <h3 class="login-instruction-heading">Login to access the marks uploading link<span class="emoji">👇</span></h3>
-   
+
   <div class="wrapper">
   <div class="static-text">
     Last date of marks submission
     <p>(Kindly submit all marks by due date)</p>
-    
+
   </div>
   <div class="marquee-container">
-    <div id="marquee" class="marquee-content"></div>
-  </div>
+    <div id="exam-dates-marquee-content" class="marquee-content"></div> </div>
 </div>
-  
-  
+
+
 <script src="teacher_dates.js"></script>
 <script>
-  const marquee = document.getElementById("marquee");
+  // সংশোধিত ID ব্যবহার করা হয়েছে
+  const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
 
   // Exam dates যুক্ত করা
   examDates.forEach(exam => {
@@ -91,7 +87,7 @@
       const span = document.createElement("span");
       span.textContent = `${exam.text} ${exam.date}, `;
 
-      // রং প্রয়োগ পুরো লাইনের জন্য
+      // রং প্রয়োগ পুরো লাইনের জন্য
       span.style.color = exam.color;
       span.style.fontWeight = "bold";
 
@@ -99,27 +95,27 @@
         span.style.backgroundColor = exam.backgroundColor;
       }
 
-      marquee.appendChild(span);
+      examDatesMarquee.appendChild(span);
     }
   });
 
   // Mouse hover করলে স্ক্রল থামানো
-  marquee.addEventListener("mouseover", () => {
-    marquee.classList.add("paused");
+  examDatesMarquee.addEventListener("mouseover", () => {
+    examDatesMarquee.classList.add("paused");
   });
-  marquee.addEventListener("mouseout", () => {
-    marquee.classList.remove("paused");
+  examDatesMarquee.addEventListener("mouseout", () => {
+    examDatesMarquee.classList.remove("paused");
   });
 
   // মোবাইলে touch করলে স্ক্রল থামানো
-  marquee.addEventListener("touchstart", () => {
-    marquee.classList.add("paused");
+  examDatesMarquee.addEventListener("touchstart", () => {
+    examDatesMarquee.classList.add("paused");
   });
-  marquee.addEventListener("touchend", () => {
-    marquee.classList.remove("paused");
+  examDatesMarquee.addEventListener("touchend", () => {
+    examDatesMarquee.classList.remove("paused");
   });
 </script>
-    
+
   <div id="exam-buttons"></div>
     <dialog id="loginDialog">
         <form method="dialog" onsubmit="return false">
@@ -142,51 +138,47 @@
         <a href="upload_student_notice.html" target="_blank" class="exam-link">UPLOAD STUDENT NOTICE</a>
   </div>
 
-  
-
 
     <div class="notice-section-box">
     <h2 class="blink">📌 Notice Board 📌</h2>
-<!-- ✅ External Notice File -->
-  <script src="teacher_notice.js"></script>
+<script src="teacher_notice.js"></script>
   <script>
-  const marquee = document.getElementById("marquee");
+  // সংশোধিত ID ব্যবহার করা হয়েছে
+  const noticeBoardMarquee = document.getElementById("notice-board-marquee-content"); // নতুন আইডি
 
   if (Array.isArray(ScrollingNotices)) {
     ScrollingNotices.forEach(notice => {
       const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
       const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
 
-      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
+      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
       if (text.trim() !== "") {
         const span = document.createElement("span");
         span.textContent = `${date} - ${text}`;
         span.style.color = notice.color || "black";
         span.style.fontWeight = "bold";
         span.style.marginRight = "30px";
-        marquee.appendChild(span);
+        noticeBoardMarquee.appendChild(span);
       }
     });
   } else {
-    marquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
+    noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
   }
 
   // 🔁 Marquee pause on hover/touch
-  marquee.addEventListener("mouseover", () => marquee.classList.add("paused"));
-  marquee.addEventListener("mouseout", () => marquee.classList.remove("paused"));
-  marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
-  marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
+  noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
+  noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
+  noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
+  noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
 </script>
-  
-  <!-- ✅ টেবিল নোটিশ বোর্ড -->
+
   <div id="notice-board"></div>
   <div class="pagination">
     <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
     <span id="pageNumber">Page 1</span>
     <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
   </div>
- <!-- ✅ Popup Modal -->
-<div id="popupModal" style="display: none;" class="modal-overlay">
+  <div id="popupModal" style="display: none;" class="modal-overlay">
   <div class="modal-content">
     <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
     <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
@@ -196,7 +188,6 @@
   </div>
 </div>
 
-  <!-- ✅ External Notice Bord -->
   <script src="notice.js"></script>
   <script>
     const noticesPerPage = 10;
@@ -231,9 +222,9 @@
           <td>${notice.date}</td>
           <td style="color: ${notice.color || '#000'};">${notice.text}</td>
 <td>
-  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')" 
-          onmouseover="this.style.opacity=0.8" 
-          onmouseout="this.style.opacity=1">
+  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')"
+           onmouseover="this.style.opacity=0.8"
+           onmouseout="this.style.opacity=1">
     View
   </button>
 </td>
@@ -269,12 +260,30 @@
   </script>
 
 <script>
+  // loadStudentExamLinks() ফাংশনটি js1 ফাইলে আছে।
+  // সুতরাং, js1 ফাইলটিকে অবশ্যই এই স্ক্রিপ্টের আগে লোড করতে হবে
+  // অথবা loadStudentExamLinks ফাংশনটিকে এমনভাবে ডিজাইন করতে হবে যেন এটি DOMContent,
+  // অর্থাৎ যখন DOM সম্পূর্ণ লোড হয়, তখন কার্যকর হয়।
+  // এখন script.js ফাইলটি শেষ লোড হচ্ছে, তাই এটি ঠিক থাকবে।
   window.onload = () => {
-    loadStudentExamLinks();   // আগের পরীক্ষার রেজাল্ট বাটন লোড
+    // এই ফাংশনটি js1 থেকে আসছে, তাই নিশ্চিত করতে হবে js1 লোড হয়েছে।
+    // যদি js1 কে 'script.js' হিসেবে বোঝানো হয়ে থাকে, তাহলে এই কলটি কার্যকর হবে।
+    // যদি `loadStudentExamLinks` অন্য কোথাও সংজ্ঞায়িত না থাকে, তাহলে এটি একটি ত্রুটি দেবে।
+    // আপনার js1 কোডে `loadExamLinks` ফাংশন আছে, `loadStudentExamLinks` নেই।
+    // এই লাইনটি `loadExamLinks()` হবে নাকি নতুন কোনো ফাংশন, তা আপনাকে নিশ্চিত করতে হবে।
+    // আপাতত, আমি ধরে নিচ্ছি এটি আপনার js1 (script.js) ফাইলের একটি ফাংশন।
+    // যদি js1 (script.js) ফাইলটি শেষ লোড হয়, তাহলে এই ফাংশনটি পাওয়া যাবে।
+    // এখানে `loadExamLinks()` হওয়া উচিত, যা `submitMasterLogin` এর সফলতার পর লোড হয়।
+    // তাই `window.onload` এ এটি সম্ভবত প্রয়োজন নেই, কারণ এটি টিচার লগইন এর পর লোড হয়।
+    // যদি এটি স্টুডেন্টদের জন্য আলাদা এক্সাম লিংক লোড করার উদ্দেশ্য হয়,
+    // তাহলে সেই ফাংশনটি এবং তার ডেটা সোর্স (সম্ভবত studentConfig.json বা অনুরূপ) নিশ্চিত করুন।
+    // এখানে আমি এই লাইনটি পরিবর্তন করছি না, তবে এই বিষয়ে আপনার মনোযোগ আকর্ষণ করছি।
+    // renderNoticeTable(); এখানে renderNoticeTable() কলটি js2 এর সাথে সম্পর্কিত নয়,
+    // এটি notice.js-এর সাথে সম্পর্কিত।
     renderNoticeTable();      // টেবিল নোটিশ লোড
   };
 </script>
-  
+
   <script> // Student Table Notice popup handle
   function showPopup(titleText, date, link, subjText) {
   // পপ-আপ কনটেইনার তৈরি
@@ -285,17 +294,17 @@
   popup.style.transform = 'translate(-50%, -50%)';
   popup.style.background = '#f0f8ff'; // হালকা নীল
   popup.style.padding = '20px';
-  popup.style.margin = '0 auto';      // সেন্টারে রাখবে
+  popup.style.margin = '0 auto';       // সেন্টারে রাখবে
   popup.style.border = '2px solid #333';
   popup.style.borderRadius = '10px';
   popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
   popup.style.zIndex = '9999';
   popup.style.textAlign = 'center';
-  popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
-  popup.style.minWidth = '240px'; // খুব ছোট না হয়
-  popup.style.width = '300px'; // সর্বোচ্চ চওড়া
+  popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
+  popup.style.minWidth = '240px'; // খুব ছোট না হয়
+  popup.style.width = '300px'; // সর্বোচ্চ চওড়া
   popup.style.fontFamily = 'Arial, sans-serif';
-  // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
+  // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
   const titleElem = document.createElement('div');
   titleElem.innerText = titleText;
   titleElem.style.backgroundColor = 'green';
@@ -313,7 +322,7 @@
   dateElem.style.marginBottom = '10px';
   popup.appendChild(dateElem);
 
-  // subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
+  // subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
   if (subjText && subjText.trim() !== '') {
     const subjElem = document.createElement('div');
     subjElem.innerText = subjText;
@@ -354,7 +363,7 @@ if (link && link.trim() !== '') {
   buttonContainer.appendChild(linkBtn);
 }
 
-// ✅ PNG Download Button (fixed) যোগ করা হয়েছে
+// ✅ PNG Download Button (fixed) যোগ করা হয়েছে
     const downloadBtn = document.createElement('button');
     downloadBtn.innerText = 'Download';
     downloadBtn.style.backgroundColor = '#28a745';
@@ -378,7 +387,7 @@ if (link && link.trim() !== '') {
         }, 100); // slight delay for reflow
     };
     buttonContainer.appendChild(downloadBtn);
-      
+
 // বন্ধ করুন বোতাম
 const closeBtn = document.createElement('button');
 closeBtn.innerText = 'Back';
@@ -408,15 +417,6 @@ function closeModal() {
 }
 </script>
     </div>
-
-
-
-
-    
-
-
-
-
 
 
     <footer>
