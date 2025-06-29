@@ -40,8 +40,8 @@ let editingRowOriginalData = null; // Stores data before editing for cancel oper
 document.querySelectorAll('.close-modal-btn').forEach(button => {
     button.addEventListener('click', (e) => {
         // .modal এর পরিবর্তে .table-modal-overlay ব্যবহার করুন
-        e.target.closest('.table-modal-overlay').style.display = 'none';
-
+        e.target.closest('.table-modal-overlay').style.display = 'none'; 
+        
         // Specific cleanup for modals
         // e.target.closest('.modal') এর পরিবর্তে e.target.closest('.table-modal-overlay') ব্যবহার করুন
         if (e.target.closest('.table-modal-overlay').id === 'inputEditModal') {
@@ -54,11 +54,11 @@ document.querySelectorAll('.close-modal-btn').forEach(button => {
 });
 
 // Initial Render
-// document.addEventListener('DOMContentLoaded', () => { // এই অংশটি বাদ দিন
-populateMonthYearSelects(); // Populate month and year dropdowns
-renderTable();
-populateCalendar(currentMonth, currentYear); // Initial calendar render
-// }); // এই অংশটি বাদ দিন
+document.addEventListener('DOMContentLoaded', () => {
+    populateMonthYearSelects(); // Populate month and year dropdowns
+    renderTable();
+    populateCalendar(currentMonth, currentYear); // Initial calendar render
+});
 
 // --- Table Rendering ---
 function renderTable() {
@@ -119,12 +119,12 @@ function createEmptyRow() {
             <button class="cancel-btn" style="display:none;">Cancel</button> <button class="delete-btn" style="display:none;">Delete</button>
         </td>
     `;
-
+    
     // Attach event listeners to newly created input fields in the empty row
     attachInputEventListeners(tr);
-
+    
     tr.querySelector('.save-btn').addEventListener('click', (e) => saveRow(tr));
-
+    
     return tr;
 }
 
@@ -233,7 +233,7 @@ confirmDeleteBtn.addEventListener('click', () => {
         localStorage.setItem('tableData', JSON.stringify(tableData));
         rowToDelete = null;
         deleteConfirmModal.style.display = 'none';
-
+        
         const totalPages = Math.ceil(tableData.length / rowsPerPage);
         if (currentPage > totalPages && totalPages > 0) {
             currentPage = totalPages;
@@ -417,7 +417,8 @@ function attachInputEventListeners(rowElement) {
         input.addEventListener('click', (e) => {
             currentEditInput = e.target;
             // Set modal heading based on the column
-
+            const headerText = e.target.closest('td').previousElementSibling ? e.target.closest('td').previousElementSibling.querySelector('input') ? e.target.closest('td').previousElementSibling.querySelector('input').placeholder : e.target.closest('td').previousElementSibling.textContent : ''; // Get heading from placeholder or previous cell if not heading or subject
+            
             // Simpler way to get heading:
             const cellIndex = Array.from(e.target.closest('tr').children).indexOf(e.target.closest('td'));
             const headerTitle = document.querySelector('#data-table thead th:nth-child(' + (cellIndex + 1) + ')').textContent;
