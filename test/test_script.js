@@ -179,7 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i <= totalPages; i++) {
             const pageBtn = document.createElement('button');
             pageBtn.textContent = i;
-            if (i === currentPage) pageBtn.style.fontWeight = "bold";
+            
+            if (i === currentPage) {
+            pageBtn.classList.add('active-page'); // 'active-page' নামে একটি নতুন ক্লাস যোগ করা হলো
+              }
+            
             pageBtn.onclick = () => {
                 currentPage = i;
                 renderTable();
