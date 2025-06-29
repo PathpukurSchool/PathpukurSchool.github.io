@@ -353,7 +353,9 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i <= totalPages; i++) {
             const pageBtn = document.createElement('button');
             pageBtn.textContent = i;
-            if (i === studentCurrentPage) pageBtn.style.fontWeight = "bold";
+            if (i === studentCurrentPage) {
+            pageBtn.classList.add('active-page'); // 'active-page' নামে একটি নতুন ক্লাস যোগ করা হলো
+            }
             pageBtn.onclick = () => {
                 studentCurrentPage = i;
                 renderStudentTable();
@@ -510,7 +512,9 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i <= totalPages; i++) {
             const pageBtn = document.createElement('button');
             pageBtn.textContent = i;
-            if (i === marksCurrentPage) pageBtn.style.fontWeight = "bold";
+            if (i === marksCurrentPage) {
+            pageBtn.classList.add('active-page'); // 'active-page' নামে একটি নতুন ক্লাস যোগ করা হলো
+            }
             pageBtn.onclick = () => {
                 marksCurrentPage = i;
                 renderMarksTable();
