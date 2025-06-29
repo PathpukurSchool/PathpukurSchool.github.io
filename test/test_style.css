@@ -162,6 +162,17 @@ button {
   background-color: #008080;
   color: white;
 }
+
+/* বর্তমান পেজের বোতামের জন্য বিশেষ স্টাইল */
+.pagination button.active-page {
+    background-color: #007bff; /* উদাহরণ: নীল ব্যাকগ্রাউন্ড */
+    color: #ffffff; /* সাদা টেক্সট */
+    border-color: #007bff; /* নীল বর্ডার */
+    font-weight: bold; /* বোল্ড টেক্সট */
+    cursor: default; /* ডিফল্ট কার্সার */
+    pointer-events: none; /* ক্লিক করা যাবে না */
+}
+
 .pagination button:hover {
   background-color: #8FBC8F;
 }
