@@ -164,7 +164,7 @@ button {
 }
 
 /* বর্তমান পেজের বোতামের জন্য বিশেষ স্টাইল */
-.pagination-container button.active-page {
+.pagination button.active-page {
     background-color: #007bff; /* উদাহরণ: নীল ব্যাকগ্রাউন্ড */
     color: #ffffff; /* সাদা টেক্সট */
     border-color: #007bff; /* নীল বর্ডার */
