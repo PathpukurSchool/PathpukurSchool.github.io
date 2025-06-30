@@ -61,8 +61,10 @@
 
         </div>
     </div>
-
-    <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+  <!-- মাস্টার লগইন সফল হলে তবেই স্ক্রীন দেখাবে, নইলে কালো দেখাবে -->
+<div id="mainContent" class="hidden-content">
+    
+  <img src="PHS-LOGO.png" alt="School Logo" class="logo">
     <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
     <h2 class="blink">Welcome to the Marks Uploading Portal</h2>
     <h3 class="login-instruction-heading">Login to access the marks uploading link<span class="emoji">👇</span></h3>
@@ -71,8 +73,8 @@
   <div class="static-text">
     Last date of marks submission
     <p>(Kindly submit all marks by due date)</p>
-
   </div>
+    
   <div class="marquee-container">
     <div id="exam-dates-marquee-content" class="marquee-content"></div> </div>
 </div>
@@ -118,6 +120,9 @@
   });
 </script>
 
+
+
+  
   <div id="exam-buttons"></div>
     <dialog id="loginDialog">
         <form method="dialog" onsubmit="return false">
@@ -419,6 +424,6 @@ function closeModal() {
   <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
     </footer>
 
-<script src="script.js"></script>
+</div> <script src="script.js"></script>
 </body>
 </html>
