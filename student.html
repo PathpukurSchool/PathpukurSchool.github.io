@@ -13,15 +13,14 @@
   <link rel="stylesheet" href="style.css">
 
   <!-- ✅ সেশন চেক -->
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
+    <script>
     if (sessionStorage.getItem("studentLoggedIn") !== "true") {
       window.location.replace("/home.html");
+      // console.log("Student not logged in. Redirecting to home.html."); // ডিবাগিং এর জন্য
     } else {
-      console.log("Student logged in: stay on page.");
+      // console.log("Student logged in. Staying on student.html."); // ডিবাগিং এর জন্য
     }
-  });
-</script>
+  </script>
 
 </head>
   <body>
