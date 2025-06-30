@@ -14,10 +14,20 @@
 
   <!-- ✅ সেশন চেক -->
   <script>
-    if (sessionStorage.getItem("studentLoggedIn") !== "true") {
-      window.location.replace("home.html");
+    const sessionRedirectMeta = document.getElementById('sessionRedirectMeta');
+    if (sessionStorage.getItem("studentLoggedIn") === "true") {
+      // যদি লগইন করা থাকে, তাহলে meta refresh ট্যাগটি সরিয়ে দিন
+      if (sessionRedirectMeta) {
+        sessionRedirectMeta.remove();
+      }
+    } else {
+      // যদি লগইন না থাকে, তাহলে meta refresh ট্যাগটি তার কাজ করবে
+      // জাভাস্ক্রিপ্ট রিডাইরেক্ট অতিরিক্ত সুরক্ষার জন্য রাখতে পারেন, তবে meta কাজ করবে
+      window.location.replace("home.html"); // নিশ্চিত করুন এটি আপনার মাস্টার লগইন পেজ
     }
   </script>
+
+  
 </head>
   <body>
   <!-- ✅ School Branding -->
