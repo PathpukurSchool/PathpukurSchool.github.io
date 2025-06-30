@@ -1,16 +1,69 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pathpukur High School (HS) Admin Panel</title>
-    <link rel="stylesheet" href="admin_style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+  <title>PATHPUKUR HIGH SCHOOL (HS)</title>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "School",
+  "name": "Pathpukur High School",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Vill: Pathpukur, PO: Bakultala Hat",
+    "addressLocality": "South 24 Parganas",
+    "addressRegion": "West Bengal",
+    "postalCode": "743338",
+    "addressCountry": "IN"
+  },
+  "telephone": "+91 3218248083",
+  "email": "pathpukur1954@gmail.com",
+  "url": "https://pathpukurschool.github.io/"
+}
+</script>
+
+  <meta name="description" content="Pathpukur High School - A Government-Sponsored Higher Secondary School in South 24 Parganas, West Bengal. official website. Access teacher and student panels, view exam dates, results and notices.">
+  <meta name="keywords" content="Pathpukur High School, Pathpukur High School(H.S.), Pathpukur High School(HS), পাতপুকুর হাই স্কুল, পাতপুকুর স্কুল, পাত পুকুর হাই স্কুল, পাতপুকুর হাই স্কুল (উঃ মাঃ), Pathpukur School, pathpukurschool, Jaynagar school, Joynagar school, High School, Government School, Student Panel, Teacher Panel, Exam Link, School Notice">
+  <meta name="author" content="Pathpukur High School">
+  <meta name="robots" content="index, follow">
+  <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="apple-touch-icon" href="PHS-LOGO.png">
+
+  <link rel="stylesheet" href="style.css">
+  <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
+
 <body>
-    <header class="main-header">
-        <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
-    </header>
+    <div id="masterLoginOverlay">
+        <div id="masterLoginBox">
+    <h2 class="red-text">Pathpukur High School</h2>
+          <h2 class="shine">Master Login</h2>
+
+
+<select id="loginType">
+  <option value="teacher">Teacher Login</option>
+  <option value="student">Student Login</option>
+  <option value="school">Institution Login</option>
+</select>
+<br><br>
+
+<input type="text" id="masterId" placeholder="Enter ID"><br><br>
+<input type="password" id="masterPass" placeholder="Enter Password"><br>
+<div id="masterLoginError" class="error"></div><br>
+<div id="masterLoginSuccess" class="success" style="display: none;"></div>
+
+<button onclick="submitMasterLogin()">LOGIN</button>
+
+        </div>
+    </div>
+
+    <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+    <h1>PATHPUKUR HIGH SCHOOL (HS)</h1>
 
     <div class="admin-panel-container">
         <h2>Admin Panel</h2>
