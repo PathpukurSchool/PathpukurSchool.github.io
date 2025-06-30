@@ -256,3 +256,15 @@ function populateList(elementId, items) {
         ul.appendChild(li);
     });
 }
+
+// মাস্টার লগইন সফল হলে তবেই স্ক্রিন দেখাবে, নইলে স্ক্রিন কালো হয়ে থাকবে ...
+document.addEventListener('DOMContentLoaded', (event) => {
+    const mainContent = document.getElementById("mainContent");
+    const masterLoginOverlay = document.getElementById("masterLoginOverlay");
+
+    // প্রথমে মূল কন্টেন্ট লুকান
+    mainContent.classList.add("hidden-content");
+    document.body.style.backgroundColor = "black";
+    document.body.style.overflow = "hidden";
+    masterLoginOverlay.style.display = "flex"; // লগইন ওভারলে যেন দৃশ্যমান থাকে
+                          
