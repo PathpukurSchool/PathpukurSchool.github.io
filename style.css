@@ -188,7 +188,8 @@ ul li a:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.10);
+    /* background-color: rgba(0, 0, 0, 0.7); */
+    background-color: black;
     color: darkblue;
     z-index: 9999;
     display: flex;
