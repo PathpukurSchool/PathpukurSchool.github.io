@@ -14,11 +14,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- ✅ সেশন চেক -->
+  <meta http-equiv="refresh" content="0;url=/home.html" id="sessionRedirectMeta">
   <script>
-    if (sessionStorage.getItem("studentLoggedIn") !== "true") {
-      window.location.replace("home.html");
+    const sessionRedirectMeta = document.getElementById('sessionRedirectMeta');
+
+    if (sessionStorage.getItem("studentLoggedIn") === "true") {
+      // যদি লগইন করা থাকে, তাহলে meta refresh ট্যাগটি সরিয়ে দিন
+      if (sessionRedirectMeta) {
+        sessionRedirectMeta.remove();
+      }
+      // পেজ লোড হতে দিন
+    } else {
+      // যদি লগইন না থাকে, তাহলে meta refresh ট্যাগটি তার কাজ করবে
+      // জাভাস্ক্রিপ্ট রিডাইরেক্টও অতিরিক্ত সুরক্ষার জন্য রাখুন
+      window.location.replace("/home.html"); // নিশ্চিত করুন এটি আপনার মাস্টার লগইন পেজের সঠিক পাথ
     }
   </script>
+  
 </head>
   <body>
     
