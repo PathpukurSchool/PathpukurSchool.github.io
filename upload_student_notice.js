@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const config = await response.json();
             correctID = config.teacher.id;
-            correctPassword = config.teacher.password;
+            correctPassword = config.teacher.pass;
         } catch (error) {
             console.error('masterConfig.json লোড করতে ত্রুটি:', error);
             loginMessage.textContent = 'কনফিগারেশন লোড করতে ত্রুটি। অনুগ্রহ করে পরে আবার চেষ্টা করুন।';
@@ -54,9 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cancelLoginBtn.addEventListener('click', () => {
         loginModal.style.display = 'none'; // লগইন মডেল লুকান
-        
-        // এখানে আপনার নতুন কোডটি যোগ করুন:
-        window.location.href = 'home.html'; // নির্দিষ্ট পৃষ্ঠায় ফিরে যান
+        window.history.back(); // ব্রাউজারের পূর্ববর্তী পৃষ্ঠায় ফিরে যান
     });
 
     // আপনার সমস্ত আপলোড এবং এডিট লজিক এই ফাংশনের ভেতরে থাকবে
