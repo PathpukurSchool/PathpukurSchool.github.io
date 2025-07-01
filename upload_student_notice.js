@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const config = await response.json();
-            correctID = config.loginCredentials.id;
-            correctPassword = config.loginCredentials.password;
+            correctID = config.teacher.id;
+            correctPassword = config.teacher.password;
         } catch (error) {
             console.error('masterConfig.json লোড করতে ত্রুটি:', error);
             loginMessage.textContent = 'কনফিগারেশন লোড করতে ত্রুটি। অনুগ্রহ করে পরে আবার চেষ্টা করুন।';
