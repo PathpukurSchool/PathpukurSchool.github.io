@@ -16,4 +16,10 @@
     "id": "St19544591", 
     "pass": "pass@PHS&25", 
     "redirect": "student.html" }
+  
+
+  "loginCredentials": {
+    "id": "Tr19181600802",
+    "password": "Phs@1954"
+  }
 }
