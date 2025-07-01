@@ -54,7 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cancelLoginBtn.addEventListener('click', () => {
         loginModal.style.display = 'none'; // লগইন মডেল লুকান
-        window.history.back(); // ব্রাউজারের পূর্ববর্তী পৃষ্ঠায় ফিরে যান
+        
+        // এটিই সেই লাইন যা আপনাকে home.html এ নিয়ে যাবে
+        window.location.href = 'home.html'; // নির্দিষ্ট পৃষ্ঠায় ফিরে যান
     });
 
     // আপনার সমস্ত আপলোড এবং এডিট লজিক এই ফাংশনের ভেতরে থাকবে
