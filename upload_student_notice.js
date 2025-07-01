@@ -54,18 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cancelLoginBtn.addEventListener('click', () => {
         loginModal.style.display = 'none'; // লগইন মডেল লুকান
-        document.body.innerHTML = `
-            <div style="text-align: center; padding-top: 50px;">
-                <h1 style="color: #333;">অ্যাক্সেস প্রত্যাখ্যান করা হয়েছে!</h1>
-                <p style="color: #666; font-size: 1.2em;">আপনি লগইন প্রক্রিয়া বাতিল করেছেন বা এই পৃষ্ঠায় আপনার প্রবেশাধিকার নেই।</p>
-                <p style="color: #666;">আপনি যদি মনে করেন এটি একটি ত্রুটি, তবে প্রশাসকের সাথে যোগাযোগ করুন।</p>
-            </div>
-            <footer>
-                 <hr>
-             <p>The Website is Developed under the Instruction of the Headmaster.</p>
-                <p>© Pathpukur High School (HS). All rights reserved.</p>
-            </footer>
-        `; // বিষয়বস্তু পরিষ্কার করুন এবং অ্যাক্সেস প্রত্যাখ্যানের বার্তা দেখান
+        
+        // এখানে আপনার নতুন কোডটি যোগ করুন:
+        window.location.href = 'home.html'; // নির্দিষ্ট পৃষ্ঠায় ফিরে যান
     });
 
     // আপনার সমস্ত আপলোড এবং এডিট লজিক এই ফাংশনের ভেতরে থাকবে
