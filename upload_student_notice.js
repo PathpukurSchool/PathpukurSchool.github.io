@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
             correctID = config.teacher.id;
             correctPassword = config.teacher.pass;
         } catch (error) {
-            console.error('masterConfig.json লোড করতে ত্রুটি:', error);
-            loginMessage.textContent = 'কনফিগারেশন লোড করতে ত্রুটি। অনুগ্রহ করে পরে আবার চেষ্টা করুন।';
+            console.error('Failed to Load:', error);
+            loginMessage.textContent ='Loading Error! Please Try Again Later...';
             // কনফিগারেশন লোড করা না গেলে ঐচ্ছিকভাবে লগইন এলিমেন্টগুলি অক্ষম করুন
             loginBtn.disabled = true;
             usernameInput.disabled = true;
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (enteredID === correctID && enteredPassword === correctPassword) {
             loginMessage.style.color = 'green';
-            loginMessage.textContent = 'লগইন সফল হয়েছে! রিডাইরেক্ট হচ্ছে...';
+            loginMessage.textContent = 'Login Successful. Loading...';
             setTimeout(() => {
                 loginModal.style.display = 'none'; // লগইন মডেল লুকান
                 document.body.classList.add('logged-in'); // পৃষ্ঠার বিষয়বস্তু দেখানোর জন্য ক্লাস যোগ করুন
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1000); // সাফল্য বার্তা পড়ার জন্য সময় দিন
         } else {
             loginMessage.style.color = 'red';
-            loginMessage.textContent = 'ভুল আইডি বা পাসওয়ার্ড।';
+            loginMessage.textContent = 'Wrong ID or Password!';
             passwordInput.value = ''; // সুরক্ষার জন্য পাসওয়ার্ড ক্ষেত্র পরিষ্কার করুন
         }
     });
