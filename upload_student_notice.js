@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (enteredID === correctID && enteredPassword === correctPassword) {
             loginMessage.style.color = 'green';
-            loginMessage.textContent = 'Login Successful. Loading...';
+            loginMessage.textContent = '✔️ Login Successful. Loading...';
             setTimeout(() => {
                 loginModal.style.display = 'none'; // লগইন মডেল লুকান
                 document.body.classList.add('logged-in'); // পৃষ্ঠার বিষয়বস্তু দেখানোর জন্য ক্লাস যোগ করুন
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1000); // সাফল্য বার্তা পড়ার জন্য সময় দিন
         } else {
             loginMessage.style.color = 'red';
-            loginMessage.textContent = 'Wrong ID or Password!';
+            loginMessage.textContent = '🚫 Wrong ID or Password!';
             passwordInput.value = ''; // সুরক্ষার জন্য পাসওয়ার্ড ক্ষেত্র পরিষ্কার করুন
         }
     });
@@ -541,3 +541,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
