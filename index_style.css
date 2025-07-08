@@ -555,7 +555,7 @@ ul {
 
 .login-button {
     display: inline-block;
-    background-color: var(--primary-red);
+    background-color: var(--dark-khaki);
     color: var(--white);
     padding: 20px 45px; /* প্যাডিং বাড়ানো হয়েছে */
     font-size: 1.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
@@ -569,7 +569,7 @@ ul {
 }
 
 .login-button:hover {
-    background-color: var(--dark-khaki); /* হোভারে খয়েরি */
+    background-color: var(--accent-color); /* হোভার */
     transform: translateY(-8px) scale(1.03); /* উপরে ওঠানো ও হালকা বড় হওয়া */
     box-shadow: 0 15px 35px rgba(230, 57, 70, 0.7);
 }
