@@ -256,3 +256,49 @@ function populateList(elementId, items) {
         ul.appendChild(li);
     });
 }
+
+// ওয়েলকাম পপ আপের জাভাস্ক্রিপ্ট কোড
+document.addEventListener('DOMContentLoaded', function() {
+    // JSON ফাইল থেকে ডেটা লোড করুন
+    fetch('home_popup.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('নেটওয়ার্ক রেসপন্স ঠিক ছিল না ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // পপ-আপের শিরোনাম এবং বার্তা সেট করুন
+            const popupTitleElement = document.getElementById('popupTitle');
+            const popupMessageElement = document.getElementById('popupMessage');
+
+            if (popupTitleElement && data.popup_title) {
+                popupTitleElement.textContent = data.popup_title;
+            }
+            if (popupMessageElement && data.popup_message) {
+                popupMessageElement.textContent = data.popup_message;
+            }
+
+            // ডেটা লোড হওয়ার পর পপ-আপ দেখান
+            const welcomePopup = document.getElementById('websiteWelcomePopup');
+            if (welcomePopup) {
+                welcomePopup.style.display = 'flex';
+            }
+        })
+        .catch(error => {
+            console.error('পপ-আপ ডেটা লোড করতে সমস্যা হয়েছে:', error);
+            // ত্রুটির ক্ষেত্রেও পপ-আপ দেখাতে চাইলে:
+            // const welcomePopup = document.getElementById('websiteWelcomePopup');
+            // if (welcomePopup) {
+            //     welcomePopup.style.display = 'flex';
+            // }
+        });
+});
+
+function closeWebsiteWelcomePopup() {
+    // ক্যান্সেল বাটনে ক্লিক করলে পপ-আপ লুকান
+    const welcomePopup = document.getElementById('websiteWelcomePopup');
+    if (welcomePopup) {
+        welcomePopup.style.display = 'none';
+    }
+}
