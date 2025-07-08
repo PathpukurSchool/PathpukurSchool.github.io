@@ -270,31 +270,42 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             // পপ-আপের শিরোনাম এবং বার্তা সেট করুন
             const popupTitleElement = document.getElementById('popupTitle');
-            const popupMessageElement = document.getElementById('popupMessage'); // এই লাইনটি
+            const popupMessageElement = document.getElementById('popupMessage');
+            const downloadPopupButton = document.getElementById('downloadPopup');
+            const closePopupButton = document.getElementById('closePopup');
+            const welcomePopup = document.getElementById('websiteWelcomePopup');
 
             if (popupTitleElement && data.popup_title) {
                 popupTitleElement.textContent = data.popup_title;
             }
-
-            // পরিবর্তন এখানে: popup_message যদি একটি অ্যারে হয়
             if (popupMessageElement && Array.isArray(data.popup_message)) {
-                popupMessageElement.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করুন
-
+                popupMessageElement.innerHTML = '';
                 data.popup_message.forEach(paragraphText => {
                     const p = document.createElement('p');
                     p.textContent = paragraphText;
                     popupMessageElement.appendChild(p);
                 });
             } else if (popupMessageElement && typeof data.popup_message === 'string') {
-                // যদি popup_message কোনো কারণে স্ট্রিং হিসেবে আসে (পুরোনো ফরম্যাট), তাহলে সেটিও হ্যান্ডেল করবে
-                popupMessageElement.innerHTML = `<p>${data.popup_message}</p>`;
+                popupMessageElement.innerHTML = data.popup_message;
             }
 
-
-            // ডেটা লোড হওয়ার পর পপ-আপ দেখান
-            const welcomePopup = document.getElementById('websiteWelcomePopup');
+            // পপ-আপ দেখান
             if (welcomePopup) {
                 welcomePopup.style.display = 'flex';
+            }
+
+            // ক্লোজ বাটনের কার্যকারিতা
+            if (closePopupButton) {
+                closePopupButton.addEventListener('click', closeWebsiteWelcomePopup);
+            }
+
+            // ডাউনলোড বাটনের কার্যকারিতা
+            if (downloadPopupButton) {
+                downloadPopupButton.addEventListener('click', () => {
+                    if (welcomePopup) {
+                        downloadPopupAsJpg(welcomePopup);
+                    }
+                });
             }
         })
         .catch(error => {
@@ -306,5 +317,26 @@ function closeWebsiteWelcomePopup() {
     const welcomePopup = document.getElementById('websiteWelcomePopup');
     if (welcomePopup) {
         welcomePopup.style.display = 'none';
+    }
+}
+
+async function downloadPopupAsJpg(popupElement) {
+    try {
+        const canvas = await html2canvas(popupElement);
+        const dataURL = canvas.toDataURL('image/jpeg');
+
+        // একটি লিঙ্ক তৈরি করে ডাউনলোড শুরু করা
+        const a = document.createElement('a');
+        a.href = dataURL;
+        a.download = 'popup_message.jpg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // ডাউনলোড হওয়ার পর পপ-আপ লুকানো
+        closeWebsiteWelcomePopup();
+
+    } catch (error) {
+        console.error('পপ-আপ ডাউনলোড করতে সমস্যা:', error);
     }
 }
