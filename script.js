@@ -270,14 +270,26 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             // পপ-আপের শিরোনাম এবং বার্তা সেট করুন
             const popupTitleElement = document.getElementById('popupTitle');
-            const popupMessageElement = document.getElementById('popupMessage');
+            const popupMessageElement = document.getElementById('popupMessage'); // এই লাইনটি
 
             if (popupTitleElement && data.popup_title) {
                 popupTitleElement.textContent = data.popup_title;
             }
-            if (popupMessageElement && data.popup_message) {
-                popupMessageElement.textContent = data.popup_message;
+
+            // পরিবর্তন এখানে: popup_message যদি একটি অ্যারে হয়
+            if (popupMessageElement && Array.isArray(data.popup_message)) {
+                popupMessageElement.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করুন
+
+                data.popup_message.forEach(paragraphText => {
+                    const p = document.createElement('p');
+                    p.textContent = paragraphText;
+                    popupMessageElement.appendChild(p);
+                });
+            } else if (popupMessageElement && typeof data.popup_message === 'string') {
+                // যদি popup_message কোনো কারণে স্ট্রিং হিসেবে আসে (পুরোনো ফরম্যাট), তাহলে সেটিও হ্যান্ডেল করবে
+                popupMessageElement.innerHTML = `<p>${data.popup_message}</p>`;
             }
+
 
             // ডেটা লোড হওয়ার পর পপ-আপ দেখান
             const welcomePopup = document.getElementById('websiteWelcomePopup');
@@ -287,16 +299,10 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('পপ-আপ ডেটা লোড করতে সমস্যা হয়েছে:', error);
-            // ত্রুটির ক্ষেত্রেও পপ-আপ দেখাতে চাইলে:
-            // const welcomePopup = document.getElementById('websiteWelcomePopup');
-            // if (welcomePopup) {
-            //     welcomePopup.style.display = 'flex';
-            // }
         });
 });
 
 function closeWebsiteWelcomePopup() {
-    // ক্যান্সেল বাটনে ক্লিক করলে পপ-আপ লুকান
     const welcomePopup = document.getElementById('websiteWelcomePopup');
     if (welcomePopup) {
         welcomePopup.style.display = 'none';
