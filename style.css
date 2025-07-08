@@ -360,20 +360,6 @@ ul li a:hover {
 }
 
 /* Login to access the marks uploading link (h3) এর স্টাইল */
-.login-instruction-box {
-    margin: 20px auto; /* উপরে-নিচে মার্জিন এবং মাঝখানে আনার জন্য */
-    margin-top: 15px;
-    margin-bottom: 20px;
-    text-align: center;
-    padding: 10px 15px; /* প্যাডিং বাড়ানো হয়েছে যাতে শ্যাডো সুন্দর দেখায় */
-    display: inline-block; /* অপরিবর্তিত */
-    background-color: #FFFFFF; /* ব্যাকগ্রাউন্ড ধূসর থেকে সাদা করা হয়েছে */
-    border: 1px solid #ddd; /* হালকা বর্ডার */
-    border-radius: 8px; /* সামান্য গোলাকার কোণ, আগের 5px থেকে বাড়ানো হয়েছে */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* সাদার উপরে ভেসে থাকার মতো শ্যাডো যোগ করা হয়েছে */
-    max-width: 600px; /* বক্সের সর্বোচ্চ প্রস্থ */
-}
-
 .login-instruction-heading {
     color: #6C5B7B; /* সফট বেগুনি-ধূসর বা ব্রাউনিশ শেড, অপরিবর্তিত */
     font-size: 20px; /* অপরিবর্তিত */
@@ -667,7 +653,7 @@ ul li a:hover {
     border-radius: 10px; /* কোণাগুলো গোলাকার */
     padding: 20px; /* ভিতরের লেখা থেকে বক্সের দূরত্ব */
     margin: 20px auto; /* উপরে-নিচে 20px মার্জিন, ডানে-বামে অটো (মাঝখানে আসবে) */
-    max-width: 500px; /* বক্সের সর্বোচ্চ প্রস্থ, আপনার পছন্দ অনুযায়ী বাড়াতে বা কমাতে পারেন */
+    max-width: 600px; /* বক্সের সর্বোচ্চ প্রস্থ, আপনার পছন্দ অনুযায়ী বাড়াতে বা কমাতে পারেন */
     text-align: center; /* ভেতরের লেখা মাঝখানে আনার জন্য */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* হালকা শেড */
     transition: all 0.3s ease-in-out; /* হোভার এফেক্টের জন্য স্মুথ ট্রানজিশন */
