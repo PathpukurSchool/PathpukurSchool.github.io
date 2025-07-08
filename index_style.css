@@ -45,7 +45,7 @@ body.no-scroll {
     display: flex;
     justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
     align-items: center;
-    background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-khaki) 100%);
+    background: linear-gradient(135deg, var(--primary-red) 0%, #B83227 50%, var(--dark-khaki) 100%);
     color: var(--white);
     padding: 20px; /* হেডার এর প্যাডিং, টপ ও বটম প্যাডিং আলাদাভাবে সেট করা আছে */
     text-align: center;
