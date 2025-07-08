@@ -1091,3 +1091,56 @@ ul li a:hover {
         margin: 0 auto; /* unchanged */
     }
 }
+
+/* ওয়েলকাম পপ-আপের জন্য CSS */
+.website-welcome-popup-overlay {
+    display: none; /* প্রাথমিকভাবে লুকানো থাকবে */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* আধা-স্বচ্ছ কালো ব্যাকগ্রাউন্ড */
+    display: flex; /* জাভাস্ক্রিপ্ট দ্বারা যখন দেখানো হবে */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* অন্যান্য উপাদানের উপরে দেখানোর জন্য */
+}
+
+.website-welcome-popup-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    position: relative; /* ক্লোজ বাটনের অবস্থানের জন্য */
+}
+
+.website-welcome-popup-content h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.website-welcome-popup-content p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.website-welcome-close-btn {
+    background: #f44336; /* ক্যান্সেল বোতামের রঙ */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.website-welcome-close-btn:hover {
+    background: #d32f2f; /* হোভারে গাঢ় রঙ */
+        }
