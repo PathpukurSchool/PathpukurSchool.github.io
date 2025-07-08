@@ -1108,39 +1108,56 @@ ul li a:hover {
 }
 
 .website-welcome-popup-content {
-    background: #fff;
+    /* নতুন ব্যাকগ্রাউন্ড রঙ: হালকা আকাশি (#e0f7fa) বা হালকা সবুজ (#e8f5e9) */
+    background: #e0f7fa; /* হালকা আকাশি, আপনি চাইলে #e8f5e9 (হালকা সবুজ) ব্যবহার করতে পারেন */
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     text-align: center;
-    max-width: 400px;
-    width: 90%;
+    max-width: 300px; /* পপ-আপের সর্বোচ্চ প্রস্থ কমানো হয়েছে */
+    width: 90%; /* মোবাইলে স্ক্রিনের 90% নেবে, কিন্তু max-width দ্বারা সীমিত থাকবে */
     position: relative; /* ক্লোজ বাটনের অবস্থানের জন্য */
+    box-sizing: border-box; /* প্যাডিং প্রস্থের অংশ হিসেবে ধরা হবে */
 }
 
 .website-welcome-popup-content h2 {
     margin-top: 0;
-    color: #333;
-    font-size: 24px;
+    color: #00796b; /* হেডিং এর জন্য গাঢ় সবুজ রঙ */
+    font-size: 22px; /* ফন্টের আকার সামান্য কমানো হয়েছে */
 }
 
 .website-welcome-popup-content p {
-    color: #666;
-    line-height: 1.6;
+    color: #424242; /* লেখার জন্য গাঢ় ধূসর রঙ */
+    line-height: 1.5; /* লাইন উচ্চতা সামান্য কমানো হয়েছে */
     margin-bottom: 20px;
+    font-size: 15px; /* ফন্টের আকার সামান্য কমানো হয়েছে */
 }
 
 .website-welcome-close-btn {
     background: #f44336; /* ক্যান্সেল বোতামের রঙ */
     color: white;
-    padding: 10px 20px;
+    padding: 8px 15px; /* প্যাডিং কমিয়ে বোতাম ছোট করা হয়েছে */
     border: none;
-    border-radius: 5px;
+    border-radius: 4px; /* বর্ডার রেডিয়াস সামান্য কমানো হয়েছে */
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px; /* ফন্টের আকার ছোট করা হয়েছে */
     transition: background 0.3s ease;
 }
 
 .website-welcome-close-btn:hover {
     background: #d32f2f; /* হোভারে গাঢ় রঙ */
-        }
+}
+
+/* ছোট স্ক্রিনের জন্য অতিরিক্ত অ্যাডজাস্টমেন্ট (ঐচ্ছিক) */
+@media (max-width: 400px) {
+    .website-welcome-popup-content {
+        max-width: 90%; /* ছোট স্ক্রিনে আরও বেশি প্রস্থ নিতে পারে */
+        padding: 20px; /* প্যাডিং আরও কমানো হয়েছে */
+    }
+    .website-welcome-popup-content h2 {
+        font-size: 20px;
+    }
+    .website-welcome-popup-content p {
+        font-size: 14px;
+    }
+}
