@@ -1,7 +1,7 @@
 /* Custom CSS Variables for Easy Theming */
 :root {
     --primary-red: #E63946;    /* লোগোর লাল */
-    --dark-khaki: #8B0000;     /* খয়েরি */
+    --dark-khaki: #6B0000;     /* খয়েরি */
     --light-khaki: #b84b00;    /* হালকা খয়েরি */
     --white: #FFFFFF;
     --black: #333333;
@@ -45,7 +45,7 @@ body.no-scroll {
     display: flex;
     justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
     align-items: center;
-    background: linear-gradient(135deg, var(--primary-red) 0%, #B83227 50%, var(--dark-khaki) 100%);
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-khaki) 100%);
     color: var(--white);
     padding: 20px; /* হেডার এর প্যাডিং, টপ ও বটম প্যাডিং আলাদাভাবে সেট করা আছে */
     text-align: center;
