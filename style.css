@@ -1140,15 +1140,15 @@ ul li a:hover {
     display: flex; /* বোতামগুলোকে পাশাপাশি রাখার জন্য */
     justify-content: space-between; /* বোতামগুলোর মধ্যে সমান ফাঁকা জায়গা */
     gap: 10px; /* বোতামগুলোর মধ্যে গ্যাপ */
-    margin-top: 5px; /* কন্টেন্ট থেকে দূরত্ব বাড়ানো হয়েছে */
+    margin-top: 5px; /* কন্টেন্ট থেকে দূরত্ব */
 }
 
 .popup-action-btn {
-    padding: 8px 0; /* প্যাডিং উপরে-নিচে 12px, ডানে-বামে 0 */
+    padding: 6px 0; /* প্যাডিং উপরে-নিচে 6px, ডানে-বামে 0 */
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
     flex: 1; /* দুটি বোতামকে সমানভাবে উপলব্ধ স্থান নিতে দেওয়া হয়েছে */
