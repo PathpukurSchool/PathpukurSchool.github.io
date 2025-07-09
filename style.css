@@ -677,10 +677,6 @@ ul li a:hover {
     }
 }
 
-
-
-
-
 /* আপলোড স্টুডেন্ট নোটিশ */
 .table-section-container {
     margin: 20px auto;
@@ -1116,17 +1112,18 @@ ul li a:hover {
     justify-content: flex-end;
     align-items: center;
     margin-bottom: 10px;
+     background: sky blue
 }
 
 .popup-icons {
     display: flex;
-    gap: 10px;
+    gap: 30px;
 }
 
 /* ইমোজি আইকনের জন্য নতুন স্টাইল */
 .popup-icons .icon-emoji {
     cursor: pointer;
-    font-size: 15px; /* ইমোজির আকার বড় করা হয়েছে */
+    font-size: 15px; /* ইমোজির আকার */
     line-height: 1; /* টেক্সট বেসলাইন অ্যালাইনমেন্ট ঠিক করতে */
     padding: 2px; /* ক্লিক করার ক্ষেত্র বড় করতে */
     transition: transform 0.2s ease-in-out; /* হোভারে সামান্য অ্যানিমেশন */
@@ -1134,7 +1131,7 @@ ul li a:hover {
 
 .popup-icons .icon-emoji:hover {
     transform: scale(1.1); /* হোভারে ইমোজি সামান্য বড় হবে */
-    color: yellow
+    color: blue
 }
 
 .website-welcome-popup-content h2 {
@@ -1147,7 +1144,7 @@ ul li a:hover {
 .website-welcome-popup-content p {
     color: #424242;
     line-height: 1.6;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     font-size: 15px;
 }
 
