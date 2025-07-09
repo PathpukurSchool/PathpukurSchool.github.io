@@ -1121,14 +1121,14 @@ ul li a:hover {
 .website-welcome-popup-content #popupMessage {
     flex-grow: 1;
     overflow-y: auto;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     padding-right: 5px;
 }
 
 .website-welcome-popup-content p {
     color: #424242;
     line-height: 1.6;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     font-size: 15px;
 }
 .website-welcome-popup-content p:last-child {
@@ -1173,4 +1173,17 @@ ul li a:hover {
 .cancel-btn:hover {
     background-color: #c82333;
     transform: translateY(-2px);
+}
+/* ছোট স্ক্রিনের জন্য অ্যাডজাস্টমেন্ট */
+@media (max-width: 400px) {
+    .website-welcome-popup-content {
+        max-width: 95%;
+        padding: 20px;
+    }
+    .website-welcome-popup-content h2 {
+        font-size: 20px;
+    }
+    .website-welcome-popup-content p {
+        font-size: 14px;
+    }
 }
