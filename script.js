@@ -271,13 +271,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // পপ-আপের শিরোনাম এবং বার্তা সেট করুন
             const popupTitleElement = document.getElementById('popupTitle');
             const popupMessageElement = document.getElementById('popupMessage');
-            const downloadPopupButton = document.getElementById('downloadPopup');
-            const closePopupButton = document.getElementById('closePopup');
+            // বোতামগুলোর নতুন আইডি ব্যবহার করা হয়েছে
+            const downloadButton = document.getElementById('downloadPopupButton'); // নতুন আইডি
+            const closeButton = document.getElementById('closePopupButton');     // নতুন আইডি
             const welcomePopup = document.getElementById('websiteWelcomePopup');
 
             if (popupTitleElement && data.popup_title) {
                 popupTitleElement.textContent = data.popup_title;
             }
+
             if (popupMessageElement && Array.isArray(data.popup_message)) {
                 popupMessageElement.innerHTML = '';
                 data.popup_message.forEach(paragraphText => {
@@ -295,13 +297,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // ক্লোজ বাটনের কার্যকারিতা
-            if (closePopupButton) {
-                closePopupButton.addEventListener('click', closeWebsiteWelcomePopup);
+            if (closeButton) {
+                closeButton.addEventListener('click', closeWebsiteWelcomePopup);
             }
 
             // ডাউনলোড বাটনের কার্যকারিতা
-            if (downloadPopupButton) {
-                downloadPopupButton.addEventListener('click', () => {
+            if (downloadButton) {
+                downloadButton.addEventListener('click', () => {
                     if (welcomePopup) {
                         downloadPopupAsJpg(welcomePopup);
                     }
@@ -320,12 +322,12 @@ function closeWebsiteWelcomePopup() {
     }
 }
 
+// downloadPopupAsJpg ফাংশনটি অপরিবর্তিত থাকবে
 async function downloadPopupAsJpg(popupElement) {
     try {
         const canvas = await html2canvas(popupElement);
         const dataURL = canvas.toDataURL('image/jpeg');
 
-        // একটি লিঙ্ক তৈরি করে ডাউনলোড শুরু করা
         const a = document.createElement('a');
         a.href = dataURL;
         a.download = 'popup_message.jpg';
@@ -333,7 +335,6 @@ async function downloadPopupAsJpg(popupElement) {
         a.click();
         document.body.removeChild(a);
 
-        // ডাউনলোড হওয়ার পর পপ-আপ লুকানো
         closeWebsiteWelcomePopup();
 
     } catch (error) {
