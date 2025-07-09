@@ -1126,7 +1126,7 @@ ul li a:hover {
 /* ইমোজি আইকনের জন্য নতুন স্টাইল */
 .popup-icons .icon-emoji {
     cursor: pointer;
-    font-size: 24px; /* ইমোজির আকার বড় করা হয়েছে */
+    font-size: 15px; /* ইমোজির আকার বড় করা হয়েছে */
     line-height: 1; /* টেক্সট বেসলাইন অ্যালাইনমেন্ট ঠিক করতে */
     padding: 2px; /* ক্লিক করার ক্ষেত্র বড় করতে */
     transition: transform 0.2s ease-in-out; /* হোভারে সামান্য অ্যানিমেশন */
@@ -1134,6 +1134,7 @@ ul li a:hover {
 
 .popup-icons .icon-emoji:hover {
     transform: scale(1.1); /* হোভারে ইমোজি সামান্য বড় হবে */
+    color: yellow
 }
 
 .website-welcome-popup-content h2 {
