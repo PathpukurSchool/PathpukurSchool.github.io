@@ -1128,7 +1128,7 @@ ul li a:hover {
 .website-welcome-popup-content p {
     color: #424242;
     line-height: 1.6;
-    margin-bottom: 10px; /* প্যারাগ্রাফগুলোর মধ্যে মার্জিন */
+    margin-bottom: 6px; /* প্যারাগ্রাফগুলোর মধ্যে মার্জিন */
     font-size: 15px;
 }
 .website-welcome-popup-content p:last-child {
@@ -1139,7 +1139,7 @@ ul li a:hover {
 .popup-actions {
     display: flex;
     justify-content: space-around; /* বোতামগুলোর মধ্যে সমান ফাঁকা জায়গা */
-    gap: 25px; /* বোতামগুলোর মধ্যে গ্যাপ */
+    gap: 10px; /* বোতামগুলোর মধ্যে গ্যাপ */
     margin-top: 0px; /* কন্টেন্ট থেকে দূরত্ব */
 }
 
@@ -1148,7 +1148,7 @@ ul li a:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
     flex: 1; /* বোতামগুলো উপলব্ধ স্থান ভাগ করে নেবে */
@@ -1188,8 +1188,8 @@ ul li a:hover {
         font-size: 14px;
     }
     .popup-action-btn {
-        padding: 8px 15px;
-        font-size: 14px;
+        padding: 6px 10px;
+        font-size: 10px;
     }
     .popup-actions {
         flex-direction: column; /* ছোট স্ক্রিনে বোতামগুলো উল্লম্বভাবে থাকবে */
