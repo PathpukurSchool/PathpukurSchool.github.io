@@ -1097,61 +1097,89 @@ ul li a:hover {
 
 .website-welcome-popup-content {
     background: #e0f7fa; /* হালকা আকাশি */
-    padding: 20px;
+    padding: 15px; /* প্যাডিং আবার বাড়ানো হয়েছে যেহেতু আইকন হেডার নেই */
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    text-align: left;
+    text-align: left; /* লেখার প্রান্তিককরণ বাম দিকে */
     max-width: 400px;
     width: 90%;
     position: relative;
     box-sizing: border-box;
-}
-
-.popup-header {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 10px;
-     background: sky blue
-}
-
-.popup-icons {
-    display: flex;
-    gap: 30px;
-}
-
-/* ইমোজি আইকনের জন্য নতুন স্টাইল */
-.popup-icons .icon-emoji {
-    cursor: pointer;
-    font-size: 15px; /* ইমোজির আকার */
-    line-height: 1; /* টেক্সট বেসলাইন অ্যালাইনমেন্ট ঠিক করতে */
-    padding: 2px; /* ক্লিক করার ক্ষেত্র বড় করতে */
-    transition: transform 0.2s ease-in-out; /* হোভারে সামান্য অ্যানিমেশন */
-}
-
-.popup-icons .icon-emoji:hover {
-    transform: scale(1.1); /* হোভারে ইমোজি সামান্য বড় হবে */
-    color: blue
+    display: flex; /* কন্টেন্টকে উল্লম্বভাবে সাজানোর জন্য */
+    flex-direction: column; /* উপাদানগুলো উপরে-নিচে থাকবে */
+    justify-content: space-between; /* বোতামগুলোকে নিচে ঠেলে দেওয়ার জন্য */
 }
 
 .website-welcome-popup-content h2 {
     margin-top: 0;
     color: #00796b;
     font-size: 22px;
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* হেডিং এর নিচের মার্জিন */
+    text-align: center; /* হেডিং মাঝখানে আনার জন্য */
+}
+
+.website-welcome-popup-content #popupMessage { /* p ট্যাগের কন্টেইনারের জন্য */
+    flex-grow: 1; /* কন্টেন্ট এরিয়াকে বাকি জায়গা নিতে দিন */
+    overflow-y: auto; /* যদি মেসেজ বড় হয়, স্ক্রলবার দেখাবে */
+    margin-bottom: 5px; /* বোতাম থেকে দূরত্ব */
+    padding-right: 5px; /* স্ক্রলবারের জন্য প্যাডিং */
 }
 
 .website-welcome-popup-content p {
     color: #424242;
     line-height: 1.6;
-    margin-bottom: 5px;
+    margin-bottom: 10px; /* প্যারাগ্রাফগুলোর মধ্যে মার্জিন */
     font-size: 15px;
 }
+.website-welcome-popup-content p:last-child {
+    margin-bottom: 0; /* শেষ প্যারাগ্রাফের নিচে মার্জিন থাকবে না */
+}
 
+/* নতুন বোতামগুলোর জন্য স্টাইল */
+.popup-actions {
+    display: flex;
+    justify-content: space-around; /* বোতামগুলোর মধ্যে সমান ফাঁকা জায়গা */
+    gap: 25px; /* বোতামগুলোর মধ্যে গ্যাপ */
+    margin-top: 0px; /* কন্টেন্ট থেকে দূরত্ব */
+}
+
+.popup-action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    flex: 1; /* বোতামগুলো উপলব্ধ স্থান ভাগ করে নেবে */
+    max-width: 150px; /* বোতামগুলোর সর্বোচ্চ প্রস্থ */
+}
+
+.download-btn {
+    background-color: #28a745; /* সবুজ রঙ */
+    color: white;
+}
+
+.download-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.cancel-btn {
+    background-color: #dc3545; /* লাল রঙ */
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* ছোট স্ক্রিনের জন্য অ্যাডজাস্টমেন্ট */
 @media (max-width: 400px) {
     .website-welcome-popup-content {
         max-width: 95%;
-        padding: 15px;
+        padding: 20px;
     }
     .website-welcome-popup-content h2 {
         font-size: 20px;
@@ -1159,7 +1187,15 @@ ul li a:hover {
     .website-welcome-popup-content p {
         font-size: 14px;
     }
-    .popup-icons .icon-emoji {
-        font-size: 22px; /* মোবাইলে আকার কিছুটা ছোট করা হয়েছে */
+    .popup-action-btn {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    .popup-actions {
+        flex-direction: column; /* ছোট স্ক্রিনে বোতামগুলো উল্লম্বভাবে থাকবে */
+        gap: 10px;
+    }
+    .popup-action-btn {
+        max-width: 100%; /* ছোট স্ক্রিনে পুরো প্রস্থ নেবে */
     }
 }
