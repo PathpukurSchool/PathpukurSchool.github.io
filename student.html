@@ -301,79 +301,79 @@ function closeModal() {
   <h2 style="text-align:center;">📄 পরীক্ষার ফলাফল 📄</h2>
   <div id="exam-buttons" style="text-align:center;"></div>
 
-  <script>
+<script>
     let studentData = {};
 
     // লিঙ্ক লোড
     function loadStudentExamLinks() {
-      fetch('config_student.json')
-      // fetch('https://script.google.com/macros/s/AKfycbwwfRPjHO_S_nVIJPnC90G0jQkbeWRFMU6R2XmQWjpdLYyu7p56Xe7KKgHDdlioJiienQ/exec?sheet=StudentLink') // ← <-- আপনার Apps Script URL এখানে বসান
-        .then(response => response.json())
-        .then(data => {
-          studentData = data;
-          renderStudentButtons();
-        })
-        .catch(error => {
-          console.error('কনফিগারেশন লোডে সমস্যা:', error);
-        });
+        fetch('config_student.json')
+            .then(response => response.json())
+            .then(data => {
+                studentData = data;
+                renderStudentButtons();
+            })
+            .catch(error => {
+                console.error('কনফিগারেশন লোডে সমস্যা:', error);
+            });
     }
 
     // বাটন তৈরি ও দেখানো
     function renderStudentButtons() {
-      const container = document.getElementById('exam-buttons');
-      container.innerHTML = '';
+        const container = document.getElementById('exam-buttons'); // এই আইডি একই থাকবে
+        container.innerHTML = '';
 
-      // ইউনিক ক্লাস লিস্ট তৈরি
-      const classes = [...new Set(Object.keys(studentData).map(k => k.split('_')[0]))];
+        // ইউনিক ক্লাস লিস্ট তৈরি
+        const classes = [...new Set(Object.keys(studentData).map(k => k.split('_')[0]))];
 
-      classes.forEach(cls => {
-        const title = document.createElement('div');
-        title.className = 'class-title';
-        title.textContent = 'CLASS ' + cls.replace('X_TEST', 'X');
-        container.appendChild(title);
+        classes.forEach(cls => {
+            // ✅ নতুন কোড: প্রতিটি ক্লাসের জন্য একটি বক্স তৈরি করা হচ্ছে
+            const classBox = document.createElement('div');
+            classBox.className = 'class-box'; // এই ক্লাসটি CSS এ যোগ করা হবে
 
-        const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
-        exams.forEach(exam => {
-          const key = `${cls}_${exam}`;
-          if (studentData[key]) {
-            const link = studentData[key].url;
-            const a = document.createElement('a');
-            a.className = 'exam-link';
-            let label = exam;
-if (exam === 'TEST') label = 'TEST EXAM';
-else if (exam === 'SEM1') label = 'SEMESTER I';
-else if (exam === 'SEM2') label = 'SEMESTER II';
-a.textContent = label;
-            a.href = '#';
-            a.onclick = (e) => {
-  e.preventDefault();
-  // আগের মেসেজ থাকলে সরিয়ে ফেলুন
-  const oldMsg = a.nextElementSibling;
-  if (oldMsg && oldMsg.classList.contains('avail-msg')) {
-    oldMsg.remove();
-  }
+            const title = document.createElement('div');
+            title.className = 'class-title'; // এই ক্লাসটি CSS এ যোগ করা হবে
+            title.textContent = 'CLASS ' + cls.replace('X_TEST', 'X');
+            classBox.appendChild(title); // বক্সের মধ্যে শিরোনাম যোগ করা হলো
 
-  if (link && link.trim() !== '') {
-    window.open(link, '_blank');
-  } else {
-    const msg = document.createElement('div');
-    msg.className = 'avail-msg';
-    msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
+            const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
+            exams.forEach(exam => {
+                const key = `${cls}_${exam}`;
+                if (studentData[key]) {
+                    const link = studentData[key].url;
+                    const a = document.createElement('a');
+                    a.className = 'exam-link';
+                    let label = exam;
+                    if (exam === 'TEST') label = 'TEST EXAM';
+                    else if (exam === 'SEM1') label = 'SEMESTER I';
+                    else if (exam === 'SEM2') label = 'SEMESTER II';
+                    a.textContent = label;
+                    a.href = '#';
+                    a.onclick = (e) => {
+                        e.preventDefault();
+                        const oldMsg = a.nextElementSibling;
+                        if (oldMsg && oldMsg.classList.contains('avail-msg')) {
+                            oldMsg.remove();
+                        }
 
-    a.parentNode.insertBefore(msg, a.nextSibling);
-
-    // 3 সেকেন্ড পর বার্তাটি অটো গায়েব হবে
-    setTimeout(() => {
-      msg.remove();
-    }, 3000);
-  }
-};
-            container.appendChild(a);
-          }
+                        if (link && link.trim() !== '') {
+                            window.open(link, '_blank');
+                        } else {
+                            const msg = document.createElement('div');
+                            msg.className = 'avail-msg';
+                            msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
+                            a.parentNode.insertBefore(msg, a.nextSibling);
+                            setTimeout(() => {
+                                msg.remove();
+                            }, 3000);
+                        }
+                    };
+                    classBox.appendChild(a); // ✅ বাটনগুলো বক্সের মধ্যে যোগ করা হলো
+                }
+            });
+            container.appendChild(classBox); // ✅ মূল কন্টেইনারে ক্লাস বক্স যোগ করা হলো
         });
-      });
     }
-  </script>
+</script>
   
   <!-- Footer -->
   <footer>
