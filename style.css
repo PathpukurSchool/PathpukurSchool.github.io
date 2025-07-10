@@ -67,7 +67,7 @@ font-weight: bold;
     box-shadow: none; /* No shadow change on hover */
 }
 /* শেডযুক্ত তথ্য বক্সের স্টাইল */
-.shaded-info-box {
+.shaded-info-box, .class-box {
     background-color: #f8f8f8; /* বক্সের জন্য খুব হালকা ধূসর ব্যাকগ্রাউন্ড */
     border: 1px solid #e0e0e0; /* হালকা ধূসর বর্ডার */
     border-radius: 8px; /* সামান্য গোলাকার কোণ */
@@ -87,7 +87,7 @@ font-weight: bold;
 
 /* এক্সাম বোতামগুলিকে বক্সের মধ্যে সাজানোর জন্য নতুন CSS */
 /* বোতামগুলির নির্দিষ্ট কোনো স্টাইল না থাকলেও, এই ক্লাসটি বোতামগুলিকে সুন্দরভাবে সাজাতে সাহায্য করবে */
-.exam-buttons-group {
+.exam-buttons-group, #exam-buttons {
     display: flex; /* বোতামগুলিকে Flexbox ব্যবহার করে সাজানো */
     flex-wrap: wrap; /* স্থান কম হলে বোতামগুলিকে পরের লাইনে নিয়ে যেতে সাহায্য করবে */
     gap: 10px; /* বোতামগুলির মধ্যে ফাঁকা স্থান */
@@ -97,7 +97,7 @@ font-weight: bold;
 
 /* মোবাইলের জন্য রেসপনসিভ অ্যাডজাস্টমেন্ট (শুধুমাত্র বক্সের স্টাইল রেখে) */
 @media (max-width: 600px) {
-    .shaded-info-box {
+    .shaded-info-box, .class-box {
         padding: 15px; /* মোবাইলে কম প্যাডিং */
         margin: 15px 10px; /* মোবাইলে মার্জিন, স্ক্রিনের কিনারা থেকে দূরে রাখতে */
     }
