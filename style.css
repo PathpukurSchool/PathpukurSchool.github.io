@@ -73,7 +73,7 @@ font-weight: bold;
     border-radius: 8px; /* সামান্য গোলাকার কোণ */
     padding: 20px; /* বক্সের ভেতরের প্যাডিং */
     margin: 20px auto; /* বক্সের উপরে/নিচে মার্জিন, এবং ডানে/বামে অটো মার্জিন দিয়ে কেন্দ্রে স্থাপন */
-    width: 90%
+    width: 95%
     max-width: 600px; /* বড় স্ক্রিনে বক্সের সর্বোচ্চ প্রস্থ */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* হালকা শেড */
     text-align: center; /* বক্সের ভেতরের কন্টেন্ট (CLASS V, বোতাম) কেন্দ্রে স্থাপন */
@@ -652,9 +652,9 @@ ul li a:hover {
     background-color: #E6F7E6; /* হালকা সবুজ আভা, আপনার থিমের সাথে মানানসই */
     border: 1px solid #C8E6C9; /* হালকা সবুজ বর্ডার */
     border-radius: 10px; /* কোণাগুলো গোলাকার */
-    padding: 20px; /* ভিতরের লেখা থেকে বক্সের দূরত্ব */
+    padding: 10px; /* ভিতরের লেখা থেকে বক্সের দূরত্ব */
     margin: 20px auto; /* উপরে-নিচে 20px মার্জিন, ডানে-বামে অটো (মাঝখানে আসবে) */
-    max-width: 600px; /* বক্সের সর্বোচ্চ প্রস্থ, আপনার পছন্দ অনুযায়ী বাড়াতে বা কমাতে পারেন */
+    max-width: 800px; /* বক্সের সর্বোচ্চ প্রস্থ, আপনার পছন্দ অনুযায়ী বাড়াতে বা কমাতে পারেন */
     text-align: center; /* ভেতরের লেখা মাঝখানে আনার জন্য */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* হালকা শেড */
     transition: all 0.3s ease-in-out; /* হোভার এফেক্টের জন্য স্মুথ ট্রানজিশন */
@@ -663,7 +663,7 @@ ul li a:hover {
 
 /* হোভার এফেক্ট (গ্লো সহ) */
 .notice-section-box:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* হোভার করলে শেড আরও গাঢ় হবে */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* হোভার করলে শেড আরও গাঢ় হবে */
     transform: translateY(-3px); /* সামান্য উপরে উঠে আসবে */
     background-color: #D9F0D9; /* হোভার করলে ব্যাকগ্রাউন্ড কালার একটু গাঢ় হবে */
 }
@@ -1102,7 +1102,7 @@ ul li a:hover {
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     text-align: left;
-    max-width: 400px;
+    max-width: 500px;
     width: 90%;
     position: relative;
     box-sizing: border-box;
@@ -1129,7 +1129,7 @@ ul li a:hover {
 .website-welcome-popup-content p {
     color: #424242;
     line-height: 1.6;
-    margin-bottom: 5px;
+    margin-bottom: 0px;
     font-size: 15px;
 }
 .website-welcome-popup-content p:last-child {
@@ -1141,11 +1141,11 @@ ul li a:hover {
     display: flex; /* বোতামগুলোকে পাশাপাশি রাখার জন্য */
     justify-content: space-between; /* বোতামগুলোর মধ্যে সমান ফাঁকা জায়গা */
     gap: 10px; /* বোতামগুলোর মধ্যে গ্যাপ */
-    margin-top: 5px; /* কন্টেন্ট থেকে দূরত্ব */
+    margin-top: 10px; /* কন্টেন্ট থেকে দূরত্ব */
 }
 
 .popup-action-btn {
-    padding: 6px 0; /* প্যাডিং উপরে-নিচে 6px, ডানে-বামে 0 */
+    padding: 4px 0; /* প্যাডিং উপরে-নিচে 4px, ডানে-বামে 0 */
     border: none;
     border-radius: 5px;
     cursor: pointer;
