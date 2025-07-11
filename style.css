@@ -9,17 +9,17 @@ h1 {
   font-size: 34px;
   font-weight: bold;
   text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
-    color: darkred;
+  color: darkred;
 }
 h2 {
     color: #333;
 }
 .class-title {
   margin-top: 20px;
-font-weight: bold;
-    margin: 28px;
-  font-size: 22px;
-    color: #fff;
+ font-weight: bold;
+ margin: 28px;
+ font-size: 22px;
+ color: #fff;
   background: linear-gradient(90deg, #DC143C, #FFD700, #B22222, #DC143C);
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -66,24 +66,56 @@ font-weight: bold;
     transform: none; /* No lift on hover */
     box-shadow: none; /* No shadow change on hover */
 }
-/* শেডযুক্ত তথ্য বক্সের স্টাইল */
+/* --- শেডযুক্ত তথ্য বক্সের স্টাইল (নোটিশ বক্সের ভেতরে অবস্থানের জন্য উপযুক্ত) --- */
 .shaded-info-box, .class-box {
-    background-color: #f8f8f8; /* বক্সের জন্য খুব হালকা ধূসর ব্যাকগ্রাউন্ড */
-    border: 1px solid #e0e0e0; /* হালকা ধূসর বর্ডার */
-    border-radius: 8px; /* সামান্য গোলাকার কোণ */
-    padding: 20px; /* বক্সের ভেতরের প্যাডিং */
-    margin: 20px auto; /* বক্সের উপরে/নিচে মার্জিন, এবং ডানে/বামে অটো মার্জিন দিয়ে কেন্দ্রে স্থাপন */
-    width: 90%
-    max-width: 400px; /* বড় স্ক্রিনে বক্সের সর্বোচ্চ প্রস্থ */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* হালকা শেড */
-    text-align: center; /* বক্সের ভেতরের কন্টেন্ট (CLASS V, বোতাম) কেন্দ্রে স্থাপন */
-    transition: box-shadow 0.3s ease, transform 0.3s ease; /* হোভার ইফেক্টের জন্য মসৃণ ট্রানজিশন */
+    /* বেসিক লেআউট ও বক্স মডেল */
+    background-color: #FFFFFF; /* পরিষ্কার সাদা ব্যাকগ্রাউন্ড, নোটিশ বক্সের হালকা আভার সাথে মানানসই */
+    border: 1px solid #E0F2F7; /* খুব হালকা নীলচে-ধূসর বর্ডার, সূক্ষ্ম দেখাবে */
+    border-radius: 10px; /* কোণাগুলো আরও মসৃণ ও গোলাকার */
+    padding: 25px; /* বক্সের ভেতরের প্যাডিং বাড়ানো হয়েছে, কন্টেন্টকে আরও জায়গা দেবে */
+    margin: 25px auto; /* উপরে-নিচে মার্জিন বাড়ানো হয়েছে, ডানে-বামে অটো (মাঝখানে আসবে) */
+    width: 85%; /* ছোট স্ক্রিনের জন্য প্রস্থের সমন্বয়, নোটিশ বক্সের ভেতরে আরও ভালো ফিট হবে */
+    max-width: 350px; /* বড় স্ক্রিনে বক্সের সর্বোচ্চ প্রস্থ কমানো হয়েছে, সুষম দেখানোর জন্য */
+    box-sizing: border-box; /* প্যাডিং এবং বর্ডার যেন প্রস্থের মধ্যে থাকে */
+
+    /* টাইপোগ্রাফি */
+    font-family: 'Segoe UI', 'Roboto', sans-serif; /* আধুনিক ও পঠনযোগ্য ফন্ট */
+    color: #444; /* গাঢ় ধূসর টেক্সট কালার */
+    text-align: center; /* বক্সের ভেতরের কন্টেন্ট কেন্দ্রে স্থাপন */
+    line-height: 1.5; /* লাইনের উচ্চতা পঠনযোগ্যতার জন্য */
+
+    /* শ্যাডো এবং ট্রানজিশন */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* হালকা ও বিস্তৃত শেড */
+    transition: all 0.3s ease-in-out; /* হোভার ইফেক্টের জন্য মসৃণ ট্রানজিশন */
 }
 
 /* পুরো বক্সের হোভার ইফেক্ট */
-.shaded-info-box:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* হোভার করলে আরও গাঢ় শেড */
-    transform: translateY(-5px); /* হোভার করলে বক্সটি সামান্য উপরে উঠবে */
+.shaded-info-box:hover, .class-box:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* হোভার করলে শেড আরও গাঢ় ও স্পষ্ট হবে */
+    transform: translateY(-7px) scale(1.02); /* হোভার করলে বক্সটি আরও উপরে উঠবে এবং সামান্য বড় হবে */
+    border-color: #B2EBF2; /* হোভার করলে বর্ডার কালার হালকা নীল হবে */
+}
+
+/* মোবাইল ডিভাইসের জন্য রেসপনসিভ ডিজাইন */
+@media (max-width: 768px) {
+    .shaded-info-box, .class-box {
+        padding: 20px; /* ছোট স্ক্রিনে প্যাডিং কমানো হয়েছে */
+        margin: 20px auto; /* মার্জিন কিছুটা কমানো হয়েছে */
+        border-radius: 8px; /* ছোট স্ক্রিনে কোণাগুলো কিছুটা কম গোলাকার */
+        font-size: 0.95em; /* ফন্ট সাইজ সামান্য কমানো হয়েছে */
+        width: 90%; /* ছোট স্ক্রিনে আরও কিছুটা প্রস্থ বাড়ানো */
+    }
+}
+
+/* খুব ছোট ডিভাইসের জন্য অতিরিক্ত রেসপনসিভনেস */
+@media (max-width: 480px) {
+    .shaded-info-box, .class-box {
+        padding: 18px;
+        margin: 15px auto;
+        border-radius: 6px;
+        font-size: 0.9em;
+        width: 95%; /* খুব ছোট স্ক্রিনে প্রায় পুরো প্রস্থ ব্যবহার করবে */
+    }
 }
 
 /* এক্সাম বোতামগুলিকে বক্সের মধ্যে সাজানোর জন্য নতুন CSS */
@@ -654,14 +686,13 @@ ul li a:hover {
     border: 1px solid #B2DFDB; /* সূক্ষ্ম অ্যাকোয়া-সবুজ বর্ডার */
     border-radius: 12px; /* কোণাগুলো আরও মসৃণ ও গোলাকার */
     padding: 5px; /* ভিতরের লেখা থেকে বক্সের দূরত্ব বাড়ানো হয়েছে */
-    margin: 30px auto; /* উপরে-নিচে 30px মার্জিন, ডানে-বামে অটো (মাঝখানে আসবে) */
-    max-width: 750px; /* বক্সের সর্বোচ্চ প্রস্থ সামান্য কমানো হয়েছে, সুষম দেখানোর জন্য */
+    margin: 15px auto; /* উপরে-নিচে 30px মার্জিন, ডানে-বামে অটো (মাঝখানে আসবে) */
+    max-width: 850px; /* বক্সের সর্বোচ্চ প্রস্থ সামান্য কমানো হয়েছে, সুষম দেখানোর জন্য */
     width: 90%; /* ছোট স্ক্রিনের জন্য প্রস্থের সমন্বয় */
     box-sizing: border-box; /* প্যাডিং এবং বর্ডার যেন প্রস্থের মধ্যে থাকে */
 
     /* টেক্সট এলাইনমেন্ট ও ফন্ট */
     text-align: center; /* ভেতরের লেখা মাঝখানে আনার জন্য */
-    font-family: 'Segoe UI', 'Roboto', sans-serif; /* আধুনিক ও পঠনযোগ্য ফন্ট */
     color: #333; /* গাঢ় ধূসর টেক্সট কালার */
     line-height: 1.6; /* লাইনের উচ্চতা বাড়ানো হয়েছে পঠনযোগ্যতার জন্য */
 
