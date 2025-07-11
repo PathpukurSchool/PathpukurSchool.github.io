@@ -73,8 +73,8 @@ font-weight: bold;
     border-radius: 8px; /* সামান্য গোলাকার কোণ */
     padding: 20px; /* বক্সের ভেতরের প্যাডিং */
     margin: 20px auto; /* বক্সের উপরে/নিচে মার্জিন, এবং ডানে/বামে অটো মার্জিন দিয়ে কেন্দ্রে স্থাপন */
-    width: 95%
-    max-width: 600px; /* বড় স্ক্রিনে বক্সের সর্বোচ্চ প্রস্থ */
+    width: 90%
+    max-width: 400px; /* বড় স্ক্রিনে বক্সের সর্বোচ্চ প্রস্থ */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* হালকা শেড */
     text-align: center; /* বক্সের ভেতরের কন্টেন্ট (CLASS V, বোতাম) কেন্দ্রে স্থাপন */
     transition: box-shadow 0.3s ease, transform 0.3s ease; /* হোভার ইফেক্টের জন্য মসৃণ ট্রানজিশন */
