@@ -60,6 +60,10 @@ h2 {
     color: #34495E; /* টেক্সট কালার: গাঢ় নীল-ধূসর */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* হালকা টেক্সট শ্যাডো */
     line-height: 1.2; /* লাইনের উচ্চতা */
+    /* নতুন বর্ডার স্টাইল */
+    border-bottom: 2px solid #F39C12; /* লেখার নিচে 2px কমলা বর্ডার */
+    padding-bottom: 5px; /* বর্ডার থেকে লেখার নিচে কিছুটা ফাঁকা স্থান */
+    margin-bottom: 5px; /* লেখার বর্ডারের নিচে সামান্য মার্জিন */
 }
 
 /* ইমোজি স্টাইল */
@@ -120,8 +124,11 @@ h2 {
     }
 
     .section-heading {
-        font-size: 1.8em; /* ফন্ট সাইজ কমানো */
-        gap: 8px; /* ইমোজি ও টেক্সটের মধ্যে ফাঁকা স্থান কমানো */
+        font-size: 1.8em;
+        gap: 8px;
+        border-bottom: 1.5px solid #F39C12; /* ছোট স্ক্রিনে বর্ডার সামান্য সরু */
+        padding-bottom: 4px;
+        margin-bottom: 4px;
     }
 
     .emoji {
@@ -140,6 +147,9 @@ h2 {
     .section-heading {
         font-size: 1.5em;
         gap: 5px;
+        border-bottom: 1px solid #F39C12; /* খুব ছোট স্ক্রিনে বর্ডার আরও সরু */
+        padding-bottom: 3px;
+        margin-bottom: 3px;
     }
 
     .emoji {
