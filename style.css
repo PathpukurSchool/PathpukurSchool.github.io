@@ -60,6 +60,10 @@ h2 {
     color: #34495E; /* টেক্সট কালার: গাঢ় নীল-ধূসর */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* হালকা টেক্সট শ্যাডো */
     line-height: 1.2; /* লাইনের উচ্চতা */
+    /* নতুন বর্ডার স্টাইল */
+    border-bottom: 2px solid #F39C12; /* লেখার নিচে 2px কমলা বর্ডার */
+    padding-bottom: 5px; /* বর্ডার থেকে লেখার নিচে কিছুটা ফাঁকা স্থান */
+    margin-bottom: 5px; /* লেখার বর্ডারের নিচে সামান্য মার্জিন */
 }
 /* হোভার এফেক্ট (গ্লো সহ) */
 .section-heading-container:hover {
@@ -118,8 +122,11 @@ h2 {
 /* --- মোবাইল ও ছোট স্ক্রিনের জন্য রেসপনসিভ ডিজাইন --- */
 @media (max-width: 768px) {
     .section-heading-container {
-        padding: 15px 0; /* ছোট স্ক্রিনে প্যাডিং কমানো */
-        margin: 40px 0; /* ট্যাবলেট স্ক্রিনে মার্জিন সামঞ্জস্য করা হয়েছে */
+        padding: 15px 0;
+        margin: 40px 0;
+        border-top-width: 5px;
+        border-bottom-width: 1px;
+        border-radius: 10px;
     }
 
     .section-heading {
@@ -138,14 +145,17 @@ h2 {
 @media (max-width: 480px) {
     .section-heading-container {
         padding: 12px 0;
-        margin: 25px 0; /* মোবাইল স্ক্রিনে মার্জিন সামঞ্জস্য করা হয়েছে */
-        border-top-width: 3px; /* মোবাইল স্ক্রিনে বর্ডার আরও সরু করা হয়েছে */
-        border-radius: 8px; /* মোবাইল স্ক্রিনে কোণ আরও কম গোলাকার */
+        margin: 25px 0;
+        border-top-width: 3px;
+        border-radius: 8px;
     }
 
     .section-heading {
         font-size: 1.5em;
         gap: 5px;
+        border-bottom: 1px solid #F39C12; /* খুব ছোট স্ক্রিনে বর্ডার আরও সরু */
+        padding-bottom: 3px;
+        margin-bottom: 3px;
     }
 
     .emoji {
