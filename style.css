@@ -437,11 +437,15 @@ ul li a:hover {
 
 /* Login to access the marks uploading link (h3) এর স্টাইল */
 .login-instruction-heading {
-    color: #6C5B7B; /* সফট বেগুনি-ধূসর বা ব্রাউনিশ শেড, অপরিবর্তিত */
-    font-size: 20px; /* অপরিবর্তিত */
-    font-weight: bold; /* বোল্ড করা হয়েছে */
-    margin-top: 0px;
-    margin-bottom: 0px;
+    color: #5D6D7E; /* গভীর ধূসর-নীল, চোখের জন্য আরামদায়ক ও আধুনিক */
+    font-size: 1.3em; /* 20px এর পরিবর্তে রিলেটিভ ফন্ট সাইজ, যা রেসপনসিভনেসের জন্য ভালো */
+    font-weight: 600; /* বোল্ড (700) এর চেয়ে কিছুটা কম বোল্ড, যা মার্জিত দেখায় */
+    font-family: 'Segoe UI', 'Roboto', sans-serif; /* আধুনিক, পঠনযোগ্য ফন্ট */
+    padding: 10px 0; /* উপরে ও নিচে প্যাডিং যোগ করা হয়েছে */
+    margin: 20px auto; /* উপরে-নিচে মার্জিন বাড়ানো হয়েছে, ডানে-বামে অটো */
+    max-width: 90%; /* সর্বোচ্চ প্রস্থ নির্ধারণ করা হয়েছে */
+    text-align: center; /* টেক্সটকে মাঝখানে আনা হয়েছে */
+    position: relative; /* ছদ্ম-এলিমেন্টের জন্য পজিশন সেট করা হয়েছে */
 }
 
 /*Last date of marks submission */
