@@ -454,9 +454,7 @@ ul li a:hover {
   flex-direction: column;
   gap: 8px;
   width: 90%;
-  margin: 0 auto;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 20px auto; /* উপরে-নিচে মার্জিন বাড়ানো হয়েছে, ডানে-বামে অটো */
   background-color: #fffdd0;
   border-radius: 5px;
   padding: 5px;
