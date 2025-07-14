@@ -79,6 +79,9 @@ h2 {
     animation: bounce 1s ease-in-out infinite; /* বাউন্স অ্যানিমেশন */
     transform-origin: center bottom; /* ইমোজি নিচ থেকে বাউন্স করবে */
     color: #F39C12; /* ইমোজির জন্য একটি উজ্জ্বল রং (যেমন কমলা) */
+    font-size: 1.1em; /* ইমোজির আকার */
+
+
 }
 
 /* বাউন্স অ্যানিমেশন */
@@ -136,10 +139,6 @@ h2 {
         padding-bottom: 4px;
         margin-bottom: 4px;
     }
-
-    .emoji {
-        font-size: 1.1em; /* ইমোজির আকার কমানো */
-    }
 }
 
 @media (max-width: 480px) {
@@ -156,10 +155,6 @@ h2 {
         border-bottom: 1px solid #F39C12; /* খুব ছোট স্ক্রিনে বর্ডার আরও সরু */
         padding-bottom: 3px;
         margin-bottom: 3px;
-    }
-
-    .emoji {
-        font-size: 1em;
     }
 }
 
