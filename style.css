@@ -4,13 +4,86 @@ body {
     text-align: center;
     padding: 20px;
 }
-h1 {
-  color: #DC143C;
-  font-size: 34px;
-  font-weight: bold;
-  text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
-  color: darkred;
+/* --- প্রধান হেডিং স্টাইল --- */
+.main-header {
+    text-align: center; /* ভেতরের সব কন্টেন্ট কেন্দ্রে থাকবে */
+    padding: 30px 20px; /* উপরে-নিচে প্যাডিং বাড়ানো হয়েছে */
+    background-color: #fdfdfd; /* হালকা ব্যাকগ্রাউন্ড কালার */
+    border-bottom: 2px solid #e0e0e0; /* নিচে একটি সূক্ষ্ম বর্ডার */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* হালকা শ্যাডো */
 }
+
+.logo {
+    max-width: 120px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
+    height: auto; /* অনুপাত ঠিক রাখতে */
+    margin-bottom: 15px; /* লোগো ও নামের মধ্যে দূরত্ব বাড়ানো হয়েছে */
+    animation: fadeIn 1s ease-out; /* লোগোর জন্য ফেড-ইন অ্যানিমেশন */
+}
+
+.school-name {
+    color: #8B0000; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
+    font-size: 2.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে, রেসপনসিভ ইউনিটে */
+    font-weight: 900; /* আরও বোল্ড করা হয়েছে */
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4); /* শ্যাডো কিছুটা হালকা করা হয়েছে */
+    margin: 0; /* ডিফল্ট মার্জিন অপসারণ */
+    line-height: 1.2; /* লাইনের উচ্চতা */
+    font-family: 'Montserrat', sans-serif; /* আধুনিক ও শক্তিশালী ফন্ট */
+    animation: slideInUp 1s ease-out forwards; /* লেখার জন্য অ্যানিমেশন */
+    opacity: 0; /* অ্যানিমেশনের শুরুতে অদৃশ্য থাকবে */
+}
+
+/* অ্যানিমেশন কিফ্রেম */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* --- রেসপনসিভ ডিজাইন --- */
+@media (max-width: 768px) {
+    .main-header {
+        padding: 25px 15px;
+    }
+
+    .logo {
+        max-width: 100px;
+        margin-bottom: 10px;
+    }
+
+    .school-name {
+        font-size: 2.2em; /* ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        padding: 20px 10px;
+    }
+
+    .logo {
+        max-width: 80px;
+        margin-bottom: 8px;
+    }
+
+    .school-name {
+        font-size: 1.8em; /* আরও ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+}
+
 h2 {
     color: #333;
 }
@@ -80,8 +153,6 @@ h2 {
     transform-origin: center bottom; /* ইমোজি নিচ থেকে বাউন্স করবে */
     color: #F39C12; /* ইমোজির জন্য একটি উজ্জ্বল রং (যেমন কমলা) */
     font-size: 1.1em; /* ইমোজির আকার */
-
-
 }
 
 /* বাউন্স অ্যানিমেশন */
@@ -273,10 +344,6 @@ h2 {
   100% { opacity: 1; }
 }
 
-.logo {
-    max-width: 150px;
-    margin-bottom: 10px;
-}
 dialog {
   padding: 20px;
   background-color: white;
@@ -400,14 +467,6 @@ ul li a:hover {
 /* Hover effect */
 #loginDialog button:hover {
     opacity: 0.9;
-}
-
-/* Master Login text colour */
-.red-text {
-  color: #DC143C; 
-  font-weight: bold;
-    text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
-    color: darkred;
 }
 
 .shine {
