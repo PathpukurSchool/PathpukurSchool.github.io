@@ -8,7 +8,7 @@ body {
 .logo {
     max-width: 120px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
     height: auto; /* অনুপাত ঠিক রাখতে */
-    animation: rotateSlowly 8s linear infinite; /* 8s এঙ্গেল, লিনিয়ার গতি, ক্রমাগত চলবে */
+    animation: rotateSlowly 10s linear infinite; /* 8s এঙ্গেল, লিনিয়ার গতি, ক্রমাগত চলবে */
     transform-style: preserve-3d; /* 3D ট্রান্সফর্মের জন্য */
     perspective: 1000px; /* 3D গভীরতা (যদি প্রয়োজন হয়) */
     /* অ্যানিমেশন শুরু হওয়ার আগে লোগো দৃশ্যমান রাখতে */
