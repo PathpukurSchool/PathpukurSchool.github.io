@@ -8,16 +8,50 @@ body {
 .logo {
     max-width: 120px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
     height: auto; /* অনুপাত ঠিক রাখতে */
-    margin-bottom: 10px; /* লোগো ও নামের মধ্যে দূরত্ব বাড়ানো হয়েছে */
+    animation: flipIn 1s ease-out forwards; /* 'flipIn' অ্যানিমেশন যোগ করা হয়েছে */
+    transform-style: preserve-3d; /* 3D ট্রান্সফর্মের জন্য */
+    perspective: 1000px; /* 3D গভীরতা */
 }
 
 .school-name {
     color: #8B0000; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
-    font-size: 2.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে, রেসপনসিভ ইউনিটে */
+    font-size: 3.0em; /* ফন্ট সাইজ বাড়ানো হয়েছে, রেসপনসিভ ইউনিটে */
     font-weight: 900; /* আরও বোল্ড করা হয়েছে */
     text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
     margin: 0; /* ডিফল্ট মার্জিন অপসারণ */
     line-height: 1.2; /* লাইনের উচ্চতা */
+    font-family: 'Montserrat', sans-serif; /* আধুনিক ও শক্তিশালী ফন্ট */
+    animation: slideInUp 1s ease-out forwards; /* লেখার জন্য অ্যানিমেশন */
+    opacity: 0; /* অ্যানিমেশনের শুরুতে অদৃশ্য থাকবে */
+}
+/* অ্যানিমেশন কিফ্রেম */
+@keyframes flipIn {
+    0% {
+        transform: perspective(1000px) rotateY(90deg); /* 90 ডিগ্রি ঘোরানো অবস্থায় শুরু */
+        opacity: 0;
+    }
+    40% {
+        transform: perspective(1000px) rotateY(-20deg); /* সামান্য পেছনে ঘোরানো */
+    }
+    70% {
+        transform: perspective(1000px) rotateY(10deg); /* সামান্য সামনে ঘোরানো */
+        opacity: 1;
+    }
+    100% {
+        transform: perspective(1000px) rotateY(0deg); /* স্বাভাবিক অবস্থায় ফিরে আসা */
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* --- রেসপনসিভ ডিজাইন --- */
@@ -36,8 +70,10 @@ body {
     .school-name {
         font-size: 1.8em; /* আরও ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
     }
+    .logo {
+        max-width: 80px;
+    }
 }
-
 /* Master Login text colour */
 .red-text {
   color: #DC143C; 
