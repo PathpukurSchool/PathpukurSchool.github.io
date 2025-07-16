@@ -8,7 +8,7 @@ body {
 .logo {
     max-width: 120px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
     height: auto; /* অনুপাত ঠিক রাখতে */
-    animation: flipIn 2s ease-in-out infinite; /* 'infinite' যোগ করা হয়েছে */
+    animation: flipIn 2s ease-in-out infinite; /* 'infinite' সর্বদা এনিমেটেড হবে */
     transform-style: preserve-3d; /* 3D ট্রান্সফর্মের জন্য */
     perspective: 1000px; /* 3D গভীরতা */
     opacity: 0;   /* অ্যানিমেশনের শুরুতে লোগো অদৃশ্য রাখতে */
@@ -22,8 +22,6 @@ body {
     margin: 0; /* ডিফল্ট মার্জিন অপসারণ */
     line-height: 1.2; /* লাইনের উচ্চতা */
     font-family: 'Montserrat', sans-serif; /* আধুনিক ও শক্তিশালী ফন্ট */
-    animation: slideInUp 1s ease-out infinite; /* লেখার জন্য অ্যানিমেশন */
-    opacity: 0; /* অ্যানিমেশনের শুরুতে অদৃশ্য থাকবে */
 }
 /* অ্যানিমেশন কিফ্রেম */
 @keyframes flipIn {
@@ -41,17 +39,6 @@ body {
     100% {
         transform: perspective(1000px) rotateY(0deg); /* স্বাভাবিক অবস্থায় ফিরে আসা */
         opacity: 1; /* শেষ হলে দৃশ্যমান */
-    }
-}
-
-@keyframes slideInUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
     }
 }
 
