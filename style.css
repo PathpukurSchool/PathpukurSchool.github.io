@@ -8,10 +8,11 @@ body {
 .logo {
     max-width: 120px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
     height: auto; /* অনুপাত ঠিক রাখতে */
-    animation: flipIn 2s ease-in-out infinite; /* 'infinite' সর্বদা এনিমেটেড হবে */
+    animation: rotateSlowly 8s linear infinite; /* 8s এঙ্গেল, লিনিয়ার গতি, ক্রমাগত চলবে */
     transform-style: preserve-3d; /* 3D ট্রান্সফর্মের জন্য */
-    perspective: 1000px; /* 3D গভীরতা */
-    opacity: 0;   /* অ্যানিমেশনের শুরুতে লোগো অদৃশ্য রাখতে */
+    perspective: 1000px; /* 3D গভীরতা (যদি প্রয়োজন হয়) */
+    /* অ্যানিমেশন শুরু হওয়ার আগে লোগো দৃশ্যমান রাখতে */
+    opacity: 1; /* সরাসরি দৃশ্যমান হবে */
 }
 
 .school-name {
@@ -20,25 +21,17 @@ body {
     font-weight: 900; /* আরও বোল্ড করা হয়েছে */
     text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
     margin: 0; /* ডিফল্ট মার্জিন অপসারণ */
+    margin-bottom: 20px;
     line-height: 1.2; /* লাইনের উচ্চতা */
     font-family: 'Montserrat', sans-serif; /* আধুনিক ও শক্তিশালী ফন্ট */
 }
 /* অ্যানিমেশন কিফ্রেম */
-@keyframes flipIn {
+@keyframes rotateSlowly {
     0% {
-        transform: perspective(1000px) rotateY(90deg); /* 90 ডিগ্রি ঘোরানো অবস্থায় শুরু */
-        opacity: 0; /* শুরুতে অদৃশ্য */
-    }
-    40% {
-        transform: perspective(1000px) rotateY(-20deg); /* সামান্য পেছনে ঘোরানো */
-    }
-    70% {
-        transform: perspective(1000px) rotateY(10deg); /* সামান্য সামনে ঘোরানো */
-        opacity: 1; /* প্রায় শেষ হওয়ার আগে দৃশ্যমান */
+        transform: rotateY(0deg); /* 0 ডিগ্রি থেকে শুরু */
     }
     100% {
-        transform: perspective(1000px) rotateY(0deg); /* স্বাভাবিক অবস্থায় ফিরে আসা */
-        opacity: 1; /* শেষ হলে দৃশ্যমান */
+        transform: rotateY(360deg); /* 360 ডিগ্রি পর্যন্ত ঘুরবে */
     }
 }
 
