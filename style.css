@@ -11,12 +11,31 @@ body {
     margin-bottom: 10px; /* লোগো ও নামের মধ্যে দূরত্ব বাড়ানো হয়েছে */
 }
 
-h1 {
-  color: #8B0000; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
-  font-size: 34px;
-  font-weight: bold;
-  text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
-  color: darkred;
+.school-name {
+    color: #8B0000; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
+    font-size: 2.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে, রেসপনসিভ ইউনিটে */
+    font-weight: 900; /* আরও বোল্ড করা হয়েছে */
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
+    margin: 0; /* ডিফল্ট মার্জিন অপসারণ */
+    line-height: 1.2; /* লাইনের উচ্চতা */
+}
+
+/* --- রেসপনসিভ ডিজাইন --- */
+@media (max-width: 768px) {
+    .logo {
+        max-width: 100px;
+        margin-bottom: 10px;
+    }
+
+    .school-name {
+        font-size: 2.2em; /* ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
+    }
+}
+
+@media (max-width: 480px) {
+    .school-name {
+        font-size: 1.8em; /* আরও ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
+    }
 }
 
 /* Master Login text colour */
