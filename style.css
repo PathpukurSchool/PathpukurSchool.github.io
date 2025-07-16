@@ -8,9 +8,10 @@ body {
 .logo {
     max-width: 120px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
     height: auto; /* অনুপাত ঠিক রাখতে */
-    animation: flipIn 1s ease-out forwards; /* 'flipIn' অ্যানিমেশন যোগ করা হয়েছে */
+    animation: flipIn 2s ease-in-out infinite; /* 'infinite' যোগ করা হয়েছে */
     transform-style: preserve-3d; /* 3D ট্রান্সফর্মের জন্য */
     perspective: 1000px; /* 3D গভীরতা */
+    opacity: 0;   /* অ্যানিমেশনের শুরুতে লোগো অদৃশ্য রাখতে */
 }
 
 .school-name {
@@ -21,25 +22,25 @@ body {
     margin: 0; /* ডিফল্ট মার্জিন অপসারণ */
     line-height: 1.2; /* লাইনের উচ্চতা */
     font-family: 'Montserrat', sans-serif; /* আধুনিক ও শক্তিশালী ফন্ট */
-    animation: slideInUp 1s ease-out forwards; /* লেখার জন্য অ্যানিমেশন */
+    animation: slideInUp 1s ease-out infinite; /* লেখার জন্য অ্যানিমেশন */
     opacity: 0; /* অ্যানিমেশনের শুরুতে অদৃশ্য থাকবে */
 }
 /* অ্যানিমেশন কিফ্রেম */
 @keyframes flipIn {
     0% {
         transform: perspective(1000px) rotateY(90deg); /* 90 ডিগ্রি ঘোরানো অবস্থায় শুরু */
-        opacity: 0;
+        opacity: 0; /* শুরুতে অদৃশ্য */
     }
     40% {
         transform: perspective(1000px) rotateY(-20deg); /* সামান্য পেছনে ঘোরানো */
     }
     70% {
         transform: perspective(1000px) rotateY(10deg); /* সামান্য সামনে ঘোরানো */
-        opacity: 1;
+        opacity: 1; /* প্রায় শেষ হওয়ার আগে দৃশ্যমান */
     }
     100% {
         transform: perspective(1000px) rotateY(0deg); /* স্বাভাবিক অবস্থায় ফিরে আসা */
-        opacity: 1;
+        opacity: 1; /* শেষ হলে দৃশ্যমান */
     }
 }
 
@@ -138,9 +139,9 @@ h2 {
 }
 /* হোভার এফেক্ট (গ্লো সহ) */
 .section-heading-container:hover {
-    background-color: #F0F0F0; /* হোভার করলে হালকা ধূসর হবে */
+    background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার হালকা অ্যাকোয়া হবে */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* হোভার করলে শ্যাডো আরও স্পষ্ট হবে */
-    transform: translateY(-5px); /* হোভার করলে বক্সটি সামান্য উপরে উঠবে */
+    transform: translateY(-5px) scale(1.01); /* সামান্য উপরে উঠে আসবে এবং একটু বড় হবে */
     border-top-color: #3498DB; /* উপরের বর্ডারের রঙ হালকা নীল হবে */
     border-bottom-color: #A9CCE3; /* নিচের বর্ডারের রঙ কিছুটা উজ্জ্বল হবে */
 }
