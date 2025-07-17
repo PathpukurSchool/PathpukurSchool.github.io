@@ -343,11 +343,6 @@ function closeModal() {
             const classBox = document.createElement('div');
             classBox.className = 'shaded-info-box'; // এই ক্লাসটি CSS এ যোগ করা হবে
 
-
-
-
-  
-
           // বক্সের হেডিং তৈরি করা হচ্ছে (ক্লাসের নাম)
         const boxHeading = document.createElement('h3');
         boxHeading.className = 'box-heading shine'; // CSS ক্লাস যা হেডিং এর স্টাইল দেবে
@@ -357,20 +352,14 @@ function closeModal() {
         // বোতামগুলির জন্য একটি কন্টেইনার তৈরি করা যাতে সেগুলো flexbox দিয়ে সাজানো যায়
         const buttonsContainer = document.createElement('div');
         buttonsContainer.className = 'exam-buttons-group'; // নতুন ক্লাস, এর জন্য CSS লাগবে
-
-
-
-
-
-
-
-            const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
+          
+          const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
             exams.forEach(exam => {
                 const key = `${cls}_${exam}`;
                 if (studentData[key]) {
                     const link = studentData[key].url;
                     const a = document.createElement('a');
-                    a.className = 'exam-link';
+                    a.className = 'box-button exam-link';
                     let label = exam;
                     if (exam === 'TEST') label = 'TEST EXAM';
                     else if (exam === 'SEM1') label = 'SEMESTER I';
