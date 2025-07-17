@@ -8,7 +8,7 @@ body {
 .logo {
     max-width: 120px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
     height: auto; /* অনুপাত ঠিক রাখতে */
-    animation: rotateSlowly 10s linear infinite; /* 8s এঙ্গেল, লিনিয়ার গতি, ক্রমাগত চলবে */
+    animation: rotateSlowly 13s linear infinite; /* 8s এঙ্গেল, লিনিয়ার গতি, ক্রমাগত চলবে */
     transform-style: preserve-3d; /* 3D ট্রান্সফর্মের জন্য */
     perspective: 1000px; /* 3D গভীরতা (যদি প্রয়োজন হয়) */
     /* অ্যানিমেশন শুরু হওয়ার আগে লোগো দৃশ্যমান রাখতে */
@@ -21,7 +21,7 @@ body {
     font-weight: 900; /* আরও বোল্ড করা হয়েছে */
     text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
     margin: 0; /* ডিফল্ট মার্জিন অপসারণ */
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     line-height: 1.2; /* লাইনের উচ্চতা */
     font-family: 'Montserrat', sans-serif; /* আধুনিক ও শক্তিশালী ফন্ট */
 }
@@ -94,7 +94,7 @@ h2 {
     padding: 20px 0; /* উপরে-নিচে প্যাডিং, ডানে-বামে ০ */
     margin: 40px 0; /* সেকশনের উপরে-নিচে মার্জিন, অন্যান্য কন্টেন্ট থেকে আলাদা করতে */
     text-align: center; /* ভেতরের কন্টেন্ট কেন্দ্রে নিয়ে আসবে */
-    border-top: 10px solid #2C3E50; /* উপরের বর্ডার: গাঢ় নীল, মোটা */
+    border-top: 10px solid #3498DB; /* উপরের বর্ডার: হাল্কা নীল, মোটা */
     border-bottom: 2px solid #BDC3C7; /* নিচের বর্ডার: হালকা ধূসর, সরু */
     border-radius: 15px; /* কোণগুলি গোলাকার */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* হালকা শ্যাডো */
@@ -122,7 +122,7 @@ h2 {
     background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার হালকা অ্যাকোয়া হবে */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* হোভার করলে শ্যাডো আরও স্পষ্ট হবে */
     transform: translateY(-5px) scale(1.01); /* সামান্য উপরে উঠে আসবে এবং একটু বড় হবে */
-    border-top-color: #3498DB; /* উপরের বর্ডারের রঙ হালকা নীল হবে */
+    border-top: 10px solid #2C3E50; /* উপরের বর্ডার: গাঢ় নীল, মোটা */
     border-bottom-color: #A9CCE3; /* নিচের বর্ডারের রঙ কিছুটা উজ্জ্বল হবে */
 }
 /* ইমোজি স্টাইল */
