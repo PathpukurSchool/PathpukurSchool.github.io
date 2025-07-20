@@ -370,7 +370,7 @@ footer {
     color: #f0f2f5;
     text-align: center;
     font-size: 0.7em;
-    border-top: 10px solid #2C3E50; /* উপরের বর্ডার: গাঢ় নীল, মোটা */
+    border-top: 8px solid #2C3E50; /* উপরের বর্ডার: গাঢ় নীল, মোটা */
     margin-top: 50px;
 }
 
@@ -1086,7 +1086,6 @@ ul li a:hover {
     font-weight: bold;
     margin-bottom: 15px;
 }
-
 
 /* --- Input Field Styles (for editing mode inside table cells) --- */
 /* This style applies when you're editing a cell directly in the table, not in the modal. */
