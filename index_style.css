@@ -87,7 +87,7 @@ body.no-scroll {
     margin: 0;
     font-size: 3.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
     letter-spacing: 2px;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
     font-weight: 700;
 }
 
