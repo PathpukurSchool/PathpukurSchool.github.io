@@ -95,7 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // কন্টেন্ট লোড এবং সাইডবার লুকানোর জন্য পুনরায় ব্যবহারযোগ্য ফাংশন
     const loadContentAndHideSidebar = (htmlContent) => {
         if (contentArea) {
+            // কন্টেন্ট এরিয়ার বর্তমান ক্লাস থেকে 'animated' সরানো
+            contentArea.classList.remove('animated');
+            // DOM রিফ্লোর্সের জন্য ছোট ডিলে যোগ করা (অ্যানিমেশন পুনরায় চালানোর জন্য)
+            void contentArea.offsetWidth; // এই লাইনটি রিফ্লোর্স ট্রিগার করে
             contentArea.innerHTML = htmlContent; // কন্টেন্ট এরিয়াতে HTML ইনজেক্ট করা
+            // অ্যানিমেশন পুনরায় যোগ করা
+            contentArea.classList.add('animated');
         }
         hideSidebar(); // কন্টেন্ট লোড হওয়ার পর সাইডবার লুকিয়ে দেওয়া
     };
