@@ -1,0 +1,65 @@
+{
+    "menuItems": [
+        {
+            "id": "teacherPanel",
+            "name": "Teacher Panel",
+            "emoji": "🧑‍🏫",
+            "roles": ["teacher", "school"],
+            "submenu": [
+                { "name": "Exam Links", "emoji": "🔗", "action": "loadTeacherExamLinks" },
+                { "name": "Marks Entry", "emoji": "⬆️", "urlKey": "teacherUrls.marksEntry", "urlSource": "teacherExams" },
+                { "name": "Attendance", "emoji": "✍️", "urlKey": "teacherUrls.attendance", "urlSource": "teacherExams" }
+            ]
+        },
+        {
+            "id": "studentPanel",
+            "name": "Student Panel",
+            "emoji": "🧑‍🎓",
+            "roles": ["student", "school"],
+            "submenu": [
+                { "name": "Exam Results", "emoji": "🏆", "action": "loadStudentExamLinks" },
+                { "name": "Fee Payment", "emoji": "💰", "urlKey": "studentUrls.feePayment", "urlSource": "teacherExams" }
+            ]
+        },
+        {
+            "id": "notices",
+            "name": "Notices & Help",
+            "emoji": "📢",
+            "roles": ["teacher", "student", "school", "guest"],
+            "submenu": [
+                { "name": "School Notices", "emoji": "📰", "action": "loadNoticeList" },
+                { "name": "Help & Support", "emoji": "❓", "action": "loadHelpList" }
+            ]
+        }
+    ],
+    "teacherExams": {
+        "V_1ST": { "url": "https://script.google.com/macros/s/AKfycbwAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=class5_1st" },
+        "V_2ND": { "url": "https://script.google.com/macros/s/AKfycbwAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=class5_2nd" },
+        "V_3RD": { "url": "" },
+        "VI_1ST": { "url": "https://script.google.com/macros/s/AKfycbwAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=class6_1st" },
+        "VI_2ND": { "url": "" },
+        "VI_3RD": { "url": "" },
+        "VII_1ST": { "url": "" },
+        "VII_2ND": { "url": "" },
+        "VII_3RD": { "url": "" },
+        "VIII_1ST": { "url": "" },
+        "VIII_2ND": { "url": "" },
+        "VIII_3RD": { "url": "" },
+        "IX_1ST": { "url": "" },
+        "IX_2ND": { "url": "" },
+        "IX_3RD": { "url": "" },
+        "X_1ST": { "url": "" },
+        "X_2ND": { "url": "" },
+        "X_TEST": { "url": "" },
+        "XI_SEM1": { "url": "" },
+        "XI_SEM2": { "url": "" },
+        "XII_TEST": { "url": "" }
+    },
+    "teacherUrls": {
+        "marksEntry": "https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec?page=marks_entry",
+        "attendance": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher_attendance"
+    },
+    "studentUrls": {
+        "feePayment": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=fee_payment"
+    }
+}
