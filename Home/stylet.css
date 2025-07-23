@@ -3,6 +3,7 @@ body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f0f2f5;
+  overflow-x: hidden; /* স্ক্রল issue এড়াতে */
 }
 
 /* 🔵 হেডার */
@@ -56,6 +57,7 @@ header h1 {
   padding: 10px;
   cursor: pointer;
   border-bottom: 1px solid #444;
+  position: relative;
 }
 
 #sidebar li:hover {
@@ -64,6 +66,7 @@ header h1 {
 
 .arrow {
   float: right;
+  transition: transform 0.3s ease;
 }
 
 /* 🔵 সাবমেনু */
@@ -106,6 +109,11 @@ header h1 {
     transform: translateY(0px);
     opacity: 1;
   }
+}
+
+/* 🔵 অ্যারো ঘুরে যাওয়া */
+.rotate-down {
+  transform: rotate(90deg);
 }
 
 @media screen and (min-width: 768px) {
