@@ -1,76 +1,98 @@
-
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>স্কুল ড্যাশবোর্ড</title>
-    <link rel="stylesheet" href="stylet.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Dashboard - Pathpukur High School</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "School",
+            "name": "Pathpukur High School",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Vill: Pathpukur, PO: Bakultala Hat",
+                "addressLocality": "South 24 Parganas",
+                "addressRegion": "West Bengal",
+                "postalCode": "743338",
+                "addressCountry": "IN"
+            },
+            "telephone": "+91 3218248083",
+            "email": "pathpukur1954@gmail.com",
+            "url": "https://pathpukurschool.github.io/"
+        }
+    </script>
+
+    <meta name="description" content="Pathpukur High School - A Government-Sponsored Higher Secondary School in South 24 Parganas, West Bengal. Official website. Access teacher and student panels, view exam dates, results and notices.">
+    <meta name="keywords" content="Pathpukur High School, Pathpukur High School(H.S.), Pathpukur High School(HS), পাতপুকুর হাই স্কুল, পাতপুকুর স্কুল, পাত পুকুর হাই স্কুল, পাতপুকুর হাই স্কুল (উঃ মাঃ), Pathpukur School, pathpukurschool, Jaynagar school, Joynagar school, High School, Government School, Student Panel, Teacher Panel, Exam Link, School Notice">
+    <meta name="author" content="Pathpukur High School">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="PHS-LOGO.png">
+    <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
 </head>
 <body>
 
     <div id="sidebar">
         <div class="sidebar-header">
-            <img src="PHS-LOGO.png" alt="স্কুল লোগো" class="sidebar-logo"/>
-            <h3>স্কুল ড্যাশবোর্ড</h3>
+            <img src="PHS-LOGO.png" alt="School Logo" class="sidebar-logo"/>
+            <h3>School Dashboard</h3>
         </div>
         <div class="dashboard-link" onclick="loadDashboard()">
-            📊 ড্যাশবোর্ড
+            📊 Dashboard
         </div>
-        <ul class="main-menu-items"> <li onclick="toggleSubmenu('marksUpload', this)">
-                📝 মার্কস আপলোড <span class="arrow">▶</span>
-            </li>
-            <ul class="submenu" id="marksUpload">
-                <li onclick="toggleSubsubmenu('classV', this)">
-                    🧮 ক্লাস V <span class="arrow">▶</span>
-                </li>
-                <ul class="subsubmenu" id="classV">
-                    <li onclick="loadContent('Class V - 1st Exam')">
-                        1️⃣ 1st পরীক্ষা
-                    </li>
-                    <li onclick="loadContent('Class V - 2nd Exam')">
-                        2️⃣ 2nd পরীক্ষা
-                    </li>
-                    <li onclick="loadContent('Class V - 3rd Exam')">
-                        3️⃣ 3rd পরীক্ষা
-                    </li>
-                </ul>
-                <li onclick="loadContent('Class VI - Marks')">
-                    🧮 ক্লাস VI <span class="arrow">▶</span>
-                </li>
+        <ul class="main-menu-items" id="mainMenuItems">
             </ul>
-
-            <li onclick="loadContent('Upload Student Notice')">
-                📢 ছাত্র বিজ্ঞপ্তি আপলোড
-            </li>
-            <li onclick="loadContent('Student List')">
-                🧑‍🎓 ছাত্র তালিকা
-            </li>
-            <li onclick="loadContent('Teacher Management')">
-                👨‍🏫 শিক্ষক ব্যবস্থাপনা
-            </li>
-            <li onclick="loadContent('Attendance')">
-                ✅ উপস্থিতি
-            </li>
-            <li onclick="loadContent('Settings')">
-                ⚙️ সেটিংস
-            </li>
-        </ul>
     </div>
 
     <header>
         <span id="menuIcon">☰</span>
-        <img src="PHS-LOGO.png" alt="স্কুল লোগো" />
-        <h1>Pathpukur High School (H.S.)</h1>
+        <img src="PHS-LOGO.png" alt="School Logo" class="school-logo-header" />
+        <h1>PATHPUKUR HIGH SCHOOL (H.S.)</h1>
     </header>
 
     <div id="content">
-        <h2 class="animated">ড্যাশবোর্ডে স্বাগতম</h2>
-        <p>এখানে আপনার কন্টেন্ট লোড হবে।</p>
+        <h2 class="animated">Welcome to Dashboard</h2>
+        <p>Your content will be loaded here.</p>
     </div>
 
-    <script src="scriptt.js"></script>
+    <div id="masterLoginOverlay" class="master-login-overlay">
+        <div class="master-login-container">
+            <h2 class="master-login-heading">School Login</h2>
+            <div class="form-group">
+                <label for="loginType">Login Type:</label>
+                <select id="loginType">
+                    <option value="">Select Type</option>
+                    <option value="Teacher">Teacher Login</option>
+                    <option value="Student">Student Login</option>
+                    <option value="School">School Login</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="masterId">ID:</label>
+                <input type="text" id="masterId" placeholder="Enter ID" required>
+            </div>
+            <div class="form-group">
+                <label for="masterPass">Password:</label>
+                <input type="password" id="masterPass" placeholder="Enter Password" required>
+            </div>
+            <button class="master-login-button" onclick="submitMasterLogin()">Login</button>
+            <div id="masterLoginError" class="error-message"></div>
+            <div id="masterLoginSuccess" class="success-message"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>School Name:</strong> Pathpukur High School (HS)</p>
+        <p><strong>Address:</strong> Vill: Pathpukur, PO: Bakultala Hat, Dist: South 24 Parganas, Pin: 743338, West Bengal</p>
+        <p><strong>Phone:</strong> +91 3218248083</p>
+        <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
+    </footer>
+
+    <script src="script.js"></script>
 
 </body>
 </html>
