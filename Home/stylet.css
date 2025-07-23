@@ -1,22 +1,21 @@
 
-/* 🔵 বডি এবং বেসিক স্টাইল */
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f0f2f5;
 }
 
-/* 🔵 টপ বার স্টাইল */
+/* 🔵 হেডার */
 header {
   display: flex;
   align-items: center;
-  background-color: #004080; /* উপরের বার এর কালার */
+  background-color: #004080;
   color: white;
   padding: 10px;
 }
 
 header img {
-  height: 50px; /* লোগোর উচ্চতা */
+  height: 50px;
   margin-right: 10px;
 }
 
@@ -30,11 +29,11 @@ header h1 {
   margin-right: 10px;
 }
 
-/* 🔵 সাইড মেনু বার */
+/* 🔵 সাইডবার */
 #sidebar {
   position: fixed;
   top: 0;
-  left: -250px; /* শুরুতে লুকানো থাকবে */
+  left: -250px;
   width: 250px;
   height: 100%;
   background-color: #333;
@@ -42,6 +41,10 @@ header h1 {
   overflow-y: auto;
   transition: left 0.3s ease;
   z-index: 999;
+}
+
+#sidebar.active {
+  left: 0;
 }
 
 #sidebar ul {
@@ -52,13 +55,18 @@ header h1 {
 #sidebar li {
   padding: 10px;
   cursor: pointer;
+  border-bottom: 1px solid #444;
 }
 
 #sidebar li:hover {
   background-color: #444;
 }
 
-/* 🔵 সাব মেনু লুকানো */
+.arrow {
+  float: right;
+}
+
+/* 🔵 সাবমেনু */
 .submenu, .subsubmenu {
   display: none;
   background-color: #555;
@@ -72,11 +80,6 @@ header h1 {
   background-color: #666;
 }
 
-/* 🔵 মেনু ওপেন হলে */
-#sidebar.active {
-  left: 0;
-}
-
 /* 🔵 কন্টেন্ট এরিয়া */
 #content {
   margin-left: 0;
@@ -84,30 +87,29 @@ header h1 {
   transition: margin-left 0.3s ease;
 }
 
-/* 🔵 রেসপনসিভ ডিসপ্লে */
+/* 🔵 হেডিং কালার */
+#content h2 {
+  color: #004080;
+}
+
+/* 🔵 অ্যানিমেশন */
+.animated {
+  animation: flyIn 0.6s ease-out;
+}
+
+@keyframes flyIn {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
 @media screen and (min-width: 768px) {
   #content {
     margin-left: 0;
   }
-}
-
-/* 🔵 ড্যাশবোর্ড লেখার স্টাইল */
-#dashboardTitle {
-  cursor: pointer;
-  margin-left: auto;
-  margin-right: 10px;
-}
-
-/* 🔵 সুন্দর বাটন ও হোভার */
-button {
-  background-color: #004080;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #0066cc;
 }
