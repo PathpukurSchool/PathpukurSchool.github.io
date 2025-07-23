@@ -1,0 +1,359 @@
+/* Google Fonts - Poppins ফন্ট ইম্পোর্ট করা হয়েছে সুন্দর টাইপোগ্রাফির জন্য */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* CSS ভেরিয়েবলস: সহজে থিম কাস্টমাইজ করার জন্য */
+:root {
+    /* --primary-color: প্রাথমিক রঙ, যেমন সবুজ। আপনার ব্র্যান্ড রঙ অনুযায়ী পরিবর্তন করুন। */
+    --primary-color: #4CAF50; /* Green */
+    /* --secondary-color: দ্বিতীয়িক রঙ, যেমন নীল। এটিও পরিবর্তন করতে পারেন। */
+    --secondary-color: #2196F3; /* Blue */
+    /* --accent-color: অ্যাকসেন্ট রঙ, যেমন অ্যাম্বার। হাইলাইট বা হোভারের জন্য ব্যবহৃত হয়। */
+    --accent-color: #FFC107; /* Amber */
+    /* --text-color: সাধারণ লেখার রঙ */
+    --text-color: #333;
+    /* --light-text-color: হালকা লেখার রঙ, ডার্ক ব্যাকগ্রাউন্ডে ব্যবহৃত হয় */
+    --light-text-color: #f0f0f0;
+    /* --bg-color-light: হালকা ব্যাকগ্রাউন্ড রঙ (ড্যাশবোর্ড কন্টেন্টের জন্য) */
+    --bg-color-light: #f4f7f6;
+    /* --bg-color-dark: ডার্ক ব্যাকগ্রাউন্ড রঙ (সাইডবারের জন্য) */
+    --bg-color-dark: #2c3e50; /* Dark Blue/Grey */
+    /* --border-color: বর্ডারের রঙ */
+    --border-color: #e0e0e0;
+    /* --sidebar-width: সাইডবারের প্রস্থ */
+    --sidebar-width: 250px;
+    /* --navbar-height: ন্যাভবারের উচ্চতা */
+    --navbar-height: 70px;
+    /* --transition-speed: স্মুথ অ্যানিমেশনের জন্য ট্রানজিশন স্পিড */
+    --transition-speed: 0.3s ease;
+}
+
+/* সকল এলিমেন্টের জন্য মার্জিন, প্যাডিং, এবং বক্স-সাইজিং রিসেট করা হয়েছে */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif; /* Poppins ফন্ট প্রয়োগ করা হয়েছে */
+}
+
+/* বডি স্টাইলিং */
+body {
+    background-color: var(--bg-color-light); /* হালকা ব্যাকগ্রাউন্ড রঙ */
+    color: var(--text-color); /* টেক্সটের রঙ */
+    line-height: 1.6; /* লাইন স্পেসিং */
+    overflow-x: hidden; /* হরাইজন্টাল স্ক্রলবার লুকানো হয়েছে */
+}
+
+/* ন্যাভবার স্টাইলিং */
+.navbar {
+    display: flex; /* ফ্লেক্সবক্স ব্যবহার করা হয়েছে উপাদানগুলোকে পাশাপাশি সাজানোর জন্য */
+    justify-content: space-between; /* বাম এবং ডান দিকের উপাদানগুলোর মধ্যে ফাঁকা স্থান */
+    align-items: center; /* উল্লম্বভাবে মাঝখানে আনা হয়েছে */
+    background-color: var(--primary-color); /* প্রাথমিক রঙ */
+    color: var(--light-text-color); /* হালকা টেক্সট রঙ */
+    padding: 10px 20px;
+    height: var(--navbar-height); /* ন্যাভবারের নির্দিষ্ট উচ্চতা */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* হালকা শ্যাডো */
+    position: sticky; /* স্ক্রল করার সময় উপরে স্থির থাকবে */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* অন্য উপাদানের উপরে থাকবে */
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container {
+    width: 50px;
+    height: 50px;
+    background-color: #fff; /* লোগো কন্টেইনারের ব্যাকগ্রাউন্ড */
+    border-radius: 50%; /* বৃত্তাকার লোগো */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    overflow: hidden; /* কন্টেইনারের বাইরে লোগো গেলে তা লুকাবে */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.school-logo {
+    width: 80%;
+    height: 80%;
+    object-fit: contain; /* লোগোকে কন্টেইনারের মধ্যে ফিট করবে */
+}
+
+.school-name {
+    font-size: 1.8em;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* হালকা টেক্সট শ্যাডো */
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: var(--light-text-color);
+    font-size: 1.8em;
+    cursor: pointer; /* কার্সর পরিবর্তনের জন্য */
+    transition: transform var(--transition-speed); /* হোভারে স্কেল পরিবর্তনের জন্য ট্রানজিশন */
+}
+
+.menu-toggle:hover {
+    transform: scale(1.1); /* হোভারে আইকনের আকার সামান্য বাড়বে */
+}
+
+/* প্রধান কন্টেইনারের স্টাইলিং */
+.main-container {
+    display: flex;
+    position: relative;
+    min-height: calc(100vh - var(--navbar-height)); /* ন্যাভবারের উচ্চতা বাদ দিয়ে সর্বনিম্ন উচ্চতা */
+}
+
+/* সাইডবার স্টাইলিং */
+.sidebar {
+    width: var(--sidebar-width); /* সাইডবারের প্রস্থ */
+    background-color: var(--bg-color-dark); /* ডার্ক ব্যাকগ্রাউন্ড রঙ */
+    color: var(--light-text-color);
+    padding-top: 20px;
+    position: fixed; /* স্ক্রল করার সময় স্থির থাকবে */
+    height: calc(100vh - var(--navbar-height)); /* ন্যাভবারের উচ্চতা বাদ দিয়ে উচ্চতা */
+    left: calc(-1 * var(--sidebar-width)); /* প্রাথমিকভাবে স্ক্রিনের বাইরে লুকানো */
+    transition: left var(--transition-speed), width var(--transition-speed); /* স্মুথ ট্রানজিশন যখন খোলা বা বন্ধ হয় */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* শ্যাডো */
+    overflow-y: auto; /* যদি মেনু বেশি লম্বা হয় তাহলে স্ক্রলবার দেখাবে */
+    z-index: 999; /* অন্য উপাদানের উপরে থাকবে */
+}
+
+/* যখন সাইডবার সক্রিয় (খোলা) হয় */
+.sidebar.active {
+    left: 0; /* স্ক্রিনে দৃশ্যমান হবে */
+}
+
+/* মেনু স্টাইলিং */
+.menu ul {
+    list-style: none; /* লিস্ট স্টাইল সরানো হয়েছে */
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-item a {
+    display: flex; /* আইকন এবং টেক্সট পাশাপাশি রাখার জন্য */
+    align-items: center;
+    padding: 15px 20px;
+    color: var(--light-text-color);
+    text-decoration: none; /* আন্ডারলাইন সরানো হয়েছে */
+    font-size: 1.1em;
+    transition: background-color var(--transition-speed), color var(--transition-speed), padding-left var(--transition-speed); /* হোভার প্রভাবের জন্য ট্রানজিশন */
+}
+
+.menu-item a:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* হোভারে হালকা ব্যাকগ্রাউন্ড রঙ */
+    color: var(--accent-color); /* হোভারে টেক্সটের রঙ পরিবর্তন */
+    padding-left: 25px; /* হোভারে বাম দিকে সামান্য সরে যাবে */
+}
+
+.menu-item a .menu-icon {
+    margin-right: 15px;
+    font-size: 1.3em;
+    width: 25px; /* আইকনের জন্য নির্দিষ্ট প্রস্থ */
+    text-align: center;
+}
+
+.submenu-arrow {
+    margin-left: auto; /* তীর আইকনকে ডানদিকে ঠেলে দেয় */
+    transition: transform var(--transition-speed); /* ঘোরানোর জন্য ট্রানজিশন */
+}
+
+/* যখন মেনু আইটেম সক্রিয় হয় (সাবমেনু খোলা থাকে) তখন তীর আইকন ঘুরবে */
+.menu-item.active > a .submenu-arrow {
+    transform: rotate(90deg);
+}
+
+/* সাবমেনু স্টাইলিং */
+.submenu, .sub-submenu {
+    list-style: none;
+    background-color: rgba(0, 0, 0, 0.2); /* সাবমেনুর ব্যাকগ্রাউন্ড রঙ */
+    overflow: hidden; /* প্রাথমিকভাবে লুকানো থাকে */
+    max-height: 0; /* প্রাথমিকভাবে কোলাপ্স করা থাকে */
+    transition: max-height var(--transition-speed) ease-out; /* খোলার/বন্ধ করার স্মুথ ট্রানজিশন */
+}
+
+/* যখন সাবমেনু বা উপ-সাবমেনু খোলা হয় */
+.submenu.open, .sub-submenu.open {
+    max-height: 500px; /* সাবমেনুর সর্বোচ্চ উচ্চতা, আপনার কন্টেন্ট অনুযায়ী এটি বাড়াতে বা কমাতে পারেন */
+    transition: max-height var(--transition-speed) ease-in;
+}
+
+.submenu-item a, .sub-submenu li a {
+    padding: 10px 20px 10px 40px; /* সাবমেনু আইটেমগুলোকে ইন্ডেন্ট করা হয়েছে */
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+}
+
+.sub-submenu li a {
+    padding-left: 60px; /* উপ-সাবমেনু আইটেমগুলোকে আরও বেশি ইন্ডেন্ট করা হয়েছে */
+}
+
+.submenu-item a:hover, .sub-submenu li a:hover {
+    background-color: rgba(255, 255, 255, 0.05); /* হোভারে হালকা ব্যাকগ্রাউন্ড */
+    color: var(--accent-color); /* হোভারে টেক্সটের রঙ পরিবর্তন */
+}
+
+/* ড্যাশবোর্ড কন্টেন্ট এলাকার স্টাইলিং */
+.dashboard-content {
+    flex-grow: 1; /* অবশিষ্ট স্থান দখল করবে */
+    padding: 20px;
+    margin-left: 0; /* প্রাথমিকভাবে বাম মার্জিন শূন্য */
+    transition: margin-left var(--transition-speed); /* সাইডবার খোলার সাথে মার্জিন পরিবর্তনের জন্য ট্রানজিশন */
+}
+
+/* যখন সাইডবার খোলা থাকে, তখন ড্যাশবোর্ড কন্টেন্ট ডানদিকে সরে যায় */
+.dashboard-content.shifted {
+    margin-left: var(--sidebar-width);
+}
+
+.dashboard-title {
+    font-size: 2em;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color); /* নিচের বর্ডার */
+    padding-bottom: 10px;
+    cursor: pointer; /* ক্লিক করার জন্য কার্সর পরিবর্তনের জন্য */
+    transition: color var(--transition-speed);
+}
+
+.dashboard-title:hover {
+    color: var(--secondary-color); /* হোভারে শিরোনামের রঙ পরিবর্তন */
+}
+
+.content-area {
+    background-color: #fff; /* কন্টেন্ট এলাকার ব্যাকগ্রাউন্ড সাদা */
+    padding: 30px;
+    border-radius: 8px; /* গোলাকার বর্ডার */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* শ্যাডো */
+    min-height: 400px; /* কন্টেন্ট এলাকার সর্বনিম্ন উচ্চতা */
+}
+
+/* ফ্রম এবং বাটনের স্টাইলিং (যদি আপনি ফর্ম যোগ করেন) */
+.content-area form {
+    margin-top: 20px;
+}
+
+.content-area label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.content-area input[type="text"],
+.content-area input[type="number"],
+.content-area textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* ইনপুট ফিল্ডে হালকা শ্যাডো */
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.content-area input[type="text"]:focus,
+.content-area input[type="number"]:focus,
+.content-area textarea:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 5px rgba(33, 150, 243, 0.5); /* ফোকাসে নীল শ্যাডো */
+    outline: none; /* ফোকাস আউটলাইন সরানো হয়েছে */
+}
+
+.btn-submit {
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-submit:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px); /* হোভারে সামান্য উপরে উঠবে */
+}
+
+
+/* রেসপনসিভ ডিজাইন: ছোট, মাঝারি, বড় সব স্ক্রিনের জন্য */
+
+/* মাঝারি স্ক্রিন (যেমন ট্যাবলেট) 768px বা তার কম প্রস্থের জন্য */
+@media (max-width: 768px) {
+    /* সাইডবারের প্রস্থ ছোট করা হয়েছে */
+    .sidebar {
+        width: 200px;
+    }
+
+    /* ছোট স্ক্রিনে সাইডবার খোলা থাকলেও ড্যাশবোর্ড কন্টেন্ট সরবে না, কারণ সাইডবার কন্টেন্টের উপরে চলে আসবে */
+    .dashboard-content.shifted {
+        margin-left: 0;
+    }
+
+    /* স্কুলের নামের ফন্ট সাইজ ছোট করা হয়েছে */
+    .school-name {
+        font-size: 1.5em;
+    }
+}
+
+/* ছোট স্ক্রিন (যেমন মোবাইল ফোন) 480px বা তার কম প্রস্থের জন্য */
+@media (max-width: 480px) {
+    /* ন্যাভবারের প্যাডিং ছোট করা হয়েছে */
+    .navbar {
+        padding: 10px 15px;
+    }
+
+    /* স্কুলের নামের ফন্ট সাইজ আরও ছোট করা হয়েছে */
+    .school-name {
+        font-size: 1.2em;
+        margin-left: 5px;
+    }
+
+    /* লোগো কন্টেইনারের আকার ছোট করা হয়েছে */
+    .logo-container {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* মেনু টগল আইকনের আকার ছোট করা হয়েছে */
+    .menu-toggle {
+        font-size: 1.5em;
+    }
+
+    /* ড্যাশবোর্ড কন্টেন্টের প্যাডিং ছোট করা হয়েছে */
+    .dashboard-content {
+        padding: 15px;
+    }
+
+    /* ড্যাশবোর্ড শিরোনামের ফন্ট সাইজ ছোট করা হয়েছে */
+    .dashboard-title {
+        font-size: 1.5em;
+    }
+
+    /* মেনু আইটেমের প্যাডিং ছোট করা হয়েছে যাতে ছোট স্ক্রিনে ভালোভাবে ফিট হয় */
+    .menu-item a {
+        padding: 12px 15px;
+        font-size: 1em;
+    }
+
+    .submenu-item a, .sub-submenu li a {
+        padding: 8px 15px 8px 30px; /* ইন্ডেন্টেশনও ছোট করা হয়েছে */
+    }
+
+    .sub-submenu li a {
+        padding-left: 45px; /* আরও ছোট ইন্ডেন্টেশন */
+    }
+}
