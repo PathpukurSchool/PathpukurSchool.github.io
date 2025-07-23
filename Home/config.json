@@ -1,38 +1,163 @@
+
 {
     "menuItems": [
         {
-            "id": "teacherPanel",
-            "name": "Teacher Panel",
-            "emoji": "🧑‍🏫",
+            "id": "dashboard",
+            "name": "Dashboard",
+            "emoji": "📊",
+            "roles": ["teacher", "student", "school"]
+        },
+        {
+            "id": "marksUploadVtoVIII",
+            "name": "Marks Upload V to VIII",
+            "emoji": "⬆️",
             "roles": ["teacher", "school"],
             "submenu": [
-                { "name": "Exam Links", "emoji": "🔗", "action": "loadTeacherExamLinks" },
-                { "name": "Marks Entry", "emoji": "⬆️", "urlKey": "teacherUrls.marksEntry", "urlSource": "teacherExams" },
-                { "name": "Attendance", "emoji": "✍️", "urlKey": "teacherUrls.attendance", "urlSource": "teacherExams" }
+                {
+                    "id": "classV",
+                    "name": "CLASS V",
+                    "emoji": "🚸",
+                    "subsubmenu": [
+                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "V_1ST" },
+                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "V_2ND" },
+                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "V_3RD" }
+                    ]
+                },
+                {
+                    "id": "classVI",
+                    "name": "CLASS VI",
+                    "emoji": "🎒",
+                    "subsubmenu": [
+                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VI_1ST" },
+                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VI_2ND" },
+                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VI_3RD" }
+                    ]
+                },
+                {
+                    "id": "classVII",
+                    "name": "CLASS VII",
+                    "emoji": "📚",
+                    "subsubmenu": [
+                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VII_1ST" },
+                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VII_2ND" },
+                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VII_3RD" }
+                    ]
+                },
+                {
+                    "id": "classVIII",
+                    "name": "CLASS VIII",
+                    "emoji": "🎓",
+                    "subsubmenu": [
+                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VIII_1ST" },
+                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VIII_2ND" },
+                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VIII_3RD" }
+                    ]
+                }
             ]
         },
         {
-            "id": "studentPanel",
-            "name": "Student Panel",
-            "emoji": "🧑‍🎓",
-            "roles": ["student", "school"],
+            "id": "marksUploadIXandX",
+            "name": "Marks Upload IX & X",
+            "emoji": "📈",
+            "roles": ["teacher", "school"],
             "submenu": [
-                { "name": "Exam Results", "emoji": "🏆", "action": "loadStudentExamLinks" },
-                { "name": "Fee Payment", "emoji": "💰", "urlKey": "studentUrls.feePayment", "urlSource": "teacherExams" }
+                {
+                    "id": "classIX",
+                    "name": "CLASS IX",
+                    "emoji": "🧑‍🎓",
+                    "subsubmenu": [
+                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "IX_1ST" },
+                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "IX_2ND" },
+                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "IX_3RD" }
+                    ]
+                },
+                {
+                    "id": "classX",
+                    "name": "CLASS X",
+                    "emoji": "👨‍🎓",
+                    "subsubmenu": [
+                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "X_1ST" },
+                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "X_2ND" },
+                        { "name": "Test Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "X_TEST" }
+                    ]
+                }
             ]
         },
         {
-            "id": "notices",
-            "name": "Notices & Help",
+            "id": "marksUploadXIandXII",
+            "name": "Marks Upload XI & XII",
+            "emoji": "📊",
+            "roles": ["teacher", "school"],
+            "submenu": [
+                {
+                    "id": "classXI",
+                    "name": "CLASS XI",
+                    "emoji": "👩‍🎓",
+                    "subsubmenu": [
+                        { "name": "Semester I", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "XI_SEM1" },
+                        { "name": "Semester II", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "XI_SEM2" }
+                    ]
+                },
+                {
+                    "id": "classXII",
+                    "name": "CLASS XII",
+                    "emoji": "🧑‍🏫",
+                    "subsubmenu": [
+                        { "name": "Test Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "XII_TEST" }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "admissionTest",
+            "name": "Admission Test",
+            "emoji": "✍️",
+            "roles": ["teacher", "school"],
+            "submenu": [
+                { "name": "Upload Marks", "emoji": "📤", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "AdmissionTest_UPLOAD" }
+            ]
+        },
+        {
+            "id": "noticeBoard",
+            "name": "Notice Board",
             "emoji": "📢",
-            "roles": ["teacher", "student", "school", "guest"],
+            "roles": ["teacher", "student", "school"],
             "submenu": [
-                { "name": "School Notices", "emoji": "📰", "action": "loadNoticeList" },
-                { "name": "Help & Support", "emoji": "❓", "action": "loadHelpList" }
+                { "name": "General Notice", "emoji": "📄", "urlSource": "notices", "urlKey": "generalNotice.url" }
+            ]
+        },
+        {
+            "id": "routine",
+            "name": "Routine",
+            "emoji": "📅",
+            "roles": ["teacher", "student", "school"],
+            "submenu": [
+                { "name": "Teacher Routine", "emoji": "🧑‍🏫", "urlSource": "routines", "urlKey": "teacherRoutine.url" },
+                { "name": "Class Routine", "emoji": "🏫", "urlSource": "routines", "urlKey": "classRoutine.url" },
+                { "name": "Subject Routine", "emoji": "📖", "urlSource": "routines", "urlKey": "subjectRoutine.url" },
+                { "name": "School Exam Routine", "emoji": "🗓️", "urlSource": "routines", "urlKey": "schoolExamRoutine.url" }
+            ]
+        },
+        {
+            "id": "studentList",
+            "name": "Student List",
+            "emoji": "🧑‍🎓",
+            "roles": ["teacher", "school"],
+            "submenu": [
+                { "name": "Search Student Info", "emoji": "🔍", "urlSource": "studentInfo", "urlKey": "searchStudentInfo.url" }
+            ]
+        },
+        {
+            "id": "uploadStudentNotice",
+            "name": "Upload Student Notice",
+            "emoji": "📤",
+            "roles": ["teacher", "school"],
+            "submenu": [
+                { "name": "Manage Student Notice", "emoji": "✍️", "urlSource": "uploadStudentNotice", "urlKey": "manageStudentNotice.url" }
             ]
         }
     ],
-    "teacherExams": {
+    "examLinks": {
         "V_1ST": { "url": "https://script.google.com/macros/s/AKfycbwAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=class5_1st" },
         "V_2ND": { "url": "https://script.google.com/macros/s/AKfycbwAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=class5_2nd" },
         "V_3RD": { "url": "" },
@@ -53,13 +178,22 @@
         "X_TEST": { "url": "" },
         "XI_SEM1": { "url": "" },
         "XI_SEM2": { "url": "" },
-        "XII_TEST": { "url": "" }
+        "XII_TEST": { "url": "" },
+        "AdmissionTest_UPLOAD": { "url": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=admission_upload" }
     },
-    "teacherUrls": {
-        "marksEntry": "https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec?page=marks_entry",
-        "attendance": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher_attendance"
+    "notices": {
+        "generalNotice": { "url": "https://example.com/notices/general.pdf" }
     },
-    "studentUrls": {
-        "feePayment": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=fee_payment"
+    "routines": {
+        "teacherRoutine": { "url": "" },
+        "classRoutine": { "url": "" },
+        "subjectRoutine": { "url": "" },
+        "schoolExamRoutine": { "url": "" }
+    },
+    "studentInfo": {
+        "searchStudentInfo": { "url": "" }
+    },
+    "uploadStudentNotice": {
+        "manageStudentNotice": { "url": "" }
     }
 }
