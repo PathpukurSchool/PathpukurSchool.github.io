@@ -1,90 +1,49 @@
 <!DOCTYPE html>
-<html lang="bn"> <head>
-    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>স্কুল ড্যাশবোর্ড</title> <link rel="stylesheet" href="stylet.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> </head>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>স্কুল ড্যাশবোর্ড</title>
+
+  <!-- 🔵 CSS ফাইল লিংক -->
+  <link rel="stylesheet" href="stylet.css" />
+</head>
 <body>
-    <header class="navbar">
-        <div class="navbar-left">
-            <div class="logo-container">
-                <img src="PHS-LOGO.png" alt="স্কুল লোগো" class="school-logo">
-            </div>
-            <h1 class="school-name">আপনার স্কুলের নাম</h1>
-        </div>
-        <div class="navbar-right">
-            <button class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i> </button>
-        </div>
-    </header>
 
-    <div class="main-container">
-        <aside class="sidebar" id="sidebar">
-            <nav class="menu">
-                <ul>
-                    <li class="menu-item">
-                        <a href="#" data-menu-id="dashboard-home">
-                            <i class="fas fa-home menu-icon"></i> ড্যাশবোর্ড
-                        </a>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <a href="#">
-                            <i class="fas fa-upload menu-icon"></i> মার্কস আপলোড
-                            <i class="fas fa-chevron-right submenu-arrow"></i> </a>
-                        <ul class="submenu">
-                            <li class="submenu-item has-submenu">
-                                <a href="#">
-                                    ক্লাস V
-                                    <i class="fas fa-chevron-right submenu-arrow"></i>
-                                </a>
-                                <ul class="sub-submenu">
-                                    <li><a href="#" data-content-id="marks-class5-exam1">১ম পরীক্ষা</a></li>
-                                    <li><a href="#" data-content-id="marks-class5-exam2">২য় পরীক্ষা</a></li>
-                                    <li><a href="#" data-content-id="marks-class5-exam3">৩য় পরীক্ষা</a></li>
-                                </ul>
-                            </li>
-                            <li class="submenu-item has-submenu">
-                                <a href="#">
-                                    ক্লাস VI
-                                    <i class="fas fa-chevron-right submenu-arrow"></i>
-                                </a>
-                                <ul class="sub-submenu">
-                                    <li><a href="#" data-content-id="marks-class6-exam1">১ম পরীক্ষা</a></li>
-                                    <li><a href="#" data-content-id="marks-class6-exam2">২য় পরীক্ষা</a></li>
-                                    <li><a href="#" data-content-id="marks-class6-exam3">৩য় পরীক্ষা</a></li>
-                                </ul>
-                            </li>
-                            <li class="submenu-item has-submenu">
-                                <a href="#">
-                                    ক্লাস XII
-                                    <i class="fas fa-chevron-right submenu-arrow"></i>
-                                </a>
-                                <ul class="sub-submenu">
-                                    <li><a href="#" data-content-id="marks-class12-exam1">১ম পরীক্ষা</a></li>
-                                    <li><a href="#" data-content-id="marks-class12-exam2">২য় পরীক্ষা</a></li>
-                                    <li><a href="#" data-content-id="marks-class12-exam3">৩য় পরীক্ষা</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-content-id="upload-student-notice">
-                            <i class="fas fa-bullhorn menu-icon"></i> ছাত্র বিজ্ঞপ্তি আপলোড
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" data-content-id="teachers-info">
-                            <i class="fas fa-chalkboard-teacher menu-icon"></i> শিক্ষকদের তথ্য
-                        </a>
-                    </li>
-                    </ul>
-            </nav>
-        </aside>
+  <!-- 🔵 উপরের হেডার -->
+  <header>
+    <span id="menuIcon">&#9776;</span> <!-- ☰ মেনু আইকন -->
+    <img src="logo.png" alt="স্কুল লোগো" /> <!-- logo.png পরিবর্তন করুন আপনার school's logo ফাইলে -->
+    <h1>আপনার স্কুলের নাম</h1>
+    <h2 id="dashboardTitle">ড্যাশবোর্ড</h2>
+  </header>
 
-        <main class="dashboard-content" id="dashboardContent">
-            <h2 class="dashboard-title" id="dashboardTitle">ড্যাশবোর্ড</h2>
-            <div class="content-area" id="contentArea">
-                <p>স্বাগতম! ড্যাশবোর্ডে আপনি বিভিন্ন অপশন দেখতে পাবেন। বাম পাশের মেনু থেকে আপনার প্রয়োজনীয় কাজটি নির্বাচন করুন।</p>
-            </div>
-        </main>
-    </div>
+  <!-- 🔵 সাইড মেনু বার -->
+  <div id="sidebar">
+    <ul>
+      <li onclick="toggleSubmenu('marksUpload')">Marks Upload</li>
+      <ul class="submenu" id="marksUpload">
+        <li onclick="toggleSubsubmenu('classV')">Class V</li>
+        <ul class="subsubmenu" id="classV">
+          <li onclick="loadContent('Class V - 1st Exam')">1st Exam</li>
+          <li onclick="loadContent('Class V - 2nd Exam')">2nd Exam</li>
+          <li onclick="loadContent('Class V - 3rd Exam')">3rd Exam</li>
+        </ul>
+        <!-- অন্য ক্লাসগুলি এভাবে কপি করুন -->
+      </ul>
 
-    <script src="scriptt.js"></script> </body>
-  </html>
+      <li onclick="loadContent('Upload Student Notice')">Upload Student Notice</li>
+    </ul>
+  </div>
+
+  <!-- 🔵 মূল কন্টেন্ট এরিয়া -->
+  <div id="content">
+    <h2>ড্যাশবোর্ডে স্বাগতম</h2>
+    <p>এখানে আপনার কন্টেন্ট লোড হবে।</p>
+  </div>
+
+  <!-- 🔵 JavaScript ফাইল লিংক -->
+  <script src="scriptt.js"></script>
+
+</body>
+</html>
