@@ -1,123 +1,64 @@
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
-  overflow-x: hidden; /* স্ক্রল issue এড়াতে */
+const menuIcon = document.getElementById('menuIcon');
+const sidebar = document.getElementById('sidebar');
+
+menuIcon.addEventListener('click', (event) => {
+  sidebar.classList.toggle('active');
+  event.stopPropagation(); // ক্লিক ইভেন্ট বুবলিং বন্ধ
+});
+
+// 🔵 যেকোনো ফাঁকা স্থানে ক্লিক করলে মেনু হাইড হবে
+document.body.addEventListener('click', () => {
+  sidebar.classList.remove('active');
+});
+
+// 🔵 বাম দিকে স্ক্রল করলে মেনু হাইড হবে
+document.addEventListener('scroll', () => {
+  sidebar.classList.remove('active');
+});
+
+sidebar.addEventListener('click', (event) => {
+  event.stopPropagation(); // সাইডবারে ক্লিক করলে মেনু হাইড হবে না
+});
+
+// 🔵 সাবমেনু টগল + অ্যারো ঘুরানো
+function toggleSubmenu(id, element) {
+  const submenu = document.getElementById(id);
+  const allSubmenus = document.querySelectorAll('.submenu');
+  const allArrows = document.querySelectorAll('.submenu ~ li .arrow, li .arrow');
+
+  allSubmenus.forEach(sm => { if(sm !== submenu) sm.style.display = 'none'; });
+  submenu.style.display = (submenu.style.display === 'block') ? 'none' : 'block';
+
+  // অ্যারো ঘুরানো
+  const arrow = element.querySelector('.arrow');
+  allArrows.forEach(a => { if(a !== arrow) a.classList.remove('rotate-down'); });
+  arrow.classList.toggle('rotate-down');
 }
 
-/* 🔵 হেডার */
-header {
-  display: flex;
-  align-items: center;
-  background-color: #004080;
-  color: white;
-  padding: 10px;
+// 🔵 উপমেনু টগল + অ্যারো ঘুরানো
+function toggleSubsubmenu(id, element) {
+  const subsubmenu = document.getElementById(id);
+  const allSubsubmenus = document.querySelectorAll('.subsubmenu');
+  const allArrows = document.querySelectorAll('.subsubmenu ~ li .arrow, li .arrow');
+
+  allSubsubmenus.forEach(ssm => { if(ssm !== subsubmenu) ssm.style.display = 'none'; });
+  subsubmenu.style.display = (subsubmenu.style.display === 'block') ? 'none' : 'block';
+
+  // অ্যারো ঘুরানো
+  const arrow = element.querySelector('.arrow');
+  allArrows.forEach(a => { if(a !== arrow) a.classList.remove('rotate-down'); });
+  arrow.classList.toggle('rotate-down');
 }
 
-header img {
-  height: 50px;
-  margin-right: 10px;
+// 🔵 ড্যাশবোর্ডে রিস্টোর
+function loadDashboard() {
+  document.getElementById('content').innerHTML = `<h2 class="animated">ড্যাশবোর্ডে স্বাগতম</h2><p>এখানে আপনার কন্টেন্ট লোড হবে।</p>`;
+  sidebar.classList.remove('active');
 }
 
-header h1 {
-  font-size: 20px;
-}
-
-#menuIcon {
-  font-size: 24px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-/* 🔵 সাইডবার */
-#sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px;
-  width: 250px;
-  height: 100%;
-  background-color: #333;
-  color: white;
-  overflow-y: auto;
-  transition: left 0.3s ease;
-  z-index: 999;
-}
-
-#sidebar.active {
-  left: 0;
-}
-
-#sidebar ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-#sidebar li {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #444;
-  position: relative;
-}
-
-#sidebar li:hover {
-  background-color: #444;
-}
-
-.arrow {
-  float: right;
-  transition: transform 0.3s ease;
-}
-
-/* 🔵 সাবমেনু */
-.submenu, .subsubmenu {
-  display: none;
-  background-color: #555;
-}
-
-.submenu li, .subsubmenu li {
-  padding-left: 20px;
-}
-
-.subsubmenu {
-  background-color: #666;
-}
-
-/* 🔵 কন্টেন্ট এরিয়া */
-#content {
-  margin-left: 0;
-  padding: 20px;
-  transition: margin-left 0.3s ease;
-}
-
-/* 🔵 হেডিং কালার */
-#content h2 {
-  color: #004080;
-}
-
-/* 🔵 অ্যানিমেশন */
-.animated {
-  animation: flyIn 0.6s ease-out;
-}
-
-@keyframes flyIn {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0px);
-    opacity: 1;
-  }
-}
-
-/* 🔵 অ্যারো ঘুরে যাওয়া */
-.rotate-down {
-  transform: rotate(90deg);
-}
-
-@media screen and (min-width: 768px) {
-  #content {
-    margin-left: 0;
-  }
+// 🔵 কন্টেন্ট লোড
+function loadContent(text) {
+  document.getElementById('content').innerHTML = `<h2 class="animated" style="color:#0066cc">${text}</h2><p>${text} এর কন্টেন্ট এখানে লোড হবে।</p>`;
+  sidebar.classList.remove('active');
 }
