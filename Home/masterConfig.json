@@ -1,18 +1,18 @@
 
 {
     "teacher": {
-        "id": "teacher123",
-        "pass": "teachpass",
-        "redirect": "index.html"
+        "id": "",
+        "pass": "",
+        "redirect": ""
     },
     "student": {
-        "id": "student123",
-        "pass": "studpass",
-        "redirect": "index.html"
+        "id": "",
+        "pass": "",
+        "redirect": "student.html"
     },
     "school": {
-        "id": "schooladmin",
-        "pass": "adminpass",
-        "redirect": "index.html"
+        "id": "",
+        "pass": "",
+        "redirect": "school.html"
     }
 }
