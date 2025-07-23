@@ -1,123 +1,209 @@
 
+/* Basic Resets & Global Styles */
 body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
-  overflow-x: hidden; /* স্ক্রল issue এড়াতে */
+    margin: 0;
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Modern font stack */
+    background-color: #f8f9fa; /* Lighter, softer background */
+    overflow-x: hidden; /* Prevent horizontal scroll issues */
+    line-height: 1.6; /* Improved readability */
+    color: #343a40; /* Darker text for better contrast */
 }
 
-/* 🔵 হেডার */
+/* --- Header Styling --- */
 header {
-  display: flex;
-  align-items: center;
-  background-color: #004080;
-  color: white;
-  padding: 10px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient to right, #0056b3, #007bff; /* Modern gradient background */
+    color: white;
+    padding: 15px 20px; /* More generous padding */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    position: sticky; /* Make header sticky */
+    top: 0;
+    z-index: 1000; /* Ensure header is above other content */
 }
 
 header img {
-  height: 50px;
-  margin-right: 10px;
+    height: 45px; /* Slightly adjusted size */
+    margin-right: 15px;
+    border-radius: 50%; /* Make logo round if desired */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Small shadow for logo */
 }
 
 header h1 {
-  font-size: 20px;
+    font-size: 24px; /* Larger, more prominent heading */
+    margin: 0;
+    font-weight: 600; /* Bolder font weight */
 }
 
 #menuIcon {
-  font-size: 24px;
-  cursor: pointer;
-  margin-right: 10px;
+    font-size: 28px; /* Larger icon for better tap target */
+    cursor: pointer;
+    margin-right: 15px;
+    transition: transform 0.3s ease-in-out; /* Smooth rotation on hover/click */
+    padding: 5px; /* Add padding for easier clicking */
+    border-radius: 5px; /* Slightly rounded corners */
 }
 
-/* 🔵 সাইডবার */
+#menuIcon:hover {
+    transform: rotate(5deg) scale(1.05); /* Subtle hover effect */
+    background-color: rgba(255, 255, 255, 0.1); /* Light background on hover */
+}
+
+/* --- Sidebar Styling --- */
 #sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px;
-  width: 250px;
-  height: 100%;
-  background-color: #333;
-  color: white;
-  overflow-y: auto;
-  transition: left 0.3s ease;
-  z-index: 999;
+    position: fixed;
+    top: 0;
+    left: -280px; /* Slightly wider sidebar */
+    width: 280px;
+    height: 100%;
+    background-color: #2c3e50; /* Darker, modern navy blue */
+    color: #ecf0f1; /* Lighter text for contrast */
+    overflow-y: auto;
+    transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother, more engaging transition */
+    z-index: 999;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.25); /* More pronounced shadow when open */
+    padding-top: 20px; /* Padding at the top */
 }
 
 #sidebar.active {
-  left: 0;
+    left: 0;
 }
 
 #sidebar ul {
-  list-style-type: none;
-  padding: 0;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
 #sidebar li {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #444;
-  position: relative;
+    padding: 14px 20px; /* More padding for better spacing */
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+    position: relative;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+    display: flex; /* Use flexbox for better alignment of text and arrow */
+    align-items: center;
+    justify-content: space-between; /* Push arrow to the right */
+}
+
+#sidebar li:last-child {
+    border-bottom: none; /* No border for the last item */
 }
 
 #sidebar li:hover {
-  background-color: #444;
+    background-color: #34495e; /* Slightly lighter hover background */
+    transform: translateX(5px); /* Gentle slide effect on hover */
+    box-shadow: inset 5px 0 0 #007bff; /* Left border highlight on hover */
 }
 
 .arrow {
-  float: right;
-  transition: transform 0.3s ease;
+    font-size: 16px; /* Adjust arrow size */
+    transition: transform 0.3s ease;
+    margin-left: 10px; /* Spacing between text and arrow */
 }
 
-/* 🔵 সাবমেনু */
+/* --- Submenu & Sub-submenu Styling --- */
 .submenu, .subsubmenu {
-  display: none;
-  background-color: #555;
+    display: none;
+    background-color: #34495e; /* Darker shade for submenus */
+    padding-left: 0; /* Remove default ul padding */
 }
 
 .submenu li, .subsubmenu li {
-  padding-left: 20px;
+    padding: 12px 25px; /* Increased left padding for nesting visual */
+    font-size: 15px; /* Slightly smaller font for nested items */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Fainter border */
+}
+
+.submenu li:hover, .subsubmenu li:hover {
+    background-color: #3e5770; /* Even darker on hover */
+    transform: translateX(3px); /* Subtle slide for nested items */
+    box-shadow: inset 3px 0 0 #0056b3; /* Different highlight color */
 }
 
 .subsubmenu {
-  background-color: #666;
+    background-color: #3e5770; /* Even darker for sub-submenus */
 }
 
-/* 🔵 কন্টেন্ট এরিয়া */
+/* --- Content Area Styling --- */
 #content {
-  margin-left: 0;
-  padding: 20px;
-  transition: margin-left 0.3s ease;
-}
-
-/* 🔵 হেডিং কালার */
-#content h2 {
-  color: #004080;
-}
-
-/* 🔵 অ্যানিমেশন */
-.animated {
-  animation: flyIn 0.6s ease-out;
-}
-
-@keyframes flyIn {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0px);
-    opacity: 1;
-  }
-}
-
-/* 🔵 অ্যারো ঘুরে যাওয়া */
-.rotate-down {
-  transform: rotate(90deg);
-}
-
-@media screen and (min-width: 768px) {
-  #content {
     margin-left: 0;
-  }
+    padding: 30px; /* More generous padding */
+    transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Match sidebar transition */
+    background-color: #ffffff; /* White content background */
+    min-height: calc(100vh - 75px); /* Ensure content area takes up most of the viewport height */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for content area */
+    border-radius: 8px; /* Slightly rounded corners for content */
+    margin: 20px; /* Margin around the content block */
+}
+
+/* --- Heading Color & Typography --- */
+#content h2 {
+    color: #007bff; /* Vibrant primary color */
+    margin-bottom: 15px;
+    font-weight: 700; /* Bolder heading */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); /* Very subtle text shadow */
+}
+
+#content p {
+    color: #555; /* Slightly lighter body text */
+    font-size: 16px;
+}
+
+/* --- Animation Enhancements --- */
+.animated {
+    animation: fadeInSlideUp 0.8s ease-out forwards; /* More refined animation */
+    opacity: 0; /* Start invisible for animation */
+}
+
+@keyframes fadeInSlideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* --- Arrow Rotation --- */
+.rotate-down {
+    transform: rotate(90deg); /* Standard rotation */
+}
+
+/* --- Responsive Adjustments --- */
+@media screen and (min-width: 768px) {
+    /* For larger screens, maybe show sidebar by default or push content */
+    /* If sidebar is always visible on desktop, uncomment below */
+    /* #sidebar {
+        left: 0;
+        box-shadow: none;
+    }
+    #content {
+        margin-left: 280px;
+    }
+    #menuIcon {
+        display: none; // Hide menu icon if sidebar is always open
+    } */
+}
+
+@media screen and (max-width: 480px) {
+    header {
+        padding: 10px 15px;
+    }
+    header h1 {
+        font-size: 20px;
+    }
+    #menuIcon {
+        font-size: 24px;
+    }
+    #sidebar {
+        width: 230px; /* Slightly narrower sidebar on small screens */
+        left: -230px;
+    }
+    #content {
+        padding: 20px;
+        margin: 10px;
+    }
 }
