@@ -1,4 +1,3 @@
-
 /* বেসিক রিসেট এবং গ্লোবাল স্টাইল */
 body {
     margin: 0;
@@ -14,8 +13,8 @@ body {
 header {
     display: flex;
     align-items: center;
-    /* আধুনিক গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
-    background: linear-gradient(to right, #0056b3, #007bff);
+    /* লাল লোগোর সাথে সামঞ্জস্যপূর্ণ গাঢ় নীল গ্রেডিয়েন্ট */
+    background: linear-gradient(to right, #004080, #0056b3);
     color: white;
     padding: 15px 20px; /* আরও উদার প্যাডিং */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* গভীরতার জন্য সূক্ষ্ম শ্যাডো */
@@ -24,10 +23,12 @@ header {
     z-index: 1000; /* নিশ্চিত করা যে হেডার অন্য কন্টেন্টের উপরে থাকবে */
 }
 
-header img {
+header .school-logo-header {
     height: 45px; /* কিছুটা সমন্বিত আকার */
     margin-right: 15px;
     border-radius: 50%; /* যদি লোগো গোলাকার হয় */
+    background-color: #fff; /* লোগোর ব্যাকগ্রাউন্ড সাদা যাতে লাল রং উজ্জ্বল দেখায় */
+    padding: 5px; /* লোগোর চারপাশে প্যাডিং */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* লোগোর জন্য ছোট শ্যাডো */
 }
 
@@ -78,7 +79,7 @@ header h1 {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
     text-align: center;
-    flex-direction: column; /* লোগো উপরে, টেক্সট নিচে */
+    flex-direction: column; /* লogo উপরে, টেক্সট নিচে */
 }
 
 .sidebar-header .sidebar-logo {
@@ -86,6 +87,8 @@ header h1 {
     width: 60px;
     border-radius: 50%;
     margin-bottom: 10px;
+    background-color: #fff; /* লোগোর ব্যাকগ্রাউন্ড সাদা যাতে লাল রং উজ্জ্বল দেখায় */
+    padding: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -111,7 +114,7 @@ header h1 {
     background-color: #0056b3; /* হোভার ইফেক্ট */
 }
 
-
+/* সাইডবার active হলে */
 #sidebar.active {
     left: 0;
 }
@@ -153,9 +156,11 @@ header h1 {
 
 /* --- সাবমেনু এবং সাব-সাবমেনু স্টাইলিং --- */
 .submenu, .subsubmenu {
+    list-style-type: none; /* বুলেট পয়েন্ট অপসারণ */
     display: none;
     background-color: #343a40; /* সাবমেনুর জন্য গাঢ় শেড */
     padding-left: 0; /* ডিফল্ট ul প্যাডিং সরানো হয়েছে */
+    margin: 0; /* ডিফল্ট ul মার্জিন সরানো হয়েছে */
 }
 
 .submenu li, .subsubmenu li {
@@ -223,9 +228,253 @@ header h1 {
     transform: rotate(90deg); /* স্ট্যান্ডার্ড ঘূর্ণন */
 }
 
+/* --- ফুটার স্টাইল --- */
+footer {
+    background-color: #343a40; /* গাঢ় ধূসর ব্যাকগ্রাউন্ড */
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+footer p {
+    margin: 5px 0;
+    color: #bbb;
+}
+
+/* --- মাস্টার লগইন ওভারলে স্টাইল --- */
+.master-login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* গাঢ় ওভারলে */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* নিশ্চিত করা যে এটি সবকিছুর উপরে থাকবে */
+}
+
+.master-login-container {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 450px; /* ফর্মের প্রস্থ নিয়ন্ত্রণ */
+    width: 90%;
+}
+
+.master-login-heading {
+    color: #007bff;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left; /* লেবেল এবং ইনপুট সারিবদ্ধ করতে */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group select {
+    width: calc(100% - 20px); /* প্যাডিং এর জন্য প্রস্থ অ্যাডজাস্ট করা হয়েছে */
+    padding: 12px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus,
+.form-group select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.master-login-button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%; /* বোতামকে ফুল-উইথ করা হয়েছে */
+    margin-top: 10px;
+}
+
+.master-login-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.error-message {
+    color: red;
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.success-message {
+    color: green;
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+/* এক্সাম বোতামের স্টাইল (শিক্ষক ও শিক্ষার্থী প্যানেলের জন্য) */
+.shaded-info-box {
+    background-color: #f0f8ff; /* হালকা নীল বা সাদার মতো */
+    border: 1px solid #e0e7ee;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* নরম শ্যাডো */
+}
+
+.box-heading {
+    color: #007bff;
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.box-heading::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #007bff;
+    border-radius: 2px;
+}
+
+.shine {
+    animation: shine 2s infinite alternate; /* সূক্ষ্ম শাইন অ্যানিমেশন */
+}
+
+@keyframes shine {
+    0% { opacity: 1; }
+    50% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+.exam-buttons-group {
+    display: flex;
+    flex-wrap: wrap; /* ছোট স্ক্রিনের জন্য বোতামগুলো নিচে নিচে আসবে */
+    gap: 15px; /* বোতামগুলির মধ্যে ফাঁকা স্থান */
+    justify-content: center; /* বোতামগুলি কেন্দ্রে সারিবদ্ধ হবে */
+}
+
+.box-button {
+    display: inline-block; /* ইনলাইন ব্লক যাতে পাশাপাশি থাকে */
+    padding: 12px 25px;
+    background-color: #28a745; /* সবুজ বাটন */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none; /* বোতামের ডিফল্ট বর্ডার অপসারণ */
+    cursor: pointer;
+}
+
+.box-button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.disabled-exam-link {
+    background-color: #6c757d !important; /* ধূসর রং, ক্লিক করা যাবে না বোঝাতে */
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.disabled-exam-link:hover {
+    background-color: #6c757d !important; /* হোভারেও একই থাকবে */
+    transform: none !important;
+}
+
+.avail-msg {
+    background-color: #fff3cd; /* হলুদ ব্যাকগ্রাউন্ড */
+    color: #856404; /* গাঢ় হলুদ টেক্সট */
+    border: 1px solid #ffeeba;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9em;
+    font-weight: 600;
+    animation: fadeOut 3s forwards; /* 3 সেকেন্ড পরে ফেড আউট হবে */
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
+
+/* নোটিশ/হেল্প লিস্টের জন্য স্টাইল */
+.notice-help-list {
+    list-style: none; /* বুলেট পয়েন্ট অপসারণ */
+    padding: 0;
+}
+
+.notice-help-list li {
+    background-color: #e9ecef; /* হালকা ধূসর ব্যাকগ্রাউন্ড */
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.notice-help-list li:hover {
+    background-color: #dee2e6;
+    transform: translateY(-2px);
+}
+
+.notice-help-list li a {
+    text-decoration: none;
+    color: #007bff; /* নীল লিঙ্ক কালার */
+    font-weight: 600;
+    flex-grow: 1; /* লিঙ্কটি সম্পূর্ণ স্থান দখল করবে */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notice-help-list li a:hover {
+    color: #0056b3;
+}
+
 /* --- রেসপনসিভ অ্যাডজাস্টমেন্ট --- */
 @media screen and (min-width: 768px) {
-    /* বড় স্ক্রিনের জন্য, ডিফল্টরূপে সাইডবার দেখানো বা কন্টেন্টকে ঠেলে দেওয়া যেতে পারে */
+    /* বড় স্ক্রিনের জন্য, সাইডবার ডিফল্টরূপে বন্ধ থাকবে */
+    /* যদি ডেস্কটপে সাইডবার সবসময় দৃশ্যমান করতে চান, তবে নিচের কমেন্ট করা কোডগুলো আনকমেন্ট করুন */
     /* #sidebar {
         left: 0;
         box-shadow: none;
@@ -255,5 +504,23 @@ header h1 {
     #content {
         padding: 20px;
         margin: 10px;
+    }
+    .master-login-container {
+        padding: 25px 20px; /* ছোট স্ক্রিনে প্যাডিং কমানো */
+    }
+    .master-login-heading {
+        font-size: 24px;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    .form-group select {
+        width: calc(100% - 16px); /* প্যাডিং এর জন্য প্রস্থ অ্যাডজাস্ট করা হয়েছে */
+    }
+    .box-heading {
+        font-size: 20px;
+    }
+    .box-button {
+        padding: 10px 20px;
+        font-size: 15px;
     }
 }
