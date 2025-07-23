@@ -1,68 +1,72 @@
 
-/* Basic Resets & Global Styles */
+/* বেসিক রিসেট এবং গ্লোবাল স্টাইল */
 body {
     margin: 0;
-    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Modern font stack */
-    background-color: #f8f9fa; /* Lighter, softer background */
-    overflow-x: hidden; /* Prevent horizontal scroll issues */
-    line-height: 1.6; /* Improved readability */
-    color: #343a40; /* Darker text for better contrast */
+    /* আধুনিক ফন্ট স্ট্যাক ব্যবহার করা হয়েছে */
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f8f9fa; /* হালকা, নরম ব্যাকগ্রাউন্ড */
+    overflow-x: hidden; /* অনুভূমিক স্ক্রল সমস্যা এড়াতে */
+    line-height: 1.6; /* উন্নত পাঠযোগ্যতা */
+    color: #343a40; /* আরও ভালো কনট্রাস্টের জন্য গাঢ় টেক্সট */
 }
 
-/* --- Header Styling --- */
+/* --- হেডার স্টাইলিং --- */
 header {
     display: flex;
     align-items: center;
-    background: linear-gradient to right, #0056b3, #007bff; /* Modern gradient background */
+    /* আধুনিক গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
+    background: linear-gradient(to right, #0056b3, #007bff);
     color: white;
-    padding: 15px 20px; /* More generous padding */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    position: sticky; /* Make header sticky */
+    padding: 15px 20px; /* আরও উদার প্যাডিং */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* গভীরতার জন্য সূক্ষ্ম শ্যাডো */
+    position: sticky; /* হেডারকে স্টিকি রাখা */
     top: 0;
-    z-index: 1000; /* Ensure header is above other content */
+    z-index: 1000; /* নিশ্চিত করা যে হেডার অন্য কন্টেন্টের উপরে থাকবে */
 }
 
 header img {
-    height: 45px; /* Slightly adjusted size */
+    height: 45px; /* কিছুটা সমন্বিত আকার */
     margin-right: 15px;
-    border-radius: 50%; /* Make logo round if desired */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Small shadow for logo */
+    border-radius: 50%; /* যদি লোগো গোলাকার হয় */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* লোগোর জন্য ছোট শ্যাডো */
 }
 
 header h1 {
-    font-size: 24px; /* Larger, more prominent heading */
+    font-size: 24px; /* বড়, আরও বিশিষ্ট শিরোনাম */
     margin: 0;
-    font-weight: 600; /* Bolder font weight */
+    font-weight: 600; /* আরও গাঢ় ফন্ট ওজন */
 }
 
 #menuIcon {
-    font-size: 28px; /* Larger icon for better tap target */
+    font-size: 28px; /* সহজে ক্লিক করার জন্য বড় আইকন */
     cursor: pointer;
     margin-right: 15px;
-    transition: transform 0.3s ease-in-out; /* Smooth rotation on hover/click */
-    padding: 5px; /* Add padding for easier clicking */
-    border-radius: 5px; /* Slightly rounded corners */
+    /* হোভার/ক্লিকে মসৃণ ঘূর্ণন */
+    transition: transform 0.3s ease-in-out;
+    padding: 5px; /* সহজে ক্লিক করার জন্য প্যাডিং যোগ করা */
+    border-radius: 5px; /* সামান্য গোলাকার কোণা */
 }
 
 #menuIcon:hover {
-    transform: rotate(5deg) scale(1.05); /* Subtle hover effect */
-    background-color: rgba(255, 255, 255, 0.1); /* Light background on hover */
+    transform: rotate(5deg) scale(1.05); /* সূক্ষ্ম হোভার প্রভাব */
+    background-color: rgba(255, 255, 255, 0.1); /* হোভারের উপর হালকা ব্যাকগ্রাউন্ড */
 }
 
-/* --- Sidebar Styling --- */
+/* --- সাইডবার স্টাইলিং --- */
 #sidebar {
     position: fixed;
     top: 0;
-    left: -280px; /* Slightly wider sidebar */
+    left: -280px; /* কিছুটা চওড়া সাইডবার */
     width: 280px;
     height: 100%;
-    background-color: #2c3e50; /* Darker, modern navy blue */
-    color: #ecf0f1; /* Lighter text for contrast */
+    background-color: #2c3e50; /* গাঢ়, আধুনিক নেভি ব্লু */
+    color: #ecf0f1; /* কনট্রাস্টের জন্য হালকা টেক্সট */
     overflow-y: auto;
-    transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother, more engaging transition */
+    /* মসৃণ, আরও আকর্ষণীয় ট্রানজিশন */
+    transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     z-index: 999;
-    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.25); /* More pronounced shadow when open */
-    padding-top: 20px; /* Padding at the top */
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.25); /* খোলার সময় আরও স্পষ্ট শ্যাডো */
+    padding-top: 20px; /* উপরে প্যাডিং */
 }
 
 #sidebar.active {
@@ -76,84 +80,88 @@ header h1 {
 }
 
 #sidebar li {
-    padding: 14px 20px; /* More padding for better spacing */
+    padding: 14px 20px; /* আরও ভালো স্পেসের জন্য বেশি প্যাডিং */
     cursor: pointer;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* সূক্ষ্ম বিভাজক */
     position: relative;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
-    display: flex; /* Use flexbox for better alignment of text and arrow */
+    /* মসৃণ ট্রানজিশন */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex; /* টেক্সট এবং অ্যারোর ভালো সারিবদ্ধতার জন্য ফ্লেক্সবক্স */
     align-items: center;
-    justify-content: space-between; /* Push arrow to the right */
+    justify-content: space-between; /* অ্যারোকে ডানদিকে ঠেলে দেয় */
 }
 
 #sidebar li:last-child {
-    border-bottom: none; /* No border for the last item */
+    border-bottom: none; /* শেষ আইটেমের জন্য কোনো বর্ডার নেই */
 }
 
 #sidebar li:hover {
-    background-color: #34495e; /* Slightly lighter hover background */
-    transform: translateX(5px); /* Gentle slide effect on hover */
-    box-shadow: inset 5px 0 0 #007bff; /* Left border highlight on hover */
+    background-color: #34495e; /* হোভারের জন্য সামান্য হালকা ব্যাকগ্রাউন্ড */
+    transform: translateX(5px); /* হোভারের উপর মৃদু স্লাইড প্রভাব */
+    box-shadow: inset 5px 0 0 #007bff; /* হোভারের উপর বাম বর্ডার হাইলাইট */
 }
 
 .arrow {
-    font-size: 16px; /* Adjust arrow size */
+    font-size: 16px; /* অ্যারোর আকার সমন্বয় করা */
     transition: transform 0.3s ease;
-    margin-left: 10px; /* Spacing between text and arrow */
+    margin-left: 10px; /* টেক্সট এবং অ্যারোর মধ্যে স্পেস */
 }
 
-/* --- Submenu & Sub-submenu Styling --- */
+/* --- সাবমেনু এবং সাব-সাবমেনু স্টাইলিং --- */
 .submenu, .subsubmenu {
     display: none;
-    background-color: #34495e; /* Darker shade for submenus */
-    padding-left: 0; /* Remove default ul padding */
+    background-color: #34495e; /* সাবমেনুর জন্য গাঢ় শেড */
+    padding-left: 0; /* ডিফল্ট ul প্যাডিং সরানো হয়েছে */
 }
 
 .submenu li, .subsubmenu li {
-    padding: 12px 25px; /* Increased left padding for nesting visual */
-    font-size: 15px; /* Slightly smaller font for nested items */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Fainter border */
+    padding: 12px 25px; /* নেস্টিং ভিজ্যুয়ালের জন্য বাম প্যাডিং বাড়ানো হয়েছে */
+    font-size: 15px; /* নেস্টেড আইটেমের জন্য সামান্য ছোট ফন্ট */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* হালকা বর্ডার */
 }
 
 .submenu li:hover, .subsubmenu li:hover {
-    background-color: #3e5770; /* Even darker on hover */
-    transform: translateX(3px); /* Subtle slide for nested items */
-    box-shadow: inset 3px 0 0 #0056b3; /* Different highlight color */
+    background-color: #3e5770; /* হোভারের উপর আরও গাঢ় */
+    transform: translateX(3px); /* নেস্টেড আইটেমের জন্য সূক্ষ্ম স্লাইড */
+    box-shadow: inset 3px 0 0 #0056b3; /* ভিন্ন হাইলাইট রঙ */
 }
 
 .subsubmenu {
-    background-color: #3e5770; /* Even darker for sub-submenus */
+    background-color: #3e5770; /* সাব-সাবমেনুর জন্য আরও গাঢ় */
 }
 
-/* --- Content Area Styling --- */
+/* --- কন্টেন্ট এরিয়া স্টাইলিং --- */
 #content {
     margin-left: 0;
-    padding: 30px; /* More generous padding */
-    transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Match sidebar transition */
-    background-color: #ffffff; /* White content background */
-    min-height: calc(100vh - 75px); /* Ensure content area takes up most of the viewport height */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for content area */
-    border-radius: 8px; /* Slightly rounded corners for content */
-    margin: 20px; /* Margin around the content block */
+    padding: 30px; /* আরও উদার প্যাডিং */
+    /* সাইডবার ট্রানজিশনের সাথে মিলিয়ে */
+    transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background-color: #ffffff; /* সাদা কন্টেন্ট ব্যাকগ্রাউন্ড */
+    /* নিশ্চিত করা যে কন্টেন্ট এরিয়া ভিউপোর্টের বেশিরভাগ উচ্চতা দখল করে */
+    min-height: calc(100vh - 75px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* কন্টেন্ট এরিয়ার জন্য সূক্ষ্ম শ্যাডো */
+    border-radius: 8px; /* কন্টেন্টের জন্য সামান্য গোলাকার কোণা */
+    margin: 20px; /* কন্টেন্ট ব্লকের চারপাশে মার্জিন */
 }
 
-/* --- Heading Color & Typography --- */
+/* --- হেডিং রঙ এবং টাইপোগ্রাফি --- */
 #content h2 {
-    color: #007bff; /* Vibrant primary color */
+    color: #007bff; /* প্রাণবন্ত প্রাথমিক রঙ */
     margin-bottom: 15px;
-    font-weight: 700; /* Bolder heading */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); /* Very subtle text shadow */
+    font-weight: 700; /* আরও গাঢ় হেডিং */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); /* খুব সূক্ষ্ম টেক্সট শ্যাডো */
 }
 
 #content p {
-    color: #555; /* Slightly lighter body text */
+    color: #555; /* সামান্য হালকা বডি টেক্সট */
     font-size: 16px;
 }
 
-/* --- Animation Enhancements --- */
+/* --- অ্যানিমেশন উন্নতকরণ --- */
 .animated {
-    animation: fadeInSlideUp 0.8s ease-out forwards; /* More refined animation */
-    opacity: 0; /* Start invisible for animation */
+    /* আরও পরিমার্জিত অ্যানিমেশন */
+    animation: fadeInSlideUp 0.8s ease-out forwards;
+    opacity: 0; /* অ্যানিমেশনের জন্য অদৃশ্য থেকে শুরু */
 }
 
 @keyframes fadeInSlideUp {
@@ -167,15 +175,15 @@ header h1 {
     }
 }
 
-/* --- Arrow Rotation --- */
+/* --- অ্যারো ঘূর্ণন --- */
 .rotate-down {
-    transform: rotate(90deg); /* Standard rotation */
+    transform: rotate(90deg); /* স্ট্যান্ডার্ড ঘূর্ণন */
 }
 
-/* --- Responsive Adjustments --- */
+/* --- রেসপনসিভ অ্যাডজাস্টমেন্ট --- */
 @media screen and (min-width: 768px) {
-    /* For larger screens, maybe show sidebar by default or push content */
-    /* If sidebar is always visible on desktop, uncomment below */
+    /* বড় স্ক্রিনের জন্য, ডিফল্টরূপে সাইডবার দেখানো বা কন্টেন্টকে ঠেলে দেওয়া যেতে পারে */
+    /* যদি ডেস্কটপে সাইডবার সবসময় দৃশ্যমান হয়, তবে নিচের কমেন্ট করা কোডগুলো আনকমেন্ট করুন */
     /* #sidebar {
         left: 0;
         box-shadow: none;
@@ -184,7 +192,7 @@ header h1 {
         margin-left: 280px;
     }
     #menuIcon {
-        display: none; // Hide menu icon if sidebar is always open
+        display: none; // সাইডবার সবসময় খোলা থাকলে মেনু আইকন লুকান
     } */
 }
 
@@ -199,7 +207,7 @@ header h1 {
         font-size: 24px;
     }
     #sidebar {
-        width: 230px; /* Slightly narrower sidebar on small screens */
+        width: 230px; /* ছোট স্ক্রিনে সামান্য সংকীর্ণ সাইডবার */
         left: -230px;
     }
     #content {
