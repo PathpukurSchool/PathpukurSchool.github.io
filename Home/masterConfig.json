@@ -1,0 +1,17 @@
+{
+    "teacher": {
+        "id": "teacher123",
+        "pass": "teachpass",
+        "redirect": "index.html"
+    },
+    "student": {
+        "id": "student123",
+        "pass": "studpass",
+        "redirect": "index.html"
+    },
+    "school": {
+        "id": "schooladmin",
+        "pass": "adminpass",
+        "redirect": "index.html"
+    }
+}
