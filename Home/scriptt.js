@@ -1,12 +1,22 @@
 
-// 🔵 মেনু বার টগল করা
 const menuIcon = document.getElementById('menuIcon');
 const sidebar = document.getElementById('sidebar');
-menuIcon.addEventListener('click', () => {
+
+menuIcon.addEventListener('click', (event) => {
   sidebar.classList.toggle('active');
+  event.stopPropagation(); // ক্লিক ইভেন্ট বুবলিং বন্ধ
 });
 
-// 🔵 সাব মেনু টগল ফাংশন
+// 🔵 যেকোনো ফাঁকা স্থানে ক্লিক করলে মেনু হাইড হবে
+document.body.addEventListener('click', () => {
+  sidebar.classList.remove('active');
+});
+
+sidebar.addEventListener('click', (event) => {
+  event.stopPropagation(); // সাইডবারে ক্লিক করলে মেনু হাইড হবে না
+});
+
+// 🔵 সাবমেনু টগল
 function toggleSubmenu(id) {
   const submenu = document.getElementById(id);
   const allSubmenus = document.querySelectorAll('.submenu');
@@ -14,7 +24,7 @@ function toggleSubmenu(id) {
   submenu.style.display = (submenu.style.display === 'block') ? 'none' : 'block';
 }
 
-// 🔵 উপ মেনু টগল ফাংশন
+// 🔵 উপমেনু টগল
 function toggleSubsubmenu(id) {
   const subsubmenu = document.getElementById(id);
   const allSubsubmenus = document.querySelectorAll('.subsubmenu');
@@ -22,21 +32,14 @@ function toggleSubsubmenu(id) {
   subsubmenu.style.display = (subsubmenu.style.display === 'block') ? 'none' : 'block';
 }
 
-// 🔵 কন্টেন্ট লোড ফাংশন
-function loadContent(text) {
-  document.getElementById('content').innerHTML = `<h2>${text}</h2><p>${text} এর কন্টেন্ট এখানে লোড হবে।</p>`;
-  sidebar.classList.remove('active'); // মেনু ক্লিকের পর sidebar hide হবে
+// 🔵 ড্যাশবোর্ডে রিস্টোর
+function loadDashboard() {
+  document.getElementById('content').innerHTML = `<h2 class="animated">ড্যাশবোর্ডে স্বাগতম</h2><p>এখানে আপনার কন্টেন্ট লোড হবে।</p>`;
+  sidebar.classList.remove('active');
 }
 
-// 🔵 ড্যাশবোর্ড টাইটেলে ক্লিক করলে হোম রিস্টোর
-document.getElementById('dashboardTitle').addEventListener('click', () => {
-  document.getElementById('content').innerHTML = `<h2>ড্যাশবোর্ডে স্বাগতম</h2><p>এখানে আপনার কন্টেন্ট লোড হবে।</p>`;
-});
-
-/* 🔵 🔶 🔴
-✅ কাস্টমাইজ করার জন্য:
-- logo.png পরিবর্তন করুন আপনার লোগো path অনুযায়ী।
-- স্কুলের নাম <h1> এ বদলান।
-- মেনু ও সাবমেনু এর লিস্ট পরিবর্তন করুন index.html এ।
-- কালার পরিবর্তন করতে style.css এ background-color ও color প্রপার্টি পরিবর্তন করুন।
-*/
+// 🔵 কন্টেন্ট লোড
+function loadContent(text) {
+  document.getElementById('content').innerHTML = `<h2 class="animated" style="color:#0066cc">${text}</h2><p>${text} এর কন্টেন্ট এখানে লোড হবে।</p>`;
+  sidebar.classList.remove('active');
+}
