@@ -2,46 +2,78 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>স্কুল ড্যাশবোর্ড</title>
-  <link rel="stylesheet" href="stylet.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>স্কুল ড্যাশবোর্ড</title>
+    <link rel="stylesheet" href="stylet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- 🔵 সাইড মেনু বার -->
-  <div id="sidebar">
-    <ul>
-      <li id="dashboardMenu" onclick="loadDashboard()">📊 ড্যাশবোর্ড</li>
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <img src="PHS-LOGO.png" alt="স্কুল লোগো" class="sidebar-logo"/>
+            <h3>স্কুল ড্যাশবোর্ড</h3>
+        </div>
+        <ul>
+            <li id="dashboardMenu" onclick="loadDashboard()">
+                <i class="fas fa-chart-line"></i> 📊 ড্যাশবোর্ড
+            </li>
 
-      <li onclick="toggleSubmenu('marksUpload', this)">📝 Marks Upload <span class="arrow">▶</span></li>
-      <ul class="submenu" id="marksUpload">
-        <li onclick="toggleSubsubmenu('classV', this)">🧮 Class V <span class="arrow">▶</span></li>
-        <ul class="subsubmenu" id="classV">
-          <li onclick="loadContent('Class V - 1st Exam')">1️⃣ 1st Exam</li>
-          <li onclick="loadContent('Class V - 2nd Exam')">2️⃣ 2nd Exam</li>
-          <li onclick="loadContent('Class V - 3rd Exam')">3️⃣ 3rd Exam</li>
+            <li onclick="toggleSubmenu('marksUpload', this)">
+                <i class="fas fa-upload"></i> 📝 মার্কস আপলোড <span class="arrow">▶</span>
+            </li>
+            <ul class="submenu" id="marksUpload">
+                <li onclick="toggleSubsubmenu('classV', this)">
+                    <i class="fas fa-chalkboard"></i> 🧮 ক্লাস V <span class="arrow">▶</span>
+                </li>
+                <ul class="subsubmenu" id="classV">
+                    <li onclick="loadContent('Class V - 1st Exam')">
+                        <i class="fas fa-file-alt"></i> 1️⃣ 1st পরীক্ষা
+                    </li>
+                    <li onclick="loadContent('Class V - 2nd Exam')">
+                        <i class="fas fa-file-alt"></i> 2️⃣ 2nd পরীক্ষা
+                    </li>
+                    <li onclick="loadContent('Class V - 3rd Exam')">
+                        <i class="fas fa-file-alt"></i> 3️⃣ 3rd পরীক্ষা
+                    </li>
+                </ul>
+                <li onclick="loadContent('Class VI - Marks')">
+                    <i class="fas fa-chalkboard"></i> ক্লাস VI <span class="arrow">▶</span>
+                </li>
+            </ul>
+
+            <li onclick="loadContent('Upload Student Notice')">
+                <i class="fas fa-bullhorn"></i> 📢 ছাত্র বিজ্ঞপ্তি আপলোড
+            </li>
+            <li onclick="loadContent('Student List')">
+                <i class="fas fa-users"></i> ছাত্র তালিকা
+            </li>
+            <li onclick="loadContent('Teacher Management')">
+                <i class="fas fa-user-tie"></i> শিক্ষক ব্যবস্থাপনা
+            </li>
+            <li onclick="loadContent('Attendance')">
+                <i class="fas fa-check-circle"></i> উপস্থিতি
+            </li>
+            <li onclick="loadContent('Settings')">
+                <i class="fas fa-cog"></i> সেটিংস
+            </li>
         </ul>
-      </ul>
+    </div>
 
-      <li onclick="loadContent('Upload Student Notice')">📢 Upload Student Notice</li>
-    </ul>
-  </div>
+    <header>
+        <span id="menuIcon"><i class="fas fa-bars"></i></span>
+        <img src="PHS-LOGO.png" alt="স্কুল লোগো" />
+        <h1>Pathpukur High School (H.S.)</h1>
+    </header>
 
-  <!-- 🔵 উপরের হেডার -->
-  <header>
-    <span id="menuIcon">&#9776;</span>
-    <img src="PHS-LOGO.png" alt="স্কুল লোগো" />
-    <h1>আপনার স্কুলের নাম</h1>
-  </header>
+    <div id="content">
+        <h2 class="animated">ড্যাশবোর্ডে স্বাগতম</h2>
+        <p>এখানে আপনার কন্টেন্ট লোড হবে।</p>
+    </div>
 
-  <!-- 🔵 মূল কন্টেন্ট এরিয়া -->
-  <div id="content">
-    <h2 class="animated">ড্যাশবোর্ডে স্বাগতম</h2>
-    <p>এখানে আপনার কন্টেন্ট লোড হবে।</p>
-  </div>
-
-  <script src="scriptt.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="scriptt.js"></script>
 
 </body>
 </html>
