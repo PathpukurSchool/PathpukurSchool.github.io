@@ -49,7 +49,7 @@ header h1 {
 
 #menuIcon:hover {
     transform: rotate(5deg) scale(1.05); /* সূক্ষ্ম হোভার প্রভাব */
-    background-color: rgba(255, 255, 255, 0.1); /* হোভারের উপর হালকা ব্যাকগ্রাউন্ড */
+    background-color: rgba(255, 255, 255, 0.1); /* হালকা ব্যাকগ্রাউন্ড অন হোভার */
 }
 
 /* --- সাইডবার স্টাইলিং --- */
@@ -59,30 +59,74 @@ header h1 {
     left: -280px; /* কিছুটা চওড়া সাইডবার */
     width: 280px;
     height: 100%;
-    background-color: #2c3e50; /* গাঢ়, আধুনিক নেভি ব্লু */
-    color: #ecf0f1; /* কনট্রাস্টের জন্য হালকা টেক্সট */
+    background-color: #212529; /* গাঢ় ব্যাকগ্রাউন্ড, লাল লোগোর সাথে মানানসই */
+    color: #f8f9fa; /* লোগোর সাথে ভালো কনট্রাস্টের জন্য প্রায় সাদা টেক্সট */
     overflow-y: auto;
     /* মসৃণ, আরও আকর্ষণীয় ট্রানজিশন */
     transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     z-index: 999;
     box-shadow: 2px 0 15px rgba(0, 0, 0, 0.25); /* খোলার সময় আরও স্পষ্ট শ্যাডো */
-    padding-top: 20px; /* উপরে প্যাডিং */
 }
+
+/* সাইডবার হেডার স্টাইল */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* সেন্টারে আনতে */
+    padding: 20px 10px;
+    background-color: #1a1d20; /* হেডারের জন্য একটু গাঢ় ব্যাকগ্রাউন্ড */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    text-align: center;
+    flex-direction: column; /* লোগো উপরে, টেক্সট নিচে */
+}
+
+.sidebar-header .sidebar-logo {
+    height: 60px; /* লোগোর আকার বড় করা */
+    width: 60px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* ড্যাশবোর্ড লিংক এর স্টাইল (এটি মূল মেনু থেকে আলাদা) */
+.dashboard-link {
+    padding: 15px 20px;
+    background-color: #007bff; /* ড্যাশবোর্ডের জন্য আলাদা ব্যাকগ্রাউন্ড রঙ */
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-link:hover {
+    background-color: #0056b3; /* হোভার ইফেক্ট */
+}
+
 
 #sidebar.active {
     left: 0;
 }
 
-#sidebar ul {
+/* মূল মেনু আইটেমগুলির জন্য মার্জিন */
+.main-menu-items {
     list-style-type: none;
     padding: 0;
-    margin: 0;
+    margin: 10px 0 0 0; /* ড্যাশবোর্ড লিংক থেকে একটু নিচে */
 }
 
 #sidebar li {
     padding: 14px 20px; /* আরও ভালো স্পেসের জন্য বেশি প্যাডিং */
     cursor: pointer;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* সূক্ষ্ম বিভাজক */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* সূক্ষ্ম বিভাজক */
     position: relative;
     /* মসৃণ ট্রানজিশন */
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -96,9 +140,9 @@ header h1 {
 }
 
 #sidebar li:hover {
-    background-color: #34495e; /* হোভারের জন্য সামান্য হালকা ব্যাকগ্রাউন্ড */
-    transform: translateX(5px); /* হোভারের উপর মৃদু স্লাইড প্রভাব */
-    box-shadow: inset 5px 0 0 #007bff; /* হোভারের উপর বাম বর্ডার হাইলাইট */
+    background-color: #343a40; /* হোভারের জন্য সামান্য হালকা ব্যাকগ্রাউন্ড */
+    transform: translateX(5px); /* মৃদু স্লাইড প্রভাব */
+    box-shadow: inset 5px 0 0 #007bff; /* বাম বর্ডার হাইলাইট অন হোভার */
 }
 
 .arrow {
@@ -110,24 +154,24 @@ header h1 {
 /* --- সাবমেনু এবং সাব-সাবমেনু স্টাইলিং --- */
 .submenu, .subsubmenu {
     display: none;
-    background-color: #34495e; /* সাবমেনুর জন্য গাঢ় শেড */
+    background-color: #343a40; /* সাবমেনুর জন্য গাঢ় শেড */
     padding-left: 0; /* ডিফল্ট ul প্যাডিং সরানো হয়েছে */
 }
 
 .submenu li, .subsubmenu li {
     padding: 12px 25px; /* নেস্টিং ভিজ্যুয়ালের জন্য বাম প্যাডিং বাড়ানো হয়েছে */
     font-size: 15px; /* নেস্টেড আইটেমের জন্য সামান্য ছোট ফন্ট */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* হালকা বর্ডার */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* ফেইন্টার বর্ডার */
 }
 
 .submenu li:hover, .subsubmenu li:hover {
-    background-color: #3e5770; /* হোভারের উপর আরও গাঢ় */
+    background-color: #495057; /* আরও গাঢ় অন হোভার */
     transform: translateX(3px); /* নেস্টেড আইটেমের জন্য সূক্ষ্ম স্লাইড */
     box-shadow: inset 3px 0 0 #0056b3; /* ভিন্ন হাইলাইট রঙ */
 }
 
 .subsubmenu {
-    background-color: #3e5770; /* সাব-সাবমেনুর জন্য আরও গাঢ় */
+    background-color: #495057; /* সাব-সাবমেনুর জন্য আরও গাঢ় */
 }
 
 /* --- কন্টেন্ট এরিয়া স্টাইলিং --- */
@@ -159,18 +203,17 @@ header h1 {
 
 /* --- অ্যানিমেশন উন্নতকরণ --- */
 .animated {
-    /* আরও পরিমার্জিত অ্যানিমেশন */
-    animation: fadeInSlideUp 0.8s ease-out forwards;
+    animation: fadeInSlideUp 0.8s ease-out forwards; /* আরও পরিমার্জিত অ্যানিমেশন */
     opacity: 0; /* অ্যানিমেশনের জন্য অদৃশ্য থেকে শুরু */
 }
 
 @keyframes fadeInSlideUp {
     from {
-        transform: translateY(20px);
+        transform: translateY(20px); /* ২০ পিক্সেল নিচ থেকে শুরু */
         opacity: 0;
     }
     to {
-        transform: translateY(0);
+        transform: translateY(0); /* আসল অবস্থানে আসে */
         opacity: 1;
     }
 }
@@ -183,7 +226,6 @@ header h1 {
 /* --- রেসপনসিভ অ্যাডজাস্টমেন্ট --- */
 @media screen and (min-width: 768px) {
     /* বড় স্ক্রিনের জন্য, ডিফল্টরূপে সাইডবার দেখানো বা কন্টেন্টকে ঠেলে দেওয়া যেতে পারে */
-    /* যদি ডেস্কটপে সাইডবার সবসময় দৃশ্যমান হয়, তবে নিচের কমেন্ট করা কোডগুলো আনকমেন্ট করুন */
     /* #sidebar {
         left: 0;
         box-shadow: none;
