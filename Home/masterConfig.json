@@ -1,8 +1,8 @@
 
 {
     "teacher": {
-        "id": "",
-        "pass": "",
+        "id": "1",
+        "pass": "1",
         "redirect": ""
     },
     "student": {
