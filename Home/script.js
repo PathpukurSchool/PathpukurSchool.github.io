@@ -1,5 +1,5 @@
 
-// ✅ মেনু খোলা ও বন্ধ করা
+// ✅ মেনু টগল করে সাইডবার দেখানো/লুকানো
 const menuToggle = document.getElementById("menu-toggle");
 const sidebar = document.getElementById("sidebar");
 
@@ -7,44 +7,50 @@ menuToggle.addEventListener("click", () => {
   sidebar.classList.toggle("open");
 });
 
-// ✅ বাইরে ক্লিক করলে মেনু লুকানো
+// ✅ বাইরে ক্লিক করলে মেনু বন্ধ হবে
 document.addEventListener("click", (event) => {
   if (!sidebar.contains(event.target) && event.target !== menuToggle) {
     sidebar.classList.remove("open");
   }
 });
 
-// ✅ একটি মেনু খুললে অন্যগুলো বন্ধ হবে
+// ✅ মেনু ক্লিকে সাবমেনু টগল + আগের গুলো লুকানো
 function toggleMenu(element) {
+  const allMenus = document.querySelectorAll(".menu-item");
   const allSubmenus = document.querySelectorAll(".submenu");
-  allSubmenus.forEach((menu) => {
-    if (menu !== element.querySelector(".submenu")) {
-      menu.style.display = "none";
+
+  allMenus.forEach(menu => {
+    if (menu !== element) {
+      menu.classList.remove("active");
+      const submenu = menu.querySelector(".submenu");
+      if (submenu) submenu.style.display = "none";
     }
   });
 
   const submenu = element.querySelector(".submenu");
   if (submenu) {
-    submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    const isVisible = submenu.style.display === "block";
+    submenu.style.display = isVisible ? "none" : "block";
+    element.classList.toggle("active", !isVisible);
   }
 }
 
-// ✅ ড্যাশবোর্ড কনটেন্ট লোডার
+// ✅ কনটেন্ট এরিয়ায় নতুন অংশ লোড
 function loadContent(page) {
   const contentArea = document.getElementById("main-content");
   let content = "";
 
   if (page === "notice") {
     content = "<h2>Upload Student Notice</h2><p>এখানে নোটিশ আপলোড ফর্ম থাকবে।</p>";
-  } else if (page.startsWith("class")) {
-    content = `<h2>Marks Upload - ${page.toUpperCase()}</h2><p>এই অংশে মার্কস আপলোড ফর্ম থাকবে ${page.toUpperCase()} ক্লাসের জন্য।</p>`;
+  } else {
+    content = `<h2>${page.replace('-', ' ').toUpperCase()}</h2><p>${page} সম্পর্কিত কনটেন্ট এখানে লোড হবে।</p>`;
   }
 
   contentArea.innerHTML = content;
-  sidebar.classList.remove("open"); // ✅ মেনু লুকানো
+  sidebar.classList.remove("open");
 }
 
-// ✅ ড্যাশবোর্ডে ক্লিক করলে পূর্বাবস্থা
+// ✅ ড্যাশবোর্ড ক্লিকে পূর্বাবস্থায় ফেরা
 function resetDashboard() {
   const contentArea = document.getElementById("main-content");
   contentArea.innerHTML = `
