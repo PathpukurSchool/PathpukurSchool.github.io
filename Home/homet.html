@@ -8,22 +8,19 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- 🏫 হেডার: স্কুলের লোগো ও নাম -->
+  <!-- 🏫 হেডার -->
   <header class="header">
-    <img src="PHS-LOGO.png" alt="School Logo" class="logo" />
-    <h1 class="school-name">পাতপুকুর হাই স্কুল</h1>
-    <p class="tagline">শিক্ষা, শৃঙ্খলা ও সেবার প্রতীক</p>
+    <img src="school-logo.png" alt="School Logo" class="logo" />
+    <h1 class="school-name">পথপুকুর হাই স্কুল</h1>
   </header>
 
-  <!-- 📱 মেনু আইকন: মেনুবার দেখাতে/লুকাতে ব্যবহৃত হয় -->
-  <div id="menu-toggle">&#9776;</div>
+  <!-- ☰ মেনু আইকন -->
+  <div id="menu-toggle">☰</div>
 
-  <!-- 📋 মেনুবার: বাম পাশে থাকবে, প্রথমে লুকানো -->
+  <!-- 📋 সাইড মেনু -->
   <aside id="sidebar" class="sidebar">
     <h2 class="dashboard-title" onclick="resetDashboard()">ড্যাশবোর্ড</h2>
 
-    <!-- Marks Upload মেনু -->
     <div class="menu-item" onclick="toggleMenu(this)">
       Marks Upload
       <ul class="submenu">
@@ -38,13 +35,26 @@
       </ul>
     </div>
 
-    <!-- Upload Student Notice মেনু -->
-    <div class="menu-item no-submenu" onclick="loadContent('notice')">
-      Upload Student Notice
+    <div class="menu-item no-submenu" onclick="loadContent('notice')">Upload Student Notice</div>
+
+    <div class="menu-item" onclick="toggleMenu(this)">
+      Routine Management
+      <ul class="submenu">
+        <li onclick="loadContent('routine-teacher')">Teacher Routine</li>
+        <li onclick="loadContent('routine-class')">Class Routine</li>
+      </ul>
+    </div>
+
+    <div class="menu-item" onclick="toggleMenu(this)">
+      Reports
+      <ul class="submenu">
+        <li onclick="loadContent('student-report')">Student Report</li>
+        <li onclick="loadContent('attendance-report')">Attendance Report</li>
+      </ul>
     </div>
   </aside>
 
-  <!-- 🧾 ড্যাশবোর্ড কনটেন্ট এরিয়া -->
+  <!-- 📄 মূল কনটেন্ট এরিয়া -->
   <main id="main-content" class="main-content">
     <h2>ড্যাশবোর্ডে স্বাগতম!</h2>
     <p>মেনু থেকে একটি অপশন সিলেক্ট করুন।</p>
