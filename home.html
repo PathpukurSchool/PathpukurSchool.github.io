@@ -77,83 +77,77 @@
         <h1 class="school-name">PATHPUKUR HIGH SCHOOL (H.S.)</h1>
 
     <!--✅ নম্বর আপলোড -->  
-<div class="section-heading-container">
-    <h2 class="section-heading">
-        <span class="emoji">🧾</span>
-        <span class="blink">Upload Student Exam Marks</span>
-    </h2>
-  <div class="wrapper">
-  <div class="static-text">
-    Last date of marks submission
-    <p>(Kindly submit all marks by due date)</p>
-  </div>
-    
-  <div class="marquee-container">
-    <div id="exam-dates-marquee-content" class="marquee-content"></div> </div>
-</div>
-
-
-<script src="teacher_dates.js"></script>
-<script>
-  // সংশোধিত ID ব্যবহার করা হয়েছে
-  const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
-
-  // Exam dates যুক্ত করা
-  examDates.forEach(exam => {
-    if (exam.date) {
-      const span = document.createElement("span");
-      span.textContent = `${exam.text} ${exam.date}, `;
-
-      // রং প্রয়োগ পুরো লাইনের জন্য
-      span.style.color = exam.color;
-      span.style.fontWeight = "bold";
-
-      if (exam.backgroundColor) {
-        span.style.backgroundColor = exam.backgroundColor;
-      }
-
-      examDatesMarquee.appendChild(span);
-    }
-  });
-
-  // Mouse hover করলে স্ক্রল থামানো
-  examDatesMarquee.addEventListener("mouseover", () => {
-    examDatesMarquee.classList.add("paused");
-  });
-  examDatesMarquee.addEventListener("mouseout", () => {
-    examDatesMarquee.classList.remove("paused");
-  });
-
-  // মোবাইলে touch করলে স্ক্রল থামানো
-  examDatesMarquee.addEventListener("touchstart", () => {
-    examDatesMarquee.classList.add("paused");
-  });
-  examDatesMarquee.addEventListener("touchend", () => {
-    examDatesMarquee.classList.remove("paused");
-  });
-</script>
-
-
-<h3 class="login-instruction-heading">Login to access the marks uploading link<span class="emoji">👇</span></h3>
-
-  <div id="exam-buttons"></div>
-    <dialog id="loginDialog">
-        <form method="dialog" onsubmit="return false">
-            <div class="input-group">
-                <img src="https://img.icons8.com/ios-filled/50/lock.png" alt="Lock">
-                <input type="text" id="loginId" placeholder="ID">
+    <div class="section-container">
+        <div class="section-heading-container">
+            <h2 class="section-heading">
+                <span class="emoji">🧾</span>
+                <span class="blink">Upload Student Exam Marks</span>
+            </h2>
+            <div class="wrapper">
+                <div class="static-text">
+                    Last date of marks submission
+                    <p>(Kindly submit all marks by due date)</p>
+                </div>
+                <div class="marquee-container">
+                    <div id="exam-dates-marquee-content" class="marquee-content"></div>
+                </div>
             </div>
-            <div class="input-group">
-                <img src="https://img.icons8.com/ios-filled/50/key.png" alt="Key">
-                <input type="password" id="loginPassword" placeholder="Password">
-            </div>
-            <div id="loginError" class="error"></div>
-            <button onclick="submitLogin()">LOGIN</button>
-            <button onclick="closeLogin()">CANCEL</button>
-        </form>
-    </dialog>
-  </div>
+        </div>
 
+        <h3 class="login-instruction-heading">Login to access the marks uploading link<span class="emoji">👇</span></h3>
+
+        <div id="class-V-exams" class="class-container">
+            <h2>CLASS V EXAMS</h2>
+            <div class="exam-buttons-group">
+                </div>
+        </div>
+
+        <div id="class-VI-exams" class="class-container">
+            <h2>CLASS VI EXAMS</h2>
+            <div class="exam-buttons-group">
+                </div>
+        </div>
+
+        <div id="class-VII-exams" class="class-container">
+            <h2>CLASS VII EXAMS</h2>
+            <div class="exam-buttons-group"></div>
+        </div>
+        <div id="class-VIII-exams" class="class-container">
+            <h2>CLASS VIII EXAMS</h2>
+            <div class="exam-buttons-group"></div>
+        </div>
+        <div id="class-IX-exams" class="class-container">
+            <h2>CLASS IX EXAMS</h2>
+            <div class="exam-buttons-group"></div>
+        </div>
+        <div id="class-X-exams" class="class-container">
+            <h2>CLASS X EXAMS</h2>
+            <div class="exam-buttons-group"></div>
+        </div>
+        <div id="class-XI-exams" class="class-container">
+            <h2>CLASS XI EXAMS</h2>
+            <div class="exam-buttons-group"></div>
+        </div>
+        <div id="class-XII-exams" class="class-container">
+            <h2>CLASS XII EXAMS</h2>
+            <div class="exam-buttons-group"></div>
+        </div>
+
+        <dialog id="loginDialog">
+            <form method="dialog" onsubmit="return false">
+                <div class="input-group">
+                    <img src="https://img.icons8.com/ios-filled/50/lock.png" alt="Lock">
+                    <input type="text" id="loginId" placeholder="ID">
+                </div>
+                <div class="input-group">
+                    <img src="https://img.icons8.com/ios-filled/50/key.png" alt="Key">
+                    <input type="password" id="loginPassword" placeholder="Password">
+                </div>
+                <div id="loginError" class="error"></div>
+                <button type="button" onclick="submitLogin()">LOGIN</button> <button type="button" onclick="closeLogin()">CANCEL</button> </form>
+        </dialog>
+    </div> <script src="teacher_dates.js"></script>
+  
 <!-- ✅ নোটিশ বোর্ড -->
     <div class="section-heading-container">
     <h2 class="section-heading">
