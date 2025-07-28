@@ -1,527 +1,107 @@
 
-/* বেসিক রিসেট এবং গ্লোবাল স্টাইল */
-body {
-    margin: 0;
-    /* আধুনিক ফন্ট স্ট্যাক ব্যবহার করা হয়েছে */
-    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f8f9fa; /* হালকা, নরম ব্যাকগ্রাউন্ড */
-    overflow-x: hidden; /* অনুভূমিক স্ক্রল সমস্যা এড়াতে */
-    line-height: 1.6; /* উন্নত পাঠযোগ্যতা */
-    color: #343a40; /* আরও ভালো কনট্রাস্টের জন্য গাঢ় টেক্সট */
+/* ✅ বেসিক রিসেট */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* --- হেডার স্টাইলিং --- */
-header {
-    display: flex;
-    align-items: center;
-    /* লাল লোগোর সাথে সামঞ্জস্যপূর্ণ গাঢ় নীল গ্রেডিয়েন্ট */
-    background: linear-gradient(to right, #004080, #0056b3);
-    color: white;
-    padding: 15px 20px; /* আরও উদার প্যাডিং */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* গভীরতার জন্য সূক্ষ্ম শ্যাডো */
-    position: sticky; /* হেডারকে স্টিকি রাখা */
-    top: 0;
-    z-index: 1000; /* নিশ্চিত করা যে হেডার অন্য কন্টেন্টের উপরে থাকবে */
+/* ✅ হেডার স্টাইল */
+.header {
+  text-align: center;
+  background-color: #004080;
+  color: white;
+  padding: 20px;
+}
+.logo {
+  width: 60px;
+  height: 60px;
+}
+.school-name {
+  font-size: 28px;
+  margin: 10px 0 5px;
+}
+.tagline {
+  font-size: 14px;
 }
 
-header .school-logo-header {
-    height: 45px; /* কিছুটা সমন্বিত আকার */
-    margin-right: 15px;
-    border-radius: 50%; /* যদি লোগো গোলাকার হয় */
-    background-color: #fff; /* লোগোর ব্যাকগ্রাউন্ড সাদা যাতে লাল রং উজ্জ্বল দেখায় */
-    padding: 5px; /* লোগোর চারপাশে প্যাডিং */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* লোগোর জন্য ছোট শ্যাডো */
+/* ✅ মেনু আইকন */
+#menu-toggle {
+  font-size: 30px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #004080;
+  color: white;
+  position: absolute;
+  top: 90px;
+  left: 10px;
+  border-radius: 5px;
+  z-index: 1001;
+  transition: background 0.3s;
+}
+#menu-toggle:hover {
+  background-color: #0055aa;
 }
 
-header h1 {
-    font-size: 24px; /* বড়, আরও বিশিষ্ট শিরোনাম */
-    margin: 0;
-    font-weight: 600; /* আরও গাঢ় ফন্ট ওজন */
+/* ✅ মেনুবার */
+.sidebar {
+  position: fixed;
+  top: 130px;
+  left: -260px;
+  width: 250px;
+  height: 100%;
+  background-color: #003060;
+  color: white;
+  padding: 20px;
+  transition: all 0.4s ease;
+  z-index: 1000;
+}
+.sidebar.open {
+  left: 0;
 }
 
-#menuIcon {
-    font-size: 28px; /* সহজে ক্লিক করার জন্য বড় আইকন */
-    cursor: pointer;
-    margin-right: 15px;
-    /* হোভার/ক্লিকে মসৃণ ঘূর্ণন */
-    transition: transform 0.3s ease-in-out;
-    padding: 5px; /* সহজে ক্লিক করার জন্য প্যাডিং যোগ করা */
-    border-radius: 5px; /* সামান্য গোলাকার কোণা */
+/* ✅ মেনু ও সাবমেনু */
+.menu-item {
+  margin-bottom: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+.menu-item:hover {
+  background-color: #004080;
+  padding-left: 5px;
+}
+.submenu {
+  list-style: none;
+  padding-left: 15px;
+  display: none;
+}
+.submenu li {
+  margin: 8px 0;
+  cursor: pointer;
+  font-weight: normal;
+  transition: color 0.2s;
+}
+.submenu li:hover {
+  color: #ffdd57;
 }
 
-#menuIcon:hover {
-    transform: rotate(5deg) scale(1.05); /* সূক্ষ্ম হোভার প্রভাব */
-    background-color: rgba(255, 255, 255, 0.1); /* হালকা ব্যাকগ্রাউন্ড অন হোভার */
+/* ✅ ড্যাশবোর্ড এরিয়া */
+.main-content {
+  margin: 150px 20px 20px 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* --- সাইডবার স্টাইলিং --- */
-#sidebar {
-    position: fixed;
-    top: 0;
-    left: -280px; /* কিছুটা চওড়া সাইডবার */
-    width: 280px;
-    height: 100%;
-    background-color: #212529; /* গাঢ় ব্যাকগ্রাউন্ড, লাল লোগোর সাথে মানানসই */
-    color: #f8f9fa; /* লোগোর সাথে ভালো কনট্রাস্টের জন্য প্রায় সাদা টেক্সট */
-    overflow-y: auto;
-    /* মসৃণ, আরও আকর্ষণীয় ট্রানজিশন */
-    transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    z-index: 999;
-    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.25); /* খোলার সময় আরও স্পষ্ট শ্যাডো */
-}
-
-/* সাইডবার হেডার স্টাইল */
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* সেন্টারে আনতে */
-    padding: 20px 10px;
-    background-color: #1a1d20; /* হেডারের জন্য একটু গাঢ় ব্যাকগ্রাউন্ড */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    text-align: center;
-    flex-direction: column; /* লogo উপরে, টেক্সট নিচে */
-}
-
-.sidebar-header .sidebar-logo {
-    height: 60px; /* লোগোর আকার বড় করা */
-    width: 60px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    background-color: #fff; /* লোগোর ব্যাকগ্রাউন্ড সাদা যাতে লাল রং উজ্জ্বল দেখায় */
-    padding: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.sidebar-header h3 {
-    margin: 0;
-    font-size: 1.3rem;
-    font-weight: 700;
-}
-
-/* ড্যাশবোর্ড লিংক এর স্টাইল (এটি মূল মেনু থেকে আলাদা) */
-.dashboard-link {
-    padding: 15px 20px;
-    background-color: #007bff; /* ড্যাশবোর্ডের জন্য আলাদা ব্যাকগ্রাউন্ড রঙ */
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    transition: background-color 0.3s ease;
-}
-
-.dashboard-link:hover {
-    background-color: #0056b3; /* হোভার ইফেক্ট */
-}
-
-/* সাইডবার active হলে */
-#sidebar.active {
-    left: 0;
-}
-
-/* মূল মেনু আইটেমগুলির জন্য মার্জিন */
-.main-menu-items {
-    list-style-type: none;
-    padding: 0;
-    margin: 10px 0 0 0; /* ড্যাশবোর্ড লিংক থেকে একটু নিচে */
-}
-
-#sidebar li {
-    padding: 14px 20px; /* আরও ভালো স্পেসের জন্য বেশি প্যাডিং */
-    cursor: pointer;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* সূক্ষ্ম বিভাজক */
-    position: relative;
-    /* মসৃণ ট্রানজিশন */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: flex; /* টেক্সট এবং অ্যারোর ভালো সারিবদ্ধতার জন্য ফ্লেক্সবক্স */
-    align-items: center;
-    justify-content: space-between; /* অ্যারোকে ডানদিকে ঠেলে দেয় */
-}
-
-#sidebar li:last-child {
-    border-bottom: none; /* শেষ আইটেমের জন্য কোনো বর্ডার নেই */
-}
-
-#sidebar li:hover {
-    background-color: #343a40; /* হোভারের জন্য সামান্য হালকা ব্যাকগ্রাউন্ড */
-    transform: translateX(5px); /* মৃদু স্লাইড প্রভাব */
-    box-shadow: inset 5px 0 0 #007bff; /* বাম বর্ডার হাইলাইট অন হোভার */
-}
-
-.arrow {
-    font-size: 16px; /* অ্যারোর আকার সমন্বয় করা */
-    transition: transform 0.3s ease;
-    margin-left: 10px; /* টেক্সট এবং অ্যারোর মধ্যে স্পেস */
-}
-
-/* --- সাবমেনু এবং সাব-সাবমেনু স্টাইলিং --- */
-.submenu, .subsubmenu {
-    list-style-type: none; /* বুলেট পয়েন্ট অপসারণ */
-    display: none;
-    background-color: #343a40; /* সাবমেনুর জন্য গাঢ় শেড */
-    padding-left: 0; /* ডিফল্ট ul প্যাডিং সরানো হয়েছে */
-    margin: 0; /* ডিফল্ট ul মার্জিন সরানো হয়েছে */
-}
-
-.submenu li, .subsubmenu li {
-    padding: 12px 25px; /* নেস্টিং ভিজ্যুয়ালের জন্য বাম প্যাডিং বাড়ানো হয়েছে */
-    font-size: 15px; /* নেস্টেড আইটেমের জন্য সামান্য ছোট ফন্ট */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* ফেইন্টার বর্ডার */
-}
-
-.submenu li:hover, .subsubmenu li:hover {
-    background-color: #495057; /* আরও গাঢ় অন হোভার */
-    transform: translateX(3px); /* নেস্টেড আইটেমের জন্য সূক্ষ্ম স্লাইড */
-    box-shadow: inset 3px 0 0 #0056b3; /* ভিন্ন হাইলাইট রঙ */
-}
-
-.subsubmenu {
-    background-color: #495057; /* সাব-সাবমেনুর জন্য আরও গাঢ় */
-}
-
-/* --- কন্টেন্ট এরিয়া স্টাইলিং --- */
-#content {
-    margin-left: 0;
-    padding: 30px; /* আরও উদার প্যাডিং */
-    /* সাইডবার ট্রানজিশনের সাথে মিলিয়ে */
-    transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background-color: #ffffff; /* সাদা কন্টেন্ট ব্যাকগ্রাউন্ড */
-    /* নিশ্চিত করা যে কন্টেন্ট এরিয়া ভিউপোর্টের বেশিরভাগ উচ্চতা দখল করে */
-    min-height: calc(100vh - 75px);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* কন্টেন্ট এরিয়ার জন্য সূক্ষ্ম শ্যাডো */
-    border-radius: 8px; /* কন্টেন্টের জন্য সামান্য গোলাকার কোণা */
-    margin: 20px; /* কন্টেন্ট ব্লকের চারপাশে মার্জিন */
-}
-
-/* --- হেডিং রঙ এবং টাইপোগ্রাফি --- */
-#content h2 {
-    color: #007bff; /* প্রাণবন্ত প্রাথমিক রঙ */
-    margin-bottom: 15px;
-    font-weight: 700; /* আরও গাঢ় হেডিং */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); /* খুব সূক্ষ্ম টেক্সট শ্যাডো */
-}
-
-#content p {
-    color: #555; /* সামান্য হালকা বডি টেক্সট */
-    font-size: 16px;
-}
-
-/* --- অ্যানিমেশন উন্নতকরণ --- */
-.animated {
-    animation: fadeInSlideUp 0.8s ease-out forwards; /* আরও পরিমার্জিত অ্যানিমেশন */
-    opacity: 0; /* অ্যানিমেশনের জন্য অদৃশ্য থেকে শুরু */
-}
-
-@keyframes fadeInSlideUp {
-    from {
-        transform: translateY(20px); /* ২০ পিক্সেল নিচ থেকে শুরু */
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0); /* আসল অবস্থানে আসে */
-        opacity: 1;
-    }
-}
-
-/* --- অ্যারো ঘূর্ণন --- */
-.rotate-down {
-    transform: rotate(90deg); /* স্ট্যান্ডার্ড ঘূর্ণন */
-}
-
-/* --- ফুটার স্টাইল --- */
-footer {
-    background-color: #343a40; /* গাঢ় ধূসর ব্যাকগ্রাউন্ড */
-    color: white;
-    text-align: center;
-    padding: 20px;
-    margin-top: 20px;
-    font-size: 0.9em;
-}
-
-footer p {
-    margin: 5px 0;
-    color: #bbb;
-}
-
-/* --- মাস্টার লগইন ওভারলে স্টাইল --- */
-.master-login-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* গাঢ় ওভারলে */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000; /* নিশ্চিত করা যে এটি সবকিছুর উপরে থাকবে */
-}
-
-.master-login-container {
-    background-color: #fff;
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    max-width: 450px; /* ফর্মের প্রস্থ নিয়ন্ত্রণ */
-    width: 90%;
-}
-
-.master-login-heading {
-    color: #007bff;
-    margin-bottom: 25px;
-    font-size: 28px;
-    font-weight: 700;
-}
-
-.form-group {
-    margin-bottom: 20px;
-    text-align: left; /* লেবেল এবং ইনপুট সারিবদ্ধ করতে */
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #333;
-}
-
-.form-group input[type="text"],
-.form-group input[type="password"],
-.form-group select {
-    width: calc(100% - 20px); /* প্যাডিং এর জন্য প্রস্থ অ্যাডজাস্ট করা হয়েছে */
-    padding: 12px 10px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-group input[type="text"]:focus,
-.form-group input[type="password"]:focus,
-.form-group select:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    outline: none;
-}
-
-.master-login-button {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    width: 100%; /* বোতামকে ফুল-উইথ করা হয়েছে */
-    margin-top: 10px;
-}
-
-.master-login-button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
-.error-message {
-    color: red;
-    margin-top: 15px;
-    font-weight: 500;
-}
-
-.success-message {
-    color: green;
-    margin-top: 15px;
-    font-weight: 500;
-}
-
-/* এক্সাম বোতামের স্টাইল (শিক্ষক ও শিক্ষার্থী প্যানেলের জন্য) */
-.shaded-info-box {
-    background-color: #f0f8ff; /* হালকা নীল বা সাদার মতো */
-    border: 1px solid #e0e7ee;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* নরম শ্যাডো */
-}
-
-.box-heading {
-    color: #007bff;
-    font-size: 22px;
-    margin-top: 0;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: 700;
-    position: relative;
-    padding-bottom: 10px;
-}
-
-.box-heading::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background-color: #007bff;
-    border-radius: 2px;
-}
-
-.shine {
-    animation: shine 2s infinite alternate; /* সূক্ষ্ম শাইন অ্যানিমেশন */
-}
-
-@keyframes shine {
-    0% { opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { opacity: 1; }
-}
-
-.exam-buttons-group {
-    display: flex;
-    flex-wrap: wrap; /* ছোট স্ক্রিনের জন্য বোতামগুলো নিচে নিচে আসবে */
-    gap: 15px; /* বোতামগুলির মধ্যে ফাঁকা স্থান */
-    justify-content: center; /* বোতামগুলি কেন্দ্রে সারিবদ্ধ হবে */
-}
-
-.box-button {
-    display: inline-block; /* ইনলাইন ব্লক যাতে পাশাপাশি থাকে */
-    padding: 12px 25px;
-    background-color: #28a745; /* সবুজ বাটন */
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    border: none; /* বোতামের ডিফল্ট বর্ডার অপসারণ */
-    cursor: pointer;
-}
-
-.box-button:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
-
-.disabled-exam-link {
-    background-color: #6c757d !important; /* ধূসর রং, ক্লিক করা যাবে না বোঝাতে */
-    cursor: not-allowed;
-    opacity: 0.8;
-}
-
-.disabled-exam-link:hover {
-    background-color: #6c757d !important; /* হোভারেও একই থাকবে */
-    transform: none !important;
-}
-
-.avail-msg {
-    background-color: #fff3cd; /* হলুদ ব্যাকগ্রাউন্ড */
-    color: #856404; /* গাঢ় হলুদ টেক্সট */
-    border: 1px solid #ffeeba;
-    padding: 10px 15px;
-    border-radius: 5px;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 0.9em;
-    font-weight: 600;
-    animation: fadeOut 3s forwards; /* 3 সেকেন্ড পরে ফেড আউট হবে */
-}
-
-@keyframes fadeOut {
-    0% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { opacity: 0; display: none; }
-}
-
-/* নোটিশ/হেল্প লিস্টের জন্য স্টাইল */
-.notice-help-list {
-    list-style: none; /* বুলেট পয়েন্ট অপসারণ */
-    padding: 0;
-}
-
-.notice-help-list li {
-    background-color: #e9ecef; /* হালকা ধূসর ব্যাকগ্রাউন্ড */
-    margin-bottom: 10px;
-    padding: 12px 15px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.notice-help-list li:hover {
-    background-color: #dee2e6;
-    transform: translateY(-2px);
-}
-
-.notice-help-list li a {
-    text-decoration: none;
-    color: #007bff; /* নীল লিঙ্ক কালার */
-    font-weight: 600;
-    flex-grow: 1; /* লিঙ্কটি সম্পূর্ণ স্থান দখল করবে */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.notice-help-list li a:hover {
-    color: #0056b3;
-}
-
-/* --- রেসপনসিভ অ্যাডজাস্টমেন্ট --- */
-@media screen and (min-width: 768px) {
-    /* বড় স্ক্রিনের জন্য, সাইডবার ডিফল্টরূপে বন্ধ থাকবে */
-    /* যদি ডেস্কটপে সাইডবার সবসময় দৃশ্যমান করতে চান, তবে নিচের কমেন্ট করা কোডগুলো আনকমেন্ট করুন */
-    /* #sidebar {
-        left: 0;
-        box-shadow: none;
-    }
-    #content {
-        margin-left: 280px;
-    }
-    #menuIcon {
-        display: none; // সাইডবার সবসময় খোলা থাকলে মেনু আইকন লুকান
-    } */
-}
-
-@media screen and (max-width: 480px) {
-    header {
-        padding: 10px 15px;
-    }
-    header h1 {
-        font-size: 20px;
-    }
-    #menuIcon {
-        font-size: 24px;
-    }
-    #sidebar {
-        width: 230px; /* ছোট স্ক্রিনে সামান্য সংকীর্ণ সাইডবার */
-        left: -230px;
-    }
-    #content {
-        padding: 20px;
-        margin: 10px;
-    }
-    .master-login-container {
-        padding: 25px 20px; /* ছোট স্ক্রিনে প্যাডিং কমানো */
-    }
-    .master-login-heading {
-        font-size: 24px;
-    }
-    .form-group input[type="text"],
-    .form-group input[type="password"],
-    .form-group select {
-        width: calc(100% - 16px); /* প্যাডিং এর জন্য প্রস্থ অ্যাডজাস্ট করা হয়েছে */
-    }
-    .box-heading {
-        font-size: 20px;
-    }
-    .box-button {
-        padding: 10px 20px;
-        font-size: 15px;
-    }
+/* ✅ রেসপনসিভ ডিজাইন */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+  #menu-toggle {
+    top: 100px;
+  }
 }
