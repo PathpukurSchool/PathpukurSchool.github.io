@@ -67,56 +67,53 @@ async function submitMasterLogin() {
     }
 }
 
-// এক্সাম লিংক লোড (মাস্টার লগইন সফল হলে)
-function loadExamLinks() {
-    fetch('config.json')
-        .then(response => response.json())
-        .then(data => {
-            credentials = data;
-            renderButtons();
-        });
-}
 
+//  লগইন সফল হলে এক্সাম লিংক লোড হবে
+// এই ভেরিয়েবলটি config.json থেকে লোড করা ক্রেডেনশিয়ালস ধারণ করবে
+let credentials = {};
+// বর্তমানে খোলা পরীক্ষার কী (যেমন: "V_1ST")
 let currentKey = '';
 
-// এক্সাম লিংক তৈরি ও দেখানো
-function renderButtons() {
-    const mainContainer = document.getElementById('exam-buttons');
-    mainContainer.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করা
+// এক্সাম লিংক লোড করার ফাংশন (মাস্টার লগইন সফল হলে)
+function loadExamLinks() {
+    fetch('config.json') // config.json ফাইল থেকে ডেটা ফেচ করুন
+        .then(response => response.json()) // রেসপন্সকে JSON এ পার্স করুন
+        .then(data => {
+            credentials = data; // প্রাপ্ত ডেটা credentials ভেরিয়েবলে সংরক্ষণ করুন
+            renderButtonsByClass(); // প্রতিটি ক্লাসের জন্য আলাদাভাবে বোতাম রেন্ডার করুন
+        })
+        .catch(error => console.error('Error loading config.json:', error)); // ত্রুটি হলে কনসোলে দেখান
+}
 
-    // ইউনিক ক্লাস তালিকা তৈরি
+// ডকুমেন্ট লোড হওয়ার সাথে সাথে এক্সাম লিংক লোড করুন
+document.addEventListener('DOMContentLoaded', loadExamLinks);
+
+// প্রতিটি ক্লাসের জন্য আলাদাভাবে এক্সাম লিংক তৈরি ও দেখানো
+function renderButtonsByClass() {
     // এখানে প্রতিটি 'cls' হবে 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'
-    const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
+    const classes = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+    const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
 
-    // ক্লাসগুলিকে একটি নির্দিষ্ট ক্রমে সাজানো যাতে V, VI, VII... XII পর্যন্ত আসে
-    const sortedClasses = classes.sort((a, b) => {
-        const order = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-        return order.indexOf(a) - order.indexOf(b);
-    });
+    classes.forEach(cls => {
+        // প্রতিটি ক্লাসের জন্য নির্দিষ্ট কন্টেইনার খুঁজুন
+        const classContainer = document.getElementById(`class-${cls}-exams`);
+        if (!classContainer) {
+            console.warn(`Container for Class ${cls} not found.`); // কন্টেইনার না পেলে সতর্ক করুন
+            return;
+        }
 
-    sortedClasses.forEach(cls => {
-        // প্রতিটি ক্লাসের জন্য একটি নতুন shaded-info-box তৈরি করা হচ্ছে
-        const classBox = document.createElement('div');
-        classBox.className = 'shaded-info-box'; // CSS ক্লাস যা বক্সের স্টাইল দেবে
+        const buttonsContainer = classContainer.querySelector('.exam-buttons-group');
+        buttonsContainer.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করুন
 
-        // বক্সের হেডিং তৈরি করা হচ্ছে (ক্লাসের নাম)
-        const boxHeading = document.createElement('h3');
-        boxHeading.className = 'box-heading shine'; // CSS ক্লাস যা হেডিং এর স্টাইল দেবে
-        boxHeading.textContent = 'CLASS ' + cls; // সরাসরি 'CLASS V', 'CLASS VI' ইত্যাদি হবে
-        classBox.appendChild(boxHeading);
+        let hasButtons = false; // এই ক্লাসের জন্য কোনো বোতাম আছে কিনা তা ট্র্যাক করতে
 
-        // বোতামগুলির জন্য একটি কন্টেইনার তৈরি করা যাতে সেগুলো flexbox দিয়ে সাজানো যায়
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.className = 'exam-buttons-group'; // নতুন ক্লাস, এর জন্য CSS লাগবে
-
-        // প্রতিটি সম্ভাব্য পরীক্ষার প্রকারের জন্য বোতাম তৈরি
-        const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
         exams.forEach(exam => {
             const key = `${cls}_${exam}`; // যেমন: "V_1ST", "IX_TEST", "XII_SEM1"
             if (credentials[key]) { // যদি এই নির্দিষ্ট পরীক্ষার জন্য ডেটা config.json-এ থাকে
+                hasButtons = true; // বোতাম আছে চিহ্নিত করুন
                 const button = document.createElement('button');
                 button.className = 'box-button exam-link'; // CSS ক্লাস যা বোতামের স্টাইল দেবে
-                
+
                 // বোতামের লেবেল নির্ধারণ
                 let label = exam;
                 switch (exam) {
@@ -129,9 +126,17 @@ function renderButtons() {
                     case 'SEM2':
                         label = 'SEMESTER II';
                         break;
-                    // '1ST', '2ND', '3RD' লেবেলগুলো অপরিবর্তিত থাকবে
+                    case '1ST':
+                        label = '1ST EXAM';
+                        break;
+                    case '2ND':
+                        label = '2ND EXAM';
+                        break;
+                    case '3RD':
+                        label = '3RD EXAM';
+                        break;
                 }
-                
+
                 button.textContent = label;
                 // যদি URL না থাকে অথবা URL খালি হয়, তাহলে সরাসরি 'showAvailableSoonMessage' কল করব
                 // অন্যথায়, আইডি/পাসওয়ার্ড লগইন ডায়ালগ খুলব
@@ -141,82 +146,92 @@ function renderButtons() {
                     button.onclick = () => showAvailableSoonMessage(key); // URL না থাকলে সরাসরি মেসেজ দেখাবে
                     button.classList.add('disabled-exam-link'); // ঐচ্ছিক: বোতামটি নিষ্প্রভ করতে একটি ক্লাস যোগ করুন
                 }
-                buttonsContainer.appendChild(button);
+                buttonsContainer.appendChild(button); // বোতাম কন্টেইনারে যোগ করুন
             }
         });
-        
-        // যদি কোন ক্লাসের জন্য কোন পরীক্ষার বোতাম না থাকে, তাহলে বক্সটি দেখাবে না
-        if (buttonsContainer.children.length > 0) {
-            classBox.appendChild(buttonsContainer); // বোতাম কন্টেইনারকে বক্সের মধ্যে যোগ করা
-            mainContainer.appendChild(classBox); // ক্লাস বক্সকে মূল কন্টেইনারে যোগ করা
+
+        // যদি এই ক্লাসের জন্য কোনো বোতাম না থাকে, তাহলে ক্লাস কন্টেইনারটি লুকান
+        if (!hasButtons) {
+            classContainer.style.display = 'none';
+        } else {
+            classContainer.style.display = 'block'; // বোতাম থাকলে দেখান
         }
     });
 }
 
-// প্রতিটি এক্সাম লিংকের জন্য সাব-লগইন
+
+// প্রতিটি এক্সাম লিংকের জন্য সাব-লগইন খোলার ফাংশন
 function openLogin(key) {
-    currentKey = key;
-    document.getElementById('loginId').value = '';
-    document.getElementById('loginPassword').value = '';
-    document.getElementById('loginError').innerText = '';
-    document.getElementById('loginDialog').showModal();
+    currentKey = key; // বর্তমান পরীক্ষার কী সেট করুন
+    document.getElementById('loginId').value = ''; // আইডি ইনপুট ফিল্ড পরিষ্কার করুন
+    document.getElementById('loginPassword').value = ''; // পাসওয়ার্ড ইনপুট ফিল্ড পরিষ্কার করুন
+    document.getElementById('loginError').innerText = ''; // ত্রুটির মেসেজ পরিষ্কার করুন
+    document.getElementById('loginDialog').showModal(); // লগইন ডায়ালগ দেখান
 }
 
-// সাব-লগইন বন্ধ
+// সাব-লগইন বন্ধ করার ফাংশন
 function closeLogin() {
-    document.getElementById('loginDialog').close();
+    document.getElementById('loginDialog').close(); // লগইন ডায়ালগ বন্ধ করুন
 }
 
-// সাব-লগইন যাচাই করে লিংক খোলা
+// সাব-লগইন যাচাই করে লিংক খোলার ফাংশন
 function submitLogin() {
-    const id = document.getElementById('loginId').value;
-    const pass = document.getElementById('loginPassword').value;
-    const credential = credentials[currentKey];
+    const id = document.getElementById('loginId').value; // ইনপুট করা আইডি নিন
+    const pass = document.getElementById('loginPassword').value; // ইনপুট করা পাসওয়ার্ড নিন
+    const credential = credentials[currentKey]; // বর্তমান পরীক্ষার জন্য ক্রেডেনশিয়াল নিন
 
+    // যদি ক্রেডেনশিয়াল থাকে এবং আইডি ও পাসওয়ার্ড মিলে যায়
     if (credential && credential.id === id && credential.pass === pass) {
+        // যদি URL থাকে এবং URL খালি না হয়
         if (credential.url && credential.url.trim() !== '') {
-            window.open(credential.url, '_blank');
-            closeLogin();
+            window.open(credential.url, '_blank'); // নতুন ট্যাবে URL খুলুন
+            closeLogin(); // লগইন ডায়ালগ বন্ধ করুন
         } else {
-            // শীঘ্রই উপলব্ধ হবে মেসেজ দেখানো
-            closeLogin(); // ডায়ালগ বন্ধ করব
-            showAvailableSoonMessage(currentKey); // বার্তা দেখাব
+            // URL না থাকলে "শীঘ্রই উপলব্ধ হবে" মেসেজ দেখান
+            closeLogin(); // ডায়ালগ বন্ধ করুন
+            showAvailableSoonMessage(currentKey); // বার্তা দেখান
         }
     } else {
-        document.getElementById('loginError').innerText = 'Incorrect ID or Password!';
+        document.getElementById('loginError').innerText = 'Incorrect ID or Password!'; // ভুল আইডি বা পাসওয়ার্ড মেসেজ দেখান
     }
 }
 
+// "শীঘ্রই উপলব্ধ হবে" মেসেজ দেখানোর ফাংশন
 function showAvailableSoonMessage(key) {
-    const container = document.getElementById('exam-buttons');
-    const links = container.getElementsByClassName('exam-link');
+    // সংশ্লিষ্ট ক্লাসের কন্টেইনার খুঁজুন
+    const cls = key.split('_')[0];
+    const classContainer = document.getElementById(`class-${cls}-exams`);
+    if (!classContainer) return; // কন্টেইনার না পেলে ফিরে যান
+
+    const links = classContainer.getElementsByClassName('exam-link'); // ঐ ক্লাসের সব এক্সাম লিংক নিন
 
     for (let link of links) {
+        // যে লিংকের টেক্সট বর্তমান পরীক্ষার টেক্সটের সাথে মিলে যায়
         if (link.textContent === getExamText(key)) {
-            // আগে থেকে কোন বার্তা থাকলে সরাও
+            // আগে থেকে কোনো বার্তা থাকলে সরাও
             const next = link.nextElementSibling;
             if (next && next.classList.contains('avail-msg')) next.remove();
 
-            const msg = document.createElement('div');
-            msg.className = 'avail-msg';
-            msg.textContent = '🔔 Available Soon 🔔';
+            const msg = document.createElement('div'); // নতুন div তৈরি করুন
+            msg.className = 'avail-msg'; // CSS ক্লাস যোগ করুন
+            msg.textContent = '🔔 Available Soon 🔔'; // মেসেজ সেট করুন
 
-            link.parentNode.insertBefore(msg, link.nextSibling);
+            link.parentNode.insertBefore(msg, link.nextSibling); // লিংকের পরে মেসেজ যোগ করুন
 
-            // 3 সেকেন্ড পরে মুছে ফেল
+            // 3 সেকেন্ড পরে মেসেজ মুছে ফেলুন
             setTimeout(() => {
                 msg.remove();
             }, 3000);
 
-            break;
+            break; // মিলে গেলে লুপ থেকে বেরিয়ে আসুন
         }
     }
 }
 
-// পরীক্ষার টেক্সট ফেরত দেয় ('TEST EXAM', 'SEMESTER I', ...)
+// পরীক্ষার টেক্সট ফেরত দেওয়ার ফাংশন ('TEST EXAM', 'SEMESTER I', ...)
 function getExamText(key) {
-    const parts = key.split('_');
-    const exam = parts[1];
+    const parts = key.split('_'); // কী-কে '_' দ্বারা বিভক্ত করুন
+    const exam = parts[1]; // পরীক্ষার অংশ নিন
 
     switch (exam) {
         case 'TEST':
@@ -232,9 +247,10 @@ function getExamText(key) {
         case '3RD':
             return '3RD EXAM';
         default:
-            return exam; // fallback
+            return exam; // কোনো ম্যাচ না হলে ডিফল্ট হিসেবে পরীক্ষার নাম ফেরত দিন
     }
 }
+
 
 // NOTICE & HELP লোড করা
 fetch('files.json')
@@ -449,3 +465,42 @@ async function downloadPopupAsJpg(popupElement) {
 
     // পেজ লোড হওয়ার সাথে সাথে ফাংশনটি কল করুন
     document.addEventListener('DOMContentLoaded', loadStudentExamLinks);
+
+// ✅ নম্বর আপলোডের শেষ তারিখ, টিচারদের জন্য....
+        // সংশোধিত ID ব্যবহার করা হয়েছে
+        const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
+
+        // Exam dates যুক্ত করা
+        examDates.forEach(exam => {
+            if (exam.date) {
+                const span = document.createElement("span");
+                span.textContent = `${exam.text} ${exam.date}, `;
+
+                // রং প্রয়োগ পুরো লাইনের জন্য
+                span.style.color = exam.color;
+                span.style.fontWeight = "bold";
+
+                if (exam.backgroundColor) {
+                    span.style.backgroundColor = exam.backgroundColor;
+                }
+
+                examDatesMarquee.appendChild(span);
+            }
+        });
+
+        // Mouse hover করলে স্ক্রল থামানো
+        examDatesMarquee.addEventListener("mouseover", () => {
+            examDatesMarquee.classList.add("paused");
+        });
+        examDatesMarquee.addEventListener("mouseout", () => {
+            examDatesMarquee.classList.remove("paused");
+        });
+
+        // মোবাইলে touch করলে স্ক্রল থামানো
+        examDatesMarquee.addEventListener("touchstart", () => {
+            examDatesMarquee.classList.add("paused");
+        });
+        examDatesMarquee.addEventListener("touchend", () => {
+            examDatesMarquee.classList.remove("paused");
+        });
+    
