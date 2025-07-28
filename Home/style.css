@@ -6,29 +6,32 @@
   box-sizing: border-box;
 }
 
-/* ✅ হেডার স্টাইল */
+/* ✅ হেডার ডিজাইন */
 .header {
-  text-align: center;
-  background-color: #004080;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: linear-gradient(to right, #004080, #0073e6);
   color: white;
-  padding: 20px;
+  padding: 15px 20px;
 }
 .logo {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
+  background: white;
+  padding: 4px;
+  border-radius: 5px;
+  border: 2px solid white;
 }
 .school-name {
-  font-size: 28px;
-  margin: 10px 0 5px;
-}
-.tagline {
-  font-size: 14px;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 /* ✅ মেনু আইকন */
 #menu-toggle {
-  font-size: 30px;
-  padding: 10px;
+  font-size: 28px;
+  padding: 8px;
   cursor: pointer;
   background-color: #004080;
   color: white;
@@ -43,7 +46,7 @@
   background-color: #0055aa;
 }
 
-/* ✅ মেনুবার */
+/* ✅ সাইডবার */
 .sidebar {
   position: fixed;
   top: 130px;
@@ -59,34 +62,53 @@
 .sidebar.open {
   left: 0;
 }
-
-/* ✅ মেনু ও সাবমেনু */
-.menu-item {
+.dashboard-title {
+  cursor: pointer;
+  font-size: 18px;
   margin-bottom: 15px;
+}
+
+/* ✅ মেনু আইটেম */
+.menu-item {
+  margin-bottom: 10px;
   cursor: pointer;
   font-weight: bold;
-  transition: background 0.3s;
+  position: relative;
+}
+.menu-item::after {
+  content: '\\25BC'; /* ▼ অ্যারো */
+  position: absolute;
+  right: 10px;
+  transition: transform 0.3s;
+}
+.menu-item.active::after {
+  transform: rotate(180deg); /* নিচের দিকে ঘোরে */
 }
 .menu-item:hover {
   background-color: #004080;
   padding-left: 5px;
 }
+
+/* ✅ সাবমেনু */
 .submenu {
   list-style: none;
   padding-left: 15px;
   display: none;
+  background-color: #002040;
+  border-left: 2px solid #0073e6;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 .submenu li {
-  margin: 8px 0;
+  margin: 6px 0;
   cursor: pointer;
   font-weight: normal;
-  transition: color 0.2s;
 }
 .submenu li:hover {
   color: #ffdd57;
 }
 
-/* ✅ ড্যাশবোর্ড এরিয়া */
+/* ✅ মূল কনটেন্ট এরিয়া */
 .main-content {
   margin: 150px 20px 20px 20px;
   padding: 20px;
