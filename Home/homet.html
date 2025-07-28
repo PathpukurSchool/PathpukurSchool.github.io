@@ -1,104 +1,55 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Dashboard - Pathpukur High School</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "School",
-            "name": "Pathpukur High School",
-            "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Vill: Pathpukur, PO: Bakultala Hat",
-                "addressLocality": "South 24 Parganas",
-                "addressRegion": "West Bengal",
-                "postalCode": "743338",
-                "addressCountry": "IN"
-            },
-            "telephone": "+91 3218248083",
-            "email": "pathpukur1954@gmail.com",
-            "url": "https://pathpukurschool.github.io/"
-        }
-    </script>
-
-    <meta name="description" content="Pathpukur High School - A Government-Sponsored Higher Secondary School in South 24 Parganas, West Bengal. Official website. Access teacher and student panels, view exam dates, results and notices.">
-    <meta name="keywords" content="Pathpukur High School, Pathpukur High School(H.S.), Pathpukur High School(HS), পাতপুকুর হাই স্কুল, পাতপুকুর স্কুল, পাত পুকুর হাই স্কুল, পাতপুকুর হাই স্কুল (উঃ মাঃ), Pathpukur School, pathpukurschool, Jaynagar school, Joynagar school, High School, Government School, Student Panel, Teacher Panel, Exam Link, School Notice">
-    <meta name="author" content="Pathpukur High School">
-    <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="apple-touch-icon" href="PHS-LOGO.png">
-    <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>স্কুল ড্যাশবোর্ড</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-    <div id="sidebar">
-        <div class="sidebar-header">
-            <img src="PHS-LOGO.png" alt="School Logo" class="sidebar-logo"/>
-            <h3>School Dashboard</h3>
-        </div>
-        <div class="dashboard-link" onclick="loadDashboard()">
-            📊 Dashboard
-        </div>
-        <ul class="main-menu-items" id="mainMenuItems">
-            </ul>
+  <!-- 🏫 হেডার: স্কুলের লোগো ও নাম -->
+  <header class="header">
+    <img src="school-logo.png" alt="School Logo" class="logo" />
+    <h1 class="school-name">পথপুকুর হাই স্কুল</h1>
+    <p class="tagline">শিক্ষা, শৃঙ্খলা ও সেবার প্রতীক</p>
+  </header>
+
+  <!-- 📱 মেনু আইকন: মেনুবার দেখাতে/লুকাতে ব্যবহৃত হয় -->
+  <div id="menu-toggle">&#9776;</div>
+
+  <!-- 📋 মেনুবার: বাম পাশে থাকবে, প্রথমে লুকানো -->
+  <aside id="sidebar" class="sidebar">
+    <h2 class="dashboard-title" onclick="resetDashboard()">ড্যাশবোর্ড</h2>
+
+    <!-- Marks Upload মেনু -->
+    <div class="menu-item" onclick="toggleMenu(this)">
+      Marks Upload
+      <ul class="submenu">
+        <li onclick="loadContent('class5')">Class V</li>
+        <li onclick="loadContent('class6')">Class VI</li>
+        <li onclick="loadContent('class7')">Class VII</li>
+        <li onclick="loadContent('class8')">Class VIII</li>
+        <li onclick="loadContent('class9')">Class IX</li>
+        <li onclick="loadContent('class10')">Class X</li>
+        <li onclick="loadContent('class11')">Class XI</li>
+        <li onclick="loadContent('class12')">Class XII</li>
+      </ul>
     </div>
 
-    <header>
-        <span id="menuIcon">☰</span>
-        <img src="PHS-LOGO.png" alt="School Logo" class="school-logo-header" />
-        <h1>PATHPUKUR HIGH SCHOOL (H.S.)</h1>
-    </header>
-
-    <div id="content">
-        <h2 class="animated">Welcome to Dashboard</h2>
-        <p>Your content will be loaded here.</p>
+    <!-- Upload Student Notice মেনু -->
+    <div class="menu-item no-submenu" onclick="loadContent('notice')">
+      Upload Student Notice
     </div>
+  </aside>
 
+  <!-- 🧾 ড্যাশবোর্ড কনটেন্ট এরিয়া -->
+  <main id="main-content" class="main-content">
+    <h2>ড্যাশবোর্ডে স্বাগতম!</h2>
+    <p>মেনু থেকে একটি অপশন সিলেক্ট করুন।</p>
+  </main>
 
-    
-  <div id="masterLoginOverlay" class="master-login-overlay">
-        <div class="master-login-container">
-            <h2 class="master-login-heading">School Login</h2>
-            <div class="form-group">
-                <label for="loginType">Login Type:</label>
-                <select id="loginType">
-                    <option value="">Select Type</option>
-                    <option value="Teacher">Teacher Login</option>
-                    <option value="Student">Student Login</option>
-                    <option value="School">School Login</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="masterId">ID:</label>
-                <input type="text" id="masterId" placeholder="Enter ID" required>
-            </div>
-            <div class="form-group">
-                <label for="masterPass">Password:</label>
-                <input type="password" id="masterPass" placeholder="Enter Password" required>
-            </div>
-            <button class="master-login-button" onclick="submitMasterLogin()">Login</button>
-            <div id="masterLoginError" class="error-message"></div>
-            <div id="masterLoginSuccess" class="success-message"></div>
-        </div>
-    </div>
-
-
-
-    
-    <footer>
-        <p><strong>School Name:</strong> Pathpukur High School (HS)</p>
-        <p><strong>Address:</strong> Vill: Pathpukur, PO: Bakultala Hat, Dist: South 24 Parganas, Pin: 743338, West Bengal</p>
-        <p><strong>Phone:</strong> +91 3218248083</p>
-        <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
-    </footer>
-
-    <script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>
