@@ -2,62 +2,56 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>স্কুল ড্যাশবোর্ড</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>স্কুল ওয়েবসাইট</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 🏫 হেডার -->
   <header class="header">
-    <img src="PHS-LOGO.png" alt="School Logo" class="logo" />
+    <div class="menu-toggle" onclick="toggleSidebar(this)">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <img src="logo.png" alt="স্কুল লোগো" class="school-logo">
     <h1 class="school-name">পাতপুকুর হাই স্কুল</h1>
   </header>
 
-  <!-- ☰ মেনু আইকন -->
-  <div id="menu-toggle">☰</div>
+  <div class="sidebar">
+    <ul class="menu">
+      <li class="has-submenu">
+        <a href="#">হোম <span class="arrow">&#9654;</span></a>
+        <ul class="submenu">
+          <li><a href="#">প্রধান শিক্ষক</a></li>
+          <li><a href="#">ইতিহাস</a></li>
+        </ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#">একাডেমিক <span class="arrow">&#9654;</span></a>
+        <ul class="submenu">
+          <li class="has-submenu">
+            <a href="#">রুটিন <span class="arrow">&#9654;</span></a>
+            <ul class="subsubmenu">
+              <li><a href="#">ক্লাস V</a></li>
+              <li><a href="#">ক্লাস XII</a></li>
+            </ul>
+          </li>
+          <li><a href="#">সিলেবাস</a></li>
+        </ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#">পরীক্ষা <span class="arrow">&#9654;</span></a>
+        <ul class="submenu">
+          <li><a href="#">1st Term</a></li>
+          <li><a href="#">2nd Term</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 
-  <!-- 📋 সাইড মেনু -->
-  <aside id="sidebar" class="sidebar">
-    <h2 class="dashboard-title" onclick="resetDashboard()">ড্যাশবোর্ড</h2>
-
-    <div class="menu-item" onclick="toggleMenu(this)">
-      Marks Upload
-      <ul class="submenu">
-        <li onclick="loadContent('class5')">Class V</li>
-        <li onclick="loadContent('class6')">Class VI</li>
-        <li onclick="loadContent('class7')">Class VII</li>
-        <li onclick="loadContent('class8')">Class VIII</li>
-        <li onclick="loadContent('class9')">Class IX</li>
-        <li onclick="loadContent('class10')">Class X</li>
-        <li onclick="loadContent('class11')">Class XI</li>
-        <li onclick="loadContent('class12')">Class XII</li>
-      </ul>
-    </div>
-
-    <div class="menu-item no-submenu" onclick="loadContent('notice')">Upload Student Notice</div>
-
-    <div class="menu-item" onclick="toggleMenu(this)">
-      Routine Management
-      <ul class="submenu">
-        <li onclick="loadContent('routine-teacher')">Teacher Routine</li>
-        <li onclick="loadContent('routine-class')">Class Routine</li>
-      </ul>
-    </div>
-
-    <div class="menu-item" onclick="toggleMenu(this)">
-      Reports
-      <ul class="submenu">
-        <li onclick="loadContent('student-report')">Student Report</li>
-        <li onclick="loadContent('attendance-report')">Attendance Report</li>
-      </ul>
-    </div>
-  </aside>
-
-  <!-- 📄 মূল কনটেন্ট এরিয়া -->
-  <main id="main-content" class="main-content">
-    <h2>ড্যাশবোর্ডে স্বাগতম!</h2>
-    <p>মেনু থেকে একটি অপশন সিলেক্ট করুন।</p>
+  <main class="content">
+    <!-- ড্যাশবোর্ড বা অন্যান্য কনটেন্ট এখানে থাকবে -->
   </main>
 
   <script src="script.js"></script>
