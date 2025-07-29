@@ -1,18 +1,18 @@
 
 /* CSS ভ্যারিয়েবলস: সহজে থিম পরিবর্তন করার জন্য */
 :root {
-    /* নতুন আধুনিক কালার প্যালেট */
-    --header-bg-start: #363636;   /* চারকোল গ্রে */
-    --header-bg-end: #4f4f4f;     /* ডার্কার গ্রে */
-    --menu-toggle-bg: #616161;    /* মিডিয়াম গ্রে */
-    --menu-toggle-hover-bg: #757575; /* লাইটার গ্রে */
-    --sidebar-bg: #212121;        /* প্রায় কালো */
-    --sidebar-hover: #3a3a3a;     /* হালকা কালো */
-    --submenu-bg: #424242;        /* ডার্ক গ্রে */
-    --submenu-item-hover: #607d8b; /* ব্লু গ্রে */
+    /* নতুন আধুনিক কালার প্যালেট: ডার্ক অলিভ গ্রিন ও সংশ্লিষ্ট শেড */
+    --header-bg-start: #4B5320;   /* ডার্ক অলিভ গ্রিন */
+    --header-bg-end: #6B8E23;     /* অলিভ ড্র্যাব */
+    --menu-toggle-bg: #8B9E4C;    /* অলিভ গ্রিন */
+    --menu-toggle-hover-bg: #9ABF5D; /* লাইটার অলিভ */
+    --sidebar-bg: #35421B;        /* আরও ডার্ক অলিভ */
+    --sidebar-hover: #50602F;     /* মিডিয়াম ডার্ক অলিভ */
+    --submenu-bg: #404F27;        /* ডার্ক অলিভ */
+    --submenu-item-hover: #7C9A4B; /* একটু উজ্জ্বল অলিভ */
     --text-color-light: #ffffff;  /* সাদা টেক্সট */
     --text-color-dark: #333;      /* গাঢ় টেক্সট */
-    --accent-color: #ffd700;     /* গোল্ডেন ইয়েলো (লোগো বর্ডারের জন্য) */
+    --accent-color: #FFD700;     /* গোল্ডেন ইয়েলো (লোগো বর্ডারের জন্য) */
     --light-bg: #f5f5f5;          /* খুব হালকা ধূসর ব্যাকগ্রাউন্ড */
     --shadow-light: rgba(0, 0, 0, 0.3);
 }
@@ -40,7 +40,7 @@ body {
     color: var(--text-color-light);
     padding: 15px 25px;
     box-shadow: 0 4px 15px var(--shadow-light);
-    position: fixed; /* হেডারকে ফিক্সড করা হয়েছে */
+    position: fixed;
     width: 100%;
     top: 0;
     left: 0;
@@ -54,12 +54,13 @@ body {
     font-size: 30px; /* আইকনের সাইজ বড় করা হয়েছে */
     padding: 10px;
     cursor: pointer;
-    background-color: var(--menu-toggle-bg); /* হেডিং এর সাথে মানানসই গ্রে কালার */
+    background-color: var(--menu-toggle-bg); /* হেডিং এর সাথে মানানসই কালার */
     color: var(--text-color-light);
     border-radius: 50%; /* গোল শেপ */
     border: none; /* বর্ডার সরানো হয়েছে */
     outline: none;
-    /* z-index: 1001; এই লাইনটি দরকার নেই কারণ এটি হেডারের চাইল্ড হিসেবে কাজ করবে */
+    position: relative; /* z-index কাজ করার জন্য প্রয়োজন */
+    z-index: 1002; /* হেডার এবং লোগোর উপরে থাকবে */
     transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     align-items: center;
@@ -74,8 +75,10 @@ body {
 }
 /* মেনু খোলা অবস্থায় আইকনের ঘোরানো */
 #menu-toggle.open-menu {
-    transform: rotate(90deg);
+    transform: rotate(90deg) scale(1.08); /* বড় হওয়া এবং ঘোরানো */
+    background-color: var(--menu-toggle-hover-bg);
 }
+
 
 /* ✅ স্কুল লোগো */
 .logo {
@@ -87,6 +90,8 @@ body {
     border: 4px solid var(--accent-color); /* বর্ডার প্রস্থ বাড়ানো হয়েছে */
     object-fit: contain;
     box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+    position: relative; /* z-index কাজ করার জন্য প্রয়োজন */
+    z-index: 1001; /* মেনু টগল বাটনের নিচে থাকবে, হেডারের উপরে */
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* অ্যানিমেশন যোগ করা হয়েছে */
 }
 .logo:hover {
@@ -99,6 +104,8 @@ body {
     font-weight: bold;
     letter-spacing: 1px;
     text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    position: relative; /* z-index কাজ করার জন্য প্রয়োজন */
+    z-index: 1000; /* বাকি এলিমেন্টের উপরে থাকবে কিন্তু বাটন/লোগোর নিচে */
 }
 
 /* ✅ সাইডবার */
@@ -108,18 +115,18 @@ body {
     left: -280px;
     width: 250px;
     height: 100%;
-    background-color: var(--sidebar-bg);
+    background-color: var(--sidebar-bg); /* নতুন মেনুবারের কালার */
     color: var(--text-color-light);
     padding: 120px 20px 20px; /* হেডার এর জন্য উপরে প্যাডিং */
     transition: all 0.4s ease-in-out;
-    z-index: 999; /* সাইডবার হেডারের নিচে থাকবে, যখন এটি খোলা হবে তখন এটি উপরে উঠে আসবে জাভাস্ক্রিপ্ট দ্বারা */
+    z-index: 999; /* প্রাথমিকভাবে হেডারের নিচে থাকবে */
     box-shadow: 3px 0 15px var(--shadow-light);
     overflow-y: auto; /* অতিরিক্ত কনটেন্ট হলে স্ক্রলবার দেখাবে */
 }
 
 .sidebar.open {
     left: 0;
-    z-index: 1005; /* সাইডবার খোলা থাকলে এটি হেডার এবং মেনু টগলের উপরে থাকবে */
+    z-index: 1003; /* খোলা অবস্থায় হেডার এবং মেনু টগলের উপরে থাকবে */
 }
 
 .dashboard-title {
@@ -138,7 +145,7 @@ body {
     transform: translateX(5px);
 }
 
-/* ✅ মেনু আইটেম */
+/* ✅ মেনু আইtem */
 .menu-item {
     margin-bottom: 10px;
     padding: 14px 20px;
@@ -161,7 +168,7 @@ body {
     color: var(--accent-color);
 }
 
-/* সাবমেনু সহ মেনু আইটেমের অ্যারো আইকন */
+/* সাবমেনু সহ মেনু আইtemের অ্যারো আইকন */
 .menu-item:not(.no-submenu)::after {
     content: '\25BC'; /* ▼ ডাউন অ্যারো */
     font-size: 16px;
@@ -186,7 +193,7 @@ body {
     max-height: 500px; /* সাবমেনুর সম্ভাব্য সর্বোচ্চ উচ্চতা। এটি প্রয়োজন অনুযায়ী বাড়ানো যেতে পারে। */
 }
 .submenu li {
-    padding: 12px 30px; /* সাবমেনু আইটেমের প্যাডিং */
+    padding: 12px 30px; /* সাবমেনু আইtemের প্যাডিং */
     cursor: pointer;
     font-weight: normal;
     transition: background-color 0.2s ease, color 0.2s ease;
