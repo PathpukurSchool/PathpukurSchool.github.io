@@ -18,7 +18,8 @@
         <h2 class="dashboard-title" onclick="resetDashboard()">ড্যাশবোর্ড</h2>
 
         <div class="menu-item" onclick="toggleMenu(this)">
-            <div class="menu-item-header">Marks Upload</div> <ul class="submenu">
+            <div class="menu-item-header">Marks Upload</div>
+            <ul class="submenu">
                 <li onclick="loadContent('class5')">Class V</li>
                 <li onclick="loadContent('class6')">Class VI</li>
                 <li onclick="loadContent('class7')">Class VII</li>
@@ -33,16 +34,45 @@
         <div class="menu-item no-submenu" onclick="loadContent('notice')">Upload Student Notice</div>
 
         <div class="menu-item" onclick="toggleMenu(this)">
-            <div class="menu-item-header">রুটিন সিস্টেম</div> <ul class="submenu">
-                <li onclick="loadContent('teacher-routine')">শিক্ষক রুটিন</li>
-                <li onclick="loadContent('student-routine')">শিক্ষার্থী রুটিন</li>
-                <li onclick="loadContent('subject-routine')">বিষয়ভিত্তিক রুটিন</li>
-                <li onclick="loadContent('exam-routine')">পরীক্ষার রুটিন</li>
+            <div class="menu-item-header">রুটিন সিস্টেম</div>
+            <ul class="submenu">
+                <li>
+                    <div class="shaded-info-box">
+                        <h2 class="shine">Staff Routine</h2>
+                        <h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3>
+                        <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">VIEW STAFF ROUTINE</a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="shaded-info-box">
+                        <h2 class="shine">Class Routine</h2>
+                        <h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3>
+                        <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student" target="_blank" class="exam-link">VIEW CLASS ROUTINE</a>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="shaded-info-box">
+                        <h2 class="shine">Subject Routine</h2>
+                        <h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3>
+                        <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="shaded-info-box">
+                        <h2 class="shine">School Exam Routine</h2>
+                        <h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3>
+                        <a href="https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>
+                    </div>
+                </li>
             </ul>
         </div>
 
         <div class="menu-item" onclick="toggleMenu(this)">
-            <div class="menu-item-header">Reports</div> <ul class="submenu">
+            <div class="menu-item-header">Reports</div>
+            <ul class="submenu">
                 <li onclick="loadContent('student-report')">Student Report</li>
                 <li onclick="loadContent('attendance-report')">Attendance Report</li>
             </ul>
@@ -51,7 +81,8 @@
         <div class="menu-item no-submenu" onclick="loadContent('admission-info')">ভর্তি তথ্য</div>
 
         <div class="menu-item" onclick="toggleMenu(this)">
-            <div class="menu-item-header">লাইব্রেরি</div> <ul class="submenu">
+            <div class="menu-item-header">লাইব্রেরি</div>
+            <ul class="submenu">
                 <li onclick="loadContent('book-list')">বইয়ের তালিকা</li>
                 <li onclick="loadContent('borrow-return')">ইস্যু/ফেরত</li>
             </ul>
