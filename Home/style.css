@@ -84,7 +84,7 @@ body {
     background: var(--text-color-light);
     padding: 5px;
     border-radius: 50%; /* লোগোকে গোলাকার করা হয়েছে */
-    border: 3px solid var(--accent-color); /* হলুদ বর্ডার */
+    border: 1px solid var(--accent-color); /* ✅ বর্ডার 1px করা হয়েছে */
     object-fit: contain;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     position: relative; /* z-index কাজ করার জন্য প্রয়োজন */
@@ -103,13 +103,13 @@ body {
 /* ✅ সাইডবার */
 .sidebar {
     position: fixed;
-    top: 0;
+    top: 85px; /* ✅ হেডিং এর নিচে ওপেন হওয়ার জন্য 85px করা হয়েছে (আপনার হেডার উচ্চতার উপর নির্ভর করে এটি সামঞ্জস্য করা যেতে পারে) */
     left: -280px; /* প্রাথমিকভাবে স্ক্রিনের বাইরে */
     width: 280px; /* প্রস্থ বাড়ানো হয়েছে */
-    height: 100%;
+    height: calc(100% - 85px); /* ✅ হেডার উচ্চতা বাদ দিয়ে বাকি উচ্চতা নেবে */
     background-color: var(--sidebar-bg);
     color: var(--text-color-light);
-    padding: 100px 20px 20px; /* হেডার এর জন্য উপরে প্যাডিং */
+    padding: 20px; /* ✅ উপরে প্যাডিং কমানো হয়েছে, কারণ top দ্বারা স্থান নির্ধারণ করা হয়েছে */
     transition: all 0.4s ease-in-out;
     z-index: 999;
     box-shadow: 3px 0 15px var(--shadow-light);
@@ -251,9 +251,11 @@ body {
         font-size: 22px;
     }
     .sidebar {
+        top: 75px; /* ✅ ছোট স্ক্রিনে হেডার এর নিচে */
+        height: calc(100% - 75px);
         width: 220px;
         left: -230px;
-        padding-top: 80px;
+        padding-top: 15px;
     }
     .menu-item-header { /* ✅ রেসপনসিভ এর জন্য প্যাডিং */
         padding: 10px 15px;
@@ -290,9 +292,11 @@ body {
         font-size: 18px;
     }
     .sidebar {
+        top: 65px; /* ✅ খুব ছোট স্ক্রিনে হেডার এর নিচে */
+        height: calc(100% - 65px);
         width: 180px;
         left: -190px;
-        padding-top: 70px;
+        padding-top: 10px;
     }
     .menu-item-header { /* ✅ রেসপনসিভ এর জন্য প্যাডিং */
         padding: 8px 10px;
