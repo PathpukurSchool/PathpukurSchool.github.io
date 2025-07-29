@@ -33,10 +33,12 @@
         <div class="menu-item no-submenu" onclick="loadContent('notice')">Upload Student Notice</div>
 
         <div class="menu-item" onclick="toggleMenu(this)">
-            Routine Management
+            রুটিন সিস্টেম
             <ul class="submenu">
-                <li onclick="loadContent('routine-teacher')">Teacher Routine</li>
-                <li onclick="loadContent('routine-class')">Class Routine</li>
+                <li onclick="loadContent('teacher-routine')">শিক্ষক রুটিন</li>
+                <li onclick="loadContent('student-routine')">শিক্ষার্থী রুটিন</li>
+                <li onclick="loadContent('subject-routine')">বিষয়ভিত্তিক রুটিন</li>
+                <li onclick="loadContent('exam-routine')">পরীক্ষার রুটিন</li>
             </ul>
         </div>
 
@@ -47,16 +49,19 @@
                 <li onclick="loadContent('attendance-report')">Attendance Report</li>
             </ul>
         </div>
-        
-        <div class="menu-item no-submenu" onclick="loadContent('admission-info')">Admission Info</div>
+
+        <div class="menu-item no-submenu" onclick="loadContent('admission-info')">ভর্তি তথ্য</div>
 
         <div class="menu-item" onclick="toggleMenu(this)">
-            Library
+            লাইব্রেরি
             <ul class="submenu">
-                <li onclick="loadContent('book-list')">Book List</li>
-                <li onclick="loadContent('borrow-return')">Borrow/Return</li>
+                <li onclick="loadContent('book-list')">বইয়ের তালিকা</li>
+                <li onclick="loadContent('borrow-return')">ইস্যু/ফেরত</li>
             </ul>
         </div>
+
+        <div class="menu-item no-submenu" onclick="loadContent('contact-us')">যোগাযোগ</div>
+
     </aside>
 
     <main id="main-content" class="main-content">
