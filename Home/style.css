@@ -1,3 +1,4 @@
+
 /* CSS ভ্যারিয়েবলস: সহজে থিম পরিবর্তন করার জন্য */
 :root {
     /* নতুন আধুনিক কালার প্যালেট */
@@ -58,7 +59,7 @@ body {
     border-radius: 50%; /* গোল শেপ */
     border: none; /* বর্ডার সরানো হয়েছে */
     outline: none;
-    z-index: 1001; /* মেনু টগল বাটনের z-index হেডার থেকে বেশি রাখা হয়েছে */
+    /* z-index: 1001; এই লাইনটি দরকার নেই কারণ এটি হেডারের চাইল্ড হিসেবে কাজ করবে */
     transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     align-items: center;
@@ -111,13 +112,14 @@ body {
     color: var(--text-color-light);
     padding: 120px 20px 20px; /* হেডার এর জন্য উপরে প্যাডিং */
     transition: all 0.4s ease-in-out;
-    z-index: 999; /* সাইডবার হেডারের নিচে থাকবে */
+    z-index: 999; /* সাইডবার হেডারের নিচে থাকবে, যখন এটি খোলা হবে তখন এটি উপরে উঠে আসবে জাভাস্ক্রিপ্ট দ্বারা */
     box-shadow: 3px 0 15px var(--shadow-light);
     overflow-y: auto; /* অতিরিক্ত কনটেন্ট হলে স্ক্রলবার দেখাবে */
 }
 
 .sidebar.open {
     left: 0;
+    z-index: 1005; /* সাইডবার খোলা থাকলে এটি হেডার এবং মেনু টগলের উপরে থাকবে */
 }
 
 .dashboard-title {
