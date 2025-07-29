@@ -79,8 +79,8 @@ body {
 
 /* ✅ স্কুল লোগো */
 .logo {
-    width: 85px;
-    height: 85px;
+    width: 100px;
+    height: 100px;
     background: var(--text-color-light);
     padding: 5px;
     border-radius: 50%; /* লোগোকে গোলাকার করা হয়েছে */
