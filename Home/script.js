@@ -59,8 +59,12 @@ function loadContent(page) {
                 <button style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">নোটিশ আপলোড করুন</button>
             </div>
         `;
-    } else {
-        // অন্য ক্লাস বা রিপোর্ট সম্পর্কিত কনটেন্ট
+    }
+    // আপনি যদি কোনো নির্দিষ্ট মেনু আইডির জন্য বিশেষ কনটেন্ট দেখাতে চান,
+    // তাহলে এখানে 'else if' ব্লক যোগ করতে পারেন।
+    // অন্যথায়, এটি জেনেরিক কনটেন্ট লোড করবে।
+    else {
+        // অন্য যেকোনো মেনু আইডির জন্য জেনেরিক কনটেন্ট
         const formattedPage = page.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         content = `
             <h2>${formattedPage}</h2>
@@ -72,6 +76,7 @@ function loadContent(page) {
                     <li>আইটেম ২</li>
                     <li>আইটেম ৩</li>
                 </ul>
+                <p>আপনি ${formattedPage} আইডির জন্য `loadContent` ফাংশনে নির্দিষ্ট HTML যোগ করতে পারেন।</p>
             </div>
         `;
     }
