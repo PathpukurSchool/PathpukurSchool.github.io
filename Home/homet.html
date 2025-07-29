@@ -2,43 +2,60 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>School Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>স্কুল ড্যাশবোর্ড</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <div class="menu-toggle" onclick="toggleMenu(this)">
-      ☰
-    </div>
-    <img src="PHS-LOGO.png" alt="School Logo" class="logo" />
-    <h1>আমার স্কুল</h1>
-  </header>
+    <header class="header">
+        <img src="school-logo.png" alt="School Logo" class="logo" />
+        <h1 class="school-name">পথপুকুর হাই স্কুল</h1>
+    </header>
 
-  <aside class="sidebar" id="sidebar">
-    <ul>
-      <li>
-        <span class="menu-item" onclick="toggleSubMenu(this)">প্রথম মেনু ▾</span>
-        <ul class="submenu">
-          <li><span class="menu-item" onclick="toggleSubMenu(this)">সাবমেনু ১ ▾</span>
+    <button id="menu-toggle" aria-label="মেনু টগল">☰</button>
+
+    <aside id="sidebar" class="sidebar">
+        <h2 class="dashboard-title" onclick="resetDashboard()">ড্যাশবোর্ড</h2>
+
+        <div class="menu-item" onclick="toggleMenu(this)">
+            Marks Upload
             <ul class="submenu">
-              <li onclick="loadContent('subsubmenu1')">উপমেনু ১-১</li>
-              <li onclick="loadContent('subsubmenu2')">উপমেনু ১-২</li>
+                <li onclick="loadContent('class5')">Class V</li>
+                <li onclick="loadContent('class6')">Class VI</li>
+                <li <li onclick="loadContent('class7')">Class VII</li>
+                <li onclick="loadContent('class8')">Class VIII</li>
+                <li onclick="loadContent('class9')">Class IX</li>
+                <li onclick="loadContent('class10')">Class X</li>
+                <li onclick="loadContent('class11')">Class XI</li>
+                <li onclick="loadContent('class12')">Class XII</li>
             </ul>
-          </li>
-          <li onclick="loadContent('submenu2')">সাবমেনু ২</li>
-        </ul>
-      </li>
-      <li onclick="loadContent('menu2')">দ্বিতীয় মেনু</li>
-    </ul>
-  </aside>
+        </div>
 
-  <main id="content">
-    <h2>ড্যাশবোর্ড</h2>
-    <p>এখানে কনটেন্ট লোড হবে...</p>
-  </main>
+        <div class="menu-item no-submenu" onclick="loadContent('notice')">Upload Student Notice</div>
 
-  <script src="script.js"></script>
+        <div class="menu-item" onclick="toggleMenu(this)">
+            Routine Management
+            <ul class="submenu">
+                <li onclick="loadContent('routine-teacher')">Teacher Routine</li>
+                <li onclick="loadContent('routine-class')">Class Routine</li>
+            </ul>
+        </div>
+
+        <div class="menu-item" onclick="toggleMenu(this)">
+            Reports
+            <ul class="submenu">
+                <li onclick="loadContent('student-report')">Student Report</li>
+                <li onclick="loadContent('attendance-report')">Attendance Report</li>
+            </ul>
+        </div>
+    </aside>
+
+    <main id="main-content" class="main-content">
+        <h2>ড্যাশবোর্ডে স্বাগতম!</h2>
+        <p>মেনু থেকে একটি অপশন সিলেক্ট করুন।</p>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
