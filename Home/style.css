@@ -110,14 +110,14 @@ body {
     color: var(--text-color-light);
     padding: 100px 20px 20px; /* হেডার এর জন্য উপরে প্যাডিং */
     transition: all 0.4s ease-in-out;
-    z-index: 10; /* প্রাথমিকভাবে অনেক নিচে থাকবে */
+    z-index: 999; /* প্রাথমিকভাবে অনেক নিচে থাকবে, কিন্তু খোলা অবস্থায় উপরে আসবে */
     box-shadow: 3px 0 15px var(--shadow-light);
     overflow-y: auto;
 }
 
 .sidebar.open {
     left: 0; /* সাইডবার ওপেন হলে বামে চলে আসবে */
-    z-index: 103; /* খোলা অবস্থায় হেডার এবং মেনু টগলের উপরে থাকবে */
+    z-index: 1004; /* খোলা অবস্থায় হেডার এবং মেনু টগলের উপরে থাকবে */
 }
 
 .dashboard-title {
@@ -197,7 +197,7 @@ body {
 
 /* ✅ মূল কনটেন্ট এরিয়া */
 .main-content {
-    margin: 100px 25px 25px 280px; /* সাইডবার এবং হেডার এর জন্য মার্জিন */
+    margin: 100px 25px 25px 25px; /* সাইডবার বন্ধ থাকলে মার্জিন */
     padding: 30px;
     background-color: var(--light-bg);
     min-height: calc(100vh - 125px);
@@ -206,10 +206,8 @@ body {
     transition: margin-left 0.4s ease-in-out;
 }
 
-/* সাইডবার খোলা থাকলে মূল কনটেন্ট এরিয়ার মার্জিন */
-.sidebar.open + .main-content {
-    margin-left: 280px; /* সাইডবার খোলার পর ডানদিকে সরে যাবে */
-}
+/* JavaScript দ্বারা .main-content এর মার্জিন পরিবর্তন হবে */
+
 
 /* ✅ রেসপনসিভ ডিজাইন */
 @media (max-width: 768px) {
@@ -235,13 +233,10 @@ body {
         padding-top: 80px;
     }
     .main-content {
-        margin: 80px 15px 15px 15px;
+        margin: 80px 15px 15px 15px; /* ছোট স্ক্রিনে সাইডবার বন্ধ থাকলে মার্জিন */
         min-height: calc(100vh - 100px);
     }
-    /* সাইডবার খোলা থাকলে মূল কনটেন্ট মার্জিন */
-    .sidebar.open + .main-content {
-        margin-left: 235px; /* ছোট স্ক্রিনে সাইডবার খোলার পর মার্জিন */
-    }
+    /* JavaScript দ্বারা .main-content এর মার্জিন পরিবর্তন হবে */
 }
 
 /* খুব ছোট স্ক্রিনের জন্য */
@@ -268,7 +263,7 @@ body {
         padding-top: 70px;
     }
     .main-content {
-        margin: 70px 10px 10px 10px;
+        margin: 70px 10px 10px 10px; /* খুব ছোট স্ক্রিনে সাইডবার বন্ধ থাকলে মার্জিন */
         padding: 15px;
     }
 }
