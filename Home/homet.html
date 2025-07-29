@@ -2,56 +2,41 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>স্কুল ওয়েবসাইট</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>School Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="header">
-    <div class="menu-toggle" onclick="toggleSidebar(this)">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
+  <header>
+    <div class="menu-toggle" onclick="toggleMenu(this)">
+      ☰
     </div>
-    <img src="logo.png" alt="PHS-LOGO.png" class="school-logo">
-    <h1 class="school-name">পাতপুকুর হাই স্কুল</h1>
+    <img src="school-logo.png" alt="School Logo" class="logo" />
+    <h1>আমার স্কুল</h1>
   </header>
 
-  <div class="sidebar">
-    <ul class="menu">
-      <li class="has-submenu">
-        <a href="#">হোম <span class="arrow">&#9654;</span></a>
+  <aside class="sidebar" id="sidebar">
+    <ul>
+      <li>
+        <span class="menu-item" onclick="toggleSubMenu(this)">প্রথম মেনু ▾</span>
         <ul class="submenu">
-          <li><a href="#">প্রধান শিক্ষক</a></li>
-          <li><a href="#">ইতিহাস</a></li>
-        </ul>
-      </li>
-      <li class="has-submenu">
-        <a href="#">একাডেমিক <span class="arrow">&#9654;</span></a>
-        <ul class="submenu">
-          <li class="has-submenu">
-            <a href="#">রুটিন <span class="arrow">&#9654;</span></a>
-            <ul class="subsubmenu">
-              <li><a href="#">ক্লাস V</a></li>
-              <li><a href="#">ক্লাস XII</a></li>
+          <li><span class="menu-item" onclick="toggleSubMenu(this)">সাবমেনু ১ ▾</span>
+            <ul class="submenu">
+              <li onclick="loadContent('subsubmenu1')">উপমেনু ১-১</li>
+              <li onclick="loadContent('subsubmenu2')">উপমেনু ১-২</li>
             </ul>
           </li>
-          <li><a href="#">সিলেবাস</a></li>
+          <li onclick="loadContent('submenu2')">সাবমেনু ২</li>
         </ul>
       </li>
-      <li class="has-submenu">
-        <a href="#">পরীক্ষা <span class="arrow">&#9654;</span></a>
-        <ul class="submenu">
-          <li><a href="#">1st Term</a></li>
-          <li><a href="#">2nd Term</a></li>
-        </ul>
-      </li>
+      <li onclick="loadContent('menu2')">দ্বিতীয় মেনু</li>
     </ul>
-  </div>
+  </aside>
 
-  <main class="content">
-    <!-- ড্যাশবোর্ড বা অন্যান্য কনটেন্ট এখানে থাকবে -->
+  <main id="content">
+    <h2>ড্যাশবোর্ড</h2>
+    <p>এখানে কনটেন্ট লোড হবে...</p>
   </main>
 
   <script src="script.js"></script>
