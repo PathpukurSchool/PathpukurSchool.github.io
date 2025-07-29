@@ -312,3 +312,78 @@ body {
         padding: 15px;
     }
 }
+
+
+
+
+
+
+
+
+
+/* আপনার অন্যান্য CSS কোডের শেষে এই নতুন ক্লাসগুলো যোগ করুন */
+
+/* ✅ Shaded Info Box (রুটিন লিঙ্ক বক্স) */
+.shaded-info-box {
+    background-color: #f0f8ff; /* হালকা আকাশী নীল */
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px; /* উপরের আইটেম থেকে দূরত্ব */
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 100%; /* সম্পূর্ণ প্রস্থ নেবে */
+    box-sizing: border-box; /* প্যাডিং এবং বর্ডার প্রস্থের মধ্যে অন্তর্ভুক্ত হবে */
+}
+
+/* ✅ Shine effect for headings (আকর্ষণীয় হেডিং) */
+.shine {
+    font-size: 1.3em;
+    color: #333;
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* হেডার গ্রাডিয়েন্ট */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7); /* হালকা সাদা শ্যাডো */
+    margin-bottom: 10px;
+}
+
+/* ✅ Login Instruction Heading */
+.login-instruction-heading {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* ✅ Emoji Styling */
+.emoji {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 1.2em;
+    animation: bounce 1s infinite alternate; /* বাউন্স অ্যানিমেশন */
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-5px);
+    }
+}
+
+/* ✅ Exam Link Button (রুটিন দেখার বাটন) */
+.exam-link {
+    display: inline-block;
+    background-color: #4CAF50; /* সবুজ বাটন */
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.exam-link:hover {
+    background-color: #45a049; /* হোভারে হালকা সবুজ */
+    transform: translateY(-2px); /* হালকা উপরে উঠবে */
+}
