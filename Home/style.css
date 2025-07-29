@@ -1,18 +1,18 @@
 
 /* CSS ভ্যারিয়েবলস: সহজে থিম পরিবর্তন করার জন্য */
 :root {
-    /* নতুন আধুনিক কালার প্যালেট: ডার্ক অলিভ গ্রিন ও সংশ্লিষ্ট শেড */
-    --header-bg-start: #4B5320;   /* ডার্ক অলিভ গ্রিন */
-    --header-bg-end: #6B8E23;     /* অলিভ ড্র্যাব */
-    --menu-toggle-bg: #8B9E4C;    /* অলিভ গ্রিন */
-    --menu-toggle-hover-bg: #9ABF5D; /* লাইটার অলিভ */
-    --sidebar-bg: #35421B;        /* আরও ডার্ক অলিভ */
-    --sidebar-hover: #50602F;     /* মিডিয়াম ডার্ক অলিভ */
-    --submenu-bg: #404F27;        /* ডার্ক অলিভ */
-    --submenu-item-hover: #7C9A4B; /* একটু উজ্জ্বল অলিভ */
+    /* নতুন আধুনিক কালার প্যালেট: ডার্ক নেভি ব্লু ও সংশ্লিষ্ট শেড */
+    --header-bg-start: #1a237e;   /* ডার্ক নেভি ব্লু */
+    --header-bg-end: #283593;     /* ইন্ডিকো */
+    --menu-toggle-bg: #3f51b5;    /* মিডিয়াম ব্লু */
+    --menu-toggle-hover-bg: #5c6bc0; /* লাইটার ব্লু */
+    --sidebar-bg: #111e6c;        /* আরও ডার্ক নেভি ব্লু */
+    --sidebar-hover: #1e2e7b;     /* মিডিয়াম ডার্ক ব্লু */
+    --submenu-bg: #212c75;        /* ডার্ক ব্লু */
+    --submenu-item-hover: #42a5f5; /* উজ্জ্বল আকাশী ব্লু */
     --text-color-light: #ffffff;  /* সাদা টেক্সট */
     --text-color-dark: #333;      /* গাঢ় টেক্সট */
-    --accent-color: #FFD700;     /* গোল্ডেন ইয়েলো (লোগো বর্ডারের জন্য) */
+    --accent-color: #ffd700;     /* গোল্ডেন ইয়েলো (লোগো বর্ডারের জন্য) */
     --light-bg: #f5f5f5;          /* খুব হালকা ধূসর ব্যাকগ্রাউন্ড */
     --shadow-light: rgba(0, 0, 0, 0.3);
 }
@@ -40,11 +40,11 @@ body {
     color: var(--text-color-light);
     padding: 15px 25px;
     box-shadow: 0 4px 15px var(--shadow-light);
-    position: fixed;
+    position: fixed; /* হেডারকে ফিক্সড করা হয়েছে */
     width: 100%;
     top: 0;
     left: 0;
-    z-index: 1000; /* হেডার অন্যান্য এলিমেন্টের উপরে থাকবে */
+    z-index: 100; /* হেডার অন্যান্য এলিমেন্টের উপরে থাকবে, তবে মেনু টগল এবং সাইডবারের চেয়ে কম */
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
@@ -60,7 +60,7 @@ body {
     border: none; /* বর্ডার সরানো হয়েছে */
     outline: none;
     position: relative; /* z-index কাজ করার জন্য প্রয়োজন */
-    z-index: 1002; /* হেডার এবং লোগোর উপরে থাকবে */
+    z-index: 102; /* লোগো এবং হেডারের উপরে থাকবে */
     transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     align-items: center;
@@ -75,7 +75,7 @@ body {
 }
 /* মেনু খোলা অবস্থায় আইকনের ঘোরানো */
 #menu-toggle.open-menu {
-    transform: rotate(90deg) scale(1.08); /* বড় হওয়া এবং ঘোরানো */
+    transform: rotate(90deg) scale(1.08); /* বড় হওয়া এবং ৯০ ডিগ্রী ঘোরানো */
     background-color: var(--menu-toggle-hover-bg);
 }
 
@@ -91,7 +91,7 @@ body {
     object-fit: contain;
     box-shadow: 0 3px 12px rgba(0,0,0,0.3);
     position: relative; /* z-index কাজ করার জন্য প্রয়োজন */
-    z-index: 1001; /* মেনু টগল বাটনের নিচে থাকবে, হেডারের উপরে */
+    z-index: 101; /* মেনু টগল বাটনের নিচে থাকবে, হেডারের উপরে */
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* অ্যানিমেশন যোগ করা হয়েছে */
 }
 .logo:hover {
@@ -105,28 +105,28 @@ body {
     letter-spacing: 1px;
     text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
     position: relative; /* z-index কাজ করার জন্য প্রয়োজন */
-    z-index: 1000; /* বাকি এলিমেন্টের উপরে থাকবে কিন্তু বাটন/লোগোর নিচে */
+    z-index: 99; /* বাকি এলিমেন্টের উপরে থাকবে কিন্তু বাটন/লোগোর নিচে */
 }
 
 /* ✅ সাইডবার */
 .sidebar {
     position: fixed;
     top: 0;
-    left: -280px;
+    left: -280px; /* প্রাথমিকভাবে স্ক্রিনের বাইরে */
     width: 250px;
     height: 100%;
     background-color: var(--sidebar-bg); /* নতুন মেনুবারের কালার */
     color: var(--text-color-light);
     padding: 120px 20px 20px; /* হেডার এর জন্য উপরে প্যাডিং */
     transition: all 0.4s ease-in-out;
-    z-index: 999; /* প্রাথমিকভাবে হেডারের নিচে থাকবে */
+    z-index: 10; /* প্রাথমিকভাবে অনেক নিচে থাকবে */
     box-shadow: 3px 0 15px var(--shadow-light);
     overflow-y: auto; /* অতিরিক্ত কনটেন্ট হলে স্ক্রলবার দেখাবে */
 }
 
 .sidebar.open {
-    left: 0;
-    z-index: 1003; /* খোলা অবস্থায় হেডার এবং মেনু টগলের উপরে থাকবে */
+    left: 0; /* খোলা অবস্থায় স্ক্রিনে চলে আসবে */
+    z-index: 103; /* খোলা অবস্থায় হেডার এবং মেনু টগলের উপরে থাকবে */
 }
 
 .dashboard-title {
