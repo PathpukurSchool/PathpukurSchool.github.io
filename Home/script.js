@@ -1,10 +1,12 @@
+
 // ✅ DOM এলিমেন্টগুলো সিলেক্ট করা
 const menuToggle = document.getElementById("menu-toggle"); // মেনু টগল বাটন
 const sidebar = document.getElementById("sidebar");       // সাইডবার
 const mainContent = document.getElementById("main-content"); // মূল কনটেন্ট এরিয়া
 
 // ✅ মেনু টগল বাটন ক্লিক করলে সাইডবার খোলা/বন্ধ করা
-menuToggle.addEventListener("click", () => {
+menuToggle.addEventListener("click", (event) => { // ইভেন্ট প্যারামিটার যোগ করা হয়েছে
+    event.stopPropagation(); // এই লাইনটি ইভেন্ট প্রোপাগেশন থামাবে
     sidebar.classList.toggle("open"); // 'open' ক্লাস যোগ/অপসারণ করে সাইডবার খোলে/বন্ধ করে
     menuToggle.classList.toggle("open-menu"); // 'open-menu' ক্লাস যোগ/অপসারণ করে আইকন ঘোরায়
 });
