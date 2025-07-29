@@ -60,9 +60,44 @@ function loadContent(page) {
             </div>
         `;
     }
-    // আপনি যদি কোনো নির্দিষ্ট মেনু আইডির জন্য বিশেষ কনটেন্ট দেখাতে চান,
-    // তাহলে এখানে 'else if' ব্লক যোগ করতে পারেন।
-    // অন্যথায়, এটি জেনেরিক কনটেন্ট লোড করবে।
+    // আপনি যদি 'শিক্ষক রুটিন', 'শিক্ষার্থী রুটিন' ইত্যাদির জন্য নির্দিষ্ট কনটেন্ট যোগ করতে চান,
+    // তাহলে এখানে else if ব্লক যোগ করতে পারেন। উদাহরণস্বরূপ:
+    else if (page === "teacher-routine") {
+        content = `
+            <h2>শিক্ষক রুটিন</h2>
+            <p>এখানে শিক্ষক মণ্ডলীর দৈনিক, সাপ্তাহিক এবং মাসিক রুটিন প্রদর্শিত হবে।</p>
+            <div style="margin-top: 20px; padding: 15px; border: 1px dashed #4CAF50; border-radius: 8px; background-color: #e8f5e9;">
+                <p>এটি শিক্ষক রুটিনের জন্য নির্দিষ্ট তথ্য এবং টেবিল লোড করবে।</p>
+                </div>
+        `;
+    }
+    else if (page === "student-routine") {
+        content = `
+            <h2>শিক্ষার্থী রুটিন</h2>
+            <p>এখানে প্রতিটি শ্রেণীর শিক্ষার্থীদের বিস্তারিত রুটিন পাওয়া যাবে।</p>
+            <div style="margin-top: 20px; padding: 15px; border: 1px dashed #2196F3; border-radius: 8px; background-color: #e3f2fd;">
+                <p>এখানে শিক্ষার্থী রুটিনের তালিকা অথবা ডাউনলোডের লিঙ্ক থাকবে।</p>
+            </div>
+        `;
+    }
+    else if (page === "subject-routine") {
+        content = `
+            <h2>বিষয়ভিত্তিক রুটিন</h2>
+            <p>প্রতিটি বিষয়ের জন্য ক্লাস টাইম এবং শিক্ষকের তথ্য এখানে উপলব্ধ।</p>
+            <div style="margin-top: 20px; padding: 15px; border: 1px dashed #FFC107; border-radius: 8px; background-color: #fffde7;">
+                <p>বিষয়ভিত্তিক রুটিনের বিবরণ এখানে দেখাবে।</p>
+            </div>
+        `;
+    }
+    else if (page === "exam-routine") {
+        content = `
+            <h2>পরীক্ষার রুটিন</h2>
+            <p>আসন্ন পরীক্ষাগুলোর বিস্তারিত রুটিন এখানে প্রকাশ করা হবে।</p>
+            <div style="margin-top: 20px; padding: 15px; border: 1px dashed #F44336; border-radius: 8px; background-color: #ffebee;">
+                <p>বোর্ড পরীক্ষা, অর্ধ-বার্ষিক পরীক্ষা এবং অন্যান্য পরীক্ষার রুটিন এখানে পাওয়া যাবে।</p>
+            </div>
+        `;
+    }
     else {
         // অন্য যেকোনো মেনু আইডির জন্য জেনেরিক কনটেন্ট
         const formattedPage = page.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
