@@ -1,4 +1,3 @@
-
 // ✅ DOM এলিমেন্টগুলো সিলেক্ট করা
 const menuToggle = document.getElementById("menu-toggle"); // মেনু টগল বাটন
 const sidebar = document.getElementById("sidebar");       // সাইডবার
@@ -7,6 +6,7 @@ const mainContent = document.getElementById("main-content"); // মূল কন
 // ✅ মেনু টগল বাটন ক্লিক করলে সাইডবার খোলা/বন্ধ করা
 menuToggle.addEventListener("click", () => {
     sidebar.classList.toggle("open"); // 'open' ক্লাস যোগ/অপসারণ করে সাইডবার খোলে/বন্ধ করে
+    menuToggle.classList.toggle("open-menu"); // 'open-menu' ক্লাস যোগ/অপসারণ করে আইকন ঘোরায়
 });
 
 // ✅ সাইডবারের বাইরে ক্লিক করলে মেনু বন্ধ হবে
@@ -14,6 +14,7 @@ document.addEventListener("click", (event) => {
     // যদি ক্লিক সাইডবারের ভিতরে না হয় এবং টগল বাটনেও না হয়
     if (!sidebar.contains(event.target) && event.target !== menuToggle) {
         sidebar.classList.remove("open"); // সাইডবার বন্ধ করো
+        menuToggle.classList.remove("open-menu"); // আইকনের ঘোরানো বন্ধ করো
     }
 });
 
@@ -22,12 +23,12 @@ function toggleMenu(element) {
     const allMenuItems = document.querySelectorAll(".menu-item"); // সমস্ত মেনু আইটেম সিলেক্ট করো
 
     allMenuItems.forEach(item => {
-        // যদি বর্তমান ক্লিক করা আইটেমটি না হয় এবং তাতে 'active' ক্লাস থাকে
-        if (item !== element && item.classList.contains("active")) {
+        // যদি বর্তমান ক্লিক করা আইটেমটি না হয়
+        if (item !== element) {
             item.classList.remove("active"); // 'active' ক্লাস সরাও
             const submenu = item.querySelector(".submenu");
             if (submenu) {
-                submenu.style.display = "none"; // সাবমেনু লুকানো
+                submenu.classList.remove("open"); // সাবমেনুর 'open' ক্লাস সরাও (এনিমেশনের জন্য)
             }
         }
     });
@@ -35,9 +36,9 @@ function toggleMenu(element) {
     // বর্তমান ক্লিক করা মেনু আইটেমের সাবমেনু খুঁজে বের করো
     const submenu = element.querySelector(".submenu");
     if (submenu) {
-        const isVisible = submenu.style.display === "block"; // সাবমেনু কি দৃশ্যমান?
-        submenu.style.display = isVisible ? "none" : "block"; // যদি দৃশ্যমান হয়, লুকানো; না হলে দেখানো
-        element.classList.toggle("active", !isVisible); // 'active' ক্লাস যোগ/অপসারণ
+        // 'open' ক্লাস টগল করে সাবমেনু খোলা/বন্ধ করো (CSS ট্রানজিশন ব্যবহার করে)
+        submenu.classList.toggle("open");
+        element.classList.toggle("active"); // 'active' ক্লাস টগল করো
     }
 }
 
@@ -77,6 +78,7 @@ function loadContent(page) {
 
     mainContent.innerHTML = content; // মূল কনটেন্ট এরিয়াতে কনটেন্ট যোগ করো
     sidebar.classList.remove("open"); // কনটেন্ট লোড হওয়ার পর সাইডবার বন্ধ করো
+    menuToggle.classList.remove("open-menu"); // আইকনের ঘোরানো বন্ধ করো
 }
 
 // ✅ ড্যাশবোর্ড শিরোনামে ক্লিক করলে ড্যাশবোর্ডকে পূর্বাবস্থায় ফেরানো
@@ -85,9 +87,11 @@ function resetDashboard() {
         <h2>ড্যাশবোর্ডে স্বাগতম!</h2>
         <p>মেনু থেকে একটি অপশন সিলেক্ট করুন।</p>`;
     sidebar.classList.remove("open"); // সাইডবার বন্ধ করো
+    menuToggle.classList.remove("open-menu"); // আইকনের ঘোরানো বন্ধ করো
+
     // সমস্ত সাবমেনু বন্ধ করে দেওয়া
     document.querySelectorAll(".submenu").forEach(submenu => {
-        submenu.style.display = "none";
+        submenu.classList.remove("open");
     });
     // সমস্ত মেনু আইটেম থেকে 'active' ক্লাস সরানো
     document.querySelectorAll(".menu-item").forEach(item => {
