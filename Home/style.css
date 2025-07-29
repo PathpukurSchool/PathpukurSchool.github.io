@@ -1,129 +1,126 @@
 
-/* ✅ বেসিক রিসেট */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* ✅ হেডার ডিজাইন */
+/* Header Styling */
 .header {
   display: flex;
   align-items: center;
-  gap: 15px;
-  background: linear-gradient(to right, #004080, #0073e6);
-  color: white;
-  padding: 15px 20px;
+  background: linear-gradient(to right, #1d3557, #457b9d);
+  color: #f1faee;
+  padding: 10px 20px;
 }
-.logo {
-  width: 50px;
-  height: 50px;
+
+.school-logo {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
   background: white;
-  padding: 4px;
-  border-radius: 5px;
   border: 2px solid white;
+  object-fit: cover;
+  margin-right: 15px;
 }
+
 .school-name {
-  font-size: 24px;
+  font-size: 1.8em;
   font-weight: bold;
 }
 
-/* ✅ মেনু আইকন */
-#menu-toggle {
-  font-size: 28px;
-  padding: 8px;
+/* Menu Icon Styling */
+.menu-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e63946;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
   cursor: pointer;
-  background-color: #004080;
-  color: white;
-  position: absolute;
-  top: 90px;
-  left: 10px;
-  border-radius: 5px;
-  z-index: 1001;
-  transition: background 0.3s;
-}
-#menu-toggle:hover {
-  background-color: #0055aa;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-/* ✅ সাইডবার */
+.menu-toggle.active {
+  background-color: #a8dadc;
+  transform: rotate(90deg);
+}
+
+.bar {
+  width: 20px;
+  height: 3px;
+  background: white;
+  margin: 3px 0;
+  border-radius: 10px;
+}
+
+/* Sidebar Menu */
 .sidebar {
-  position: fixed;
-  top: 130px;
-  left: -260px;
   width: 250px;
-  height: 100%;
-  background-color: #003060;
+  background-color: #1d3557;
   color: white;
-  padding: 20px;
-  transition: all 0.4s ease;
-  z-index: 1000;
-}
-.sidebar.open {
+  height: 100vh;
+  overflow-y: auto;
+  position: absolute;
   left: 0;
-}
-.dashboard-title {
-  cursor: pointer;
-  font-size: 18px;
-  margin-bottom: 15px;
+  top: 70px;
+  padding-top: 10px;
 }
 
-/* ✅ মেনু আইটেম */
-.menu-item {
-  margin-bottom: 10px;
-  cursor: pointer;
-  font-weight: bold;
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu > li {
   position: relative;
 }
-.menu-item::after {
-  content: '\\25BC'; /* ▼ অ্যারো */
-  position: absolute;
-  right: 10px;
-  transition: transform 0.3s;
-}
-.menu-item.active::after {
-  transform: rotate(180deg); /* নিচের দিকে ঘোরে */
-}
-.menu-item:hover {
-  background-color: #004080;
-  padding-left: 5px;
+
+.menu a {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: white;
+  transition: background 0.3s;
 }
 
-/* ✅ সাবমেনু */
+.menu a:hover {
+  background: #457b9d;
+}
+
+/* Arrows */
+.arrow {
+  transition: transform 0.3s ease;
+}
+
+.has-submenu.open > a .arrow {
+  transform: rotate(90deg);
+}
+
+/* Submenu & Subsubmenu */
 .submenu {
-  list-style: none;
-  padding-left: 15px;
   display: none;
-  background-color: #002040;
-  border-left: 2px solid #0073e6;
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-.submenu li {
-  margin: 6px 0;
-  cursor: pointer;
-  font-weight: normal;
-}
-.submenu li:hover {
-  color: #ffdd57;
+  background-color: rgba(255, 255, 255, 0.08);
+  padding-left: 10px;
+  border-left: 3px solid #f1faee;
 }
 
-/* ✅ মূল কনটেন্ট এরিয়া */
-.main-content {
-  margin: 150px 20px 20px 20px;
+.subsubmenu {
+  display: none;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding-left: 15px;
+  border-left: 2px dashed #a8dadc;
+}
+
+/* Open states */
+.has-submenu.open > .submenu {
+  display: block;
+}
+
+.has-submenu.open > .submenu > .has-submenu.open > .subsubmenu {
+  display: block;
+}
+
+/* Main Content */
+.content {
+  margin-left: 270px;
   padding: 20px;
-  background-color: #f9f9f9;
-  min-height: 400px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* ✅ রেসপনসিভ ডিজাইন */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 200px;
-  }
-  #menu-toggle {
-    top: 100px;
-  }
 }
