@@ -5,20 +5,28 @@ const sidebar = document.getElementById("sidebar");       // সাইডবা�
 const mainContent = document.getElementById("main-content"); // মূল কনটেন্ট এরিয়া
 
 // ✅ মেনু টগল বাটন ক্লিক করলে সাইডবার খোলা/বন্ধ করা
-menuToggle.addEventListener("click", (event) => { // ইভেন্ট প্যারামিটার যোগ করা হয়েছে
+menuToggle.addEventListener("click", (event) => {
     event.stopPropagation(); // এই লাইনটি ইভেন্ট প্রোপাগেশন থামাবে
-    sidebar.classList.toggle("open"); // 'open' ক্লাস যোগ/অপসারণ করে সাইডবার খোলে/বন্ধ করে
-    menuToggle.classList.toggle("open-menu"); // 'open-menu' ক্লাস যোগ/অপসারণ করে আইকন ঘোরায়
+
+    // সাইডবার যদি খোলা থাকে তাহলে বন্ধ করবে, না হলে খুলবে
+    if (sidebar.classList.contains("open")) {
+        sidebar.classList.remove("open");
+        menuToggle.classList.remove("open-menu");
+    } else {
+        sidebar.classList.add("open");
+        menuToggle.classList.add("open-menu");
+    }
 });
 
 // ✅ সাইডবারের বাইরে ক্লিক করলে মেনু বন্ধ হবে
 document.addEventListener("click", (event) => {
     // যদি ক্লিক সাইডবারের ভিতরে না হয় এবং টগল বাটনেও না হয়
-    if (!sidebar.contains(event.target) && event.target !== menuToggle) {
+    if (!sidebar.contains(event.target) && event.target !== menuToggle && !menuToggle.contains(event.target)) {
         sidebar.classList.remove("open"); // সাইডবার বন্ধ করো
         menuToggle.classList.remove("open-menu"); // আইকনের ঘোরানো বন্ধ করো
     }
 });
+
 
 // ✅ মেনু আইটেম ক্লিক করলে সাবমেনু টগল করা এবং অন্য সাবমেনু বন্ধ করা
 function toggleMenu(element) {
