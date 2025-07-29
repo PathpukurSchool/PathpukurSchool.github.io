@@ -84,7 +84,7 @@ body {
     background: var(--text-color-light);
     padding: 5px;
     border-radius: 50%; /* লোগোকে গোলাকার করা হয়েছে */
-    border: 0.5px solid var(--text-color-light); /* বর্ডার */
+    border: 0px solid var(--text-color-light); /* বর্ডার */
     object-fit: contain;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     position: relative; /* z-index কাজ করার জন্য প্রয়োজন */
@@ -285,8 +285,8 @@ body {
         font-size: 22px;
     }
     .logo {
-        width: 45px;
-        height: 45px;
+        width: 40px;
+        height: 40px;
     }
     .school-name {
         font-size: 18px;
