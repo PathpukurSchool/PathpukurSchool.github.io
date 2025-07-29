@@ -53,7 +53,7 @@ body {
     font-size: 28px;
     padding: 10px;
     cursor: pointer;
-    background-color: var(--menu-toggle-bg);
+    background-color: var(--header-bg-end);
     color: var(--text-color-light);
     border-radius: 50%; /* গোল শেপ */
     border: 2px solid var(--text-color-light); /* বর্ডার */
@@ -79,8 +79,8 @@ body {
 
 /* ✅ স্কুল লোগো */
 .logo {
-    width: 55px;
-    height: 55px;
+    width: 65px;
+    height: 65px;
     background: var(--text-color-light);
     padding: 5px;
     border-radius: 50%; /* লোগোকে গোলাকার করা হয়েছে */
