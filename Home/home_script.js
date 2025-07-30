@@ -1,111 +1,634 @@
 
-// ✅ DOM এলিমেন্টগুলো সিলেক্ট করা
-const menuToggle = document.getElementById("menu-toggle"); // মেনু টগল বাটন
-const sidebar = document.getElementById("sidebar");       // সাইডবার
-const mainContent = document.getElementById("main-content"); // মূল কনটেন্ট এরিয়া
+let credentials = {};
+let masterCredential = {};
+let studentData = {}; // শিক্ষার্থীর ডেটা সংরক্ষণ করার জন্য
+let appConfig = {}; // config.json থেকে লোড করা ডেটা (আগের কোড থেকে)
 
-// ✅ URL গুলি config.json থেকে লোড করার জন্য একটি ভ্যারিয়েবল।
-// এটি গ্লোবাল স্কোপে রাখা হয়েছে যাতে অন্য ফাংশন থেকেও অ্যাক্সেস করা যায়।
-let appConfig = {};
+// ✅ শিক্ষকের জন্য নম্বর আপলোডের শেষ তারিখ এবং চলমান নোটিশের ডেটা
+// এই ডেটা আপনি চাইলে একটি JSON ফাইলে (যেমন teacher_notice.json) রাখতে পারেন এবং fetch করে লোড করতে পারেন।
+// আপাতত, আমি এটিকে সরাসরি কোডে সংজ্ঞায়িত করছি।
+const examDates = [
+    { text: "নম্বর আপলোডের শেষ তারিখ (প্রথম সাময়িক):", date: "১৫ এপ্রিল ২০২৪", color: "red", backgroundColor: "#ffe0b2" },
+    { text: "নম্বর আপলোডের শেষ তারিখ (দ্বিতীয় সাময়িক):", date: "১৫ আগস্ট ২০২৪", color: "#e65100", backgroundColor: "#fff3e0" },
+    { text: "নম্বর আপলোডের শেষ তারিখ (তৃতীয় সাময়িক):", date: "১৫ নভেম্বর ২০২৪", color: "#00796b", backgroundColor: "#e0f2f1" },
+    { text: "বিশেষ নোটিশ: সকল শিক্ষককে সময় মতো নম্বর আপলোড করার জন্য অনুরোধ করা হচ্ছে।", date: "", color: "#1a237e", backgroundColor: "#e8eaf6" },
+    { text: "ছুটির ঘোষণা: ঈদ উপলক্ষে স্কুল বন্ধ থাকবে ২৫-২৮ এপ্রিল।", date: "২৬ এপ্রিল ২০২৪", color: "#8e24aa", backgroundColor: "#f3e5f5" }
+];
 
-// ✅ config.json ফাইল লোড করার ফাংশন
+
+// মাস্টার লগইনের তথ্য লোড (masterConfig.json)
+async function getCredentials() {
+    try {
+        const response = await fetch('masterConfig.json');
+        if (!response.ok) {
+            throw new Error('Failed to load config');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching masterConfig:', error); // কনসোল লগ পরিবর্তন
+        return null;
+    }
+}
+
+// config.json ফাইল লোড করার ফাংশন (আগের script.js থেকে)
 async function loadConfig() {
     try {
-        // 'config.json' ফাইলটি ফেচ (fetch) করুন।
         const response = await fetch('config.json');
-        // যদি রেসপন্স ঠিক না থাকে (যেমন 404), তাহলে এরর থ্রো করুন।
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        // রেসপন্সটিকে JSON ফরম্যাটে পার্স করুন এবং appConfig ভ্যারিয়েবলে সংরক্ষণ করুন।
         appConfig = await response.json();
-        console.log("Configuration loaded successfully:", appConfig);
+        console.log("Application configuration loaded successfully:", appConfig);
     } catch (error) {
-        // কোনো এরর হলে কনসোলে লগ করুন এবং ইউজারকে জানান।
-        console.error("Failed to load configuration:", error);
+        console.error("Failed to load application configuration:", error);
         alert("Error loading application configuration. Please try again later.");
     }
 }
 
-// ✅ পেজ লোড হওয়ার সাথে সাথে কনফিগারেশন লোড করুন।
-// এটি নিশ্চিত করবে যে URL গুলি ব্যবহার করার আগে লোড হয়ে গেছে।
-document.addEventListener('DOMContentLoaded', loadConfig);
+
+// মাস্টার লগইন সাবমিট ফাংশন
+async function submitMasterLogin() {
+    const type = document.getElementById('loginType').value;
+    const id = document.getElementById('masterId').value.trim();
+    const pass = document.getElementById('masterPass').value.trim();
+    const errorDiv = document.getElementById('masterLoginError');
+    const successDiv = document.getElementById('masterLoginSuccess');
+
+    errorDiv.innerText = "";
+    successDiv.innerText = "";
+    successDiv.style.display = "none";
+
+    if (!type || !id || !pass) {
+        errorDiv.innerText = "Please select login type and fill ID & Password.";
+        return;
+    }
+
+    const allCredentials = await getCredentials(); // masterConfig.json থেকে ডেটা লোড
+
+    if (!allCredentials) {
+        errorDiv.innerText = "Unable to load login configuration.";
+        return;
+    }
+
+    const user = allCredentials[type.toLowerCase()];
+
+    if (user && id === user.id && pass === user.pass) {
+        sessionStorage.setItem("userType", type.toLowerCase());
+        sessionStorage.setItem("isLoggedIn", "true"); // একটি সাধারণ লগইন স্ট্যাটাস ফ্ল্যাগ
+
+        if (type.toLowerCase() === "student") {
+            sessionStorage.setItem("studentLoggedIn", "true");
+        }
+
+        successDiv.innerText = "✔️ Login Successful.";
+        successDiv.style.display = "block";
+
+        setTimeout(() => {
+            if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
+                window.location.href = user.redirect;
+            } else if (type.toLowerCase() === 'teacher') {
+                document.getElementById('masterLoginOverlay').style.display = "none";
+                loadTeacherExamLinks(); // শিক্ষকের লগইন সফল হলে শিক্ষক পরীক্ষার লিঙ্ক লোড করুন
+            }
+        }, 1000); // 1 সেকেন্ড পর রিডাইরেক্ট
+    } else {
+        errorDiv.innerText = "Incorrect ID or Password!";
+        errorDiv.style.color = "red";
+    }
+}
 
 
-// ✅ মেনু টগল বাটন ক্লিক করলে সাইডবার খোলা/বন্ধ করা
+let currentKey = ''; // সাব-লগইনের জন্য বর্তমানে নির্বাচিত পরীক্ষার কী
+
+// ✅ শিক্ষকের জন্য এক্সাম লিংক লোড (মাস্টার লগইন সফল হলে)
+function loadTeacherExamLinks() {
+    fetch('config.json') // শিক্ষকের ডেটার জন্য config.json ব্যবহার করা হচ্ছে
+        .then(response => response.json())
+        .then(data => {
+            credentials = data.classExamUrls || {}; // শুধুমাত্র classExamUrls অংশটি নেওয়া হচ্ছে
+            renderTeacherButtonsByClass();
+        })
+        .catch(error => console.error('Error loading config.json for teacher:', error));
+}
+
+
+// ✅ শিক্ষকের জন্য এক্সাম লিংক তৈরি ও দেখানো (প্রতিটি ক্লাসের জন্য আলাদা)
+function renderTeacherButtonsByClass() {
+    const classesOrder = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+    const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
+
+    classesOrder.forEach(cls => {
+        const classContainer = document.getElementById(`class-${cls}-exams`);
+        if (!classContainer) {
+            // console.warn(`Teacher: Container for Class ${cls} not found.`); // ড্যাশবোর্ডে না থাকলে ওয়ার্নিং এড়ানো
+            return;
+        }
+
+        const buttonsContainer = classContainer.querySelector('.exam-buttons-group');
+        if (!buttonsContainer) {
+            // console.warn(`Teacher: Buttons container inside Class ${cls} not found.`);
+            return;
+        }
+        buttonsContainer.innerHTML = '';
+
+        let hasButtons = false;
+
+        exams.forEach(exam => {
+            const key = `class${cls.toLowerCase()}${exam}`; // config.json এ কী ফরম্যাট 'class5firstterm' হলে
+            // অথবা যদি config.json এ আপনার কী ফরম্যাট `V_1ST` এরকম হয়: const key = `${cls}_${exam}`;
+            // আপনি আপনার config.json এর 'classExamUrls' এর কী অনুযায়ী এটি সেট করবেন।
+            // যেমন: config.json এ class5FirstTerm আছে, তাই এখানে সেইমতো চেক করতে হবে।
+
+            // যেহেতু config.json এ class5FirstTerm, class5SecondTerm এই ফরম্যাটে আছে, তাই সেই অনুযায়ী key তৈরি করছি।
+            let configKey;
+            switch(exam) {
+                case '1ST': configKey = `class${cls.toLowerCase()}FirstTerm`; break;
+                case '2ND': configKey = `class${cls.toLowerCase()}SecondTerm`; break;
+                case '3RD': configKey = `class${cls.toLowerCase()}ThirdTerm`; break;
+                case 'TEST': configKey = `class${cls.toLowerCase()}Test`; break; // যদি config.json এ থাকে
+                case 'SEM1': configKey = `class${cls.toLowerCase()}Sem1`; break; // যদি config.json এ থাকে
+                case 'SEM2': configKey = `class${cls.toLowerCase()}Sem2`; break; // যদি config.json এ থাকে
+                default: configKey = null;
+            }
+
+            if (configKey && credentials[configKey]) { // যদি এই নির্দিষ্ট পরীক্ষার জন্য ডেটা config.json-এ থাকে
+                hasButtons = true;
+                const button = document.createElement('button');
+                button.className = 'box-button exam-link';
+
+                let label = exam;
+                switch (exam) {
+                    case 'TEST': label = 'TEST EXAM'; break;
+                    case 'SEM1': label = 'SEMESTER I'; break;
+                    case 'SEM2': label = 'SEMESTER II'; break;
+                    case '1ST': label = '1ST EXAM'; break;
+                    case '2ND': label = '2ND EXAM'; break;
+                    case '3RD': label = '3RD EXAM'; break;
+                }
+
+                button.textContent = label;
+                // credentials[configKey].url কে সরাসরি ব্যবহার করা হবে
+                if (credentials[configKey].url && credentials[configKey].url.trim() !== '') {
+                    button.onclick = () => openLoginForTeacherExam(configKey); // URL থাকলে আইডি/পাসওয়ার্ড চাইবে
+                } else {
+                    button.onclick = () => showAvailableSoonMessage(configKey); // URL না থাকলে সরাসরি মেসেজ দেখাবে
+                    button.classList.add('disabled-exam-link');
+                }
+                buttonsContainer.appendChild(button);
+            }
+        });
+
+        if (!hasButtons) {
+            classContainer.style.display = 'none';
+        } else {
+            classContainer.style.display = 'block';
+        }
+    });
+}
+
+
+// প্রতিটি এক্সাম লিংকের জন্য সাব-লগইন (শিক্ষক)
+function openLoginForTeacherExam(key) { // ফাংশনের নাম পরিবর্তন করা হয়েছে যাতে শিক্ষক সাব-লগইন বোঝা যায়
+    currentKey = key;
+    document.getElementById('loginId').value = '';
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('loginError').innerText = '';
+    document.getElementById('loginDialog').showModal();
+}
+
+// সাব-লগইন বন্ধ
+function closeLogin() {
+    document.getElementById('loginDialog').close();
+}
+
+// সাব-লগইন যাচাই করে লিংক খোলা
+function submitLogin() {
+    const id = document.getElementById('loginId').value;
+    const pass = document.getElementById('loginPassword').value;
+
+    // credentials অবজেক্টের মধ্যে সঠিক কী দিয়ে অ্যাক্সেস করুন
+    const credential = credentials[currentKey]; // এটি teacher এর classExamUrls থেকে আসবে
+
+    if (credential && credential.id === id && credential.pass === pass) {
+        if (credential.url && credential.url.trim() !== '') {
+            window.open(credential.url, '_blank');
+            closeLogin();
+        } else {
+            closeLogin();
+            showAvailableSoonMessage(currentKey);
+        }
+    } else {
+        document.getElementById('loginError').innerText = 'Incorrect ID or Password!';
+    }
+}
+
+
+// "শীঘ্রই উপলব্ধ হবে" মেসেজ দেখানোর ফাংশন (শিক্ষক ও শিক্ষার্থীর জন্য)
+function showAvailableSoonMessage(key) {
+    const clsMatch = key.match(/class(v|vi|vii|viii|ix|x|xi|xii)/i); // ক্লাস নাম বের করার জন্য regex
+    let cls = '';
+    if (clsMatch) {
+        cls = clsMatch[1].toUpperCase(); // যেমন 'V'
+        if (cls === 'V') cls = 'V'; // Ensure V is uppercase
+        else if (cls === 'VI') cls = 'VI';
+        else if (cls === 'VII') cls = 'VII';
+        else if (cls === 'VIII') cls = 'VIII';
+        else if (cls === 'IX') cls = 'IX';
+        else if (cls === 'X') cls = 'X';
+        else if (cls === 'XI') cls = 'XI';
+        else if (cls === 'XII') cls = 'XII';
+    }
+
+    const specificClassContainer = document.getElementById(`class-${cls}-exams`);
+
+    if (!specificClassContainer) {
+        console.warn(`Container for class ${cls} not found for showing message.`);
+        return;
+    }
+
+    // সঠিক লেবেল পেতে getExamText ফাংশন ব্যবহার করুন।
+    // এখানে currentKey ফরম্যাট 'class5FirstTerm' এর বদলে 'V_1ST' ফরম্যাটে প্রয়োজন।
+    // তাই key থেকে পরীক্ষার অংশটা বের করে নিতে হবে।
+    let examPart = '';
+    if (key.includes('FirstTerm')) examPart = '1ST';
+    else if (key.includes('SecondTerm')) examPart = '2ND';
+    else if (key.includes('ThirdTerm')) examPart = '3RD';
+    else if (key.includes('Test')) examPart = 'TEST';
+    else if (key.includes('Sem1')) examPart = 'SEM1';
+    else if (key.includes('Sem2')) examPart = 'SEM2';
+
+    const targetText = getExamText(`${cls}_${examPart}`);
+
+    const links = specificClassContainer.getElementsByClassName('exam-link');
+
+    for (let link of links) {
+        if (link.textContent === targetText) {
+            const next = link.nextElementSibling;
+            if (next && next.classList.contains('avail-msg')) next.remove();
+
+            const msg = document.createElement('div');
+            msg.className = 'avail-msg';
+            msg.textContent = '🔔 Available Soon 🔔';
+
+            link.parentNode.insertBefore(msg, link.nextSibling);
+
+            setTimeout(() => {
+                msg.remove();
+            }, 3000);
+
+            break;
+        }
+    }
+}
+
+// পরীক্ষার টেক্সট ফেরত দেয় ('TEST EXAM', 'SEMESTER I', ...)
+function getExamText(key) {
+    const parts = key.split('_');
+    const exam = parts[1];
+
+    switch (exam) {
+        case 'TEST': return 'TEST EXAM';
+        case 'SEM1': return 'SEMESTER I';
+        case 'SEM2': return 'SEMESTER II';
+        case '1ST': return '1ST EXAM';
+        case '2ND': return '2ND EXAM';
+        case '3RD': return '3RD EXAM';
+        default: return exam; // fallback
+    }
+}
+
+
+// ✅ স্টুডেন্ট এক্সাম লিঙ্ক (পরীক্ষার ফলাফল) - ক্লাস অনুযায়ী রেন্ডার করা
+function loadStudentExamLinks() {
+    fetch('config_student.json') // config_student.json ফাইল লোড করুন
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            studentData = data;
+            renderStudentButtonsByClass();
+        })
+        .catch(error => {
+            console.error('কনফিগারেশন লোডে সমস্যা (শিক্ষার্থী):', error);
+        });
+}
+
+
+// ✅ শিক্ষার্থীর জন্য বাটন তৈরি ও দেখানো (প্রতিটি ক্লাসের জন্য আলাদা)
+function renderStudentButtonsByClass() {
+    const classesOrder = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+    classesOrder.forEach(cls => {
+        const classContainer = document.getElementById(`class-${cls}-exams`);
+        if (!classContainer) {
+            // console.warn(`Student: Container for Class ${cls} not found.`); // ড্যাশবোর্ডে না থাকলে ওয়ার্নিং এড়ানো
+            return;
+        }
+
+        const buttonsContainer = classContainer.querySelector('.exam-buttons-group');
+        if (!buttonsContainer) {
+            // console.warn(`Student: Buttons container inside Class ${cls} not found.`);
+            return;
+        }
+        buttonsContainer.innerHTML = '';
+
+        const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
+        let hasButtons = false;
+
+        exams.forEach(exam => {
+            const key = `${cls}_${exam}`;
+            if (studentData[key]) {
+                hasButtons = true;
+                const link = studentData[key].url;
+                const a = document.createElement('a');
+                a.className = 'box-button exam-link';
+                a.target = '_blank';
+
+                let label = exam;
+                if (exam === 'TEST') label = 'TEST EXAM';
+                else if (exam === 'SEM1') label = 'SEMESTER I';
+                else if (exam === 'SEM2') label = 'SEMESTER II';
+                else if (exam === '1ST') label = '1ST EXAM';
+                else if (exam === '2ND') label = '2ND EXAM';
+                else if (exam === '3RD') label = '3RD EXAM';
+                a.textContent = label;
+
+                if (link && link.trim() !== '') {
+                    a.href = link;
+                } else {
+                    a.href = '#';
+                    a.onclick = (e) => {
+                        e.preventDefault();
+                        const oldMsg = a.nextElementSibling;
+                        if (oldMsg && oldMsg.classList.contains('avail-msg')) {
+                            oldMsg.remove();
+                        }
+                        const msg = document.createElement('div');
+                        msg.className = 'avail-msg';
+                        msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
+                        a.parentNode.insertBefore(msg, a.nextSibling);
+                        setTimeout(() => {
+                            msg.remove();
+                        }, 3000);
+                    };
+                    a.classList.add('disabled-exam-link');
+                }
+                buttonsContainer.appendChild(a);
+            }
+        });
+
+        if (!hasButtons) {
+            classContainer.style.display = 'none';
+        } else {
+            classContainer.style.display = 'block';
+            if (!classContainer.querySelector('.box-heading')) {
+                const boxHeading = document.createElement('h2');
+                boxHeading.className = 'box-heading shine';
+                boxHeading.textContent = `CLASS ${cls} EXAMS`;
+                classContainer.prepend(boxHeading);
+            }
+            if (!classContainer.querySelector('.exam-buttons-group')) {
+                classContainer.appendChild(buttonsContainer);
+            }
+        }
+    });
+}
+
+
+// NOTICE & HELP লোড করা
+fetch('files.json')
+    .then(response => response.json())
+    .then(data => {
+        populateList('notice-list', data.notices);
+        populateList('help-list', data.help);
+    })
+    .catch(error => console.error('Error fetching files.json:', error));
+
+function populateList(elementId, items) {
+    const ul = document.getElementById(elementId);
+    if (!ul) {
+        // console.warn(`Element with ID ${elementId} not found.`); // ড্যাশবোর্ডে না থাকলে ওয়ার্নিং এড়ানো
+        return;
+    }
+    ul.innerHTML = '';
+    items.forEach(item => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = item.url;
+        a.textContent = `${item.name} (${item.date})`;
+        a.target = '_blank';
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
+}
+
+// ওয়েলকাম পপ আপের জাভাস্ক্রিপ্ট কোড
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('home_popup.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('নেটওয়ার্ক রেসপন্স ঠিক ছিল না ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const popupTitleElement = document.getElementById('popupTitle');
+            const popupMessageElement = document.getElementById('popupMessage');
+            const downloadButton = document.getElementById('downloadPopupButton');
+            const closeButton = document.getElementById('closePopupButton');
+            const welcomePopup = document.getElementById('websiteWelcomePopup');
+
+            if (popupTitleElement && data.popup_title) {
+                popupTitleElement.textContent = data.popup_title;
+            }
+
+            if (popupMessageElement && Array.isArray(data.popup_message)) {
+                popupMessageElement.innerHTML = '';
+                data.popup_message.forEach(paragraphText => {
+                    const p = document.createElement('p');
+                    p.textContent = paragraphText;
+                    popupMessageElement.appendChild(p);
+                });
+            } else if (popupMessageElement && typeof data.popup_message === 'string') {
+                popupMessageElement.innerHTML = data.popup_message;
+            }
+
+            if (welcomePopup) {
+                welcomePopup.style.display = 'flex';
+            }
+
+            if (closeButton) {
+                closeButton.addEventListener('click', closeWebsiteWelcomePopup);
+            }
+
+            if (downloadButton) {
+                downloadButton.addEventListener('click', () => {
+                    if (welcomePopup) {
+                        downloadPopupAsJpg(welcomePopup);
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error('পপ-আপ ডেটা লোড করতে সমস্যা হয়েছে:', error);
+        });
+});
+
+function closeWebsiteWelcomePopup() {
+    const welcomePopup = document.getElementById('websiteWelcomePopup');
+    if (welcomePopup) {
+        welcomePopup.style.display = 'none';
+    }
+}
+
+// downloadPopupAsJpg ফাংশনটি অপরিবর্তিত থাকবে
+async function downloadPopupAsJpg(popupElement) {
+    try {
+        const canvas = await html2canvas(popupElement);
+        const dataURL = canvas.toDataURL('image/jpeg');
+
+        const a = document.createElement('a');
+        a.href = dataURL;
+        a.download = 'popup_message.jpg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        closeWebsiteWelcomePopup();
+
+    } catch (error) {
+        console.error('পপ-আপ ডাউনলোড করতে সমস্যা:', error);
+    }
+}
+
+
+// DOMContentLoaded এর পরে সবকিছু লোড করুন
+document.addEventListener('DOMContentLoaded', () => {
+    // config.json লোড করা হচ্ছে
+    loadConfig();
+
+    const userType = sessionStorage.getItem("userType");
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn"); // নতুন ফ্ল্যাগ
+
+    // মারকিউ কন্টেন্ট লোড করা হচ্ছে
+    const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
+
+    if (examDatesMarquee) { // যদি marqee div টি HTML এ থাকে
+        examDates.forEach(exam => {
+            if (exam.date) {
+                const span = document.createElement("span");
+                span.textContent = `${exam.text} ${exam.date}, `;
+                span.style.color = exam.color;
+                span.style.fontWeight = "bold";
+
+                if (exam.backgroundColor) {
+                    span.style.backgroundColor = exam.backgroundColor;
+                }
+                examDatesMarquee.appendChild(span);
+            }
+        });
+
+        examDatesMarquee.addEventListener("mouseover", () => {
+            examDatesMarquee.classList.add("paused");
+        });
+        examDatesMarquee.addEventListener("mouseout", () => {
+            examDatesMarquee.classList.remove("paused");
+        });
+        examDatesMarquee.addEventListener("touchstart", () => {
+            examDatesMarquee.classList.add("paused");
+        });
+        examDatesMarquee.addEventListener("touchend", () => {
+            examDatesMarquee.classList.remove("paused");
+        });
+    }
+
+    // লগইন স্ট্যাটাস চেক এবং কন্টেন্ট লোড করা
+    // যদি userType 'teacher' বা 'student' হয় এবং isLoggedIn সত্য হয়
+    if (isLoggedIn === "true") {
+        document.getElementById('masterLoginOverlay').style.display = "none"; // লগইন ওভারলে লুকান
+        if (userType === 'teacher') {
+            loadTeacherExamLinks();
+        } else if (userType === 'student') {
+            loadStudentExamLinks();
+        }
+    } else {
+        // যদি লগইন না থাকে, তাহলে মাস্টার লগইন ওভারলে দেখান
+        const masterLoginOverlay = document.getElementById('masterLoginOverlay');
+        if (masterLoginOverlay) {
+            masterLoginOverlay.style.display = "flex";
+        }
+    }
+});
+
+
+// ✅ DOM এলিমেন্টগুলো সিলেক্ট করা (আগের script.js থেকে)
+const menuToggle = document.getElementById("menu-toggle");
+const sidebar = document.getElementById("sidebar");
+const mainContent = document.getElementById("main-content");
+
+// ✅ মেনু টগল বাটন ক্লিক করলে সাইডবার খোলা/বন্ধ করা (আগের script.js থেকে)
 menuToggle.addEventListener("click", (event) => {
-    event.preventDefault(); // ✅ পৃষ্ঠার রিলোড হওয়া বন্ধ করে
-    event.stopPropagation(); // ✅ এই লাইনটি ইভেন্ট প্রোপাগেশন থামাবে
+    event.preventDefault();
+    event.stopPropagation();
 
-    // সাইডবার যদি খোলা থাকে তাহলে বন্ধ করবে, না হলে খুলবে
     if (sidebar.classList.contains("open")) {
         sidebar.classList.remove("open");
         menuToggle.classList.remove("open-menu");
-        mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট
+        mainContent.style.marginLeft = "25px";
     } else {
         sidebar.classList.add("open");
         menuToggle.classList.add("open-menu");
-        mainContent.style.marginLeft = "280px"; // সাইডবার খুললে মূল কনটেন্টের মার্জিন সেট
+        mainContent.style.marginLeft = "280px";
     }
 });
 
-// ✅ সাইডবারের বাইরে ক্লিক করলে মেনু বন্ধ হবে
+// ✅ সাইডবারের বাইরে ক্লিক করলে মেনু বন্ধ হবে (আগের script.js থেকে)
 document.addEventListener("click", (event) => {
-    // যদি ক্লিক সাইডবারের ভিতরে না হয় এবং টগল বাটনেও না হয় (এবং টগল বাটন নিজে না হয়)
     if (!sidebar.contains(event.target) && event.target !== menuToggle && !menuToggle.contains(event.target)) {
-        sidebar.classList.remove("open"); // সাইডবার বন্ধ করো
-        menuToggle.classList.remove("open-menu"); // আইকনের ঘোরানো বন্ধ করো
-        mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট
+        sidebar.classList.remove("open");
+        menuToggle.classList.remove("open-menu");
+        mainContent.style.marginLeft = "25px";
     }
 });
 
-// ✅ মেনু আইটেম ক্লিক করলে সাবমেনু টগল করা এবং অন্য সাবমেনু বন্ধ করা
+// ✅ মেনু আইটেম ক্লিক করলে সাবমেনু টগল করা এবং অন্য সাবমেনু বন্ধ করা (আগের script.js থেকে)
 function toggleMenu(element) {
-    const allMenuItems = document.querySelectorAll(".menu-item"); // সমস্ত মেনু আইটেম সিলেক্ট করো
+    const allMenuItems = document.querySelectorAll(".menu-item");
 
     allMenuItems.forEach(item => {
-        // যদি বর্তমান ক্লিক করা আইটেমটি না হয়
         if (item !== element) {
-            item.classList.remove("active"); // 'active' ক্লাস সরাও
+            item.classList.remove("active");
             const submenu = item.querySelector(".submenu");
             if (submenu) {
-                submenu.classList.remove("open"); // সাবমেনুর 'open' ক্লাস সরাও (এনিমেশনের জন্য)
+                submenu.classList.remove("open");
             }
         }
     });
 
-    // বর্তমান ক্লিক করা মেনু আইটেমের সাবমেনু খুঁজে বের করো
     const submenu = element.querySelector(".submenu");
     if (submenu) {
-        // 'open' ক্লাস টoggle করে সাবমেনু খোলা/বন্ধ করো (CSS ট্রানজিশন ব্যবহার করে)
         submenu.classList.toggle("open");
-        element.classList.toggle("active"); // 'active' ক্লাস টoggle করো
+        element.classList.toggle("active");
     }
 }
 
-// ✅ loadContent(page) ফাংশন: এটি ড্যাশবোর্ডের মূল অংশে (main-content) নির্বাচিত বিষয়বস্তু লোড করে।
-// 'page' প্যারামিটারটি লোড করার জন্য নির্দিষ্ট বিষয়বস্তুর আইডি বা নাম।
-// ✅ যেহেতু এই ফাংশনে URL ব্যবহার করা হবে যা অ্যাসিঙ্ক্রোনাসভাবে লোড হয়, তাই এখানে একটি চেক যোগ করা হয়েছে।
+// ✅ loadContent(page) ফাংশন (আগের script.js থেকে)
 function loadContent(page) {
-    let content = ""; // 'content' ভ্যারিয়েবলটি লোড করার জন্য HTML স্ট্রিং সংরক্ষণ করবে।
+    let content = "";
 
-    // ✅ appConfig লোড হয়েছে কিনা তা নিশ্চিত করুন। যদি লোড না হয়ে থাকে, তাহলে ইউজারকে অপেক্ষা করতে বলুন।
     if (Object.keys(appConfig).length === 0) {
         mainContent.innerHTML = `<div style="text-align: center; padding: 50px;">
                                     <h3>কনফিগারেশন লোড হচ্ছে... অনুগ্রহ করে একটু অপেক্ষা করুন।</h3>
                                     <p>যদি লোড হতে বেশি সময় লাগে, তাহলে পৃষ্ঠাটি রিফ্রেশ করুন।</p>
                                 </div>`;
-        // কনফিগারেশন লোড হওয়ার পরে আবার ফাংশনটি চালানোর জন্য একটি ছোট ডিলে যোগ করা যেতে পারে।
-        // তবে, ব্যবহারকারীর ক্লিক করার আগে loadConfig() লোড হয়ে যাওয়া উচিত।
-        return; // কনফিগারেশন লোড না হলে ফাংশন এক্সিকিউশন বন্ধ করুন।
+        return;
     }
 
-    // বিভিন্ন 'page' আইডি অনুযায়ী শর্তসাপেক্ষে বিষয়বস্তু তৈরি করা হয়।
-    // প্রতিটি 'if/else if' ব্লক একটি নির্দিষ্ট মেনু আইটেমের জন্য কন্টেন্ট তৈরি করে।
-
-    // ✅ Class V Marks Upload
     if (page === "class5") {
-        // config.json থেকে Class V পরীক্ষার URL গুলি লোড করা হচ্ছে।
         const class5FirstTermUrl = appConfig.classExamUrls.class5FirstTerm || '#';
         const class5SecondTermUrl = appConfig.classExamUrls.class5SecondTerm || '#';
         const class5ThirdTermUrl = appConfig.classExamUrls.class5ThirdTerm || '#';
@@ -129,7 +652,6 @@ function loadContent(page) {
             </div>
         `;
     }
-    // অন্যান্য ক্লাস V থেকে VIII এর জন্য জেনেরিক কন্টেন্ট
     else if (['class6', 'class7', 'class8', 'class9', 'class10', 'class11', 'class12'].includes(page)) {
         const className = page.replace('class', 'Class ');
         content = `
@@ -159,9 +681,8 @@ function loadContent(page) {
             </div>
         `;
     }
-    // ✅ রুটিন সিস্টেমের কন্টেন্ট: URL গুলি appConfig অবজেক্ট থেকে নেওয়া হয়েছে।
     else if (page === "staff-routine") {
-        const staffRoutineUrl = appConfig.routineUrls.teacher || '#'; // যদি URL না পাওয়া যায়, তাহলে '#' ব্যবহার করুন।
+        const staffRoutineUrl = appConfig.routineUrls.teacher || '#';
         content = `
             <div class="shaded-info-box">
             <h2 class="shine">Staff Routine</h2>
@@ -255,7 +776,6 @@ function loadContent(page) {
         `;
     }
     else {
-        // যদি কোনো নির্দিষ্ট 'page' আইডি না মেলে, তাহলে একটি জেনেরিক কন্টেন্ট তৈরি হবে।
         const formattedPage = page.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         content = `
             <h2>${formattedPage}</h2>
@@ -271,17 +791,42 @@ function loadContent(page) {
         `;
     }
 
-    mainContent.innerHTML = content; // তৈরি করা HTML কন্টেন্টকে মূল ড্যাশবোর্ড এরিয়ায় (main-content) ইনজেক্ট করা হয়।
-    sidebar.classList.remove("open"); // কন্টেন্ট লোড হওয়ার পর সাইডবার স্বয়ংক্রিয়ভাবে বন্ধ করা হয়।
-    menuToggle.classList.remove("open-menu"); // মেনু টগল আইকনের অবস্থা রিসেট করা হয়।
-    mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট করা হয়।
+    mainContent.innerHTML = content;
+    sidebar.classList.remove("open");
+    menuToggle.classList.remove("open-menu");
+    mainContent.style.marginLeft = "25px";
 }
 
-// ✅ ড্যাশবোর্ড শিরোনামে ক্লিক করলে ড্যাশবোর্ডকে পূর্বাবস্থায় ফেরানো
+// ✅ ড্যাশবোর্ড শিরোনামে ক্লিক করলে ড্যাশবোর্ডকে পূর্বাবস্থায় ফেরানো (আগের script.js থেকে)
 function resetDashboard() {
     mainContent.innerHTML = `
+        <div class="marquee-container">
+            <div id="exam-dates-marquee-content" class="marquee-content">
+                </div>
+        </div>
         <h2>ড্যাশবোর্ডে স্বাগতম!</h2>
         <p>মেনু থেকে একটি অপশন সিলেক্ট করুন।</p>`;
+
+    // মারকিউ কন্টেন্ট পুনরায় লোড করা (যদি `resetDashboard` এর মাধ্যমে মারকিউ পরিষ্কার হয়ে যায়)
+    const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
+    if (examDatesMarquee) {
+        examDatesMarquee.innerHTML = ''; // কন্টেন্ট পরিষ্কার করুন
+        examDates.forEach(exam => {
+            if (exam.date) {
+                const span = document.createElement("span");
+                span.textContent = `${exam.text} ${exam.date}, `;
+                span.style.color = exam.color;
+                span.style.fontWeight = "bold";
+                if (exam.backgroundColor) {
+                    span.style.backgroundColor = exam.backgroundColor;
+                }
+                examDatesMarquee.appendChild(span);
+            }
+        });
+        // নিশ্চিত করুন অ্যানিমেশন পুনরায় শুরু হয়
+        examDatesMarquee.classList.remove("paused");
+    }
+
     sidebar.classList.remove("open");
     menuToggle.classList.remove("open-menu");
     mainContent.style.marginLeft = "25px";
