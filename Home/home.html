@@ -17,24 +17,42 @@
     <aside id="sidebar" class="sidebar">
         <h2 class="dashboard-title" onclick="resetDashboard()">ড্যাশবোর্ড</h2>
 
+
+        
         <div class="menu-item" onclick="toggleMenu(this)">
-            <div class="menu-item-header">Marks Upload</div>
+            <div class="menu-item-header">Marks Upload V to VIII</div>
             <ul class="submenu">
                 <li onclick="loadContent('class5')">Class V</li>
                 <li onclick="loadContent('class6')">Class VI</li>
                 <li onclick="loadContent('class7')">Class VII</li>
                 <li onclick="loadContent('class8')">Class VIII</li>
-                <li onclick="loadContent('class9')">Class IX</li>
-                <li onclick="loadContent('class10')">Class X</li>
-                <li onclick="loadContent('class11')">Class XI</li>
-                <li onclick="loadContent('class12')">Class XII</li>
             </ul>
         </div>
 
-        <div class="menu-item no-submenu" onclick="loadContent('notice')">Upload Student Notice</div>
+
+<div class="menu-item" onclick="toggleMenu(this)">
+            <div class="menu-item-header">Marks Upload IX & X</div>
+            <ul class="submenu">
+                <li onclick="loadContent('class9')">Class IX</li>
+                <li onclick="loadContent('class10')">Class X</li>
+            </ul>
+</div>
+
+
+<div class="menu-item" onclick="toggleMenu(this)">
+            <div class="menu-item-header">Marks Upload XI & XII</div>
+            <ul class="submenu">
+                <li onclick="loadContent('class11')">Class XI</li>
+                <li onclick="loadContent('class12')">Class XII</li>
+            </ul>
+</div>
+
+        
+        
+        
 
         <div class="menu-item" onclick="toggleMenu(this)">
-            <div class="menu-item-header">রুটিন সিস্টেম</div>
+            <div class="menu-item-header">Routine</div>
             <ul class="submenu">
                 <li onclick="loadContent('staff-routine')">Staff Routine</li>
                 <li onclick="loadContent('class-routine')">Class Routine</li>
@@ -60,6 +78,8 @@
                 <li onclick="loadContent('borrow-return')">ইস্যু/ফেরত</li>
             </ul>
         </div>
+
+        <div class="menu-item no-submenu" onclick="loadContent('notice')">Upload Student Notice</div>
 
         <div class="menu-item no-submenu" onclick="loadContent('contact-us')">যোগাযোগ</div>
 
