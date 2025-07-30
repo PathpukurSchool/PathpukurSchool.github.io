@@ -11,7 +11,7 @@
     <header class="header">
         <button id="menu-toggle" type="button" aria-label="মেনু টগল">☰</button>
         <img src="PHS-LOGO.png" alt="School Logo" class="logo" />
-        <h1 class="school-name">পথপুকুর হাই স্কুল</h1>
+        <h1 class="school-name">পাতপুকুর হাই স্কুল</h1>
     </header>
 
     <aside id="sidebar" class="sidebar">
@@ -36,37 +36,10 @@
         <div class="menu-item" onclick="toggleMenu(this)">
             <div class="menu-item-header">রুটিন সিস্টেম</div>
             <ul class="submenu">
-                <li>
-                    <div class="shaded-info-box">
-                        <h2 class="shine">Staff Routine</h2>
-                        <h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3>
-                        <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">VIEW STAFF ROUTINE</a>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="shaded-info-box">
-                        <h2 class="shine">Class Routine</h2>
-                        <h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3>
-                        <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student" target="_blank" class="exam-link">VIEW CLASS ROUTINE</a>
-                    </div>
-                </li>
-                
-                <li>
-                    <div class="shaded-info-box">
-                        <h2 class="shine">Subject Routine</h2>
-                        <h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3>
-                        <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>
-                    </div>
-                </li>
-                
-                <li>
-                    <div class="shaded-info-box">
-                        <h2 class="shine">School Exam Routine</h2>
-                        <h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3>
-                        <a href="https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>
-                    </div>
-                </li>
+                <li onclick="loadContent('staff-routine')">Staff Routine</li>
+                <li onclick="loadContent('class-routine')">Class Routine</li>
+                <li onclick="loadContent('subject-routine')">Subject Routine</li>
+                <li onclick="loadContent('school-exam-routine')">School Exam Routine</li>
             </ul>
         </div>
 
