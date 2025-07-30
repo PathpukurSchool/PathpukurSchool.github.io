@@ -388,3 +388,40 @@ body {
     background-color: #45a049; /* হোভারে হালকা সবুজ */
     transform: translateY(-2px); /* হালকা উপরে উঠবে */
 }
+
+/* home_style.css এ নতুন যোগ করা হয়েছে */
+
+.marquee-container {
+    background-color: #fffde7; /* হালকা হলুদ ব্যাকগ্রাউন্ড */
+    border: 1px solid #ffeb3b; /* হলুদ বর্ডার */
+    padding: 10px 0;
+    margin: 20px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.marquee-content {
+    display: inline-block;
+    padding-left: 100%; /* কন্টেন্ট স্ক্রিনের বাইরে থেকে আসা শুরু করবে */
+    animation: marquee 30s linear infinite; /* অ্যানিমেশন চালু করুন */
+}
+
+.marquee-content.paused {
+    animation-play-state: paused; /* হোভার করলে অ্যানিমেশন থামান */
+}
+
+.marquee-content span {
+    padding-right: 50px; /* প্রতিটি আইটেমের মধ্যে ফাঁকা স্থান */
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #4CAF50; /* ডিফল্ট টেক্সট কালার */
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+/* অন্যান্য CSS স্টাইল অপরিবর্তিত থাকবে */
