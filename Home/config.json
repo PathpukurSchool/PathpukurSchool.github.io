@@ -1,199 +1,123 @@
 
 {
-    "menuItems": [
-        {
-            "id": "dashboard",
-            "name": "Dashboard",
-            "emoji": "📊",
-            "roles": ["teacher", "student", "school"]
-        },
-        {
-            "id": "marksUploadVtoVIII",
-            "name": "Marks Upload V to VIII",
-            "emoji": "⬆️",
-            "roles": ["teacher", "school"],
-            "submenu": [
-                {
-                    "id": "classV",
-                    "name": "CLASS V",
-                    "emoji": "🚸",
-                    "subsubmenu": [
-                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "V_1ST" },
-                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "V_2ND" },
-                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "V_3RD" }
-                    ]
-                },
-                {
-                    "id": "classVI",
-                    "name": "CLASS VI",
-                    "emoji": "🎒",
-                    "subsubmenu": [
-                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VI_1ST" },
-                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VI_2ND" },
-                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VI_3RD" }
-                    ]
-                },
-                {
-                    "id": "classVII",
-                    "name": "CLASS VII",
-                    "emoji": "📚",
-                    "subsubmenu": [
-                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VII_1ST" },
-                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VII_2ND" },
-                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VII_3RD" }
-                    ]
-                },
-                {
-                    "id": "classVIII",
-                    "name": "CLASS VIII",
-                    "emoji": "🎓",
-                    "subsubmenu": [
-                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VIII_1ST" },
-                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VIII_2ND" },
-                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "VIII_3RD" }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "marksUploadIXandX",
-            "name": "Marks Upload IX & X",
-            "emoji": "📈",
-            "roles": ["teacher", "school"],
-            "submenu": [
-                {
-                    "id": "classIX",
-                    "name": "CLASS IX",
-                    "emoji": "🧑‍🎓",
-                    "subsubmenu": [
-                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "IX_1ST" },
-                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "IX_2ND" },
-                        { "name": "3rd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "IX_3RD" }
-                    ]
-                },
-                {
-                    "id": "classX",
-                    "name": "CLASS X",
-                    "emoji": "👨‍🎓",
-                    "subsubmenu": [
-                        { "name": "1st Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "X_1ST" },
-                        { "name": "2nd Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "X_2ND" },
-                        { "name": "Test Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "X_TEST" }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "marksUploadXIandXII",
-            "name": "Marks Upload XI & XII",
-            "emoji": "📊",
-            "roles": ["teacher", "school"],
-            "submenu": [
-                {
-                    "id": "classXI",
-                    "name": "CLASS XI",
-                    "emoji": "👩‍🎓",
-                    "subsubmenu": [
-                        { "name": "Semester I", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "XI_SEM1" },
-                        { "name": "Semester II", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "XI_SEM2" }
-                    ]
-                },
-                {
-                    "id": "classXII",
-                    "name": "CLASS XII",
-                    "emoji": "🧑‍🏫",
-                    "subsubmenu": [
-                        { "name": "Test Exam", "emoji": "📝", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "XII_TEST" }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "admissionTest",
-            "name": "Admission Test",
-            "emoji": "✍️",
-            "roles": ["teacher", "school"],
-            "submenu": [
-                { "name": "Upload Marks", "emoji": "📤", "action": "renderExamLinks", "urlSource": "examLinks", "urlKey": "AdmissionTest_UPLOAD" }
-            ]
-        },
-        {
-            "id": "noticeBoard",
-            "name": "Notice Board",
-            "emoji": "📢",
-            "roles": ["teacher", "student", "school"],
-            "submenu": [
-                { "name": "General Notice", "emoji": "📄", "urlSource": "notices", "urlKey": "generalNotice.url" }
-            ]
-        },
-        {
-            "id": "routine",
-            "name": "Routine",
-            "emoji": "📅",
-            "roles": ["teacher", "student", "school"],
-            "submenu": [
-                { "name": "Teacher Routine", "emoji": "🧑‍🏫", "urlSource": "routines", "urlKey": "teacherRoutine.url" },
-                { "name": "Class Routine", "emoji": "🏫", "urlSource": "routines", "urlKey": "classRoutine.url" },
-                { "name": "Subject Routine", "emoji": "📖", "urlSource": "routines", "urlKey": "subjectRoutine.url" },
-                { "name": "School Exam Routine", "emoji": "🗓️", "urlSource": "routines", "urlKey": "schoolExamRoutine.url" }
-            ]
-        },
-        {
-            "id": "studentList",
-            "name": "Student List",
-            "emoji": "🧑‍🎓",
-            "roles": ["teacher", "school"],
-            "submenu": [
-                { "name": "Search Student Info", "emoji": "🔍", "urlSource": "studentInfo", "urlKey": "searchStudentInfo.url" }
-            ]
-        },
-        {
-            "id": "uploadStudentNotice",
-            "name": "Upload Student Notice",
-            "emoji": "📤",
-            "roles": ["teacher", "school"],
-            "submenu": [
-                { "name": "Manage Student Notice", "emoji": "✍️", "urlSource": "uploadStudentNotice", "urlKey": "manageStudentNotice.url" }
-            ]
-        }
-    ],
-    "examLinks": {
-        "V_1ST": { "url": "https://script.google.com/macros/s/AKfycbwAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=class5_1st" },
-        "V_2ND": { "url": "https://script.google.com/macros/s/AKfycbwAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=class5_2nd" },
-        "V_3RD": { "url": "" },
-        "VI_1ST": { "url": "https://script.google.com/macros/s/AKfycbwAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=class6_1st" },
-        "VI_2ND": { "url": "" },
-        "VI_3RD": { "url": "" },
-        "VII_1ST": { "url": "" },
-        "VII_2ND": { "url": "" },
-        "VII_3RD": { "url": "" },
-        "VIII_1ST": { "url": "" },
-        "VIII_2ND": { "url": "" },
-        "VIII_3RD": { "url": "" },
-        "IX_1ST": { "url": "" },
-        "IX_2ND": { "url": "" },
-        "IX_3RD": { "url": "" },
-        "X_1ST": { "url": "" },
-        "X_2ND": { "url": "" },
-        "X_TEST": { "url": "" },
-        "XI_SEM1": { "url": "" },
-        "XI_SEM2": { "url": "" },
-        "XII_TEST": { "url": "" },
-        "AdmissionTest_UPLOAD": { "url": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=admission_upload" }
+  "V_1ST": {
+    "id": "V191816",
+    "pass": "White@Head99",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ESnjptIwCWNEuJWzlHOKsuMB5J28wLWxUb9P9sJdZVG6cA?e=55ArZJ"
+  },
+  "V_2ND": {
+    "id": "V191816",
+    "pass": "White@Head99",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EVWbJGU6QkNEv-FxkoXbT0YBX5HGSJXCBSx_Uumm5s7v3w?e=PNruEh"
+  },
+  "V_3RD": {
+    "id": "V191816",
+    "pass": "White@Head99",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EYX9PZLQMx9Igz7NFVQ7wAwBgpgMeqgFlZmYni2f6wFArg?e=Pt7e3A"
+  },
+  "VI_1ST": {
+    "id": "VI191816",
+    "pass": "Black&Sea77",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ER0B-GxPtLdIs1SVY2b6yPIBydQP_JQqOy94N_vP3v-IzQ?e=dZimBG"
+  },
+  "VI_2ND": {
+    "id": "VI191816",
+    "pass": "Black&Sea77",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EQydwrPUggZEvA0Q2TUKMQcBORdWEl18SKg_MImDya22HQ?e=zuccEO"
+  },
+  "VI_3RD": {
+    "id": "VI191816",
+    "pass": "Black&Sea77",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EZQTq1SZkfhEiO3lU6mxT70BqbeO6zX8FE27npK2gnlU6Q?e=VbWuQF"
+  },
+  "VII_1ST": {
+    "id": "VII191816",
+    "pass": "Blue&Book66",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EQvcYO6acbtHs4WAI_5oXLABUrAJRwxG-vB1Aj5aq91Avg?e=iqED3A"
+  },
+  "VII_2ND": {
+    "id": "VII191816",
+    "pass": "Blue&Book66",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ETEbkqFgpWpJkll9xJADRVoBAYu326_H55mB9rSN3He94g?e=SzPl63"
+  },
+  "VII_3RD": {
+    "id": "VII191816",
+    "pass": "Blue&Book66",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EcoJGiyxDqZJvhwN26_YVmsBa6ZNbO3j6juW7uTI-sSCuQ?e=PQvdDI"
+  },
+  "VIII_1ST": {
+    "id": "VIII191816",
+    "pass": "Green#Sky44",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EbrIrFPMf4hMhrarC-GRQzQBKAuaKRvaaEIXBL05FCF9PQ?e=jjjdvI"
+  },
+  "VIII_2ND": {
+    "id": "VIII191816",
+    "pass": "Green#Sky44",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/Edao7OFRvNNMpnfsJTJt8KwBQduwOGytaYtJ4IJny4SNeQ?e=1li0rw"
+  },
+  "VIII_3RD": {
+    "id": "VIII191816",
+    "pass": "Green#Sky44",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EadB-eE-PlJOvm2GZiet7UkBqi3SIddlqnWKK7yqYn5AoQ?e=iy3pzJ"
+  },
+  "IX_1ST": {
+    "id": "IX191816",
+    "pass": "Pink@Song11",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EWjWWnQWafBKuOq3bA4zZPkB3A6aHnR1lMIGZRtrrGN5zA?e=3Klnv8"
+  },
+  "IX_2ND": {
+    "id": "IX191816",
+    "pass": "Pink@Song11",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/Ebv7WTLe_t1NiS_uIrM5G30BBPeKYBTJcUPmqStjNBkgIw?e=pPRhWb"
+  },
+  "IX_3RD": {
+    "id": "IX191816",
+    "pass": "Pink@Song11",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EaH98cNGEPFOpTcuodZRYKMBTtk1sB1jxzH2tnP5r9QYUQ?e=rWI7nm"
+  },
+  "X_1ST": {
+    "id": "X191816",
+    "pass": "Red@Eye55",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EUz9bCpGbNNKt4WzYrDOlRwB7LsRKmQlx6tGy3FRu0CcVw?e=bJowKi"
+  },
+  "X_2ND": {
+    "id": "X191816",
+    "pass": "Red@Eye55",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ESShrap4xVBLl9Gc_fBut-EB4FP6YdXXZilh4Bvs-S9FAA?e=A2lbgz"
+  },
+  "X_TEST": {
+    "id": "X191816",
+    "pass": "Red@Eye55",
+    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EVrCFNjtDF1MtwSeum9oAJ8BXf4t5p7PLxjRjmYZ5Zkr0Q?e=wTWY84"
+  },
+  "XI_SEM1": {
+  "id": "",
+  "pass": "",
+  "url": ""
+},
+"XI_SEM2": {
+  "id": "",
+  "pass": "",
+  "url": ""
+},
+"XII_TEST": {
+  "id": "",
+  "pass": "",
+  "url": ""
+}
+
+}
+
+
+{
+    "routineUrls": {
+        "teacher": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher",
+        "student": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student",
+        "subject": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject",
+        "schoolExam": "https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec"
     },
-    "notices": {
-        "generalNotice": { "url": "https://example.com/notices/general.pdf" }
-    },
-    "routines": {
-        "teacherRoutine": { "url": "" },
-        "classRoutine": { "url": "" },
-        "subjectRoutine": { "url": "" },
-        "schoolExamRoutine": { "url": "" }
-    },
-    "studentInfo": {
-        "searchStudentInfo": { "url": "" }
-    },
-    "uploadStudentNotice": {
-        "manageStudentNotice": { "url": "" }
+    "otherUrls": {
+        "noticeUploadApi": "https://example.com/api/upload-notice"
+        // ভবিষ্যতে অন্য কোনো API URL এখানে যোগ করতে পারেন
     }
 }
