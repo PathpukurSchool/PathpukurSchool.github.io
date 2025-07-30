@@ -118,6 +118,6 @@
     },
     "otherUrls": {
         "noticeUploadApi": "https://example.com/api/upload-notice"
-        // ভবিষ্যতে অন্য কোনো API URL এখানে যোগ করতে পারেন
+    
     }
 }
