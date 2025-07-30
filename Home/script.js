@@ -49,9 +49,9 @@ function toggleMenu(element) {
     // বর্তমান ক্লিক করা মেনু আইটেমের সাবমেনু খুঁজে বের করো
     const submenu = element.querySelector(".submenu");
     if (submenu) {
-        // 'open' ক্লাস টগল করে সাবমেনু খোলা/বন্ধ করো (CSS ট্রানজিশন ব্যবহার করে)
+        // 'open' ক্লাস টoggle করে সাবমেনু খোলা/বন্ধ করো (CSS ট্রানজিশন ব্যবহার করে)
         submenu.classList.toggle("open");
-        element.classList.toggle("active"); // 'active' ক্লাস টগল করো
+        element.classList.toggle("active"); // 'active' ক্লাস টoggle করো
     }
 }
 
@@ -72,42 +72,47 @@ function loadContent(page) {
                 <button style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">নোটিশ আপলোড করুন</button>
             </div>
         `;
-    } else if (page === "teacher-routine") {
+    }
+    // ✅ রুটিন সিস্টেমের নতুন কন্টেন্ট
+    else if (page === "staff-routine") {
         content = `
-            <h2>শিক্ষক রুটিন</h2>
-            <p>এখানে শিক্ষক মণ্ডলীর দৈনিক, সাপ্তাহিক এবং মাসিক রুটিন প্রদর্শিত হবে।</p>
-            <div style="margin-top: 20px; padding: 15px; border: 1px dashed #4CAF50; border-radius: 8px; background-color: #e8f5e9;">
-                <p>এটি শিক্ষক রুটিনের জন্য নির্দিষ্ট তথ্য এবং টেবিল লোড করবে।</p>
+            <div class="shaded-info-box">
+            <h2 class="shine">Staff Routine</h2>
+            <h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3>
+            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">VIEW STAFF ROUTINE</a>
             </div>
         `;
     }
-    else if (page === "student-routine") {
+    else if (page === "class-routine") {
         content = `
-            <h2>শিক্ষার্থী রুটিন</h2>
-            <p>এখানে প্রতিটি শ্রেণীর শিক্ষার্থীদের বিস্তারিত রুটিন পাওয়া যাবে।</p>
-            <div style="margin-top: 20px; padding: 15px; border: 1px dashed #2196F3; border-radius: 8px; background-color: #e3f2fd;">
-                <p>এখানে শিক্ষার্থী রুটিনের তালিকা অথবা ডাউনলোডের লিঙ্ক থাকবে।</p>
+            <div class="shaded-info-box">
+            <h2 class="shine">Class Routine</h2>
+            <h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3>
+            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student" target="_blank" class="exam-link">VIEW CLASS ROUTINE</a>
             </div>
         `;
     }
     else if (page === "subject-routine") {
         content = `
-            <h2>বিষয়ভিত্তিক রুটিন</h2>
-            <p>প্রতিটি বিষয়ের জন্য ক্লাস টাইম এবং শিক্ষকের তথ্য এখানে উপলব্ধ।</p>
-            <div style="margin-top: 20px; padding: 15px; border: 1px dashed #FFC107; border-radius: 8px; background-color: #fffde7;">
-                <p>বিষয়ভিত্তিক রুটিনের বিবরণ এখানে দেখাবে।</p>
+            <div class="shaded-info-box">
+            <h2 class="shine">Subject Routine</h2>
+            <h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3>
+            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>
             </div>
         `;
     }
-    else if (page === "exam-routine") {
+    else if (page === "school-exam-routine") {
         content = `
-            <h2>পরীক্ষার রুটিন</h2>
-            <p>আসন্ন পরীক্ষাগুলোর বিস্তারিত রুটিন এখানে প্রকাশ করা হবে।</p>
-            <div style="margin-top: 20px; padding: 15px; border: 1px dashed #F44336; border-radius: 8px; background-color: #ffebee;">
-                <p>বোর্ড পরীক্ষা, অর্ধ-বার্ষিক পরীক্ষা এবং অন্যান্য পরীক্ষার রুটিন এখানে পাওয়া যাবে।</p>
+            <div class="shaded-info-box">
+            <h2 class="shine">School Exam Routine</h2>
+            <h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3>
+            <a href="https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>
             </div>
         `;
     }
+    // রুটিন সিস্টেমের আগের কন্টেন্ট (যদি থাকে) আর প্রয়োজন নেই, কারণ এখন নতুন ভাবে লোড হবে।
+    // এই ব্লকগুলো script.js থেকে সরিয়ে দিতে হবে: teacher-routine, student-routine, subject-routine, exam-routine
+
     else if (page === "student-report") {
         content = `
             <h2>Student Report</h2>
