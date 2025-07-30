@@ -34,47 +34,52 @@ document.addEventListener('DOMContentLoaded', loadConfig);
 
 // ✅ মেনু টগল বাটন ক্লিক করলে সাইডবার খোলা/বন্ধ করা
 menuToggle.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
+    event.preventDefault(); // ✅ পৃষ্ঠার রিলোড হওয়া বন্ধ করে
+    event.stopPropagation(); // ✅ এই লাইনটি ইভেন্ট প্রোপাগেশন থামাবে
 
+    // সাইডবার যদি খোলা থাকে তাহলে বন্ধ করবে, না হলে খুলবে
     if (sidebar.classList.contains("open")) {
         sidebar.classList.remove("open");
         menuToggle.classList.remove("open-menu");
-        mainContent.style.marginLeft = "25px";
+        mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট
     } else {
         sidebar.classList.add("open");
         menuToggle.classList.add("open-menu");
-        mainContent.style.marginLeft = "280px";
+        mainContent.style.marginLeft = "280px"; // সাইডবার খুললে মূল কনটেন্টের মার্জিন সেট
     }
 });
 
 // ✅ সাইডবারের বাইরে ক্লিক করলে মেনু বন্ধ হবে
 document.addEventListener("click", (event) => {
+    // যদি ক্লিক সাইডবারের ভিতরে না হয় এবং টগল বাটনেও না হয় (এবং টগল বাটন নিজে না হয়)
     if (!sidebar.contains(event.target) && event.target !== menuToggle && !menuToggle.contains(event.target)) {
-        sidebar.classList.remove("open");
-        menuToggle.classList.remove("open-menu");
-        mainContent.style.marginLeft = "25px";
+        sidebar.classList.remove("open"); // সাইডবার বন্ধ করো
+        menuToggle.classList.remove("open-menu"); // আইকনের ঘোরানো বন্ধ করো
+        mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট
     }
 });
 
 // ✅ মেনু আইটেম ক্লিক করলে সাবমেনু টগল করা এবং অন্য সাবমেনু বন্ধ করা
 function toggleMenu(element) {
-    const allMenuItems = document.querySelectorAll(".menu-item");
+    const allMenuItems = document.querySelectorAll(".menu-item"); // সমস্ত মেনু আইটেম সিলেক্ট করো
 
     allMenuItems.forEach(item => {
+        // যদি বর্তমান ক্লিক করা আইটেমটি না হয়
         if (item !== element) {
-            item.classList.remove("active");
+            item.classList.remove("active"); // 'active' ক্লাস সরাও
             const submenu = item.querySelector(".submenu");
             if (submenu) {
-                submenu.classList.remove("open");
+                submenu.classList.remove("open"); // সাবমেনুর 'open' ক্লাস সরাও (এনিমেশনের জন্য)
             }
         }
     });
 
+    // বর্তমান ক্লিক করা মেনু আইটেমের সাবমেনু খুঁজে বের করো
     const submenu = element.querySelector(".submenu");
     if (submenu) {
+        // 'open' ক্লাস টoggle করে সাবমেনু খোলা/বন্ধ করো (CSS ট্রানজিশন ব্যবহার করে)
         submenu.classList.toggle("open");
-        element.classList.toggle("active");
+        element.classList.toggle("active"); // 'active' ক্লাস টoggle করো
     }
 }
 
@@ -96,7 +101,52 @@ function loadContent(page) {
     }
 
     // বিভিন্ন 'page' আইডি অনুযায়ী শর্তসাপেক্ষে বিষয়বস্তু তৈরি করা হয়।
-    if (page === "notice") {
+    // প্রতিটি 'if/else if' ব্লক একটি নির্দিষ্ট মেনু আইটেমের জন্য কন্টেন্ট তৈরি করে।
+
+    // ✅ Class V Marks Upload
+    if (page === "class5") {
+        // config.json থেকে Class V পরীক্ষার URL গুলি লোড করা হচ্ছে।
+        const class5FirstTermUrl = appConfig.classExamUrls.class5FirstTerm || '#';
+        const class5SecondTermUrl = appConfig.classExamUrls.class5SecondTerm || '#';
+        const class5ThirdTermUrl = appConfig.classExamUrls.class5ThirdTerm || '#';
+
+        content = `
+            <div id="class-V-exams" class="class-container">
+                <h2>CLASS V EXAMS</h2>
+                <div class="exam-buttons-group">
+                    <a href="${class5FirstTermUrl}" target="_blank" class="exam-button">First Term Exam</a>
+                    <a href="${class5SecondTermUrl}" target="_blank" class="exam-button">Second Term Exam</a>
+                    <a href="${class5ThirdTermUrl}" target="_blank" class="exam-button">Third Term Exam</a>
+                </div>
+            </div>
+            <div style="margin-top: 20px; padding: 15px; border: 1px dashed #4CAF50; border-radius: 8px; background-color: #e8f5e9;">
+                <p>এখানে ক্লাস V এর মার্কস আপলোড করার জন্য ফর্ম অথবা নির্দেশাবলী থাকবে।</p>
+                <form style="margin-top: 15px;">
+                    <label for="class5MarksFile">মার্কস ফাইল আপলোড করুন (ক্লাস V):</label><br>
+                    <input type="file" id="class5MarksFile" name="class5MarksFile" accept=".csv, .xlsx" style="margin-top: 5px;"><br>
+                    <button type="submit" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">আপলোড করুন</button>
+                </form>
+            </div>
+        `;
+    }
+    // অন্যান্য ক্লাস V থেকে VIII এর জন্য জেনেরিক কন্টেন্ট
+    else if (['class6', 'class7', 'class8', 'class9', 'class10', 'class11', 'class12'].includes(page)) {
+        const className = page.replace('class', 'Class ');
+        content = `
+            <div class="class-container">
+                <h2>${className} Marks Upload</h2>
+                <p>এখানে ${className} এর জন্য মার্কস আপলোড করার ফর্ম বা নির্দেশাবলী থাকবে।</p>
+                <div style="margin-top: 20px; padding: 15px; border: 1px dashed #4CAF50; border-radius: 8px; background-color: #e8f5e9;">
+                    <form style="margin-top: 15px;">
+                        <label for="${page}MarksFile">মার্কস ফাইল আপলোড করুন (${className}):</label><br>
+                        <input type="file" id="${page}MarksFile" name="${page}MarksFile" accept=".csv, .xlsx" style="margin-top: 5px;"><br>
+                        <button type="submit" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">আপলোড করুন</button>
+                    </form>
+                </div>
+            </div>
+        `;
+    }
+    else if (page === "notice") {
         content = `
             <h2>শিক্ষার্থী নোটিশ আপলোড</h2>
             <p>এখানে নতুন নোটিশ আপলোড করার ফর্ম এবং অপশন থাকবে।</p>
@@ -150,7 +200,6 @@ function loadContent(page) {
             </div>
         `;
     }
-    // অন্যান্য মেনু আইটেমের জন্য কন্টেন্ট তৈরি - এখানে কোন URL ব্যবহার করা হচ্ছে না, তাই পরিবর্তন নেই।
     else if (page === "student-report") {
         content = `
             <h2>Student Report</h2>
@@ -206,6 +255,7 @@ function loadContent(page) {
         `;
     }
     else {
+        // যদি কোনো নির্দিষ্ট 'page' আইডি না মেলে, তাহলে একটি জেনেরিক কন্টেন্ট তৈরি হবে।
         const formattedPage = page.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         content = `
             <h2>${formattedPage}</h2>
@@ -221,10 +271,10 @@ function loadContent(page) {
         `;
     }
 
-    mainContent.innerHTML = content;
-    sidebar.classList.remove("open");
-    menuToggle.classList.remove("open-menu");
-    mainContent.style.marginLeft = "25px";
+    mainContent.innerHTML = content; // তৈরি করা HTML কন্টেন্টকে মূল ড্যাশবোর্ড এরিয়ায় (main-content) ইনজেক্ট করা হয়।
+    sidebar.classList.remove("open"); // কন্টেন্ট লোড হওয়ার পর সাইডবার স্বয়ংক্রিয়ভাবে বন্ধ করা হয়।
+    menuToggle.classList.remove("open-menu"); // মেনু টগল আইকনের অবস্থা রিসেট করা হয়।
+    mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট করা হয়।
 }
 
 // ✅ ড্যাশবোর্ড শিরোনামে ক্লিক করলে ড্যাশবোর্ডকে পূর্বাবস্থায় ফেরানো
