@@ -4,62 +4,98 @@ const menuToggle = document.getElementById("menu-toggle"); // মেনু ট�
 const sidebar = document.getElementById("sidebar");       // সাইডবার
 const mainContent = document.getElementById("main-content"); // মূল কনটেন্ট এরিয়া
 
+// ✅ URL গুলি config.json থেকে লোড করার জন্য একটি ভ্যারিয়েবল।
+// এটি গ্লোবাল স্কোপে রাখা হয়েছে যাতে অন্য ফাংশন থেকেও অ্যাক্সেস করা যায়।
+let appConfig = {};
+
+// ✅ config.json ফাইল লোড করার ফাংশন
+async function loadConfig() {
+    try {
+        // 'config.json' ফাইলটি ফেচ (fetch) করুন।
+        const response = await fetch('config.json');
+        // যদি রেসপন্স ঠিক না থাকে (যেমন 404), তাহলে এরর থ্রো করুন।
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        // রেসপন্সটিকে JSON ফরম্যাটে পার্স করুন এবং appConfig ভ্যারিয়েবলে সংরক্ষণ করুন।
+        appConfig = await response.json();
+        console.log("Configuration loaded successfully:", appConfig);
+    } catch (error) {
+        // কোনো এরর হলে কনসোলে লগ করুন এবং ইউজারকে জানান।
+        console.error("Failed to load configuration:", error);
+        alert("Error loading application configuration. Please try again later.");
+    }
+}
+
+// ✅ পেজ লোড হওয়ার সাথে সাথে কনফিগারেশন লোড করুন।
+// এটি নিশ্চিত করবে যে URL গুলি ব্যবহার করার আগে লোড হয়ে গেছে।
+document.addEventListener('DOMContentLoaded', loadConfig);
+
+
 // ✅ মেনু টগল বাটন ক্লিক করলে সাইডবার খোলা/বন্ধ করা
 menuToggle.addEventListener("click", (event) => {
-    event.preventDefault(); // ✅ পৃষ্ঠার রিলোড হওয়া বন্ধ করে
-    event.stopPropagation(); // ✅ এই লাইনটি ইভেন্ট প্রোপাগেশন থামাবে
+    event.preventDefault();
+    event.stopPropagation();
 
-    // সাইডবার যদি খোলা থাকে তাহলে বন্ধ করবে, না হলে খুলবে
     if (sidebar.classList.contains("open")) {
         sidebar.classList.remove("open");
         menuToggle.classList.remove("open-menu");
-        mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট
+        mainContent.style.marginLeft = "25px";
     } else {
         sidebar.classList.add("open");
         menuToggle.classList.add("open-menu");
-        mainContent.style.marginLeft = "280px"; // সাইডবার খুললে মূল কনটেন্টের মার্জিন সেট
+        mainContent.style.marginLeft = "280px";
     }
 });
 
 // ✅ সাইডবারের বাইরে ক্লিক করলে মেনু বন্ধ হবে
 document.addEventListener("click", (event) => {
-    // যদি ক্লিক সাইডবারের ভিতরে না হয় এবং টগল বাটনেও না হয় (এবং টগল বাটন নিজে না হয়)
     if (!sidebar.contains(event.target) && event.target !== menuToggle && !menuToggle.contains(event.target)) {
-        sidebar.classList.remove("open"); // সাইডবার বন্ধ করো
-        menuToggle.classList.remove("open-menu"); // আইকনের ঘোরানো বন্ধ করো
-        mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট
+        sidebar.classList.remove("open");
+        menuToggle.classList.remove("open-menu");
+        mainContent.style.marginLeft = "25px";
     }
 });
 
 // ✅ মেনু আইটেম ক্লিক করলে সাবমেনু টগল করা এবং অন্য সাবমেনু বন্ধ করা
 function toggleMenu(element) {
-    const allMenuItems = document.querySelectorAll(".menu-item"); // সমস্ত মেনু আইটেম সিলেক্ট করো
+    const allMenuItems = document.querySelectorAll(".menu-item");
 
     allMenuItems.forEach(item => {
-        // যদি বর্তমান ক্লিক করা আইটেমটি না হয়
         if (item !== element) {
-            item.classList.remove("active"); // 'active' ক্লাস সরাও
+            item.classList.remove("active");
             const submenu = item.querySelector(".submenu");
             if (submenu) {
-                submenu.classList.remove("open"); // সাবমেনুর 'open' ক্লাস সরাও (এনিমেশনের জন্য)
+                submenu.classList.remove("open");
             }
         }
     });
 
-    // বর্তমান ক্লিক করা মেনু আইটেমের সাবমেনু খুঁজে বের করো
     const submenu = element.querySelector(".submenu");
     if (submenu) {
-        // 'open' ক্লাস টoggle করে সাবমেনু খোলা/বন্ধ করো (CSS ট্রানজিশন ব্যবহার করে)
         submenu.classList.toggle("open");
-        element.classList.toggle("active"); // 'active' ক্লাস টoggle করো
+        element.classList.toggle("active");
     }
 }
 
-// ✅ মূল কনটেন্ট এরিয়ায় নতুন অংশ লোড করা
+// ✅ loadContent(page) ফাংশন: এটি ড্যাশবোর্ডের মূল অংশে (main-content) নির্বাচিত বিষয়বস্তু লোড করে।
+// 'page' প্যারামিটারটি লোড করার জন্য নির্দিষ্ট বিষয়বস্তুর আইডি বা নাম।
+// ✅ যেহেতু এই ফাংশনে URL ব্যবহার করা হবে যা অ্যাসিঙ্ক্রোনাসভাবে লোড হয়, তাই এখানে একটি চেক যোগ করা হয়েছে।
 function loadContent(page) {
-    let content = ""; // কনটেন্ট সংরক্ষণের জন্য ভ্যারিয়েবল
+    let content = ""; // 'content' ভ্যারিয়েবলটি লোড করার জন্য HTML স্ট্রিং সংরক্ষণ করবে।
 
-    // নির্বাচিত পেজের উপর ভিত্তি করে কনটেন্ট তৈরি করা
+    // ✅ appConfig লোড হয়েছে কিনা তা নিশ্চিত করুন। যদি লোড না হয়ে থাকে, তাহলে ইউজারকে অপেক্ষা করতে বলুন।
+    if (Object.keys(appConfig).length === 0) {
+        mainContent.innerHTML = `<div style="text-align: center; padding: 50px;">
+                                    <h3>কনফিগারেশন লোড হচ্ছে... অনুগ্রহ করে একটু অপেক্ষা করুন।</h3>
+                                    <p>যদি লোড হতে বেশি সময় লাগে, তাহলে পৃষ্ঠাটি রিফ্রেশ করুন।</p>
+                                </div>`;
+        // কনফিগারেশন লোড হওয়ার পরে আবার ফাংশনটি চালানোর জন্য একটি ছোট ডিলে যোগ করা যেতে পারে।
+        // তবে, ব্যবহারকারীর ক্লিক করার আগে loadConfig() লোড হয়ে যাওয়া উচিত।
+        return; // কনফিগারেশন লোড না হলে ফাংশন এক্সিকিউশন বন্ধ করুন।
+    }
+
+    // বিভিন্ন 'page' আইডি অনুযায়ী শর্তসাপেক্ষে বিষয়বস্তু তৈরি করা হয়।
     if (page === "notice") {
         content = `
             <h2>শিক্ষার্থী নোটিশ আপলোড</h2>
@@ -73,46 +109,48 @@ function loadContent(page) {
             </div>
         `;
     }
-    // ✅ রুটিন সিস্টেমের নতুন কন্টেন্ট
+    // ✅ রুটিন সিস্টেমের কন্টেন্ট: URL গুলি appConfig অবজেক্ট থেকে নেওয়া হয়েছে।
     else if (page === "staff-routine") {
+        const staffRoutineUrl = appConfig.routineUrls.teacher || '#'; // যদি URL না পাওয়া যায়, তাহলে '#' ব্যবহার করুন।
         content = `
             <div class="shaded-info-box">
             <h2 class="shine">Staff Routine</h2>
             <h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3>
-            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">VIEW STAFF ROUTINE</a>
+            <a href="${staffRoutineUrl}" target="_blank" class="exam-link">VIEW STAFF ROUTINE</a>
             </div>
         `;
     }
     else if (page === "class-routine") {
+        const classRoutineUrl = appConfig.routineUrls.student || '#';
         content = `
             <div class="shaded-info-box">
             <h2 class="shine">Class Routine</h2>
             <h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3>
-            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student" target="_blank" class="exam-link">VIEW CLASS ROUTINE</a>
+            <a href="${classRoutineUrl}" target="_blank" class="exam-link">VIEW CLASS ROUTINE</a>
             </div>
         `;
     }
     else if (page === "subject-routine") {
+        const subjectRoutineUrl = appConfig.routineUrls.subject || '#';
         content = `
             <div class="shaded-info-box">
             <h2 class="shine">Subject Routine</h2>
             <h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3>
-            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>
+            <a href="${subjectRoutineUrl}" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>
             </div>
         `;
     }
     else if (page === "school-exam-routine") {
+        const schoolExamRoutineUrl = appConfig.routineUrls.schoolExam || '#';
         content = `
             <div class="shaded-info-box">
             <h2 class="shine">School Exam Routine</h2>
             <h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3>
-            <a href="https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>
+            <a href="${schoolExamRoutineUrl}" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>
             </div>
         `;
     }
-    // রুটিন সিস্টেমের আগের কন্টেন্ট (যদি থাকে) আর প্রয়োজন নেই, কারণ এখন নতুন ভাবে লোড হবে।
-    // এই ব্লকগুলো script.js থেকে সরিয়ে দিতে হবে: teacher-routine, student-routine, subject-routine, exam-routine
-
+    // অন্যান্য মেনু আইটেমের জন্য কন্টেন্ট তৈরি - এখানে কোন URL ব্যবহার করা হচ্ছে না, তাই পরিবর্তন নেই।
     else if (page === "student-report") {
         content = `
             <h2>Student Report</h2>
@@ -168,7 +206,6 @@ function loadContent(page) {
         `;
     }
     else {
-        // অন্য যেকোনো মেনু আইডির জন্য জেনেরিক কনটেন্ট
         const formattedPage = page.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         content = `
             <h2>${formattedPage}</h2>
@@ -184,10 +221,10 @@ function loadContent(page) {
         `;
     }
 
-    mainContent.innerHTML = content; // মূল কনটেন্ট এরিয়াতে কনটেন্ট যোগ করো
-    sidebar.classList.remove("open"); // কনটেন্ট লোড হওয়ার পর সাইডবার বন্ধ করো
-    menuToggle.classList.remove("open-menu"); // আইকনের ঘোরানো বন্ধ করো
-    mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট
+    mainContent.innerHTML = content;
+    sidebar.classList.remove("open");
+    menuToggle.classList.remove("open-menu");
+    mainContent.style.marginLeft = "25px";
 }
 
 // ✅ ড্যাশবোর্ড শিরোনামে ক্লিক করলে ড্যাশবোর্ডকে পূর্বাবস্থায় ফেরানো
@@ -195,15 +232,13 @@ function resetDashboard() {
     mainContent.innerHTML = `
         <h2>ড্যাশবোর্ডে স্বাগতম!</h2>
         <p>মেনু থেকে একটি অপশন সিলেক্ট করুন।</p>`;
-    sidebar.classList.remove("open"); // সাইডবার বন্ধ করো
-    menuToggle.classList.remove("open-menu"); // আইকনের ঘোরানো বন্ধ করো
-    mainContent.style.marginLeft = "25px"; // সাইডবার বন্ধ হলে মূল কনটেন্টের মার্জিন রিসেট
+    sidebar.classList.remove("open");
+    menuToggle.classList.remove("open-menu");
+    mainContent.style.marginLeft = "25px";
 
-    // সমস্ত সাবমেনু বন্ধ করে দেওয়া
     document.querySelectorAll(".submenu").forEach(submenu => {
         submenu.classList.remove("open");
     });
-    // সমস্ত মেনু আইটেম থেকে 'active' ক্লাস সরানো
     document.querySelectorAll(".menu-item").forEach(item => {
         item.classList.remove("active");
     });
