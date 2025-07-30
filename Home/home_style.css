@@ -225,6 +225,7 @@ body {
     background-color: var(--light-bg);
     min-height: calc(100vh - 125px);
     border-radius: 12px;
+    text-align: center;
     box-shadow: 0 5px 20px var(--shadow-light);
     transition: margin-left 0.4s ease-in-out;
 }
