@@ -1,157 +1,511 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>PATHPUKUR HIGH SCHOOL (HS)</title>
+  <title>PATHPUKUR HIGH SCHOOL (HS)</title>
 
-    <script type="application/ld+json">
+  <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "School",
-    "name": "Pathpukur High School",
-    "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Vill: Pathpukur, PO: Bakultala Hat",
-        "addressLocality": "South 24 Parganas",
-        "addressRegion": "West Bengal",
-        "postalCode": "743338",
-        "addressCountry": "IN"
-    },
-    "telephone": "+91 3218248083",
-    "email": "pathpukur1954@gmail.com",
-    "url": "https://pathpukurschool.github.io/"
+  "@context": "https://schema.org",
+  "@type": "School",
+  "name": "Pathpukur High School",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Vill: Pathpukur, PO: Bakultala Hat",
+    "addressLocality": "South 24 Parganas",
+    "addressRegion": "West Bengal",
+    "postalCode": "743338",
+    "addressCountry": "IN"
+  },
+  "telephone": "+91 3218248083",
+  "email": "pathpukur1954@gmail.com",
+  "url": "https://pathpukurschool.github.io/"
 }
 </script>
 
-    <meta name="description" content="Pathpukur High School - A Government-Sponsored Higher Secondary School in South 24 Parganas, West Bengal. official website. Access teacher and student panels, view exam dates, results and notices.">
-    <meta name="keywords" content="Pathpukur High School, Pathpukur High School(H.S.), Pathpukur High School(HS), পাতপুকুর হাই স্কুল, পাতপুকুর স্কুল, পাত পুকুর হাই স্কুল, পাতপুকুর হাই স্কুল (উঃ মাঃ), Pathpukur School, pathpukurschool, Jaynagar school, Joynagar school, High School, Government School, Student Panel, Teacher Panel, Exam Link, School Notice">
-    <meta name="author" content="Pathpukur High School">
-    <meta name="robots" content="index, follow">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="description" content="Pathpukur High School - A Government-Sponsored Higher Secondary School in South 24 Parganas, West Bengal. official website. Access teacher and student panels, view exam dates, results and notices.">
+  <meta name="keywords" content="Pathpukur High School, Pathpukur High School(H.S.), Pathpukur High School(HS), পাতপুকুর হাই স্কুল, পাতপুকুর স্কুল, পাত পুকুর হাই স্কুল, পাতপুকুর হাই স্কুল (উঃ মাঃ), Pathpukur School, pathpukurschool, Jaynagar school, Joynagar school, High School, Government School, Student Panel, Teacher Panel, Exam Link, School Notice">
+  <meta name="author" content="Pathpukur High School">
+  <meta name="robots" content="index, follow">
+  <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-    <link rel="apple-touch-icon" href="PHS-LOGO.png">
-    <link rel="stylesheet" href="style.css">
-    <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
+  <link rel="apple-touch-icon" href="PHS-LOGO.png">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
-<body>
+  <body>
+    <!-- ✅ Welcome pop-up -->
     <div class="website-welcome-popup-overlay" id="websiteWelcomePopup">
-        <div class="website-welcome-popup-content">
-            <h2 id="popupTitle"></h2>
-            <div id="popupMessage"></div>
-            <div class="popup-actions">
-                <button id="downloadPopupButton" class="popup-action-btn download-btn">Download</button>
-                <button id="closePopupButton" class="popup-action-btn cancel-btn">Close</button>
-            </div>
+    <div class="website-welcome-popup-content">
+        <h2 id="popupTitle"></h2>
+        <div id="popupMessage">
+        </div>
+        <div class="popup-actions">
+            <button id="downloadPopupButton" class="popup-action-btn download-btn">Download</button>
+            <button id="closePopupButton" class="popup-action-btn cancel-btn">Close</button>
         </div>
     </div>
+</div>
 
     <div id="masterLoginOverlay">
         <div id="masterLoginBox">
-            <h2 class="red-text">Pathpukur High School</h2>
-            <h2 class="shine">Master Login</h2>
-            <select id="loginType">
-                <option value="teacher">Teacher Login</option>
-                <option value="student">Student Login</option>
-                <option value="school">Institution Login</option>
-            </select>
-            <br><br>
-            <input type="text" id="masterId" placeholder="Enter ID"><br><br>
-            <input type="password" id="masterPass" placeholder="Enter Password"><br>
-            <div id="masterLoginError" class="error"></div><br>
-            <div id="masterLoginSuccess" class="success" style="display: none;"></div>
-            <button onclick="submitMasterLogin()">LOGIN</button>
-        </div>
+   <h2 class="red-text">Pathpukur High School</h2>
+          <h2 class="shine">Master Login</h2>
+
+<select id="loginType">
+  <option value="teacher">Teacher Login</option>
+  <option value="student">Student Login</option>
+  <option value="school">Institution Login</option>
+</select>
+<br><br>
+
+<input type="text" id="masterId" placeholder="Enter ID"><br><br>
+<input type="password" id="masterPass" placeholder="Enter Password"><br>
+<div id="masterLoginError" class="error"></div><br>
+<div id="masterLoginSuccess" class="success" style="display: none;"></div>
+
+<button onclick="submitMasterLogin()">LOGIN</button>
+    </div>
     </div>
     
-    <img src="PHS-LOGO.png" alt="School Logo" class="logo">
-    <h1 class="school-name">PATHPUKUR HIGH SCHOOL (H.S.)</h1>
+<!--✅ মেন হেডিং -->  
+        <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+        <h1 class="school-name">PATHPUKUR HIGH SCHOOL (H.S.)</h1>
 
-    <div id="main-content">
-        <div class="section-heading-container">
-            <h2 class="section-heading">
-                <span class="emoji">🧾</span>
-                <span class="blink">Upload Student Exam Marks</span>
-            </h2>
-            <div class="wrapper">
-                <div class="static-text">
-                    Last date of marks submission
-                    <p>(Kindly submit all marks by due date)</p>
-                </div>
-                <div class="marquee-container">
-                    <div id="exam-dates-marquee-content" class="marquee-content"></div>
-                </div>
-            </div>
-            <h3 class="login-instruction-heading">Login to access the marks uploading link<span class="emoji">👇</span></h3>
-            <div id="exam-buttons-container"></div>
-            <dialog id="loginDialog">
-                <form method="dialog" onsubmit="return false">
-                    <div class="input-group">
-                        <img src="https://img.icons8.com/ios-filled/50/lock.png" alt="Lock">
-                        <input type="text" id="loginId" placeholder="ID">
-                    </div>
-                    <div class="input-group">
-                        <img src="https://img.icons8.com/ios-filled/50/key.png" alt="Key">
-                        <input type="password" id="loginPassword" placeholder="Password">
-                    </div>
-                    <div id="loginError" class="error"></div>
-                    <button onclick="submitLogin()">LOGIN</button>
-                    <button onclick="closeLogin()">CANCEL</button>
-                </form>
-            </dialog>
-        </div>
+    <!--✅ নম্বর আপলোড -->  
+<div class="section-heading-container">
+    <h2 class="section-heading">
+        <span class="emoji">🧾</span>
+        <span class="blink">Upload Student Exam Marks</span>
+    </h2>
+  <div class="wrapper">
+  <div class="static-text">
+    Last date of marks submission
+    <p>(Kindly submit all marks by due date)</p>
+  </div>
+    
+  <div class="marquee-container">
+    <div id="exam-dates-marquee-content" class="marquee-content"></div> </div>
+</div>
 
-        <div class="section-heading-container">
-            <h2 class="section-heading">
-                <span class="emoji">📋</span>
-                <span class="blink">General News & Notice Board</span>
-            </h2>
-            <div id="notice-board-marquee-content" class="marquee-content"></div>
-            <div id="notice-board"></div>
-            <div class="pagination">
-                <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-                <span id="pageNumber">Page 1</span>
-                <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
-            </div>
-            <div id="popupModal" style="display: none;" class="modal-overlay">
-                <div class="modal-content">
-                    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
-                    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
-                    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
-                    <div id="popupLinkArea" style="margin-top: 10px;"></div>
-                    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
-                </div>
-            </div>
-        </div>
-        
-        <div class="section-heading-container">
-            <h2 class="section-heading">
-                <span class="emoji">🏫</span>
-                <span class="blink">Routine & Student Information</span>
-            </h2>
-            <h3 class="login-instruction-heading">This is a draft timetable and should not be considered final. It may change as needed by the school.</h3>
-            <div id="routine-and-info-buttons-container"></div>
-        </div>
 
-        <div class="section-heading-container">
-            <h2 class="section-heading">
-                <span class="emoji">📝</span>
-                <span class="blink">Manage & Post Student Notice</span>
-            </h2>
-            <h3 class="login-instruction-heading">If you wish to upload a notice for students, please click the button below:<span class="emoji">👇</span></h3>
-            <div id="upload-notice-container"></div>
-        </div>
+<script src="teacher_dates.js"></script>
+<script>
+  // সংশোধিত ID ব্যবহার করা হয়েছে
+  const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
+
+  // Exam dates যুক্ত করা
+  examDates.forEach(exam => {
+    if (exam.date) {
+      const span = document.createElement("span");
+      span.textContent = `${exam.text} ${exam.date}, `;
+
+      // রং প্রয়োগ পুরো লাইনের জন্য
+      span.style.color = exam.color;
+      span.style.fontWeight = "bold";
+
+      if (exam.backgroundColor) {
+        span.style.backgroundColor = exam.backgroundColor;
+      }
+
+      examDatesMarquee.appendChild(span);
+    }
+  });
+
+  // Mouse hover করলে স্ক্রল থামানো
+  examDatesMarquee.addEventListener("mouseover", () => {
+    examDatesMarquee.classList.add("paused");
+  });
+  examDatesMarquee.addEventListener("mouseout", () => {
+    examDatesMarquee.classList.remove("paused");
+  });
+
+  // মোবাইলে touch করলে স্ক্রল থামানো
+  examDatesMarquee.addEventListener("touchstart", () => {
+    examDatesMarquee.classList.add("paused");
+  });
+  examDatesMarquee.addEventListener("touchend", () => {
+    examDatesMarquee.classList.remove("paused");
+  });
+</script>
+
+
+<h3 class="login-instruction-heading">Login to access the marks uploading link<span class="emoji">👇</span></h3>
+
+  <div id="exam-buttons"></div>
+    <dialog id="loginDialog">
+        <form method="dialog" onsubmit="return false">
+            <div class="input-group">
+                <img src="https://img.icons8.com/ios-filled/50/lock.png" alt="Lock">
+                <input type="text" id="loginId" placeholder="ID">
+            </div>
+            <div class="input-group">
+                <img src="https://img.icons8.com/ios-filled/50/key.png" alt="Key">
+                <input type="password" id="loginPassword" placeholder="Password">
+            </div>
+            <div id="loginError" class="error"></div>
+            <button onclick="submitLogin()">LOGIN</button>
+            <button onclick="closeLogin()">CANCEL</button>
+        </form>
+    </dialog>
+  </div>
+
+<!-- ✅ নোটিশ বোর্ড -->
+    <div class="section-heading-container">
+    <h2 class="section-heading">
+        <span class="emoji">📋</span>
+        <span class="blink">General News & Notice Board</span>
+    </h2>
+    <div id="notice-board-marquee-content" class="marquee-content"></div>
+<script src="teacher_notice.js"></script>
+  <script>
+  // সংশোধিত ID ব্যবহার করা হয়েছে
+  const noticeBoardMarquee = document.getElementById("notice-board-marquee-content"); // নতুন আইডি
+
+  if (Array.isArray(ScrollingNotices)) {
+    ScrollingNotices.forEach(notice => {
+      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
+      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
+
+      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
+      if (text.trim() !== "") {
+        const span = document.createElement("span");
+        span.textContent = `${date} - ${text}`;
+        span.style.color = notice.color || "black";
+        span.style.fontWeight = "bold";
+        span.style.marginRight = "30px";
+        noticeBoardMarquee.appendChild(span);
+      }
+    });
+  } else {
+    noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
+  }
+
+  // 🔁 Marquee pause on hover/touch
+  noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
+  noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
+  noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
+  noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
+</script>
+
+  <div id="notice-board"></div>
+  <div class="pagination">
+    <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+    <span id="pageNumber">Page 1</span>
+    <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+  </div>
+  <div id="popupModal" style="display: none;" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
+    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
+    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
+    <div id="popupLinkArea" style="margin-top: 10px;"></div>
+    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+  </div>
+</div>
+
+  <script src="notice.js"></script>
+  <script>
+    const noticesPerPage = 10;
+    let currentPage = 1;
+
+    function renderNoticeTable() {
+      const container = document.getElementById('notice-board');
+      container.innerHTML = "";
+
+      const start = (currentPage - 1) * noticesPerPage;
+      const end = start + noticesPerPage;
+      const paginatedNotices = TableNotices.slice(start, end);
+
+      const table = document.createElement('table');
+      table.id = 'notice-table';
+
+      const thead = document.createElement('thead');
+      thead.innerHTML = `
+        <tr>
+          <th>তারিখ</th>
+          <th>বিষয়বস্তু</th>
+          <th>বিজ্ঞপ্তি</th>
+        </tr>
+      `;
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      paginatedNotices.forEach(notice => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${notice.date}</td>
+          <td style="color: ${notice.color || '#000'};">${notice.text}</td>
+<td>
+  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')"
+           onmouseover="this.style.opacity=0.8"
+           onmouseout="this.style.opacity=1">
+    View
+  </button>
+</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      container.appendChild(table);
+
+      const totalPages = Math.ceil(TableNotices.length / noticesPerPage);
+      document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
+      document.getElementById('prevBtn').disabled = currentPage === 1;
+      document.getElementById('nextBtn').disabled = currentPage === totalPages;
+    }
+
+    function nextPage() {
+      if (currentPage < Math.ceil(TableNotices.length / noticesPerPage)) {
+        currentPage++;
+        renderNoticeTable();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderNoticeTable();
+      }
+    }
+
+    // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
+    renderNoticeTable();
+  </script>
+
+<script>
+  window.onload = () => {
+    // loadStudentExamLinks() ফাংশনটি সংজ্ঞায়িত নয়, তাই এরর এড়াতে এটিকে কমেন্ট করা হয়েছে।
+    // আপনার script.js ফাইলে loadExamLinks() ফাংশন থাকতে পারে।
+    // loadStudentExamLinks();
+    renderNoticeTable();      // টেবিল নোটিশ লোড
+  };
+</script>
+
+  <script> // Student Table Notice popup handle
+  function showPopup(titleText, date, link, subjText) {
+  // পপ-আপ কনটেইনার তৈরি
+  const popup = document.createElement('div');
+  popup.style.position = 'fixed';
+  popup.style.top = '50%';
+  popup.style.left = '50%';
+  popup.style.transform = 'translate(-50%, -50%)';
+  popup.style.background = '#f0f8ff'; // হালকা নীল
+  popup.style.padding = '20px';
+  popup.style.margin = '0 auto';        // সেন্টারে রাখবে
+  popup.style.border = '2px solid #333';
+  popup.style.borderRadius = '10px';
+  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+  popup.style.zIndex = '9999';
+  popup.style.textAlign = 'center';
+  popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
+  popup.style.minWidth = '240px'; // খুব ছোট না হয়
+  popup.style.width = '300px'; // সর্বোচ্চ চওড়া
+  popup.style.fontFamily = 'Arial, sans-serif';
+  // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
+  const titleElem = document.createElement('div');
+  titleElem.innerText = titleText;
+  titleElem.style.backgroundColor = 'green';
+  titleElem.style.color = 'white';
+  titleElem.style.fontWeight = 'bold';
+  titleElem.style.fontSize = '15px';
+  titleElem.style.padding = '10px';
+  titleElem.style.borderRadius = '5px';
+  titleElem.style.marginBottom = '15px';
+  popup.appendChild(titleElem);
+
+  // তারিখ (Date)
+  const dateElem = document.createElement('div');
+  dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+  dateElem.style.marginBottom = '10px';
+  popup.appendChild(dateElem);
+
+  // subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
+  if (subjText && subjText.trim() !== '') {
+    const subjElem = document.createElement('div');
+    subjElem.innerText = subjText;
+    subjElem.style.color = 'darkgreen';
+    subjElem.style.backgroundColor = '#e6ffe6'; // হালকা সবুজ
+    subjElem.style.fontWeight = 'bold';
+    subjElem.style.fontSize = '14px';
+    subjElem.style.padding = '6px';
+    subjElem.style.borderRadius = '4px';
+    subjElem.style.marginBottom = '12px';
+    popup.appendChild(subjElem);
+  }
+// বোতাম কন্টেইনার
+const buttonContainer = document.createElement('div');
+buttonContainer.style.marginTop = '20px';
+buttonContainer.style.display = 'flex';
+buttonContainer.style.flexWrap = 'wrap';
+buttonContainer.style.justifyContent = 'center';
+buttonContainer.style.gap = '20px'; // বোতামের মাঝে দূরত্ব
+
+// ফাইল খুলুন বোতাম লিঙ্ক থাকলে তা দেখাও
+if (link && link.trim() !== '') {
+  const linkBtn = document.createElement('a');
+  linkBtn.href = link;
+  linkBtn.innerText = 'Open Link';
+  linkBtn.target = '_blank';
+  linkBtn.style.backgroundColor = '#007bff';
+  linkBtn.style.color = 'white';
+  linkBtn.style.padding = '10px 16px';
+  linkBtn.style.border = 'none';
+  linkBtn.style.borderRadius = '5px';
+  linkBtn.style.textDecoration = 'none';
+  linkBtn.style.fontWeight = 'bold';
+  linkBtn.style.fontSize = '12px'; // ছোট ফন্ট
+  linkBtn.style.transition = 'background-color 0.3s';
+  linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+  linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+  buttonContainer.appendChild(linkBtn);
+}
+
+// ✅ PNG Download Button (fixed) যোগ করা হয়েছে
+    const downloadBtn = document.createElement('button');
+    downloadBtn.innerText = 'Download';
+    downloadBtn.style.backgroundColor = '#28a745';
+    downloadBtn.style.color = 'white';
+    downloadBtn.style.padding = '6px 10px';
+    downloadBtn.style.border = 'none';
+    downloadBtn.style.borderRadius = '5px';
+    downloadBtn.style.fontWeight = 'bold';
+    downloadBtn.style.fontSize = '12px'; // ছোট ফন্ট
+    downloadBtn.style.cursor = 'pointer';
+    downloadBtn.onclick = () => {
+        // Ensure reflow before capturing
+        setTimeout(() => {
+            html2canvas(popup).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'notice.png';
+                link.click();
+            });
+        }, 100); // slight delay for reflow
+    };
+    buttonContainer.appendChild(downloadBtn);
+
+// বন্ধ করুন বোতাম
+const closeBtn = document.createElement('button');
+closeBtn.innerText = 'Back';
+closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.style.color = 'white';
+closeBtn.style.padding = '6px 10px';
+closeBtn.style.border = 'none';
+closeBtn.style.borderRadius = '5px';
+closeBtn.style.fontWeight = 'bold';
+closeBtn.style.fontSize = '12px'; // ছোট ফন্ট
+closeBtn.style.cursor = 'pointer';
+closeBtn.style.transition = 'background-color 0.3s';
+closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
+closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.onclick = () => document.body.removeChild(popup);
+buttonContainer.appendChild(closeBtn);
+
+// পপআপে বোতাম কন্টেইনার যোগ করুন
+popup.appendChild(buttonContainer);
+
+  // স্ক্রিনে দেখাও
+  document.body.appendChild(popup);
+}
+
+function closeModal() {
+  document.getElementById('popupModal').style.display = 'none';
+}
+</script>
     </div>
+    
+<!-- ✅ স্কুল রুটিন ও স্টুডেন্ট ইনফমেশন --->
+  <div class="section-heading-container">
+        <h2 class="section-heading">
+            <span class="emoji">🏫</span>
+            <span class="blink">Routine & Student Information</span>
+        </h2>
+    <h3 class="login-instruction-heading">This is a draft timetable and should not be considered final. It may change as needed by the school.</h3>
+    <div id="exam-buttons">
+      
+    <!-- ✅ টিচার রুটিন -->
+    <div class="shaded-info-box">
+    <h2 class="shine">Staff Routine</h2>
+    <h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3>
+    <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">VIEW STAFF ROUTINE</a>
+    </div>
+
+    <!-- ✅ স্টুডেন্ট রুটিন -->
+    <div class="shaded-info-box">
+    <h2 class="shine">Class Routine</h2>
+    <h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3>
+    <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student" target="_blank" class="exam-link">VIEW CLASS ROUTINE</a>
+    </div>
+    
+    <!-- ✅ সাবজেক্ট রুটিন -->
+      <div class="shaded-info-box">
+      <h2 class="shine">Subject Routine</h2>
+      <h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3>
+      <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>
+      </div>
+    
+     <!-- ✅ আন্ত: বিদ্যালয় পরীক্ষার রুটিন -->
+      <div class="shaded-info-box">
+      <h2 class="shine">School Exam Routine</h2>
+      <h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3>
+      <a href="https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>
+      </div>
+
+      <!-- ✅ সর্চেবল স্টুডেন্ট লিস্ট/ডাটা -->
+    <div class="shaded-info-box">
+    <h2 class="shine">Student Information</h2>
+    <h3 class="login-instruction-heading">To view student information or search the student database, please click the button below:<span class="emoji">👇</span></h3>
+    <a href="https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
+    </div>
+      </div>
+      </div>
+    
+ <!-- ✅ আপলোড স্টুডেন্ট নোটিশ -->   
+<div class="section-heading-container">
+    <h2 class="section-heading">
+        <span class="emoji">📝</span>
+        <span class="blink">Manage & Post Student Notice</span>
+    </h2>
+  <h3 class="login-instruction-heading">If you wish to upload a notice for students, please click the button below:<span class="emoji">👇</span></h3>
+
+  
+     <!-- Available Soon! এই কোড এক্টিভ করতে হলে -->
+    <div style="
+    border: 2px solid #ff9999;
+    background-color: #ffe6e6;
+    color: #cc0000;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 300px;
+    margin: 0 auto;
+  ">
+    <strong> Available Soon! </strong><br> Please check back later for updates.
+    </div>
+
+
+
+        <a href="upload_student_notice.html" target="_blank" class="exam-link">UPLOAD STUDENT NOTICE</a>
+</div>
+
     
     <footer>
-        <p><strong>School Name:</strong> Pathpukur High School (HS)</p>
-        <p><strong>Address:</strong> Vill: Pathpukur, PO: Bakultala Hat, Dist: South 24 Parganas, Pin: 743338, West Bengal</p>
-        <p><strong>Phone:</strong> +91 3218248083</p>
-        <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
+  <p><strong>School Name:</strong> Pathpukur High School (HS)</p>
+  <p><strong>Address:</strong> Vill: Pathpukur, PO: Bakultala Hat, Dist: South 24 Parganas, Pin: 743338, West Bengal</p>
+  <p><strong>Phone:</strong> +91 3218248083</p>
+  <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
     </footer>
 
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
