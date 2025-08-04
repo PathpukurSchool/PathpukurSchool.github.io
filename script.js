@@ -1,4 +1,3 @@
-
 let credentials = {};
 let masterCredential = {};
 
@@ -86,7 +85,6 @@ function renderButtons() {
     mainContainer.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করা
 
     // ইউনিক ক্লাস তালিকা তৈরি
-    // এখানে প্রতিটি 'cls' হবে 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'
     const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
 
     // ক্লাসগুলিকে একটি নির্দিষ্ট ক্রমে সাজানো যাতে V, VI, VII... XII পর্যন্ত আসে
@@ -130,14 +128,13 @@ function renderButtons() {
                     case 'SEM2':
                         label = 'SEMESTER II';
                         break;
-                    // '1ST', '2ND', '3RD' লেবেলগুলো অপরিবর্তিত থাকবে
                 }
                 
                 button.textContent = label;
                 // যদি URL না থাকে অথবা URL খালি হয়, তাহলে সরাসরি 'showAvailableSoonMessage' কল করব
-                // অন্যথায়, আইডি/পাসওয়ার্ড লগইন ডায়ালগ খুলব
+                // অন্যথায়, সরাসরি লিংক খুলব
                 if (credentials[key].url && credentials[key].url.trim() !== '') {
-                    button.onclick = () => openLogin(key); // URL থাকলে আইডি/পাসওয়ার্ড চাইবে
+                    button.onclick = () => window.open(credentials[key].url, '_blank');
                 } else {
                     button.onclick = () => showAvailableSoonMessage(key); // URL না থাকলে সরাসরি মেসেজ দেখাবে
                     button.classList.add('disabled-exam-link'); // ঐচ্ছিক: বোতামটি নিষ্প্রভ করতে একটি ক্লাস যোগ করুন
@@ -152,40 +149,6 @@ function renderButtons() {
             mainContainer.appendChild(classBox); // ক্লাস বক্সকে মূল কন্টেইনারে যোগ করা
         }
     });
-}
-
-// প্রতিটি এক্সাম লিংকের জন্য সাব-লগইন
-function openLogin(key) {
-    currentKey = key;
-    document.getElementById('loginId').value = '';
-    document.getElementById('loginPassword').value = '';
-    document.getElementById('loginError').innerText = '';
-    document.getElementById('loginDialog').showModal();
-}
-
-// সাব-লগইন বন্ধ
-function closeLogin() {
-    document.getElementById('loginDialog').close();
-}
-
-// সাব-লগইন যাচাই করে লিংক খোলা
-function submitLogin() {
-    const id = document.getElementById('loginId').value;
-    const pass = document.getElementById('loginPassword').value;
-    const credential = credentials[currentKey];
-
-    if (credential && credential.id === id && credential.pass === pass) {
-        if (credential.url && credential.url.trim() !== '') {
-            window.open(credential.url, '_blank');
-            closeLogin();
-        } else {
-            // শীঘ্রই উপলব্ধ হবে মেসেজ দেখানো
-            closeLogin(); // ডায়ালগ বন্ধ করব
-            showAvailableSoonMessage(currentKey); // বার্তা দেখাব
-        }
-    } else {
-        document.getElementById('loginError').innerText = 'Incorrect ID or Password!';
-    }
 }
 
 function showAvailableSoonMessage(key) {
@@ -214,7 +177,7 @@ function showAvailableSoonMessage(key) {
     }
 }
 
-// পরীক্ষার টেক্সট ফেরত দেয় ('TEST EXAM', 'SEMESTER I', ...)
+// পরীক্ষার টেক্সট ফেরত দেয় ('TEST EXAM', 'SEMESTER I', ...)
 function getExamText(key) {
     const parts = key.split('_');
     const exam = parts[1];
@@ -227,15 +190,15 @@ function getExamText(key) {
         case 'SEM2':
             return 'SEMESTER II';
         case '1ST':
-            return '1ST EXAM';
+            return '1ST';
         case '2ND':
-            return '2ND EXAM';
+            return '2ND';
         case '3RD':
-            return '3RD EXAM';
+            return '3RD';
         default:
             return exam; // fallback
     }
-}
+}  
 
 // NOTICE & HELP লোড করা
 fetch('files.json')
