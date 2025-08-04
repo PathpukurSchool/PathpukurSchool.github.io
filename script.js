@@ -1,14 +1,14 @@
 
 let config = {}; // config.json থেকে লোড হওয়া ডেটা
 let masterCredentials = {}; // masterConfig.json থেকে লোড হওয়া ডেটা
-let studentData = {};
 let currentKey = '';
 let currentPage = 1;
 const noticesPerPage = 10;
-let ScrollingNotices = []; // স্ক্রলিং নোটিশের ডেটা এখানে থাকবে
-let TableNotices = []; // টেবিল নোটিশের ডেটা এখানে থাকবে
+let ScrollingNotices = []; // teacher_notice.js থেকে লোড হবে
+let TableNotices = []; // notice.js থেকে লোড হবে
+let examDates = []; // teacher_dates.js থেকে লোড হবে
 
-// সমস্ত প্রয়োজনীয় JSON ফাইল লোড করার জন্য প্রধান ফাংশন
+// সমস্ত প্রয়োজনীয় JSON এবং JS ফাইল লোড করার জন্য প্রধান ফাংশন
 async function loadAllData() {
     try {
         // masterConfig.json থেকে মাস্টার লগইন ডেটা লোড
@@ -18,45 +18,36 @@ async function loadAllData() {
         }
         masterCredentials = await masterResponse.json();
 
-        // config.json থেকে অন্যান্য সব ডেটা (URL, scrolling notice) লোড
+        // config.json থেকে শুধুমাত্র URL এবং স্ক্রলিং নোটিশের ডেটা লোড
         const configResponse = await fetch('config.json');
         if (!configResponse.ok) {
             throw new Error('Failed to load config.json');
         }
         config = await configResponse.json();
-
-        // studentData লোড করা (যদি প্রয়োজন হয়)
-        const studentResponse = await fetch('config_student.json');
-        if (studentResponse.ok) {
-            studentData = await studentResponse.json();
-        }
         
-        // teacher_dates.js এবং teacher_notice.js লোড করার জন্য Fetch ব্যবহার
-        // যদি এই ফাইলগুলো জাভাস্ক্রিপ্ট কোড লোড না করে, তাহলে সরাসরি লোড হবে
-        
-        // TableNotices লোড করা
-        const noticeResponse = await fetch('notice.js');
-        const noticeText = await noticeResponse.text();
-        eval(noticeText); // এটি `TableNotices` ভেরিয়েবল তৈরি করবে
-
-        // ScrollingNotices লোড করা
-        const scrollNoticeResponse = await fetch('teacher_notice.js');
-        const scrollNoticeText = await scrollNoticeResponse.text();
-        eval(scrollNoticeText); // এটি `ScrollingNotices` ভেরিয়েবল তৈরি করবে
-
+        // teacher_dates.js থেকে examDates লোড করা হচ্ছে
         const examDatesResponse = await fetch('teacher_dates.js');
         const examDatesText = await examDatesResponse.text();
         eval(examDatesText); // এটি `examDates` ভেরিয়েবল তৈরি করবে
 
+        // teacher_notice.js থেকে ScrollingNotices লোড করা হচ্ছে
+        const scrollNoticeResponse = await fetch('teacher_notice.js');
+        const scrollNoticeText = await scrollNoticeResponse.text();
+        eval(scrollNoticeText); // এটি `ScrollingNotices` ভেরিয়েবল তৈরি করবে
+
+        // notice.js থেকে TableNotices লোড করা হচ্ছে
+        const noticeResponse = await fetch('notice.js');
+        const noticeText = await noticeResponse.text();
+        eval(noticeText); // এটি `TableNotices` ভেরিয়েবল তৈরি করবে
+
         // সমস্ত ডেটা লোড হওয়ার পর রেন্ডারিং শুরু
-        renderAllSections();
-        renderNoticeTable();
-        handleWelcomePopup();
         renderExamDatesMarquee();
         renderNoticeBoardMarquee();
+        renderNoticeTable();
+        renderAllSections();
 
     } catch (error) {
-        console.error('JSON ফাইল লোড করতে সমস্যা হয়েছে:', error);
+        console.error('ফাইল লোড করতে সমস্যা হয়েছে:', error);
     }
 }
 
@@ -91,8 +82,6 @@ async function submitMasterLogin() {
                 window.location.href = user.redirect;
             } else {
                 document.getElementById('masterLoginOverlay').style.display = "none";
-                // মাস্টার লগইন সফল হলে এক্সাম লিংক লোড হবে
-                renderAllSections();
             }
         }, 1000);
     } else {
@@ -101,263 +90,65 @@ async function submitMasterLogin() {
     }
 }
 
-// সমস্ত সেকশন রেন্ডার করার ফাংশন
-function renderAllSections() {
-    renderMarksUploadingSection();
-    renderExamButtons();
-    renderAdmissionTestSection();
-    renderRoutineAndInfo();
-    renderUploadNoticeSection();
-}
-
-// মার্কস আপলোডিং সেকশন তৈরি
-function renderMarksUploadingSection() {
-    const mainContainer = document.getElementById('main-content');
-    if (!mainContainer) return;
-
-    const section = document.createElement('div');
-    section.className = 'shaded-info-box';
-
-    const heading = document.createElement('h3');
-    heading.className = 'box-heading shine';
-    heading.textContent = 'MARKS UPLOADING STATUS';
-    section.appendChild(heading);
-
-    const buttonsContainer = document.createElement('div');
-    buttonsContainer.className = 'exam-buttons-group';
-
-    const button = document.createElement('button');
-    button.className = 'box-button';
-    button.textContent = 'Marks Upload Status';
+// পরীক্ষার তারিখের জন্য স্ক্রলিং মারকিউ রেন্ডার করা
+function renderExamDatesMarquee() {
+    const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
+    if (!examDatesMarquee || !examDates) return;
+    examDatesMarquee.innerHTML = '';
     
-    button.onclick = () => {
-        if (config.urls.marks_upload_status && config.urls.marks_upload_status.trim() !== '') {
-            window.open(config.urls.marks_upload_status, '_blank');
-        } else {
-            showInfoMessage(button, '🔔 উপলব্ধ নয় 🔔');
+    examDates.forEach(exam => {
+        if (exam.date) {
+            const span = document.createElement("span");
+            span.textContent = `${exam.text} ${exam.date}, `;
+            span.style.color = exam.color;
+            span.style.fontWeight = "bold";
+            if (exam.backgroundColor) {
+                span.style.backgroundColor = exam.backgroundColor;
+            }
+            examDatesMarquee.appendChild(span);
         }
-    };
-    buttonsContainer.appendChild(button);
-    section.appendChild(buttonsContainer);
-
-    mainContainer.insertBefore(section, mainContainer.firstChild); 
-}
-
-// এক্সাম বাটন তৈরি করা (ID-Password ছাড়া)
-function renderExamButtons() {
-    const mainContainer = document.getElementById('main-content');
-    if (!mainContainer) return;
-
-    const section = document.createElement('div');
-    section.id = 'exam-buttons';
-    mainContainer.appendChild(section);
-
-    const credentials = config.exam_credentials || {};
-    const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
-    const sortedClasses = classes.sort((a, b) => {
-        const order = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-        return order.indexOf(a) - order.indexOf(b);
     });
 
-    sortedClasses.forEach(cls => {
-        const classBox = document.createElement('div');
-        classBox.className = 'shaded-info-box';
+    examDatesMarquee.addEventListener("mouseover", () => examDatesMarquee.classList.add("paused"));
+    examDatesMarquee.addEventListener("mouseout", () => examDatesMarquee.classList.remove("paused"));
+    examDatesMarquee.addEventListener("touchstart", () => examDatesMarquee.classList.add("paused"));
+    examDatesMarquee.addEventListener("touchend", () => examDatesMarquee.classList.remove("paused"));
+}
 
-        const boxHeading = document.createElement('h3');
-        boxHeading.className = 'box-heading shine';
-        boxHeading.textContent = 'CLASS ' + cls;
-        classBox.appendChild(boxHeading);
+// নোটিশ বোর্ডের জন্য স্ক্রলিং মারকিউ রেন্ডার করা
+function renderNoticeBoardMarquee() {
+    const noticeBoardMarquee = document.getElementById("notice-board-marquee-content");
+    if (!noticeBoardMarquee || !ScrollingNotices) return;
+    noticeBoardMarquee.innerHTML = '';
 
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.className = 'exam-buttons-group';
-
-        const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
-        exams.forEach(exam => {
-            const key = `${cls}_${exam}`;
-            if (credentials[key]) {
-                const button = document.createElement('button');
-                button.className = 'box-button exam-link';
-                
-                let label = exam;
-                switch (exam) {
-                    case 'TEST': label = 'TEST EXAM'; break;
-                    case 'SEM1': label = 'SEMESTER I'; break;
-                    case 'SEM2': label = 'SEMESTER II'; break;
-                }
-                
-                button.textContent = label;
-                
-                // এখানে সরাসরি URL ব্যবহার করা হচ্ছে, কোনো আইডি/পাসওয়ার্ড যাচাই নেই
-                if (credentials[key].url && credentials[key].url.trim() !== '') {
-                    button.onclick = () => window.open(credentials[key].url, '_blank');
-                } else {
-                    button.onclick = () => showAvailableSoonMessage(key);
-                    button.classList.add('disabled-exam-link');
-                }
-                buttonsContainer.appendChild(button);
+    if (Array.isArray(ScrollingNotices)) {
+        ScrollingNotices.forEach(notice => {
+            const date = notice.date || "";
+            const text = notice.text || "";
+            if (text.trim() !== "") {
+                const span = document.createElement("span");
+                span.textContent = `${date} - ${text}`;
+                span.style.color = notice.color || "black";
+                span.style.fontWeight = "bold";
+                span.style.marginRight = "30px";
+                noticeBoardMarquee.appendChild(span);
             }
         });
-        
-        if (buttonsContainer.children.length > 0) {
-            classBox.appendChild(buttonsContainer);
-            section.appendChild(classBox);
-        }
-    });
-}
-
-// অ্যাডমিশন টেস্ট সেকশন তৈরি
-function renderAdmissionTestSection() {
-    const mainContainer = document.getElementById('main-content');
-    if (!mainContainer) return;
-
-    const section = document.createElement('div');
-    section.className = 'shaded-info-box';
-
-    const heading = document.createElement('h3');
-    heading.className = 'box-heading shine';
-    heading.textContent = 'ADMISSION TEST';
-    section.appendChild(heading);
-    
-    const buttonsContainer = document.createElement('div');
-    buttonsContainer.className = 'exam-buttons-group';
-
-    const button = document.createElement('button');
-    button.className = 'box-button';
-    button.textContent = 'Admission Test';
-
-    button.onclick = () => {
-        if (config.urls.admission_test && config.urls.admission_test.trim() !== '') {
-            window.open(config.urls.admission_test, '_blank');
-        } else {
-            showInfoMessage(button, '🔔 উপলব্ধ নয় 🔔');
-        }
-    };
-    buttonsContainer.appendChild(button);
-    section.appendChild(buttonsContainer);
-
-    mainContainer.appendChild(section); 
-}
-
-// রুটিন এবং ইনফরমেশন সেকশন তৈরি
-function renderRoutineAndInfo() {
-    const container = document.getElementById('routine-and-info-buttons-container');
-    if (!container) return;
-    container.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করা
-    
-    const urls = config.urls || {};
-
-    createButtonBox(container, 'Staff Routine', 'To view staff (teacher) routine, please click the button below:', urls.teacher_routine, 'VIEW STAFF ROUTINE');
-    createButtonBox(container, 'Class Routine', 'To view class (student) routine, please click the button below:', urls.class_routine, 'VIEW CLASS ROUTINE');
-    createButtonBox(container, 'Subject Routine', 'To view subject routine, please click the button below:', urls.subject_routine, 'VIEW SUBJECT ROUTINE');
-    createButtonBox(container, 'School Exam Routine', 'To view Inter-school Examination Routine, please click the button below:', urls.school_exam_routine, 'VIEW EXAM ROUTINE');
-    createButtonBox(container, 'Student Information', 'To view student information or search the student database, please click the button below:', urls.student_database, 'VIEW STUDENT DATABASE');
-}
-
-// নোটিশ আপলোড সেকশন তৈরি
-function renderUploadNoticeSection() {
-    const container = document.getElementById('upload-notice-container');
-    if (!container) return;
-    container.innerHTML = '';
-    
-    const url = config.urls.upload_student_notice;
-    
-    if (url && url.trim() !== '') {
-        const button = document.createElement('a');
-        button.href = url;
-        button.textContent = 'UPLOAD STUDENT NOTICE';
-        button.className = 'exam-link';
-        button.target = '_blank';
-        container.appendChild(button);
     } else {
-        const availableSoonMsg = document.createElement('div');
-        availableSoonMsg.innerHTML = '<strong> Available Soon! </strong><br> Please check back later for updates.';
-        availableSoonMsg.style.cssText = `
-            border: 2px solid #ff9999;
-            background-color: #ffe6e6;
-            color: #cc0000;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 300px;
-            margin: 0 auto;
-        `;
-        container.appendChild(availableSoonMsg);
+        noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
     }
-}
 
-// সহায়ক ফাংশন: একটি বোতাম বক্স তৈরি করা
-function createButtonBox(container, headingText, instructionText, url, buttonText) {
-    const box = document.createElement('div');
-    box.className = 'shaded-info-box';
-    
-    const heading = document.createElement('h2');
-    heading.className = 'shine';
-    heading.textContent = headingText;
-    box.appendChild(heading);
-    
-    const instruction = document.createElement('h3');
-    instruction.className = 'login-instruction-heading';
-    instruction.innerHTML = `${instructionText}<span class="emoji">👇</span>`;
-    box.appendChild(instruction);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.textContent = buttonText;
-    link.target = '_blank';
-    link.className = 'exam-link';
-    box.appendChild(link);
-    
-    container.appendChild(box);
-}
-
-// পপআপ মেসেজ দেখানোর ফাংশন
-function showAvailableSoonMessage(key) {
-    const container = document.getElementById('exam-buttons');
-    const links = container.getElementsByClassName('exam-link');
-    
-    // কোডের বাকি অংশ অপরিবর্তিত
-    for (let link of links) {
-        if (link.textContent === getExamText(key)) {
-            const next = link.nextElementSibling;
-            if (next && next.classList.contains('avail-msg')) next.remove();
-            
-            const msg = document.createElement('div');
-            msg.className = 'avail-msg';
-            msg.textContent = '🔔 Available Soon 🔔';
-            
-            link.parentNode.insertBefore(msg, link.nextSibling);
-            
-            setTimeout(() => {
-                msg.remove();
-            }, 3000);
-            break;
-        }
-    }
-}
-
-// পরীক্ষার নাম ফরম্যাট করার ফাংশন
-function getExamText(key) {
-    const parts = key.split('_');
-    const exam = parts[1];
-    switch (exam) {
-        case 'TEST': return 'TEST EXAM';
-        case 'SEM1': return 'SEMESTER I';
-        case 'SEM2': return 'SEMESTER II';
-        case '1ST': return '1ST EXAM';
-        case '2ND': return '2ND EXAM';
-        case '3RD': return '3RD EXAM';
-        default: return exam;
-    }
+    noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
+    noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
+    noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
+    noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
 }
 
 // নোটিশ টেবিল রেন্ডার করার ফাংশন
 function renderNoticeTable() {
     const container = document.getElementById('notice-board');
     if (!container || !TableNotices || !Array.isArray(TableNotices)) return;
-    
-    // কোডের বাকি অংশ অপরিবর্তিত
+
     container.innerHTML = "";
     const start = (currentPage - 1) * noticesPerPage;
     const end = start + noticesPerPage;
@@ -403,56 +194,139 @@ function prevPage() {
     }
 }
 
-// ওয়েলকাম পপআপ পরিচালনা করা
-function handleWelcomePopup() {
-    if (!config.home_popup) return;
-    const data = config.home_popup;
-    const popupTitleElement = document.getElementById('popupTitle');
-    const popupMessageElement = document.getElementById('popupMessage');
-    const downloadButton = document.getElementById('downloadPopupButton');
-    const closeButton = document.getElementById('closePopupButton');
-    const welcomePopup = document.getElementById('websiteWelcomePopup');
+// পপ-আপ মেসেজ দেখানোর ফাংশন (এই অংশ অপরিবর্তিত)
+function showPopup(titleText, date, link, subjText) {
+    // পপ-আপ কনটেইনার তৈরি
+    const popup = document.createElement('div');
+    popup.style.position = 'fixed';
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+    popup.style.background = '#f0f8ff'; // হালকা নীল
+    popup.style.padding = '20px';
+    popup.style.margin = '0 auto';
+    popup.style.border = '2px solid #333';
+    popup.style.borderRadius = '10px';
+    popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+    popup.style.zIndex = '9999';
+    popup.style.textAlign = 'center';
+    popup.style.maxWidth = '90%';
+    popup.style.minWidth = '240px';
+    popup.style.width = '300px';
+    popup.style.fontFamily = 'Arial, sans-serif';
+
+    // হেডিং (Text)
+    const titleElem = document.createElement('div');
+    titleElem.innerText = titleText;
+    titleElem.style.backgroundColor = 'green';
+    titleElem.style.color = 'white';
+    titleElem.style.fontWeight = 'bold';
+    titleElem.style.fontSize = '15px';
+    titleElem.style.padding = '10px';
+    titleElem.style.borderRadius = '5px';
+    titleElem.style.marginBottom = '15px';
+    popup.appendChild(titleElem);
+
+    // তারিখ (Date)
+    const dateElem = document.createElement('div');
+    dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+    dateElem.style.marginBottom = '10px';
+    popup.appendChild(dateElem);
+
+    // subj থাকলে তা দেখাও
+    if (subjText && subjText.trim() !== '') {
+        const subjElem = document.createElement('div');
+        subjElem.innerText = subjText;
+        subjElem.style.color = 'darkgreen';
+        subjElem.style.backgroundColor = '#e6ffe6';
+        subjElem.style.fontWeight = 'bold';
+        subjElem.style.fontSize = '14px';
+        subjElem.style.padding = '6px';
+        subjElem.style.borderRadius = '4px';
+        subjElem.style.marginBottom = '12px';
+        popup.appendChild(subjElem);
+    }
     
-    // কোডের বাকি অংশ অপরিবর্তিত
-    if (popupTitleElement && data.popup_title) {
-        popupTitleElement.textContent = data.popup_title;
+    // বোতাম কন্টেইনার
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.marginTop = '20px';
+    buttonContainer.style.display = 'flex';
+    buttonContainer.style.flexWrap = 'wrap';
+    buttonContainer.style.justifyContent = 'center';
+    buttonContainer.style.gap = '20px';
+
+    // ফাইল খুলুন বোতাম
+    if (link && link.trim() !== '') {
+        const linkBtn = document.createElement('a');
+        linkBtn.href = link;
+        linkBtn.innerText = 'Open Link';
+        linkBtn.target = '_blank';
+        linkBtn.style.backgroundColor = '#007bff';
+        linkBtn.style.color = 'white';
+        linkBtn.style.padding = '10px 16px';
+        linkBtn.style.border = 'none';
+        linkBtn.style.borderRadius = '5px';
+        linkBtn.style.textDecoration = 'none';
+        linkBtn.style.fontWeight = 'bold';
+        linkBtn.style.fontSize = '12px';
+        linkBtn.style.transition = 'background-color 0.3s';
+        linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+        linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+        buttonContainer.appendChild(linkBtn);
     }
 
-    if (popupMessageElement && Array.isArray(data.popup_message)) {
-        popupMessageElement.innerHTML = '';
-        data.popup_message.forEach(paragraphText => {
-            const p = document.createElement('p');
-            p.textContent = paragraphText;
-            popupMessageElement.appendChild(p);
-        });
-    } else if (popupMessageElement && typeof data.popup_message === 'string') {
-        popupMessageElement.innerHTML = data.popup_message;
-    }
+    // PNG ডাউনলোড বোতাম
+    const downloadBtn = document.createElement('button');
+    downloadBtn.innerText = 'Download';
+    downloadBtn.style.backgroundColor = '#28a745';
+    downloadBtn.style.color = 'white';
+    downloadBtn.style.padding = '6px 10px';
+    downloadBtn.style.border = 'none';
+    downloadBtn.style.borderRadius = '5px';
+    downloadBtn.style.fontWeight = 'bold';
+    downloadBtn.style.fontSize = '12px';
+    downloadBtn.style.cursor = 'pointer';
+    downloadBtn.onclick = () => {
+        setTimeout(() => {
+            html2canvas(popup).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'notice.png';
+                link.click();
+            });
+        }, 100);
+    };
+    buttonContainer.appendChild(downloadBtn);
 
-    if (welcomePopup) {
-        welcomePopup.style.display = 'flex';
-    }
+    // বন্ধ করুন বোতাম
+    const closeBtn = document.createElement('button');
+    closeBtn.innerText = 'Back';
+    closeBtn.style.backgroundColor = '#dc3545';
+    closeBtn.style.color = 'white';
+    closeBtn.style.padding = '6px 10px';
+    closeBtn.style.border = 'none';
+    closeBtn.style.borderRadius = '5px';
+    closeBtn.style.fontWeight = 'bold';
+    closeBtn.style.fontSize = '12px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.transition = 'background-color 0.3s';
+    closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
+    closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
+    closeBtn.onclick = () => document.body.removeChild(popup);
+    buttonContainer.appendChild(closeBtn);
 
-    if (closeButton) {
-        closeButton.addEventListener('click', closeWebsiteWelcomePopup);
-    }
-    if (downloadButton) {
-        downloadButton.addEventListener('click', () => {
-            if (welcomePopup) {
-                downloadPopupAsJpg(welcomePopup);
-            }
-        });
-    }
+    popup.appendChild(buttonContainer);
+    document.body.appendChild(popup);
 }
 
+// welcome pop-up এবং master login এর জন্য অন্য প্রয়োজনীয় ফাংশন
 function closeWebsiteWelcomePopup() {
     const welcomePopup = document.getElementById('websiteWelcomePopup');
     if (welcomePopup) {
         welcomePopup.style.display = 'none';
     }
 }
-
-// পপআপ JPG হিসেবে ডাউনলোড
 async function downloadPopupAsJpg(popupElement) {
     try {
         const canvas = await html2canvas(popupElement);
@@ -469,59 +343,54 @@ async function downloadPopupAsJpg(popupElement) {
         console.error('পপ-আপ ডাউনলোড করতে সমস্যা:', error);
     }
 }
-
-// এক্সাম ডেট স্ক্রলিং রেন্ডার করা
-function renderExamDatesMarquee() {
-    const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
-    if (!examDatesMarquee || !examDates) return;
-    
-    // কোডের বাকি অংশ অপরিবর্তিত
-    examDates.forEach(exam => {
-        if (exam.date) {
-            const span = document.createElement("span");
-            span.textContent = `${exam.text} ${exam.date}, `;
-            span.style.color = exam.color;
-            span.style.fontWeight = "bold";
-            if (exam.backgroundColor) {
-                span.style.backgroundColor = exam.backgroundColor;
-            }
-            examDatesMarquee.appendChild(span);
-        }
-    });
-
-    examDatesMarquee.addEventListener("mouseover", () => examDatesMarquee.classList.add("paused"));
-    examDatesMarquee.addEventListener("mouseout", () => examDatesMarquee.classList.remove("paused"));
-    examDatesMarquee.addEventListener("touchstart", () => examDatesMarquee.classList.add("paused"));
-    examDatesMarquee.addEventListener("touchend", () => examDatesMarquee.classList.remove("paused"));
+function submitLogin() {
+    // এই ফাংশনটি যেহেতু exam-buttons এর জন্য, তাই এর কোনো পরিবর্তন হবে না
+}
+function closeLogin() {
+    // এই ফাংশনটি যেহেতু exam-buttons এর জন্য, তাই এর কোনো পরিবর্তন হবে না
 }
 
-// নোটিশ বোর্ড স্ক্রলিং রেন্ডার করা
-function renderNoticeBoardMarquee() {
-    const noticeBoardMarquee = document.getElementById("notice-board-marquee-content");
-    if (!noticeBoardMarquee || !ScrollingNotices) return;
+// এই ফাংশনটি শুধুমাত্র রুটিন ও ইনফো সেকশন তৈরি করবে
+function renderAllSections() {
+    const container = document.getElementById('routine-and-info-buttons-container');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    // teacher_routine
+    const teacherRoutineBox = document.createElement('div');
+    teacherRoutineBox.className = 'shaded-info-box';
+    teacherRoutineBox.innerHTML = `<h2 class="shine">Staff Routine</h2><h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3><a href="${config.urls.teacher_routine}" target="_blank" class="exam-link">VIEW STAFF ROUTINE</a>`;
+    container.appendChild(teacherRoutineBox);
+    
+    // class_routine
+    const classRoutineBox = document.createElement('div');
+    classRoutineBox.className = 'shaded-info-box';
+    classRoutineBox.innerHTML = `<h2 class="shine">Class Routine</h2><h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3><a href="${config.urls.class_routine}" target="_blank" class="exam-link">VIEW CLASS ROUTINE</a>`;
+    container.appendChild(classRoutineBox);
 
-    // কোডের বাকি অংশ অপরিবর্তিত
-    if (Array.isArray(ScrollingNotices)) {
-        ScrollingNotices.forEach(notice => {
-            const date = notice.date || "";
-            const text = notice.text || "";
-            if (text.trim() !== "") {
-                const span = document.createElement("span");
-                span.textContent = `${date} - ${text}`;
-                span.style.color = notice.color || "black";
-                span.style.fontWeight = "bold";
-                span.style.marginRight = "30px";
-                noticeBoardMarquee.appendChild(span);
-            }
-        });
-    } else {
-        noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
+    // subject_routine
+    const subjectRoutineBox = document.createElement('div');
+    subjectRoutineBox.className = 'shaded-info-box';
+    subjectRoutineBox.innerHTML = `<h2 class="shine">Subject Routine</h2><h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3><a href="${config.urls.subject_routine}" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>`;
+    container.appendChild(subjectRoutineBox);
+
+    // school_exam_routine
+    const schoolExamRoutineBox = document.createElement('div');
+    schoolExamRoutineBox.className = 'shaded-info-box';
+    schoolExamRoutineBox.innerHTML = `<h2 class="shine">School Exam Routine</h2><h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3><a href="${config.urls.school_exam_routine}" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>`;
+    container.appendChild(schoolExamRoutineBox);
+    
+    // student_database
+    const studentDatabaseBox = document.createElement('div');
+    studentDatabaseBox.className = 'shaded-info-box';
+    studentDatabaseBox.innerHTML = `<h2 class="shine">Student Information</h2><h3 class="login-instruction-heading">To view student information or search the student database, please click the button below:<span class="emoji">👇</span></h3><a href="${config.urls.student_database}" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>`;
+    container.appendChild(studentDatabaseBox);
+
+    // upload_student_notice
+    const uploadNoticeContainer = document.getElementById('upload-notice-container');
+    if (uploadNoticeContainer) {
+        uploadNoticeContainer.innerHTML = `<a href="${config.urls.upload_student_notice}" target="_blank" class="exam-link">UPLOAD STUDENT NOTICE</a>`;
     }
-
-    noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
-    noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
-    noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
-    noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
 }
 
 // Document Load হলে সমস্ত ডেটা লোড করার জন্য প্রধান ফাংশনটি কল করা হয়
