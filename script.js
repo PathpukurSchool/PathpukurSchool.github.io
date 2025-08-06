@@ -82,6 +82,8 @@ let currentKey = '';
 // এক্সাম লিংক তৈরি ও দেখানো
 // সম্পূর্ণ লজিক একটি ফাইলের মধ্যে রাখা হলো যাতে কোনো সংঘাত না হয়
 
+// সম্পূর্ণ লজিক একটি ফাইলের মধ্যে রাখা হলো যাতে কোনো সংঘাত না হয়
+
 // যখন সম্পূর্ণ HTML ডকুমেন্ট লোড হয়ে যাবে, তখন এই ফাংশনটি কল করা হবে
 document.addEventListener('DOMContentLoaded', init);
 
@@ -137,7 +139,7 @@ function updateStaticLinks(routines) {
 }
 
 
-// পরীক্ষার বোতাম তৈরি ও দেখানোর ফাংশন (আপনার দেওয়া কোড থেকে নেওয়া, সামান্য পরিবর্তিত)
+// পরীক্ষার বোতাম তৈরি ও দেখানোর ফাংশন
 function renderExamButtons(credentials) {
     const mainContainer = document.getElementById('exam-buttons');
     if (!mainContainer) return;
@@ -154,45 +156,41 @@ function renderExamButtons(credentials) {
     });
 
     sortedClasses.forEach(cls => {
-        // প্রতিটি ক্লাসের জন্য একটি নতুন shaded-info-box তৈরি করা হচ্ছে
         const classBox = document.createElement('div');
         classBox.className = 'shaded-info-box'; 
 
-        // বক্সের হেডিং তৈরি করা হচ্ছে
         const boxHeading = document.createElement('h3');
         boxHeading.className = 'box-heading shine'; 
         boxHeading.textContent = 'CLASS ' + cls; 
         classBox.appendChild(boxHeading);
 
-        // বোতামগুলির জন্য একটি কন্টেইনার তৈরি করা
         const buttonsContainer = document.createElement('div');
         buttonsContainer.className = 'exam-buttons-group'; 
 
-        // প্রতিটি সম্ভাব্য পরীক্ষার প্রকারের জন্য বোতাম তৈরি
+        // পরীক্ষার প্রকারগুলোকে সঠিক ক্রমে সাজানো হয়েছে
         const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
+        
         exams.forEach(exam => {
             const key = `${cls}_${exam}`;
-            if (credentials[key]) { // যদি এই নির্দিষ্ট পরীক্ষার জন্য ডেটা config.json-এ থাকে
+            // এখন শুধুমাত্র URL এর অস্তিত্ব পরীক্ষা করা হচ্ছে
+            if (credentials[key] && credentials[key].url) { 
                 const button = document.createElement('button');
                 button.className = 'box-button exam-link'; 
                 
-                // বোতামের লেবেল নির্ধারণ (config.json থেকে label নেওয়া)
                 const label = credentials[key].label || getExamText(key);
                 button.textContent = label;
                 
                 // URL আছে কিনা তা পরীক্ষা করা
-                if (credentials[key].url && credentials[key].url.trim() !== '') {
+                if (credentials[key].url.trim() !== '') {
                     button.onclick = () => window.open(credentials[key].url, '_blank');
                 } else {
-                    // URL না থাকলে showAvailableSoonMessage কল করবে
                     button.onclick = () => showAvailableSoonMessage(button); 
-                    button.classList.add('disabled-exam-link'); // ঐচ্ছিক: বোতামটি নিষ্প্রভ করতে একটি ক্লাস যোগ করুন
+                    button.classList.add('disabled-exam-link');
                 }
                 buttonsContainer.appendChild(button);
             }
         });
         
-        // যদি কোন ক্লাসের জন্য কোন পরীক্ষার বোতাম না থাকে, তাহলে বক্সটি দেখাবে না
         if (buttonsContainer.children.length > 0) {
             classBox.appendChild(buttonsContainer); 
             mainContainer.appendChild(classBox); 
@@ -200,9 +198,8 @@ function renderExamButtons(credentials) {
     });
 }
 
-// আপনার দেওয়া কোডের অনুরূপ Available Soon মেসেজ দেখানোর ফাংশন (সামান্য পরিবর্তিত)
+// Available Soon মেসেজ দেখানোর ফাংশন
 function showAvailableSoonMessage(buttonElement) {
-    // আগে থেকে কোন বার্তা থাকলে সরাও
     const next = buttonElement.nextElementSibling;
     if (next && next.classList.contains('avail-msg')) {
         next.remove();
@@ -214,7 +211,6 @@ function showAvailableSoonMessage(buttonElement) {
 
     buttonElement.parentNode.insertBefore(msg, buttonElement.nextSibling);
 
-    // 3 সেকেন্ড পরে মেসেজ মুছে ফেল
     setTimeout(() => {
         if (msg.parentNode) {
             msg.remove();
@@ -222,7 +218,7 @@ function showAvailableSoonMessage(buttonElement) {
     }, 3000);
 }
 
-// পরীক্ষার টেক্সট ফেরত দেয় (ফলব্যাক হিসেবে, যদি config.json এ label না থাকে)
+// পরীক্ষার টেক্সট ফেরত দেয়
 function getExamText(key) {
     const parts = key.split('_');
     const exam = parts[1];
@@ -238,6 +234,8 @@ function getExamText(key) {
             return exam; 
     }
 }
+
+    
 
 // NOTICE & HELP লোড করা
 fetch('files.json')
