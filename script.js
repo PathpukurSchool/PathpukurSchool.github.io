@@ -80,145 +80,104 @@ function loadExamLinks() {
 let currentKey = '';
 
 // এক্সাম লিংক তৈরি ও দেখানো
-// সম্পূর্ণ লজিক একটি ফাইলের মধ্যে রাখা হলো যাতে কোনো সংঘাত না হয়
-
-// সম্পূর্ণ লজিক একটি ফাইলের মধ্যে রাখা হলো যাতে কোনো সংঘাত না হয়
-
-// যখন সম্পূর্ণ HTML ডকুমেন্ট লোড হয়ে যাবে, তখন এই ফাংশনটি কল করা হবে
-document.addEventListener('DOMContentLoaded', init);
-
-// প্রধান ফাংশন যা সবকিছু শুরু করবে
-async function init() {
-    try {
-        // config.json ফাইলটি ফেচ করা হচ্ছে
-        const response = await fetch('config.json');
-        
-        // যদি রেসপন্স ঠিকঠাক না হয়, তাহলে একটি error throw করবে
-        if (!response.ok) {
-            throw new Error(`config.json ফেচ করতে ব্যর্থ। স্ট্যাটাস: ${response.status}`);
-        }
-        
-        // JSON ডেটা পার্স করা হচ্ছে
-        const config = await response.json();
-
-        // রুটিন এবং স্ট্যাটিক লিঙ্কগুলি আপডেট করার জন্য ফাংশন কল করা হচ্ছে
-        updateStaticLinks(config.routines);
-        
-        // পরীক্ষার বোতামগুলি তৈরি এবং দেখানোর জন্য ফাংশন কল করা হচ্ছে
-        renderExamButtons(config.examCredentials);
-
-    } catch (error) {
-        // কোনো ত্রুটি হলে তা কনসোলে দেখানো হচ্ছে
-        console.error("config.json ফেচ বা প্রসেস করতে ত্রুটি হয়েছে:", error);
-    }
-}
-
-// রুটিন এবং অন্যান্য স্ট্যাটিক লিঙ্ক আপডেট করার ফাংশন
-function updateStaticLinks(routines) {
-    // data-link অ্যাট্রিবিউট আছে এমন সমস্ত লিঙ্ক ট্যাগ সিলেক্ট করা হচ্ছে
-    const links = document.querySelectorAll('#static-links-container [data-link]');
-
-    // প্রতিটি লিংকের উপর লুপ চালানো হচ্ছে
-    links.forEach(link => {
-        // data-link অ্যাট্রিবিউট থেকে কী (যেমন, "staffRoutine") নেওয়া হচ্ছে
-        const linkKey = link.dataset.link;
-        
-        // config.json এর routines অবজেক্টে সেই কী-এর জন্য কোনো URL আছে কিনা এবং তা খালি নয় কিনা, তা পরীক্ষা করা হচ্ছে
-        if (routines[linkKey] && routines[linkKey].trim() !== '') {
-            // যদি URL থাকে, তাহলে href এবং target অ্যাট্রিবিউট সেট করা হচ্ছে
-            link.href = routines[linkKey];
-            link.target = "_blank"; // নতুন ট্যাবে খোলার জন্য
-        } else {
-            // যদি URL না থাকে, তাহলে লিঙ্কটি নিষ্ক্রিয় করা হচ্ছে এবং মেসেজ দেখানো হচ্ছে
-            link.removeAttribute('href'); // href অ্যাট্রিবিউট সরিয়ে দেওয়া হচ্ছে
-            link.style.cursor = 'not-allowed'; // কার্সার পরিবর্তন করা হচ্ছে
-            link.textContent = 'Available Soon'; // টেক্সট পরিবর্তন করা হচ্ছে
-            link.classList.add('unavailable-message'); // CSS ক্লাস যোগ করা হচ্ছে
-        }
-    });
-}
-
-
-// পরীক্ষার বোতাম তৈরি ও দেখানোর ফাংশন
-function renderExamButtons(credentials) {
+function renderButtons() {
     const mainContainer = document.getElementById('exam-buttons');
-    if (!mainContainer) return;
-    
     mainContainer.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করা
 
     // ইউনিক ক্লাস তালিকা তৈরি
     const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
 
-    // ক্লাসগুলিকে একটি নির্দিষ্ট ক্রমে সাজানো
+    // ক্লাসগুলিকে একটি নির্দিষ্ট ক্রমে সাজানো যাতে V, VI, VII... XII পর্যন্ত আসে
     const sortedClasses = classes.sort((a, b) => {
         const order = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
         return order.indexOf(a) - order.indexOf(b);
     });
 
     sortedClasses.forEach(cls => {
+        // প্রতিটি ক্লাসের জন্য একটি নতুন shaded-info-box তৈরি করা হচ্ছে
         const classBox = document.createElement('div');
-        classBox.className = 'shaded-info-box'; 
+        classBox.className = 'shaded-info-box'; // CSS ক্লাস যা বক্সের স্টাইল দেবে
 
+        // বক্সের হেডিং তৈরি করা হচ্ছে (ক্লাসের নাম)
         const boxHeading = document.createElement('h3');
-        boxHeading.className = 'box-heading shine'; 
-        boxHeading.textContent = 'CLASS ' + cls; 
+        boxHeading.className = 'box-heading shine'; // CSS ক্লাস যা হেডিং এর স্টাইল দেবে
+        boxHeading.textContent = 'CLASS ' + cls; // সরাসরি 'CLASS V', 'CLASS VI' ইত্যাদি হবে
         classBox.appendChild(boxHeading);
 
+        // বোতামগুলির জন্য একটি কন্টেইনার তৈরি করা যাতে সেগুলো flexbox দিয়ে সাজানো যায়
         const buttonsContainer = document.createElement('div');
-        buttonsContainer.className = 'exam-buttons-group'; 
+        buttonsContainer.className = 'exam-buttons-group'; // নতুন ক্লাস, এর জন্য CSS লাগবে
 
-        // পরীক্ষার প্রকারগুলোকে সঠিক ক্রমে সাজানো হয়েছে
+        // প্রতিটি সম্ভাব্য পরীক্ষার প্রকারের জন্য বোতাম তৈরি
         const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
-        
         exams.forEach(exam => {
-            const key = `${cls}_${exam}`;
-            // এখন শুধুমাত্র URL এর অস্তিত্ব পরীক্ষা করা হচ্ছে
-            if (credentials[key] && credentials[key].url) { 
+            const key = `${cls}_${exam}`; // যেমন: "V_1ST", "IX_TEST", "XII_SEM1"
+            if (credentials[key]) { // যদি এই নির্দিষ্ট পরীক্ষার জন্য ডেটা config.json-এ থাকে
                 const button = document.createElement('button');
-                button.className = 'box-button exam-link'; 
+                button.className = 'box-button exam-link'; // CSS ক্লাস যা বোতামের স্টাইল দেবে
                 
-                const label = credentials[key].label || getExamText(key);
+                // বোতামের লেবেল নির্ধারণ
+                let label = exam;
+                switch (exam) {
+                    case 'TEST':
+                        label = 'TEST EXAM';
+                        break;
+                    case 'SEM1':
+                        label = 'SEMESTER I';
+                        break;
+                    case 'SEM2':
+                        label = 'SEMESTER II';
+                        break;
+                }
+                
                 button.textContent = label;
-                
-                // URL আছে কিনা তা পরীক্ষা করা
-                if (credentials[key].url.trim() !== '') {
+                // যদি URL না থাকে অথবা URL খালি হয়, তাহলে সরাসরি 'showAvailableSoonMessage' কল করব
+                // অন্যথায়, সরাসরি লিংক খুলব
+                if (credentials[key].url && credentials[key].url.trim() !== '') {
                     button.onclick = () => window.open(credentials[key].url, '_blank');
                 } else {
-                    button.onclick = () => showAvailableSoonMessage(button); 
-                    button.classList.add('disabled-exam-link');
+                    button.onclick = () => showAvailableSoonMessage(key); // URL না থাকলে সরাসরি মেসেজ দেখাবে
+                    button.classList.add('disabled-exam-link'); // ঐচ্ছিক: বোতামটি নিষ্প্রভ করতে একটি ক্লাস যোগ করুন
                 }
                 buttonsContainer.appendChild(button);
             }
         });
         
+        // যদি কোন ক্লাসের জন্য কোন পরীক্ষার বোতাম না থাকে, তাহলে বক্সটি দেখাবে না
         if (buttonsContainer.children.length > 0) {
-            classBox.appendChild(buttonsContainer); 
-            mainContainer.appendChild(classBox); 
+            classBox.appendChild(buttonsContainer); // বোতাম কন্টেইনারকে বক্সের মধ্যে যোগ করা
+            mainContainer.appendChild(classBox); // ক্লাস বক্সকে মূল কন্টেইনারে যোগ করা
         }
     });
 }
 
-// Available Soon মেসেজ দেখানোর ফাংশন
-function showAvailableSoonMessage(buttonElement) {
-    const next = buttonElement.nextElementSibling;
-    if (next && next.classList.contains('avail-msg')) {
-        next.remove();
-    }
+function showAvailableSoonMessage(key) {
+    const container = document.getElementById('exam-buttons');
+    const links = container.getElementsByClassName('exam-link');
 
-    const msg = document.createElement('div');
-    msg.className = 'avail-msg';
-    msg.textContent = '🔔 Available Soon 🔔';
+    for (let link of links) {
+        if (link.textContent === getExamText(key)) {
+            // আগে থেকে কোন বার্তা থাকলে সরাও
+            const next = link.nextElementSibling;
+            if (next && next.classList.contains('avail-msg')) next.remove();
 
-    buttonElement.parentNode.insertBefore(msg, buttonElement.nextSibling);
+            const msg = document.createElement('div');
+            msg.className = 'avail-msg';
+            msg.textContent = '🔔 Available Soon 🔔';
 
-    setTimeout(() => {
-        if (msg.parentNode) {
-            msg.remove();
+            link.parentNode.insertBefore(msg, link.nextSibling);
+
+            // 3 সেকেন্ড পরে মুছে ফেল
+            setTimeout(() => {
+                msg.remove();
+            }, 3000);
+
+            break;
         }
-    }, 3000);
+    }
 }
 
-// পরীক্ষার টেক্সট ফেরত দেয়
+// পরীক্ষার টেক্সট ফেরত দেয় ('TEST EXAM', 'SEMESTER I', ...)
 function getExamText(key) {
     const parts = key.split('_');
     const exam = parts[1];
@@ -230,12 +189,16 @@ function getExamText(key) {
             return 'SEMESTER I';
         case 'SEM2':
             return 'SEMESTER II';
+        case '1ST':
+            return '1ST';
+        case '2ND':
+            return '2ND';
+        case '3RD':
+            return '3RD';
         default:
-            return exam; 
+            return exam; // fallback
     }
-}
-
-    
+}  
 
 // NOTICE & HELP লোড করা
 fetch('files.json')
@@ -447,6 +410,147 @@ async function downloadPopupAsJpg(popupElement) {
             container.appendChild(classBox); // ✅ মূল কন্টেইনারে ক্লাস বক্স যোগ করা হলো
         });
     }
+
+//Teacher Table Notice
+
+ window.onload = () => {
+    // loadStudentExamLinks() ফাংশনটি সংজ্ঞায়িত নয়, তাই এরর এড়াতে এটিকে কমেন্ট করা হয়েছে।
+    // আপনার script.js ফাইলে loadExamLinks() ফাংশন থাকতে পারে।
+    // loadStudentExamLinks();
+    renderNoticeTable();      // টেবিল নোটিশ লোড
+  };
+  function showPopup(titleText, date, link, subjText) {
+  // পপ-আপ কনটেইনার তৈরি
+  const popup = document.createElement('div');
+  popup.style.position = 'fixed';
+  popup.style.top = '50%';
+  popup.style.left = '50%';
+  popup.style.transform = 'translate(-50%, -50%)';
+  popup.style.background = '#f0f8ff'; // হালকা নীল
+  popup.style.padding = '20px';
+  popup.style.margin = '0 auto';        // সেন্টারে রাখবে
+  popup.style.border = '2px solid #333';
+  popup.style.borderRadius = '10px';
+  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+  popup.style.zIndex = '9999';
+  popup.style.textAlign = 'center';
+  popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
+  popup.style.minWidth = '240px'; // খুব ছোট না হয়
+  popup.style.width = '300px'; // সর্বোচ্চ চওড়া
+  popup.style.fontFamily = 'Arial, sans-serif';
+  // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
+  const titleElem = document.createElement('div');
+  titleElem.innerText = titleText;
+  titleElem.style.backgroundColor = 'green';
+  titleElem.style.color = 'white';
+  titleElem.style.fontWeight = 'bold';
+  titleElem.style.fontSize = '15px';
+  titleElem.style.padding = '10px';
+  titleElem.style.borderRadius = '5px';
+  titleElem.style.marginBottom = '15px';
+  popup.appendChild(titleElem);
+
+  // তারিখ (Date)
+  const dateElem = document.createElement('div');
+  dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+  dateElem.style.marginBottom = '10px';
+  popup.appendChild(dateElem);
+
+  // subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
+  if (subjText && subjText.trim() !== '') {
+    const subjElem = document.createElement('div');
+    subjElem.innerText = subjText;
+    subjElem.style.color = 'darkgreen';
+    subjElem.style.backgroundColor = '#e6ffe6'; // হালকা সবুজ
+    subjElem.style.fontWeight = 'bold';
+    subjElem.style.fontSize = '14px';
+    subjElem.style.padding = '6px';
+    subjElem.style.borderRadius = '4px';
+    subjElem.style.marginBottom = '12px';
+    popup.appendChild(subjElem);
+  }
+// বোতাম কন্টেইনার
+const buttonContainer = document.createElement('div');
+buttonContainer.style.marginTop = '20px';
+buttonContainer.style.display = 'flex';
+buttonContainer.style.flexWrap = 'wrap';
+buttonContainer.style.justifyContent = 'center';
+buttonContainer.style.gap = '20px'; // বোতামের মাঝে দূরত্ব
+
+// ফাইল খুলুন বোতাম লিঙ্ক থাকলে তা দেখাও
+if (link && link.trim() !== '') {
+  const linkBtn = document.createElement('a');
+  linkBtn.href = link;
+  linkBtn.innerText = 'Open Link';
+  linkBtn.target = '_blank';
+  linkBtn.style.backgroundColor = '#007bff';
+  linkBtn.style.color = 'white';
+  linkBtn.style.padding = '10px 16px';
+  linkBtn.style.border = 'none';
+  linkBtn.style.borderRadius = '5px';
+  linkBtn.style.textDecoration = 'none';
+  linkBtn.style.fontWeight = 'bold';
+  linkBtn.style.fontSize = '12px'; // ছোট ফন্ট
+  linkBtn.style.transition = 'background-color 0.3s';
+  linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+  linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+  buttonContainer.appendChild(linkBtn);
+}
+
+// ✅ PNG Download Button (fixed) যোগ করা হয়েছে
+    const downloadBtn = document.createElement('button');
+    downloadBtn.innerText = 'Download';
+    downloadBtn.style.backgroundColor = '#28a745';
+    downloadBtn.style.color = 'white';
+    downloadBtn.style.padding = '6px 10px';
+    downloadBtn.style.border = 'none';
+    downloadBtn.style.borderRadius = '5px';
+    downloadBtn.style.fontWeight = 'bold';
+    downloadBtn.style.fontSize = '12px'; // ছোট ফন্ট
+    downloadBtn.style.cursor = 'pointer';
+    downloadBtn.onclick = () => {
+        // Ensure reflow before capturing
+        setTimeout(() => {
+            html2canvas(popup).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'notice.png';
+                link.click();
+            });
+        }, 100); // slight delay for reflow
+    };
+    buttonContainer.appendChild(downloadBtn);
+
+// বন্ধ করুন বোতাম
+const closeBtn = document.createElement('button');
+closeBtn.innerText = 'Back';
+closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.style.color = 'white';
+closeBtn.style.padding = '6px 10px';
+closeBtn.style.border = 'none';
+closeBtn.style.borderRadius = '5px';
+closeBtn.style.fontWeight = 'bold';
+closeBtn.style.fontSize = '12px'; // ছোট ফন্ট
+closeBtn.style.cursor = 'pointer';
+closeBtn.style.transition = 'background-color 0.3s';
+closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
+closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.onclick = () => document.body.removeChild(popup);
+buttonContainer.appendChild(closeBtn);
+
+// পপআপে বোতাম কন্টেইনার যোগ করুন
+popup.appendChild(buttonContainer);
+
+  // স্ক্রিনে দেখাও
+  document.body.appendChild(popup);
+}
+
+function closeModal() {
+  document.getElementById('popupModal').style.display = 'none';
+}
+
+
 
     // পেজ লোড হওয়ার সাথে সাথে ফাংশনটি কল করুন
     document.addEventListener('DOMContentLoaded', loadStudentExamLinks);
