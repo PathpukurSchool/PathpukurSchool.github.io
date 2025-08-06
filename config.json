@@ -1,4 +1,14 @@
+
 {
+  "routines": {
+    "staffRoutine": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher",
+    "classRoutine": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student",
+    "subjectRoutine": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject",
+    "schoolExamRoutine": "https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec",
+    "studentDatabase": "https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec"
+  },
+  
+"examCredentials": {
   "V_1ST": {
     "id": "V191816",
     "pass": "White@Head99",
@@ -104,5 +114,6 @@
   "pass": "",
   "url": ""
 }
-
+/* অন্যান্য ক্লাসের জন্য এখানে যোগ করুন */
+}
 }
