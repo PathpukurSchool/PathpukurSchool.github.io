@@ -1,4 +1,3 @@
-
 {
   "routines": {
     "staffRoutine": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher",
@@ -7,48 +6,15 @@
     "schoolExamRoutine": "https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec",
     "studentDatabase": "https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec"
   },
-  
-"examCredentials": {
-  "V_1ST": {
-    "id": "V191816",
-    "pass": "White@Head99",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ESnjptIwCWNEuJWzlHOKsuMB5J28wLWxUb9P9sJdZVG6cA?e=55ArZJ"
-  },
-  "V_2ND": {
-    "id": "V191816",
-    "pass": "White@Head99",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EVWbJGU6QkNEv-FxkoXbT0YBX5HGSJXCBSx_Uumm5s7v3w?e=PNruEh"
-  },
-  "V_3RD": {
-    "id": "V191816",
-    "pass": "White@Head99",
-    "url": "https://script.google.com/macros/s/AKfycbzxziHwFufj3oaSkPftE3lYiqH7LFqqhL6qMRsodRnqxFd28zTQb5Hdfwp-KH4FxpDcNg/exec"
-  },
-  "VI_1ST": {
-    "id": "VI191816",
-    "pass": "Black&Sea77",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ER0B-GxPtLdIs1SVY2b6yPIBydQP_JQqOy94N_vP3v-IzQ?e=dZimBG"
-  },
-  "VI_2ND": {
-    "id": "VI191816",
-    "pass": "Black&Sea77",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EQydwrPUggZEvA0Q2TUKMQcBORdWEl18SKg_MImDya22HQ?e=zuccEO"
-  },
-  "VI_3RD": {
-    "id": "VI191816",
-    "pass": "Black&Sea77",
-    "url": "https://script.google.com/macros/s/AKfycbyfT9R-C1QFsmVXL6kj-c-DCosUNsUJH56z53zX2uxtT84AoJ3XgtPRzojM4OCeP9E/exec"
-  },
-  "VII_1ST": {
-    "id": "VII191816",
-    "pass": "Blue&Book66",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EQvcYO6acbtHs4WAI_5oXLABUrAJRwxG-vB1Aj5aq91Avg?e=iqED3A"
-  },
-  "VII_2ND": {
-    "id": "VII191816",
-    "pass": "Blue&Book66",
-    "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ETEbkqFgpWpJkll9xJADRVoBAYu326_H55mB9rSN3He94g?e=SzPl63"
-  },
+  "examCredentials": {
+    "V_1ST": { "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ESnjptIwCWNEuJWzlHOKsuMB5J28wLWxUb9P9sJdZVG6cA?e=55ArZJ" },
+    "V_2ND": { "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EVWbJGU6QkNEv-FxkoXbT0YBX5HGSJXCBSx_Uumm5s7v3w?e=PNruEh" },
+    "V_3RD": { "url": "https://script.google.com/macros/s/AKfycbzxziHwFufj3oaSkPftE3lYiqH7LFqqhL6qMRsodRnqxFd28zTQb5Hdfwp-KH4FxpDcNg/exec" },
+    "VI_1ST": { "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ER0B-GxPtLdIs1SVY2b6yPIBydQP_JQqOy94N_vP3v-IzQ?e=dZimBG" },
+    "VI_2ND": { "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EQydwrPUggZEvA0Q2TUKMQcBORdWEl18SKg_MImDya22HQ?e=zuccEO" },
+    "VI_3RD": { "url": "https://script.google.com/macros/s/AKfycbyfT9R-C1QFsmVXL6kj-c-DCosUNsUJH56z53zX2uxtT84AoJ3XgtPRzojM4OCeP9E/exec" },
+    "VII_1ST": { "url": "https://1drv.ms/x/c/cc21b5634a3a4440/EQvcYO6acbtHs4WAI_5oXLABUrAJRwxG-vB1Aj5aq91Avg?e=iqED3A" },
+    "VII_2ND": { "url": "https://1drv.ms/x/c/cc21b5634a3a4440/ETEbkqFgpWpJkll9xJADRVoBAYu326_H55mB9rSN3He94g?e=SzPl63" },
   "VII_3RD": {
     "id": "VII191816",
     "pass": "Blue&Book66",
@@ -114,6 +80,5 @@
   "pass": "",
   "url": ""
 }
-/* অন্যান্য ক্লাসের জন্য এখানে যোগ করুন */
 }
 }
