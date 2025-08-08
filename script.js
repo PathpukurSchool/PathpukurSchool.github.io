@@ -198,181 +198,172 @@ function getExamText(key) {
         default:
             return exam; // fallback
     }
-} 
+}  
 
 // NOTICE & HELP লোড করা
 fetch('files.json')
-    .then(response => response.json())
-    .then(data => {
-        populateList('notice-list', data.notices);
-        populateList('help-list', data.help);
-    });
+    .then(response => response.json())
+    .then(data => {
+        populateList('notice-list', data.notices);
+        populateList('help-list', data.help);
+    });
 
 function populateList(elementId, items) {
-    const ul = document.getElementById(elementId);
-    items.forEach(item => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = item.url;
-        a.textContent = `${item.name} (${item.date})`;
-        a.target = '_blank';
-        li.appendChild(a);
-        ul.appendChild(li);
-    });
+    const ul = document.getElementById(elementId);
+    items.forEach(item => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = item.url;
+        a.textContent = `${item.name} (${item.date})`;
+        a.target = '_blank';
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
 }
 
 // ওয়েলকাম পপ আপের জাভাস্ক্রিপ্ট কোড
 document.addEventListener('DOMContentLoaded', function() {
-    // JSON ফাইল থেকে ডেটা লোড করুন
-    fetch('home_popup.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('নেটওয়ার্ক রেসপন্স ঠিক ছিল না ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // পপ-আপের শিরোনাম এবং বার্তা সেট করুন
-            const popupTitleElement = document.getElementById('popupTitle');
-            const popupMessageElement = document.getElementById('popupMessage');
-            // বোতামগুলোর নতুন আইডি ব্যবহার করা হয়েছে
-            const downloadButton = document.getElementById('downloadPopupButton'); // নতুন আইডি
-            const closeButton = document.getElementById('closePopupButton');     // নতুন আইডি
-            const welcomePopup = document.getElementById('websiteWelcomePopup');
+    // JSON ফাইল থেকে ডেটা লোড করুন
+    fetch('home_popup.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('নেটওয়ার্ক রেসপন্স ঠিক ছিল না ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // পপ-আপের শিরোনাম এবং বার্তা সেট করুন
+            const popupTitleElement = document.getElementById('popupTitle');
+            const popupMessageElement = document.getElementById('popupMessage');
+            // বোতামগুলোর নতুন আইডি ব্যবহার করা হয়েছে
+            const downloadButton = document.getElementById('downloadPopupButton'); // নতুন আইডি
+            const closeButton = document.getElementById('closePopupButton');     // নতুন আইডি
+            const welcomePopup = document.getElementById('websiteWelcomePopup');
 
-            if (popupTitleElement && data.popup_title) {
-                popupTitleElement.textContent = data.popup_title;
-            }
+            if (popupTitleElement && data.popup_title) {
+                popupTitleElement.textContent = data.popup_title;
+            }
 
-            if (popupMessageElement && Array.isArray(data.popup_message)) {
-                popupMessageElement.innerHTML = '';
-                data.popup_message.forEach(paragraphText => {
-                    const p = document.createElement('p');
-                    p.textContent = paragraphText;
-                    popupMessageElement.appendChild(p);
-                });
-            } else if (popupMessageElement && typeof data.popup_message === 'string') {
-                popupMessageElement.innerHTML = data.popup_message;
-            }
+            if (popupMessageElement && Array.isArray(data.popup_message)) {
+                popupMessageElement.innerHTML = '';
+                data.popup_message.forEach(paragraphText => {
+                    const p = document.createElement('p');
+                    p.textContent = paragraphText;
+                    popupMessageElement.appendChild(p);
+                });
+            } else if (popupMessageElement && typeof data.popup_message === 'string') {
+                popupMessageElement.innerHTML = data.popup_message;
+            }
 
-            // পপ-আপ দেখান
-            if (welcomePopup) {
-                welcomePopup.style.display = 'flex';
-            }
+            // পপ-আপ দেখান
+            if (welcomePopup) {
+                welcomePopup.style.display = 'flex';
+            }
 
-            // ক্লোজ বাটনের কার্যকারিতা
-            if (closeButton) {
-                closeButton.addEventListener('click', closeWebsiteWelcomePopup);
-            }
+            // ক্লোজ বাটনের কার্যকারিতা
+            if (closeButton) {
+                closeButton.addEventListener('click', closeWebsiteWelcomePopup);
+            }
 
-            // ডাউনলোড বাটনের কার্যকারিতা
-            if (downloadButton) {
-                downloadButton.addEventListener('click', () => {
-                    if (welcomePopup) {
-                        downloadPopupAsJpg(welcomePopup);
-                    }
-                });
-            }
-        })
-        .catch(error => {
-            console.error('পপ-আপ ডেটা লোড করতে সমস্যা হয়েছে:', error);
-        });
+            // ডাউনলোড বাটনের কার্যকারিতা
+            if (downloadButton) {
+                downloadButton.addEventListener('click', () => {
+                    if (welcomePopup) {
+                        downloadPopupAsJpg(welcomePopup);
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error('পপ-আপ ডেটা লোড করতে সমস্যা হয়েছে:', error);
+        });
 });
 
 function closeWebsiteWelcomePopup() {
-    const welcomePopup = document.getElementById('websiteWelcomePopup');
-    if (welcomePopup) {
-        welcomePopup.style.display = 'none';
-    }
+    const welcomePopup = document.getElementById('websiteWelcomePopup');
+    if (welcomePopup) {
+        welcomePopup.style.display = 'none';
+    }
 }
 
 // downloadPopupAsJpg ফাংশনটি অপরিবর্তিত থাকবে
 async function downloadPopupAsJpg(popupElement) {
-    try {
-        const canvas = await html2canvas(popupElement);
-        const dataURL = canvas.toDataURL('image/jpeg');
+    try {
+        const canvas = await html2canvas(popupElement);
+        const dataURL = canvas.toDataURL('image/jpeg');
 
-        const a = document.createElement('a');
-        a.href = dataURL;
-        a.download = 'popup_message.jpg';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        const a = document.createElement('a');
+        a.href = dataURL;
+        a.download = 'popup_message.jpg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
 
-        closeWebsiteWelcomePopup();
+        closeWebsiteWelcomePopup();
 
-    } catch (error) {
-        console.error('পপ-আপ ডাউনলোড করতে সমস্যা:', error);
-    }
+    } catch (error) {
+        console.error('পপ-আপ ডাউনলোড করতে সমস্যা:', error);
+    }
 }
 
 //Teacher Table Notice
 
-let studentTableNotices = []; // JSON থেকে ডেটা লোড করার জন্য একটি খালি অ্যারে
+ window.onload = () => {
+    // loadStudentExamLinks() ফাংশনটি সংজ্ঞায়িত নয়, তাই এরর এড়াতে এটিকে কমেন্ট করা হয়েছে।
+    // আপনার script.js ফাইলে loadExamLinks() ফাংশন থাকতে পারে।
+    // loadStudentExamLinks();
+    renderNoticeTable();      // টেবিল নোটিশ লোড
+  };
+  function showPopup(titleText, date, link, subjText) {
+  // পপ-আপ কনটেইনার তৈরি
+  const popup = document.createElement('div');
+  popup.style.position = 'fixed';
+  popup.style.top = '50%';
+  popup.style.left = '50%';
+  popup.style.transform = 'translate(-50%, -50%)';
+  popup.style.background = '#f0f8ff'; // হালকা নীল
+  popup.style.padding = '20px';
+  popup.style.margin = '0 auto';        // সেন্টারে রাখবে
+  popup.style.border = '2px solid #333';
+  popup.style.borderRadius = '10px';
+  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+  popup.style.zIndex = '9999';
+  popup.style.textAlign = 'center';
+  popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
+  popup.style.minWidth = '240px'; // খুব ছোট না হয়
+  popup.style.width = '300px'; // সর্বোচ্চ চওড়া
+  popup.style.fontFamily = 'Arial, sans-serif';
+  // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
+  const titleElem = document.createElement('div');
+  titleElem.innerText = titleText;
+  titleElem.style.backgroundColor = 'green';
+  titleElem.style.color = 'white';
+  titleElem.style.fontWeight = 'bold';
+  titleElem.style.fontSize = '15px';
+  titleElem.style.padding = '10px';
+  titleElem.style.borderRadius = '5px';
+  titleElem.style.marginBottom = '15px';
+  popup.appendChild(titleElem);
 
-// পেজ লোড হলে নোটিশ ডেটা লোড করুন
-window.onload = () => {
-    fetch('student_notices.json') // এখানে আপনার JSON ফাইলের নাম দিন
-        .then(response => response.json())
-        .then(data => {
-            studentTableNotices = data.notices; // ধরে নিচ্ছি JSON ফাইলে 'notices' নামে একটি অ্যারে আছে
-            renderNoticeTable(); // ডেটা লোড হওয়ার পর টেবিল রেন্ডার করা
-        })
-        .catch(error => {
-            console.error('নোটিশ ডেটা লোড করতে সমস্যা হয়েছে:', error);
-        });
-};
+  // তারিখ (Date)
+  const dateElem = document.createElement('div');
+  dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+  dateElem.style.marginBottom = '10px';
+  popup.appendChild(dateElem);
 
-function showPopup(titleText, date, link, subjText) {
-// পপ-আপ কনটেইনার তৈরি
-const popup = document.createElement('div');
-popup.style.position = 'fixed';
-popup.style.top = '50%';
-popup.style.left = '50%';
-popup.style.transform = 'translate(-50%, -50%)';
-popup.style.background = '#f0f8ff'; // হালকা নীল
-popup.style.padding = '20px';
-popup.style.margin = '0 auto';        // সেন্টারে রাখবে
-popup.style.border = '2px solid #333';
-popup.style.borderRadius = '10px';
-popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-popup.style.zIndex = '9999';
-popup.style.textAlign = 'center';
-popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
-popup.style.minWidth = '240px'; // খুব ছোট না হয়
-popup.style.width = '300px'; // সর্বোচ্চ চওড়া
-popup.style.fontFamily = 'Arial, sans-serif';
-// হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
-const titleElem = document.createElement('div');
-titleElem.innerText = titleText;
-titleElem.style.backgroundColor = 'green';
-titleElem.style.color = 'white';
-titleElem.style.fontWeight = 'bold';
-titleElem.style.fontSize = '15px';
-titleElem.style.padding = '10px';
-titleElem.style.borderRadius = '5px';
-titleElem.style.marginBottom = '15px';
-popup.appendChild(titleElem);
-
-// তারিখ (Date)
-const dateElem = document.createElement('div');
-dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-dateElem.style.marginBottom = '10px';
-popup.appendChild(dateElem);
-
-// subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
-if (subjText && subjText.trim() !== '') {
-  const subjElem = document.createElement('div');
-  subjElem.innerText = subjText;
-  subjElem.style.color = 'darkgreen';
-  subjElem.style.backgroundColor = '#e6ffe6'; // হালকা সবুজ
-  subjElem.style.fontWeight = 'bold';
-  subjElem.style.fontSize = '14px';
-  subjElem.style.padding = '6px';
-  subjElem.style.borderRadius = '4px';
-  subjElem.style.marginBottom = '12px';
-  popup.appendChild(subjElem);
-}
+  // subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
+  if (subjText && subjText.trim() !== '') {
+    const subjElem = document.createElement('div');
+    subjElem.innerText = subjText;
+    subjElem.style.color = 'darkgreen';
+    subjElem.style.backgroundColor = '#e6ffe6'; // হালকা সবুজ
+    subjElem.style.fontWeight = 'bold';
+    subjElem.style.fontSize = '14px';
+    subjElem.style.padding = '6px';
+    subjElem.style.borderRadius = '4px';
+    subjElem.style.marginBottom = '12px';
+    popup.appendChild(subjElem);
+  }
 // বোতাম কন্টেইনার
 const buttonContainer = document.createElement('div');
 buttonContainer.style.marginTop = '20px';
@@ -383,48 +374,48 @@ buttonContainer.style.gap = '20px'; // বোতামের মাঝে দূ
 
 // ফাইল খুলুন বোতাম লিঙ্ক থাকলে তা দেখাও
 if (link && link.trim() !== '') {
-  const linkBtn = document.createElement('a');
-  linkBtn.href = link;
-  linkBtn.innerText = 'Open Link';
-  linkBtn.target = '_blank';
-  linkBtn.style.backgroundColor = '#007bff';
-  linkBtn.style.color = 'white';
-  linkBtn.style.padding = '10px 16px';
-  linkBtn.style.border = 'none';
-  linkBtn.style.borderRadius = '5px';
-  linkBtn.style.textDecoration = 'none';
-  linkBtn.style.fontWeight = 'bold';
-  linkBtn.style.fontSize = '12px'; // ছোট ফন্ট
-  linkBtn.style.transition = 'background-color 0.3s';
-  linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
-  linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
-  buttonContainer.appendChild(linkBtn);
+  const linkBtn = document.createElement('a');
+  linkBtn.href = link;
+  linkBtn.innerText = 'Open Link';
+  linkBtn.target = '_blank';
+  linkBtn.style.backgroundColor = '#007bff';
+  linkBtn.style.color = 'white';
+  linkBtn.style.padding = '10px 16px';
+  linkBtn.style.border = 'none';
+  linkBtn.style.borderRadius = '5px';
+  linkBtn.style.textDecoration = 'none';
+  linkBtn.style.fontWeight = 'bold';
+  linkBtn.style.fontSize = '12px'; // ছোট ফন্ট
+  linkBtn.style.transition = 'background-color 0.3s';
+  linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+  linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+  buttonContainer.appendChild(linkBtn);
 }
 
 // ✅ PNG Download Button (fixed) যোগ করা হয়েছে
-    const downloadBtn = document.createElement('button');
-    downloadBtn.innerText = 'Download';
-    downloadBtn.style.backgroundColor = '#28a745';
-    downloadBtn.style.color = 'white';
-    downloadBtn.style.padding = '6px 10px';
-    downloadBtn.style.border = 'none';
-    downloadBtn.style.borderRadius = '5px';
-    downloadBtn.style.fontWeight = 'bold';
-    downloadBtn.style.fontSize = '12px'; // ছোট ফন্ট
-    downloadBtn.style.cursor = 'pointer';
-    downloadBtn.onclick = () => {
-        // Ensure reflow before capturing
-        setTimeout(() => {
-            html2canvas(popup).then(canvas => {
-                const image = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.href = image;
-                link.download = 'notice.png';
-                link.click();
-            });
-        }, 100); // slight delay for reflow
-    };
-    buttonContainer.appendChild(downloadBtn);
+    const downloadBtn = document.createElement('button');
+    downloadBtn.innerText = 'Download';
+    downloadBtn.style.backgroundColor = '#28a745';
+    downloadBtn.style.color = 'white';
+    downloadBtn.style.padding = '6px 10px';
+    downloadBtn.style.border = 'none';
+    downloadBtn.style.borderRadius = '5px';
+    downloadBtn.style.fontWeight = 'bold';
+    downloadBtn.style.fontSize = '12px'; // ছোট ফন্ট
+    downloadBtn.style.cursor = 'pointer';
+    downloadBtn.onclick = () => {
+        // Ensure reflow before capturing
+        setTimeout(() => {
+            html2canvas(popup).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'notice.png';
+                link.click();
+            });
+        }, 100); // slight delay for reflow
+    };
+    buttonContainer.appendChild(downloadBtn);
 
 // বন্ধ করুন বোতাম
 const closeBtn = document.createElement('button');
@@ -446,213 +437,16 @@ buttonContainer.appendChild(closeBtn);
 // পপআপে বোতাম কন্টেইনার যোগ করুন
 popup.appendChild(buttonContainer);
 
-  // স্ক্রিনে দেখাও
-  document.body.appendChild(popup);
+  // স্ক্রিনে দেখাও
+  document.body.appendChild(popup);
 }
 
 function closeModal() {
-  document.getElementById('popupModal').style.display = 'none';
+  document.getElementById('popupModal').style.display = 'none';
 }
 
-//স্টুডেন্ট নোটিশ টেবিল
-    const noticesPerPage = 10;
-    let currentPage = 1;
-
-    function renderNoticeTable() {
-      const container = document.getElementById('notice-board');
-      container.innerHTML = "";
-
-      const start = (currentPage - 1) * noticesPerPage;
-      const end = start + noticesPerPage;
-      const paginatedNotices = studentTableNotices.slice(start, end);
-
-      const table = document.createElement('table');
-      table.id = 'notice-table';
-
-      const thead = document.createElement('thead');
-      thead.innerHTML = `
-        <tr>
-          <th>তারিখ</th>
-          <th>বিষয়বস্তু</th>
-          <th>বিজ্ঞপ্তি</th>
-        </tr>
-      `;
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      paginatedNotices.forEach(notice => {
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
-          <td>${notice.date}</td>
-          <td style="color: ${notice.color || '#000'};">${notice.text}</td>
-<td>
-  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')" 
-          onmouseover="this.style.opacity=0.8" 
-          onmouseout="this.style.opacity=1">
-    View
-  </button>
-</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      table.appendChild(tbody);
-      container.appendChild(table);
-
-      const totalPages = Math.ceil(studentTableNotices.length / noticesPerPage);
-      document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
-      document.getElementById('prevBtn').disabled = currentPage === 1;
-      document.getElementById('nextBtn').disabled = currentPage === totalPages;
-    }
-
-    function nextPage() {
-      if (currentPage < Math.ceil(studentTableNotices.length / noticesPerPage)) {
-        currentPage++;
-        renderNoticeTable();
-      }
-    }
-
-    function prevPage() {
-      if (currentPage > 1) {
-        currentPage--;
-        renderNoticeTable();
-      }
-    }
-
-  
-   // Student Table Notice popup handle
-function showPopup(titleText, date, link, subjText) {
-// পপ-আপ কনটেইনার তৈরি
-const popup = document.createElement('div');
-popup.style.position = 'fixed';
-popup.style.top = '50%';
-popup.style.left = '50%';
-popup.style.transform = 'translate(-50%, -50%)';
-popup.style.background = '#f0f8ff'; // হালকা নীল
-popup.style.padding = '20px';
-popup.style.margin = '0 auto';      // সেন্টারে রাখবে
-popup.style.border = '2px solid #333';
-popup.style.borderRadius = '10px';
-popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-popup.style.zIndex = '9999';
-popup.style.textAlign = 'center';
-popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
-popup.style.minWidth = '240px'; // খুব ছোট না হয়
-popup.style.width = '300px'; // সর্বোচ্চ চওড়া
-popup.style.fontFamily = 'Arial, sans-serif';
-
-// হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
-const titleElem = document.createElement('div');
-titleElem.innerText = titleText;
-titleElem.style.backgroundColor = 'green';
-titleElem.style.color = 'white';
-titleElem.style.fontWeight = 'bold';
-titleElem.style.fontSize = '15px';
-titleElem.style.padding = '10px';
-titleElem.style.borderRadius = '5px';
-titleElem.style.marginBottom = '15px';
-popup.appendChild(titleElem);
-
-// তারিখ (Date)
-const dateElem = document.createElement('div');
-dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-dateElem.style.marginBottom = '10px';
-popup.appendChild(dateElem);
-
-// subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
-if (subjText && subjText.trim() !== '') {
-  const subjElem = document.createElement('div');
-  subjElem.innerText = subjText;
-  subjElem.style.color = 'darkgreen';
-  subjElem.style.backgroundColor = '#e6ffe6'; // হালকা সবুজ
-  subjElem.style.fontWeight = 'bold';
-  subjElem.style.fontSize = '14px';
-  subjElem.style.padding = '6px';
-  subjElem.style.borderRadius = '4px';
-  subjElem.style.marginBottom = '12px';
-  popup.appendChild(subjElem);
-}
-// বোতাম কন্টেইনার
-const buttonContainer = document.createElement('div');
-buttonContainer.style.marginTop = '20px';
-buttonContainer.style.display = 'flex';
-buttonContainer.style.flexWrap = 'wrap';
-buttonContainer.style.justifyContent = 'center';
-buttonContainer.style.gap = '10px'; // বোতামের মাঝে দূরত্ব
-
-// ফাইল খুলুন বোতাম লিঙ্ক থাকলে তা দেখাও
-if (link && link.trim() !== '') {
-  const linkBtn = document.createElement('a');
-  linkBtn.href = link;
-  linkBtn.innerText = 'Open Link';
-  linkBtn.target = '_blank';
-  linkBtn.style.backgroundColor = '#007bff';
-  linkBtn.style.color = 'white';
-  linkBtn.style.padding = '6px 10px';
-  linkBtn.style.border = 'none';
-  linkBtn.style.borderRadius = '5px';
-  linkBtn.style.textDecoration = 'none';
-  linkBtn.style.fontWeight = 'bold';
-  linkBtn.style.fontSize = '12px'; // ছোট ফন্ট
-  linkBtn.style.transition = 'background-color 0.3s';
-  linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
-  linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
-  buttonContainer.appendChild(linkBtn);
-}
-
-// ✅ PNG Download Button (fixed)
-    const downloadBtn = document.createElement('button');
-    downloadBtn.innerText = 'Download';
-    downloadBtn.style.backgroundColor = '#28a745';
-    downloadBtn.style.color = 'white';
-    downloadBtn.style.padding = '6px 10px';
-    downloadBtn.style.border = 'none';
-    downloadBtn.style.borderRadius = '5px';
-    downloadBtn.style.fontWeight = 'bold';
-    downloadBtn.style.fontSize = '12px'; // ছোট ফন্ট
-    downloadBtn.style.cursor = 'pointer';
-    downloadBtn.onclick = () => {
-        // Ensure reflow before capturing
-        setTimeout(() => {
-            html2canvas(popup).then(canvas => {
-                const image = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.href = image;
-                link.download = 'notice.png';
-                link.click();
-            });
-        }, 100); // slight delay for reflow
-    };
-    buttonContainer.appendChild(downloadBtn);
-    
-// বন্ধ করুন বোতাম
-const closeBtn = document.createElement('button');
-closeBtn.innerText = 'Back';
-closeBtn.style.backgroundColor = '#dc3545';
-closeBtn.style.color = 'white';
-closeBtn.style.padding = '6px 10px';
-closeBtn.style.border = 'none';
-closeBtn.style.borderRadius = '5px';
-closeBtn.style.fontWeight = 'bold';
-closeBtn.style.fontSize = '12px'; // ছোট ফন্ট
-closeBtn.style.cursor = 'pointer';
-closeBtn.style.transition = 'background-color 0.3s';
-closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
-closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
-closeBtn.onclick = () => document.body.removeChild(popup);
-buttonContainer.appendChild(closeBtn);
-
-// পপআপে বোতাম কন্টেইনার যোগ করুন
-popup.appendChild(buttonContainer);
-
-  // স্ক্রিনে দেখাও
-  document.body.appendChild(popup);
-}
-
-function closeModal() {
-  document.getElementById('popupModal').style.display = 'none';
-}
+    // পেজ লোড হওয়ার সাথে সাথে ফাংশনটি কল করুন
+    document.addEventListener('DOMContentLoaded', loadStudentExamLinks);
 
 // ✅ স্টুডেন্ট নেভিগেশন বার
 // ✅ Smooth scrolling for navigation links
