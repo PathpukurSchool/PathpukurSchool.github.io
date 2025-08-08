@@ -89,6 +89,25 @@
 	<a href="#" class="nav-link" onclick="logout()">LogOut</a>
    </nav>
 
+<script>
+	const menuButton = document.getElementById('menu-toggle-button');
+const sidebar = document.getElementById('sidebar-menu');
+const overlay = document.getElementById('overlay');
+
+// মেনু বাটন ক্লিক করলে সাইডবার এবং ওভারলে টগল করবে
+menuButton.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+});
+
+// ওভারলেতে ক্লিক করলে সাইডবার এবং ওভারলে বন্ধ করবে
+overlay.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+});
+</script>
+
+	  
 	  <!--✅ মেন হেডিং -->  
          <div class="header-content-container">
         <div class="header-main">
