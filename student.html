@@ -45,24 +45,58 @@
       <span class="emoji">📢</span>
       <span class="blink">গুরুত্বপূর্ণ বিজ্ঞপ্তি</span>
     </h2>
-    <script src="student_notice.js"></script>
-    <div id="notice-board"></div>
-    <div class="pagination">
-      <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-      <span id="pageNumber">Page 1</span>
-      <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
-    </div>
-    <div id="popupModal" style="display: none;" class="modal-overlay">
-      <div class="modal-content">
-        <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
-        <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
-        <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
-        <div id="popupLinkArea" style="margin-top: 10px;"></div>
-        <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
-      </div>
-    </div>
-  </div>
- <!-- ✅ External Notice Bord -->
+    
+  <!-- ✅ External Notice File -->
+  <script src="student_notice.js"></script>
+  <script>
+  const marquee = document.getElementById("marquee");
+
+  if (Array.isArray(studentNotices)) {
+    studentNotices.forEach(notice => {
+      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
+      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
+
+      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
+      if (text.trim() !== "") {
+        const span = document.createElement("span");
+        span.textContent = `${date} - ${text}`;
+        span.style.color = notice.color || "black";
+        span.style.fontWeight = "bold";
+        span.style.marginRight = "30px";
+        marquee.appendChild(span);
+      }
+    });
+  } else {
+    marquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
+  }
+
+  // 🔁 Marquee pause on hover/touch
+  marquee.addEventListener("mouseover", () => marquee.classList.add("paused"));
+  marquee.addEventListener("mouseout", () => marquee.classList.remove("paused"));
+  marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
+  marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
+</script>
+  
+  <!-- ✅ টেবিল নোটিশ বোর্ড -->
+  <div id="notice-board"></div>
+  <div class="pagination">
+    <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+    <span id="pageNumber">Page 1</span>
+    <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+  </div>
+ <!-- ✅ Popup Modal -->
+<div id="popupModal" style="display: none;" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
+    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
+    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
+    <div id="popupLinkArea" style="margin-top: 10px;"></div>
+    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+  </div>
+</div>
+  </div>
+
+  <!-- ✅ External Notice Bord -->
   <script>
     const noticesPerPage = 10;
     let currentPage = 1;
@@ -272,7 +306,6 @@ popup.appendChild(buttonContainer);
 function closeModal() {
   document.getElementById('popupModal').style.display = 'none';
 }
-
   </script>
 
     <div class="section-heading-container" id="result-section">
