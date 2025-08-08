@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Page</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="apple-touch-icon" href="PHS-LOGO.png">
-  <link rel="stylesheet" href="student.css">
-    <script>
-    if (sessionStorage.getItem("studentLoggedIn") !== "true") {
-      window.location.replace("/home.html");
-    }
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Page</title>
+
+  <!-- Favicon & Touch Icon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="PHS-LOGO.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="student.css">
+
+  <!-- ✅ সেশন চেক -->
+    <script>
+    if (sessionStorage.getItem("studentLoggedIn") !== "true") {
+      window.location.replace("/home.html");
+      // console.log("Student not logged in. Redirecting to home.html."); // ডিবাগিং এর জন্য
+    } else {
+      // console.log("Student logged in. Staying on student.html."); // ডিবাগিং এর জন্য
+    }
+  </script>
+
 </head>
 <body>
  
