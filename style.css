@@ -1316,3 +1316,80 @@ ul li a:hover {
     }
 }
 
+/* Sidebar Menu Styles */
+.sidebar-menu {
+    position: fixed; /* Fixed position so it overlays content */
+    top: 0;
+    left: -320px; /* Initially off-screen to the left (adjust based on your desired width) */
+    width: 300px; /* Width of your sidebar */
+    height: 100%; /* Full height of the viewport */
+    background: linear-gradient(to bottom, #E6FFE6, #FFF0F5); /* Background color of the sidebar */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4); /* Shadow for depth */
+    transition: left 0.4s ease-in-out; /* Smooth transition for opening/closing */
+    z-index: 1000; /* High z-index to be above all content (and overlay) */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    padding-top: 20px; /* Space from the top */
+    display: flex; /* For vertical alignment of links */
+    flex-direction: column; /* Stack links vertically */
+    /* Add any other styling for the sidebar links here */
+}
+.sidebar-menu.active {
+    left: 0; /* Moves the sidebar into view when active */
+}
+.sidebar-menu a {
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    display: block; /* Make links take full width */
+    transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.3s ease; /* Smooth transition for hover effects */
+    border-bottom: 1px solid #eee; /* Separator between links */
+}
+    /* লেখার চারপাশে সাদা বর্ডার যোগ করতে text-shadow ব্যবহার করুন */
+    text-shadow:
+        -1px -1px 0 var(--white),  /* উপরের বামে */
+        1px -1px 0 var(--white),   /* উপরের ডানে */
+        -1px 1px 0 var(--white),   /* নিচের বামে */
+        1px 1px 0 var(--white);    /* নিচের ডানে */
+}
+
+.sidebar-menu a:hover {
+    background-color: #E0FFFF; /* A light blue background on hover */
+    color: #0056b3; /* Darker blue text color on hover */
+    padding-left: 25px; /* Slight indent on hover for visual feedback */
+}
+.sidebar-menu a:active {
+    background-color: #007bff; /* Bright Blue */
+    color: #FFFFFF; /* White text on click */
+}
+.sidebar-menu a.active-link {
+    background-color: #00008B;
+    color: white;
+    font-weight: bold;
+}
+    .sidebar-menu a:last-child {
+    border-bottom: 2px solid #ccc; /* Ensure it has a border if you want it */
+    margin-bottom: 10px; /* Small margin to push it slightly from the bottom of the menu */
+    }
+}
+section[id] {
+    scroll-margin-top: 320px;
+}
+/* Overlay for when the sidebar is open */
+.overlay {
+    position: fixed; /* Fixed position to cover the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    z-index: 999; /* Lower than sidebar (1000), but above main content */
+    opacity: 0; /* Initially invisible */
+    visibility: hidden; /* Hidden from screen readers and interactions */
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out; /* Smooth fade effect */
+}
+
+.overlay.active {
+    opacity: 1; /* Fully visible when active */
+    visibility: visible; /* Make it interactive */
+}
