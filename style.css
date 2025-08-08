@@ -1,61 +1,122 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #F0F0F0;
-    text-align: center;
-    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #eef2f5;
+    color: #333;
+    margin: 0;
+    padding-top: 60px; /* Space for fixed header */
 }
-/* --- প্রধান হেডিং স্টাইল --- */
-.logo {
-    max-width: 80px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
-    height: auto; /* অনুপাত ঠিক রাখতে */
-    margin-right: 20px;
-    animation: rotateSlowly 13s linear infinite; /* 8s এঙ্গেল, লিনিয়ার গতি, ক্রমাগত চলবে */
-    transform-style: preserve-3d; /* 3D ট্রান্সফর্মের জন্য */
-    perspective: 1000px; /* 3D গভীরতা (যদি প্রয়োজন হয়) */
-    /* অ্যানিমেশন শুরু হওয়ার আগে লোগো দৃশ্যমান রাখতে */
-    opacity: 1; /* সরাসরি দৃশ্যমান হবে */
+* {
+    box-sizing: border-box;
 }
 
-.school-name {
-    color: #004d40; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
-   font-size: 2.2rem; /* ফন্ট সাইজ বাড়ানো হয়েছে, রেসপনসিভ ইউনিটে */
-    font-weight: 900; /* আরও বোল্ড করা হয়েছে */
-    text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
-    margin: 0; /* ডিফল্ট মার্জিন অপসারণ */
-    margin-bottom: 25px;
-    line-height: 1.2; /* লাইনের উচ্চতা */
-    font-family: 'Montserrat', sans-serif; /* আধুনিক ও শক্তিশালী ফন্ট */
+/* ✅ Main Header & Navigation Bar */
+.main-header {
+    background-color: #004d40;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
 }
-/* অ্যানিমেশন কিফ্রেম */
+.main-nav {
+    display: flex;
+    gap: 25px;
+}
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* ✅ Header Content (Logo & School Name) */
+.header-content-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 80px auto 20px; /* Adjusting margin-top for fixed header */
+}
+
+/* আপনার দেওয়া পুরোনো কোড থেকে স্টাইল যুক্ত করা হয়েছে */
+.logo {
+    max-width: 80px;
+    height: auto;
+    margin-right: 20px;
+    animation: rotateSlowly 13s linear infinite;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    opacity: 1;
+}
+.school-name {
+    color: #004d40;
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
+    margin: 0;
+    line-height: 1.2;
+    font-family: 'Montserrat', sans-serif;
+}
 @keyframes rotateSlowly {
     0% {
-        transform: rotateY(0deg); /* 0 ডিগ্রি থেকে শুরু */
+        transform: rotateY(0deg);
     }
     100% {
-        transform: rotateY(360deg); /* 360 ডিগ্রি পর্যন্ত ঘুরবে */
+        transform: rotateY(360deg);
     }
 }
 
-/* --- রেসপনসিভ ডিজাইন --- */
+/* ✅ Responsive Design */
 @media (max-width: 768px) {
+    .header-content-container {
+        flex-direction: column;
+        text-align: center;
+        margin-top: 70px;
+    }
     .logo {
         max-width: 50px;
-        margin-bottom: 0px;
+        margin-right: 0;
+        margin-bottom: 10px;
     }
-
     .school-name {
-        font-size: 1.2em; /* ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
+        font-size: 1.8rem;
+    }
+    .main-nav {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .nav-link {
+        font-size: 0.9rem;
+        padding: 3px 8px;
     }
 }
-
 @media (max-width: 480px) {
     .school-name {
-        font-size: 1em; /* আরও ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
+        font-size: 1.5rem;
     }
     .logo {
         max-width: 40px;
     }
 }
+
 /* Master Login text colour */
 .red-text {
   color: #DC143C; 
@@ -1254,63 +1315,3 @@ ul li a:hover {
     }
 }
 
-/* স্টুডেন্ট নেভিগেশন বার */
-/* ✅ Main Header & Navigation Bar */
-.main-header {
-    background-color: #004d40;
-    padding: 15px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    display: flex;
-    justify-content: center;
-}
-.main-nav {
-    display: flex;
-    gap: 25px;
-}
-.nav-link {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-
-/* ✅ Header Content */
-.header-content {
-    text-align: center;
-    margin-top: 20px;
-}
-@media (max-width: 768px) {
-    .main-nav {
-        gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .nav-link {
-        font-size: 0.9rem;
-        padding: 3px 8px;
-    }
-}
-.header-content-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    max-width: 900px;
-    margin: 80px auto 20px; /* Adjusting margin-top for fixed header */
-}
