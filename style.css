@@ -1320,8 +1320,8 @@ ul li a:hover {
 .sidebar-menu {
     position: fixed; /* Fixed position so it overlays content */
     top: 0;
-    left: -320px; /* Initially off-screen to the left (adjust based on your desired width) */
-    width: 300px; /* Width of your sidebar */
+    left: -160px; /* Initially off-screen to the left (adjust based on your desired width) */
+    width: 150px; /* Width of your sidebar */
     height: 100%; /* Full height of the viewport */
     background: linear-gradient(to bottom, #E6FFE6, #FFF0F5); /* Background color of the sidebar */
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4); /* Shadow for depth */
