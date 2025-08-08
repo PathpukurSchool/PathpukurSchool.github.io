@@ -105,6 +105,15 @@ overlay.addEventListener('click', () => {
     sidebar.classList.remove('active');
     overlay.classList.remove('active');
 });
+	const navLinks = document.querySelectorAll('.sidebar-menu a');
+
+// নেভিগেশন লিংকে ক্লিক করলে সাইডবার এবং ওভারলে বন্ধ করবে
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+});
 </script>
 
 	  
