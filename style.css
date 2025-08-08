@@ -1253,5 +1253,51 @@ ul li a:hover {
     }
 }
 
-
 /* স্টুডেন্ট নেভিগেশন বার */
+/* ✅ Main Header & Navigation Bar */
+.main-header {
+    background-color: #004d40;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+}
+.main-nav {
+    display: flex;
+    gap: 25px;
+}
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* ✅ Header Content */
+.header-content {
+    text-align: center;
+    margin-top: 20px;
+}
+@media (max-width: 768px) {
+    .main-nav {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .nav-link {
+        font-size: 0.9rem;
+        padding: 3px 8px;
+    }
+}
