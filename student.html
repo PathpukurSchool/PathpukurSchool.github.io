@@ -35,44 +35,6 @@
             <span class="emoji">📢</span>
             <span class="blink">গুরুত্বপূর্ণ বিজ্ঞপ্তি</span>
       </h2>
-
-  <!-- ✅ Scrolling Notice -->
-  <div class="wrapper">
-    <div class="marquee-container">
-      <div id="marquee" class="marquee-content"></div>
-    </div>
-  </div>
-
-  <!-- ✅ External Notice File -->
-  <script src="student_notice.js"></script>
-  <script>
-  const marquee = document.getElementById("marquee");
-
-  if (Array.isArray(studentNotices)) {
-    studentNotices.forEach(notice => {
-      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
-      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
-
-      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
-      if (text.trim() !== "") {
-        const span = document.createElement("span");
-        span.textContent = `${date} - ${text}`;
-        span.style.color = notice.color || "black";
-        span.style.fontWeight = "bold";
-        span.style.marginRight = "30px";
-        marquee.appendChild(span);
-      }
-    });
-  } else {
-    marquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
-  }
-
-  // 🔁 Marquee pause on hover/touch
-  marquee.addEventListener("mouseover", () => marquee.classList.add("paused"));
-  marquee.addEventListener("mouseout", () => marquee.classList.remove("paused"));
-  marquee.addEventListener("touchstart", () => marquee.classList.add("paused"));
-  marquee.addEventListener("touchend", () => marquee.classList.remove("paused"));
-</script>
   
   <!-- ✅ টেবিল নোটিশ বোর্ড -->
   <div id="notice-board"></div>
@@ -313,7 +275,7 @@ function closeModal() {
         <span class="blink">পরীক্ষার ফলাফল</span>
     </h2>
     <h3 class="login-instruction-heading"> শিক্ষার্থীদের লিখিত পরীক্ষার নম্বর দেখতে নিচের বোতামটিতে ক্লিক করুন: <span class="emoji">👇</span></h3>
-    <a href="https://script.google.com/macros/s/AKfycbwOiPSFzl2HQLEzSoJeiJx34O33N-TS2IoWKh-hx3TOibk9ELtC5xQBQZ_qanP-evgiQg/exec" target="_blank" class="exam-link">লিখিত পরীক্ষার নম্বর দেখুন</a>
+    <a href="https://script.google.com/macros/s/AKfycbwWJ0IRCZIOpmZWpOFkCZQgaCbjQfhInftY58DRe_EcU3ZC6xNZx-dxDp3v9pyrbI20CQ/exec" target="_blank" class="exam-link">লিখিত পরীক্ষার নম্বর দেখুন</a>
     </div>
 
       <!-- ✅ স্টুডেন্ট রুটিন -->
