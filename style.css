@@ -1316,6 +1316,85 @@ ul li a:hover {
     }
 }
 
+
+/* Styles for the menu button itself */
+.menu-button {
+    background-color: #FF5733; /* Example background */
+    color: #FFFFFF; /* White icon color for contrast */
+    border: 2px solid #FF5733; /* Border matching background for cleaner look */
+    padding: 10px 12px;
+    width: 40px; /* একটি নির্দিষ্ট প্রস্থ দিতে পারেন যাতে এটি একটি বর্গাকার বা বৃত্তাকার হয় */
+    height: 40px; /* একটি নির্দিষ্ট উচ্চতা দিতে পারেন */
+    border-radius: 50%; /* Make it circular for a modern, distinct look */
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    justify-content: center; /* আইকনটিকে অনুভূমিকভাবে কেন্দ্রীভূত করবে */
+    align-items: center;     /* আইকনটিকে উল্লম্বভাবে কেন্দ্রীভূত করবে */
+    position: relative; /* If you want to position it specifically in header */
+    z-index: 1001; /* Ensure button is clickable above the overlay when closed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); /* Adds depth, makes it pop */
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover */
+}
+/* Ensure the Font Awesome icon inside the button inherits color */
+.menu-button i {
+    color: inherit; /* Icon color will be white from .menu-button */
+}
+
+/* Add an optional subtle animation if you like for the icon itself */
+.menu-button i {
+    transition: transform 0.3s ease;
+}
+
+.menu-button:hover i {
+    transform: rotate(90deg); /* Optional: Rotate icon on hover */
+}
+.menu-button:hover {
+    background-color: #E64A19; /* Darker orange on hover */
+    border-color: #E64A19;
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35); /* More prominent shadow on hover */
+}
+.menu-button:active {
+    background-color: #BF360C; /* Even darker on click for tactile feedback */
+    border-color: #BF360C;
+    transform: scale(0.98); /* Slightly shrink on active state */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Smaller shadow on active */
+}
+/* Ensure header-buttons has a position context for the button */
+.header-buttons {
+   position: fixed; /* Or fixed, depending on where you want it visually */
+    top: 10px; /* Adjust as needed for padding from top */
+    left: 20px; /* Adjust as needed for padding from left */
+    z-index: 1001; /* Must be higher than overlay */
+}
+
+/* Media Queries for Menu Button */
+@media (max-width: 768px) {
+    .menu-button {
+        top: 15px;
+        left: 15px;
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+    .main-header {
+        padding-left: 70px;
+        padding-right: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-button {
+        top: 10px;
+        left: 10px;
+        padding: 5px 10px;
+        font-size: 0.75em;
+    }
+    .main-header {
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+}
 /* Sidebar Menu Styles */
 .sidebar-menu {
     position: fixed; /* Fixed position so it overlays content */
