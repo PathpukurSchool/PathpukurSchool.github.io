@@ -6,8 +6,9 @@ body {
 }
 /* --- প্রধান হেডিং স্টাইল --- */
 .logo {
-    max-width: 120px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
+    max-width: 80px; /* লোগোর সর্বোচ্চ প্রস্থ কিছুটা কমানো হয়েছে */
     height: auto; /* অনুপাত ঠিক রাখতে */
+    margin-right: 20px;
     animation: rotateSlowly 13s linear infinite; /* 8s এঙ্গেল, লিনিয়ার গতি, ক্রমাগত চলবে */
     transform-style: preserve-3d; /* 3D ট্রান্সফর্মের জন্য */
     perspective: 1000px; /* 3D গভীরতা (যদি প্রয়োজন হয়) */
@@ -16,8 +17,8 @@ body {
 }
 
 .school-name {
-    color: #8B0000; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
-    font-size: 3.0em; /* ফন্ট সাইজ বাড়ানো হয়েছে, রেসপনসিভ ইউনিটে */
+    color: #004d40; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
+   font-size: 2.2rem; /* ফন্ট সাইজ বাড়ানো হয়েছে, রেসপনসিভ ইউনিটে */
     font-weight: 900; /* আরও বোল্ড করা হয়েছে */
     text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
     margin: 0; /* ডিফল্ট মার্জিন অপসারণ */
@@ -38,21 +39,21 @@ body {
 /* --- রেসপনসিভ ডিজাইন --- */
 @media (max-width: 768px) {
     .logo {
-        max-width: 100px;
-        margin-bottom: 10px;
+        max-width: 50px;
+        margin-bottom: 0px;
     }
 
     .school-name {
-        font-size: 2.2em; /* ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
+        font-size: 1.2em; /* ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
     }
 }
 
 @media (max-width: 480px) {
     .school-name {
-        font-size: 1.8em; /* আরও ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
+        font-size: 1em; /* আরও ছোট স্ক্রিনে ফন্ট সাইজ কমানো হয়েছে */
     }
     .logo {
-        max-width: 80px;
+        max-width: 40px;
     }
 }
 /* Master Login text colour */
@@ -1300,4 +1301,16 @@ ul li a:hover {
         font-size: 0.9rem;
         padding: 3px 8px;
     }
+}
+.header-content-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 80px auto 20px; /* Adjusting margin-top for fixed header */
 }
