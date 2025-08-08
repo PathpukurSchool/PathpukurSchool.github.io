@@ -1210,23 +1210,25 @@ ul li a:hover {
 
 /* Styles for the menu button itself */
 .menu-button {
-    background-color: #FF5733; /* Example background */
-    color: #FFFFFF; /* White icon color for contrast */
-    border: 2px solid #FF5733; /* Border matching background for cleaner look */
+    background-color: #FF5733;
+    color: #FFFFFF;
+    border: 2px solid #FF5733;
     padding: 10px 12px;
-    width: 40px; /* একটি নির্দিষ্ট প্রস্থ দিতে পারেন যাতে এটি একটি বর্গাকার বা বৃত্তাকার হয় */
-    height: 40px; /* একটি নির্দিষ্ট উচ্চতা দিতে পারেন */
-    border-radius: 50%; /* Make it circular for a modern, distinct look */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     cursor: pointer;
     font-size: 16px;
     display: flex;
-    justify-content: center; /* আইকনটিকে অনুভূমিকভাবে কেন্দ্রীভূত করবে */
-    align-items: center;     /* আইকনটিকে উল্লম্বভাবে কেন্দ্রীভূত করবে */
-    position: relative; /* If you want to position it specifically in header */
-    z-index: 1001; /* Ensure button is clickable above the overlay when closed */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); /* Adds depth, makes it pop */
-    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover */
-}
+    justify-content: center;
+    align-items: center;
+    position: fixed; /* ✅ এই প্রপার্টিটি পরিবর্তন করা হয়েছে */
+    top: 10px;      /* ✅ বাটনের উপরের দিক থেকে দূরত্ব */
+    left: 10px;     /* ✅ বাটনের বাম দিক থেকে দূরত্ব */
+    z-index: 1001;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
 /* Ensure the Font Awesome icon inside the button inherits color */
 .menu-button i {
     color: inherit; /* Icon color will be white from .menu-button */
