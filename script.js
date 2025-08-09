@@ -363,24 +363,6 @@ function closeModal() {
     // পেজ লোড হওয়ার সাথে সাথে ফাংশনটি কল করুন
     document.addEventListener('DOMContentLoaded', loadStudentExamLinks);
 
-// ✅ স্টুডেন্ট নেভিগেশন বার
-// ✅ Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-            const headerHeight = document.querySelector('.main-header').offsetHeight;
-            const yOffset = -headerHeight - 20; // Additional offset
-            const y = targetElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({
-                top: y,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
 
 // ✅ Logout function
 function logout() {
