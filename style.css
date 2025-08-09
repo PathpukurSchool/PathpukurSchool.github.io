@@ -1,73 +1,55 @@
-/* ✅ Global Styles - পুরো ওয়েবসাইটের জন্য সাধারণ স্টাইল */
+/* ✅ Global Styles */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* ফন্ট স্টাইল নির্ধারণ */
-    line-height: 1.6; /* লাইনের উচ্চতা */
-    background-color: #eef2f5; /* ব্যাকগ্রাউন্ড কালার */
-    color: #333; /* টেক্সটের কালার */
-    margin: 0; /* মার্জিন শূন্য */
-    padding-top: 60px; /* ফিক্সড হেডারের জন্য উপরের অংশে জায়গা রাখা */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #eef2f5;
+    color: #333;
+    margin: 0;
+    padding-top: 120px; /* ফিক্সড হেডারের জন্য উপরের অংশে পর্যাপ্ত জায়গা রাখা */
 }
 * {
-    box-sizing: border-box; /* বক্সের সাইজিং মডেল */
+    box-sizing: border-box;
 }
-
 /* ✅ Main Header & Navigation Bar (প্রধান হেডার এবং নেভিগেশন বার) */
-.main-header {
-    background-color: #004d40; /* হেডারের ব্যাকগ্রাউন্ড কালার */
-    padding: 15px 20px; /* হেডারের ভেতরের প্যাডিং */
-    position: fixed; /* হেডারকে স্ক্রিনের উপরে স্থির রাখা */
-    top: 0; /* উপরের প্রান্ত থেকে দূরত্ব শূন্য */
-    left: 0; /* বাম প্রান্ত থেকে দূরত্ব শূন্য */
-    width: 100%; /* পুরো প্রস্থ জুড়ে হেডার */
-    z-index: 1000; /* অন্য কন্টেন্টের উপরে রাখা */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* হালকা শ্যাডো যোগ করা */
-    display: flex; /* কন্টেন্টকে পাশাপাশি সাজানো */
-    justify-content: center; /* কন্টেন্টকে মাঝখানে আনা */
-}
 .main-header-container {
-    display: flex; /* কন্টেন্টকে এক লাইনে আনার জন্য */
-    align-items: center; /* উল্লম্বভাবে মাঝখানে আনার জন্য */
-    justify-content: space-between; /* কন্টেন্টকে দুই পাশে সরাতে */
-    padding: 10px 20px;
     background-color: #fff;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
-.header-info {
-    display: flex; /* লোগো এবং নামকে এক লাইনে আনার জন্য */
+.header-top-bar {
+    display: flex;
     align-items: center;
-    gap: 15px; /* লোগো এবং নামের মাঝে ফাঁকা স্থান */
+    justify-content: space-between;
 }
-.main-nav {
-    display: flex; /* নেভিগেশন লিংকগুলোকে পাশাপাশি রাখা */
-    gap: 25px; /* লিংকগুলোর মাঝে ফাঁকা স্থান */
+.header-school-name {
+    text-align: center;
+    padding-top: 10px;
 }
-.nav-link {
-    color: white; /* লিংকের টেক্সটের রঙ সাদা */
-    text-decoration: none; /* লিংকের নিচের আন্ডারলাইন সরানো */
-    font-weight: bold; /* টেক্সট বোল্ড করা */
-    font-size: 1rem; /* ফন্টের সাইজ */
-    padding: 5px 10px; /* লিংকের ভেতরের প্যাডিং */
-    border-radius: 5px; /* কোণগুলোকে কিছুটা গোলাকার করা */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* হোভার ইফেক্টের জন্য ট্রানজিশন */
+.school-name {
+    color: #004d40;
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+    margin: 0;
+    line-height: 1.2;
+    font-family: 'Montserrat', sans-serif;
 }
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* হোভার করলে ব্যাকগ্রাউন্ড কালার হালকা হবে */
-    transform: translateY(-2px); /* হোভার করলে সামান্য উপরে উঠবে */
+.logout-button {
+    background-color: #DC143C;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
-
-/* ✅ Header Content (লোগো ও স্কুলের নাম) */
-.header-content-container {
-    display: flex; /* কন্টেন্টকে পাশাপাশি সাজানো */
-    align-items: center; /* কন্টেন্টকে উল্লম্বভাবে মাঝখানে আনা */
-    justify-content: center; /* কন্টেন্টকে অনুভূমিকভাবে মাঝখানে আনা */
-    background-color: #ffffff; /* ব্যাকগ্রাউন্ড কালার সাদা */
-    padding: 20px; /* ভেতরের প্যাডিং */
-    margin-top: 20px; /* উপরের মার্জিন */
-    border-radius: 10px; /* কোণগুলোকে গোলাকার করা */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* শ্যাডো যোগ করা */
-    max-width: 900px; /* সর্বোচ্চ প্রস্থ নির্ধারণ */
-    margin: 80px auto 20px; /* উপরে, ডানে-বামে অটো, নিচে মার্জিন */
+.logout-button:hover {
+    background-color: #B22222;
 }
 .logo {
     max-width: 80px; /* লোগোর সর্বোচ্চ প্রস্থ */
@@ -78,20 +60,10 @@ body {
     perspective: 1000px; /* থ্রিডি দৃষ্টিকোণ */
     opacity: 1; /* স্বচ্ছতা */
 }
-.school-name {
-    color: #004d40; /* টেক্সটের কালার */
-    font-size: 2.5rem; /* ফন্টের সাইজ */
-    font-weight: 900; /* ফন্টের মোটা ভাব */
-    text-shadow: 3px 3px 6px rgba(0,0,0,0.6); /* টেক্সটে শ্যাডো যোগ করা */
-    margin: 0; /* মার্জিন শূন্য */
-    line-height: 1.2; /* লাইনের উচ্চতা */
-    font-family: 'Montserrat', sans-serif; /* ফন্ট স্টাইল */
-}
 @keyframes rotateSlowly {
     0% { transform: rotateY(0deg); } /* অ্যানিমেশন শুরু */
     100% { transform: rotateY(360deg); } /* অ্যানিমেশন শেষ */
 }
-
 /* ✅ Menu Button & Sidebar (মেনু বাটন ও সাইডবার) */
 .menu-button {
     background-color: #FF5733; /* ব্যাকগ্রাউন্ড কালার */
@@ -355,7 +327,7 @@ footer {
         margin-bottom: 0; /* নিচের মার্জিন শূন্য */
     }
     .school-name {
-        font-size: 1.8rem; /* ফন্টের সাইজ কমানো */
+        font-size: 1.5rem; /* ফন্টের সাইজ কমানো */
     }
     .main-nav {
         gap: 15px; /* ফাঁকা স্থান কমানো */
