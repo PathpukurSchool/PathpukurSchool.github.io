@@ -12,16 +12,26 @@ body {
 * {
     box-sizing: border-box;
 }
+/* ✅ ভাসমান মেনু এবং লগআউট বোতামের স্টাইল */
+.floating-controls {
+    position: fixed; /* এটিকে স্ক্রিনে স্থির করে রাখা হয়েছে */
+    top: 10px; /* উপরের প্রান্ত থেকে দূরত্ব */
+    left: 2.5%; /* বাম দিক থেকে দূরত্ব */
+    width: 95%; /* স্ক্রিনের প্রায় পুরো প্রস্থ জুড়ে থাকবে */
+    display: flex;
+    justify-content: space-between; /* মেনু বোতাম বামে এবং লগআউট বোতাম ডানে থাকবে */
+    align-items: center;
+    z-index: 1001; /* অন্যান্য কন্টেন্টের উপরে রাখা হয়েছে */
+}
 /* ✅ Main Header & Navigation Bar (প্রধান হেডার এবং নেভিগেশন বার) */
 .main-header-container {
     background-color: #fff;
     padding: 10px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: static; /* এটি স্থির নয়, তাই স্ক্রল করবে */
     width: 100%;
-    z-index: 1000;
+    z-index: 999;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 .header-top-bar {
     display: flex; /* কন্টেন্টকে এক লাইনে আনা */
