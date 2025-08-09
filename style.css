@@ -12,37 +12,27 @@ body {
 * {
     box-sizing: border-box;
 }
-/* ✅ ভাসমান মেনু বোতামের স্টাইল */
-.floating-menu-button-container {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1001;
-}
 
 /* ✅ প্রধান হেডার, যা স্ক্রল করবে */
 .main-header-container {
-    background-color: #fff;
-    padding: 10px 20px;
-    position: static;
-    width: 100%;
-    z-index: 999;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #004080; /* নীল ব্যাকগ্রাউন্ড */
+    color: white;
+    padding: 5px 10px;
     text-align: center;
+    border-bottom: 3px solid #00264d;
 }
 
 /* ✅ হেডারের উপরের অংশের স্টাইল (লোগো ও লগআউট) */
 .header-top-bar {
     display: flex;
-    justify-content: center; /* লোগোকে মাঝখানে আনার জন্য */
+    justify-content: space-between;
     align-items: center;
-    position: relative;
-    padding-bottom: 10px;
 }
-
 /* ✅ লোগোর স্টাইল */
 .header-logo {
-    /* এটি এমনিতেই মাঝখানে থাকবে কারণ প্যারেন্টে justify-content: center আছে */
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
 .header-school-name {
     text-align: center;
@@ -59,17 +49,14 @@ body {
 }
 * ✅ লগআউট বোতামের স্টাইল */
 .logout-button {
-    position: absolute; /* লোগোর অবস্থানকে প্রভাবিত না করে ডান দিকে সরাতে */
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
     background-color: #FF5733;
+    border: none;
     color: white;
-    padding: 8px 16px;
-    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
     font-weight: bold;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    cursor: pointer;
+    font-size: 14px;
 }
 .logout-button:hover {
     background-color: #B22222;
@@ -82,6 +69,7 @@ body {
     transform-style: preserve-3d; /* থ্রিডি ট্রান্সফর্মের জন্য */
     perspective: 1000px; /* থ্রিডি দৃষ্টিকোণ */
     opacity: 1; /* স্বচ্ছতা */
+    object-fit: cover;
 }
 @keyframes rotateSlowly {
     0% { transform: rotateY(0deg); } /* অ্যানিমেশন শুরু */
@@ -211,7 +199,10 @@ body {
     background-color: #F8F8F8; /* ব্যাকগ্রাউন্ড কালার */
     padding: 20px 0; /* ভেতরের প্যাডিং */
     max-width: 95%; /* ✅ সর্বোচ্চ প্রস্থ স্ক্রিনের ৯৫% */
-    margin: 40px 0; /* ডানে-বামে স্বয়ংক্রিয় মার্জিন দিয়ে মাঝখানে আনা */
+   margin-top: 40px;
+    margin-right: 0px;
+    margin-bottom: 40px;
+    margin-left: 10px;
     text-align: center; /* কন্টেন্টকে মাঝখানে আনা */
     border-top: 10px solid #2C3E50; /* উপরের বর্ডার */
     border-bottom: 2px solid #BDC3C7; /* নিচের বর্ডার */
