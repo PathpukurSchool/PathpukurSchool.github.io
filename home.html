@@ -89,29 +89,27 @@
 </nav>
 
 <script>
-	document.addEventListener("DOMContentLoaded", function() {
-    // গুরুত্বপূর্ণ উপাদানগুলো নির্বাচন করা হচ্ছে
+document.addEventListener("DOMContentLoaded", function() {
     const menuButton = document.getElementById('menu-toggle-button');
     const sidebar = document.getElementById('sidebar-menu');
     const overlay = document.getElementById('overlay');
     const navLinks = sidebar.querySelectorAll("a");
-    
-    // মেনু বাটন ক্লিক করলে সাইডবার এবং ওভারলে টগল (খোলা/বন্ধ) করবে
+    const allSections = document.querySelectorAll("main section"); // ✅ সব সেকশন নির্বাচন করা হলো
+
+    // মেনু বাটন, ওভারলে এবং লিংকের জন্য ইভেন্ট লিসেনার
     menuButton.addEventListener('click', () => {
         sidebar.classList.toggle('active');
         overlay.classList.toggle('active');
     });
 
-    // ওভারলেতে ক্লিক করলে সাইডবার এবং ওভারলে বন্ধ করবে
     overlay.addEventListener('click', () => {
         sidebar.classList.remove('active');
         overlay.classList.remove('active');
     });
-    
-    // নেভিগেশন লিংকে ক্লিক করলে সাইডবার বন্ধ হবে, লিংক হাইলাইট হবে এবং মূল পেজের সেকশন হাইলাইট হবে
+
     navLinks.forEach(link => {
         link.addEventListener("click", function(event) {
-            // সমস্ত লিংক থেকে 'active-link' ক্লাসটি সরিয়ে দেওয়া হচ্ছে
+            // সমস্ত লিংক থেকে 'active-link' ক্লাস সরিয়ে দেওয়া হচ্ছে
             navLinks.forEach(item => item.classList.remove("active-link"));
             
             // যে লিংকে ক্লিক করা হয়েছে, সেটিতে 'active-link' ক্লাস যোগ করা হচ্ছে
@@ -121,22 +119,20 @@
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
 
-            // মূল পেজের কন্টেন্ট হাইলাইট করার জন্য কোড
-            const targetSectionId = this.getAttribute("href").substring(1);
-            const allSections = document.querySelectorAll("main section");
-
+            // ✅ এখানে মূল পরিবর্তন করা হয়েছে:
             // সমস্ত সেকশন থেকে 'highlight-section' ক্লাসটি সরিয়ে দেওয়া হচ্ছে
             allSections.forEach(section => {
                 section.classList.remove("highlight-section");
             });
 
             // যদি কোনো সেকশন আইডি পাওয়া যায়, তাহলে সেটি হাইলাইট করা হবে
+            const targetSectionId = this.getAttribute("href").substring(1);
             if (targetSectionId) {
                 const targetSection = document.getElementById(targetSectionId);
                 if (targetSection) {
                     targetSection.classList.add("highlight-section");
                     // স্ক্রোলিং করার জন্য যদি প্রয়োজন হয়, নিচের লাইনটি যোগ করতে পারেন
-                    // targetSection.scrollIntoView({ behavior: 'smooth' });
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
                 }
             }
         });
