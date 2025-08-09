@@ -13,34 +13,35 @@ body {
     box-sizing: border-box;
 }
 /* ✅ ভাসমান মেনু এবং লগআউট বোতামের স্টাইল */
-.floating-controls {
-    position: fixed; /* এটিকে স্ক্রিনে স্থির করে রাখা হয়েছে */
-    top: 10px; /* উপরের প্রান্ত থেকে দূরত্ব */
-    left: 2.5%; /* বাম দিক থেকে দূরত্ব */
-    width: 95%; /* স্ক্রিনের প্রায় পুরো প্রস্থ জুড়ে থাকবে */
+.main-header {
     display: flex;
-    justify-content: space-between; /* মেনু বোতাম বামে এবং লগআউট বোতাম ডানে থাকবে */
+    justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
     align-items: center;
-    z-index: 1001; /* অন্যান্য কন্টেন্টের উপরে রাখা হয়েছে */
-}
-/* ✅ Main Header & Navigation Bar (প্রধান হেডার এবং নেভিগেশন বার) */
-.main-header-container {
-    background-color: #fff;
-    padding: 10px 20px;
-    position: static; /* এটি স্থির নয়, তাই স্ক্রল করবে */
-    width: 100%;
-    z-index: 999;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    padding: 20px; /* হেডার এর প্যাডিং, টপ ও বটম প্যাডিং আলাদাভাবে সেট করা আছে */
     text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    position: relative; /* মেনু বারের জন্য পজিশন - এটি ঠিক আছে */
+    overflow: hidden;
+    padding-top: 60px; /* উপরের লগইন বোতামের জন্য একটু জায়গা নিশ্চিত করবে */
+    padding-bottom: 20px; /* প্রয়োজন অনুযায়ী সামঞ্জস্য করুন */
+    z-index: 900; /* মেনু বারের (1001) এবং ওভারলের (1000) নিচে রাখুন */
+    width: 100%; /* সম্পূর্ণ প্রস্থ নিশ্চিত করুন */
+    box-sizing: border-box; /* padding সহ প্রস্থ হিসাব করবে */
 }
-.header-top-bar {
+.header-content {
+    position: relative;
+    z-index: 2; /* অন্যান্য কন্টেন্টের উপরে থাকবে */
+    flex-grow: 1; /* উপলব্ধ স্থান পূরণ করবে */
+    text-align: center; /* হেডার কন্টেন্ট মাঝখানে থাকবে */
+.main-header-top-bar {
     display: flex; /* কন্টেন্টকে এক লাইনে আনা */
     align-items: center; /* উল্লম্বভাবে মাঝখানে আনা */
     justify-content: space-between; /* ✅ মেনু বোতাম এবং লগআউট বোতামকে দুই পাশে সরিয়ে দেওয়া */
     position: relative; /* লোগোকে মাঝখানে রাখার জন্য এটি দরকার */
     height: 80px; /* ✅ একটি নির্দিষ্ট উচ্চতা দেওয়া হয়েছে যাতে লোগো ঠিকভাবে অবস্থান করতে পারে */
 }
-.header-logo {
+.main-header-logo {
     position: absolute; /* ✅ এটিকে পজিশন অ্যাবসলিউট করা হয়েছে */
     left: 50%; /* ✅ বাম দিক থেকে ৫০% সরিয়ে আনা হয়েছে */
     transform: translateX(-50%); /* ✅ লোগোকে নিজের প্রস্থের অর্ধেক বামে সরিয়ে ঠিক মাঝখানে আনা হয়েছে */
@@ -50,7 +51,7 @@ body {
     align-items: center;
     justify-content: center;
 }
-.header-school-name {
+.main-header-school-name {
     text-align: center;
     padding-top: 10px;
 }
