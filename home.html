@@ -38,7 +38,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
   <body>
-	  
+    <!-- ✅ Welcome pop-up -->
+    <div class="website-welcome-popup-overlay" id="websiteWelcomePopup">
+    <div class="website-welcome-popup-content">
+        <h2 id="popupTitle"></h2>
+        <div id="popupMessage">
+        </div>
+        <div class="popup-actions">
+            <button id="downloadPopupButton" class="popup-action-btn download-btn">Download</button>
+            <button id="closePopupButton" class="popup-action-btn cancel-btn">Close</button>
+        </div>
+    </div>
+</div>
+
     <div id="masterLoginOverlay">
         <div id="masterLoginBox">
    <h2 class="red-text">Pathpukur High School</h2>
@@ -60,7 +72,6 @@
     </div>
     </div>
    <!--✅ মেন হেডিং --> 
-<!--✅ উপরের নেভিগেশন বার -->
      <div class="floating-menu-button-container">
     <button id="menu-toggle-button" class="menu-button">☰</button>
 </div>
