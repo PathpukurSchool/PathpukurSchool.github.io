@@ -24,10 +24,11 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .header-top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative; /* ✅ এটি লোগোকে মাঝখানে রাখার জন্য গুরুত্বপূর্ণ */
+    display: flex; /* কন্টেন্টকে এক লাইনে আনা */
+    align-items: center; /* উল্লম্বভাবে মাঝখানে আনা */
+    justify-content: space-between; /* ✅ মেনু বোতাম এবং লগআউট বোতামকে দুই পাশে সরিয়ে দেওয়া */
+    position: relative; /* লোগোকে মাঝখানে রাখার জন্য এটি দরকার */
+    height: 80px; /* ✅ একটি নির্দিষ্ট উচ্চতা দেওয়া হয়েছে যাতে লোগো ঠিকভাবে অবস্থান করতে পারে */
 }
 .header-logo {
     position: absolute; /* ✅ এটিকে পজিশন অ্যাবসলিউট করা হয়েছে */
