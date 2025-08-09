@@ -64,7 +64,9 @@
       <header class="main-header-container">
     <div class="header-top-bar">
         <button id="menu-toggle-button" class="menu-button">☰</button>
-        <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+       <div class="header-logo">
+            <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+        </div>
         <a href="#" class="logout-button" onclick="logout()">LogOut</a>
     </div>
     <div class="header-school-name">
@@ -149,9 +151,9 @@ document.addEventListener("DOMContentLoaded", function() {
   
    <!-- ✅ নম্বর আপলোডের শেষ তারিখ -->
   <div class="shaded-info-box" id="last-date-section">
-  <div class="static-text">
-    Last date of marks submission
-    <p>(Kindly submit all marks by due date)</p>
+  <h2 class="shine">Last date of marks submission</h2>
+	  <div class="static-text">
+    (Kindly submit all marks by due date)
   </div>
     
   <div class="marquee-container">
@@ -200,6 +202,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
  <!-- ✅ নম্বর আপলোডের স্টাটাস -->
       <div class="shaded-info-box" id="marks-uploading-section">
+		<h2 class="shine">Marks Uploading Report</h2>
       <a href="https://script.google.com/macros/s/AKfycby92wlqHa0LdogrHoSTMrbs2snqGpb-p-ASQQods_202pOLzQGNmeqIHxw0Eow1juYC/exec" targetet="_blank" class="exam-link">View Mark Uploading Status</a>
       </div>
 
@@ -399,6 +402,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
  <!-- ✅ আপলোড স্টুডেন্ট নোটিশ --> 
 	  <div class="section-heading-container">
+		  
 	  <div class="shaded-info-box" id="uploda-student-notice-section">
     <h2 class="section-heading">
         <span class="emoji">📝</span>
