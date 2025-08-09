@@ -24,6 +24,20 @@ body {
     display: flex; /* কন্টেন্টকে পাশাপাশি সাজানো */
     justify-content: center; /* কন্টেন্টকে মাঝখানে আনা */
 }
+.main-header-container {
+    display: flex; /* কন্টেন্টকে এক লাইনে আনার জন্য */
+    align-items: center; /* উল্লম্বভাবে মাঝখানে আনার জন্য */
+    justify-content: space-between; /* কন্টেন্টকে দুই পাশে সরাতে */
+    padding: 10px 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-info {
+    display: flex; /* লোগো এবং নামকে এক লাইনে আনার জন্য */
+    align-items: center;
+    gap: 15px; /* লোগো এবং নামের মাঝে ফাঁকা স্থান */
+}
 .main-nav {
     display: flex; /* নেভিগেশন লিংকগুলোকে পাশাপাশি রাখা */
     gap: 25px; /* লিংকগুলোর মাঝে ফাঁকা স্থান */
