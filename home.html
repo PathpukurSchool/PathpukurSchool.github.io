@@ -59,10 +59,18 @@
 <button onclick="submitMasterLogin()">LOGIN</button>
     </div>
     </div>
-    <!--✅ উপরের নেভিগেশন বার -->
-	<button id="menu-toggle-button" class="menu-button">☰</button>     <div class="overlay" id="overlay"></div>
-    <div class="overlay" id="overlay"></div>
-    <nav id="sidebar-menu" class="sidebar-menu">
+   <!--✅ মেন হেডিং --> 
+<!--✅ উপরের নেভিগেশন বার -->
+       <header class="main-header-container">
+    <button id="menu-toggle-button" class="menu-button">☰</button>
+    <div class="header-info">
+        <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+        <h1 class="school-name">Pathpukur High School (H.S.)</h1>
+    </div>
+</header>
+<div class="overlay" id="overlay"></div>
+<nav id="sidebar-menu" class="sidebar-menu">
+    </nav>
         <a href="#last-date-section" class="nav-link">Marks Submission Date</a>
         <a href="#marks-uploading-section" class="nav-link">Marks Upload Status</a>
         <a href="#upload-your-marks-section" class="nav-link">Marks Upload</a>
@@ -77,40 +85,60 @@
    </nav>
 
 <script>
-	const menuButton = document.getElementById('menu-toggle-button');
-const sidebar = document.getElementById('sidebar-menu');
-const overlay = document.getElementById('overlay');
+	document.addEventListener("DOMContentLoaded", function() {
+    // গুরুত্বপূর্ণ উপাদানগুলো নির্বাচন করা হচ্ছে
+    const menuButton = document.getElementById('menu-toggle-button');
+    const sidebar = document.getElementById('sidebar-menu');
+    const overlay = document.getElementById('overlay');
+    const navLinks = sidebar.querySelectorAll("a");
+    
+    // মেনু বাটন ক্লিক করলে সাইডবার এবং ওভারলে টগল (খোলা/বন্ধ) করবে
+    menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
 
-// মেনু বাটন ক্লিক করলে সাইডবার এবং ওভারলে টগল করবে
-menuButton.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
-});
-
-// ওভারলেতে ক্লিক করলে সাইডবার এবং ওভারলে বন্ধ করবে
-overlay.addEventListener('click', () => {
-    sidebar.classList.remove('active');
-    overlay.classList.remove('active');
-});
-	const navLinks = document.querySelectorAll('.sidebar-menu a');
-
-// নেভিগেশন লিংকে ক্লিক করলে সাইডবার এবং ওভারলে বন্ধ করবে
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
+    // ওভারলেতে ক্লিক করলে সাইডবার এবং ওভারলে বন্ধ করবে
+    overlay.addEventListener('click', () => {
         sidebar.classList.remove('active');
         overlay.classList.remove('active');
     });
+    
+    // নেভিগেশন লিংকে ক্লিক করলে সাইডবার বন্ধ হবে, লিংক হাইলাইট হবে এবং মূল পেজের সেকশন হাইলাইট হবে
+    navLinks.forEach(link => {
+        link.addEventListener("click", function(event) {
+            // সমস্ত লিংক থেকে 'active-link' ক্লাসটি সরিয়ে দেওয়া হচ্ছে
+            navLinks.forEach(item => item.classList.remove("active-link"));
+            
+            // যে লিংকে ক্লিক করা হয়েছে, সেটিতে 'active-link' ক্লাস যোগ করা হচ্ছে
+            this.classList.add("active-link");
+
+            // সাইডবার এবং ওভারলে বন্ধ করা হচ্ছে
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+
+            // মূল পেজের কন্টেন্ট হাইলাইট করার জন্য কোড
+            const targetSectionId = this.getAttribute("href").substring(1);
+            const allSections = document.querySelectorAll("main section");
+
+            // সমস্ত সেকশন থেকে 'highlight-section' ক্লাসটি সরিয়ে দেওয়া হচ্ছে
+            allSections.forEach(section => {
+                section.classList.remove("highlight-section");
+            });
+
+            // যদি কোনো সেকশন আইডি পাওয়া যায়, তাহলে সেটি হাইলাইট করা হবে
+            if (targetSectionId) {
+                const targetSection = document.getElementById(targetSectionId);
+                if (targetSection) {
+                    targetSection.classList.add("highlight-section");
+                    // স্ক্রোলিং করার জন্য যদি প্রয়োজন হয়, নিচের লাইনটি যোগ করতে পারেন
+                    // targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    });
 });
 </script>
-
-	  
-	  <!--✅ মেন হেডিং -->  
-         <div class="header-content-container">
-        <div class="header-main">
-            <img src="PHS-LOGO.png" alt="School Logo" class="logo">
-            <h1 class="school-name">PATHPUKUR HIGH SCHOOL (H.S.)</h1>
-        </div>
-    </div>
 	  
     <!--✅ নম্বর আপলোড -->  
 <div class="section-heading-container">
