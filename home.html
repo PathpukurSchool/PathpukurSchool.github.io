@@ -155,8 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
   <h2 class="shine">Last date of marks submission</h2>
 	  <div class="static-text">
     (Kindly submit all marks by due date)
-  </div>
-    
+  
   <div class="marquee-container">
     <div id="exam-dates-marquee-content" class="marquee-content"></div> </div>
   </div>
@@ -200,7 +199,8 @@ document.addEventListener("DOMContentLoaded", function() {
     examDatesMarquee.classList.remove("paused");
   });
 </script>
-  
+  </div>
+	
  <!-- ✅ নম্বর আপলোডের স্টাটাস -->
       <div class="shaded-info-box" id="marks-uploading-section">
 		<h2 class="shine">Marks Uploading Report</h2>
@@ -229,6 +229,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <!-- ✅ নোটিশ বোর্ড -->
     <div class="section-heading-container" id="notice-board-section">
+		<div id="notice-bord">
     <h2 class="section-heading">
         <span class="emoji">📋</span>
         <span class="blink">General News & Notice Board</span>
@@ -347,13 +348,10 @@ document.addEventListener("DOMContentLoaded", function() {
         renderNoticeTable();
       }
     }
-
     // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
     renderNoticeTable();
   </script>
-
-
-    </div>
+    </div></div>
     
 <!-- ✅ স্কুল রুটিন ও স্টুডেন্ট ইনফমেশন --->
   <div class="section-heading-container">
