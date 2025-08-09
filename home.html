@@ -61,17 +61,19 @@
     </div>
    <!--✅ মেন হেডিং --> 
 <!--✅ উপরের নেভিগেশন বার -->
-     <header class="main-header">
-        <div class="header-buttons">
-            <button id="menu-toggle-button" class="menu-button">☰</button>
-        </div>
-        
-        <div class="main-header-container">
-            <img src="PHS-LOGO.png" alt="School Logo" class="logo">
-            <h1 class="school-name">Pathpukur High School (H.S.)</h1>
-        </div>
-        <a href="#" class="logout-button" onclick="logout()">LogOut</a>
-    </header>
+      <div class="floating-controls">
+    <button id="menu-toggle-button" class="menu-button">☰</button>
+    <a href="#" class="logout-button" onclick="logout()">LogOut</a>
+</div>
+
+<header class="main-header-container">
+    <div class="header-logo">
+        <img src="PHS-LOGO.png" alt="School Logo" class="logo">
+    </div>
+    <div class="header-school-name">
+        <h1 class="school-name">PATHPUKUR HIGH SCHOOL (H.S.)</h1>
+    </div>
+</header>
 
 <div class="overlay" id="overlay"></div>
 <nav id="sidebar-menu" class="sidebar-menu">
