@@ -214,7 +214,8 @@ body {
 .section-heading-container {
     background-color: #F8F8F8; /* ব্যাকগ্রাউন্ড কালার */
     padding: 20px 0; /* ভেতরের প্যাডিং */
-    margin: 40px 0; /* মার্জিন নির্ধারণ */
+    max-width: 95%; /* ✅ সর্বোচ্চ প্রস্থ স্ক্রিনের ৯৫% */
+    margin: 40px auto; /* ডানে-বামে স্বয়ংক্রিয় মার্জিন দিয়ে মাঝখানে আনা */
     text-align: center; /* কন্টেন্টকে মাঝখানে আনা */
     border-top: 10px solid #2C3E50; /* উপরের বর্ডার */
     border-bottom: 2px solid #BDC3C7; /* নিচের বর্ডার */
@@ -222,6 +223,11 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* শ্যাডো যোগ করা */
     overflow: hidden; /* ভেতরের কন্টেন্ট বাইরে না যায় */
     transition: all 0.3s ease-in-out; /* হোভার ট্রানজিশন */
+    display: flex; /* ভেতরের উপাদানকে পাশাপাশি সাজানোর জন্য */
+    flex-wrap: wrap; /* ছোট স্ক্রীনে উপাদানগুলোকে নিচে নামানোর জন্য */
+    justify-content: center; /* উপাদানগুলোকে অনুভূমিকভাবে মাঝখানে আনার জন্য */
+    align-items: flex-start; /* উপাদানগুলোকে উল্লম্বভাবে উপরের দিকে সাজানোর জন্য */
+    gap: 20px; /* উপাদানগুলোর মাঝে ফাঁকা স্থান */
 }
 .section-heading-container:hover {
     background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
@@ -276,6 +282,11 @@ body {
 
 /* ✅ Info & Class Box Styles (তথ্য এবং ক্লাস বক্স) */
 .shaded-info-box, .class-box {
+    display: flex; /* ভেতরের কন্টেন্টকে পাশাপাশি সাজানোর জন্য */
+    flex-wrap: wrap; /* ছোট স্ক্রীনে কন্টেন্টকে নিচে নামানোর জন্য */
+    justify-content: center; /* কন্টেন্টকে মাঝখানে আনার জন্য */
+    align-items: center; /* কন্টেন্টকে উল্লম্বভাবে মাঝখানে আনার জন্য */
+    gap: 15px; /* ভেতরের এক্সাম বোতামগুলোর মাঝে ফাঁকা স্থান */
     background-color: #FFFFFF; /* ব্যাকগ্রাউন্ড কালার সাদা */
     border: 1px solid #E0F2F7; /* বর্ডার স্টাইল */
     border-radius: 10px; /* কোণগুলোকে গোলাকার করা */
