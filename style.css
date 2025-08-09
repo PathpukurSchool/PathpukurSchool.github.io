@@ -5,6 +5,8 @@ body {
     background-color: #eef2f5;
     color: #333;
     margin: 0;
+    text-align: center;
+    /*padding: 20px; */
     padding-top: 120px; /* ফিক্সড হেডারের জন্য উপরের অংশে পর্যাপ্ত জায়গা রাখা */
 }
 * {
@@ -31,7 +33,7 @@ body {
     padding-top: 10px;
 }
 .school-name {
-    color: #004d40;
+    color: #8B0000; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
     font-size: 2.5rem;
     font-weight: 900;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
@@ -187,7 +189,7 @@ body {
     background-color: #F8F8F8; /* ব্যাকগ্রাউন্ড কালার */
     padding: 20px 0; /* ভেতরের প্যাডিং */
     max-width: 95%; /* ✅ সর্বোচ্চ প্রস্থ স্ক্রিনের ৯৫% */
-    margin: 40px auto; /* ডানে-বামে স্বয়ংক্রিয় মার্জিন দিয়ে মাঝখানে আনা */
+    margin: 40px 0; /* ডানে-বামে স্বয়ংক্রিয় মার্জিন দিয়ে মাঝখানে আনা */
     text-align: center; /* কন্টেন্টকে মাঝখানে আনা */
     border-top: 10px solid #2C3E50; /* উপরের বর্ডার */
     border-bottom: 2px solid #BDC3C7; /* নিচের বর্ডার */
@@ -202,11 +204,11 @@ body {
     gap: 20px; /* উপাদানগুলোর মাঝে ফাঁকা স্থান */
 }
 .section-heading-container:hover {
-    background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
+    /* background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* হোভার করলে শ্যাডো স্পষ্ট হবে */
     transform: translateY(-5px) scale(1.01); /* হোভার করলে সামান্য উপরে উঠবে */
-    border-top-color: #3498DB; /* হোভার করলে উপরের বর্ডারের রঙ পরিবর্তন */
-    border-bottom-color: #A9CCE3; /* হোভার করলে নিচের বর্ডারের রঙ পরিবর্তন */
+    border-top-color: #3498DB; /* উপরের বর্ডারের রঙ হালকা নীল হবে */
+    border-bottom-color: #A9CCE3; /* নিচের বর্ডারের রঙ কিছুটা উজ্জ্বল হবে */
 }
 .section-heading {
     display: flex; /* ইমোজি এবং টেক্সটকে পাশাপাশি রাখা */
@@ -215,6 +217,7 @@ body {
     gap: 10px; /* কন্টেন্টের মাঝে ফাঁকা স্থান */
     font-size: 2.2em; /* ফন্টের সাইজ */
     font-weight: 700; /* ফন্টের মোটা ভাব */
+    font-family: 'Roboto', sans-serif; /* একটি পরিষ্কার, আধুনিক ফন্ট */
     color: #34495E; /* টেক্সটের কালার */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* হালকা টেক্সট শ্যাডো */
     line-height: 1.2; /* লাইনের উচ্চতা */
@@ -278,6 +281,7 @@ body {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* হোভার করলে শ্যাডো স্পষ্ট হবে */
     transform: translateY(-7px) scale(1.02); /* হোভার করলে উপরে উঠবে এবং বড় হবে */
     border-color: #B2EBF2; /* হোভার করলে বর্ডার কালার পরিবর্তন */
+    background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
 }
 
 /* ✅ Exam Links & Buttons (পরীক্ষার লিংক ও বোতাম) */
