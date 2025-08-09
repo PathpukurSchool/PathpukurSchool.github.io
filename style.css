@@ -506,7 +506,17 @@ ul li a {
 ul li a:hover {
     color: darkred;
 }
+/* Master Login text colour */
+.red-text {
+  color: #DC143C; 
+  font-weight: bold;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
+  color: darkred;
+}
 
+h2 {
+    color: #333;
+}
 #masterLoginOverlay {
     position: fixed;
     top: 0;
