@@ -186,7 +186,15 @@ body {
     opacity: 1; /* যখন active ক্লাস যোগ হবে, তখন সম্পূর্ণ দৃশ্যমান হবে */
     visibility: visible; /* দৃশ্যমান করা */
 }
-
+/* ✅ মূল পেজের সেকশন হাইলাইট করার স্টাইল */
+.highlight-section {
+    border: 3px solid #3498db; /* সেকশনের চারপাশে উজ্জ্বল নীল বর্ডার */
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5); /* গ্লোয়িং শ্যাডো এফেক্ট */
+    background-color: #f7fcff; /* হালকা ব্যাকগ্রাউন্ড কালার */
+    padding: 20px; /* সেকশনের ভেতরের প্যাডিং */
+    border-radius: 10px; /* সেকশনের কোণগুলো গোলাকার করা */
+    transition: all 0.5s ease-in-out; /* হাইলাইট করার সময় মসৃণ ট্রানজিশন এফেক্ট */
+}
 /* ✅ Section Heading & Title Styles (সেকশন হেডিং ও টাইটেল) */
 .class-title {
     margin: 28px; /* মার্জিন নির্ধারণ */
