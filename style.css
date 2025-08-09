@@ -12,43 +12,37 @@ body {
 * {
     box-sizing: border-box;
 }
-/* ✅ ভাসমান মেনু এবং লগআউট বোতামের স্টাইল */
-.floating-controls {
-    position: fixed; /* এটিকে স্ক্রিনে স্থির করে রাখা হয়েছে */
-    top: 10px; /* উপরের প্রান্ত থেকে দূরত্ব */
-    left: 2.5%; /* বাম দিক থেকে দূরত্ব */
-    width: 95%; /* স্ক্রিনের প্রায় পুরো প্রস্থ জুড়ে থাকবে */
-    display: flex;
-    justify-content: space-between; /* মেনু বোতাম বামে এবং লগআউট বোতাম ডানে থাকবে */
-    align-items: center;
-    z-index: 1001; /* অন্যান্য কন্টেন্টের উপরে রাখা হয়েছে */
+/* ✅ ভাসমান মেনু বোতামের স্টাইল */
+.floating-menu-button-container {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1001;
 }
-/* ✅ Main Header & Navigation Bar (প্রধান হেডার এবং নেভিগেশন বার) */
+
+/* ✅ প্রধান হেডার, যা স্ক্রল করবে */
 .main-header-container {
     background-color: #fff;
     padding: 10px 20px;
-    position: static; /* এটি স্থির নয়, তাই স্ক্রল করবে */
+    position: static;
     width: 100%;
     z-index: 999;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
+
+/* ✅ হেডারের উপরের অংশের স্টাইল (লোগো ও লগআউট) */
 .header-top-bar {
-    display: flex; /* কন্টেন্টকে এক লাইনে আনা */
-    align-items: center; /* উল্লম্বভাবে মাঝখানে আনা */
-    justify-content: space-between; /* ✅ মেনু বোতাম এবং লগআউট বোতামকে দুই পাশে সরিয়ে দেওয়া */
-    position: relative; /* লোগোকে মাঝখানে রাখার জন্য এটি দরকার */
-    height: 80px; /* ✅ একটি নির্দিষ্ট উচ্চতা দেওয়া হয়েছে যাতে লোগো ঠিকভাবে অবস্থান করতে পারে */
-}
-.header-logo {
-    position: absolute; /* ✅ এটিকে পজিশন অ্যাবসলিউট করা হয়েছে */
-    left: 50%; /* ✅ বাম দিক থেকে ৫০% সরিয়ে আনা হয়েছে */
-    transform: translateX(-50%); /* ✅ লোগোকে নিজের প্রস্থের অর্ধেক বামে সরিয়ে ঠিক মাঝখানে আনা হয়েছে */
-    top: 50%; /* ✅ উপরের দিক থেকে ৫০% সরিয়ে আনা হয়েছে */
-    transform: translate(-50%, -50%); /* ✅ মাঝখানে রাখার জন্য উল্লম্ব ও অনুভূমিক উভয় দিকে সরানো হয়েছে */
     display: flex;
+    justify-content: center; /* লোগোকে মাঝখানে আনার জন্য */
     align-items: center;
-    justify-content: center;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* ✅ লোগোর স্টাইল */
+.header-logo {
+    /* এটি এমনিতেই মাঝখানে থাকবে কারণ প্যারেন্টে justify-content: center আছে */
 }
 .header-school-name {
     text-align: center;
@@ -63,10 +57,15 @@ body {
     line-height: 1.2;
     font-family: 'Montserrat', sans-serif;
 }
+* ✅ লগআউট বোতামের স্টাইল */
 .logout-button {
-    background-color: #FF5733; /* ব্যাকগ্রাউন্ড কালার */
+    position: absolute; /* লোগোর অবস্থানকে প্রভাবিত না করে ডান দিকে সরাতে */
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #FF5733;
     color: white;
-    padding: 4px 8px;
+    padding: 8px 16px;
     text-decoration: none;
     font-weight: bold;
     border-radius: 5px;
@@ -207,28 +206,23 @@ body {
     0% { background-position: 0% center; } /* অ্যানিমেশন শুরু */
     100% { background-position: 200% center; } /* অ্যানিমেশন শেষ */
 }
+/* --- সেকশন হেডিং স্টাইল --- */
 .section-heading-container {
-    background-color: #F8F8F8; /* ব্যাকগ্রাউন্ড কালার */
-    padding: 20px 0; /* ভেতরের প্যাডিং */
-    max-width: 90%; /* ✅ সর্বোচ্চ প্রস্থ স্ক্রিনের ৯৫% */
-    margin: 40px 0; /* ডানে-বামে স্বয়ংক্রিয় মার্জিন দিয়ে মাঝখানে আনা */
-    text-align: center; /* কন্টেন্টকে মাঝখানে আনা */
-    border-top: 10px solid #2C3E50; /* উপরের বর্ডার */
-    border-bottom: 2px solid #BDC3C7; /* নিচের বর্ডার */
-    border-radius: 15px; /* কোণগুলোকে গোলাকার করা */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* শ্যাডো যোগ করা */
-    overflow: hidden; /* ভেতরের কন্টেন্ট বাইরে না যায় */
-    transition: all 0.3s ease-in-out; /* হোভার ট্রানজিশন */
-    display: flex; /* ভেতরের উপাদানকে পাশাপাশি সাজানোর জন্য */
-    flex-wrap: wrap; /* ছোট স্ক্রীনে উপাদানগুলোকে নিচে নামানোর জন্য */
-    justify-content: center; /* উপাদানগুলোকে অনুভূমিকভাবে মাঝখানে আনার জন্য */
-    align-items: flex-start; /* উপাদানগুলোকে উল্লম্বভাবে উপরের দিকে সাজানোর জন্য */
-    gap: 20px; /* উপাদানগুলোর মাঝে ফাঁকা স্থান */
+    background-color: #F8F8F8; /* হালকা ধূসর/প্রায় সাদা ব্যাকগ্রাউন্ড */
+    padding: 20px 0; /* উপরে-নিচে প্যাডিং, ডানে-বামে ০ */
+    margin: 40px 0; /* সেকশনের উপরে-নিচে মার্জিন, অন্যান্য কন্টেন্ট থেকে আলাদা করতে */
+    text-align: center; /* ভেতরের কন্টেন্ট কেন্দ্রে নিয়ে আসবে */
+    border-top: 10px solid #2C3E50; /* উপরের বর্ডার: গাঢ় নীল, মোটা */
+    border-bottom: 2px solid #BDC3C7; /* নিচের বর্ডার: হালকা ধূসর, সরু */
+    border-radius: 15px; /* কোণগুলি গোলাকার */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* হালকা শ্যাডো */
+    overflow: hidden; /* ভেতরের কন্টেন্ট বর্ডারের বাইরে না যায় */
 }
+/* হোভার এফেক্ট (গ্লো সহ) */
 .section-heading-container:hover {
-    /* background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* হোভার করলে শ্যাডো স্পষ্ট হবে */
-    transform: translateY(-5px) scale(1.01); /* হোভার করলে সামান্য উপরে উঠবে */
+    background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার হালকা অ্যাকোয়া হবে */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* হোভার করলে শ্যাডো আরও স্পষ্ট হবে */
+    transform: translateY(-5px) scale(1.01); /* সামান্য উপরে উঠে আসবে এবং একটু বড় হবে */
     border-top-color: #3498DB; /* উপরের বর্ডারের রঙ হালকা নীল হবে */
     border-bottom-color: #A9CCE3; /* নিচের বর্ডারের রঙ কিছুটা উজ্জ্বল হবে */
 }
@@ -277,33 +271,34 @@ body {
     }
 }
 
-/* ✅ Info & Class Box Styles (তথ্য এবং ক্লাস বক্স) */
+/* --- শেডযুক্ত তথ্য বক্সের স্টাইল (নোটিশ বক্সের ভেতরে অবস্থানের জন্য উপযুক্ত) --- */
 .shaded-info-box, .class-box {
-    display: flex; /* ভেতরের কন্টেন্টকে পাশাপাশি সাজানোর জন্য */
-    flex-wrap: wrap; /* ছোট স্ক্রীনে কন্টেন্টকে নিচে নামানোর জন্য */
-    justify-content: center; /* কন্টেন্টকে মাঝখানে আনার জন্য */
-    align-items: center; /* কন্টেন্টকে উল্লম্বভাবে মাঝখানে আনার জন্য */
-    gap: 15px; /* ভেতরের এক্সাম বোতামগুলোর মাঝে ফাঁকা স্থান */
-    background-color: #FFFFFF; /* ব্যাকগ্রাউন্ড কালার সাদা */
-    border: 1px solid #E0F2F7; /* বর্ডার স্টাইল */
-    border-radius: 10px; /* কোণগুলোকে গোলাকার করা */
-    padding: 25px; /* ভেতরের প্যাডিং */
-    margin: 20px auto; /* মার্জিন নির্ধারণ */
-    width: 85%; /* প্রস্থ */
-    max-width: 350px; /* সর্বোচ্চ প্রস্থ */
-    box-sizing: border-box; /* বক্সের সাইজিং মডেল */
-    font-family: 'Segoe UI', 'Roboto', sans-serif; /* ফন্ট স্টাইল */
-    color: #444; /* টেক্সটের কালার */
-    text-align: center; /* কন্টেন্টকে মাঝখানে আনা */
-    line-height: 1.5; /* লাইনের উচ্চতা */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* শ্যাডো যোগ করা */
-    transition: all 0.3s ease-in-out; /* হোভার ট্রানজিশন */
+    /* বেসিক লেআউট ও বক্স মডেল */
+    background-color: #FFFFFF; /* পরিষ্কার সাদা ব্যাকগ্রাউন্ড, নোটিশ বক্সের হালকা আভার সাথে মানানসই */
+    border: 1px solid #E0F2F7; /* খুব হালকা নীলচে-ধূসর বর্ডার, সূক্ষ্ম দেখাবে */
+    border-radius: 10px; /* কোণাগুলো আরও মসৃণ ও গোলাকার */
+    padding: 25px; /* বক্সের ভেতরের প্যাডিং বাড়ানো হয়েছে, কন্টেন্টকে আরও জায়গা দেবে */
+    margin: 20px auto; /* উপরে-নিচে মার্জিন বাড়ানো হয়েছে, ডানে-বামে অটো (মাঝখানে আসবে) */
+    width: 85%; /* ছোট স্ক্রিনের জন্য প্রস্থের সমন্বয়, নোটিশ বক্সের ভেতরে আরও ভালো ফিট হবে */
+    max-width: 350px; /* বড় স্ক্রিনে বক্সের সর্বোচ্চ প্রস্থ কমানো হয়েছে, সুষম দেখানোর জন্য */
+    box-sizing: border-box; /* প্যাডিং এবং বর্ডার যেন প্রস্থের মধ্যে থাকে */
+
+    /* টাইপোগ্রাফি */
+    font-family: 'Segoe UI', 'Roboto', sans-serif; /* আধুনিক ও পঠনযোগ্য ফন্ট */
+    color: #444; /* গাঢ় ধূসর টেক্সট কালার */
+    text-align: center; /* বক্সের ভেতরের কন্টেন্ট কেন্দ্রে স্থাপন */
+    line-height: 1.5; /* লাইনের উচ্চতা পঠনযোগ্যতার জন্য */
+
+    /* শ্যাডো এবং ট্রানজিশন */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* হালকা ও বিস্তৃত শেড */
+    transition: all 0.3s ease-in-out; /* হোভার ইফেক্টের জন্য মসৃণ ট্রানজিশন */
 }
+
+/* পুরো বক্সের হোভার ইফেক্ট */
 .shaded-info-box:hover, .class-box:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* হোভার করলে শ্যাডো স্পষ্ট হবে */
-    transform: translateY(-7px) scale(1.02); /* হোভার করলে উপরে উঠবে এবং বড় হবে */
-    border-color: #B2EBF2; /* হোভার করলে বর্ডার কালার পরিবর্তন */
-    background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* হোভার করলে শেড আরও গাঢ় ও স্পষ্ট হবে */
+    transform: translateY(-7px) scale(1.02); /* হোভার করলে বক্সটি আরও উপরে উঠবে এবং সামান্য বড় হবে */
+    border-color: #B2EBF2; /* হোভার করলে বর্ডার কালার হালকা নীল হবে */
 }
 
 /* ✅ Exam Links & Buttons (পরীক্ষার লিংক ও বোতাম) */
@@ -350,10 +345,12 @@ footer {
 
 /* ✅ Responsive Design (মোবাইল এবং ছোট স্ক্রিনের জন্য) */
 @media (max-width: 768px) {
-    .header-content-container {
-        flex-direction: row; /* কন্টেন্টকে পাশাপাশি রাখা */
-        text-align: center; /* টেক্সটকে মাঝখানে আনা */
-        margin-top: 70px; /* উপরের মার্জিন */
+    .section-heading-container {
+        padding: 15px 0;
+        margin: 40px 0;
+        border-top-width: 5px;
+        border-bottom-width: 1px;
+        border-radius: 10px;
     }
     .logo {
         max-width: 50px; /* লোগোর সর্বোচ্চ প্রস্থ কমানো */
@@ -382,11 +379,12 @@ footer {
         margin-bottom: 4px; /* মার্জিন কমানো */
     }
     .shaded-info-box, .class-box {
-        padding: 20px; /* প্যাডিং কমানো */
-        margin: 20px auto; /* মার্জিন কমানো */
-        border-radius: 8px; /* কোণগুলোকে কম গোলাকার করা */
-        font-size: 0.95em; /* ফন্টের সাইজ কমানো */
-        width: 90%; /* প্রস্থ বাড়ানো */
+        .shaded-info-box, .class-box {
+        padding: 20px; /* ছোট স্ক্রিনে প্যাডিং কমানো হয়েছে */
+        margin: 20px auto; /* মার্জিন কিছুটা কমানো হয়েছে */
+        border-radius: 8px; /* ছোট স্ক্রিনে কোণাগুলো কিছুটা কম গোলাকার */
+        font-size: 0.95em; /* ফন্ট সাইজ সামান্য কমানো হয়েছে */
+        width: 90%; /* ছোট স্ক্রিনে আরও কিছুটা প্রস্থ বাড়ানো */
     }
     .menu-button {
         top: 15px; /* উপরের মার্জিন পরিবর্তন */
@@ -403,10 +401,11 @@ footer {
         max-width: 40px; /* লোগোর প্রস্থ আরও কমানো */
     }
     .section-heading-container {
-        padding: 12px 0; /* প্যাডিং আরও কমানো */
-        margin: 25px 0; /* মার্জিন আরও কমানো */
-        border-top-width: 3px; /* বর্ডারের প্রস্থ আরও কমানো */
-        border-radius: 8px; /* কোণগুলোকে কম গোলাকার করা */
+        .section-heading-container {
+        padding: 12px 0;
+        margin: 25px 0;
+        border-top-width: 3px;
+        border-radius: 8px;
     }
     .section-heading {
         font-size: 1.5em; /* ফন্টের সাইজ আরও কমানো */
@@ -416,11 +415,12 @@ footer {
         margin-bottom: 3px; /* মার্জিন আরও কমানো */
     }
     .shaded-info-box, .class-box {
-        padding: 18px; /* প্যাডিং আরও কমানো */
-        margin: 15px auto; /* মার্জিন আরও কমানো */
-        border-radius: 6px; /* কোণগুলোকে আরও কম গোলাকার করা */
-        font-size: 0.9em; /* ফন্টের সাইজ আরও কমানো */
-        width: 95%; /* প্রস্থ আরও বাড়ানো */
+        .shaded-info-box, .class-box {
+        padding: 18px;
+        margin: 15px auto;
+        border-radius: 6px;
+        font-size: 0.9em;
+        width: 95%; /* খুব ছোট স্ক্রিনে প্রায় পুরো প্রস্থ ব্যবহার করবে */
     }
     .menu-button {
         top: 10px; /* উপরের মার্জিন পরিবর্তন */
@@ -429,7 +429,14 @@ footer {
         font-size: 0.75em; /* ফন্টের সাইজ কমানো */
     }
 }
-
+/* মোবাইলের জন্য রেসপনসিভ অ্যাডজাস্টমেন্ট (শুধুমাত্র বক্সের স্টাইল রেখে) */
+@media (max-width: 600px) {
+    .shaded-info-box, .class-box {
+        padding: 15px; /* মোবাইলে কম প্যাডিং */
+        margin: 15px 10px; /* মোবাইলে মার্জিন, স্ক্রিনের কিনারা থেকে দূরে রাখতে */
+        width: 90%
+    }
+}
 /* শীঘ্রই উপলব্ধ বার্তা */
 .avail-msg {
   color: red;
