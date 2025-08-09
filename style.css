@@ -27,6 +27,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative; /* ✅ এটি লোগোকে মাঝখানে রাখার জন্য গুরুত্বপূর্ণ */
+}
+.header-logo {
+    position: absolute; /* ✅ এটিকে পজিশন অ্যাবসলিউট করা হয়েছে */
+    left: 50%; /* ✅ বাম দিক থেকে ৫০% সরিয়ে আনা হয়েছে */
+    transform: translateX(-50%); /* ✅ লোগোকে নিজের প্রস্থের অর্ধেক বামে সরিয়ে ঠিক মাঝখানে আনা হয়েছে */
+    top: 50%; /* ✅ উপরের দিক থেকে ৫০% সরিয়ে আনা হয়েছে */
+    transform: translate(-50%, -50%); /* ✅ মাঝখানে রাখার জন্য উল্লম্ব ও অনুভূমিক উভয় দিকে সরানো হয়েছে */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .header-school-name {
     text-align: center;
@@ -42,9 +53,9 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 .logout-button {
-    background-color: #DC143C;
+    background-color: #FF5733; /* ব্যাকগ্রাউন্ড কালার */
     color: white;
-    padding: 8px 16px;
+    padding: 4px 8px;
     text-decoration: none;
     font-weight: bold;
     border-radius: 5px;
