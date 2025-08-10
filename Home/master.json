@@ -17,6 +17,18 @@
     "exam_2nd": "",
     "exam_3rd": "Available Soon"
   },
+  "exam_links": {
+    "class_v": {
+      "first_exam": "https://example.com/class5-exam1",
+      "second_exam": "https://example.com/class5-exam2",
+      "third_exam": ""
+    },
+    "class_vi": {
+      "first_exam": "https://example.com/class6-exam1",
+      "second_exam": "https://example.com/class6-exam2",
+      "third_exam": "Available Soon"
+    }
+  }
   "routines": {
     "student": {
       "url": "https://example.com/student-routine",
