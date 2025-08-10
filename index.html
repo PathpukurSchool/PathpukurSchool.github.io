@@ -163,26 +163,8 @@
 
 <section id="student-section" class="student-info card animated-card fade-in delay-5">
     <h2><i class="fas fa-user-graduate icon"></i> For Students</h2>
-    <div class="section-content-wrapper">
-        <div class="shaded-info-box class-box">
-            <h3 class="box-heading shine">Summative Evaluation Scores</h3>
-            <div class="buttons-container">
-                <a href="#" id="exam-marks-link" class="box-button exam-link">View Marks</a>
-            </div>
+    <div id="student-content-wrapper" class="section-content-wrapper">
         </div>
-        <div class="shaded-info-box class-box">
-            <h3 class="box-heading shine">Class Routine</h3>
-            <div class="buttons-container">
-                <a href="#" id="class-routine-link" class="box-button exam-link">View Routine</a>
-            </div>
-        </div>
-        <div class="shaded-info-box class-box">
-            <h3 class="box-heading shine">Exam Routine</h3>
-            <div class="buttons-container">
-                <a href="#" id="exam-routine-link" class="box-button exam-link">View Routine</a>
-            </div>
-        </div>
-    </div>
     <button class="toggle-button more-btn">More...</button>
 </section>
 
@@ -699,50 +681,66 @@ if (sidebarMenu) {
     });
 
     //Student Section js Code
-    document.addEventListener("DOMContentLoaded", function() {
-    loadStudentLinks();
+ document.addEventListener("DOMContentLoaded", function() {
+    loadDynamicStudentLinks();
 });
 
-function loadStudentLinks() {
-    fetch('Index_link.json')
+function loadDynamicStudentLinks() {
+    fetch('index_link.json')
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to load student links configuration.');
+                throw new Error('Failed to load index_link.json');
             }
             return response.json();
         })
         .then(data => {
-            const links = {
-                'exam-marks-link': data['exam-marks-url'],
-                'class-routine-link': data['class-routine-url'],
-                'exam-routine-link': data['exam-routine-url']
-            };
+            const mainContainer = document.getElementById('student-content-wrapper');
+            mainContainer.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করা
 
-            for (const id in links) {
-                const url = links[id];
-                const linkElement = document.getElementById(id);
+            for (const key in data) {
+                const item = data[key];
+                const id = `${key}-link`;
+                const url = item.url;
+                const title = item.title;
 
-                if (linkElement) {
-                    if (url && url.trim() !== '') {
-                        linkElement.href = url;
-                        linkElement.target = '_blank';
-                    } else {
-                        linkElement.href = 'javascript:void(0)'; // কোনো URL না থাকলে href নিষ্ক্রিয় করা
-                        linkElement.classList.add('disabled-link');
-                        linkElement.addEventListener('click', function(event) {
-                            showAvailableSoonMessage(linkElement);
-                        });
-                    }
+                const box = document.createElement('div');
+                box.className = 'shaded-info-box class-box';
+
+                const boxHeading = document.createElement('h3');
+                boxHeading.className = 'box-heading shine';
+                boxHeading.textContent = title;
+                box.appendChild(boxHeading);
+
+                const buttonsContainer = document.createElement('div');
+                buttonsContainer.className = 'buttons-container';
+
+                const linkElement = document.createElement('a');
+                linkElement.id = id;
+                linkElement.className = 'box-button exam-link';
+                linkElement.textContent = 'View';
+
+                if (url && url.trim() !== '') {
+                    linkElement.href = url;
+                    linkElement.target = '_blank';
+                } else {
+                    linkElement.href = 'javascript:void(0)';
+                    linkElement.classList.add('disabled-link');
+                    linkElement.addEventListener('click', function(event) {
+                        showAvailableSoonMessage(linkElement);
+                    });
                 }
+
+                buttonsContainer.appendChild(linkElement);
+                box.appendChild(buttonsContainer);
+                mainContainer.appendChild(box);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error loading student links:', error);
         });
 }
 
 function showAvailableSoonMessage(element) {
-    // আগের বার্তা থাকলে তা সরিয়ে দাও
     const parentContainer = element.closest('.shaded-info-box');
     const existingMessage = parentContainer.querySelector('.avail-msg');
     if (existingMessage) {
