@@ -29,3 +29,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // এই অংশে আরও জাভাস্ক্রিপ্ট কোড যুক্ত করা যাবে যদি প্রয়োজন হয়
     // যেমন: ডেটা লোড করা, লগইন ফর্ম পরিচালনা করা ইত্যাদি
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const navItems = document.querySelectorAll('.nav-item');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function(event) {
+            const submenu = this.querySelector('.submenu');
+            if (submenu) {
+                event.preventDefault();
+                // অন্য সকল সাবমেনু লুকিয়ে ফেলা হচ্ছে
+                document.querySelectorAll('.submenu').forEach(sub => {
+                    if (sub !== submenu) {
+                        sub.style.display = 'none';
+                    }
+                });
+                // বর্তমান সাবমেনুর অবস্থা টগল করা হচ্ছে
+                submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+            }
+        });
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.nav-item')) {
+            document.querySelectorAll('.submenu').forEach(submenu => {
+                submenu.style.display = 'none';
+            });
+        }
+    });
+});
