@@ -87,6 +87,7 @@ async function submitMasterLogin() {
 }
 
 // ✅ এক্সাম লিঙ্ক লোড ফাংশন
+
 function loadExamLinks() {
     fetch('config.json')
         .then(response => {
@@ -104,9 +105,6 @@ function loadExamLinks() {
             document.getElementById('exam-buttons').innerHTML = "<p style='color:red;'>Exam links not available.</p>";
         });
 }
-
-let currentKey = '';
-
 
 // এক্সাম লিংক তৈরি ও দেখানো
 function renderButtons() {
@@ -126,11 +124,12 @@ function renderButtons() {
         // প্রতিটি ক্লাসের জন্য একটি নতুন shaded-info-box তৈরি করা হচ্ছে
         const classBox = document.createElement('div');
         classBox.className = 'shaded-info-box'; // CSS ক্লাস যা বক্সের স্টাইল দেবে
+        classBox.id = `class-${cls}`; // ইউনিক আইডি যুক্ত করা
 
         // বক্সের হেডিং তৈরি করা হচ্ছে (ক্লাসের নাম)
         const boxHeading = document.createElement('h3');
         boxHeading.className = 'box-heading shine'; // CSS ক্লাস যা হেডিং এর স্টাইল দেবে
-        boxHeading.textContent = 'CLASS ' + cls; // সরাসরি 'CLASS V', 'CLASS VI' ইত্যাদি হবে
+        boxHeading.textContent = 'CLASS ' + cls;
         classBox.appendChild(boxHeading);
 
         // বোতামগুলির জন্য একটি কন্টেইনার তৈরি করা যাতে সেগুলো flexbox দিয়ে সাজানো যায়
@@ -160,8 +159,7 @@ function renderButtons() {
                 }
                 
                 button.textContent = label;
-                // যদি URL না থাকে অথবা URL খালি হয়, তাহলে সরাসরি 'showAvailableSoonMessage' কল করব
-                // অন্যথায়, সরাসরি লিংক খুলব
+                // যদি URL না থাকে অথবা URL খালি হয়, তাহলে 'Available Soon' মেসেজ দেখাবে
                 if (credentials[key].url && credentials[key].url.trim() !== '') {
                     button.onclick = () => window.open(credentials[key].url, '_blank');
                 } else {
@@ -227,7 +225,7 @@ function getExamText(key) {
         default:
             return exam; // fallback
     }
-}  
+}
 
 // NOTICE & HELP লোড করা
 fetch('files.json')
