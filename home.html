@@ -57,12 +57,10 @@
 </div>
 
 	  
-<div class="exam-buttons-group" id="exam-buttons">
 <button id="menu-toggle-button" class="menu-button">☰</button>
     <img src="PHS-LOGO.png" alt="School Logo" class="logo">
 <button class="logout-button" onclick="logout()">Logout</button>
     <h1 class="school-name">Pathpukur High School (H.S.)</h1>
-  </div>
 
 	  
 
@@ -206,30 +204,14 @@ document.addEventListener("DOMContentLoaded", function() {
       </div></div>
 	
  <!--✅ নম্বর আপলোড -->  
-<div class="section-heading-container">
+<div class="section-heading-container" id="upload-your-marks-section">
     <h2 class="section-heading">
         <span class="emoji">🧾</span>
         <span class="blink">Upload Student Exam Marks</span>
     </h2>
   <!-- ✅ নম্বর আপলোডের বোতাম তৈরি -->
-  <div id="upload-your-marks-section">
   <div id="exam-buttons"></div>
-    <dialog id="loginDialog">
-        <form method="dialog" onsubmit="return false">
-            <div class="input-group">
-                <img src="https://img.icons8.com/ios-filled/50/lock.png" alt="Lock">
-                <input type="text" id="loginId" placeholder="ID">
-            </div>
-            <div class="input-group">
-                <img src="https://img.icons8.com/ios-filled/50/key.png" alt="Key">
-                <input type="password" id="loginPassword" placeholder="Password">
-            </div>
-            <div id="loginError" class="error"></div>
-            <button onclick="submitLogin()">LOGIN</button>
-            <button onclick="closeLogin()">CANCEL</button>
-        </form>
-    </dialog>
-</div></div>
+</div>
 
 <!-- ✅ নোটিশ বোর্ড -->
     <div class="section-heading-container" id="notice-board-section">
