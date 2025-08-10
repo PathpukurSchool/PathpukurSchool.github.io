@@ -1,6 +1,6 @@
 {
   "schoolName": "Pathpukur High School (HS)",
-  "logo": "",
+  "logo": "PHS-LOGO.png",
 
   /* 🔐 Teacher credential: লগইন যাচাইয়ের জন্য */
   "teacher": {
