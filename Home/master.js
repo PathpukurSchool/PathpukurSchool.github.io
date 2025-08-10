@@ -63,50 +63,65 @@ fetch('master.json')
     loginMsg.style.color = "red";
   });
 
-/* ---------------------------
-   Login: সাবমিট হ্যান্ডলার
-   - ID/Password master.json থেকে যাচাই হবে
-   - ফাঁকা ইনপুট থাকলে রেড মেসেজ
-   --------------------------- */
+
+
+// =================== JSON লোড ও লগইন চেক ===================
+let credentials = null; // master.json থেকে teacher data সংরক্ষণ
+let schoolName = "";
+
+// master.json লোড
+fetch('master.json')
+    .then(res => res.json())
+    .then(data => {
+        credentials = data.teacher;
+        schoolName = data.schoolName || "School Name";
+        document.getElementById('schoolName').textContent = schoolName;
+    })
+    .catch(err => {
+        console.error("JSON Load Error:", err);
+        loginMsg.textContent = "Configuration missing. Contact admin.";
+        loginMsg.style.color = "red";
+    });
+
+// লগইন বাটনে ক্লিক হ্যান্ডলার
 loginSubmit.addEventListener('click', () => {
-  const idVal = loginId.value.trim();
-  const passVal = loginPass.value.trim();
+    const idVal = loginId.value.trim();
+    const passVal = loginPass.value.trim();
 
-  // ইনপুট চেক
-  if (!idVal || !passVal) {
-    loginMsg.textContent = "Please enter ID and Password before submitting.";
-    loginMsg.style.color = "red";
-    return;
-  }
+    // যদি JSON লোড না হয়
+    if (!credentials) {
+        loginMsg.textContent = "Configuration missing. Contact admin.";
+        loginMsg.style.color = "red";
+        return;
+    }
 
-  // ডেট পাওয়া গেছে কিনা পরীক্ষা
-  if (!data || !data.teacher) {
-    loginMsg.textContent = "Configuration missing. Contact admin.";
-    loginMsg.style.color = "red";
-    return;
-  }
+    // ফাঁকা ইনপুট চেক
+    if (!idVal || !passVal) {
+        loginMsg.textContent = "Please enter ID and Password before submitting.";
+        loginMsg.style.color = "red";
+        return;
+    }
 
-  // সঠিক হলে overlay লুকানো ও কন্টেন্ট দেখানো
-  if (idVal === data.teacher.id && passVal === data.teacher.pass) {
-    loginMsg.textContent = "Login Successful!";
-    loginMsg.style.color = "green";
-    setTimeout(() => {
-      loginOverlay.style.display = 'none';
-      loginOverlay.setAttribute('aria-hidden', 'true');
-      mainContent.setAttribute('aria-hidden', 'false');
-      // স্ক্রল ও ইন্টারঅ্যাকশন সক্ষম করতে হবে
-      initMenuBehaviour();
-      initSectionObserver();
-    }, 600);
-  } else {
-    loginMsg.textContent = "Invalid ID or Password!";
-    loginMsg.style.color = "red";
-  }
+    // সঠিক ID/Password চেক
+    if (idVal === credentials.id && passVal === credentials.pass) {
+        loginMsg.textContent = "Login Successful!";
+        loginMsg.style.color = "green";
+        setTimeout(() => {
+            loginOverlay.style.display = 'none';
+            loginOverlay.setAttribute('aria-hidden', 'true');
+            mainContent.setAttribute('aria-hidden', 'false');
+            initMenuBehaviour();
+            initSectionObserver();
+        }, 600);
+    } else {
+        loginMsg.textContent = "Invalid ID or Password!";
+        loginMsg.style.color = "red";
+    }
 });
 
-// ক্যান্সেল বোতাম - previous page এ যাবে
+// ক্যান্সেল বাটন
 loginCancel.addEventListener('click', () => {
-  window.history.back();
+    window.history.back();
 });
 
 /* ---------------------------
