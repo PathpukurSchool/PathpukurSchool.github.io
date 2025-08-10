@@ -15,11 +15,13 @@ body {
 
 /* ✅ প্রধান হেডার, যা স্ক্রল করবে */
 .main-header-container {
-    background-color: #004080; /* নীল ব্যাকগ্রাউন্ড */
-    color: white;
+    background-color: #fff; /* নীল ব্যাকগ্রাউন্ড */
     padding: 5px 10px;
     text-align: center;
-    border-bottom: 3px solid #00264d;
+    position: static;
+    width: 100%;
+    z-index: 999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* ✅ হেডারের উপরের অংশের স্টাইল (লোগো ও লগআউট) */
