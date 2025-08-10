@@ -1,0 +1,276 @@
+/* ============================
+   master.css
+   বাংলা কমেন্ট: স্টাইলশীট — রেসপনসিভ, লাল থিম
+   ============================ */
+
+/* বেস রিসেট */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root{
+  --accent: #d81b1b; /* প্রধান লাল রং */
+  --accent-dark: #b01212;
+  --muted: #666;
+  --card-bg: #fff;
+  --glass: rgba(255,255,255,0.85);
+}
+
+/* পুরো পেজ ব্যাকগ্রাউন্ড (জেন্টল গ্রেডিয়েন্ট) */
+body{
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffecec 30%, #fff 100%);
+  color: #222;
+  min-height: 100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ====== ফিক্সড টপবার ====== */
+/* বাংলা: টপ মেনু বার - ফিক্সড ও কম স্পেস নেয় এমন স্টাইল */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  z-index: 1000;
+}
+
+/* লোগো + নাম কন্টেইনার - সব স্ক্রিনে এক লাইনে থাকবে */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* লোগো ইমেজ (অতি ছোট হলে টেক্সট দেখাবে) */
+.brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 2px solid var(--accent);
+}
+
+/* স্কুল নাম */
+.school-title {
+  font-weight: 700;
+  color: var(--accent-dark);
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+/* মেনু লাইন - ডান দিক */
+.nav {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  height: 100%;
+}
+
+/* প্রত্যেক মেনু আইটেম */
+.nav .menu {
+  position: relative;
+  list-style: none;
+}
+
+/* মেনু টপ লেভেল বাটন (কম জায়গা নেবে) */
+.nav .menu > button {
+  background: transparent;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #222;
+  border-radius: 8px;
+}
+
+/* হোভার ও active স্টেট */
+.nav .menu > button:hover,
+.nav .menu > button.active {
+  background: rgba(216,27,27,0.08);
+  color: var(--accent-dark);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+/* সাবমেনু (প্রাথমিকভাবে লুকানো) */
+.submenu {
+  position: absolute;
+  top: 46px;
+  right: 0;
+  background: white;
+  min-width: 180px;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1001;
+}
+
+/* সাবমেনু আইটেম (লিংক) */
+.submenu a {
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 6px;
+  display: block;
+  color: #222;
+  font-weight: 500;
+}
+
+.submenu a:hover, .submenu a.active {
+  background: #fff0f0;
+  color: var(--accent-dark);
+}
+
+/* মেমনু খোলার ক্লাস যোগ করলে দেখা যায় */
+.menu.open .submenu { display: flex; }
+
+/* ====== পেজ কন্টেন্ট ====== */
+.container {
+  max-width: 1100px;
+  margin: 100px auto 40px; /* টপবার এর নিচে থেকে শুরু হবে */
+  padding: 0 16px;
+}
+
+/* কার্ড স্টাইল */
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  margin-bottom: 16px;
+}
+
+/* লাস্ট-ডেট বোর্ড - হাইলাইটেড */
+.last-dates {
+  border-left: 6px solid var(--accent);
+  padding: 12px 16px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* লাস্ট-ডেট আইটেম */
+.last-dates .item {
+  min-width: 160px;
+  background: #fff7f7;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.03);
+  font-weight: 600;
+}
+
+/* ক্লাস সেকশন - বোতাম রো */
+.class-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* exam button */
+.exam-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ffdede;
+  background: linear-gradient(180deg, #fff, #fff7f7);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--accent-dark);
+}
+
+/* যদি link মিসিং -> Available Soon স্টাইল */
+.avail-soon {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* সেকশনের হেডলাইন ও আইডি */
+.section {
+  scroll-margin-top: 76px; /* স্ক্রল করে গেলে টপবার নিচে অবস্থান */
+}
+
+.section h2 {
+  margin-bottom: 8px;
+  color: var(--accent-dark);
+}
+
+/* সেকশন হাইলাইট (active) */
+.section.active {
+  outline: 4px solid rgba(216,27,27,0.07);
+  transition: outline 0.3s;
+}
+
+/* ফ্লেক্স গ্রিড: বড় স্ক্রীনে দো-কোলাম */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 16px;
+}
+
+/* মোবাইল রেসপনসিভ */
+@media (max-width: 880px){
+  .grid { grid-template-columns: 1fr; }
+  .nav { gap: 8px; }
+  .school-title { font-size: 0.95rem; }
+}
+
+/* ====== Login overlay ====== */
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.5));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.login-box {
+  width: 92%;
+  max-width: 420px;
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+.login-box h3 { margin-bottom: 8px; color: var(--accent-dark); }
+
+.login-box label { display:block; text-align:left; margin-top:10px; font-size:0.9rem; color:var(--muted); }
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin-top:6px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* login buttons */
+.login-actions { display:flex; gap:8px; margin-top:14px; justify-content:center; }
+.btn {
+  padding: 10px 14px;
+  border-radius:8px;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+}
+.btn.primary { background:var(--accent); color:white; }
+.btn.ghost { background:#f3f3f3; color:#333; }
+
+/* message */
+.msg { margin-top:10px; font-weight:700; }
+
+/* footer */
+.footer { text-align:center; padding:20px 8px; color:var(--muted); font-size:0.9rem; margin-top:28px; }
