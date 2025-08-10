@@ -1,0 +1,63 @@
+{
+  "schoolName": "Pathpukur High School (HS)",
+  "logo": "PHS-LOGO.png",
+
+  /* 🔐 Teacher credential: লগইন যাচাইয়ের জন্য */
+  "teacher": {
+    "id": "Master",
+    "pass": "1234"
+  },
+
+  /* 📅 Exam last-dates — যদি কোন ডেট না থাকে তখন সেই লাইন দেখাবে না */
+  "lastDates": {
+    "1stExam": "2025-08-20",
+    "2ndExam": "2025-10-15",
+    "3rdExam": ""   /* খালি থাকলে 3rd exam দেখানো হবে না */
+  },
+
+  /* 🧾 প্রতিটি ক্লাসের exam link (empty -> Available Soon) */
+  "links": {
+    "V": {
+      "1st": "https://example.com/classv/1st",
+      "2nd": "",
+      "3rd": "https://example.com/classv/3rd"
+    },
+    "VI": {
+      "1st": "https://example.com/classvi/1st",
+      "2nd": "https://example.com/classvi/2nd",
+      "3rd": ""
+    },
+    "VII": {
+      "1st": "",
+      "2nd": "",
+      "3rd": ""
+    },
+    "VIII": {
+      "1st": "https://example.com/class8/1st",
+      "2nd": "https://example.com/class8/2nd",
+      "3rd": "https://example.com/class8/3rd"
+    },
+    "IX": {
+      "1st": "https://example.com/class9/1st",
+      "2nd": "",
+      "3rd": ""
+    },
+    "X": {
+      "1st": "",
+      "2nd": "",
+      "test": ""
+    }
+  },
+
+  /* 🗂️ অন্যান্য লিংক - Student/Teacher/Class/Subject/UpdateNotice ইত্যাদি */
+  "otherLinks": {
+    "studentRoutine": "https://example.com/student-routine",
+    "teacherRoutine": "",
+    "classRoutine": "https://example.com/class-routine",
+    "subjectRoutine": "",
+    "updateStudentNotice": "https://example.com/upload-notice"
+  },
+
+  /* 📰 Footer text (যদি না দেন খালি রাখুন) */
+  "footer": "© 2025 Pathpukur High School (HS). All rights reserved."
+}
