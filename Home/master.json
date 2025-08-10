@@ -1,9 +1,6 @@
 // master.json
 {
   "themeColor": "#FF0000",
-  "schoolName": "My Awesome School",
-  "schoolLogoUrl": "https://example.com/school-logo.png",
-  "footerText": "© 2025 My Awesome School. All rights reserved.",
   "lastDates": [
     { "text": "Last date of 1st exam", "date": "2025-08-30" },
     { "text": "Last date of 2nd exam", "date": "2026-01-15" },
