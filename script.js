@@ -17,7 +17,9 @@ async function getCredentials() {
 }
 
 async function submitMasterLogin() {
-    const type = document.getElementById('loginType').value;
+    // এখানে পরিবর্তন করা হয়েছে। ড্রপ-ডাউন থেকে মান না নিয়ে সরাসরি 'teacher' সেট করা হয়েছে।
+    const type = 'teacher'; 
+
     const id = document.getElementById('masterId').value.trim();
     const pass = document.getElementById('masterPass').value.trim();
     const errorDiv = document.getElementById('masterLoginError');
@@ -28,7 +30,7 @@ async function submitMasterLogin() {
     successDiv.style.display = "none";
     
     if (!type || !id || !pass) {
-        errorDiv.innerText = "Please select login type and fill ID & Password.";
+        errorDiv.innerText = "Please fill ID & Password.";
         return;
     }
 
