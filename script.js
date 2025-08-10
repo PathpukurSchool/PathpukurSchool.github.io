@@ -394,5 +394,5 @@ function closeModal() {
 // ✅ Logout function
 function logout() {
     sessionStorage.removeItem("studentLoggedIn");
-    window.location.replace("home.html");
+    window.location.replace("index.html");
 }
