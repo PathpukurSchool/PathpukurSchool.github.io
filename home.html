@@ -57,7 +57,7 @@
 </div>
 
 	  
-<div class="main-header-container">
+<div class="exam-buttons-group" id="exam-buttons">
 <button id="menu-toggle-button" class="menu-button">☰</button>
     <img src="PHS-LOGO.png" alt="School Logo" class="logo">
 <button class="logout-button" onclick="logout()">Logout</button>
@@ -148,11 +148,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	  
     <!--✅ নম্বর আপলোড -->  
 <div class="section-heading-container">
-    <h2 class="section-heading">
-        <span class="emoji">🧾</span>
-        <span class="blink">Upload Student Exam Marks</span>
-    </h2>
-  
    <!-- ✅ নম্বর আপলোডের শেষ তারিখ -->
   <div class="shaded-info-box" id="last-date-section">
   <h2 class="shine">Last date of marks submission</h2>
@@ -208,10 +203,16 @@ document.addEventListener("DOMContentLoaded", function() {
       <div class="shaded-info-box" id="marks-uploading-section">
 		<h2 class="shine">Marks Uploading Report</h2>
       <a href="https://script.google.com/macros/s/AKfycby92wlqHa0LdogrHoSTMrbs2snqGpb-p-ASQQods_202pOLzQGNmeqIHxw0Eow1juYC/exec" targetet="_blank" class="exam-link">View Mark Uploading Status</a>
-      </div>
-
+      </div></div>
+	
+ <!--✅ নম্বর আপলোড -->  
+<div class="section-heading-container">
+    <h2 class="section-heading">
+        <span class="emoji">🧾</span>
+        <span class="blink">Upload Student Exam Marks</span>
+    </h2>
   <!-- ✅ নম্বর আপলোডের বোতাম তৈরি -->
-  <div id="upload-your-marks-section-section">
+  <div id="upload-your-marks-section">
   <div id="exam-buttons"></div>
     <dialog id="loginDialog">
         <form method="dialog" onsubmit="return false">
