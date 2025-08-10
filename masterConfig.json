@@ -1,8 +1,7 @@
-
 {
- 
-  "teacher": { 
-    "id": "Tr19181600802", 
-    "pass": "Phs@1954", 
-    "redirect": "" },
+    "teacher": {
+        "id": "Tr19181600802",
+        "pass": "Phs@1954",
+        "redirect": ""
+    }
 }
