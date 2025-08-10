@@ -162,10 +162,10 @@
 
 
 <section id="student-section" class="student-info card animated-card fade-in delay-5">
-    <h2><i class="fas fa-user-graduate icon"></i> For Students</h2>
+    <h2><i class="fas fa-user-graduate icon"></i> Students Zone</h2>
     <div class="section-content-wrapper">
         <div class="shaded-info-box class-box">
-            <h3 class="box-heading shine">Exam Marks</h3>
+            <h3 class="box-heading shine">Summative Evaluation Marks</h3>
             <div class="buttons-container">
                 <a href="#" id="exam-marks-link" class="box-button exam-link">View Marks</a>
             </div>
@@ -173,15 +173,32 @@
         <div class="shaded-info-box class-box">
             <h3 class="box-heading shine">Class Routine</h3>
             <div class="buttons-container">
-                <a href="#" id="class-routine-link" class="box-button exam-link">View Routine</a>
+                <a href="#" id="class-routine-link" class="box-button exam-link">View Class Routine</a>
             </div>
         </div>
         <div class="shaded-info-box class-box">
-            <h3 class="box-heading shine">Exam Routine</h3>
+            <h3 class="box-heading shine">School Exam Routine</h3>
             <div class="buttons-container">
-                <a href="#" id="exam-routine-link" class="box-button exam-link">View Routine</a>
+                <a href="#" id="exam-routine-link" class="box-button exam-link">View Exam Routine</a>
             </div>
         </div>
+
+        
+        <div class="shaded-info-box class-box">
+            <h3 class="box-heading shine">Class XI Bank Mandate Form for TAB</h3>
+            <div class="buttons-container">
+                <a href="#" id="xi-tab-form-link" class="box-button exam-link">View Annexure-F (Bank Mandate) Form</a>
+            </div>
+        </div>
+
+        <div class="shaded-info-box class-box">
+            <h3 class="box-heading shine">New Admission Form</h3>
+            <div class="buttons-container">
+                <a href="#" id="new-admission-link" class="box-button exam-link">View Admission Form</a>
+            </div>
+        </div>
+
+        
     </div>
     <button class="toggle-button more-btn">More...</button>
 </section>
@@ -702,7 +719,7 @@ if (sidebarMenu) {
     document.addEventListener("DOMContentLoaded", function() {
     loadStudentLinks();
 });
-
+//স্টুডেন্জ জোনে নতুন লিঙ্ক যোগ করতে হলে এই অংশে পরিবর্তন করতে হবে
 function loadStudentLinks() {
     fetch('index_link.json')
         .then(response => {
@@ -715,7 +732,9 @@ function loadStudentLinks() {
             const links = {
                 'exam-marks-link': data['exam-marks-url'],
                 'class-routine-link': data['class-routine-url'],
-                'exam-routine-link': data['exam-routine-url']
+                'exam-routine-link': data['exam-routine-url'],
+                'xi-tab-form-link': data['xi-tab-form-url'],
+                'new-admission-link': data['new-admission-url']
             };
 
             for (const id in links) {
