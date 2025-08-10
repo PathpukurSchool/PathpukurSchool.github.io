@@ -8,13 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // CSS ভেরিয়েবল সেট করা হয়েছে থিমের জন্য
             document.documentElement.style.setProperty('--primary-color', data.themeColor);
 
-            // লোগো এবং স্কুলের নাম সেট করা হয়েছে
-            document.getElementById('school-logo').src = data.schoolLogoUrl;
-            document.getElementById('school-name').textContent = data.schoolName;
-
-            // ফুটার টেক্সট সেট করা হয়েছে
-            document.getElementById('footer-text').textContent = data.footerText;
-
             // ডেট ডেটা লোড করা
             const lastDatesContainer = document.getElementById('last-dates-container');
             data.lastDates.forEach(dateData => {
