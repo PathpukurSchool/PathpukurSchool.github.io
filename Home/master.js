@@ -1,5 +1,5 @@
 /* ============================
-   master.js - সংশোধিত সংস্করণ
+   master.js - সংশোধিত সংস্করণ (async/await)
    ============================ */
 
 /* ---------------------------
@@ -24,60 +24,45 @@ const schoolTitle = $('schoolTitle');
 const schoolNameTop = $('schoolNameTop');
 
 /* ---------------------------
-   JSON লোড ও ইনিশিয়ালাইজেশন
+   JSON লোড ফাংশন (async)
    --------------------------- */
-fetch('master.json')
-    .then(r => r.json())
-    .then(json => {
+async function loadMasterConfig() {
+    try {
+        const response = await fetch('master.json');
+        if (!response.ok) {
+            throw new Error(`Failed to load master.json: ${response.status}`);
+        }
+        const json = await response.json();
         data = json;
         console.log("master.json data loaded:", data);
-
-        // স্কুল নাম সেট করা
-        if (data.schoolName) {
-            if (schoolTitle) schoolTitle.textContent = data.schoolName;
-            if (schoolNameTop) schoolNameTop.textContent = data.schoolName;
-        }
-
-        // লোগো থাকলে সেট করুন
-        if (data.logo && data.logo.trim() !== '') {
-            if (logoImg) {
-                logoImg.src = data.logo;
-                logoImg.style.display = 'block';
-            }
-        } else {
-            if (logoImg) logoImg.style.display = 'none';
-        }
-
-        // ফুটার টেক্সট
-        if (footerText) footerText.textContent = data.footer || '';
-
-        // ডাইনামিক অংশ রেন্ডার করুন
-        // এই ফাংশনগুলি নিশ্চিত করতে হবে যে তারা DOM এ বিদ্যমান
-        if ($('lastDatesContainer')) renderLastDates();
-        // নিশ্চিত করুন যে অন্যান্য render ফাংশনগুলিও কল করা হয়েছে
-        if ($('classVButtons')) renderClassButtons();
-        if ($('studentRoutineLink')) renderOtherLinks();
-
-    })
-    .catch(err => {
-        console.error("Failed to load master.json:", err);
-        if (loginMsg) {
-            loginMsg.textContent = "Failed to load configuration.";
-            loginMsg.style.color = "red";
-        }
-    });
+        return data;
+    } catch (error) {
+        console.error("Error fetching config:", error);
+        return null;
+    }
+}
 
 /* ---------------------------
-   Login: সাবমিট হ্যান্ডলার (সংশোধিত)
+   Login: সাবমিট হ্যান্ডলার (async)
    --------------------------- */
+async function handleLoginSubmit() {
+    // নিশ্চিত করি যে DOM উপাদানগুলো আছে
+    if (!loginId || !loginPass || !loginMsg) return;
 
-
-/* ---------------------------
-   Login: সাবমিট হ্যান্ডলার
-   --------------------------- */
-loginSubmit.addEventListener('click', () => {
     const idVal = loginId.value.trim();
     const passVal = loginPass.value.trim();
+
+    // ইনপুট খালি কিনা চেক
+    if (!idVal || !passVal) {
+        loginMsg.textContent = "Please enter ID and Password.";
+        loginMsg.style.color = "red";
+        return;
+    }
+
+    // ডেটা লোড না হলে লোড করার চেষ্টা করি
+    if (!data) {
+        data = await loadMasterConfig();
+    }
 
     if (!data || !data.teacher) {
         loginMsg.textContent = "Configuration missing. Contact admin.";
@@ -85,18 +70,15 @@ loginSubmit.addEventListener('click', () => {
         return;
     }
 
-    if (!idVal || !passVal) {
-        loginMsg.textContent = "Please enter ID and Password.";
-        loginMsg.style.color = "red";
-        return;
-    }
-
+    // লগইন ভেরিফাই
     if (idVal === data.teacher.id && passVal === data.teacher.pass) {
         loginMsg.textContent = "Login Successful!";
         loginMsg.style.color = "green";
         localStorage.setItem("isLoggedIn", "true");
         setTimeout(() => {
-            loginOverlay.style.display = 'none';
+            if (loginOverlay) loginOverlay.style.display = 'none';
+            // লগইন সফল হলে ডাইনামিক অংশ রেন্ডার করি
+            renderDynamicContent();
             initMenuBehaviour();
             initSectionObserver();
         }, 600);
@@ -104,16 +86,85 @@ loginSubmit.addEventListener('click', () => {
         loginMsg.textContent = "Invalid ID or Password!";
         loginMsg.style.color = "red";
     }
+}
+
+/* ---------------------------
+   ইনিশিয়ালাইজেশন ফাংশন
+   --------------------------- */
+async function initializeApp() {
+    // প্রথমেই config লোড করি
+    const config = await loadMasterConfig();
+
+    if (!config) {
+        if (loginMsg) {
+            loginMsg.textContent = "Failed to load configuration.";
+            loginMsg.style.color = "red";
+        }
+        return; // config লোড না হলে থামিয়ে দেই
+    }
+
+    // DOM-এ ডেটা সেট করি
+    if (config.schoolName) {
+        if (schoolTitle) schoolTitle.textContent = config.schoolName;
+        if (schoolNameTop) schoolNameTop.textContent = config.schoolName;
+    }
+    if (config.logo && config.logo.trim() !== '') {
+        if (logoImg) {
+            logoImg.src = config.logo;
+            logoImg.style.display = 'block';
+        }
+    } else {
+        if (logoImg) logoImg.style.display = 'none';
+    }
+    if (footerText) footerText.textContent = config.footer || '';
+
+    // লগইন স্টেট চেক করি
+    if (localStorage.getItem("isLoggedIn") === "true") {
+        if (loginOverlay) loginOverlay.style.display = 'none';
+        renderDynamicContent();
+        initMenuBehaviour();
+        initSectionObserver();
+    } else {
+        if (loginOverlay) loginOverlay.style.display = 'flex';
+    }
+}
+
+// এই ফাংশনটি লগইন সফল হলে বা পেজ লোড হওয়ার সময় কল হবে
+function renderDynamicContent() {
+    if ($('lastDatesContainer')) renderLastDates();
+    if ($('classVButtons')) renderClassButtons();
+    if ($('studentRoutineLink')) renderOtherLinks();
+}
+
+/* ============================
+   ইভেন্ট হ্যান্ডলার্স
+   ============================ */
+document.addEventListener('DOMContentLoaded', () => {
+    // অ্যাপ ইনিশিয়ালাইজ করি
+    initializeApp();
+
+    if (loginSubmit) {
+        loginSubmit.addEventListener('click', handleLoginSubmit);
+    }
+    if (loginCancel) {
+        loginCancel.addEventListener('click', () => {
+            window.history.back();
+        });
+    }
+    // Enter চাপলে সাবমিট
+    if (loginId) {
+        loginId.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') loginSubmit.click();
+        });
+    }
+    if (loginPass) {
+        loginPass.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') loginSubmit.click();
+        });
+    }
 });
 
-loginCancel.addEventListener('click', () => {
-    window.history.back();
-});
-
-
-
-
-// বাকি ফাংশনগুলি অপরিবর্তিত
+// ... বাকি ফাংশনগুলি (renderLastDates, formatDate, ইত্যাদি) অপরিবর্তিত থাকবে
 /* ---------------------------
    Render: Last Dates
    --------------------------- */
