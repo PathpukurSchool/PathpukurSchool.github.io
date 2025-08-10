@@ -17,7 +17,6 @@ const loginCancel = $('loginCancel');
 const loginMsg = $('loginMsg');
 const loginId = $('loginId');
 const loginPass = $('loginPass');
-const mainContent = $('mainContent');
 const footerText = $('footerText');
 const logoImg = $('logoImg');
 const schoolTitle = $('schoolTitle');
@@ -46,20 +45,17 @@ async function loadMasterConfig() {
    Login: সাবমিট হ্যান্ডলার (async)
    --------------------------- */
 async function handleLoginSubmit() {
-    // নিশ্চিত করি যে DOM উপাদানগুলো আছে
     if (!loginId || !loginPass || !loginMsg) return;
 
     const idVal = loginId.value.trim();
     const passVal = loginPass.value.trim();
 
-    // ইনপুট খালি কিনা চেক
     if (!idVal || !passVal) {
         loginMsg.textContent = "Please enter ID and Password.";
         loginMsg.style.color = "red";
         return;
     }
 
-    // ডেটা লোড না হলে লোড করার চেষ্টা করি
     if (!data) {
         data = await loadMasterConfig();
     }
@@ -70,14 +66,12 @@ async function handleLoginSubmit() {
         return;
     }
 
-    // লগইন ভেরিফাই
     if (idVal === data.teacher.id && passVal === data.teacher.pass) {
         loginMsg.textContent = "Login Successful!";
         loginMsg.style.color = "green";
         localStorage.setItem("isLoggedIn", "true");
         setTimeout(() => {
             if (loginOverlay) loginOverlay.style.display = 'none';
-            // লগইন সফল হলে ডাইনামিক অংশ রেন্ডার করি
             renderDynamicContent();
             initMenuBehaviour();
             initSectionObserver();
@@ -92,7 +86,6 @@ async function handleLoginSubmit() {
    ইনিশিয়ালাইজেশন ফাংশন
    --------------------------- */
 async function initializeApp() {
-    // প্রথমেই config লোড করি
     const config = await loadMasterConfig();
 
     if (!config) {
@@ -100,7 +93,7 @@ async function initializeApp() {
             loginMsg.textContent = "Failed to load configuration.";
             loginMsg.style.color = "red";
         }
-        return; // config লোড না হলে থামিয়ে দেই
+        return;
     }
 
     // DOM-এ ডেটা সেট করি
@@ -118,7 +111,7 @@ async function initializeApp() {
     }
     if (footerText) footerText.textContent = config.footer || '';
 
-    // লগইন স্টেট চেক করি
+    // লগইন স্টেট চেক
     if (localStorage.getItem("isLoggedIn") === "true") {
         if (loginOverlay) loginOverlay.style.display = 'none';
         renderDynamicContent();
@@ -129,42 +122,15 @@ async function initializeApp() {
     }
 }
 
-// এই ফাংশনটি লগইন সফল হলে বা পেজ লোড হওয়ার সময় কল হবে
+/* ---------------------------
+   Dynamic Content Loader
+   --------------------------- */
 function renderDynamicContent() {
     if ($('lastDatesContainer')) renderLastDates();
     if ($('classVButtons')) renderClassButtons();
     if ($('studentRoutineLink')) renderOtherLinks();
 }
 
-/* ============================
-   ইভেন্ট হ্যান্ডলার্স
-   ============================ */
-document.addEventListener('DOMContentLoaded', () => {
-    // অ্যাপ ইনিশিয়ালাইজ করি
-    initializeApp();
-
-    if (loginSubmit) {
-        loginSubmit.addEventListener('click', handleLoginSubmit);
-    }
-    if (loginCancel) {
-        loginCancel.addEventListener('click', () => {
-            window.history.back();
-        });
-    }
-    // Enter চাপলে সাবমিট
-    if (loginId) {
-        loginId.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') loginSubmit.click();
-        });
-    }
-    if (loginPass) {
-        loginPass.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') loginSubmit.click();
-        });
-    }
-});
-
-// ... বাকি ফাংশনগুলি (renderLastDates, formatDate, ইত্যাদি) অপরিবর্তিত থাকবে
 /* ---------------------------
    Render: Last Dates
    --------------------------- */
@@ -174,12 +140,12 @@ function renderLastDates() {
         if (container) container.innerHTML = '<div class="item">No date information</div>';
         return;
     }
-    // ... (পূর্বের কোড)
+    // আপনার পূর্বের কোড এখানে দিন
 }
 
 /* ছোট হেল্পার: YYYY-MM-DD -> readable */
 function formatDate(iso) {
-    // ... (পূর্বের কোড)
+    // আপনার পূর্বের কোড এখানে দিন
 }
 
 /* ---------------------------
@@ -187,7 +153,7 @@ function formatDate(iso) {
    --------------------------- */
 function renderClassButtons() {
     if (!data || !data.links) return;
-    // ... (পূর্বের কোড)
+    // আপনার পূর্বের কোড এখানে দিন
 }
 
 /* ---------------------------
@@ -195,7 +161,7 @@ function renderClassButtons() {
    --------------------------- */
 function renderOtherLinks() {
     if (!data || !data.otherLinks) return;
-    // ... (পূর্বের কোড)
+    // আপনার পূর্বের কোড এখানে দিন
 }
 
 /* ---------------------------
@@ -212,33 +178,37 @@ function setLastAction(text) {
    Menu behaviour & Section highlight
    --------------------------- */
 function initMenuBehaviour() {
-    // ... (পূর্বের কোড)
+    // আপনার পূর্বের কোড এখানে দিন
 }
 
 function closeAllMenus() {
-    // ... (পূর্বের কোড)
+    // আপনার পূর্বের কোড এখানে দিন
 }
 
 function initSectionObserver() {
-    // ... (পূর্বের কোড)
+    // আপনার পূর্বের কোড এখানে দিন
 }
 
 /* ============================
-   শেষ: পেজ লোড হয়ে গেলে ইনিশিয়ালাইজেশন
+   একটাই DOMContentLoaded ব্লক
    ============================ */
 document.addEventListener('DOMContentLoaded', () => {
-    // লগইন সাবমিট এবং বাতিল বাটন থাকলে ইভেন্ট হ্যান্ডলার সেট করা
-    // লগইন সফল হলে, overlay লুকানো হবে এবং মেনু কাজ করবে
-    if (localStorage.getItem("isLoggedIn") === "true") {
-        if (loginOverlay) loginOverlay.style.display = 'none';
-        initMenuBehaviour();
-        initSectionObserver();
-    } else {
-        // লগইন সফল না হলে, overlay দেখানো হবে
-        if (loginOverlay) loginOverlay.style.display = 'flex';
+    // অ্যাপ ইনিশিয়ালাইজ
+    initializeApp();
+
+    // লগইন বাটন
+    if (loginSubmit) {
+        loginSubmit.addEventListener('click', handleLoginSubmit);
     }
 
-    // Enter চাপলে সাবমিট
+    // ক্যানসেল বাটন
+    if (loginCancel) {
+        loginCancel.addEventListener('click', () => {
+            window.history.back();
+        });
+    }
+
+    // Enter কী সাপোর্ট
     if (loginId) {
         loginId.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') loginSubmit.click();
