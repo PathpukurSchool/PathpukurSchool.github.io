@@ -188,7 +188,7 @@ body {
 .section-heading-container {
     background-color: #F8F8F8; /* ব্যাকগ্রাউন্ড কালার */
     padding: 20px 0; /* ভেতরের প্যাডিং */
-    max-width: 100%; /* ✅ সর্বোচ্চ প্রস্থ স্ক্রিনের ৯৫% */
+    max-width: 95%; /* ✅ সর্বোচ্চ প্রস্থ স্ক্রিনের ৯৫% */
     margin-top: 40px;
     margin-right: 0px;
     margin-bottom: 40px;
