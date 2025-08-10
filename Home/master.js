@@ -1,222 +1,187 @@
-/* ============================
-   master.js - সংশোধিত সংস্করণ (async/await)
-   ============================ */
+// master.js
 
-/* ---------------------------
-   Helper: DOM Shortcuts
-   --------------------------- */
-const $ = id => document.getElementById(id);
-
-/* ---------------------------
-   ভ্যারিয়েবল ডিক্লেয়ার
-   --------------------------- */
-let data = null; // master.json ডেটা হবে এখানে
-const loginOverlay = $('loginOverlay');
-const loginSubmit = $('loginSubmit');
-const loginCancel = $('loginCancel');
-const loginMsg = $('loginMsg');
-const loginId = $('loginId');
-const loginPass = $('loginPass');
-const footerText = $('footerText');
-const logoImg = $('logoImg');
-const schoolTitle = $('schoolTitle');
-const schoolNameTop = $('schoolNameTop');
-
-/* ---------------------------
-   JSON লোড ফাংশন (async)
-   --------------------------- */
-async function loadMasterConfig() {
-    try {
-        const response = await fetch('master.json');
-        if (!response.ok) {
-            throw new Error(`Failed to load master.json: ${response.status}`);
-        }
-        const json = await response.json();
-        data = json;
-        console.log("master.json data loaded:", data);
-        return data;
-    } catch (error) {
-        console.error("Error fetching config:", error);
-        return null;
-    }
-}
-
-/* ---------------------------
-   Login: সাবমিট হ্যান্ডলার (async)
-   --------------------------- */
-async function handleLoginSubmit() {
-    if (!loginId || !loginPass || !loginMsg) return;
-
-    const idVal = loginId.value.trim();
-    const passVal = loginPass.value.trim();
-
-    if (!idVal || !passVal) {
-        loginMsg.textContent = "Please enter ID and Password.";
-        loginMsg.style.color = "red";
-        return;
-    }
-
-    if (!data) {
-        data = await loadMasterConfig();
-    }
-
-    if (!data || !data.teacher) {
-        loginMsg.textContent = "Configuration missing. Contact admin.";
-        loginMsg.style.color = "red";
-        return;
-    }
-
-    if (idVal === data.teacher.id && passVal === data.teacher.pass) {
-        loginMsg.textContent = "Login Successful!";
-        loginMsg.style.color = "green";
-        localStorage.setItem("isLoggedIn", "true");
-        setTimeout(() => {
-            if (loginOverlay) loginOverlay.style.display = 'none';
-            renderDynamicContent();
-            initMenuBehaviour();
-            initSectionObserver();
-        }, 600);
-    } else {
-        loginMsg.textContent = "Invalid ID or Password!";
-        loginMsg.style.color = "red";
-    }
-}
-
-/* ---------------------------
-   ইনিশিয়ালাইজেশন ফাংশন
-   --------------------------- */
-async function initializeApp() {
-    const config = await loadMasterConfig();
-
-    if (!config) {
-        if (loginMsg) {
-            loginMsg.textContent = "Failed to load configuration.";
-            loginMsg.style.color = "red";
-        }
-        return;
-    }
-
-    // DOM-এ ডেটা সেট করি
-    if (config.schoolName) {
-        if (schoolTitle) schoolTitle.textContent = config.schoolName;
-        if (schoolNameTop) schoolNameTop.textContent = config.schoolName;
-    }
-    if (config.logo && config.logo.trim() !== '') {
-        if (logoImg) {
-            logoImg.src = config.logo;
-            logoImg.style.display = 'block';
-        }
-    } else {
-        if (logoImg) logoImg.style.display = 'none';
-    }
-    if (footerText) footerText.textContent = config.footer || '';
-
-    // লগইন স্টেট চেক
-    if (localStorage.getItem("isLoggedIn") === "true") {
-        if (loginOverlay) loginOverlay.style.display = 'none';
-        renderDynamicContent();
-        initMenuBehaviour();
-        initSectionObserver();
-    } else {
-        if (loginOverlay) loginOverlay.style.display = 'flex';
-    }
-}
-
-/* ---------------------------
-   Dynamic Content Loader
-   --------------------------- */
-function renderDynamicContent() {
-    if ($('lastDatesContainer')) renderLastDates();
-    if ($('classVButtons')) renderClassButtons();
-    if ($('studentRoutineLink')) renderOtherLinks();
-}
-
-/* ---------------------------
-   Render: Last Dates
-   --------------------------- */
-function renderLastDates() {
-    const container = $('lastDatesContainer');
-    if (!data || !data.lastDates || !container) {
-        if (container) container.innerHTML = '<div class="item">No date information</div>';
-        return;
-    }
-    // আপনার পূর্বের কোড এখানে দিন
-}
-
-/* ছোট হেল্পার: YYYY-MM-DD -> readable */
-function formatDate(iso) {
-    // আপনার পূর্বের কোড এখানে দিন
-}
-
-/* ---------------------------
-   Render: Class Buttons
-   --------------------------- */
-function renderClassButtons() {
-    if (!data || !data.links) return;
-    // আপনার পূর্বের কোড এখানে দিন
-}
-
-/* ---------------------------
-   Render: Other Links
-   --------------------------- */
-function renderOtherLinks() {
-    if (!data || !data.otherLinks) return;
-    // আপনার পূর্বের কোড এখানে দিন
-}
-
-/* ---------------------------
-   Last action setter
-   --------------------------- */
-function setLastAction(text) {
-    const lastActionEl = $('lastAction');
-    if (lastActionEl) {
-        lastActionEl.textContent = text;
-    }
-}
-
-/* ---------------------------
-   Menu behaviour & Section highlight
-   --------------------------- */
-function initMenuBehaviour() {
-    // আপনার পূর্বের কোড এখানে দিন
-}
-
-function closeAllMenus() {
-    // আপনার পূর্বের কোড এখানে দিন
-}
-
-function initSectionObserver() {
-    // আপনার পূর্বের কোড এখানে দিন
-}
-
-/* ============================
-   একটাই DOMContentLoaded ব্লক
-   ============================ */
 document.addEventListener('DOMContentLoaded', () => {
-    // অ্যাপ ইনিশিয়ালাইজ
-    initializeApp();
+    // JSON ফাইল থেকে ডেটা লোড করার ফাংশন
+    fetch('master.json')
+        .then(response => response.json())
+        .then(data => {
+            // CSS ভেরিয়েবল সেট করা হয়েছে থিমের জন্য
+            document.documentElement.style.setProperty('--primary-color', data.themeColor);
 
-    // লগইন বাটন
-    if (loginSubmit) {
-        loginSubmit.addEventListener('click', handleLoginSubmit);
+            // লোগো এবং স্কুলের নাম সেট করা হয়েছে
+            document.getElementById('school-logo').src = data.schoolLogoUrl;
+            document.getElementById('school-name').textContent = data.schoolName;
+
+            // ফুটার টেক্সট সেট করা হয়েছে
+            document.getElementById('footer-text').textContent = data.footerText;
+
+            // মেনু এবং সাব-মেনু তৈরি করার ফাংশন
+            const mainMenu = document.getElementById('main-menu');
+            const mainContentContainer = document.getElementById('main-content-container');
+
+            data.menu.forEach(menuItemData => {
+                const menuItem = document.createElement('li');
+                menuItem.className = 'menu-item';
+                menuItem.textContent = menuItemData.title;
+
+                // মেনুতে ক্লিক করলে হাইলাইট হবে
+                menuItem.addEventListener('click', () => {
+                    handleMenuClick(menuItem, menuItemData.sectionId);
+                });
+
+                // সাব-মেনু তৈরি করা
+                if (menuItemData.subMenu.length > 0) {
+                    const subMenu = document.createElement('ul');
+                    subMenu.className = 'sub-menu';
+
+                    menuItemData.subMenu.forEach(subMenuItemData => {
+                        const subMenuItem = document.createElement('li');
+                        subMenuItem.className = 'sub-menu-item';
+                        subMenuItem.textContent = subMenuItemData.title;
+
+                        // সাব-মেনুতে ক্লিক করলে নির্দিষ্ট সেকশনে যাবে
+                        subMenuItem.addEventListener('click', (event) => {
+                            event.stopPropagation(); // উপরের মেনু আইটেমের ক্লিক বন্ধ করতে
+                            handleSubMenuClick(subMenuItem, subMenuItemData.sectionId, subMenuItemData.url);
+                            subMenu.style.display = 'none'; // ক্লিক করার পর সাব-মেনু লুকানো
+                        });
+                        subMenu.appendChild(subMenuItem);
+                    });
+                    menuItem.appendChild(subMenu);
+                }
+                mainMenu.appendChild(menuItem);
+            });
+
+            // সেকশন তৈরি করার ফাংশন
+            data.menu.forEach(menuItemData => {
+                const section = document.createElement('section');
+                section.id = menuItemData.sectionId;
+                section.className = 'section';
+
+                const sectionTitle = document.createElement('h2');
+                sectionTitle.textContent = menuItemData.title;
+                section.appendChild(sectionTitle);
+
+                // সাব-মেনুর কন্টেন্ট (বোতাম) তৈরি করা
+                if (menuItemData.subMenu.length > 0) {
+                    menuItemData.subMenu.forEach(subMenuItemData => {
+                        const subSection = document.createElement('div');
+                        subSection.id = subMenuItemData.sectionId;
+
+                        const subSectionTitle = document.createElement('h3');
+                        subSectionTitle.textContent = subMenuItemData.title;
+                        subSection.appendChild(subSectionTitle);
+
+                        // বোতাম তৈরি করা
+                        if (subMenuItemData.buttons) {
+                            const buttonContainer = document.createElement('div');
+                            buttonContainer.className = 'button-container';
+                            subMenuItemData.buttons.forEach(buttonData => {
+                                const btn = document.createElement('a');
+                                btn.className = 'btn';
+                                btn.textContent = buttonData.text;
+                                btn.href = (buttonData.url === "Available Soon") ? '#' : buttonData.url;
+                                if (buttonData.url === "Available Soon") {
+                                    btn.classList.add('disabled');
+                                } else {
+                                    btn.target = '_blank';
+                                }
+                                buttonContainer.appendChild(btn);
+                            });
+                            subSection.appendChild(buttonContainer);
+                        }
+                        section.appendChild(subSection);
+                    });
+                }
+                mainContentContainer.appendChild(section);
+            });
+
+            // লাস্ট ডেট সেকশন তৈরি করা
+            const lastDatesSection = document.createElement('div');
+            lastDatesSection.className = 'last-dates';
+            lastDatesSection.id = 'last-dates-section';
+            const lastDatesTitle = document.createElement('h2');
+            lastDatesTitle.textContent = 'Marks Submission Last Dates';
+            lastDatesSection.appendChild(lastDatesTitle);
+            
+            // JSON থেকে ডেট ডেটা লোড করা
+            data.lastDates.forEach(dateData => {
+                if (dateData.date) { // যদি ডেট থাকে তবেই দেখাবে
+                    const p = document.createElement('p');
+                    p.innerHTML = `<span class="highlight-date">${dateData.text}:</span> ${dateData.date}`;
+                    lastDatesSection.appendChild(p);
+                }
+            });
+            mainContentContainer.insertBefore(lastDatesSection, mainContentContainer.firstChild);
+
+            // মেনু, সাব-মেনু এবং ওয়েব পেজের ফাঁকা অংশে ক্লিক করলে সাব-মেনু লুকিয়ে যাবে
+            document.body.addEventListener('click', (event) => {
+                const subMenus = document.querySelectorAll('.sub-menu');
+                subMenus.forEach(subMenu => {
+                    const parentMenu = subMenu.closest('.menu-item');
+                    if (!parentMenu.contains(event.target)) {
+                        subMenu.style.display = 'none';
+                    }
+                });
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+    // হাইলাইটিং এবং স্ক্রলিং এর জন্য ফাংশন
+    let lastActiveElements = {
+        menuItem: null,
+        subMenuItem: null,
+        section: null
+    };
+
+    function handleMenuClick(menuItem, sectionId) {
+        // আগের হাইলাইটগুলো সরিয়ে ফেলা
+        removeHighlights();
+
+        // নতুন মেনু আইটেম হাইলাইট করা
+        menuItem.classList.add('highlight');
+        lastActiveElements.menuItem = menuItem;
+
+        // সাব-মেনু দেখানো বা লুকানো
+        const subMenu = menuItem.querySelector('.sub-menu');
+        if (subMenu) {
+            subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
+        }
     }
 
-    // ক্যানসেল বাটন
-    if (loginCancel) {
-        loginCancel.addEventListener('click', () => {
-            window.history.back();
-        });
+    function handleSubMenuClick(subMenuItem, sectionId, url) {
+        // আগের হাইলাইটগুলো সরিয়ে ফেলা
+        removeHighlights();
+
+        // নতুন সাব-মেনু এবং তার মূল মেনু হাইলাইট করা
+        subMenuItem.classList.add('highlight');
+        subMenuItem.closest('.menu-item').classList.add('highlight');
+        lastActiveElements.subMenuItem = subMenuItem;
+        lastActiveElements.menuItem = subMenuItem.closest('.menu-item');
+
+        // নির্দিষ্ট সেকশনে স্ক্রল করা
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.classList.add('highlight');
+            lastActiveElements.section = targetSection;
+            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // যদি URL থাকে তাহলে নতুন ট্যাবে খোলা
+        if (url && url !== "Available Soon" && url !== '#') {
+            window.open(url, '_blank');
+        }
     }
 
-    // Enter কী সাপোর্ট
-    if (loginId) {
-        loginId.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') loginSubmit.click();
-        });
-    }
-    if (loginPass) {
-        loginPass.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') loginSubmit.click();
-        });
+    function removeHighlights() {
+        if (lastActiveElements.menuItem) {
+            lastActiveElements.menuItem.classList.remove('highlight');
+        }
+        if (lastActiveElements.subMenuItem) {
+            lastActiveElements.subMenuItem.classList.remove('highlight');
+        }
+        if (lastActiveElements.section) {
+            lastActiveElements.section.classList.remove('highlight');
+        }
     }
 });
