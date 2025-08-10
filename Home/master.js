@@ -70,49 +70,93 @@ fetch('master.json')
 /* ---------------------------
    Login: সাবমিট হ্যান্ডলার (সংশোধিত)
    --------------------------- */
-if (loginSubmit) {
-    loginSubmit.addEventListener('click', function (e) {
-        e.preventDefault(); // ফর্ম সাবমিট প্রতিরোধ
+let credentials = {};
+let masterCredential = {};
 
-        // JSON ডেটা লোড না হলে
-        if (!data || !data.teacher) {
-            loginMsg.textContent = "Configuration missing. Contact admin.";
-            loginMsg.style.color = "red";
-            return;
+// ✅ মাস্টার লগইনের তথ্য লোড ফাংশন
+async function getCredentials() {
+    try {
+        const response = await fetch('master.json');
+        if (!response.ok) {
+            throw new Error('Failed to load master.json');
         }
-
-        const userId = loginId.value.trim();
-        const password = loginPass.value.trim();
-
-        // ফাঁকা ইনপুট চেক
-        if (!userId || !password) {
-            loginMsg.textContent = "Please enter ID and Password.";
-            loginMsg.style.color = "red";
-            return;
-        }
-
-        // আইডি-পাসওয়ার্ড ম্যাচ চেক
-        if (userId === data.teacher.id && password === data.teacher.pass) {
-            loginMsg.textContent = "Login Successful!";
-            loginMsg.style.color = "green";
-            localStorage.setItem("isLoggedIn", "true"); // লগইন স্টেট সংরক্ষণ
-            setTimeout(() => {
-                window.location.href = "home.html"; // মূল পেজে পাঠানো
-            }, 1000);
-        } else {
-            loginMsg.textContent = "Invalid ID or Password!";
-            loginMsg.style.color = "red";
-        }
-    });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching config:', error);
+        return null;
+    }
 }
 
-// লগইন বাতিল
-if (loginCancel) {
-    loginCancel.addEventListener('click', () => {
-        if (loginOverlay) loginOverlay.style.display = 'none';
-    });
-}
+// ✅ মাস্টার লগইন সাবমিট ফাংশন
+async function submitMasterLogin() {
+    const type = 'teacher'; // সরাসরি teacher সেট করা
+    const id = document.getElementById('masterId').value.trim();
+    const pass = document.getElementById('masterPass').value.trim();
 
+    const errorDiv = document.getElementById('masterLoginError');
+    const successDiv = document.getElementById('masterLoginSuccess');
+
+    // পুরোনো মেসেজ ক্লিয়ার
+    errorDiv.innerText = "";
+    successDiv.innerText = "";
+    successDiv.style.display = "none";
+
+    // ইনপুট চেক
+    if (!id || !pass) {
+        errorDiv.innerText = "Please fill ID & Password.";
+        errorDiv.style.color = "red";
+        return;
+    }
+
+    // JSON থেকে ক্রেডেনশিয়াল লোড
+    const allCredentials = await getCredentials();
+    if (!allCredentials) {
+        errorDiv.innerText = "Unable to load login configuration.";
+        errorDiv.style.color = "red";
+        return;
+    }
+
+    // টাইপ অনুযায়ী ইউজার ডেটা নিন
+    const user = allCredentials[type.toLowerCase()];
+    if (!user) {
+        errorDiv.innerText = "Invalid user type!";
+        errorDiv.style.color = "red";
+        return;
+    }
+
+    // ✅ লগইন ভেরিফাই
+    if (id === user.id && pass === user.pass) {
+        sessionStorage.setItem("userType", type.toLowerCase());
+        if (type.toLowerCase() === "student") {
+            sessionStorage.setItem("studentLoggedIn", "true");
+        }
+
+        // সফল লগইন মেসেজ
+        successDiv.innerText = "✔️ Login Successful.";
+        successDiv.style.display = "block";
+
+        setTimeout(() => {
+            if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
+                // রিডাইরেক্ট
+                if (user.redirect) {
+                    window.location.href = user.redirect;
+                } else {
+                    errorDiv.innerText = "No redirect link found!";
+                    errorDiv.style.color = "red";
+                }
+            } else {
+                // Teacher লগইন
+                document.getElementById('masterLoginOverlay').style.display = "none";
+                loadExamLinks(); // এক্সাম লিঙ্ক লোড
+            }
+        }, 1000);
+
+    } else {
+        errorDiv.innerText = "Incorrect ID or Password!";
+        errorDiv.style.color = "red";
+    }
+}
 // বাকি ফাংশনগুলি অপরিবর্তিত
 /* ---------------------------
    Render: Last Dates
