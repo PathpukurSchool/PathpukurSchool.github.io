@@ -681,12 +681,13 @@ if (sidebarMenu) {
     });
 
     //Student Section js Code
- document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
     loadDynamicStudentLinks();
+    // অন্যান্য ইভেন্ট লিসেনার ও ফাংশন এখানে থাকবে
 });
 
 function loadDynamicStudentLinks() {
-    fetch('index_link.json')
+    fetch('Index_link.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to load index_link.json');
@@ -697,25 +698,28 @@ function loadDynamicStudentLinks() {
             const mainContainer = document.getElementById('student-content-wrapper');
             mainContainer.innerHTML = ''; // পূর্বের কন্টেন্ট পরিষ্কার করা
 
+            // JSON ফাইলের প্রতিটি আইটেমের জন্য লুপ
             for (const key in data) {
                 const item = data[key];
-                const id = `${key}-link`;
                 const url = item.url;
                 const title = item.title;
 
+                // নতুন বক্স তৈরি করা
                 const box = document.createElement('div');
                 box.className = 'shaded-info-box class-box';
 
+                // হেডিং তৈরি করা
                 const boxHeading = document.createElement('h3');
                 boxHeading.className = 'box-heading shine';
                 boxHeading.textContent = title;
                 box.appendChild(boxHeading);
 
+                // বাটন কন্টেইনার তৈরি করা
                 const buttonsContainer = document.createElement('div');
                 buttonsContainer.className = 'buttons-container';
 
+                // লিংক বাটন তৈরি করা
                 const linkElement = document.createElement('a');
-                linkElement.id = id;
                 linkElement.className = 'box-button exam-link';
                 linkElement.textContent = 'View';
 
@@ -729,14 +733,14 @@ function loadDynamicStudentLinks() {
                         showAvailableSoonMessage(linkElement);
                     });
                 }
-
+                
                 buttonsContainer.appendChild(linkElement);
                 box.appendChild(buttonsContainer);
                 mainContainer.appendChild(box);
             }
         })
         .catch(error => {
-            console.error('Error loading student links:', error);
+            console.error('Error fetching student links:', error);
         });
 }
 
