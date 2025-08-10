@@ -1,65 +1,25 @@
 // master.json
 {
   "themeColor": "#FF0000",
-  "schoolName": "Pathpukur High School (HS)",
-  "schoolLogoUrl": "PHS-LOGO.png",
-  "menu": [
-    {
-      "title": "Home",
-      "sectionId": "home-section",
-      "subMenu": []
-    },
-    {
-      "title": "Exams",
-      "sectionId": "exams-section",
-      "subMenu": [
-        {
-          "title": "Class V",
-          "sectionId": "class-v-section",
-          "buttons": [
-            { "text": "1st Exam", "url": "https://example.com/class-v-exam1" },
-            { "text": "2nd Exam", "url": "https://example.com/class-v-exam2" },
-            { "text": "3rd Exam", "url": "Available Soon" }
-          ]
-        },
-        {
-          "title": "Class VI",
-          "sectionId": "class-vi-section",
-          "buttons": [
-            { "text": "1st Exam", "url": "https://example.com/class-vi-exam1" },
-            { "text": "2nd Exam", "url": "https://example.com/class-vi-exam2" },
-            { "text": "3rd Exam", "url": "https://example.com/class-vi-exam3" }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Routine",
-      "sectionId": "routine-section",
-      "subMenu": [
-        { "title": "Student Routine", "url": "https://example.com/student-routine" },
-        { "title": "Teacher Routine", "url": "https://example.com/teacher-routine" },
-        { "title": "Class Routine", "url": "https://example.com/class-routine" },
-        { "title": "Subject Routine", "url": "https://example.com/subject-routine" }
-      ]
-    },
-    {
-      "title": "Notices",
-      "sectionId": "notices-section",
-      "subMenu": [
-        { "title": "Update Student Notice", "url": "https://example.com/student-notice-update" }
-      ]
-    },
-    {
-      "title": "Gallery",
-      "sectionId": "gallery-section",
-      "subMenu": []
-    }
-  ],
+  "schoolName": "My Awesome School",
+  "schoolLogoUrl": "https://example.com/school-logo.png",
+  "footerText": "© 2025 My Awesome School. All rights reserved.",
   "lastDates": [
     { "text": "Last date of 1st exam", "date": "2025-08-30" },
     { "text": "Last date of 2nd exam", "date": "2026-01-15" },
     { "text": "Last date of 3rd exam", "date": "" }
   ],
-  "footerText": "© 2025 My Awesome School. All rights reserved."
+  "links": {
+    "classV_1stExam": "https://example.com/class-v-exam1",
+    "classV_2ndExam": "https://example.com/class-v-exam2",
+    "classV_3rdExam": "Available Soon",
+    "classVI_1stExam": "https://example.com/class-vi-exam1",
+    "classVI_2ndExam": "https://example.com/class-vi-exam2",
+    "classVI_3rdExam": "https://example.com/class-vi-exam3",
+    "studentRoutine": "https://example.com/student-routine",
+    "teacherRoutine": "https://example.com/teacher-routine",
+    "classRoutine": "https://example.com/class-routine",
+    "subjectRoutine": "https://example.com/subject-routine",
+    "studentNotice": "https://example.com/student-notice-update"
+  }
 }
