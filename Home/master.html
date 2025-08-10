@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pathpukur High School (HS)/title>
+    <title>My Awesome School</title>
     <link rel="stylesheet" href="master.css">
 </head>
 <body>
@@ -11,7 +11,31 @@
     <header class="top-menu-bar">
         <nav>
             <ul class="menu-list" id="main-menu">
-                </ul>
+                <li class="menu-item" data-section-id="home-section">Home</li>
+                <li class="menu-item has-submenu" data-section-id="exams-section">
+                    Exams
+                    <ul class="sub-menu">
+                        <li class="sub-menu-item" data-section-id="class-v-section">Class V</li>
+                        <li class="sub-menu-item" data-section-id="class-vi-section">Class VI</li>
+                    </ul>
+                </li>
+                <li class="menu-item has-submenu" data-section-id="routine-section">
+                    Routine
+                    <ul class="sub-menu">
+                        <li class="sub-menu-item" data-section-id="student-routine-section" data-url-key="studentRoutine">Student Routine</li>
+                        <li class="sub-menu-item" data-section-id="teacher-routine-section" data-url-key="teacherRoutine">Teacher Routine</li>
+                        <li class="sub-menu-item" data-section-id="class-routine-section" data-url-key="classRoutine">Class Routine</li>
+                        <li class="sub-menu-item" data-section-id="subject-routine-section" data-url-key="subjectRoutine">Subject Routine</li>
+                    </ul>
+                </li>
+                <li class="menu-item has-submenu" data-section-id="notices-section">
+                    Notices
+                    <ul class="sub-menu">
+                        <li class="sub-menu-item" data-section-id="student-notice-section" data-url-key="studentNotice">Update Student Notice</li>
+                    </ul>
+                </li>
+                <li class="menu-item" data-section-id="gallery-section">Gallery</li>
+            </ul>
         </nav>
     </header>
 
@@ -20,8 +44,55 @@
         <h1 id="school-name"></h1>
     </div>
 
-    <main class="main-content" id="main-content-container">
-        </main>
+    <main class="main-content">
+        <section id="last-dates-section" class="section last-dates">
+            <h2>Marks Submission Last Dates</h2>
+            <div id="last-dates-container">
+                </div>
+        </section>
+
+        <section id="exams-section" class="section">
+            <h2>Exams</h2>
+            
+            <div id="class-v-section" class="sub-section">
+                <h3>Class V</h3>
+                <div class="button-container">
+                    <a href="#" class="btn" data-url-key="classV_1stExam">1st Exam</a>
+                    <a href="#" class="btn" data-url-key="classV_2ndExam">2nd Exam</a>
+                    <a href="#" class="btn" data-url-key="classV_3rdExam">3rd Exam</a>
+                </div>
+            </div>
+
+            <div id="class-vi-section" class="sub-section">
+                <h3>Class VI</h3>
+                <div class="button-container">
+                    <a href="#" class="btn" data-url-key="classVI_1stExam">1st Exam</a>
+                    <a href="#" class="btn" data-url-key="classVI_2ndExam">2nd Exam</a>
+                    <a href="#" class="btn" data-url-key="classVI_3rdExam">3rd Exam</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="routine-section" class="section">
+            <h2>Routine</h2>
+            <p>Please click on the submenu items to view the respective routines.</p>
+        </section>
+
+        <section id="notices-section" class="section">
+            <h2>Notices</h2>
+            <p>Please click on the submenu items to view the latest notices.</p>
+        </section>
+
+        <section id="gallery-section" class="section">
+            <h2>Gallery</h2>
+            <p>Here you can find photos and videos of school events.</p>
+        </section>
+        
+        <section id="home-section" class="section">
+            <h2>Welcome to My Awesome School</h2>
+            <p>This is the home section of our school website.</p>
+        </section>
+    </main>
 
     <footer class="main-footer">
         <p id="footer-text"></p>
