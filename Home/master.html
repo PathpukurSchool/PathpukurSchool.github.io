@@ -11,75 +11,226 @@
 </head>
 <body>
 
-    <header class="top-menu">
-        <nav class="nav-container">
-            <a href="#" class="logo-text">Pathpukur High School (HS)</a>
-            <ul class="nav-links">
-                <li class="nav-item">
-                    <a href="#about-us">About Us</a>
-                    <ul class="submenu">
-                        <li><a href="#school-history">School History</a></li>
-                        <li><a href="#our-mission">Our Mission</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#academics">Academics</a>
-                    <ul class="submenu">
-                        <li><a href="#curriculum">Curriculum</a></li>
-                        <li><a href="#results">Results</a></li>
-                    </ul>
-                </li>
+    <div class="login-container">
+        <form id="login-form">
+            <h2>Pathpukur High School (HS)</h2>
+            <p>Teacher Login</p>
+            <div class="input-group">
+                <span>&#x1F464;</span>
+                <input type="text" id="username" name="username" placeholder="User ID" required>
+            </div>
+            <div class="input-group">
+                <span>&#x1F512;</span>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="message-box" id="login-message"></div>
+            <div class="button-group-login">
+                <button type="submit" class="login-button">Submit</button>
+                <button type="button" class="cancel-button">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="main-page-content hidden">
+        <header class="top-menu">
+            <nav class="nav-container">
+                <a href="#" class="logo-text">Pathpukur High School (HS)</a>
+                <ul class="nav-links">
+                    <li class="nav-item">
+                        <a href="#">About Us</a>
+                        <ul class="submenu">
+                            <li><a href="#school-history">School History</a></li>
+                            <li><a href="#our-mission">Our Mission</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Academics</a>
+                        <ul class="submenu">
+                            <li><a href="#curriculum">Curriculum</a></li>
+                            <li><a href="#results">Results</a></li>
+                            <li><a href="#exam-schedule">Exam Schedule</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Routines</a>
+                        <ul class="submenu">
+                            <li><a href="#student-routine">Student Routine</a></li>
+                            <li><a href="#teacher-routine">Teacher Routine</a></li>
+                            <li><a href="#class-routine">Class Routine</a></li>
+                            <li><a href="#subject-routine">Subject Routine</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Notices</a>
+                        <ul class="submenu">
+                            <li><a href="#student-notice">Student Notice</a></li>
+                            <li><a href="#teacher-notice">Teacher Notice</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Contact Us</a>
+                        <ul class="submenu">
+                            <li><a href="#contact-info">Contact Info</a></li>
+                            <li><a href="#map">Location</a></li>
+                        </ul>
+                    </li>
                 </ul>
-        </nav>
-    </header>
+            </nav>
+        </header>
 
-    <section class="school-header">
-        <img src="https://via.placeholder.com/150x50.png?text=School+Logo" alt="School Logo" class="school-logo">
-        <h1 class="school-name">Pathpukur High School (HS)</h1>
-    </section>
-
-    <main class="main-content">
-        <section id="marks-submission" class="content-section highlight-section">
-            <h2>Important Dates</h2>
-            <div class="date-item">
-                <span class="date-label">Last date of 1st Exam:</span>
-                <span class="date-value">Not available</span> </div>
-            <div class="date-item">
-                <span class="date-label">Last date of 2nd Exam:</span>
-                <span class="date-value">Available Soon</span>
-            </div>
-        </section>
-        
-        <hr>
-
-        <section id="class-v" class="content-section">
-            <h2>Class V</h2>
-            <div class="button-group">
-                <a href="#" class="action-button">1st Exam</a>
-                <a href="#" class="action-button">2nd Exam</a>
-                <a href="#" class="action-button">3rd Exam</a>
-            </div>
-        </section>
-        
-        <hr>
-        
-        <section id="student-routine" class="content-section">
-            <h2>Student Routine</h2>
-            <p>Routines will be available soon. Please check back later.</p>
-            <a href="#" class="action-button">View Routine</a>
+        <section class="school-header">
+            <img src="PHS-LOGO.png" alt="Pathpukur High School Logo" class="school-logo">
+            <h1 class="school-name">Pathpukur High School (HS)</h1>
         </section>
 
-        <section id="teacher-routine" class="content-section">
-            <h2>Teacher Routine</h2>
-            <p>Routines will be available soon. Please check back later.</p>
-            <a href="#" class="action-button">View Routine</a>
-        </section>
-        
-    </main>
+        <main class="main-content">
+            <section id="marks-submission" class="content-section highlight-section">
+                <h2>Important Dates</h2>
+                <div class="date-item">
+                    <span class="date-label">Last date of 1st Exam:</span>
+                    <span class="date-value" id="last-date-1">Not available</span>
+                </div>
+                <div class="date-item">
+                    <span class="date-label">Last date of 2nd Exam:</span>
+                    <span class="date-value" id="last-date-2">Available Soon</span>
+                </div>
+                <div class="date-item">
+                    <span class="date-label">Last date of 3rd Exam:</span>
+                    <span class="date-value" id="last-date-3">Not available</span>
+                </div>
+            </section>
+            
+            <hr>
 
-    <footer class="footer">
-        <p>&copy; 2025 Pathpukur High School (HS). All Rights Reserved.</p>
-    </footer>
+            <section id="class-v" class="content-section">
+                <h2>Class V</h2>
+                <div class="button-group">
+                    <a href="#" class="action-button">1st Exam</a>
+                    <a href="#" class="action-button">2nd Exam</a>
+                    <a href="#" class="action-button">3rd Exam</a>
+                </div>
+            </section>
+            
+            <hr>
 
+            <section id="class-vi" class="content-section">
+                <h2>Class VI</h2>
+                <div class="button-group">
+                    <a href="#" class="action-button">1st Exam</a>
+                    <a href="#" class="action-button">2nd Exam</a>
+                    <a href="#" class="action-button">3rd Exam</a>
+                </div>
+            </section>
+            
+            <hr>
+            
+            <section id="class-vii" class="content-section">
+                <h2>Class VII</h2>
+                <div class="button-group">
+                    <a href="#" class="action-button">1st Exam</a>
+                    <a href="#" class="action-button">2nd Exam</a>
+                    <a href="#" class="action-button">3rd Exam</a>
+                </div>
+            </section>
+            
+            <hr>
+            
+            <section id="class-viii" class="content-section">
+                <h2>Class VIII</h2>
+                <div class="button-group">
+                    <a href="#" class="action-button">1st Exam</a>
+                    <a href="#" class="action-button">2nd Exam</a>
+                    <a href="#" class="action-button">3rd Exam</a>
+                </div>
+            </section>
+            
+            <hr>
+            
+            <section id="class-ix" class="content-section">
+                <h2>Class IX</h2>
+                <div class="button-group">
+                    <a href="#" class="action-button">1st Exam</a>
+                    <a href="#" class="action-button">2nd Exam</a>
+                    <a href="#" class="action-button">3rd Exam</a>
+                </div>
+            </section>
+            
+            <hr>
+            
+            <section id="class-x" class="content-section">
+                <h2>Class X</h2>
+                <div class="button-group">
+                    <a href="#" class="action-button">1st Exam</a>
+                    <a href="#" class="action-button">2nd Exam</a>
+                    <a href="#" class="action-button">3rd Exam</a>
+                </div>
+            </section>
+            
+            <hr>
+            
+            <section id="class-xii" class="content-section">
+                <h2>Class XII</h2>
+                <div class="button-group">
+                    <a href="#" class="action-button">1st Exam</a>
+                    <a href="#" class="action-button">2nd Exam</a>
+                    <a href="#" class="action-button">3rd Exam</a>
+                </div>
+            </section>
+
+            <hr>
+            
+            <section id="student-routine" class="content-section">
+                <h2>Student Routine</h2>
+                <p>Routines will be available soon. Please check back later.</p>
+                <a href="#" class="action-button">View Routine</a>
+            </section>
+
+            <hr>
+            
+            <section id="teacher-routine" class="content-section">
+                <h2>Teacher Routine</h2>
+                <p>Routines will be available soon. Please check back later.</p>
+                <a href="#" class="action-button">View Routine</a>
+            </section>
+            
+            <hr>
+            
+            <section id="class-routine" class="content-section">
+                <h2>Class Routine</h2>
+                <p>The class routine for all classes will be available soon.</p>
+                <a href="#" class="action-button">View Routine</a>
+            </section>
+            
+            <hr>
+            
+            <section id="subject-routine" class="content-section">
+                <h2>Subject Routine</h2>
+                <p>The subject-wise routine will be updated here.</p>
+                <a href="#" class="action-button">View Routine</a>
+            </section>
+            
+            <hr>
+            
+            <section id="student-notice" class="content-section">
+                <h2>Student Notice</h2>
+                <p>All important notices for students will be published here.</p>
+                <a href="#" class="action-button">View Notices</a>
+            </section>
+
+            <hr>
+            
+            <section id="teacher-notice" class="content-section">
+                <h2>Teacher Notice</h2>
+                <p>Important notices for teachers can be found in this section.</p>
+                <a href="#" class="action-button">View Notices</a>
+            </section>
+            
+            <hr>
+            
+            <footer class="footer">
+                <p>&copy; 2025 Pathpukur High School (HS). All Rights Reserved.</p>
+            </footer>
+        </div>
+    <script src="master.js"></script>
 </body>
 </html>
