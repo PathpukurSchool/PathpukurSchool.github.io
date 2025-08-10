@@ -1,19 +1,5 @@
-
 {
-    "exam_marks": {
-        "title": "Summative Evaluation Scores",
-        "url": "https://script.google.com/macros/s/AKfycbwWJ0IRCZIOpmZWpOFkCZQgaCbjQfhInftY58DRe_EcU3ZC6xNZx-dxDp3v9pyrbI20CQ/exec"
-    },
-    "class_routine": {
-        "title": "Class Routine",
-        "url": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student"
-    },
-    "exam_routine": {
-        "title": "School Exam Routine",
-        "url": "https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exe"
-    },
-    "new_admission_form": {
-        "title": "New Admission Form",
-        "url": ""
-    }
+    "exam-marks-url": "https://script.google.com/macros/s/AKfycbwWJ0IRCZIOpmZWpOFkCZQgaCbjQfhInftY58DRe_EcU3ZC6xNZx-dxDp3v9pyrbI20CQ/exec",
+    "class-routine-url": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student",
+    "exam-routine-url": "https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec"
 }
