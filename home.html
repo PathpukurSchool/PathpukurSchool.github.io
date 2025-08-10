@@ -38,20 +38,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
   <body>
-    
-    <div id="masterLoginOverlay">
+	  
+    <!-- ✅ মাস্টার লগইন ঃ টিচার লগইন -->
+   <div id="masterLoginOverlay">
     <div id="masterLoginBox">
         <h2 class="red-text">Pathpukur High School</h2>
         <h2 class="shine">Teacher Login</h2>
 
         <input type="hidden" id="loginType" value="teacher">
-        
-        <br><br>
 
-        <input type="text" id="masterId" placeholder="Enter ID"><br><br>
+        <input type="text" id="masterId" placeholder="Enter ID"><br>
         <input type="password" id="masterPass" placeholder="Enter Password"><br>
-        <div id="masterLoginError" class="error"></div><br>
-        <div id="masterLoginSuccess" class="success" style="display: none;"></div>
+        <div id="masterLoginError" class="error"></div>
+        <div id="masterLoginSuccess" class="success" style="display:none;"></div>
 
         <button onclick="submitMasterLogin()">LOGIN</button>
     </div>
