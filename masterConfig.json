@@ -1,19 +1,8 @@
 
 {
-  "school": { 
-    "id": "reduniform", 
-    "pass": "School.Admin", 
-    "redirect": "admin.html" },
-
-  
+ 
   "teacher": { 
     "id": "Tr19181600802", 
     "pass": "Phs@1954", 
     "redirect": "" },
-
-  
-  "student": { 
-    "id": "St19544591", 
-    "pass": "pass@PHS&25", 
-    "redirect": "student.html" }
 }
