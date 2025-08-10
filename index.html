@@ -704,7 +704,7 @@ if (sidebarMenu) {
 });
 
 function loadStudentLinks() {
-    fetch('Index_link.json')
+    fetch('index_link.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to load student links configuration.');
