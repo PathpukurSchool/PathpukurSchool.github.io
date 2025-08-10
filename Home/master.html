@@ -1,236 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pathpukur High School (HS)</title>
-    <link rel="stylesheet" href="master.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Master Panel - Pathpukur HS</title>
+  <link rel="stylesheet" href="master.css">
 </head>
 <body>
-
-    <div class="login-container">
-        <form id="login-form">
-            <h2>Pathpukur High School (HS)</h2>
-            <p>Teacher Login</p>
-            <div class="input-group">
-                <span>&#x1F464;</span>
-                <input type="text" id="username" name="username" placeholder="User ID" required>
-            </div>
-            <div class="input-group">
-                <span>&#x1F512;</span>
-                <input type="password" id="password" name="password" placeholder="Password" required>
-            </div>
-            <div class="message-box" id="login-message"></div>
-            <div class="button-group-login">
-                <button type="submit" class="login-button">Submit</button>
-                <button type="button" class="cancel-button">Cancel</button>
-            </div>
-        </form>
+  <!-- ====== ফিক্সড টপবার ====== -->
+  <header class="topbar">
+    <div class="brand">
+      <!-- লোগো থাকলে দেখাবে, না থাকলে টেক্সট দেখাবে -->
+      <img id="logoImg" src="" alt="logo" onerror="this.style.display='none'">
+      <div class="school-title" id="schoolTitle">Pathpukur High School (HS)</div>
     </div>
 
-    <div class="main-page-content hidden">
-        <header class="top-menu">
-            <nav class="nav-container">
-                <a href="#" class="logo-text">Pathpukur High School (HS)</a>
-                <ul class="nav-links">
-                    <li class="nav-item">
-                        <a href="#">About Us</a>
-                        <ul class="submenu">
-                            <li><a href="#school-history">School History</a></li>
-                            <li><a href="#our-mission">Our Mission</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">Academics</a>
-                        <ul class="submenu">
-                            <li><a href="#curriculum">Curriculum</a></li>
-                            <li><a href="#results">Results</a></li>
-                            <li><a href="#exam-schedule">Exam Schedule</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">Routines</a>
-                        <ul class="submenu">
-                            <li><a href="#student-routine">Student Routine</a></li>
-                            <li><a href="#teacher-routine">Teacher Routine</a></li>
-                            <li><a href="#class-routine">Class Routine</a></li>
-                            <li><a href="#subject-routine">Subject Routine</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">Notices</a>
-                        <ul class="submenu">
-                            <li><a href="#student-notice">Student Notice</a></li>
-                            <li><a href="#teacher-notice">Teacher Notice</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">Contact Us</a>
-                        <ul class="submenu">
-                            <li><a href="#contact-info">Contact Info</a></li>
-                            <li><a href="#map">Location</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-        </header>
+    <!-- মেনু বার - প্রতিটি মেনুতে সাবমেনু থাকতে পারে -->
+    <nav class="nav" id="mainNav">
+      <!-- Menu: Marks (drop) -->
+      <div class="menu" data-menu="marks">
+        <button type="button">Marks ▾</button>
+        <div class="submenu">
+          <a href="#marks-lastdates" data-target="marks-lastdates">Last Dates</a>
+          <a href="#classV" data-target="classV">Class V</a>
+          <a href="#classVI" data-target="classVI">Class VI</a>
+          <a href="#classVII" data-target="classVII">Class VII</a>
+        </div>
+      </div>
 
-        <section class="school-header">
-            <img src="PHS-LOGO.png" alt="Pathpukur High School Logo" class="school-logo">
-            <h1 class="school-name">Pathpukur High School (HS)</h1>
+      <!-- Menu: Routines -->
+      <div class="menu" data-menu="routines">
+        <button type="button">Routines ▾</button>
+        <div class="submenu">
+          <a href="#studentRoutine" data-target="studentRoutine">Student Routine</a>
+          <a href="#teacherRoutine" data-target="teacherRoutine">Teacher Routine</a>
+          <a href="#classRoutine" data-target="classRoutine">Class Routine</a>
+        </div>
+      </div>
+
+      <!-- Menu: Others -->
+      <div class="menu" data-menu="others">
+        <button type="button">Others ▾</button>
+        <div class="submenu">
+          <a href="#subjectRoutine" data-target="subjectRoutine">Subject Routine</a>
+          <a href="#updateNotice" data-target="updateNotice">Update Student Notice</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ====== Login Overlay - প্রথমেই দেখা যাবে ====== -->
+  <div class="login-overlay" id="loginOverlay" aria-hidden="false">
+    <div class="login-box card" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
+      <h3 id="loginTitle">👩‍🏫 Teacher Login</h3>
+      <p id="schoolNameTop" style="color:var(--muted); margin-bottom:8px;">Pathpukur High School (HS)</p>
+
+      <!-- ইনপুট -->
+      <label for="loginId">🆔 ID</label>
+      <input id="loginId" type="text" placeholder="Enter your ID">
+
+      <label for="loginPass">🔒 Password</label>
+      <input id="loginPass" type="password" placeholder="Enter your password">
+
+      <div class="login-actions">
+        <button class="btn primary" id="loginSubmit">Submit</button>
+        <button class="btn ghost" id="loginCancel">Cancel</button>
+      </div>
+
+      <div class="msg" id="loginMsg" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <!-- ====== প্রধান কন্টেন্ট ====== -->
+  <main class="container" id="mainContent" aria-hidden="true">
+    <div class="grid">
+      <div>
+        <!-- Last Dates কার্ড -->
+        <section id="marks-lastdates" class="card section">
+          <h2>Last date of exams</h2>
+          <div class="last-dates" id="lastDatesContainer">
+            <!-- ডাইনামিকালি master.js এ ভরা হবে -->
+            <!-- প্রতিটি ডেট item .item ক্লাস পাবে -->
+          </div>
         </section>
 
-        <main class="main-content">
-            <section id="marks-submission" class="content-section highlight-section">
-                <h2>Important Dates</h2>
-                <div class="date-item">
-                    <span class="date-label">Last date of 1st Exam:</span>
-                    <span class="date-value" id="last-date-1">Not available</span>
-                </div>
-                <div class="date-item">
-                    <span class="date-label">Last date of 2nd Exam:</span>
-                    <span class="date-value" id="last-date-2">Available Soon</span>
-                </div>
-                <div class="date-item">
-                    <span class="date-label">Last date of 3rd Exam:</span>
-                    <span class="date-value" id="last-date-3">Not available</span>
-                </div>
-            </section>
-            
-            <hr>
+        <!-- ক্লাস সেকশন: Class V -->
+        <section id="classV" class="card section">
+          <h2>Class V</h2>
+          <div class="class-row" id="classVButtons">
+            <!-- বাটনগুলো JS থেকে রেন্ডার হবে -->
+          </div>
+        </section>
 
-            <section id="class-v" class="content-section">
-                <h2>Class V</h2>
-                <div class="button-group">
-                    <a href="#" class="action-button">1st Exam</a>
-                    <a href="#" class="action-button">2nd Exam</a>
-                    <a href="#" class="action-button">3rd Exam</a>
-                </div>
-            </section>
-            
-            <hr>
+        <!-- Class VI -->
+        <section id="classVI" class="card section">
+          <h2>Class VI</h2>
+          <div class="class-row" id="classVIButtons"></div>
+        </section>
 
-            <section id="class-vi" class="content-section">
-                <h2>Class VI</h2>
-                <div class="button-group">
-                    <a href="#" class="action-button">1st Exam</a>
-                    <a href="#" class="action-button">2nd Exam</a>
-                    <a href="#" class="action-button">3rd Exam</a>
-                </div>
-            </section>
-            
-            <hr>
-            
-            <section id="class-vii" class="content-section">
-                <h2>Class VII</h2>
-                <div class="button-group">
-                    <a href="#" class="action-button">1st Exam</a>
-                    <a href="#" class="action-button">2nd Exam</a>
-                    <a href="#" class="action-button">3rd Exam</a>
-                </div>
-            </section>
-            
-            <hr>
-            
-            <section id="class-viii" class="content-section">
-                <h2>Class VIII</h2>
-                <div class="button-group">
-                    <a href="#" class="action-button">1st Exam</a>
-                    <a href="#" class="action-button">2nd Exam</a>
-                    <a href="#" class="action-button">3rd Exam</a>
-                </div>
-            </section>
-            
-            <hr>
-            
-            <section id="class-ix" class="content-section">
-                <h2>Class IX</h2>
-                <div class="button-group">
-                    <a href="#" class="action-button">1st Exam</a>
-                    <a href="#" class="action-button">2nd Exam</a>
-                    <a href="#" class="action-button">3rd Exam</a>
-                </div>
-            </section>
-            
-            <hr>
-            
-            <section id="class-x" class="content-section">
-                <h2>Class X</h2>
-                <div class="button-group">
-                    <a href="#" class="action-button">1st Exam</a>
-                    <a href="#" class="action-button">2nd Exam</a>
-                    <a href="#" class="action-button">3rd Exam</a>
-                </div>
-            </section>
-            
-            <hr>
-            
-            <section id="class-xii" class="content-section">
-                <h2>Class XII</h2>
-                <div class="button-group">
-                    <a href="#" class="action-button">1st Exam</a>
-                    <a href="#" class="action-button">2nd Exam</a>
-                    <a href="#" class="action-button">3rd Exam</a>
-                </div>
-            </section>
+        <!-- Class VII -->
+        <section id="classVII" class="card section">
+          <h2>Class VII</h2>
+          <div class="class-row" id="classVIIButtons"></div>
+        </section>
 
-            <hr>
-            
-            <section id="student-routine" class="content-section">
-                <h2>Student Routine</h2>
-                <p>Routines will be available soon. Please check back later.</p>
-                <a href="#" class="action-button">View Routine</a>
-            </section>
+        <!-- ভাড়াটা আরো ক্লাস যোগ করতে পারেন JSON ও HTML এ -->
+        <section id="classVIII" class="card section">
+          <h2>Class VIII</h2>
+          <div class="class-row" id="classVIIIButtons"></div>
+        </section>
 
-            <hr>
-            
-            <section id="teacher-routine" class="content-section">
-                <h2>Teacher Routine</h2>
-                <p>Routines will be available soon. Please check back later.</p>
-                <a href="#" class="action-button">View Routine</a>
-            </section>
-            
-            <hr>
-            
-            <section id="class-routine" class="content-section">
-                <h2>Class Routine</h2>
-                <p>The class routine for all classes will be available soon.</p>
-                <a href="#" class="action-button">View Routine</a>
-            </section>
-            
-            <hr>
-            
-            <section id="subject-routine" class="content-section">
-                <h2>Subject Routine</h2>
-                <p>The subject-wise routine will be updated here.</p>
-                <a href="#" class="action-button">View Routine</a>
-            </section>
-            
-            <hr>
-            
-            <section id="student-notice" class="content-section">
-                <h2>Student Notice</h2>
-                <p>All important notices for students will be published here.</p>
-                <a href="#" class="action-button">View Notices</a>
-            </section>
+        <section id="classIX" class="card section">
+          <h2>Class IX</h2>
+          <div class="class-row" id="classIXButtons"></div>
+        </section>
 
-            <hr>
-            
-            <section id="teacher-notice" class="content-section">
-                <h2>Teacher Notice</h2>
-                <p>Important notices for teachers can be found in this section.</p>
-                <a href="#" class="action-button">View Notices</a>
-            </section>
-            
-            <hr>
-            
-            <footer class="footer">
-                <p>&copy; 2025 Pathpukur High School (HS). All Rights Reserved.</p>
-            </footer>
+        <section id="classX" class="card section">
+          <h2>Class X</h2>
+          <div class="class-row" id="classXButtons"></div>
+        </section>
+
+        <!-- আরো সেকশন: routines, subject, update notice -->
+        <section id="studentRoutine" class="card section">
+          <h2>Student Routine</h2>
+          <p id="studentRoutineLink">Link: <span class="linkText"></span></p>
+        </section>
+
+        <section id="teacherRoutine" class="card section">
+          <h2>Teacher Routine</h2>
+          <p id="teacherRoutineLink">Link: <span class="linkText"></span></p>
+        </section>
+
+        <section id="classRoutine" class="card section">
+          <h2>Class Routine</h2>
+          <p id="classRoutineLink">Link: <span class="linkText"></span></p>
+        </section>
+
+        <section id="subjectRoutine" class="card section">
+          <h2>Subject Routine</h2>
+          <p id="subjectRoutineLink">Link: <span class="linkText"></span></p>
+        </section>
+
+        <section id="updateNotice" class="card section">
+          <h2>Update Student Notice</h2>
+          <p id="updateNoticeLink">Link: <span class="linkText"></span></p>
+        </section>
+
+      </div>
+
+      <!-- ডান সাইডবার (নোটিস/সংক্ষিপ্ত তথ্য) -->
+      <aside>
+        <div class="card">
+          <h3>Quick Info</h3>
+          <p id="quickInfo">All links and dates are taken from <code>master.json</code>. If link missing, 'Available Soon' will show.</p>
         </div>
-    <script src="master.js"></script>
+
+        <div class="card">
+          <h3>Last action</h3>
+          <p id="lastAction">—</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="footer" id="footerText"></footer>
+  </main>
+
+  <script src="master.js"></script>
 </body>
 </html>
