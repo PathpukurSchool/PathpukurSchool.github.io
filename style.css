@@ -12,12 +12,14 @@ body {
 * {
     box-sizing: border-box;
 }
-.header-container {
-  display: flex; /* কন্টেইনারকে Flexbox হিসেবে সেট করা */
-  justify-content: space-between; /* এলিমেন্টগুলোকে বাম, মাঝ এবং ডানে ছড়িয়ে দেওয়া */
-  align-items: center; /* উল্লম্বভাবে মাঝখানে আনা */
-  padding: 10px 20px; /* ভেতরের প্যাডিং */
-  background-color: #f0f0f0; /* ব্যাকগ্রাউন্ড কালার */
+/* ✅ header content */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  margin-left: 60px; /* মেনু বোতামের জন্য জায়গা ছেড়ে দেওয়া (40px width + 10px left + 10px margin) */
+  background-color: #f0f0f0;
 }
 .school-name {
     color: #8B0000; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
@@ -30,8 +32,6 @@ body {
 }
 * ✅ লগআউট বোতামের স্টাইল */
 .logout-button {
-  /* ডান কোণের জন্য */
-  /* আপনার আগের স্টাইল, তবে 'position: absolute;' বাদ দিতে হবে */
   background-color: #ff5733;
   color: #ffffff;
   border: 2px solid #ff5733;
@@ -45,7 +45,6 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
   transition: all 0.3s ease;
 }
-
 .logout-button:hover {
   background-color: #e64a19;
   border-color: #e64a19;
@@ -56,7 +55,6 @@ body {
     max-width: 80px; /* লোগোর সর্বোচ্চ প্রস্থ */
     width: 50px;
     height: 50px;
-    margin-right: 20px; /* লোগোর ডান পাশে ফাঁকা স্থান */
     animation: rotateSlowly 13s linear infinite; /* অ্যানিমেশন যুক্ত করা */
     transform-style: preserve-3d; /* থ্রিডি ট্রান্সফর্মের জন্য */
     perspective: 1000px; /* থ্রিডি দৃষ্টিকোণ */
