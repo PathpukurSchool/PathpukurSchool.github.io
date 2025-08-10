@@ -70,93 +70,49 @@ fetch('master.json')
 /* ---------------------------
    Login: সাবমিট হ্যান্ডলার (সংশোধিত)
    --------------------------- */
-let credentials = {};
-let masterCredential = {};
 
-// ✅ মাস্টার লগইনের তথ্য লোড ফাংশন
-async function getCredentials() {
-    try {
-        const response = await fetch('master.json');
-        if (!response.ok) {
-            throw new Error('Failed to load master.json');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching config:', error);
-        return null;
-    }
-}
 
-// ✅ মাস্টার লগইন সাবমিট ফাংশন
-async function submitMasterLogin() {
-    const type = 'teacher'; // সরাসরি teacher সেট করা
-    const id = document.getElementById('masterId').value.trim();
-    const pass = document.getElementById('masterPass').value.trim();
+/* ---------------------------
+   Login: সাবমিট হ্যান্ডলার
+   --------------------------- */
+loginSubmit.addEventListener('click', () => {
+    const idVal = loginId.value.trim();
+    const passVal = loginPass.value.trim();
 
-    const errorDiv = document.getElementById('masterLoginError');
-    const successDiv = document.getElementById('masterLoginSuccess');
-
-    // পুরোনো মেসেজ ক্লিয়ার
-    errorDiv.innerText = "";
-    successDiv.innerText = "";
-    successDiv.style.display = "none";
-
-    // ইনপুট চেক
-    if (!id || !pass) {
-        errorDiv.innerText = "Please fill ID & Password.";
-        errorDiv.style.color = "red";
+    if (!data || !data.teacher) {
+        loginMsg.textContent = "Configuration missing. Contact admin.";
+        loginMsg.style.color = "red";
         return;
     }
 
-    // JSON থেকে ক্রেডেনশিয়াল লোড
-    const allCredentials = await getCredentials();
-    if (!allCredentials) {
-        errorDiv.innerText = "Unable to load login configuration.";
-        errorDiv.style.color = "red";
+    if (!idVal || !passVal) {
+        loginMsg.textContent = "Please enter ID and Password.";
+        loginMsg.style.color = "red";
         return;
     }
 
-    // টাইপ অনুযায়ী ইউজার ডেটা নিন
-    const user = allCredentials[type.toLowerCase()];
-    if (!user) {
-        errorDiv.innerText = "Invalid user type!";
-        errorDiv.style.color = "red";
-        return;
-    }
-
-    // ✅ লগইন ভেরিফাই
-    if (id === user.id && pass === user.pass) {
-        sessionStorage.setItem("userType", type.toLowerCase());
-        if (type.toLowerCase() === "student") {
-            sessionStorage.setItem("studentLoggedIn", "true");
-        }
-
-        // সফল লগইন মেসেজ
-        successDiv.innerText = "✔️ Login Successful.";
-        successDiv.style.display = "block";
-
+    if (idVal === data.teacher.id && passVal === data.teacher.pass) {
+        loginMsg.textContent = "Login Successful!";
+        loginMsg.style.color = "green";
+        localStorage.setItem("isLoggedIn", "true");
         setTimeout(() => {
-            if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
-                // রিডাইরেক্ট
-                if (user.redirect) {
-                    window.location.href = user.redirect;
-                } else {
-                    errorDiv.innerText = "No redirect link found!";
-                    errorDiv.style.color = "red";
-                }
-            } else {
-                // Teacher লগইন
-                document.getElementById('masterLoginOverlay').style.display = "none";
-                loadExamLinks(); // এক্সাম লিঙ্ক লোড
-            }
-        }, 1000);
-
+            loginOverlay.style.display = 'none';
+            initMenuBehaviour();
+            initSectionObserver();
+        }, 600);
     } else {
-        errorDiv.innerText = "Incorrect ID or Password!";
-        errorDiv.style.color = "red";
+        loginMsg.textContent = "Invalid ID or Password!";
+        loginMsg.style.color = "red";
     }
-}
+});
+
+loginCancel.addEventListener('click', () => {
+    window.history.back();
+});
+
+
+
+
 // বাকি ফাংশনগুলি অপরিবর্তিত
 /* ---------------------------
    Render: Last Dates
