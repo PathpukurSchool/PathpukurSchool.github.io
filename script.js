@@ -1,12 +1,12 @@
 let credentials = {};
 let masterCredential = {};
 
-// মাস্টার লগইনের তথ্য লোড
+// ✅ মাস্টার লগইনের তথ্য লোড ফাংশন
 async function getCredentials() {
     try {
         const response = await fetch('masterConfig.json');
         if (!response.ok) {
-            throw new Error('Failed to load config');
+            throw new Error('Failed to load masterConfig.json');
         }
         const data = await response.json();
         return data;
@@ -16,70 +16,97 @@ async function getCredentials() {
     }
 }
 
+// ✅ মাস্টার লগইন সাবমিট ফাংশন
 async function submitMasterLogin() {
-    // এখানে পরিবর্তন করা হয়েছে। ড্রপ-ডাউন থেকে মান না নিয়ে সরাসরি 'teacher' সেট করা হয়েছে।
-    const type = 'teacher'; 
-
+    const type = 'teacher'; // সরাসরি teacher সেট করা
     const id = document.getElementById('masterId').value.trim();
     const pass = document.getElementById('masterPass').value.trim();
-    const errorDiv = document.getElementById('masterLoginError');
-    const successDiv = document.getElementById('masterLoginSuccess'); // success ডিভ
 
+    const errorDiv = document.getElementById('masterLoginError');
+    const successDiv = document.getElementById('masterLoginSuccess');
+
+    // পুরোনো মেসেজ ক্লিয়ার
     errorDiv.innerText = "";
     successDiv.innerText = "";
     successDiv.style.display = "none";
-    
-    if (!type || !id || !pass) {
+
+    // ইনপুট চেক
+    if (!id || !pass) {
         errorDiv.innerText = "Please fill ID & Password.";
+        errorDiv.style.color = "red";
         return;
     }
 
+    // JSON থেকে ক্রেডেনশিয়াল লোড
     const allCredentials = await getCredentials();
-
     if (!allCredentials) {
         errorDiv.innerText = "Unable to load login configuration.";
+        errorDiv.style.color = "red";
         return;
     }
 
+    // টাইপ অনুযায়ী ইউজার ডেটা নিন
     const user = allCredentials[type.toLowerCase()];
-
-    if (user && id === user.id && pass === user.pass) {
-        // Session set করুন
-    sessionStorage.setItem("userType", type.toLowerCase());
-            if (type.toLowerCase() === "student") {
-        sessionStorage.setItem("studentLoggedIn", "true");
+    if (!user) {
+        errorDiv.innerText = "Invalid user type!";
+        errorDiv.style.color = "red";
+        return;
     }
 
-        // সফল লগইন
+    // ✅ লগইন ভেরিফাই
+    if (id === user.id && pass === user.pass) {
+        sessionStorage.setItem("userType", type.toLowerCase());
+        if (type.toLowerCase() === "student") {
+            sessionStorage.setItem("studentLoggedIn", "true");
+        }
+
+        // সফল লগইন মেসেজ
         successDiv.innerText = "✔️ Login Successful.";
         successDiv.style.display = "block";
 
         setTimeout(() => {
             if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
-                window.location.href = user.redirect;
+                // রিডাইরেক্ট
+                if (user.redirect) {
+                    window.location.href = user.redirect;
+                } else {
+                    errorDiv.innerText = "No redirect link found!";
+                    errorDiv.style.color = "red";
+                }
             } else {
-                // Teacher login successful – hide the login overlay
+                // Teacher লগইন
                 document.getElementById('masterLoginOverlay').style.display = "none";
-                loadExamLinks(); // মূল ডেটা লোড
+                loadExamLinks(); // এক্সাম লিঙ্ক লোড
             }
-        }, 1000); // 1.5 সেকেন্ড পর রিডাইরেক্ট
+        }, 1000);
+
     } else {
         errorDiv.innerText = "Incorrect ID or Password!";
         errorDiv.style.color = "red";
     }
 }
 
-// এক্সাম লিংক লোড (মাস্টার লগইন সফল হলে)
+// ✅ এক্সাম লিঙ্ক লোড ফাংশন
 function loadExamLinks() {
     fetch('config.json')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('config.json not found');
+            }
+            return response.json();
+        })
         .then(data => {
             credentials = data;
             renderButtons();
+        })
+        .catch(err => {
+            console.error('Error loading config.json:', err);
+            document.getElementById('exam-buttons').innerHTML = "<p style='color:red;'>Exam links not available.</p>";
         });
 }
 
 let currentKey = '';
+
 
 // এক্সাম লিংক তৈরি ও দেখানো
 function renderButtons() {
