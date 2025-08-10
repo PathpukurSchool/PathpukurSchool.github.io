@@ -1,63 +1,33 @@
+/*
+    JSON ফাইল: master.json
+    এই ফাইলটিতে বিভিন্ন ডেটা সংরক্ষণ করা হয়েছে।
+    জাভাস্ক্রিপ্ট ব্যবহার করে এই ডেটাগুলি ওয়েব পেজে লোড করা হয়।
+    যদি কোনো ডেটা না থাকে, তাহলে সেই অংশটি ওয়েব পেজে দেখাবে না।
+*/
 {
-  "schoolName": "Pathpukur High School (HS)",
-  "logo": "PHS-LOGO.png",
-
-  /* 🔐 Teacher credential: লগইন যাচাইয়ের জন্য */
-  "teacher": {
-    "id": "Master",
-    "pass": "1234"
+  "school": {
+    "name": "Pathpukur High School (HS)"
   },
-
-  /* 📅 Exam last-dates — যদি কোন ডেট না থাকে তখন সেই লাইন দেখাবে না */
-  "lastDates": {
-    "1stExam": "2025-08-20",
-    "2ndExam": "2025-10-15",
-    "3rdExam": ""   /* খালি থাকলে 3rd exam দেখানো হবে না */
+  "login": {
+    "username": "teacher",
+    "password": "123"
   },
-
-  /* 🧾 প্রতিটি ক্লাসের exam link (empty -> Available Soon) */
-  "links": {
-    "V": {
-      "1st": "https://example.com/classv/1st",
-      "2nd": "",
-      "3rd": "https://example.com/classv/3rd"
+  "important_dates": {
+    "exam_1st": "30-08-2025",
+    "exam_2nd": "",
+    "exam_3rd": "Available Soon"
+  },
+  "routines": {
+    "student": {
+      "url": "https://example.com/student-routine",
+      "status": "Available Soon"
     },
-    "VI": {
-      "1st": "https://example.com/classvi/1st",
-      "2nd": "https://example.com/classvi/2nd",
-      "3rd": ""
-    },
-    "VII": {
-      "1st": "",
-      "2nd": "",
-      "3rd": ""
-    },
-    "VIII": {
-      "1st": "https://example.com/class8/1st",
-      "2nd": "https://example.com/class8/2nd",
-      "3rd": "https://example.com/class8/3rd"
-    },
-    "IX": {
-      "1st": "https://example.com/class9/1st",
-      "2nd": "",
-      "3rd": ""
-    },
-    "X": {
-      "1st": "",
-      "2nd": "",
-      "test": ""
+    "teacher": {
+      "url": "https://example.com/teacher-routine",
+      "status": "Available Soon"
     }
   },
-
-  /* 🗂️ অন্যান্য লিংক - Student/Teacher/Class/Subject/UpdateNotice ইত্যাদি */
-  "otherLinks": {
-    "studentRoutine": "https://example.com/student-routine",
-    "teacherRoutine": "",
-    "classRoutine": "https://example.com/class-routine",
-    "subjectRoutine": "",
-    "updateStudentNotice": "https://example.com/upload-notice"
-  },
-
-  /* 📰 Footer text (যদি না দেন খালি রাখুন) */
-  "footer": "© 2025 Pathpukur High School (HS). All rights reserved."
+  "notices": {
+    "student_notice_url": "https://example.com/student-notice"
+  }
 }
