@@ -558,26 +558,24 @@ ul li a:hover {
     position: relative; /* ছদ্ম-এলিমেন্টের জন্য পজিশন সেট করা হয়েছে */
 }
 
-/*Last date of marks submission */
- .wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 90%;
-  margin: 20px auto; /* উপরে-নিচে মার্জিন বাড়ানো হয়েছে, ডানে-বামে অটো */
-  background-color: #fffdd0;
-  border-radius: 5px;
-  padding: 5px;
-  transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease; /* মসৃণ ট্রানজিশন যোগ করা হয়েছে */
+/* এক্সাম বোতামগুলিকে বক্সের মধ্যে সাজানোর জন্য নতুন CSS */
+/* বোতামগুলির নির্দিষ্ট কোনো স্টাইল না থাকলেও, এই ক্লাসটি বোতামগুলিকে সুন্দরভাবে সাজাতে সাহায্য করবে */
+.exam-buttons-group, #exam-buttons {
+    display: flex; /* বোতামগুলিকে Flexbox ব্যবহার করে সাজানো */
+    flex-wrap: wrap; /* স্থান কম হলে বোতামগুলিকে পরের লাইনে নিয়ে যেতে সাহায্য করবে */
+    gap: 10px; /* বোতামগুলির মধ্যে ফাঁকা স্থান */
+    justify-content: center; /* বক্সের মধ্যে বোতামগুলিকে অনুভূমিকভাবে কেন্দ্রে স্থাপন */
+    margin-top: 15px; /* হেডিং থেকে বোতাম গ্রুপের উপরের ফাঁকা স্থান */
 }
 
-/* .wrapper এর হোভার ইফেক্ট */
-.wrapper:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* হোভার করলে আরও স্পষ্ট শ্যাডো */
-    transform: translateY(-3px); /* সামান্য উপরে উঠবে */
-    background-color: #fffacd; /* হোভার করলে ব্যাকগ্রাউন্ড কালার হালকা পরিবর্তন */
+/* মোবাইলের জন্য রেসপনসিভ অ্যাডজাস্টমেন্ট (শুধুমাত্র বক্সের স্টাইল রেখে) */
+@media (max-width: 600px) {
+    .shaded-info-box, .class-box {
+        padding: 15px; /* মোবাইলে কম প্যাডিং */
+        margin: 15px 10px; /* মোবাইলে মার্জিন, স্ক্রিনের কিনারা থেকে দূরে রাখতে */
+        width: 90%
+    }
 }
-
 .static-text {
   font-size: 18px;
   font-weight: bold;
