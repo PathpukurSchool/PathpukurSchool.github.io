@@ -5,124 +5,52 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('master.json')
         .then(response => response.json())
         .then(data => {
-            // CSS ভেরিয়েবল সেট করা হয়েছে থিমের জন্য
+            // CSS ভেরিয়েবল সেট করা হয়েছে থিমের জন্য
             document.documentElement.style.setProperty('--primary-color', data.themeColor);
 
-            // লোগো এবং স্কুলের নাম সেট করা হয়েছে
+            // লোগো এবং স্কুলের নাম সেট করা হয়েছে
             document.getElementById('school-logo').src = data.schoolLogoUrl;
             document.getElementById('school-name').textContent = data.schoolName;
 
-            // ফুটার টেক্সট সেট করা হয়েছে
+            // ফুটার টেক্সট সেট করা হয়েছে
             document.getElementById('footer-text').textContent = data.footerText;
 
-            // মেনু এবং সাব-মেনু তৈরি করার ফাংশন
-            const mainMenu = document.getElementById('main-menu');
-            const mainContentContainer = document.getElementById('main-content-container');
-
-            data.menu.forEach(menuItemData => {
-                const menuItem = document.createElement('li');
-                menuItem.className = 'menu-item';
-                menuItem.textContent = menuItemData.title;
-
-                // মেনুতে ক্লিক করলে হাইলাইট হবে
-                menuItem.addEventListener('click', () => {
-                    handleMenuClick(menuItem, menuItemData.sectionId);
-                });
-
-                // সাব-মেনু তৈরি করা
-                if (menuItemData.subMenu.length > 0) {
-                    const subMenu = document.createElement('ul');
-                    subMenu.className = 'sub-menu';
-
-                    menuItemData.subMenu.forEach(subMenuItemData => {
-                        const subMenuItem = document.createElement('li');
-                        subMenuItem.className = 'sub-menu-item';
-                        subMenuItem.textContent = subMenuItemData.title;
-
-                        // সাব-মেনুতে ক্লিক করলে নির্দিষ্ট সেকশনে যাবে
-                        subMenuItem.addEventListener('click', (event) => {
-                            event.stopPropagation(); // উপরের মেনু আইটেমের ক্লিক বন্ধ করতে
-                            handleSubMenuClick(subMenuItem, subMenuItemData.sectionId, subMenuItemData.url);
-                            subMenu.style.display = 'none'; // ক্লিক করার পর সাব-মেনু লুকানো
-                        });
-                        subMenu.appendChild(subMenuItem);
-                    });
-                    menuItem.appendChild(subMenu);
-                }
-                mainMenu.appendChild(menuItem);
-            });
-
-            // সেকশন তৈরি করার ফাংশন
-            data.menu.forEach(menuItemData => {
-                const section = document.createElement('section');
-                section.id = menuItemData.sectionId;
-                section.className = 'section';
-
-                const sectionTitle = document.createElement('h2');
-                sectionTitle.textContent = menuItemData.title;
-                section.appendChild(sectionTitle);
-
-                // সাব-মেনুর কন্টেন্ট (বোতাম) তৈরি করা
-                if (menuItemData.subMenu.length > 0) {
-                    menuItemData.subMenu.forEach(subMenuItemData => {
-                        const subSection = document.createElement('div');
-                        subSection.id = subMenuItemData.sectionId;
-
-                        const subSectionTitle = document.createElement('h3');
-                        subSectionTitle.textContent = subMenuItemData.title;
-                        subSection.appendChild(subSectionTitle);
-
-                        // বোতাম তৈরি করা
-                        if (subMenuItemData.buttons) {
-                            const buttonContainer = document.createElement('div');
-                            buttonContainer.className = 'button-container';
-                            subMenuItemData.buttons.forEach(buttonData => {
-                                const btn = document.createElement('a');
-                                btn.className = 'btn';
-                                btn.textContent = buttonData.text;
-                                btn.href = (buttonData.url === "Available Soon") ? '#' : buttonData.url;
-                                if (buttonData.url === "Available Soon") {
-                                    btn.classList.add('disabled');
-                                } else {
-                                    btn.target = '_blank';
-                                }
-                                buttonContainer.appendChild(btn);
-                            });
-                            subSection.appendChild(buttonContainer);
-                        }
-                        section.appendChild(subSection);
-                    });
-                }
-                mainContentContainer.appendChild(section);
-            });
-
-            // লাস্ট ডেট সেকশন তৈরি করা
-            const lastDatesSection = document.createElement('div');
-            lastDatesSection.className = 'last-dates';
-            lastDatesSection.id = 'last-dates-section';
-            const lastDatesTitle = document.createElement('h2');
-            lastDatesTitle.textContent = 'Marks Submission Last Dates';
-            lastDatesSection.appendChild(lastDatesTitle);
-            
-            // JSON থেকে ডেট ডেটা লোড করা
+            // ডেট ডেটা লোড করা
+            const lastDatesContainer = document.getElementById('last-dates-container');
             data.lastDates.forEach(dateData => {
                 if (dateData.date) { // যদি ডেট থাকে তবেই দেখাবে
                     const p = document.createElement('p');
                     p.innerHTML = `<span class="highlight-date">${dateData.text}:</span> ${dateData.date}`;
-                    lastDatesSection.appendChild(p);
+                    lastDatesContainer.appendChild(p);
                 }
             });
-            mainContentContainer.insertBefore(lastDatesSection, mainContentContainer.firstChild);
 
-            // মেনু, সাব-মেনু এবং ওয়েব পেজের ফাঁকা অংশে ক্লিক করলে সাব-মেনু লুকিয়ে যাবে
-            document.body.addEventListener('click', (event) => {
-                const subMenus = document.querySelectorAll('.sub-menu');
-                subMenus.forEach(subMenu => {
-                    const parentMenu = subMenu.closest('.menu-item');
-                    if (!parentMenu.contains(event.target)) {
-                        subMenu.style.display = 'none';
-                    }
-                });
+            // বোতামগুলোতে URL সেট করা এবং "Available Soon" হ্যান্ডেল করা
+            document.querySelectorAll('.btn').forEach(button => {
+                const urlKey = button.getAttribute('data-url-key');
+                const url = data.links[urlKey];
+
+                if (url === 'Available Soon') {
+                    button.classList.add('disabled');
+                    button.textContent = button.textContent + " (Available Soon)";
+                } else {
+                    button.href = url;
+                    button.target = '_blank';
+                }
+            });
+
+            // সাব-মেনু আইটেমগুলোতে URL সেট করা
+            document.querySelectorAll('.sub-menu-item').forEach(subMenuItem => {
+                const urlKey = subMenuItem.getAttribute('data-url-key');
+                if (urlKey) {
+                    const url = data.links[urlKey];
+                    subMenuItem.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        if (url && url !== 'Available Soon') {
+                            window.open(url, '_blank');
+                        }
+                    });
+                }
             });
         })
         .catch(error => console.error('Error fetching data:', error));
@@ -134,45 +62,69 @@ document.addEventListener('DOMContentLoaded', () => {
         section: null
     };
 
-    function handleMenuClick(menuItem, sectionId) {
-        // আগের হাইলাইটগুলো সরিয়ে ফেলা
-        removeHighlights();
+    // মেনু আইটেম ক্লিক হ্যান্ডলার
+    document.querySelectorAll('.menu-item').forEach(menuItem => {
+        menuItem.addEventListener('click', (event) => {
+            removeHighlights();
+            menuItem.classList.add('highlight');
+            lastActiveElements.menuItem = menuItem;
 
-        // নতুন মেনু আইটেম হাইলাইট করা
-        menuItem.classList.add('highlight');
-        lastActiveElements.menuItem = menuItem;
+            const subMenu = menuItem.querySelector('.sub-menu');
+            if (subMenu) {
+                subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
+            }
 
-        // সাব-মেনু দেখানো বা লুকানো
-        const subMenu = menuItem.querySelector('.sub-menu');
-        if (subMenu) {
-            subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
-        }
-    }
+            // সেকশনে স্ক্রল করা
+            const sectionId = menuItem.getAttribute('data-section-id');
+            if (sectionId) {
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.add('highlight');
+                    lastActiveElements.section = targetSection;
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
 
-    function handleSubMenuClick(subMenuItem, sectionId, url) {
-        // আগের হাইলাইটগুলো সরিয়ে ফেলা
-        removeHighlights();
+    // সাব-মেনু আইটেম ক্লিক হ্যান্ডলার
+    document.querySelectorAll('.sub-menu-item').forEach(subMenuItem => {
+        subMenuItem.addEventListener('click', (event) => {
+            event.stopPropagation();
+            removeHighlights();
 
-        // নতুন সাব-মেনু এবং তার মূল মেনু হাইলাইট করা
-        subMenuItem.classList.add('highlight');
-        subMenuItem.closest('.menu-item').classList.add('highlight');
-        lastActiveElements.subMenuItem = subMenuItem;
-        lastActiveElements.menuItem = subMenuItem.closest('.menu-item');
+            subMenuItem.classList.add('highlight');
+            subMenuItem.closest('.menu-item').classList.add('highlight');
+            lastActiveElements.subMenuItem = subMenuItem;
+            lastActiveElements.menuItem = subMenuItem.closest('.menu-item');
 
-        // নির্দিষ্ট সেকশনে স্ক্রল করা
-        const targetSection = document.getElementById(sectionId);
-        if (targetSection) {
-            targetSection.classList.add('highlight');
-            lastActiveElements.section = targetSection;
-            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+            const sectionId = subMenuItem.getAttribute('data-section-id');
+            if (sectionId) {
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.add('highlight');
+                    lastActiveElements.section = targetSection;
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+            
+            // সাব-মেনু লুকানো
+            subMenuItem.closest('.sub-menu').style.display = 'none';
+        });
+    });
 
-        // যদি URL থাকে তাহলে নতুন ট্যাবে খোলা
-        if (url && url !== "Available Soon" && url !== '#') {
-            window.open(url, '_blank');
-        }
-    }
-
+    // ফাঁকা জায়গায় ক্লিক করলে মেনু লুকানো
+    document.body.addEventListener('click', (event) => {
+        const subMenus = document.querySelectorAll('.sub-menu');
+        subMenus.forEach(subMenu => {
+            const parentMenu = subMenu.closest('.menu-item');
+            if (!parentMenu.contains(event.target)) {
+                subMenu.style.display = 'none';
+            }
+        });
+    });
+    
+    // হাইলাইট অপসারণ ফাংশন
     function removeHighlights() {
         if (lastActiveElements.menuItem) {
             lastActiveElements.menuItem.classList.remove('highlight');
