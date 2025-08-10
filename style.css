@@ -23,17 +23,30 @@ body {
 }
 * ✅ লগআউট বোতামের স্টাইল */
 .logout-button {
-    background-color: #FF5733;
-    border: none;
-    color: white;
-    padding: 6px 12px;
+    background-color: #FF5733; /* ব্যাকগ্রাউন্ড কালার */
+    color: #FFFFFF; /* আইকনের কালার */
+    border: 2px solid #FF5733; /* বর্ডারের স্টাইল */
+    width: 40px; /* প্রস্থ */
+    height: 40px; /* উচ্চতা */
+    padding: 6px 12px; /* ভেতরের প্যাডিং */
     border-radius: 4px;
     font-weight: bold;
-    cursor: pointer;
-    font-size: 14px;
+    cursor: pointer; /* কার্সর পরিবর্তন করা */
+    font-size: 14px; /* ফন্টের সাইজ */
+    display: flex; /* কন্টেন্টকে পাশাপাশি আনা */
+    justify-content: center; /* অনুভূমিকভাবে মাঝখানে আনা */
+    align-items: center; /* উল্লম্বভাবে মাঝখানে আনা */
+    top: 10px; /* উপরের প্রান্ত থেকে দূরত্ব */
+    right: 10px; /* ডান প্রান্ত থেকে দূরত্ব */
+    z-index: 1001; /* অন্য কন্টেন্টের উপরে রাখা */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); /* শ্যাডো যোগ করা */
+    transition: all 0.3s ease; /* সব ট্রানজিশনের জন্য */
 }
 .logout-button:hover {
-    background-color: #B22222;
+    background-color: #E64A19; /* হোভার করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
+    border-color: #E64A19; /* হোভার করলে বর্ডার কালার পরিবর্তন */
+    transform: scale(1.05); /* হোভার করলে সামান্য বড় হবে */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35); /* হোভার করলে শ্যাডো স্পষ্ট হবে */
 }
 .logo {
     max-width: 80px; /* লোগোর সর্বোচ্চ প্রস্থ */
