@@ -38,6 +38,7 @@ body {
     align-items: center; /* উল্লম্বভাবে মাঝখানে আনা */
     top: 10px; /* উপরের প্রান্ত থেকে দূরত্ব */
     right: 10px; /* ডান প্রান্ত থেকে দূরত্ব */
+    position: absolute;
     z-index: 1001; /* অন্য কন্টেন্টের উপরে রাখা */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); /* শ্যাডো যোগ করা */
     transition: all 0.3s ease; /* সব ট্রানজিশনের জন্য */
