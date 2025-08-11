@@ -13,13 +13,38 @@ body {
     box-sizing: border-box;
 }
 /* ✅ header content */
+/* Header Section */
+.main-header {
+    display: flex;
+    justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary-red) 0%, #B83227 50%, var(--dark-khaki) 100%);
+    color: var(--white);
+    padding: 20px; /* হেডার এর প্যাডিং, টপ ও বটম প্যাডিং আলাদাভাবে সেট করা আছে */
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    position: relative; /* মেনু বারের জন্য পজিশন - এটি ঠিক আছে */
+    overflow: hidden;
+    padding-top: 60px; /* উপরের লগইন বোতামের জন্য একটু জায়গা নিশ্চিত করবে */
+    padding-bottom: 20px; /* প্রয়োজন অনুযায়ী সামঞ্জস্য করুন */
+    z-index: 900; /* মেনু বারের (1001) এবং ওভারলের (1000) নিচে রাখুন */
+    width: 100%; /* সম্পূর্ণ প্রস্থ নিশ্চিত করুন */
+    box-sizing: border-box; /* padding সহ প্রস্থ হিসাব করবে */
+}
 .header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  margin-left: 60px; /* মেনু বোতামের জন্য জায়গা ছেড়ে দেওয়া (40px width + 10px left + 10px margin) */
-  background-color: #f0f0f0;
+    position: relative;
+    z-index: 2; /* অন্যান্য কন্টেন্টের উপরে থাকবে */
+    flex-grow: 1; /* উপলব্ধ স্থান পূরণ করবে */
+    text-align: center; /* হেডার কন্টেন্ট মাঝখানে থাকবে */
+    /* যদি আপনার হেডার কন্টেন্ট মাঝখানে থাকে এবং মেনু বাটন ও লগইন বাটন absolute হয়, তাহলে এই padding-right প্রয়োজন নাও হতে পারে। */
+    /* padding-right: 70px; /* ছোট স্ক্রিনে বোতামের জন্য পর্যাপ্ত জায়গা (যদি হেডার কন্টেন্ট সরানোর প্রয়োজন হয়) */
+}
+/* Ensure header-buttons has a position context for the button */
+.header-buttons {
+   position: fixed; /* Or fixed, depending on where you want it visually */
+    top: 10px; /* Adjust as needed for padding from top */
+    left: 20px; /* Adjust as needed for padding from left */
+    z-index: 1001; /* Must be higher than overlay */
 }
 .school-name {
     color: #8B0000; /* গাঢ় লাল, শক্তিশালী এবং আকর্ষণীয় */
@@ -31,35 +56,55 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 * ✅ লগআউট বোতামের স্টাইল */
+/* logout-button */
 .logout-button {
-  background-color: #ff5733;
-  color: #ffffff;
-  border: 2px solid #ff5733;
-  width: 100px;
-  height: 40px;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 14px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
-  transition: all 0.3s ease;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--primary-red);
+    color: var(--white);
+    padding: 6px 15px;
+    border: 1px solid var(--white);
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    z-index: 1002; /* মেনু বারের উপরে থাকবে */
+    display: inline-block;
+    white-space: nowrap;
 }
+
 .logout-button:hover {
-  background-color: #e64a19;
-  border-color: #e64a19;
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+    background-color: var(--accent-color);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    border-color: var(--light-gray);
+}
+
+/* Media Queries for Top Login Button */
+@media (max-width: 768px) {
+    .logout-button {
+        top: 15px;
+        right: 15px;
+        padding: 4px 12px;
+        font-size: 0.8em;
+    }
 }
 .logo {
     max-width: 80px; /* লোগোর সর্বোচ্চ প্রস্থ */
     width: 50px;
     height: 50px;
+    border-radius: 50%;
+    border: 6px solid rgba(255, 255, 255, 0.9);
+    object-fit: cover;
+    background-color: white;
+    margin-bottom: 20px;
     animation: rotateSlowly 13s linear infinite; /* অ্যানিমেশন যুক্ত করা */
     transform-style: preserve-3d; /* থ্রিডি ট্রান্সফর্মের জন্য */
     perspective: 1000px; /* থ্রিডি দৃষ্টিকোণ */
     opacity: 1; /* স্বচ্ছতা */
-    object-fit: cover;
 }
 @keyframes rotateSlowly {
     0% { transform: rotateY(0deg); } /* অ্যানিমেশন শুরু */
@@ -329,9 +374,11 @@ footer {
         text-align: center; /* টেক্সটকে মাঝখানে আনা */
         margin-top: 70px; /* উপরের মার্জিন */
     }
+    .main-header {
+        padding: 30px 15px;
+    }
     .logo {
         max-width: 50px; /* লোগোর সর্বোচ্চ প্রস্থ কমানো */
-        margin-right: 10px; /* মার্জিন কমানো */
         margin-bottom: 0; /* নিচের মার্জিন শূন্য */
     }
     .school-name {
@@ -374,6 +421,12 @@ footer {
     }
 }
 @media (max-width: 480px) {
+    .top-login-button {
+        top: 10px;
+        right: 10px;
+        padding: 3px 10px;
+        font-size: 0.75em;
+    }
     .school-name {
         font-size: 1.2rem; /* ফন্টের সাইজ আরও কমানো */
     }
