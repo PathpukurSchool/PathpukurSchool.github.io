@@ -55,10 +55,9 @@
         <button onclick="submitMasterLogin()">LOGIN</button>
     </div>
 </div>
-
-	  
+	     <!-- ✅ মেন হেডার -->
 <header class="main-header">
-        <div class="overlay"></div>
+        <div class="overlay" id="top-bar-section"></div>
         <div class="header-buttons">
             <button id="menu-toggle-button" class="menu-button">☰</button>
         </div>
@@ -69,11 +68,12 @@
         </div>
         <button onclick="logout()" class="logout-button">Logout</button>
     </header>
-	  
 
+	     <!-- ✅ সাইড বার মেনু -->
 <div class="overlay" id="overlay"></div>
 <nav id="sidebar-menu" class="sidebar-menu">
     <ul>
+		 <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
         <li><a href="#last-date-section" class="nav-link">Marks Submission Last Date</a></li>
         <li><a href="#marks-uploading-section" class="nav-link">Marks Uploading Status</a></li>
         <li><a href="#upload-your-marks-section" class="nav-link">Marks Upload</a></li>
@@ -95,10 +95,10 @@
         <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
         <li><a href="#uploda-student-notice-section" class="nav-link">Uploda Student Notice</a></li>
         <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
-        <li><a href="#" class="nav-link" onclick="logout()">LogOut</a></li>
+        <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
     </ul>
 </nav>
-	  
+	  	     <!-- ✅ সাইড বার মেনুঃ জাভা স্ক্রিপ্ট -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const menuButton = document.getElementById('menu-toggle-button');
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="section-heading-container">
    <!-- ✅ নম্বর আপলোডের শেষ তারিখ -->
   <div class="shaded-info-box" id="last-date-section">
-  <h2 class="shine">Last date of marks submission</h2>
+  <h2 class="shine">Last Date of Marks Submission</h2>
 	  <div class="static-text">
     (Kindly submit all marks by due date)
   
@@ -394,11 +394,11 @@ document.addEventListener("DOMContentLoaded", function() {
     
  <!-- ✅ আপলোড স্টুডেন্ট নোটিশ --> 
 	  <div class="section-heading-container">
-		 <h2 class="section-heading">
+		 <div><h2 class="section-heading">
         <span class="emoji">📝</span>
         <span class="blink">Upload Student Notice</span>
     </h2>
-  <h3 class="login-instruction-heading">If you wish to upload a notice for students, please click the button below:<span class="emoji">👇</span></h3> 
+  <h3 class="login-instruction-heading">If you wish to upload a notice for students, please click the button below:<span class="emoji">👇</span></h3> </div>
 	  
 		  <div class="shaded-info-box" id="uploda-student-notice-section">
         <a href="upload_student_notice.html" target="_blank" class="exam-link">UPLOAD STUDENT NOTICE</a>
