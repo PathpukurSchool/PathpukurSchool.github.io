@@ -369,11 +369,6 @@ footer {
 
 /* ✅ Responsive Design (মোবাইল এবং ছোট স্ক্রিনের জন্য) */
 @media (max-width: 768px) {
-    .header-content-container {
-        flex-direction: row; /* কন্টেন্টকে পাশাপাশি রাখা */
-        text-align: center; /* টেক্সটকে মাঝখানে আনা */
-        margin-top: 70px; /* উপরের মার্জিন */
-    }
     .main-header {
         padding: 30px 15px;
     }
@@ -421,7 +416,7 @@ footer {
     }
 }
 @media (max-width: 480px) {
-    .top-login-button {
+    .logout-button {
         top: 10px;
         right: 10px;
         padding: 3px 10px;
