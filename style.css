@@ -18,18 +18,10 @@ body {
     display: flex;
     justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
     align-items: center;
-    background: linear-gradient(135deg, #E63946 0%, #B83227 50%, #6B0000 100%);
-    color: #FFFFFF;
-    padding: 20px; /* হেডার এর প্যাডিং, টপ ও বটম প্যাডিং আলাদাভাবে সেট করা আছে */
     text-align: center;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     position: relative; /* মেনু বারের জন্য পজিশন - এটি ঠিক আছে */
     overflow: hidden;
-    padding-top: 60px; /* উপরের লগইন বোতামের জন্য একটু জায়গা নিশ্চিত করবে */
-    padding-bottom: 20px; /* প্রয়োজন অনুযায়ী সামঞ্জস্য করুন */
     z-index: 900; /* মেনু বারের (1001) এবং ওভারলের (1000) নিচে রাখুন */
-    width: 100%; /* সম্পূর্ণ প্রস্থ নিশ্চিত করুন */
-    box-sizing: border-box; /* padding সহ প্রস্থ হিসাব করবে */
 }
 .header-content {
     position: relative;
