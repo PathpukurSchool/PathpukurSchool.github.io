@@ -51,7 +51,7 @@ body {
 /* logout-button */
 .logout-button {
   position: absolute;
-  top: 0px;
+  top: 5px;
   right: 20px;
   background-color: #E74C3C; /* মনোরম লাল রঙ */
   color: #FFFFFF;
@@ -140,7 +140,7 @@ body {
 }
 .sidebar-menu {
     position: fixed; /* সাইডবারকে স্ক্রিনের পাশে স্থির রাখা */
-    top: 2; /* উপরের প্রান্ত থেকে দূরত্ব শূন্য */
+    top: 0; /* উপরের প্রান্ত থেকে দূরত্ব শূন্য */
     left: -265px; /* শুরুতে স্ক্রিনের বাইরে রাখা */
     width: 250px; /* সাইডবারের প্রস্থ */
     height: 100%; /* পুরো উচ্চতা জুড়ে */
@@ -422,7 +422,7 @@ footer {
 }
 @media (max-width: 480px) {
     .logout-button {
-        top: 0px;
+        top: 3px;
         right: 20px;
         padding: 3px 10px;
         font-size: 0.75em;
