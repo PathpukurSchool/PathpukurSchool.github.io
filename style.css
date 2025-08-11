@@ -134,6 +134,10 @@ body {
     transform: scale(0.98); /* ক্লিক করলে সামান্য ছোট হবে */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* ক্লিক করলে শ্যাডো ছোট হবে */
 }
+/* ক্লিক করলে ঘোরানোর জন্য */
+.menu-button.rotated {
+    transform: rotate(90deg);
+}
 .sidebar-menu {
     position: fixed; /* সাইডবারকে স্ক্রিনের পাশে স্থির রাখা */
     top: 2; /* উপরের প্রান্ত থেকে দূরত্ব শূন্য */
