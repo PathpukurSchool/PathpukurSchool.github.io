@@ -18,8 +18,8 @@ body {
     display: flex;
     justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
     align-items: center;
-    background: linear-gradient(135deg, var(--primary-red) 0%, #B83227 50%, var(--dark-khaki) 100%);
-    color: var(--white);
+    background: linear-gradient(135deg, #E63946 0%, #B83227 50%, #6B0000 100%);
+    color: #FFFFFF;
     padding: 20px; /* হেডার এর প্যাডিং, টপ ও বটম প্যাডিং আলাদাভাবে সেট করা আছে */
     text-align: center;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
@@ -61,10 +61,10 @@ body {
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: var(--primary-red);
-    color: var(--white);
+    background-color: #E63946;
+    color: #FFFFFF;
     padding: 6px 15px;
-    border: 1px solid var(--white);
+    border: 1px solid #FFFFFF;
     border-radius: 5px;
     text-decoration: none;
     font-weight: 600;
@@ -77,10 +77,10 @@ body {
 }
 
 .logout-button:hover {
-    background-color: var(--accent-color);
+    background-color: #C82333;
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-    border-color: var(--light-gray);
+    border-color: #f0f2f5;
 }
 
 /* Media Queries for Top Login Button */
@@ -94,10 +94,10 @@ body {
 }
 .logo {
     max-width: 80px; /* লোগোর সর্বোচ্চ প্রস্থ */
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    border: 6px solid rgba(255, 255, 255, 0.9);
+    border: 4px solid rgba(255, 255, 255, 0.9);
     object-fit: cover;
     background-color: white;
     margin-bottom: 20px;
@@ -237,7 +237,7 @@ body {
     margin-top: 40px;
     margin-right: 0px;
     margin-bottom: 40px;
-    margin-left: 20px;
+    margin-left: 25px;
     text-align: center; /* কন্টেন্টকে মাঝখানে আনা */
     border-top: 10px solid #2C3E50; /* উপরের বর্ডার */
     border-bottom: 2px solid #BDC3C7; /* নিচের বর্ডার */
