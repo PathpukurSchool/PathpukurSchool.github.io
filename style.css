@@ -636,23 +636,21 @@ ul li a:hover {
     }
 }
 .static-text {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
   color: #333;
   white-space: nowrap;
     text-align: center; /* কন্টেন্টকে মাঝখানে আনা */
-    overflow: hidden; /* ভেতরের কন্টেন্ট বাইরে না যায় */
     padding: 10px;
     max-width: 100%; /* নিশ্চিত করুন যে এটি তার parent এর থেকে বেশি চওড়া না হয় */
     box-sizing: border-box; /* padding, border কে width এর মধ্যে রাখবে */
 }
 
 .static-text p {
-    font-size: 16px; /* ভেতরের প্যারাগ্রাফের জন্য একটু ছোট ফন্ট সাইজ */
+    font-size: 15px; /* ভেতরের প্যারাগ্রাফের জন্য একটু ছোট ফন্ট সাইজ */
     font-weight: normal; /* নরমাল ফন্ট ওয়েট, বোল্ড না */
     color: #555; /* একটু হালকা রঙ */
     text-align: center; /* কন্টেন্টকে মাঝখানে আনা */
-    overflow: hidden; /* ভেতরের কন্টেন্ট বাইরে না যায় */
     margin-top: 5px; /* উপরের লেখা থেকে সামান্য ফাঁকা স্থান */
     line-height: 1.4; /* লাইনের উচ্চতা বাড়াবে যাতে পড়তে সুবিধা হয় */
     word-wrap: break-word; /* লম্বা শব্দ স্বয়ংক্রিয়ভাবে ভেঙ্গে পরের লাইনে নিয়ে যাবে */
