@@ -157,7 +157,7 @@ body {
     padding: 15px 10px; /* লিংকের ভেতরের প্যাডিং */
     text-decoration: none; /* আন্ডারলাইন সরানো */
     color: black; /* টেক্সটের কালার */
-    text-align: center;
+    text-align: left;
     font-weight: bold; /* টেক্সট বোল্ড করা */font-weightize: 16px; /* ফন্টের সাইজ */
     display: block; /* পুরো প্রস্থ জুড়ে লিংক */
     transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.3s ease; /* হোভার ট্রানজিশন */
