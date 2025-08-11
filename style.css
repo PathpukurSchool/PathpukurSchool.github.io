@@ -167,6 +167,7 @@ body {
 /* ➡️ menu-header এর স্টাইল */
 .sidebar-menu .menu-header {
     color: dark red; /* লাল রঙে টেক্সট */
+    text-align: center;
     font-size: 18px; /* ফন্ট সাইজ সামান্য বাড়ানো */
     text-transform: uppercase; /* টেক্সট বড় হাতের অক্ষরে */
     text-border-bottom: 2px solid #2c3e50; /* নিচের দিকে গাঢ় বর্ডার */
