@@ -300,34 +300,44 @@ body {
 
 /* --- শেডযুক্ত তথ্য বক্সের স্টাইল (নোটিশ বক্সের ভেতরে অবস্থানের জন্য উপযুক্ত) --- */
 /* ✅ Info & Class Box Styles (তথ্য এবং ক্লাস বক্স) */
+/* ✅ সাধারণ স্টাইল */
 .shaded-info-box, .class-box {
-    display: flex; /* ভেতরের কন্টেন্টকে পাশাপাশি সাজানোর জন্য */
-    flex-wrap: wrap; /* ছোট স্ক্রীনে কন্টেন্টকে নিচে নামানোর জন্য */
-    justify-content: center; /* কন্টেন্টকে মাঝখানে আনার জন্য */
-    align-items: center; /* কন্টেন্টকে উল্লম্বভাবে মাঝখানে আনার জন্য */
-    gap: 15px; /* ভেতরের এক্সাম বোতামগুলোর মাঝে ফাঁকা স্থান */
-    background-color: #FFFFFF; /* ব্যাকগ্রাউন্ড কালার সাদা */
-    border: 1px solid #E0F2F7; /* বর্ডার স্টাইল */
-    border-radius: 10px; /* কোণগুলোকে গোলাকার করা */
-    padding: 25px; /* ভেতরের প্যাডিং */
-    margin: 20px auto; /* মার্জিন নির্ধারণ */
-    width: 85%; /* প্রস্থ */
-    max-width: 350px; /* সর্বোচ্চ প্রস্থ */
-    box-sizing: border-box; /* বক্সের সাইজিং মডেল */
-    font-family: 'Segoe UI', 'Roboto', sans-serif; /* ফন্ট স্টাইল */
-    color: #444; /* টেক্সটের কালার */
-    text-align: center; /* কন্টেন্টকে মাঝখানে আনা */
-    line-height: 1.5; /* লাইনের উচ্চতা */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* শ্যাডো যোগ করা */
-    transition: all 0.3s ease-in-out; /* হোভার ট্রানজিশন */
-}
-.shaded-info-box:hover, .class-box:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* হোভার করলে শ্যাডো স্পষ্ট হবে */
-    transform: translateY(-7px) scale(1.02); /* হোভার করলে উপরে উঠবে এবং বড় হবে */
-    border-color: #B2EBF2; /* হোভার করলে বর্ডার কালার পরিবর্তন */
-    background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    background-color: #FFFFFF;
+    border: 1px solid #E0F2F7;
+    border-radius: 10px;
+    padding: 25px;
+    margin: 20px auto;
+    width: 85%;
+    max-width: 350px;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    color: #444;
+    text-align: center;
+    line-height: 1.5;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer; /* ক্লিক করার জন্য কার্সর পরিবর্তন */
 }
 
+/* ✅ হোভার স্টাইল */
+.shaded-info-box:hover, .class-box:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-7px) scale(1.02);
+    border-color: #B2EBF2;
+    background-color: #E0F7FA;
+}
+
+/* ✅ ক্লিক করলে স্টাইল */
+.shaded-info-box:active, .class-box:active {
+    background-color: #B2EBF2; /* ক্লিক করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
+    transform: translateY(-2px); /* ক্লিক করলে সামান্য নিচে নামবে */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
 /* ✅ Exam Links & Buttons (পরীক্ষার লিংক ও বোতাম) */
 .exam-link {
     display: inline-block; /* ইনলাইন ব্লক হিসেবে রাখা */
