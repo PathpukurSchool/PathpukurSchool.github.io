@@ -47,52 +47,51 @@ body {
     line-height: 1.2;
     font-family: 'Montserrat', sans-serif;
 }
-* ✅ লগআউট বোতামের স্টাইল */
+/* ✅ লগআউট বোতামের স্টাইল */
 /* logout-button */
 .logout-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: #E63946;
-    color: #FFFFFF;
-    padding: 6px 15px;
-    border: 1px solid #FFFFFF;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-    z-index: 1002; /* মেনু বারের উপরে থাকবে */
-    display: inline-block;
-    white-space: nowrap;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background-color: #E74C3C; /* মনোরম লাল রঙ */
+  color: #FFFFFF;
+  padding: 8px 18px; /* প্যাডিং কিছুটা বাড়ানো হয়েছে */
+  border: 1px solid #E74C3C; /* বর্ডারের রঙ ব্যাকগ্রাউন্ডের সাথে মেলানো */
+  border-radius: 50px; /* গোলাকার বর্ডার */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1em; /* ফন্ট সাইজ সামান্য বাড়ানো হয়েছে */
+  transition: all 0.3s ease; /* সব ট্রানজিশনের জন্য */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* হালকা শ্যাডো */
+  z-index: 1002;
+  display: inline-block;
+  white-space: nowrap;
+  cursor: pointer; /* কার্সর পরিবর্তন করা */
 }
 
 .logout-button:hover {
-    background-color: #C82333;
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-    border-color: #f0f2f5;
+  background-color: #C0392B; /* হোভার করলে গাঢ় লাল রঙ */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* হোভার করলে শ্যাডো আরও স্পষ্ট হবে */
+  border-color: #C0392B;
 }
 
 /* Media Queries for Top Login Button */
 @media (max-width: 768px) {
-    .logout-button {
-        top: 15px;
-        right: 15px;
-        padding: 4px 12px;
-        font-size: 0.8em;
-    }
+  .logout-button {
+    top: 10px;
+    right: 15px;
+    padding: 6px 15px;
+    font-size: 0.9em;
+  }
 }
 .logo {
-    max-width: 80px; /* লোগোর সর্বোচ্চ প্রস্থ */
-    width: 70px;
-    height: 70px;
+    max-width: 100px; /* লোগোর সর্বোচ্চ প্রস্থ */
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    border: 4px solid rgba(255, 255, 255, 0.9);
     object-fit: cover;
-    background-color: white;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     animation: rotateSlowly 13s linear infinite; /* অ্যানিমেশন যুক্ত করা */
     transform-style: preserve-3d; /* থ্রিডি ট্রান্সফর্মের জন্য */
     perspective: 1000px; /* থ্রিডি দৃষ্টিকোণ */
@@ -137,7 +136,8 @@ body {
 }
 .sidebar-menu {
     position: fixed; /* সাইডবারকে স্ক্রিনের পাশে স্থির রাখা */
-    top: 0; /* উপরের প্রান্ত থেকে দূরত্ব শূন্য */
+    top: 20; /* উপরের প্রান্ত থেকে দূরত্ব শূন্য */
+    bottom: 10:
     left: -265px; /* শুরুতে স্ক্রিনের বাইরে রাখা */
     width: 250px; /* সাইডবারের প্রস্থ */
     height: 100%; /* পুরো উচ্চতা জুড়ে */
@@ -410,7 +410,7 @@ footer {
 @media (max-width: 480px) {
     .logout-button {
         top: 10px;
-        right: 10px;
+        right: 20px;
         padding: 3px 10px;
         font-size: 0.75em;
     }
