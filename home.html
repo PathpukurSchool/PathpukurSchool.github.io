@@ -75,92 +75,92 @@
 <div class="overlay" id="overlay"></div>
 <nav id="sidebar-menu" class="sidebar-menu">
     <ul>
-		 <li><a href="#top-bar-section" class="nav-link">Home</a></li>
-		
-		<li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
+        <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
+        
+        <li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
         <li><a href="#last-date-section" class="nav-link">Marks Submission Last Date</a></li>
         <li><a href="#marks-uploading-section" class="nav-link">Marks Uploading Status</a></li>
-		 <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
-		
+        <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
+        
         <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Student Marks</a></li>
-        <li><a href="#class-V">Class V</a></li>
-        <li><a href="#class-VI">Class VI</a></li>
-        <li><a href="#class-VII">Class VII</a></li>
-        <li><a href="#class-VIII">Class VIII</a></li>
-        <li><a href="#class-IX">Class IX</a></li>
-        <li><a href="#class-X">Class X</a></li>
-        <li><a href="#class-XI">Class XI</a></li>
-        <li><a href="#class-XII">Class XII</a></li>
+        <li><a href="#class-V" class="nav-link">Class V</a></li>
+        <li><a href="#class-VI" class="nav-link">Class VI</a></li>
+        <li><a href="#class-VII" class="nav-link">Class VII</a></li>
+        <li><a href="#class-VIII" class="nav-link">Class VIII</a></li>
+        <li><a href="#class-IX" class="nav-link">Class IX</a></li>
+        <li><a href="#class-X" class="nav-link">Class X</a></li>
+        <li><a href="#class-XI" class="nav-link">Class XI</a></li>
+        <li><a href="#class-XII" class="nav-link">Class XII</a></li>
     
         <li><a href="#notice-board-section" class="nav-link menu-header">Notice Board</a></li>
-		
-		<li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
+        
+        <li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
         <li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
         <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
         <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
         <li><a href="#exam-routine-section" class="nav-link">Exam Routine</a></li>
-		
+        
         <li><a href="#uploda-student-notice-section" class="nav-link menu-header">Uploda Student Notice</a></li>
         <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
         <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
     </ul>
 </nav>
-	  	     <!-- ✅ সাইড বার মেনুঃ জাভা স্ক্রিপ্ট -->
+<!-- ✅ সাইড বার মেনুঃ জাভা স্ক্রিপ্ট -->
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const menuButton = document.getElementById('menu-toggle-button');
-    const sidebar = document.getElementById('sidebar-menu');
-    const overlay = document.getElementById('overlay');
-    const navLinks = sidebar.querySelectorAll("a");
+    document.addEventListener("DOMContentLoaded", function() {
+        const menuButton = document.getElementById('menu-toggle-button');
+        const sidebar = document.getElementById('sidebar-menu');
+        const overlay = document.getElementById('overlay');
+        const navLinks = sidebar.querySelectorAll("a");
 
-    // ✅ সব id টার্গেট লিস্ট তৈরি
-    const targetIds = Array.from(navLinks)
-        .map(link => link.getAttribute("href"))
-        .filter(href => href && href.startsWith("#"))
-        .map(href => href.substring(1));
+        // ✅ সব id টার্গেট লিস্ট তৈরি
+        const targetIds = Array.from(navLinks)
+            .map(link => link.getAttribute("href"))
+            .filter(href => href && href.startsWith("#"))
+            .map(href => href.substring(1));
 
-    menuButton.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-    });
+        menuButton.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
 
-    overlay.addEventListener('click', () => {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-    });
-
-    navLinks.forEach(link => {
-        link.addEventListener("click", function(event) {
-            event.preventDefault();
-
-            // সব লিংক থেকে active-link সরানো
-            navLinks.forEach(item => item.classList.remove("active-link"));
-            this.classList.add("active-link");
-
-            // সাইডবার বন্ধ
+        overlay.addEventListener('click', () => {
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
+        });
 
-            // ✅ আগে সব টার্গেট id থেকে highlight-section সরানো
-            targetIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.remove("highlight-section");
+        navLinks.forEach(link => {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+
+                // সব লিংক থেকে active-link সরানো
+                navLinks.forEach(item => item.classList.remove("active-link"));
+                this.classList.add("active-link");
+
+                // সাইডবার বন্ধ
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+
+                // ✅ আগে সব টার্গেট id থেকে highlight-section সরানো
+                targetIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.remove("highlight-section");
+                });
+
+                // ✅ শুধু ক্লিক করা id হাইলাইট করা
+                const targetSectionId = this.getAttribute("href").substring(1);
+                const targetSection = document.getElementById(targetSectionId);
+                if (targetSection) {
+                    targetSection.classList.add("highlight-section");
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
             });
-
-            // ✅ শুধু ক্লিক করা id হাইলাইট করা
-            const targetSectionId = this.getAttribute("href").substring(1);
-            const targetSection = document.getElementById(targetSectionId);
-            if (targetSection) {
-                targetSection.classList.add("highlight-section");
-                targetSection.scrollIntoView({ behavior: 'smooth' });
-            }
         });
     });
-});
 </script>
- 
-    <!--✅ নম্বর আপলোড -->  
-<div class="section-container" id="marks-information-section">
+
+  <!--✅ নম্বর আপলোড -->  
+<div class="main-section-container" id="marks-information-section">
     <div class="section-heading-wrapper">
         <h2 class="section-heading">
             <span class="emoji">🏫</span>
@@ -168,6 +168,7 @@ document.addEventListener("DOMContentLoaded", function() {
         </h2>
     </div>
 
+	 <!-- ✅ নম্বর আপলোডের শেষ তারিখ -->
     <div class="sub-section-container" id="last-date-section">
         <div class="sub-section-heading">
             <h2 class="shine">Last Date of Marks Submission</h2>
@@ -180,91 +181,126 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
         </div>
     </div>
-    
+	
+ <!-- ✅ নম্বর আপলোডের স্টাটাস -->
     <div class="sub-section-container" id="marks-uploading-section">
         <div class="sub-section-heading">
             <h2 class="shine">Marks Uploading Report</h2>
             <h3 class="login-instruction-heading">To know how many students' exam marks have been uploaded, please click the button below:<span class="emoji">👇</span></h3>
         </div>
         <div class="sub-section-content">
-            <a href="https://script.google.com/macros/s/AKfycby92wlqHa0LdogrHoSTMrbs2snqGpb-p-ASQQods_202pOLzQGNmeqIHxw0Eow1juYC/exec" target="_blank" class="exam-link">VIEW MARK UPLOADING STATUS</a>
+            <a href="https://script.google.com/macros/s/AKfycby92wlqHa0LdogrHoSTMrbs2snqGpb-p-ASQQods_202pOLzQGNmeqIHxw0Eow1juYC/exec" target="_blank" class="call-to-action-button">VIEW MARK UPLOADING STATUS</a>
         </div>
     </div>
-    
+
+	 <!-- ✅ সর্চেবল স্টুডেন্ট লিস্ট/ডাটা -->
     <div class="sub-section-container" id="student-list-section">
         <div class="sub-section-heading">
             <h2 class="shine">Student Information</h2>
             <h3 class="login-instruction-heading">To view student information or search the student database, please click the button below:<span class="emoji">👇</span></h3>
         </div>
         <div class="sub-section-content">
-            <a href="https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
+            <a href="https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec" target="_blank" class="call-to-action-button">VIEW STUDENT DATABASE</a>
         </div>
     </div>
 </div>
 
 <script src="teacher_dates.js"></script>
 <script>
+    // সংশোধিত ID ব্যবহার করা হয়েছে
     const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
-    
+
+    // Exam dates যুক্ত করা
     if (typeof examDates !== 'undefined' && Array.isArray(examDates)) {
         examDates.forEach(exam => {
             if (exam.date) {
                 const span = document.createElement("span");
                 span.textContent = `${exam.text} ${exam.date}, `;
+
+                // রং প্রয়োগ পুরো লাইনের জন্য
                 span.style.color = exam.color;
                 span.style.fontWeight = "bold";
+
                 if (exam.backgroundColor) {
                     span.style.backgroundColor = exam.backgroundColor;
                 }
+
                 examDatesMarquee.appendChild(span);
             }
         });
     }
 
-    examDatesMarquee.addEventListener("mouseover", () => examDatesMarquee.classList.add("paused"));
-    examDatesMarquee.addEventListener("mouseout", () => examDatesMarquee.classList.remove("paused"));
-    examDatesMarquee.addEventListener("touchstart", () => examDatesMarquee.classList.add("paused"));
-    examDatesMarquee.addEventListener("touchend", () => examDatesMarquee.classList.remove("paused"));
+    // Mouse hover করলে স্ক্রল থামানো
+    examDatesMarquee.addEventListener("mouseover", () => {
+        examDatesMarquee.classList.add("paused");
+    });
+    examDatesMarquee.addEventListener("mouseout", () => {
+        examDatesMarquee.classList.remove("paused");
+    });
+
+    // মোবাইলে touch করলে স্ক্রল থামানো
+    examDatesMarquee.addEventListener("touchstart", () => {
+        examDatesMarquee.classList.add("paused");
+    });
+    examDatesMarquee.addEventListener("touchend", () => {
+        examDatesMarquee.classList.remove("paused");
+    });
 </script>
 
 	  <!--✅ নম্বর আপলোড -->  
-<div class="section-container">
+<div class="main-section-container" id="upload-your-marks-section">
     <div class="section-heading-wrapper">
         <h2 class="section-heading">
             <span class="emoji">🧾</span>
             <span class="blink">Upload Student Exam Marks</span>
         </h2>
-        <h3 class="section-subheading">
-            Click the button below to upload student grades, marks & comments. You will need to log in with your ID and password:
-            <span class="emoji">👇</span>
-        </h3>
+        <h3 class="login-instruction-heading">Click the button below to upload student grades, marks & comments. You will need to log in with your ID and password:<span class="emoji">👇</span></h3>
     </div>
-    <!-- ✅ নম্বর আপলোডের বোতাম তৈরি -->
-    <div class="section-content">
-        <a href="upload_marks.html" target="_blank" class="call-to-action-button">UPLOAD EXAM MARKS</a>
+	  <!-- ✅ নম্বর আপলোডের বোতাম তৈরি -->
+    <div id="exam-buttons" class="sub-sections-wrapper">
+        <div class="sub-section-container">
+            <a href="#class-V" class="call-to-action-button">Class V</a>
+        </div>
+        <div class="sub-section-container">
+            <a href="#class-VI" class="call-to-action-button">Class VI</a>
+        </div>
+        <div class="sub-section-container">
+            <a href="#class-VII" class="call-to-action-button">Class VII</a>
+        </div>
+        <div class="sub-section-container">
+            <a href="#class-VIII" class="call-to-action-button">Class VIII</a>
+        </div>
+        <div class="sub-section-container">
+            <a href="#class-IX" class="call-to-action-button">Class IX</a>
+        </div>
+        <div class="sub-section-container">
+            <a href="#class-X" class="call-to-action-button">Class X</a>
+        </div>
+        <div class="sub-section-container">
+            <a href="#class-XI" class="call-to-action-button">Class XI</a>
+        </div>
+        <div class="sub-section-container">
+            <a href="#class-XII" class="call-to-action-button">Class XII</a>
+        </div>
     </div>
 </div>
 
 <!-- ✅ নোটিশ বোর্ড -->
-    <div class="section-container" id="notice-board-section">
+<div class="main-section-container" id="notice-board-section">
     <div class="section-heading-wrapper">
         <h2 class="section-heading">
             <span class="emoji">📋</span>
             <span class="blink">Notice Board</span>
         </h2>
     </div>
-    
     <div id="notice-board-marquee-content" class="marquee-content"></div>
-
     <div id="notice-board"></div>
-    
     <div class="pagination">
         <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
         <span id="pageNumber">Page 1</span>
         <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
     </div>
-    
-    <div id="popupModal" style="display: none;" class="modal-overlay">
+    <div id="popupModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
             <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
@@ -276,11 +312,10 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
 
 <script src="teacher_notice.js"></script>
-<script src="notice.js"></script>
 <script>
-    // স্ক্রলিং নোটিশের লজিক
+    // ✅ স্ক্রলিং নোটিশের লজিক
     const noticeBoardMarquee = document.getElementById("notice-board-marquee-content");
-    
+
     if (Array.isArray(ScrollingNotices)) {
         ScrollingNotices.forEach(notice => {
             const date = notice.date || "";
@@ -298,12 +333,13 @@ document.addEventListener("DOMContentLoaded", function() {
         noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
     }
 
+    // 🔁 Marquee pause on hover/touch
     noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
     noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
     noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
     noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
     
-    // টেবিল নোটিশের লজিক
+    // ✅ টেবিল নোটিশের লজিক
     const noticesPerPage = 10;
     let currentPage = 1;
     
@@ -323,7 +359,7 @@ document.addEventListener("DOMContentLoaded", function() {
             popupLinkArea.appendChild(a);
         }
         
-        popupModal.style.display = 'block';
+        popupModal.style.display = 'flex'; // পপআপ দেখানোর জন্য flex ব্যবহার করা হয়েছে
     }
     
     function closeModal() {
@@ -358,9 +394,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <td>${notice.date}</td>
                 <td style="color: ${notice.color || '#000'};">${notice.text}</td>
                 <td>
-                    <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')"
-                           onmouseover="this.style.opacity=0.8"
-                           onmouseout="this.style.opacity=1">
+                    <button onclick="showPopup('${notice.text.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')">
                         View
                     </button>
                 </td>
@@ -394,10 +428,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
     document.addEventListener('DOMContentLoaded', renderNoticeTable);
 </script>
-    
-<!-- ✅ স্কুল রুটিন  --->
-  <div class="main-container">
-    <div class="section-heading-container" id="school-routine-section">
+
+	  <!-- ✅ স্কুল রুটিন  --->
+<div class="main-section-container" id="school-routine-section">
+    <div class="section-heading-wrapper">
         <h2 class="section-heading">
             <span class="emoji">🏫</span>
             <span class="blink">School Routine</span>
@@ -405,64 +439,83 @@ document.addEventListener("DOMContentLoaded", function() {
         <h3 class="login-instruction-heading">This is a draft timetable and should not be considered final. It may change as needed by the school.</h3>
     </div>
 
-	    <!-- ✅ টিচার রুটিন -->
-    <div id="exam-buttons">
-        <div class="shaded-info-box" id="teacher-routine-section">
-            <h2 class="shine">Teacher Routine</h2>
-            <h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3>
-            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">VIEW TEACHER ROUTINE</a>
+	  <!-- ✅ টিচার রুটিন -->
+    <div id="exam-buttons" class="sub-sections-wrapper">
+        <div class="sub-section-container" id="teacher-routine-section">
+            <div class="sub-section-heading">
+                <h2 class="shine">Teacher Routine</h2>
+                <h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="sub-section-content">
+                <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="call-to-action-button">VIEW TEACHER ROUTINE</a>
+            </div>
         </div>
 
 		 <!-- ✅ স্টুডেন্ট রুটিন -->
-        <div class="shaded-info-box" id="class-routine-section">
-            <h2 class="shine">Student Routine</h2>
-            <h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3>
-            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student" target="_blank" class="exam-link">VIEW STUDENT ROUTINE</a>
+        <div class="sub-section-container" id="class-routine-section">
+            <div class="sub-section-heading">
+                <h2 class="shine">Student Routine</h2>
+                <h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="sub-section-content">
+                <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student" target="_blank" class="call-to-action-button">VIEW STUDENT ROUTINE</a>
+            </div>
         </div>
 
 		 <!-- ✅ সাবজেক্ট রুটিন -->
-        <div class="shaded-info-box" id="subject-routine-section">
-            <h2 class="shine">Subject Routine</h2>
-            <h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3>
-            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>
+        <div class="sub-section-container" id="subject-routine-section">
+            <div class="sub-section-heading">
+                <h2 class="shine">Subject Routine</h2>
+                <h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="sub-section-content">
+                <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="call-to-action-button">VIEW SUBJECT ROUTINE</a>
+            </div>
         </div>
 
 		<!-- ✅ বিদ্যালয় পরীক্ষার রুটিন -->
-        <div class="shaded-info-box" id="exam-routine-section">
-            <h2 class="shine">School Exam Routine</h2>
-            <h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3>
-            <a href="https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>
+        <div class="sub-section-container" id="exam-routine-section">
+            <div class="sub-section-heading">
+                <h2 class="shine">School Exam Routine</h2>
+                <h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="sub-section-content">
+                <a href="https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec" target="_blank" class="call-to-action-button">VIEW EXAM ROUTINE</a>
+            </div>
         </div>
     </div>
 </div>
-    
- <!-- ✅ আপলোড স্টুডেন্ট নোটিশ --> 
-	  <div class="section-container">
+
+ <!-- ✅ আপলোড স্টুডেন্ট নোটিশ --> 
+<div class="main-section-container" id="uploda-student-notice-section">
     <div class="section-heading-wrapper">
         <h2 class="section-heading">
             <span class="emoji">📝</span>
             <span class="blink">Upload Student Notice</span>
         </h2>
-        <h3 class="section-subheading">
-            If you wish to upload a notice for students, please click the button below:
-            <span class="emoji">👇</span>
-        </h3>
+        <h3 class="login-instruction-heading">If you wish to upload a notice for students, please click the button below:<span class="emoji">👇</span></h3>
     </div>
-    
     <div class="section-content">
         <a href="upload_student_notice.html" target="_blank" class="call-to-action-button">UPLOAD STUDENT NOTICE</a>
     </div>
 </div>
-    
- <!-- ✅ ফুটার  -->
-    <div id="school-address-section">
-    <footer>
-  <p><strong>School Name:</strong> Pathpukur High School (HS)</p>
-  <p><strong>Address:</strong> Vill: Pathpukur, PO: Bakultala Hat, Dist: South 24 Parganas, Pin: 743338, West Bengal</p>
-  <p><strong>Phone:</strong> +91 3218248083</p>
-  <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
+
+ <!-- ✅ ফুটার  -->	  
+<div class="main-section-container" id="school-address-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji">📞</span>
+            <span>Contact Details</span>
+        </h2>
+    </div>
+
+	<footer>
+        <p><strong>School Name:</strong> Pathpukur High School (HS)</p>
+        <p><strong>Address:</strong> Vill: Pathpukur, PO: Bakultala Hat, Dist: South 24 Parganas, Pin: 743338, West Bengal</p>
+        <p><strong>Phone:</strong> +91 3218248083</p>
+        <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
     </footer>
-	</div>
+</div>
 
 <script src="script.js"></script>
 </body>
