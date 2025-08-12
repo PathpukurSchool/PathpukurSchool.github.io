@@ -348,48 +348,63 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-   <script>
-    // Digital Notice Board এর জন্য Pagination এবং rendering logic
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcRb_cEyTyEgCjZbNIGutx-p1Sk86t7OwkLT77rfYLGOPNTeqiY1uqYFRZO-AgClmYwg/exec";
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
+    /* ===============================
+       Digital Notice Board Variables
+    =============================== */
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcRb_cEyTyEgCjZbNIGutx-p1Sk86t7OwkLT77rfYLGOPNTeqiY1uqYFRZO-AgClmYwg/exec";
     const NOTICES_PER_PAGE = 10;
     let currentPage = 1;
     let totalPages = 0;
     let Helping = [];
 
+    /* ===============================
+       Fetch Notices
+    =============================== */
     async function fetchNotices() {
         try {
             const response = await fetch(APPS_SCRIPT_URL);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
             const data = await response.json();
-            Helping = data.notices;
+            Helping = Array.isArray(data.notices) ? data.notices : [];
             renderHelpList();
         } catch (error) {
             console.error("Failed to fetch notices:", error);
             const container = document.getElementById('help-list');
             if (container) {
-                container.innerHTML = `
-                    <div style="
-                        border: 2px solid #ff9999;
-                        background-color: #ffe6e6;
-                        color: #cc0000;
-                        font-size: 20px;
-                        font-weight: bold;
-                        padding: 10px;
-                        border-radius: 8px;
-                        text-align: center;
-                        max-width: 300px;
-                        margin: 0 auto;
-                    ">
-                        <strong> Error! </strong><br> Failed to load notices.
-                    </div>
-                `;
+                container.innerHTML = errorBox("Error!", "Failed to load notices.");
             }
         }
     }
 
+    /* ===============================
+       Error / Empty Box UI
+    =============================== */
+    function errorBox(title, message) {
+        return `
+            <div style="
+                border: 2px solid #ff9999;
+                background-color: #ffe6e6;
+                color: #cc0000;
+                font-size: 20px;
+                font-weight: bold;
+                padding: 10px;
+                border-radius: 8px;
+                text-align: center;
+                max-width: 300px;
+                margin: 0 auto;
+            ">
+                <strong>${title}</strong><br>${message}
+            </div>
+        `;
+    }
+
+    /* ===============================
+       Render Help List
+    =============================== */
     function renderHelpList() {
         const container = document.getElementById('help-list');
         if (!container) {
@@ -399,22 +414,7 @@
         container.innerHTML = "";
 
         if (!Array.isArray(Helping) || Helping.length === 0) {
-            container.innerHTML = `
-                <div style="
-                    border: 2px solid #ff9999;
-                    background-color: #ffe6e6;
-                    color: #cc0000;
-                    font-size: 20px;
-                    font-weight: bold;
-                    padding: 10px;
-                    border-radius: 8px;
-                    text-align: center;
-                    max-width: 300px;
-                    margin: 0 auto;
-                ">
-                    <strong> Available Soon! </strong><br> Please check back later for updates.
-                </div>
-            `;
+            container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
             return;
         }
 
@@ -425,14 +425,16 @@
 
         noticesToRender.forEach(item => {
             const itemDiv = document.createElement('div');
-            itemDiv.innerText = item.text;
-            itemDiv.style.cursor = 'pointer';
-            itemDiv.style.margin = '10px 0';
-            itemDiv.style.padding = '8px 10px';
-            itemDiv.style.backgroundColor = '#f9f9f9';
-            itemDiv.style.borderLeft = `6px solid #8B4513`;
-            itemDiv.style.borderRadius = '4px';
-            itemDiv.style.transition = 'background-color 0.3s';
+            itemDiv.innerText = item.text || "No Title";
+            itemDiv.style.cssText = `
+                cursor: pointer;
+                margin: 10px 0;
+                padding: 8px 10px;
+                background-color: #f9f9f9;
+                border-left: 6px solid #8B4513;
+                border-radius: 4px;
+                transition: background-color 0.3s;
+            `;
             itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
             itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
             itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
@@ -442,132 +444,143 @@
         renderPaginationControls();
     }
 
+    /* ===============================
+       Pagination Controls
+    =============================== */
     function renderPaginationControls() {
         const paginationContainer = document.getElementById('pagination-controls');
         if (!paginationContainer) return;
         paginationContainer.innerHTML = '';
-        if (totalPages <= 1) {
-            return;
-        }
-        const backBtn = document.createElement('button');
-        backBtn.innerText = 'BACK';
-        backBtn.onclick = () => {
+        if (totalPages <= 1) return;
+
+        const backBtn = createButton('BACK', '#007bff', () => {
             if (currentPage > 1) {
                 currentPage--;
                 renderHelpList();
             }
-        };
-        backBtn.style.padding = '8px 15px';
-        backBtn.style.marginRight = '10px';
-        backBtn.style.backgroundColor = '#007bff';
-        backBtn.style.color = 'white';
-        backBtn.style.border = 'none';
-        backBtn.style.borderRadius = '5px';
-        backBtn.style.cursor = 'pointer';
-        backBtn.disabled = currentPage === 1;
-        paginationContainer.appendChild(backBtn);
+        }, currentPage === 1);
+
         const pageInfo = document.createElement('span');
         pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
         pageInfo.style.margin = '0 10px';
         pageInfo.style.fontWeight = 'bold';
-        paginationContainer.appendChild(pageInfo);
-        const nextBtn = document.createElement('button');
-        nextBtn.innerText = 'NEXT';
-        nextBtn.onclick = () => {
+
+        const nextBtn = createButton('NEXT', '#007bff', () => {
             if (currentPage < totalPages) {
                 currentPage++;
                 renderHelpList();
             }
-        };
-        nextBtn.style.padding = '8px 15px';
-        nextBtn.style.marginLeft = '10px';
-        nextBtn.style.backgroundColor = '#007bff';
-        nextBtn.style.color = 'white';
-        nextBtn.style.border = 'none';
-        nextBtn.style.borderRadius = '5px';
-        nextBtn.style.cursor = 'pointer';
-        nextBtn.disabled = currentPage === totalPages;
-        paginationContainer.appendChild(nextBtn);
+        }, currentPage === totalPages);
+
+        paginationContainer.append(backBtn, pageInfo, nextBtn);
     }
 
+    function createButton(text, bgColor, onClick, disabled = false) {
+        const btn = document.createElement('button');
+        btn.innerText = text;
+        btn.onclick = onClick;
+        btn.style.cssText = `
+            padding: 8px 15px;
+            margin: 0 5px;
+            background-color: ${bgColor};
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        `;
+        btn.disabled = disabled;
+        return btn;
+    }
+
+    /* ===============================
+       Popup Show
+    =============================== */
     function showPopup(titleText, date, link, subjText) {
         const existing = document.getElementById('notice-popup');
         if (existing) existing.remove();
+
         const popup = document.createElement('div');
         popup.id = 'notice-popup';
-        popup.style.position = 'fixed';
-        popup.style.top = '50%';
-        popup.style.left = '50%';
-        popup.style.transform = 'translate(-50%, -50%)';
-        popup.style.background = '#f0f8ff';
-        popup.style.padding = '20px';
-        popup.style.border = '2px solid #333';
-        popup.style.borderRadius = '10px';
-        popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-        popup.style.zIndex = '9999';
-        popup.style.textAlign = 'center';
-        popup.style.maxWidth = '90%';
-        popup.style.minWidth = '240px';
-        popup.style.width = '300px';
-        popup.style.fontFamily = 'Arial, sans-serif';
+        popup.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #f0f8ff;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 9999;
+            text-align: center;
+            max-width: 90%;
+            min-width: 240px;
+            width: 300px;
+            font-family: Arial, sans-serif;
+        `;
+
         const titleElem = document.createElement('div');
-        titleElem.innerText = titleText;
-        titleElem.style.backgroundColor = 'green';
-        titleElem.style.color = 'white';
-        titleElem.style.fontWeight = 'bold';
-        titleElem.style.fontSize = '15px';
-        titleElem.style.padding = '10px';
-        titleElem.style.borderRadius = '5px';
-        titleElem.style.marginBottom = '15px';
+        titleElem.innerText = titleText || "No Title";
+        titleElem.style.cssText = `
+            background-color: green;
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        `;
         popup.appendChild(titleElem);
-        const dateElem = document.createElement('div');
-        dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-        dateElem.style.marginBottom = '10px';
-        popup.appendChild(dateElem);
+
+        if (date) {
+            const dateElem = document.createElement('div');
+            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+            dateElem.style.marginBottom = '10px';
+            popup.appendChild(dateElem);
+        }
+
         if (subjText && subjText.trim() !== '') {
             const subjElem = document.createElement('div');
             subjElem.innerText = subjText;
-            subjElem.style.color = 'darkgreen';
-            subjElem.style.backgroundColor = '#e6ffe6';
-            subjElem.style.fontWeight = 'bold';
-            subjElem.style.fontSize = '14px';
-            subjElem.style.padding = '6px';
-            subjElem.style.borderRadius = '4px';
-            subjElem.style.marginBottom = '12px';
+            subjElem.style.cssText = `
+                color: darkgreen;
+                background-color: #e6ffe6;
+                font-weight: bold;
+                font-size: 14px;
+                padding: 6px;
+                border-radius: 4px;
+                margin-bottom: 12px;
+            `;
             popup.appendChild(subjElem);
         }
+
         const buttonContainer = document.createElement('div');
-        buttonContainer.style.marginTop = '20px';
-        buttonContainer.style.display = 'flex';
-        buttonContainer.style.flexWrap = 'wrap';
-        buttonContainer.style.justifyContent = 'center';
-        buttonContainer.style.gap = '10px';
+        buttonContainer.style.cssText = `
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        `;
+
         if (link && link.trim() !== '') {
             const linkBtn = document.createElement('a');
             linkBtn.href = link;
             linkBtn.innerText = 'Open Link';
             linkBtn.target = '_blank';
-            linkBtn.style.backgroundColor = '#007bff';
-            linkBtn.style.color = 'white';
-            linkBtn.style.padding = '6px 10px';
-            linkBtn.style.border = 'none';
-            linkBtn.style.borderRadius = '5px';
-            linkBtn.style.textDecoration = 'none';
-            linkBtn.style.fontWeight = 'bold';
-            linkBtn.style.fontSize = '12px';
+            linkBtn.style.cssText = `
+                background-color: #007bff;
+                color: white;
+                padding: 6px 10px;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 12px;
+                text-decoration: none;
+            `;
             buttonContainer.appendChild(linkBtn);
         }
-        const downloadBtn = document.createElement('button');
-        downloadBtn.innerText = 'Download';
-        downloadBtn.style.backgroundColor = '#28a745';
-        downloadBtn.style.color = 'white';
-        downloadBtn.style.padding = '6px 10px';
-        downloadBtn.style.border = 'none';
-        downloadBtn.style.borderRadius = '5px';
-        downloadBtn.style.fontWeight = 'bold';
-        downloadBtn.style.fontSize = '12px';
-        downloadBtn.style.cursor = 'pointer';
-        downloadBtn.onclick = () => {
+
+        const downloadBtn = createButton('Download', '#28a745', () => {
             setTimeout(() => {
                 html2canvas(popup).then(canvas => {
                     const image = canvas.toDataURL('image/png');
@@ -577,200 +590,78 @@
                     link.click();
                 });
             }, 100);
-        };
-        buttonContainer.appendChild(downloadBtn);
-        const closeBtn = document.createElement('button');
-        closeBtn.innerText = 'Back';
-        closeBtn.style.backgroundColor = '#dc3545';
-        closeBtn.style.color = 'white';
-        closeBtn.style.padding = '6px 10px';
-        closeBtn.style.border = 'none';
-        closeBtn.style.borderRadius = '5px';
-        closeBtn.style.fontWeight = 'bold';
-        closeBtn.style.fontSize = '12px';
-        closeBtn.style.cursor = 'pointer';
-        closeBtn.onclick = () => popup.remove();
-        buttonContainer.appendChild(closeBtn);
+        });
+
+        const closeBtn = createButton('Back', '#dc3545', () => popup.remove());
+
+        buttonContainer.append(downloadBtn, closeBtn);
         popup.appendChild(buttonContainer);
+
         document.body.appendChild(popup);
     }
 
-    // সমস্ত কোড একটি মাত্র DOMContentLoaded ইভেন্ট লিসেনারের মধ্যে থাকবে
-    document.addEventListener('DOMContentLoaded', function() {
-        // নোটিশ বোর্ড লোড করার ফাংশন কল করা হয়েছে
-        fetchNotices();
+    /* ===============================
+       Student Section Links
+    =============================== */
+    function loadStudentLinks() {
+        fetch('index_link.json')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load student links configuration.');
+                return response.json();
+            })
+            .then(data => {
+                const links = {
+                    'exam-marks-link': data['exam-marks-url'],
+                    'class-routine-link': data['class-routine-url'],
+                    'exam-routine-link': data['exam-routine-url'],
+                    'xi-tab-form-link': data['xi-tab-form-url'],
+                    'new-admission-link': data['new-admission-url']
+                };
 
-        // --- More/Less Button Logic ---
-        const toggleButtons = document.querySelectorAll('.toggle-button');
-        toggleButtons.forEach(button => {
-            const sectionContentWrapper = button.previousElementSibling;
-            if (sectionContentWrapper && sectionContentWrapper.scrollHeight <= sectionContentWrapper.clientHeight) {
-                button.style.display = 'none';
-            }
-            button.addEventListener('click', function() {
-                sectionContentWrapper.classList.toggle('expanded');
-                if (sectionContentWrapper.classList.contains('expanded')) {
-                    button.textContent = 'Less...';
-                    button.classList.remove('more-btn');
-                    button.classList.add('less-btn');
-                } else {
-                    button.textContent = 'More...';
-                    button.classList.remove('less-btn');
-                    button.classList.add('more-btn');
-                }
-            });
-        });
-
-        // --- Menu Bar Logic ---
-        const menuToggleButton = document.getElementById('menu-toggle-button');
-        const sidebarMenu = document.getElementById('sidebar-menu');
-        const overlay = document.querySelector('.overlay');
-
-        function toggleMenu() {
-            if (sidebarMenu) {
-                sidebarMenu.classList.toggle('active');
-            } else {
-                console.error("Sidebar menu element not found!");
-            }
-            if (overlay) {
-                overlay.classList.toggle('active');
-            } else {
-                console.error("Overlay element not found!");
-            }
-            document.body.classList.toggle('no-scroll', sidebarMenu.classList.contains('active'));
-        }
-
-        if (menuToggleButton) {
-            menuToggleButton.addEventListener('click', function(event) {
-                event.stopPropagation();
-                toggleMenu();
-            });
-        } else {
-            console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
-        }
-
-        if (sidebarMenu) {
-            sidebarMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', function(event) {
-                    toggleMenu();
-                    const href = this.getAttribute('href');
-                    sidebarMenu.querySelectorAll('a').forEach(otherLink => {
-                        otherLink.classList.remove('active-link');
-                    });
-                    this.classList.add('active-link');
-                    if (href && href.startsWith('#')) {
-                        event.preventDefault();
-                        const targetId = href.substring(1);
-                        const targetSection = document.getElementById(targetId);
-                        if (targetSection) {
-                            const approximateHeaderHeight = 400;
-                            window.scrollTo({
-                                top: targetSection.offsetTop - approximateHeaderHeight,
-                                behavior: 'smooth'
+                for (const id in links) {
+                    const url = links[id];
+                    const linkElement = document.getElementById(id);
+                    if (linkElement) {
+                        if (url && url.trim() !== '') {
+                            linkElement.href = url;
+                            linkElement.target = '_blank';
+                        } else {
+                            linkElement.href = 'javascript:void(0)';
+                            linkElement.classList.add('disabled-link');
+                            linkElement.addEventListener('click', function () {
+                                showAvailableSoonMessage(linkElement);
                             });
                         }
                     }
-                });
-            });
-        }
-
-        if (overlay) {
-            overlay.addEventListener('click', function() {
-                if (sidebarMenu && sidebarMenu.classList.contains('active')) {
-                    toggleMenu();
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
-        }
+    }
 
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && sidebarMenu && sidebarMenu.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
+    function showAvailableSoonMessage(element) {
+        const parentContainer = element.closest('.shaded-info-box');
+        if (!parentContainer) return;
+        const existingMessage = parentContainer.querySelector('.avail-msg');
+        if (existingMessage) existingMessage.remove();
 
-        // --- Gallery Fullscreen Logic ---
-        const galleryImages = document.querySelectorAll('.gallery-image');
-        const fullscreenOverlay = document.getElementById('fullscreen-overlay');
-        const fullscreenImage = document.getElementById('fullscreen-image');
+        const msg = document.createElement('div');
+        msg.className = 'avail-msg';
+        msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
+        parentContainer.appendChild(msg);
 
-        if (galleryImages.length > 0 && fullscreenOverlay && fullscreenImage) {
-            galleryImages.forEach(image => {
-                image.addEventListener('click', function() {
-                    const imageUrl = this.getAttribute('data-src') || this.src;
-                    if (imageUrl) {
-                        fullscreenImage.src = imageUrl;
-                        fullscreenOverlay.classList.add('active');
-                    }
-                });
-            });
-            fullscreenOverlay.addEventListener('click', function() {
-                fullscreenOverlay.classList.remove('active');
-                fullscreenImage.src = '';
-                document.body.style.overflow = '';
-            });
-        } else {
-            console.warn("Warning: Gallery elements (images, fullscreen overlay, or image) not found. Gallery fullscreen might not work.");
-        }
+        setTimeout(() => msg.remove(), 3000);
+    }
 
-        // Student Section js Code
-        loadStudentLinks();
+    /* ===============================
+       Run Functions
+    =============================== */
+    fetchNotices();
+    loadStudentLinks();
 
-        //স্টুডেন্জ জোনে নতুন লিঙ্ক যোগ করতে হলে এই অংশে পরিবর্তন করতে হবে
-        function loadStudentLinks() {
-            fetch('index_link.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load student links configuration.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const links = {
-                        'exam-marks-link': data['exam-marks-url'],
-                        'class-routine-link': data['class-routine-url'],
-                        'exam-routine-link': data['exam-routine-url'],
-                        'xi-tab-form-link': data['xi-tab-form-url'],
-                        'new-admission-link': data['new-admission-url']
-                    };
-
-                    for (const id in links) {
-                        const url = links[id];
-                        const linkElement = document.getElementById(id);
-                        if (linkElement) {
-                            if (url && url.trim() !== '') {
-                                linkElement.href = url;
-                                linkElement.target = '_blank';
-                            } else {
-                                linkElement.href = 'javascript:void(0)';
-                                linkElement.classList.add('disabled-link');
-                                linkElement.addEventListener('click', function(event) {
-                                    showAvailableSoonMessage(linkElement);
-                                });
-                            }
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        function showAvailableSoonMessage(element) {
-            const parentContainer = element.closest('.shaded-info-box');
-            const existingMessage = parentContainer.querySelector('.avail-msg');
-            if (existingMessage) {
-                existingMessage.remove();
-            }
-            const msg = document.createElement('div');
-            msg.className = 'avail-msg';
-            msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
-            parentContainer.appendChild(msg);
-            setTimeout(() => {
-                msg.remove();
-            }, 3000);
-        }
-    }); // এই একটি মাত্র ক্লোজিং ট্যাগ দিয়ে সব কোড শেষ হবে
+});
 </script>
-    
+ 
 </body>
 </html>
