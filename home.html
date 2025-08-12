@@ -75,7 +75,7 @@
 <div class="overlay" id="overlay"></div>
 <nav id="sidebar-menu" class="sidebar-menu">
     <ul>
-		 <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
+		 <li><a href="#top-bar-section" class="nav-link">Home</a></li>
 		
 		<li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
         <li><a href="#last-date-section" class="nav-link">Marks Submission Last Date</a></li>
@@ -160,266 +160,299 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
  
     <!--✅ নম্বর আপলোড -->  
-<div></div><div class="section-heading-container" id="marks-information-section">
-	<h2 class="section-heading">
+<div class="section-container" id="marks-information-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
             <span class="emoji">🏫</span>
             <span class="blink">Marks Uploading & Student Information</span>
         </h2>
-	
-   <!-- ✅ নম্বর আপলোডের শেষ তারিখ -->
-  <div class="shaded-info-box" id="last-date-section">
-  <h2 class="shine">Last Date of Marks Submission</h2>
-<h3 class="login-instruction-heading">Please upload the students' marks, grades & comments within the given time frame:<span class="emoji">👇</span></h3>
-	  <div class="static-text">
-    (Kindly submit all marks by due date)
-  
-  <div class="marquee-container">
-    <div id="exam-dates-marquee-content" class="marquee-content"></div> </div>
-  </div>
+    </div>
+
+    <div class="sub-section-container" id="last-date-section">
+        <div class="sub-section-heading">
+            <h2 class="shine">Last Date of Marks Submission</h2>
+            <h3 class="login-instruction-heading">Please upload the students' marks, grades & comments within the given time frame:<span class="emoji">👇</span></h3>
+        </div>
+        <div class="static-text">
+            (Kindly submit all marks by due date)
+            <div class="marquee-container">
+                <div id="exam-dates-marquee-content" class="marquee-content"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="sub-section-container" id="marks-uploading-section">
+        <div class="sub-section-heading">
+            <h2 class="shine">Marks Uploading Report</h2>
+            <h3 class="login-instruction-heading">To know how many students' exam marks have been uploaded, please click the button below:<span class="emoji">👇</span></h3>
+        </div>
+        <div class="sub-section-content">
+            <a href="https://script.google.com/macros/s/AKfycby92wlqHa0LdogrHoSTMrbs2snqGpb-p-ASQQods_202pOLzQGNmeqIHxw0Eow1juYC/exec" target="_blank" class="exam-link">VIEW MARK UPLOADING STATUS</a>
+        </div>
+    </div>
+    
+    <div class="sub-section-container" id="student-list-section">
+        <div class="sub-section-heading">
+            <h2 class="shine">Student Information</h2>
+            <h3 class="login-instruction-heading">To view student information or search the student database, please click the button below:<span class="emoji">👇</span></h3>
+        </div>
+        <div class="sub-section-content">
+            <a href="https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
+        </div>
+    </div>
+</div>
 
 <script src="teacher_dates.js"></script>
 <script>
-  // সংশোধিত ID ব্যবহার করা হয়েছে
-  const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
-
-  // Exam dates যুক্ত করা
-  examDates.forEach(exam => {
-    if (exam.date) {
-      const span = document.createElement("span");
-      span.textContent = `${exam.text} ${exam.date}, `;
-
-      // রং প্রয়োগ পুরো লাইনের জন্য
-      span.style.color = exam.color;
-      span.style.fontWeight = "bold";
-
-      if (exam.backgroundColor) {
-        span.style.backgroundColor = exam.backgroundColor;
-      }
-
-      examDatesMarquee.appendChild(span);
+    const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
+    
+    if (typeof examDates !== 'undefined' && Array.isArray(examDates)) {
+        examDates.forEach(exam => {
+            if (exam.date) {
+                const span = document.createElement("span");
+                span.textContent = `${exam.text} ${exam.date}, `;
+                span.style.color = exam.color;
+                span.style.fontWeight = "bold";
+                if (exam.backgroundColor) {
+                    span.style.backgroundColor = exam.backgroundColor;
+                }
+                examDatesMarquee.appendChild(span);
+            }
+        });
     }
-  });
 
-  // Mouse hover করলে স্ক্রল থামানো
-  examDatesMarquee.addEventListener("mouseover", () => {
-    examDatesMarquee.classList.add("paused");
-  });
-  examDatesMarquee.addEventListener("mouseout", () => {
-    examDatesMarquee.classList.remove("paused");
-  });
-
-  // মোবাইলে touch করলে স্ক্রল থামানো
-  examDatesMarquee.addEventListener("touchstart", () => {
-    examDatesMarquee.classList.add("paused");
-  });
-  examDatesMarquee.addEventListener("touchend", () => {
-    examDatesMarquee.classList.remove("paused");
-  });
+    examDatesMarquee.addEventListener("mouseover", () => examDatesMarquee.classList.add("paused"));
+    examDatesMarquee.addEventListener("mouseout", () => examDatesMarquee.classList.remove("paused"));
+    examDatesMarquee.addEventListener("touchstart", () => examDatesMarquee.classList.add("paused"));
+    examDatesMarquee.addEventListener("touchend", () => examDatesMarquee.classList.remove("paused"));
 </script>
-  </div>
-	
- <!-- ✅ নম্বর আপলোডের স্টাটাস -->
-      <div class="shaded-info-box" id="marks-uploading-section">
-		<h2 class="shine">Marks Uploading Report</h2>
-		  <h3 class="login-instruction-heading">To know how many students' exam marks have been uploaded, please click the button below:<span class="emoji">👇</span></h3>
-      <a href="https://script.google.com/macros/s/AKfycby92wlqHa0LdogrHoSTMrbs2snqGpb-p-ASQQods_202pOLzQGNmeqIHxw0Eow1juYC/exec" targetet="_blank" class="exam-link">VIEW MARK UPLOADING STATUS</a>
-      </div>
-	
- <!-- ✅ সর্চেবল স্টুডেন্ট লিস্ট/ডাটা -->
-    <div class="shaded-info-box" id=student-list-section>
-    <h2 class="shine">Student Information</h2>
-    <h3 class="login-instruction-heading">To view student information or search the student database, please click the button below:<span class="emoji">👇</span></h3>
-    <a href="https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
-    </div>
-</div></div>
 
- <!--✅ নম্বর আপলোড -->  
-<div class="section-heading-container" id="upload-your-marks-section">
-    <h2 class="section-heading">
-        <span class="emoji">🧾</span>
-        <div></div><span class="blink">Upload Student Exam Marks</span>
-    </h2>
-	<h3 class="login-instruction-heading">Click the button below to upload student grades, marks & comments. You will need to log in with your ID and password:<span class="emoji">👇</span></h3></div>
-  <!-- ✅ নম্বর আপলোডের বোতাম তৈরি -->
-  <div id="exam-buttons"></div>
+	  <!--✅ নম্বর আপলোড -->  
+<div class="section-container">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji">🧾</span>
+            <span class="blink">Upload Student Exam Marks</span>
+        </h2>
+        <h3 class="section-subheading">
+            Click the button below to upload student grades, marks & comments. You will need to log in with your ID and password:
+            <span class="emoji">👇</span>
+        </h3>
+    </div>
+    <!-- ✅ নম্বর আপলোডের বোতাম তৈরি -->
+    <div class="section-content">
+        <a href="upload_marks.html" target="_blank" class="call-to-action-button">UPLOAD EXAM MARKS</a>
+    </div>
 </div>
 
 <!-- ✅ নোটিশ বোর্ড -->
-    <div class="section-heading-container" id="notice-board-section">
-		<div id="notice-bord">
-    <h2 class="section-heading">
-        <span class="emoji">📋</span>
-        <span class="blink">Notice Board</span>
-    </h2>
+    <div class="section-container" id="notice-board-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji">📋</span>
+            <span class="blink">Notice Board</span>
+        </h2>
+    </div>
+    
     <div id="notice-board-marquee-content" class="marquee-content"></div>
-<script src="teacher_notice.js"></script>
-  <script>
-  // সংশোধিত ID ব্যবহার করা হয়েছে
-  const noticeBoardMarquee = document.getElementById("notice-board-marquee-content"); // নতুন আইডি
 
-  if (Array.isArray(ScrollingNotices)) {
-    ScrollingNotices.forEach(notice => {
-      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
-      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
-
-      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
-      if (text.trim() !== "") {
-        const span = document.createElement("span");
-        span.textContent = `${date} - ${text}`;
-        span.style.color = notice.color || "black";
-        span.style.fontWeight = "bold";
-        span.style.marginRight = "30px";
-        noticeBoardMarquee.appendChild(span);
-      }
-    });
-  } else {
-    noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
-  }
-
-  // 🔁 Marquee pause on hover/touch
-  noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
-  noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
-  noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
-  noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
-</script>
-
-  <div id="notice-board"></div>
-  <div class="pagination">
-    <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-    <span id="pageNumber">Page 1</span>
-    <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
-  </div>
-  <div id="popupModal" style="display: none;" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
-    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
-    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
-    <div id="popupLinkArea" style="margin-top: 10px;"></div>
-    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
-  </div>
+    <div id="notice-board"></div>
+    
+    <div class="pagination">
+        <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+        <span id="pageNumber">Page 1</span>
+        <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+    </div>
+    
+    <div id="popupModal" style="display: none;" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
+            <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
+            <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
+            <div id="popupLinkArea" style="margin-top: 10px;"></div>
+            <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+        </div>
+    </div>
 </div>
 
-  <script src="notice.js"></script>
-  <script>
+<script src="teacher_notice.js"></script>
+<script src="notice.js"></script>
+<script>
+    // স্ক্রলিং নোটিশের লজিক
+    const noticeBoardMarquee = document.getElementById("notice-board-marquee-content");
+    
+    if (Array.isArray(ScrollingNotices)) {
+        ScrollingNotices.forEach(notice => {
+            const date = notice.date || "";
+            const text = notice.text || "";
+            if (text.trim() !== "") {
+                const span = document.createElement("span");
+                span.textContent = `${date} - ${text}`;
+                span.style.color = notice.color || "black";
+                span.style.fontWeight = "bold";
+                span.style.marginRight = "30px";
+                noticeBoardMarquee.appendChild(span);
+            }
+        });
+    } else {
+        noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
+    }
+
+    noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
+    noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
+    noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
+    noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
+    
+    // টেবিল নোটিশের লজিক
     const noticesPerPage = 10;
     let currentPage = 1;
+    
+    function showPopup(text, date, link, subj) {
+        const popupModal = document.getElementById('popupModal');
+        document.getElementById('popupTitle').textContent = subj || 'বিষয়';
+        document.getElementById('popupDate').textContent = date;
+        document.getElementById('popupBody').textContent = text;
+    
+        const popupLinkArea = document.getElementById('popupLinkArea');
+        popupLinkArea.innerHTML = '';
+        if (link) {
+            const a = document.createElement('a');
+            a.href = link;
+            a.target = '_blank';
+            a.textContent = 'বিজ্ঞপ্তি দেখুন';
+            popupLinkArea.appendChild(a);
+        }
+        
+        popupModal.style.display = 'block';
+    }
+    
+    function closeModal() {
+        document.getElementById('popupModal').style.display = 'none';
+    }
 
     function renderNoticeTable() {
-      const container = document.getElementById('notice-board');
-      container.innerHTML = "";
-
-      const start = (currentPage - 1) * noticesPerPage;
-      const end = start + noticesPerPage;
-      const paginatedNotices = TableNotices.slice(start, end);
-
-      const table = document.createElement('table');
-      table.id = 'notice-table';
-
-      const thead = document.createElement('thead');
-      thead.innerHTML = `
-        <tr>
-          <th>তারিখ</th>
-          <th>বিষয়বস্তু</th>
-          <th>বিজ্ঞপ্তি</th>
-        </tr>
-      `;
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      paginatedNotices.forEach(notice => {
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
-          <td>${notice.date}</td>
-          <td style="color: ${notice.color || '#000'};">${notice.text}</td>
-<td>
-  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')"
-           onmouseover="this.style.opacity=0.8"
-           onmouseout="this.style.opacity=1">
-    View
-  </button>
-</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      table.appendChild(tbody);
-      container.appendChild(table);
-
-      const totalPages = Math.ceil(TableNotices.length / noticesPerPage);
-      document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
-      document.getElementById('prevBtn').disabled = currentPage === 1;
-      document.getElementById('nextBtn').disabled = currentPage === totalPages;
-    }
-
-    function nextPage() {
-      if (currentPage < Math.ceil(TableNotices.length / noticesPerPage)) {
-        currentPage++;
-        renderNoticeTable();
-      }
-    }
-
-    function prevPage() {
-      if (currentPage > 1) {
-        currentPage--;
-        renderNoticeTable();
-      }
-    }
-    // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
-    renderNoticeTable();
-  </script>
-    </div></div>
+        const container = document.getElementById('notice-board');
+        container.innerHTML = "";
     
-<!-- ✅ স্কুল রুটিন ও স্টুডেন্ট ইনফমেশন --->
-  <div class="section-heading-container" id="school-routine-section">
+        const start = (currentPage - 1) * noticesPerPage;
+        const end = start + noticesPerPage;
+        const paginatedNotices = TableNotices.slice(start, end);
+    
+        const table = document.createElement('table');
+        table.id = 'notice-table';
+    
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+            <tr>
+                <th>তারিখ</th>
+                <th>বিষয়বস্তু</th>
+                <th>বিজ্ঞপ্তি</th>
+            </tr>
+        `;
+        table.appendChild(thead);
+    
+        const tbody = document.createElement('tbody');
+        paginatedNotices.forEach(notice => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${notice.date}</td>
+                <td style="color: ${notice.color || '#000'};">${notice.text}</td>
+                <td>
+                    <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')"
+                           onmouseover="this.style.opacity=0.8"
+                           onmouseout="this.style.opacity=1">
+                        View
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    
+        table.appendChild(tbody);
+        container.appendChild(table);
+    
+        const totalPages = Math.ceil(TableNotices.length / noticesPerPage);
+        document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
+        document.getElementById('prevBtn').disabled = currentPage === 1;
+        document.getElementById('nextBtn').disabled = currentPage === totalPages;
+    }
+    
+    function nextPage() {
+        if (currentPage < Math.ceil(TableNotices.length / noticesPerPage)) {
+            currentPage++;
+            renderNoticeTable();
+        }
+    }
+    
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            renderNoticeTable();
+        }
+    }
+    
+    // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
+    document.addEventListener('DOMContentLoaded', renderNoticeTable);
+</script>
+    
+<!-- ✅ স্কুল রুটিন  --->
+  <div class="main-container">
+    <div class="section-heading-container" id="school-routine-section">
         <h2 class="section-heading">
             <span class="emoji">🏫</span>
-            <div></div><span class="blink">School Routine</span>
+            <span class="blink">School Routine</span>
         </h2>
-    <h3 class="login-instruction-heading">This is a draft timetable and should not be considered final. It may change as needed by the school.</h3></div>
-    <div id="exam-buttons">
-      
-    <!-- ✅ টিচার রুটিন -->
-    <div class="shaded-info-box" id="teacher-routine-section">
-    <h2 class="shine">Teacher Routine</h2>
-    <h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3>
-    <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">VIEW TEACHER ROUTINE</a>
+        <h3 class="login-instruction-heading">This is a draft timetable and should not be considered final. It may change as needed by the school.</h3>
     </div>
 
-    <!-- ✅ স্টুডেন্ট রুটিন -->
-    <div class="shaded-info-box" id="class-routine-section">
-    <h2 class="shine">Student Routine</h2>
-    <h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3>
-    <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student" target="_blank" class="exam-link">VIEW STUDENT ROUTINE</a>
+	    <!-- ✅ টিচার রুটিন -->
+    <div id="exam-buttons">
+        <div class="shaded-info-box" id="teacher-routine-section">
+            <h2 class="shine">Teacher Routine</h2>
+            <h3 class="login-instruction-heading">To view staff (teacher) routine, please click the button below:<span class="emoji">👇</span></h3>
+            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">VIEW TEACHER ROUTINE</a>
+        </div>
+
+		 <!-- ✅ স্টুডেন্ট রুটিন -->
+        <div class="shaded-info-box" id="class-routine-section">
+            <h2 class="shine">Student Routine</h2>
+            <h3 class="login-instruction-heading">To view class (student) routine, please click the button below:<span class="emoji">👇</span></h3>
+            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student" target="_blank" class="exam-link">VIEW STUDENT ROUTINE</a>
+        </div>
+
+		 <!-- ✅ সাবজেক্ট রুটিন -->
+        <div class="shaded-info-box" id="subject-routine-section">
+            <h2 class="shine">Subject Routine</h2>
+            <h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3>
+            <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>
+        </div>
+
+		<!-- ✅ বিদ্যালয় পরীক্ষার রুটিন -->
+        <div class="shaded-info-box" id="exam-routine-section">
+            <h2 class="shine">School Exam Routine</h2>
+            <h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3>
+            <a href="https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>
+        </div>
     </div>
-    
-    <!-- ✅ সাবজেক্ট রুটিন -->
-      <div class="shaded-info-box" id="subject-routine-section">
-      <h2 class="shine">Subject Routine</h2>
-      <h3 class="login-instruction-heading">To view subject routine, please click the button below:<span class="emoji">👇</span></h3>
-      <a href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">VIEW SUBJECT ROUTINE</a>
-      </div>
-    
-     <!-- ✅ আন্ত: বিদ্যালয় পরীক্ষার রুটিন -->
-      <div class="shaded-info-box" id="exam-routine-section">
-      <h2 class="shine">School Exam Routine</h2>
-      <h3 class="login-instruction-heading">To view Inter-school Examination Routine, please click the button below:<span class="emoji">👇</span></h3>
-      <a href="https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec" target="_blank" class="exam-link">VIEW EXAM ROUTINE</a>
-      </div>
-      </div>
-      </div>
+</div>
     
  <!-- ✅ আপলোড স্টুডেন্ট নোটিশ --> 
-	  <div class="section-heading-container">
-		 <div><h2 class="section-heading">
-        <span class="emoji">📝</span>
-        <span class="blink">Upload Student Notice</span>
-    </h2>
-  <h3 class="login-instruction-heading">If you wish to upload a notice for students, please click the button below:<span class="emoji">👇</span></h3>
-	  
-		  <div class="shaded-info-box" id="uploda-student-notice-section">
-        <a href="upload_student_notice.html" target="_blank" class="exam-link">UPLOAD STUDENT NOTICE</a>
-</div></div></div>
+	  <div class="section-container">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji">📝</span>
+            <span class="blink">Upload Student Notice</span>
+        </h2>
+        <h3 class="section-subheading">
+            If you wish to upload a notice for students, please click the button below:
+            <span class="emoji">👇</span>
+        </h3>
+    </div>
+    
+    <div class="section-content">
+        <a href="upload_student_notice.html" target="_blank" class="call-to-action-button">UPLOAD STUDENT NOTICE</a>
+    </div>
+</div>
     
  <!-- ✅ ফুটার  -->
     <div id="school-address-section">
@@ -428,7 +461,8 @@ document.addEventListener("DOMContentLoaded", function() {
   <p><strong>Address:</strong> Vill: Pathpukur, PO: Bakultala Hat, Dist: South 24 Parganas, Pin: 743338, West Bengal</p>
   <p><strong>Phone:</strong> +91 3218248083</p>
   <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
-    </footer> </div>
+    </footer>
+	</div>
 
 <script src="script.js"></script>
 </body>
