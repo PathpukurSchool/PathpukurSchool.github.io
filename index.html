@@ -348,11 +348,9 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="index_notice.js"></script>
-
-<script>
+   <script>
     // Digital Notice Board এর জন্য Pagination এবং rendering logic
-   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcRb_cEyTyEgCjZbNIGutx-p1Sk86t7OwkLT77rfYLGOPNTeqiY1uqYFRZO-AgClmYwg/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcRb_cEyTyEgCjZbNIGutx-p1Sk86t7OwkLT77rfYLGOPNTeqiY1uqYFRZO-AgClmYwg/exec";
 
     const NOTICES_PER_PAGE = 10;
     let currentPage = 1;
@@ -421,11 +419,10 @@
         }
 
         totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
-
         const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
         const endIndex = startIndex + NOTICES_PER_PAGE;
         const noticesToRender = Helping.slice(startIndex, endIndex);
-        
+
         noticesToRender.forEach(item => {
             const itemDiv = document.createElement('div');
             itemDiv.innerText = item.text;
@@ -597,23 +594,19 @@
         popup.appendChild(buttonContainer);
         document.body.appendChild(popup);
     }
+
+    // সমস্ত কোড একটি মাত্র DOMContentLoaded ইভেন্ট লিসেনারের মধ্যে থাকবে
     document.addEventListener('DOMContentLoaded', function() {
-        fetchNotices(); 
-    }); // নোটিশ রেন্ডার করার জন্য
+        // নোটিশ বোর্ড লোড করার ফাংশন কল করা হয়েছে
+        fetchNotices();
 
         // --- More/Less Button Logic ---
         const toggleButtons = document.querySelectorAll('.toggle-button');
         toggleButtons.forEach(button => {
             const sectionContentWrapper = button.previousElementSibling;
-
-            // Initially check if content overflows
-            // This is a rough check, CSS 'max-height' with 'overflow: hidden' is typically used
-            // and overflow check is done by comparing scrollHeight and clientHeight.
-            // If sectionContentWrapper is shorter than its content, then it overflows.
             if (sectionContentWrapper && sectionContentWrapper.scrollHeight <= sectionContentWrapper.clientHeight) {
-                button.style.display = 'none'; // Hide if no overflow
+                button.style.display = 'none';
             }
-
             button.addEventListener('click', function() {
                 sectionContentWrapper.classList.toggle('expanded');
                 if (sectionContentWrapper.classList.contains('expanded')) {
@@ -633,7 +626,6 @@
         const sidebarMenu = document.getElementById('sidebar-menu');
         const overlay = document.querySelector('.overlay');
 
-        // Function to toggle menu and overlay visibility
         function toggleMenu() {
             if (sidebarMenu) {
                 sidebarMenu.classList.toggle('active');
@@ -645,66 +637,51 @@
             } else {
                 console.error("Overlay element not found!");
             }
-            // Toggle body scroll. If sidebar is active, add 'no-scroll' to body.
             document.body.classList.toggle('no-scroll', sidebarMenu.classList.contains('active'));
         }
 
         if (menuToggleButton) {
             menuToggleButton.addEventListener('click', function(event) {
-                event.stopPropagation(); // Prevents click from bubbling up to document/overlay
+                event.stopPropagation();
                 toggleMenu();
             });
         } else {
             console.warn("Warning: 'menu-toggle-button' not found. Menu might not open.");
         }
 
-        // Close menu when clicking on a link inside the sidebar
-if (sidebarMenu) {
-    sidebarMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function(event) {
-            toggleMenu(); // Close the menu when a link is clicked
-
-            const href = this.getAttribute('href');
-            // --- NEW CODE FOR ACTIVE LINK ---
-            // Remove 'active-link' class from all sidebar links first
-            sidebarMenu.querySelectorAll('a').forEach(otherLink => {
-                otherLink.classList.remove('active-link');
-            });
-            // Add 'active-link' class to the clicked link
-            this.classList.add('active-link');
-            // --- END NEW CODE ---
-
-            // Check if the link is an internal section link (starts with '#')
-            if (href && href.startsWith('#')) {
-                event.preventDefault(); // Prevent default link behavior for internal links
-                const targetId = href.substring(1);
-                const targetSection = document.getElementById(targetId);
-
-                if (targetSection) {
-                    const approximateHeaderHeight = 400; // Adjust based on your actual header height
-                    window.scrollTo({
-                        top: targetSection.offsetTop - approximateHeaderHeight,
-                        behavior: 'smooth'
+        if (sidebarMenu) {
+            sidebarMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(event) {
+                    toggleMenu();
+                    const href = this.getAttribute('href');
+                    sidebarMenu.querySelectorAll('a').forEach(otherLink => {
+                        otherLink.classList.remove('active-link');
                     });
-                }
-            }
-            // If it's not an internal section link (e.g., 'home.html'),
-            // let its default behavior (navigation) proceed.
-        });
-    });
-}
+                    this.classList.add('active-link');
+                    if (href && href.startsWith('#')) {
+                        event.preventDefault();
+                        const targetId = href.substring(1);
+                        const targetSection = document.getElementById(targetId);
+                        if (targetSection) {
+                            const approximateHeaderHeight = 400;
+                            window.scrollTo({
+                                top: targetSection.offsetTop - approximateHeaderHeight,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+        }
 
-        // Close menu when clicking outside (on the overlay)
         if (overlay) {
             overlay.addEventListener('click', function() {
-                // Only close if the sidebar is currently active
                 if (sidebarMenu && sidebarMenu.classList.contains('active')) {
                     toggleMenu();
                 }
             });
         }
 
-        // Close menu on ESC key press
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape' && sidebarMenu && sidebarMenu.classList.contains('active')) {
                 toggleMenu();
@@ -726,7 +703,6 @@ if (sidebarMenu) {
                     }
                 });
             });
-
             fullscreenOverlay.addEventListener('click', function() {
                 fullscreenOverlay.classList.remove('active');
                 fullscreenImage.src = '';
@@ -735,71 +711,65 @@ if (sidebarMenu) {
         } else {
             console.warn("Warning: Gallery elements (images, fullscreen overlay, or image) not found. Gallery fullscreen might not work.");
         }
-    });
 
-    //Student Section js Code
-    document.addEventListener("DOMContentLoaded", function() {
-    loadStudentLinks();
-});
-//স্টুডেন্জ জোনে নতুন লিঙ্ক যোগ করতে হলে এই অংশে পরিবর্তন করতে হবে
-function loadStudentLinks() {
-    fetch('index_link.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to load student links configuration.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const links = {
-                'exam-marks-link': data['exam-marks-url'],
-                'class-routine-link': data['class-routine-url'],
-                'exam-routine-link': data['exam-routine-url'],
-                'xi-tab-form-link': data['xi-tab-form-url'],
-                'new-admission-link': data['new-admission-url']
-            };
+        // Student Section js Code
+        loadStudentLinks();
 
-            for (const id in links) {
-                const url = links[id];
-                const linkElement = document.getElementById(id);
-
-                if (linkElement) {
-                    if (url && url.trim() !== '') {
-                        linkElement.href = url;
-                        linkElement.target = '_blank';
-                    } else {
-                        linkElement.href = 'javascript:void(0)'; // কোনো URL না থাকলে href নিষ্ক্রিয় করা
-                        linkElement.classList.add('disabled-link');
-                        linkElement.addEventListener('click', function(event) {
-                            showAvailableSoonMessage(linkElement);
-                        });
+        //স্টুডেন্জ জোনে নতুন লিঙ্ক যোগ করতে হলে এই অংশে পরিবর্তন করতে হবে
+        function loadStudentLinks() {
+            fetch('index_link.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load student links configuration.');
                     }
-                }
+                    return response.json();
+                })
+                .then(data => {
+                    const links = {
+                        'exam-marks-link': data['exam-marks-url'],
+                        'class-routine-link': data['class-routine-url'],
+                        'exam-routine-link': data['exam-routine-url'],
+                        'xi-tab-form-link': data['xi-tab-form-url'],
+                        'new-admission-link': data['new-admission-url']
+                    };
+
+                    for (const id in links) {
+                        const url = links[id];
+                        const linkElement = document.getElementById(id);
+                        if (linkElement) {
+                            if (url && url.trim() !== '') {
+                                linkElement.href = url;
+                                linkElement.target = '_blank';
+                            } else {
+                                linkElement.href = 'javascript:void(0)';
+                                linkElement.classList.add('disabled-link');
+                                linkElement.addEventListener('click', function(event) {
+                                    showAvailableSoonMessage(linkElement);
+                                });
+                            }
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function showAvailableSoonMessage(element) {
+            const parentContainer = element.closest('.shaded-info-box');
+            const existingMessage = parentContainer.querySelector('.avail-msg');
+            if (existingMessage) {
+                existingMessage.remove();
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-function showAvailableSoonMessage(element) {
-    // আগের বার্তা থাকলে তা সরিয়ে দাও
-    const parentContainer = element.closest('.shaded-info-box');
-    const existingMessage = parentContainer.querySelector('.avail-msg');
-    if (existingMessage) {
-        existingMessage.remove();
-    }
-
-    const msg = document.createElement('div');
-    msg.className = 'avail-msg';
-    msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
-
-    parentContainer.appendChild(msg);
-
-    setTimeout(() => {
-        msg.remove();
-    }, 3000);
-}
+            const msg = document.createElement('div');
+            msg.className = 'avail-msg';
+            msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
+            parentContainer.appendChild(msg);
+            setTimeout(() => {
+                msg.remove();
+            }, 3000);
+        }
+    }); // এই একটি মাত্র ক্লোজিং ট্যাগ দিয়ে সব কোড শেষ হবে
 </script>
     
 </body>
