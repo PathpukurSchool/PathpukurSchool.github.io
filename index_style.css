@@ -1164,3 +1164,10 @@ section[id] {
 .toggle-button.less-btn:hover {
     background-color: #da190b;
 }
+/* শীঘ্রই উপলব্ধ বার্তা */
+.avail-msg {
+  color: red;
+  font-weight: bold;
+  margin-top: 5px;
+  animation: blink 1s step-start 0s infinite;
+}
