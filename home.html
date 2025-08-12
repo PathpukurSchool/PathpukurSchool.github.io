@@ -261,148 +261,132 @@
     </div>
 
 <!-- ✅ নোটিশ বোর্ড -->
-<div class="main-section-container" id="notice-board-section">
+    <div class="main-section-container" id="notice-board-section">
+		<div id="notice-bord">
     <div class="section-heading-wrapper">
-        <h2 class="section-heading">
-            <span class="emoji">📋</span>
-            <span class="blink">Notice Board</span>
-        </h2>
-    </div>
+<h2 class="section-heading">
+        <span class="emoji">📋</span>
+        <span class="blink">Notice Board</span>
+    </h2>
+</div>
     <div id="notice-board-marquee-content" class="marquee-content"></div>
-    <div id="notice-board"></div>
-    <div class="pagination">
-        <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-        <span id="pageNumber">Page 1</span>
-        <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
-    </div>
-    <div id="popupModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
-            <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
-            <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
-            <div id="popupLinkArea" style="margin-top: 10px;"></div>
-            <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
-        </div>
-    </div>
+<script src="teacher_notice.js"></script>
+  <script>
+  // সংশোধিত ID ব্যবহার করা হয়েছে
+  const noticeBoardMarquee = document.getElementById("notice-board-marquee-content"); // নতুন আইডি
+
+  if (Array.isArray(ScrollingNotices)) {
+    ScrollingNotices.forEach(notice => {
+      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
+      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
+
+      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
+      if (text.trim() !== "") {
+        const span = document.createElement("span");
+        span.textContent = `${date} - ${text}`;
+        span.style.color = notice.color || "black";
+        span.style.fontWeight = "bold";
+        span.style.marginRight = "30px";
+        noticeBoardMarquee.appendChild(span);
+      }
+    });
+  } else {
+    noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
+  }
+
+  // 🔁 Marquee pause on hover/touch
+  noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
+  noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
+  noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
+  noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
+</script>
+
+  <div id="notice-board"></div>
+  <div class="pagination">
+    <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+    <span id="pageNumber">Page 1</span>
+    <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+  </div>
+  <div id="popupModal" style="display: none;" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
+    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
+    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
+    <div id="popupLinkArea" style="margin-top: 10px;"></div>
+    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+  </div>
 </div>
 
-<script src="teacher_notice.js"></script>
-<script>
-    // ✅ স্ক্রলিং নোটিশের লজিক
-    const noticeBoardMarquee = document.getElementById("notice-board-marquee-content");
-
-    if (Array.isArray(ScrollingNotices)) {
-        ScrollingNotices.forEach(notice => {
-            const date = notice.date || "";
-            const text = notice.text || "";
-            if (text.trim() !== "") {
-                const span = document.createElement("span");
-                span.textContent = `${date} - ${text}`;
-                span.style.color = notice.color || "black";
-                span.style.fontWeight = "bold";
-                span.style.marginRight = "30px";
-                noticeBoardMarquee.appendChild(span);
-            }
-        });
-    } else {
-        noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
-    }
-
-    // 🔁 Marquee pause on hover/touch
-    noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
-    noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
-    noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
-    noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
-    
-    // ✅ টেবিল নোটিশের লজিক
+  <script src="notice.js"></script>
+  <script>
     const noticesPerPage = 10;
     let currentPage = 1;
-    
-    function showPopup(text, date, link, subj) {
-        const popupModal = document.getElementById('popupModal');
-        document.getElementById('popupTitle').textContent = subj || 'বিষয়';
-        document.getElementById('popupDate').textContent = date;
-        document.getElementById('popupBody').textContent = text;
-    
-        const popupLinkArea = document.getElementById('popupLinkArea');
-        popupLinkArea.innerHTML = '';
-        if (link) {
-            const a = document.createElement('a');
-            a.href = link;
-            a.target = '_blank';
-            a.textContent = 'বিজ্ঞপ্তি দেখুন';
-            popupLinkArea.appendChild(a);
-        }
-        
-        popupModal.style.display = 'flex'; // পপআপ দেখানোর জন্য flex ব্যবহার করা হয়েছে
-    }
-    
-    function closeModal() {
-        document.getElementById('popupModal').style.display = 'none';
-    }
 
     function renderNoticeTable() {
-        const container = document.getElementById('notice-board');
-        container.innerHTML = "";
-    
-        const start = (currentPage - 1) * noticesPerPage;
-        const end = start + noticesPerPage;
-        const paginatedNotices = TableNotices.slice(start, end);
-    
-        const table = document.createElement('table');
-        table.id = 'notice-table';
-    
-        const thead = document.createElement('thead');
-        thead.innerHTML = `
-            <tr>
-                <th>তারিখ</th>
-                <th>বিষয়বস্তু</th>
-                <th>বিজ্ঞপ্তি</th>
-            </tr>
+      const container = document.getElementById('notice-board');
+      container.innerHTML = "";
+
+      const start = (currentPage - 1) * noticesPerPage;
+      const end = start + noticesPerPage;
+      const paginatedNotices = TableNotices.slice(start, end);
+
+      const table = document.createElement('table');
+      table.id = 'notice-table';
+
+      const thead = document.createElement('thead');
+      thead.innerHTML = `
+        <tr>
+          <th>তারিখ</th>
+          <th>বিষয়বস্তু</th>
+          <th>বিজ্ঞপ্তি</th>
+        </tr>
+      `;
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      paginatedNotices.forEach(notice => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${notice.date}</td>
+          <td style="color: ${notice.color || '#000'};">${notice.text}</td>
+<td>
+  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')"
+           onmouseover="this.style.opacity=0.8"
+           onmouseout="this.style.opacity=1">
+    View
+  </button>
+</td>
         `;
-        table.appendChild(thead);
-    
-        const tbody = document.createElement('tbody');
-        paginatedNotices.forEach(notice => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${notice.date}</td>
-                <td style="color: ${notice.color || '#000'};">${notice.text}</td>
-                <td>
-                    <button onclick="showPopup('${notice.text.replace(/'/g, "\\'").replace(/"/g, "&quot;")}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')">
-                        View
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-    
-        table.appendChild(tbody);
-        container.appendChild(table);
-    
-        const totalPages = Math.ceil(TableNotices.length / noticesPerPage);
-        document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
-        document.getElementById('prevBtn').disabled = currentPage === 1;
-        document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      container.appendChild(table);
+
+      const totalPages = Math.ceil(TableNotices.length / noticesPerPage);
+      document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
+      document.getElementById('prevBtn').disabled = currentPage === 1;
+      document.getElementById('nextBtn').disabled = currentPage === totalPages;
     }
-    
+
     function nextPage() {
-        if (currentPage < Math.ceil(TableNotices.length / noticesPerPage)) {
-            currentPage++;
-            renderNoticeTable();
-        }
+      if (currentPage < Math.ceil(TableNotices.length / noticesPerPage)) {
+        currentPage++;
+        renderNoticeTable();
+      }
     }
-    
+
     function prevPage() {
-        if (currentPage > 1) {
-            currentPage--;
-            renderNoticeTable();
-        }
+      if (currentPage > 1) {
+        currentPage--;
+        renderNoticeTable();
+      }
     }
-    
     // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
-    document.addEventListener('DOMContentLoaded', renderNoticeTable);
-</script>
+    renderNoticeTable();
+  </script>
+    </div></div>
 
 	  <!-- ✅ স্কুল রুটিন  --->
 <div class="main-section-container" id="school-routine-section">
