@@ -242,24 +242,9 @@ body {
     color: #ff5722;
 }
 
-/* ✅ Section Heading & Title Styles (সেকশন হেডিং ও টাইটেল) */
-.class-title {
-    margin: 28px; /* মার্জিন নির্ধারণ */
-    font-weight: bold; /* টেক্সট বোল্ড করা */
-    font-size: 22px; /* ফন্টের সাইজ */
-    color: #fff; /* টেক্সটের কালার */
-    background: linear-gradient(90deg, #DC143C, #FFD700, #B22222, #DC143C); /* গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
-    background-size: 200% auto; /* গ্রেডিয়েন্টের সাইজ */
-    -webkit-background-clip: text; /* টেক্সটকে গ্রেডিয়েন্ট দিয়ে পূর্ণ করা */
-    -webkit-text-fill-color: transparent; /* টেক্সটের ভেতরের রঙ স্বচ্ছ রাখা */
-    animation: shine-animation 2s linear infinite; /* অ্যানিমেশন যোগ করা */
-}
-@keyframes shine-animation {
-    0% { background-position: 0% center; } /* অ্যানিমেশন শুরু */
-    100% { background-position: 200% center; } /* অ্যানিমেশন শেষ */
-}
+/* প্রধান সেকশনগুলির জন্য ধারক */
 /* --- সেকশন হেডিং স্টাইল --- */
-.section-heading-container {
+.main-section-container {
     background-color: #F8F8F8; /* ব্যাকগ্রাউন্ড কালার */
     padding: 20px 0; /* ভেতরের প্যাডিং */
     max-width: 95%; /* ✅ সর্বোচ্চ প্রস্থ স্ক্রিনের ৯৫% */
@@ -280,7 +265,7 @@ body {
     align-items: flex-start; /* উপাদানগুলোকে উল্লম্বভাবে উপরের দিকে সাজানোর জন্য */
     gap: 20px; /* উপাদানগুলোর মাঝে ফাঁকা স্থান */
 }
-.section-heading-container:hover {
+.main-section-container:hover {
     /* background-color: #E0F7FA; /* হোভার করলে ব্যাকগ্রাউন্ড কালার পরিবর্তন */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* হোভার করলে শ্যাডো স্পষ্ট হবে */
     transform: translateY(-5px) scale(1.01); /* হোভার করলে সামান্য উপরে উঠবে */
@@ -302,6 +287,25 @@ body {
     padding-bottom: 5px; /* বর্ডারের উপরে প্যাডিং */
     margin: 0 auto 5px; /* মার্জিন নির্ধারণ */
     width: fit-content; /* প্রস্থ কন্টেন্টের সমান হবে */
+}
+
+
+/* সেকশনের হেডিং এবং সাব-হেডিংকে একসাথে রাখার জন্য */
+.section-heading-wrapper {
+    margin-bottom: 25px;
+}
+
+/* একাধিক সাব-সেকশনকে সাজানোর জন্য */
+.sub-sections-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* ছোট স্ক্রিনে একটি কলামে চলে আসবে */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* সাব-সেকশনের হেডিং স্টাইল */
+.sub-section-heading {
+    margin-bottom: 15px;
 }
 .emoji {
     display: inline-block; /* ইমোজিকে ইনলাইন ব্লক হিসেবে রাখা */
@@ -357,7 +361,6 @@ body {
     transition: all 0.3s ease-in-out;
     cursor: pointer; /* ক্লিক করার জন্য কার্সর পরিবর্তন */
 }
-
 /* ✅ হোভার স্টাইল */
 .shaded-info-box:hover, .class-box:hover {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -427,7 +430,7 @@ footer {
         font-size: 0.9rem; /* ফন্টের সাইজ কমানো */
         padding: 3px 8px; /* প্যাডিং কমানো */
     }
-    .section-heading-container {
+    .main-section-container {
         padding: 15px 0; /* প্যাডিং কমানো */
         margin: 40px 0; /* মার্জিন কমানো */
         border-top-width: 5px; /* বর্ডারের প্রস্থ কমানো */
@@ -467,7 +470,7 @@ footer {
     .logo {
         max-width: 40px; /* লোগোর প্রস্থ আরও কমানো */
     }
-    .section-heading-container {
+    .main-section-container {
         padding: 12px 0; /* প্যাডিং আরও কমানো */
         margin: 25px 0; /* মার্জিন আরও কমানো */
         border-top-width: 3px; /* বর্ডারের প্রস্থ আরও কমানো */
