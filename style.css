@@ -633,23 +633,26 @@ ul li a:hover {
 
 .shine {
   font-weight: bold;
-  font-size: 28px;
+  font-size: 28px; /* ফন্ট সাইজ একটু বাড়ানো হয়েছে */
   color: #fff;
-  background: linear-gradient(90deg, red, orange, red);
+  background: linear-gradient(90deg, #8a2be2, #00bfff, #8a2be2);
+  /* নতুন গ্রেডিয়েন্ট: বেগুনী, আকাশী নীল, বেগুনী */
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shine-animation 2s linear infinite;
+  animation: modern-shine 3s linear infinite; /* অ্যানিমেশনের সময় বাড়ানো হয়েছে */
+  letter-spacing: 2px; /* অক্ষরগুলোর মধ্যে একটু ফাঁকা স্থান যোগ করা হয়েছে */
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5); /* হালকা শ্যাডো যোগ করা হয়েছে */
 }
 
-@keyframes shine-animation {
+@keyframes modern-shine {
   0% {
     background-position: 0% center;
   }
   100% {
     background-position: 200% center;
   }
-    }
+}
 
 /* Login to access the marks uploading link (h3) এর স্টাইল */
 .login-instruction-heading {
