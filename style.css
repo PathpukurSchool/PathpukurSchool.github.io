@@ -635,8 +635,8 @@ ul li a:hover {
   font-weight: bold;
   font-size: 28px; /* ফন্ট সাইজ একটু বাড়ানো হয়েছে */
   color: #fff;
-  background: linear-gradient(90deg, #8a2be2, #00bfff, #8a2be2);
-  /* নতুন গ্রেডিয়েন্ট: বেগুনী, আকাশী নীল, বেগুনী */
+ background: linear-gradient(90deg, red, #8a2be2, red);
+  /* নতুন গ্রেডিয়েন্ট: লাল,বেগুনী, লাল */
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
