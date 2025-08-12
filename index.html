@@ -352,9 +352,45 @@
 
 <script>
     // Digital Notice Board এর জন্য Pagination এবং rendering logic
+   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcRb_cEyTyEgCjZbNIGutx-p1Sk86t7OwkLT77rfYLGOPNTeqiY1uqYFRZO-AgClmYwg/exec";
+
     const NOTICES_PER_PAGE = 10;
     let currentPage = 1;
     let totalPages = 0;
+    let Helping = [];
+
+    async function fetchNotices() {
+        try {
+            const response = await fetch(APPS_SCRIPT_URL);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            Helping = data.notices;
+            renderHelpList();
+        } catch (error) {
+            console.error("Failed to fetch notices:", error);
+            const container = document.getElementById('help-list');
+            if (container) {
+                container.innerHTML = `
+                    <div style="
+                        border: 2px solid #ff9999;
+                        background-color: #ffe6e6;
+                        color: #cc0000;
+                        font-size: 20px;
+                        font-weight: bold;
+                        padding: 10px;
+                        border-radius: 8px;
+                        text-align: center;
+                        max-width: 300px;
+                        margin: 0 auto;
+                    ">
+                        <strong> Error! </strong><br> Failed to load notices.
+                    </div>
+                `;
+            }
+        }
+    }
 
     function renderHelpList() {
         const container = document.getElementById('help-list');
@@ -364,7 +400,7 @@
         }
         container.innerHTML = "";
 
-        if (typeof Helping === 'undefined' || !Array.isArray(Helping) || Helping.length === 0 || !Helping[0].text) {
+        if (!Array.isArray(Helping) || Helping.length === 0) {
             container.innerHTML = `
                 <div style="
                     border: 2px solid #ff9999;
@@ -389,7 +425,7 @@
         const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
         const endIndex = startIndex + NOTICES_PER_PAGE;
         const noticesToRender = Helping.slice(startIndex, endIndex);
-
+        
         noticesToRender.forEach(item => {
             const itemDiv = document.createElement('div');
             itemDiv.innerText = item.text;
@@ -412,13 +448,10 @@
     function renderPaginationControls() {
         const paginationContainer = document.getElementById('pagination-controls');
         if (!paginationContainer) return;
-
         paginationContainer.innerHTML = '';
-
         if (totalPages <= 1) {
             return;
         }
-
         const backBtn = document.createElement('button');
         backBtn.innerText = 'BACK';
         backBtn.onclick = () => {
@@ -436,13 +469,11 @@
         backBtn.style.cursor = 'pointer';
         backBtn.disabled = currentPage === 1;
         paginationContainer.appendChild(backBtn);
-
         const pageInfo = document.createElement('span');
         pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
         pageInfo.style.margin = '0 10px';
         pageInfo.style.fontWeight = 'bold';
         paginationContainer.appendChild(pageInfo);
-
         const nextBtn = document.createElement('button');
         nextBtn.innerText = 'NEXT';
         nextBtn.onclick = () => {
@@ -465,7 +496,6 @@
     function showPopup(titleText, date, link, subjText) {
         const existing = document.getElementById('notice-popup');
         if (existing) existing.remove();
-
         const popup = document.createElement('div');
         popup.id = 'notice-popup';
         popup.style.position = 'fixed';
@@ -483,7 +513,6 @@
         popup.style.minWidth = '240px';
         popup.style.width = '300px';
         popup.style.fontFamily = 'Arial, sans-serif';
-
         const titleElem = document.createElement('div');
         titleElem.innerText = titleText;
         titleElem.style.backgroundColor = 'green';
@@ -494,12 +523,10 @@
         titleElem.style.borderRadius = '5px';
         titleElem.style.marginBottom = '15px';
         popup.appendChild(titleElem);
-
         const dateElem = document.createElement('div');
         dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
         dateElem.style.marginBottom = '10px';
         popup.appendChild(dateElem);
-
         if (subjText && subjText.trim() !== '') {
             const subjElem = document.createElement('div');
             subjElem.innerText = subjText;
@@ -512,14 +539,12 @@
             subjElem.style.marginBottom = '12px';
             popup.appendChild(subjElem);
         }
-
         const buttonContainer = document.createElement('div');
         buttonContainer.style.marginTop = '20px';
         buttonContainer.style.display = 'flex';
         buttonContainer.style.flexWrap = 'wrap';
         buttonContainer.style.justifyContent = 'center';
         buttonContainer.style.gap = '10px';
-
         if (link && link.trim() !== '') {
             const linkBtn = document.createElement('a');
             linkBtn.href = link;
@@ -535,7 +560,6 @@
             linkBtn.style.fontSize = '12px';
             buttonContainer.appendChild(linkBtn);
         }
-
         const downloadBtn = document.createElement('button');
         downloadBtn.innerText = 'Download';
         downloadBtn.style.backgroundColor = '#28a745';
@@ -558,7 +582,6 @@
             }, 100);
         };
         buttonContainer.appendChild(downloadBtn);
-
         const closeBtn = document.createElement('button');
         closeBtn.innerText = 'Back';
         closeBtn.style.backgroundColor = '#dc3545';
@@ -571,13 +594,12 @@
         closeBtn.style.cursor = 'pointer';
         closeBtn.onclick = () => popup.remove();
         buttonContainer.appendChild(closeBtn);
-
         popup.appendChild(buttonContainer);
         document.body.appendChild(popup);
     }
-
     document.addEventListener('DOMContentLoaded', function() {
-        renderHelpList(); // নোটিশ বোর্ড রেন্ডার করার জন্য
+        fetchNotices(); 
+    }); // নোটিশ রেন্ডার করার জন্য
 
         // --- More/Less Button Logic ---
         const toggleButtons = document.querySelectorAll('.toggle-button');
