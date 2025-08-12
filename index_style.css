@@ -1166,8 +1166,37 @@ section[id] {
 }
 /* শীঘ্রই উপলব্ধ বার্তা */
 .avail-msg {
-  color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* আইকন এবং টেক্সটের মধ্যে ফাঁকা স্থান */
+  
+  font-family: 'Arial', sans-serif;
+  font-size: 1.2rem;
   font-weight: bold;
-  margin-top: 5px;
-  animation: blink 1s step-start 0s infinite;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  
+  background: linear-gradient(45deg, #ff4e50, #fc913a); /* আকর্ষণীয় গ্রেডিয়েন্ট */
+  border-radius: 10px;
+  padding: 15px 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+  margin: 20px auto;
+  max-width: fit-content;
+  
+  animation: pulse 1.5s infinite ease-in-out; /* পালস অ্যানিমেশন যোগ করা হয়েছে */
+}
+
+/* পালস অ্যানিমেশনের কীফ্রেম */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05); /* হালকা বড় হবে */
+  }
+  100% {
+    transform: scale(1);
+  }
 }
