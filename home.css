@@ -94,7 +94,7 @@ html {
 .header-content {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0rem;
 }
 
 .logo {
@@ -617,7 +617,7 @@ footer p {
     }
 
     .school-name {
-        font-size: 1.5rem;
+        font-size: 1rem;
     }
 
     .section-heading {
