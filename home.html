@@ -57,20 +57,11 @@
     </div>
 </div>
 	     <!-- ✅ মেন হেডার -->
-	  <div id="top-bar-section">
-    <header class="main-header">
-        <div class="header-content">
-            <div class="header-buttons">
-                <button id="menu-toggle-button" class="menu-button">☰</button>
-            </div>
-            
-            <img src="PHS-LOGO.png" alt="School Logo" class="logo">
-            <h1 class="school-name">Pathpukur High School (H.S.)</h1>
-        </div>
-        
-        <button onclick="logout()" class="logout-button">Logout</button>
-    </header>
-</div>
+	 <header class="main-header">
+    <button id="menu-toggle-button" class="menu-button">☰</button>
+    <h1 class="school-name">Pathpukur High School (H.S.)</h1>
+    <button onclick="logout()" class="logout-button">Logout</button>
+</header>
 
 	     <!-- ✅ সাইড বার মেনু -->
 <div class="overlay" id="overlay"></div>
@@ -108,63 +99,67 @@
 </nav>
 <!-- ✅ সাইড বার মেনুঃ জাভা স্ক্রিপ্ট -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const menuButton = document.getElementById('menu-toggle-button');
-        const sidebar = document.getElementById('sidebar-menu');
-        const overlay = document.getElementById('overlay');
-        const navLinks = sidebar.querySelectorAll("a");
+document.addEventListener("DOMContentLoaded", function() {
+    const menuButton = document.getElementById('menu-toggle-button');
+    const sidebar = document.getElementById('sidebar-menu');
+    const overlay = document.getElementById('overlay');
+    const navLinks = sidebar.querySelectorAll("a");
 
-        // ✅ সব id টার্গেট লিস্ট তৈরি
-        const targetIds = Array.from(navLinks)
-            .map(link => link.getAttribute("href"))
-            .filter(href => href && href.startsWith("#"))
-            .map(href => href.substring(1));
+    // সব id টার্গেট লিস্ট তৈরি
+    const targetIds = Array.from(navLinks)
+        .map(link => link.getAttribute("href"))
+        .filter(href => href && href.startsWith("#"))
+        .map(href => href.substring(1));
 
-        menuButton.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-        });
+    // মেনু বোতাম ক্লিক করলে সাইডবার টগল হবে
+    menuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
 
-        overlay.addEventListener('click', () => {
+    // ওভারলে ক্লিক করলে সাইডবার বন্ধ হবে
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
+    // ন্যাভ লিঙ্ক ক্লিক ইভেন্ট
+    navLinks.forEach(link => {
+        link.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            // সব লিংক থেকে active-link সরানো
+            navLinks.forEach(item => item.classList.remove("active-link"));
+            this.classList.add("active-link");
+
+            // সাইডবার বন্ধ
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
+
+            // টার্গেট সেকশন খুঁজে বের করা
+            const targetSectionId = this.getAttribute("href").substring(1);
+            const targetSection = document.getElementById(targetSectionId);
+
+            if (targetSection) {
+                targetSection.classList.add("highlight-section");
+
+                // হেডার উচ্চতা গণনা করুন
+                const headerHeight = document.querySelector('.main-header')?.offsetHeight || 0;
+
+                // স্ক্রল করার জন্য লক্ষ্যস্থান নির্ধারণ করুন
+                const targetPosition = targetSection.offsetTop - headerHeight - 20;
+
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+
+                // ৩ সেকেন্ড পরে হাইলাইট সরানো হবে
+                setTimeout(() => {
+                    targetSection.classList.remove("highlight-section");
+                }, 3000);
+            }
         });
-
-        navLinks.forEach(link => {
-            link.addEventListener("click", function(event) {
-                event.preventDefault();
-
-                // সব লিংক থেকে active-link সরানো
-                navLinks.forEach(item => item.classList.remove("active-link"));
-                this.classList.add("active-link");
-
-                // সাইডবার বন্ধ
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
-
-        // ✅ এই অংশটি পরিবর্তন করা হয়েছে 👇
-        const targetSectionId = this.getAttribute("href").substring(1);
-        const targetSection = document.getElementById(targetSectionId);
-
-        if (targetSection) {
-            targetSection.classList.add("highlight-section");
-
-            // হেডার উচ্চতা গণনা করুন
-            const headerHeight = document.querySelector('.main-header').offsetHeight;
-            
-            // স্ক্রল করার জন্য লক্ষ্যস্থান নির্ধারণ করুন
-            const targetPosition = targetSection.offsetTop - headerHeight - 20; // 20px অতিরিক্ত মার্জিন
-            
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-            });
-
-            // হাইলাইট ক্লাস সরানোর জন্য টাইমার
-            setTimeout(() => {
-                targetSection.classList.remove("highlight-section");
-            }, 3000); // 2 সেকেন্ড পর হাইলাইট সরাবে
-        }
     });
 });
 </script>
