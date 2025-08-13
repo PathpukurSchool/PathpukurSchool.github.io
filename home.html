@@ -33,6 +33,7 @@
   <link rel="apple-touch-icon" href="PHS-LOGO.png">
 
   <link rel="stylesheet" href="home.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -141,29 +142,38 @@
                 sidebar.classList.remove('active');
                 overlay.classList.remove('active');
 
-                // ✅ আগে সব টার্গেট id থেকে highlight-section সরানো
-                targetIds.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.classList.remove("highlight-section");
-                });
+        // ✅ এই অংশটি পরিবর্তন করা হয়েছে 👇
+        const targetSectionId = this.getAttribute("href").substring(1);
+        const targetSection = document.getElementById(targetSectionId);
 
-                // ✅ শুধু ক্লিক করা id হাইলাইট করা
-                const targetSectionId = this.getAttribute("href").substring(1);
-                const targetSection = document.getElementById(targetSectionId);
-                if (targetSection) {
-                    targetSection.classList.add("highlight-section");
-                    targetSection.scrollIntoView({ behavior: 'smooth' });
-                }
+        if (targetSection) {
+            targetSection.classList.add("highlight-section");
+
+            // হেডার উচ্চতা গণনা করুন
+            const headerHeight = document.querySelector('.main-header').offsetHeight;
+            
+            // স্ক্রল করার জন্য লক্ষ্যস্থান নির্ধারণ করুন
+            const targetPosition = targetSection.offsetTop - headerHeight - 20; // 20px অতিরিক্ত মার্জিন
+            
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
             });
-        });
+
+            // হাইলাইট ক্লাস সরানোর জন্য টাইমার
+            setTimeout(() => {
+                targetSection.classList.remove("highlight-section");
+            }, 3000); // 2 সেকেন্ড পর হাইলাইট সরাবে
+        }
     });
+});
 </script>
 
   <!--✅ নম্বর আপলোড -->  
 <div class="main-section-container" id="marks-information-section">
     <div class="section-heading-wrapper">
         <h2 class="section-heading">
-            <span class="emoji">🏫</span>
+            <span class="emoji"><i class="fa-solid fa-school"></i></span>
             <span class="blink">Marks Uploading & Student Information</span>
         </h2>
 		<h3 class="login-instruction-heading">This section provides the last date for uploading marks, the current status of marks uploaded and a searchable student list to help you find student information by name, class, roll number etc.</h3>
@@ -252,7 +262,7 @@
 <div class="main-section-container" id="upload-your-marks-section">
     <div class="section-heading-wrapper">
         <h2 class="section-heading">
-            <span class="emoji">🧾</span>
+            <span class="emoji"><i class="fa-solid fa-receipt"></i></span>
             <span class="blink">Upload Student Exam Marks</span>
         </h2>
         <h3 class="login-instruction-heading">Click the button below to upload student grades, marks & comments. You will need to log in with your ID and password:<span class="emoji">👇</span></h3>
@@ -266,7 +276,7 @@
 		<div id="notice-bord">
     <div class="section-heading-wrapper">
 <h2 class="section-heading">
-        <span class="emoji">📋</span>
+        <span class="emoji"><i class="fa-solid fa-clipboard-list"></i></span>
         <span class="blink">Notice Board</span>
     </h2>
 </div>
@@ -393,7 +403,7 @@
 <div class="main-section-container" id="school-routine-section">
     <div class="section-heading-wrapper">
         <h2 class="section-heading">
-            <span class="emoji">🏫</span>
+            <span class="emoji"><i class="fa-solid fa-clipboard-list"></i></span>
             <span class="blink">School Routine</span>
         </h2>
         <h3 class="login-instruction-heading">This is a draft timetable and should not be considered final. It may change as needed by the school.</h3>
@@ -450,7 +460,7 @@
 <div class="main-section-container" id="uploda-student-notice-section">
     <div class="section-heading-wrapper">
         <h2 class="section-heading">
-            <span class="emoji">📝</span>
+           <span class="emoji"><i class="fa-solid fa-clipboard-list"></i></span>
             <span class="blink">Upload Student Notice</span>
         </h2>
         <h3 class="login-instruction-heading">After logging in with the specific ID and password, you can carefully upload new notices or edit/delete old notices for the students.</h3>
@@ -471,7 +481,7 @@
 	<footer>
 		<div class="section-heading-wrapper">
         <h2 class="section-heading">
-            <span class="emoji">📞</span>
+            <span class="emoji"><i class="fa-solid fa-clipboard-list"></i></span>
             <span class="blink">Contact Details</span>
         </h2>
     </div>
