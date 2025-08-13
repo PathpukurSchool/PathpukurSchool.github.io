@@ -1,17 +1,10 @@
-/*
-* Pathpukur High School Teacher Dashboard CSS
-* Author: Gemini AI
-* Date: August 13, 2025
-* Description: A modern, clean, and eye-friendly CSS for the teacher dashboard.
-*/
-
 /* --------------------
     ফন্ট এবং সাধারণ স্টাইল
 -------------------- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #386641; /* ডিপ ফরেস্ট গ্রিন */
+     --primary-color: #386641; /* ডিপ ফরেস্ট গ্রিন */
     --secondary-color: #ff9800; /* Amber for highlights and accents */
     --background-color: #f0f2f5; /* Light gray for the main background */
     --card-background: #ffffff;
@@ -96,17 +89,25 @@ html {
     max-width: 1200px;
     margin: 0 auto;
     color: #ffffff;
-    position: relative; /* স্কুলের নামকে মাঝখানে আনার জন্য এটি জরুরি */
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+    background: white;
+    border-radius: 50%;
 }
 
 .school-name {
     font-size: 1.5rem;
     font-weight: 500;
     margin: 0;
-    position: absolute;      /* এটিকে অন্য উপাদান নিরপেক্ষভাবে সরায় */
-    left: 50%;               /* বাম থেকে ৫০% দূরে সরায় */
-    transform: translateX(-50%); /* নিজের আকারের ৫০% বামে এসে ঠিক মাঝখানে বসে */
-    text-align: center;
 }
 
 .logout-button {
@@ -184,12 +185,14 @@ html {
     color: var(--error-color);
     margin-top: -0.5rem;
     margin-bottom: 1rem;
+    font-weight: bold;
 }
 
 .success {
     color: var(--success-color);
     margin-top: -0.5rem;
     margin-bottom: 1rem;
+    font-weight: bold;
 }
 
 /* --------------------
@@ -539,15 +542,15 @@ footer {
     background-color: var(--primary-color);
     color: #ffffff;
     text-align: center;
-    padding: 2rem 1.5rem;
-    margin-top: 2rem;
+    padding: 1.5rem 1rem;
+    margin-top: 1rem;
 }
 
 footer p {
     margin: 0.5rem 0;
     color: #f0f2f5;
 }
-/*ফুটারের হেডিং ও ইমোজি
+/*ফুটারের হেডিং ও ইমোজি */
 #school-address-section .section-heading {
     color: #ffffff; /* হেডিং এর কালার সাদা করে দিন */
 }
@@ -571,8 +574,13 @@ footer p {
     margin-right: 5px;
 }
 
+/* ✅ মূল পেজের সেকশন হাইলাইট করার স্টাইল */
+/* ✨ হাইলাইট সেকশন ডিজাইন */
 .highlight-section {
-    animation: highlight-fade 2s ease-in-out;
+    position: relative;
+    border-radius: 8px;
+    transition: all 0.4s ease;
+    animation: highlight-fade 3s ease-in-out;
 }
 
 @keyframes highlight-fade {
@@ -580,10 +588,24 @@ footer p {
     100% { background-color: var(--background-color); }
 }
 
+/* হাইলাইটের ভেতরের কনটেন্টে একটু গ্লো এফেক্ট */
+.highlight-section * {
+    transition: color 0.3s ease;
+}
+
+.highlight-section:hover * {
+    color: #ff5722;
+}
+
 /* --------------------
     রেসপনসিভ ডিজাইন
 -------------------- */
 @media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     .header-content {
         width: 100%;
         justify-content: space-between;
@@ -595,12 +617,10 @@ footer p {
     }
 
     .school-name {
-        font-size: 0.8rem;
-        width: 60%; 
+        font-size: 1.5rem;
     }
 
     .section-heading {
         font-size: 1.5rem;
     }
 }
-
