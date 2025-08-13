@@ -48,6 +48,13 @@ html {
     padding: 2rem 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
+    padding-top: 2rem; /* আগের padding-top বজায় রাখুন */
+    padding-bottom: 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    scroll-margin-top: 6rem; /* 👈 এই লাইনটি যোগ করুন */
+    /* 6rem বা প্রায় 96px ব্যবহার করা হয়েছে, যা হেডারের উচ্চতার চেয়ে বেশি।
+    এটি নিশ্চিত করবে যে সেকশনটি হেডারের নিচে চাপা পড়বে না। */
 }
 
 .sub-sections-wrapper {
@@ -100,6 +107,7 @@ html {
 .logo {
     height: 40px;
     width: auto;
+    background: white;
 }
 
 .school-name {
@@ -592,7 +600,7 @@ footer p {
     }
 
     .school-name {
-        font-size: 1.2rem;
+        font-size: 1.0rem;
     }
 
     .section-heading {
