@@ -1,0 +1,601 @@
+/*
+* Pathpukur High School Teacher Dashboard CSS
+* Author: Gemini AI
+* Date: August 13, 2025
+* Description: A modern, clean, and eye-friendly CSS for the teacher dashboard.
+*/
+
+/* --------------------
+    ফন্ট এবং সাধারণ স্টাইল
+-------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #004d40; /* Teal color for a professional, calm feel */
+    --secondary-color: #ff9800; /* Amber for highlights and accents */
+    --background-color: #f0f2f5; /* Light gray for the main background */
+    --card-background: #ffffff;
+    --text-color-dark: #212121;
+    --text-color-light: #555555;
+    --border-color: #e0e0e0;
+    --success-color: #4caf50;
+    --error-color: #f44336;
+    --link-color: #1a73e8; /* A standard blue for links */
+    --hover-bg: #f8f9fa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color-dark);
+    line-height: 1.6;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* --------------------
+    লেআউট এবং কন্টেইনার
+-------------------- */
+.main-section-container {
+    padding: 2rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sub-sections-wrapper {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.shaded-info-box {
+    background-color: var(--card-background);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 5px solid var(--primary-color);
+}
+
+.shaded-info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* --------------------
+    হেডার এবং লগইন
+-------------------- */
+#top-bar-section {
+    background-color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #ffffff;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+}
+
+.school-name {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.logout-button {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #e65100;
+}
+
+/* --------------------
+    লগইন ওভারলে
+-------------------- */
+#masterLoginOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+#masterLoginBox {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+}
+
+#masterLoginBox input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+#masterLoginBox button {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#masterLoginBox button:hover {
+    background-color: #00382e;
+}
+
+.red-text {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.error {
+    color: var(--error-color);
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+}
+
+.success {
+    color: var(--success-color);
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* --------------------
+    সাইডবার মেনু
+-------------------- */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.sidebar-menu {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto; /* মেনু অনেক বড় হলে স্ক্রলবার আসবে */
+}
+
+.sidebar-menu.active {
+    left: 0;
+}
+
+.sidebar-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 5px;
+}
+
+.sidebar-menu .nav-link {
+    display: block;
+    padding: 12px 20px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.3s ease, border-left-color 0.3s ease;
+    border-left: 5px solid transparent;
+}
+
+.sidebar-menu .nav-link:hover,
+.sidebar-menu .nav-link.active-link {
+    background-color: #00382e;
+    border-left-color: var(--secondary-color);
+}
+
+.sidebar-menu .menu-header {
+    background-color: #00382e;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 15px 20px;
+    color: var(--secondary-color);
+    cursor: default;
+    pointer-events: none;
+    border-left: none;
+}
+
+.menu-button {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* --------------------
+    সেকশন হেডিং এবং কন্টেন্ট
+-------------------- */
+.section-heading-wrapper {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.section-heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.shaded-info-box-heading {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-instruction-heading {
+    font-size: 1rem;
+    color: var(--text-color-light);
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
+
+.sub-section-content {
+    text-align: center;
+}
+
+.exam-link {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.exam-link:hover {
+    background-color: #e65100;
+}
+
+.static-text {
+    text-align: center;
+    color: var(--text-color-light);
+    font-style: italic;
+    margin-top: 1rem;
+}
+
+/* --------------------
+    নম্বর আপলোড বোতাম
+-------------------- */
+.exam-buttons-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.box-heading {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.box-button {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.box-button:hover {
+    background-color: #00382e;
+    transform: translateY(-2px);
+}
+
+.disabled-exam-link {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.disabled-exam-link:hover {
+    background-color: #ccc;
+    transform: none;
+}
+
+.avail-msg {
+    color: var(--secondary-color);
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 5px;
+    text-align: center;
+    animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* --------------------
+    নোটিশ বোর্ড
+-------------------- */
+.marquee-container {
+    background-color: var(--hover-bg);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+.marquee-content {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 20s linear infinite;
+    padding-left: 100%;
+}
+
+.marquee-content:hover, .marquee-content.paused {
+    animation-play-state: paused;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+#notice-board-marquee-content {
+    animation-duration: 30s;
+}
+
+#notice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+}
+
+#notice-table th, #notice-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#notice-table th {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 500;
+}
+
+#notice-table tbody tr:hover {
+    background-color: var(--hover-bg);
+}
+
+#notice-table button {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pagination button {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+}
+
+.modal-header {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.modal-date {
+    color: var(--text-color-light);
+    margin-bottom: 1.5rem;
+}
+
+.modal-body {
+    white-space: pre-wrap;
+    font-size: 1rem;
+    color: var(--text-color-dark);
+}
+
+#closeModalBtn {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+/* --------------------
+    ফুটার
+-------------------- */
+footer {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    margin-top: 2rem;
+}
+
+footer p {
+    margin: 0.5rem 0;
+    color: #f0f2f5;
+}
+
+/* --------------------
+    ইউটিলিটি ক্লাস এবং অ্যানিমেশন
+-------------------- */
+.blink {
+    animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+    to { visibility: hidden; }
+}
+
+.emoji {
+    font-size: 1.5rem;
+    margin-right: 5px;
+}
+
+.highlight-section {
+    animation: highlight-fade 2s ease-in-out;
+}
+
+@keyframes highlight-fade {
+    0% { background-color: rgba(255, 235, 59, 0.5); }
+    100% { background-color: var(--background-color); }
+}
+
+/* --------------------
+    রেসপনসিভ ডিজাইন
+-------------------- */
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-content {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .logout-button {
+        margin-top: 1rem;
+        width: 100%;
+    }
+
+    .school-name {
+        font-size: 1.2rem;
+    }
+
+    .section-heading {
+        font-size: 1.5rem;
+    }
+}
