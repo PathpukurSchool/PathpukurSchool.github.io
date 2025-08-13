@@ -631,7 +631,7 @@ ul li a:hover {
     opacity: 0.9;
 }
 
-.shine {
+.shaded-info-box-heading {
   font-weight: bold;
   font-size: 28px; /* ফন্ট সাইজ একটু বাড়ানো হয়েছে */
   color: #fff;
