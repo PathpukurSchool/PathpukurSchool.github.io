@@ -63,6 +63,11 @@ html {
     margin-top: 0.5rem;
 }
 
+.sub-sections-wrapper .shaded-info-box {
+    /* এই কোডটি প্রতিটি বক্সকে সঠিক আকার দেবে */
+    width: auto;
+}
+
 .shaded-info-box {
     background-color: var(--card-background);
     padding: 1.5rem;
