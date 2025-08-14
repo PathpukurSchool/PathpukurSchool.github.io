@@ -77,7 +77,9 @@
 <nav id="sidebar-menu" class="sidebar-menu">
     <ul>
         <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
-        
+
+		 <li><a href="#notice-board-section" class="nav-link menu-header">Notice Board</a></li>
+		
         <li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
         <li><a href="#last-date-section" class="nav-link">Marks Submission Date</a></li>
         <li><a href="#marks-uploading-section" class="nav-link">Marks Uploading Status</a></li>
@@ -92,8 +94,6 @@
         <li><a href="#class-X" class="nav-link">Class X</a></li>
         <li><a href="#class-XI" class="nav-link">Class XI</a></li>
         <li><a href="#class-XII" class="nav-link">Class XII</a></li>
-    
-        <li><a href="#notice-board-section" class="nav-link menu-header">Notice Board</a></li>
         
         <li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
         <li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
@@ -172,110 +172,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-
-  <!--✅ নম্বর আপলোড -->  
-<div class="main-section-container" id="marks-information-section">
-    <div class="section-heading-wrapper">
-        <h2 class="section-heading">
-            <span class="emoji"><i class="fa-solid fa-school"></i></span>
-            <span class="blink">Marks Uploading & Student Information</span>
-        </h2>
-		<h3 class="login-instruction-heading">This section provides the last date for uploading marks, the current status of marks uploaded and a searchable student list to help you find student information by name, class, roll number etc.</h3>
-    </div>
-	
-<div class="sub-sections-wrapper">
-	 <!-- ✅ নম্বর আপলোডের শেষ তারিখ -->
-    <div class="shaded-info-box" id="last-date-section">
-        <div class="sub-section-heading">
-            <h2 class="shaded-info-box-heading">Last Date of Marks Submission</h2>
-            <h3 class="login-instruction-heading">Please upload the students' marks, grades & comments within the given time frame:<span class="emoji">👇</span></h3>
-        </div>
-        <div class="static-text">
-            (Kindly submit all marks by due date)
-            <div class="marquee-container">
-                <div id="exam-dates-marquee-content" class="marquee-content"></div>
-            </div>
-        </div>
-    </div>
-	
- <!-- ✅ নম্বর আপলোডের স্টাটাস -->
-    <div class="shaded-info-box" id="marks-uploading-section">
-        <div class="sub-section-heading">
-            <h2 class="shaded-info-box-heading">Marks Uploading Report</h2>
-            <h3 class="login-instruction-heading">To know how many students' exam marks have been uploaded, please click the button below:<span class="emoji">👇</span></h3>
-        </div>
-        <div class="sub-section-content">
-            <a href="https://script.google.com/macros/s/AKfycby92wlqHa0LdogrHoSTMrbs2snqGpb-p-ASQQods_202pOLzQGNmeqIHxw0Eow1juYC/exec" target="_blank" class="exam-link">VIEW MARK UPLOADING STATUS</a>
-        </div>
-    </div>
-
-	 <!-- ✅ সর্চেবল স্টুডেন্ট লিস্ট/ডাটা -->
-    <div class="shaded-info-box" id="student-list-section">
-        <div class="sub-section-heading">
-            <h2 class="shaded-info-box-heading">Student Information</h2>
-            <h3 class="login-instruction-heading">To view student information or search the student database, please click the button below:<span class="emoji">👇</span></h3>
-        </div>
-        <div class="sub-section-content">
-            <a href="https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
-        </div>
-    </div>
-</div>
-</div>
-
-<script src="teacher_dates.js"></script>
-<script>
-    // নম্বর আপলোডের শেষ তারিখ এর জাভা স্ক্রিপ্ট
-    const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
-
-    // Exam dates যুক্ত করা
-    if (typeof examDates !== 'undefined' && Array.isArray(examDates)) {
-        examDates.forEach(exam => {
-            if (exam.date) {
-                const span = document.createElement("span");
-                span.textContent = `${exam.text} ${exam.date}, `;
-
-                // রং প্রয়োগ পুরো লাইনের জন্য
-                span.style.color = exam.color;
-                span.style.fontWeight = "bold";
-
-                if (exam.backgroundColor) {
-                    span.style.backgroundColor = exam.backgroundColor;
-                }
-
-                examDatesMarquee.appendChild(span);
-            }
-        });
-    }
-
-    // Mouse hover করলে স্ক্রল থামানো
-    examDatesMarquee.addEventListener("mouseover", () => {
-        examDatesMarquee.classList.add("paused");
-    });
-    examDatesMarquee.addEventListener("mouseout", () => {
-        examDatesMarquee.classList.remove("paused");
-    });
-
-    // মোবাইলে touch করলে স্ক্রল থামানো
-    examDatesMarquee.addEventListener("touchstart", () => {
-        examDatesMarquee.classList.add("paused");
-    });
-    examDatesMarquee.addEventListener("touchend", () => {
-        examDatesMarquee.classList.remove("paused");
-    });
-</script>
-
-	  <!--✅ নম্বর আপলোড -->  
-<div class="main-section-container" id="upload-your-marks-section">
-    <div class="section-heading-wrapper">
-        <h2 class="section-heading">
-            <span class="emoji"><i class="fa-solid fa-receipt"></i></span>
-            <span class="blink">Upload Student Exam Marks</span>
-        </h2>
-        <h3 class="login-instruction-heading">Click the button below to upload student grades, marks & comments. You will need to log in with your ID and password:<span class="emoji">👇</span></h3>
-    </div>
-	  <!-- ✅ নম্বর আপলোডের বোতাম তৈরি -->
-    <div id="exam-buttons" class="sub-sections-wrapper"> </div>
-    </div>
 
 <!-- ✅ নোটিশ বোর্ড -->
     <div class="main-section-container" id="notice-board-section">
@@ -404,6 +300,110 @@ document.addEventListener("DOMContentLoaded", function() {
     renderNoticeTable();
   </script>
     </div></div>
+	  
+  <!--✅ নম্বর আপলোড -->  
+<div class="main-section-container" id="marks-information-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji"><i class="fa-solid fa-school"></i></span>
+            <span class="blink">Marks Uploading & Student Information</span>
+        </h2>
+		<h3 class="login-instruction-heading">This section provides the last date for uploading marks, the current status of marks uploaded and a searchable student list to help you find student information by name, class, roll number etc.</h3>
+    </div>
+	
+<div class="sub-sections-wrapper">
+	 <!-- ✅ নম্বর আপলোডের শেষ তারিখ -->
+    <div class="shaded-info-box" id="last-date-section">
+        <div class="sub-section-heading">
+            <h2 class="shaded-info-box-heading">Last Date of Marks Submission</h2>
+            <h3 class="login-instruction-heading">Please upload the students' marks, grades & comments within the given time frame:<span class="emoji">👇</span></h3>
+        </div>
+        <div class="static-text">
+            (Kindly submit all marks by due date)
+            <div class="marquee-container">
+                <div id="exam-dates-marquee-content" class="marquee-content"></div>
+            </div>
+        </div>
+    </div>
+	
+ <!-- ✅ নম্বর আপলোডের স্টাটাস -->
+    <div class="shaded-info-box" id="marks-uploading-section">
+        <div class="sub-section-heading">
+            <h2 class="shaded-info-box-heading">Marks Uploading Report</h2>
+            <h3 class="login-instruction-heading">To know how many students' exam marks have been uploaded, please click the button below:<span class="emoji">👇</span></h3>
+        </div>
+        <div class="sub-section-content">
+            <a href="https://script.google.com/macros/s/AKfycby92wlqHa0LdogrHoSTMrbs2snqGpb-p-ASQQods_202pOLzQGNmeqIHxw0Eow1juYC/exec" target="_blank" class="exam-link">VIEW MARK UPLOADING STATUS</a>
+        </div>
+    </div>
+
+	 <!-- ✅ সর্চেবল স্টুডেন্ট লিস্ট/ডাটা -->
+    <div class="shaded-info-box" id="student-list-section">
+        <div class="sub-section-heading">
+            <h2 class="shaded-info-box-heading">Student Information</h2>
+            <h3 class="login-instruction-heading">To view student information or search the student database, please click the button below:<span class="emoji">👇</span></h3>
+        </div>
+        <div class="sub-section-content">
+            <a href="https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="teacher_dates.js"></script>
+<script>
+    // নম্বর আপলোডের শেষ তারিখ এর জাভা স্ক্রিপ্ট
+    const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
+
+    // Exam dates যুক্ত করা
+    if (typeof examDates !== 'undefined' && Array.isArray(examDates)) {
+        examDates.forEach(exam => {
+            if (exam.date) {
+                const span = document.createElement("span");
+                span.textContent = `${exam.text} ${exam.date}, `;
+
+                // রং প্রয়োগ পুরো লাইনের জন্য
+                span.style.color = exam.color;
+                span.style.fontWeight = "bold";
+
+                if (exam.backgroundColor) {
+                    span.style.backgroundColor = exam.backgroundColor;
+                }
+
+                examDatesMarquee.appendChild(span);
+            }
+        });
+    }
+
+    // Mouse hover করলে স্ক্রল থামানো
+    examDatesMarquee.addEventListener("mouseover", () => {
+        examDatesMarquee.classList.add("paused");
+    });
+    examDatesMarquee.addEventListener("mouseout", () => {
+        examDatesMarquee.classList.remove("paused");
+    });
+
+    // মোবাইলে touch করলে স্ক্রল থামানো
+    examDatesMarquee.addEventListener("touchstart", () => {
+        examDatesMarquee.classList.add("paused");
+    });
+    examDatesMarquee.addEventListener("touchend", () => {
+        examDatesMarquee.classList.remove("paused");
+    });
+</script>
+
+	  <!--✅ নম্বর আপলোড -->  
+<div class="main-section-container" id="upload-your-marks-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji"><i class="fa-solid fa-receipt"></i></span>
+            <span class="blink">Upload Student Exam Marks</span>
+        </h2>
+        <h3 class="login-instruction-heading">Click the button below to upload student grades, marks & comments. You will need to log in with your ID and password:<span class="emoji">👇</span></h3>
+    </div>
+	  <!-- ✅ নম্বর আপলোডের বোতাম তৈরি -->
+    <div id="exam-buttons" class="sub-sections-wrapper"> </div>
+    </div>
 
 	  <!-- ✅ স্কুল রুটিন  --->
 <div class="main-section-container" id="school-routine-section">
