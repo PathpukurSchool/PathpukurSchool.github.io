@@ -83,11 +83,12 @@ html {
 
 .main-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-between; /* উপাদানগুলোকে দুই প্রান্তে ঠেলে দেবে */
+    align-items: center;           /* উলম্বভাবে মাঝখানে আনবে */
     padding: 1rem 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative; /* স্কুলের নামকে মাঝখানে আনার জন্য এটি জরুরি */
     color: #ffffff;
 }
 
@@ -105,9 +106,11 @@ html {
 }
 
 .school-name {
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin: 0;
+    position: absolute;      /* এটিকে অন্য উপাদান নিরপেক্ষভাবে সরায় */
+    left: 50%;               /* বাম থেকে ৫০% দূরে সরায় */
+    transform: translateX(-50%); /* নিজের আকারের ৫০% বামে এসে ঠিক মাঝখানে বসে */
+    margin: 0;               /* অপ্রয়োজনীয় মার্জিন সরায় */
+    text-align: center;
 }
 
 .logout-button {
@@ -604,6 +607,7 @@ footer p {
     .main-header {
         flex-direction: column;
         align-items: flex-start;
+        padding: 1rem; /* ছোট স্ক্রিনের জন্য প্যাডিং কমানো হলো */
     }
 
     .header-content {
@@ -617,9 +621,14 @@ footer p {
     }
 
     .school-name {
-        font-size: 1rem;
+        font-size: 1rem; /* ছোট স্ক্রিনের জন্য ফন্টের আকার কমানো হলো */
+        width: 60%;      /* নিশ্চিত করে যেন নামটি বোতামের উপর না যায় */
     }
 
+    .red-text {
+    font-size: 0.9rem;
+    }
+    
     .section-heading {
         font-size: 1.5rem;
     }
