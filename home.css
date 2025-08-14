@@ -70,6 +70,20 @@ html {
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* ✅ প্রতিটি সেকশনের কন্টেন্ট পাশাপাশি সাজানোর জন্য এই ক্লাসটি যোগ করুন */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* বড় স্ক্রিনে একাধিক কলাম দেখাবে */
+    gap: 1.5rem; /* কন্টেন্টগুলোর মধ্যে দূরত্ব */
+    margin-top: 1.5rem;
+}
+
+/* ✅ সেকশন হেডিং এর জন্য স্টাইল */
+.section-heading-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
 /* --------------------
     হেডার এবং লগইন
 -------------------- */
