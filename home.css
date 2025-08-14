@@ -50,10 +50,17 @@ html {
     এটি নিশ্চিত করবে যে সেকশনটি হেডারের নিচে চাপা পড়বে না। */
 }
 
+/* ✅ সেকশন হেডিং এর জন্য স্টাইল */
+.section-heading-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
 .sub-sections-wrapper {
     display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* বড় স্ক্রিনে একাধিক কলাম দেখাবে */
+    gap: 0.5rem; /* কন্টেন্টগুলোর মধ্যে দূরত্ব */
+    margin-top: 0.5rem;
 }
 
 .shaded-info-box {
