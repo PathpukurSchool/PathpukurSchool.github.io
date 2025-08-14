@@ -77,8 +77,6 @@
 <nav id="sidebar-menu" class="sidebar-menu">
     <ul>
         <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
-
-		 <li><a href="#notice-board-section" class="nav-link menu-header">Notice Board</a></li>
 		
         <li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
         <li><a href="#last-date-section" class="nav-link">Marks Submission Date</a></li>
@@ -100,7 +98,8 @@
         <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
         <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
         <li><a href="#exam-routine-section" class="nav-link">Exam Routine</a></li>
-        
+		
+        <li><a href="#notice-board-section" class="nav-link menu-header">Notice Board</a></li>
         <li><a href="#uploda-student-notice-section" class="nav-link">Uploda Student Notice</a></li>
         <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
         <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
@@ -172,134 +171,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-
-<!-- ✅ নোটিশ বোর্ড -->
-    <div class="main-section-container" id="notice-board-section">
-		<div id="notice-bord">
-    <div class="section-heading-wrapper">
-<h2 class="section-heading">
-        <span class="emoji"><i class="fa-solid fa-clipboard-list"></i></span>
-        <span class="blink">Notice Board</span>
-    </h2>
-</div>
-    <div id="notice-board-marquee-content" class="marquee-content"></div>
-<script src="teacher_notice.js"></script>
-  <script>
-  // সংশোধিত ID ব্যবহার করা হয়েছে
-  const noticeBoardMarquee = document.getElementById("notice-board-marquee-content"); // নতুন আইডি
-
-  if (Array.isArray(ScrollingNotices)) {
-    ScrollingNotices.forEach(notice => {
-      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
-      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
-
-      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
-      if (text.trim() !== "") {
-        const span = document.createElement("span");
-        span.textContent = `${date} - ${text}`;
-        span.style.color = notice.color || "black";
-        span.style.fontWeight = "bold";
-        span.style.marginRight = "30px";
-        noticeBoardMarquee.appendChild(span);
-      }
-    });
-  } else {
-    noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
-  }
-
-  // 🔁 Marquee pause on hover/touch
-  noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
-  noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
-  noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
-  noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
-</script>
-
-  <div id="notice-board"></div>
-  <div class="pagination">
-    <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-    <span id="pageNumber">Page 1</span>
-    <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
-  </div>
-  <div id="popupModal" style="display: none;" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
-    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
-    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
-    <div id="popupLinkArea" style="margin-top: 10px;"></div>
-    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
-  </div>
-</div>
-
-  <script src="notice.js"></script>
-  <script>
-    const noticesPerPage = 10;
-    let currentPage = 1;
-
-    function renderNoticeTable() {
-      const container = document.getElementById('notice-board');
-      container.innerHTML = "";
-
-      const start = (currentPage - 1) * noticesPerPage;
-      const end = start + noticesPerPage;
-      const paginatedNotices = TableNotices.slice(start, end);
-
-      const table = document.createElement('table');
-      table.id = 'notice-table';
-
-      const thead = document.createElement('thead');
-      thead.innerHTML = `
-        <tr>
-          <th>তারিখ</th>
-          <th>বিষয়বস্তু</th>
-          <th>বিজ্ঞপ্তি</th>
-        </tr>
-      `;
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      paginatedNotices.forEach(notice => {
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
-          <td>${notice.date}</td>
-          <td style="color: ${notice.color || '#000'};">${notice.text}</td>
-<td>
-  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')"
-           onmouseover="this.style.opacity=0.8"
-           onmouseout="this.style.opacity=1">
-    View
-  </button>
-</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      table.appendChild(tbody);
-      container.appendChild(table);
-
-      const totalPages = Math.ceil(TableNotices.length / noticesPerPage);
-      document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
-      document.getElementById('prevBtn').disabled = currentPage === 1;
-      document.getElementById('nextBtn').disabled = currentPage === totalPages;
-    }
-
-    function nextPage() {
-      if (currentPage < Math.ceil(TableNotices.length / noticesPerPage)) {
-        currentPage++;
-        renderNoticeTable();
-      }
-    }
-
-    function prevPage() {
-      if (currentPage > 1) {
-        currentPage--;
-        renderNoticeTable();
-      }
-    }
-    // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
-    renderNoticeTable();
-  </script>
-    </div></div>
 	  
   <!--✅ নম্বর আপলোড -->  
 <div class="main-section-container" id="marks-information-section">
@@ -462,6 +333,135 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
 </div>
 
+	  <!-- ✅ নোটিশ বোর্ড -->
+    <div class="main-section-container" id="notice-board-section">
+		<div id="notice-bord">
+    <div class="section-heading-wrapper">
+<h2 class="section-heading">
+        <span class="emoji"><i class="fa-solid fa-clipboard-list"></i></span>
+        <span class="blink">Notice Board</span>
+    </h2>
+</div>
+    <div id="notice-board-marquee-content" class="marquee-content"></div>
+<script src="teacher_notice.js"></script>
+  <script>
+  // সংশোধিত ID ব্যবহার করা হয়েছে
+  const noticeBoardMarquee = document.getElementById("notice-board-marquee-content"); // নতুন আইডি
+
+  if (Array.isArray(ScrollingNotices)) {
+    ScrollingNotices.forEach(notice => {
+      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
+      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
+
+      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
+      if (text.trim() !== "") {
+        const span = document.createElement("span");
+        span.textContent = `${date} - ${text}`;
+        span.style.color = notice.color || "black";
+        span.style.fontWeight = "bold";
+        span.style.marginRight = "30px";
+        noticeBoardMarquee.appendChild(span);
+      }
+    });
+  } else {
+    noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
+  }
+
+  // 🔁 Marquee pause on hover/touch
+  noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
+  noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
+  noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
+  noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
+</script>
+
+  <div id="notice-board"></div>
+  <div class="pagination">
+    <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+    <span id="pageNumber">Page 1</span>
+    <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+  </div>
+  <div id="popupModal" style="display: none;" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
+    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
+    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
+    <div id="popupLinkArea" style="margin-top: 10px;"></div>
+    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+  </div>
+</div>
+
+  <script src="notice.js"></script>
+  <script>
+    const noticesPerPage = 10;
+    let currentPage = 1;
+
+    function renderNoticeTable() {
+      const container = document.getElementById('notice-board');
+      container.innerHTML = "";
+
+      const start = (currentPage - 1) * noticesPerPage;
+      const end = start + noticesPerPage;
+      const paginatedNotices = TableNotices.slice(start, end);
+
+      const table = document.createElement('table');
+      table.id = 'notice-table';
+
+      const thead = document.createElement('thead');
+      thead.innerHTML = `
+        <tr>
+          <th>তারিখ</th>
+          <th>বিষয়বস্তু</th>
+          <th>বিজ্ঞপ্তি</th>
+        </tr>
+      `;
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      paginatedNotices.forEach(notice => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${notice.date}</td>
+          <td style="color: ${notice.color || '#000'};">${notice.text}</td>
+<td>
+  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')"
+           onmouseover="this.style.opacity=0.8"
+           onmouseout="this.style.opacity=1">
+    View
+  </button>
+</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      container.appendChild(table);
+
+      const totalPages = Math.ceil(TableNotices.length / noticesPerPage);
+      document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
+      document.getElementById('prevBtn').disabled = currentPage === 1;
+      document.getElementById('nextBtn').disabled = currentPage === totalPages;
+    }
+
+    function nextPage() {
+      if (currentPage < Math.ceil(TableNotices.length / noticesPerPage)) {
+        currentPage++;
+        renderNoticeTable();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderNoticeTable();
+      }
+    }
+    // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
+    renderNoticeTable();
+  </script>
+    </div>
+	</div>
+	  
  <!-- ✅ আপলোড স্টুডেন্ট নোটিশ --> 
 <div class="main-section-container">
     <div class="section-heading-wrapper">
