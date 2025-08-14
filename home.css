@@ -74,14 +74,14 @@ html {
 .content-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* বড় স্ক্রিনে একাধিক কলাম দেখাবে */
-    gap: 1.5rem; /* কন্টেন্টগুলোর মধ্যে দূরত্ব */
-    margin-top: 1.5rem;
+    gap: 0.5rem; /* কন্টেন্টগুলোর মধ্যে দূরত্ব */
+    margin-top: 0.5rem;
 }
 
 /* ✅ সেকশন হেডিং এর জন্য স্টাইল */
 .section-heading-container {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 /* --------------------
