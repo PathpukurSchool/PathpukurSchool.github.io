@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <h3 class="login-instruction-heading">To view student score sheets / marks foil, please click the button below:<span class="emoji">👇</span></h3>
             </div>
             <div class="sub-section-content">
-                <a href="https://demo.com.in" target="_blank" class="exam-link">VIEW STUDENT SCORE SHEET</a>
+                <a href="https://demo_score_sheet.com" target="_blank" class="exam-link">VIEW STUDENT SCORE SHEET</a>
             </div>
         </div>
 		
@@ -351,34 +351,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	  <!-- ✅ নোটিশ বোর্ড -->
     <div class="main-section-container" id="notice-board-section">
-    <div id="notice-bord">
         <div class="section-heading-wrapper">
             <h2 class="section-heading">
                 <span class="emoji"><i class="fa-solid fa-bullhorn"></i></span>
                 <span class="blink">Notice Board</span>
             </h2>
         </div>
-        <div id="notice-board-marquee-content" class="marquee-content"></div>
         
-        <div id="notice-board"></div>
-        
-        <div class="pagination">
-            <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-            <span id="pageNumber">Page 1</span>
-            <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
-        </div>
-        
-        <div id="popupModal" style="display: none;" class="modal-overlay">
-            <div class="modal-content">
-                <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
-                <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
-                <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
-                <div id="popupLinkArea" style="margin-top: 10px;"></div>
-                <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+          <div class="section-content-wrapper">
+                <div id="help-list"></div>
+                <div id="pagination-controls" style="text-align: center; margin-top: 20px;"></div>
             </div>
-        </div>
-    </div>
 </div>
+	  
 	  <!-- ✅ নোটিশ বোর্ড এর জাভা স্ক্রিপ্ট -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
