@@ -444,33 +444,43 @@ document.addEventListener('DOMContentLoaded', function () {
         paginationContainer.innerHTML = '';
         if (totalPages <= 1) return;
 
-        const backBtn = createButton('BACK', '#007bff', () => {
-            if (currentPage > 1) { currentPage--; renderHelpList(); }
-        }, currentPage === 1);
+        const backBtn = createButton('BACK', '#ff9800', () => {
+    if (currentPage > 1) { currentPage--; renderHelpList(); }
+}, currentPage === 1);
 
-        const pageInfo = document.createElement('span');
-        pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
-        pageInfo.style.cssText = `margin: 0 10px; font-weight: bold;`;
+const pageInfo = document.createElement('span');
+pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
+pageInfo.style.cssText = `margin: 0 10px; font-weight: bold;`;
 
-        const nextBtn = createButton('NEXT', '#007bff', () => {
-            if (currentPage < totalPages) { currentPage++; renderHelpList(); }
-        }, currentPage === totalPages);
+const nextBtn = createButton('NEXT', '#ff9800', () => {
+    if (currentPage < totalPages) { currentPage++; renderHelpList(); }
+}, currentPage === totalPages);
 
-        paginationContainer.append(backBtn, pageInfo, nextBtn);
-    }
+paginationContainer.append(backBtn, pageInfo, nextBtn);
+}
 
-    function createButton(text, bgColor, onClick, disabled = false) {
-        const btn = document.createElement('button');
-        btn.innerText = text;
-        btn.onclick = onClick;
-        btn.disabled = disabled;
-        btn.style.cssText = `
-            padding: 8px 15px; margin: 0 5px;
-            background-color: ${bgColor}; color: white;
-            border: none; border-radius: 5px; cursor: pointer;
-        `;
-        return btn;
-    }
+function createButton(text, bgColor, onClick, disabled = false) {
+    const btn = document.createElement('button');
+    btn.innerText = text;
+    btn.onclick = onClick;
+    btn.disabled = disabled;
+    btn.style.cssText = `
+        background-color: ${bgColor};
+        color: #ffffff;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    `;
+    
+    // :hover স্টাইল যোগ করা
+    btn.onmouseover = () => { btn.style.backgroundColor = '#e65100'; };
+    btn.onmouseout = () => { btn.style.backgroundColor = bgColor; };
+    
+    return btn;
+}
 
     function showPopup(titleText, date, link, subjText) {
         const existing = document.getElementById('notice-popup');
