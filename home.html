@@ -79,9 +79,10 @@
         <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
 		
         <li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
-        <li><a href="#last-date-section" class="nav-link">Marks Submission Date</a></li>
+        <li><a href="#last-date-section" class="nav-link">Deadline for Uploading Marks</a></li>
         <li><a href="#marks-uploading-section" class="nav-link">Marks Uploading Status</a></li>
         <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
+		<li><a href="#student-score-sheet-section" class="nav-link">Student Score Sheet</a></li>
         
         <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Marks</a></li>
         <li><a href="#class-V" class="nav-link">Class V</a></li>
@@ -104,6 +105,7 @@
         <li><a href="#notice-board-section" class="nav-link">Notice Board</a></li>
         <li><a href="#uploda-student-notice-section" class="nav-link">Uploda Student Notice</a></li>
 		<li><a href="#uploda-teacher-notice-section" class="nav-link">Uploda Teacher Notice</a></li>
+		
         <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
         <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
     </ul>
@@ -174,7 +176,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-	  
+
+	  <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য  --->
 <div class="main-section-container" id="marks-information-section">
     <div class="section-heading-wrapper">
         <h2 class="section-heading">
@@ -183,10 +186,11 @@ document.addEventListener("DOMContentLoaded", function() {
         </h2>
         <h3 class="login-instruction-heading">This section provides the last date for uploading marks, the current status of marks uploaded and a searchable student list to help you find student information by name, class, roll number etc.</h3>
     </div>
-    
+
+	  <!-- ✅ নম্বর আপলোড এর সময়সীমা  --->
     <div class="sub-sections-wrapper"> <div class="shaded-info-box" id="last-date-section">
             <div class="sub-section-heading">
-                <h2 class="shaded-info-box-heading">Last Date of Marks Submission</h2>
+                <h2 class="shaded-info-box-heading">Deadline for Uploading Marks</h2>
                 <h3 class="login-instruction-heading">Please upload the students' marks, grades & comments within the given time frame:<span class="emoji">👇</span></h3>
             </div>
             <div class="static-text">
@@ -197,6 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
         </div>
 
+		  <!-- ✅ নম্বর আপলোড এর তথ্য  --->
         <div class="shaded-info-box" id="marks-uploading-section">
             <div class="sub-section-heading">
                 <h2 class="shaded-info-box-heading">Marks Uploading Report</h2>
@@ -207,6 +212,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
         </div>
 
+		  <!-- ✅ সারচেবল স্টুডেন্ট তথ্য  --->
         <div class="shaded-info-box" id="student-list-section">
             <div class="sub-section-heading">
                 <h2 class="shaded-info-box-heading">Student Information</h2>
@@ -216,7 +222,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 <a href="https://script.google.com/macros/s/AKfycbz4nrrWELgqIkGJcKavU5Wp3ioedEqHNiKjIZ395Wi6Z9nwjh3leHgGbENQqXRtm49m/exec" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
             </div>
         </div>
-    </div>
+    
+	  <!-- ✅ স্কোর শীট  --->
+		 <div class="shaded-info-box" id="student-score-sheet-section">
+            <div class="sub-section-heading">
+                <h2 class="shaded-info-box-heading">Score Sheet / Marks  Foil</h2>
+                <h3 class="login-instruction-heading">To view student score sheets / marks foil, please click the button below:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="sub-section-content">
+                <a href="https://demopage.com" target="_blank" class="exam-link">VIEW STUDENT SCORE SHEET</a>
+            </div>
+        </div>
+		
+	</div>
 </div>
 
 <script src="teacher_dates.js"></script>
@@ -333,132 +351,226 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	  <!-- ✅ নোটিশ বোর্ড -->
     <div class="main-section-container" id="notice-board-section">
-		<div id="notice-bord">
-    <div class="section-heading-wrapper">
-<h2 class="section-heading">
-        <span class="emoji"><i class="fa-solid fa-bullhorn"></i></span>
-        <span class="blink">Notice Board</span>
-    </h2>
+    <div id="notice-bord">
+        <div class="section-heading-wrapper">
+            <h2 class="section-heading">
+                <span class="emoji"><i class="fa-solid fa-bullhorn"></i></span>
+                <span class="blink">Notice Board</span>
+            </h2>
+        </div>
+        <div id="notice-board-marquee-content" class="marquee-content"></div>
+        
+        <div id="notice-board"></div>
+        
+        <div class="pagination">
+            <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
+            <span id="pageNumber">Page 1</span>
+            <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
+        </div>
+        
+        <div id="popupModal" style="display: none;" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
+                <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
+                <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
+                <div id="popupLinkArea" style="margin-top: 10px;"></div>
+                <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
+            </div>
+        </div>
+    </div>
 </div>
-    <div id="notice-board-marquee-content" class="marquee-content"></div>
-<script src="teacher_notice.js"></script>
-  <script>
-  // সংশোধিত ID ব্যবহার করা হয়েছে
-  const noticeBoardMarquee = document.getElementById("notice-board-marquee-content"); // নতুন আইডি
+	  <!-- ✅ নোটিশ বোর্ড এর জাভা স্ক্রিপ্ট -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-  if (Array.isArray(ScrollingNotices)) {
-    ScrollingNotices.forEach(notice => {
-      const date = notice.date || "";  // যদি না থাকে, তাহলে ফাঁকা
-      const text = notice.text || "";  // যদি না থাকে, তাহলে ফাঁকা
+    /* =================================
+     * Digital Notice Board Functions
+     * ================================= */
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyp9ZJPAza692OVL0ppMfA5ZZ8L2Yp7QW_PgO7jh-RAUGUbkiY1ZDQ7VHfXOnXL-fPc/exec?action=read";
+    const NOTICES_PER_PAGE = 10;
+    let currentPage = 1;
+    let totalPages = 0;
+    let Helping = [];
 
-      // যদি একেবারেই খালি হয়, তাহলে স্কিপ করে দিন
-      if (text.trim() !== "") {
-        const span = document.createElement("span");
-        span.textContent = `${date} - ${text}`;
-        span.style.color = notice.color || "black";
-        span.style.fontWeight = "bold";
-        span.style.marginRight = "30px";
-        noticeBoardMarquee.appendChild(span);
-      }
-    });
-  } else {
-    noticeBoardMarquee.textContent = "কোনো নোটিশ পাওয়া যায়নি।";
-  }
+    async function fetchNotices() {
+        try {
+            const response = await fetch(APPS_SCRIPT_URL);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            Helping = Array.isArray(data.notices) ? data.notices : [];
+            renderHelpList();
+        } catch (error) {
+            console.error("Failed to fetch notices:", error);
+            const container = document.getElementById('help-list');
+            if (container) {
+                container.innerHTML = errorBox("Error!", "Failed to load notices.");
+            }
+        }
+    }
 
-  // 🔁 Marquee pause on hover/touch
-  noticeBoardMarquee.addEventListener("mouseover", () => noticeBoardMarquee.classList.add("paused"));
-  noticeBoardMarquee.addEventListener("mouseout", () => noticeBoardMarquee.classList.remove("paused"));
-  noticeBoardMarquee.addEventListener("touchstart", () => noticeBoardMarquee.classList.add("paused"));
-  noticeBoardMarquee.addEventListener("touchend", () => noticeBoardMarquee.classList.remove("paused"));
+    function errorBox(title, message) {
+        return `
+            <div style="
+                border: 2px solid #ff9999; background-color: #ffe6e6;
+                color: #cc0000; font-size: 18px; font-weight: bold;
+                padding: 10px; border-radius: 8px; text-align: center;
+                max-width: 320px; margin: 0 auto;
+            ">
+                <strong>${title}</strong><br>${message}
+            </div>
+        `;
+    }
+
+    function renderHelpList() {
+        const container = document.getElementById('help-list');
+        if (!container) return console.error("Error: 'help-list' container not found.");
+        container.innerHTML = "";
+
+        if (!Array.isArray(Helping) || Helping.length === 0) {
+            container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
+            return;
+        }
+
+        totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
+        const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
+        const endIndex = startIndex + NOTICES_PER_PAGE;
+        const noticesToRender = Helping.slice(startIndex, endIndex);
+
+        noticesToRender.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.innerText = item.text || "No Title";
+            itemDiv.style.cssText = `
+                cursor: pointer; margin: 10px 0; padding: 8px 10px;
+                background-color: #f9f9f9; border-left: 6px solid #8B4513;
+                border-radius: 4px; transition: background-color 0.3s;
+            `;
+            itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
+            itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+            itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
+            container.appendChild(itemDiv);
+        });
+
+        renderPaginationControls();
+    }
+
+    function renderPaginationControls() {
+        const paginationContainer = document.getElementById('pagination-controls');
+        if (!paginationContainer) return;
+        paginationContainer.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        const backBtn = createButton('BACK', '#007bff', () => {
+            if (currentPage > 1) { currentPage--; renderHelpList(); }
+        }, currentPage === 1);
+
+        const pageInfo = document.createElement('span');
+        pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
+        pageInfo.style.cssText = `margin: 0 10px; font-weight: bold;`;
+
+        const nextBtn = createButton('NEXT', '#007bff', () => {
+            if (currentPage < totalPages) { currentPage++; renderHelpList(); }
+        }, currentPage === totalPages);
+
+        paginationContainer.append(backBtn, pageInfo, nextBtn);
+    }
+
+    function createButton(text, bgColor, onClick, disabled = false) {
+        const btn = document.createElement('button');
+        btn.innerText = text;
+        btn.onclick = onClick;
+        btn.disabled = disabled;
+        btn.style.cssText = `
+            padding: 8px 15px; margin: 0 5px;
+            background-color: ${bgColor}; color: white;
+            border: none; border-radius: 5px; cursor: pointer;
+        `;
+        return btn;
+    }
+
+    function showPopup(titleText, date, link, subjText) {
+        const existing = document.getElementById('notice-popup');
+        if (existing) existing.remove();
+
+        const popup = document.createElement('div');
+        popup.id = 'notice-popup';
+        popup.style.cssText = `
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #f0f8ff; padding: 20px; border: 2px solid #333;
+            border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 9999; text-align: center; max-width: 90%; min-width: 240px;
+            width: 300px; font-family: Arial, sans-serif;
+        `;
+
+        const titleElem = document.createElement('div');
+        titleElem.innerText = titleText || "No Title";
+        titleElem.style.cssText = `
+            background-color: green; color: white; font-weight: bold;
+            font-size: 15px; padding: 10px; border-radius: 5px; margin-bottom: 15px;
+        `;
+        popup.appendChild(titleElem);
+
+        if (date) {
+            const dateElem = document.createElement('div');
+            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+            dateElem.style.marginBottom = '10px';
+            popup.appendChild(dateElem);
+        }
+
+        if (subjText && subjText.trim() !== '') {
+            const subjElem = document.createElement('div');
+            subjElem.innerText = subjText;
+            subjElem.style.cssText = `
+                color: darkgreen; background-color: #e6ffe6;
+                font-weight: bold; font-size: 14px; padding: 6px;
+                border-radius: 4px; margin-bottom: 12px;
+            `;
+            popup.appendChild(subjElem);
+        }
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.cssText = `
+            margin-top: 20px; display: flex; flex-wrap: wrap;
+            justify-content: center; gap: 10px;
+        `;
+
+        if (link && link.trim() !== '') {
+            const linkBtn = document.createElement('a');
+            linkBtn.href = link;
+            linkBtn.innerText = 'Open Link';
+            linkBtn.target = '_blank';
+            linkBtn.style.cssText = `
+                background-color: #007bff; color: white; padding: 6px 10px;
+                border-radius: 5px; font-weight: bold; font-size: 12px;
+                text-decoration: none;
+            `;
+            buttonContainer.appendChild(linkBtn);
+        }
+
+        const downloadBtn = createButton('Download', '#28a745', () => {
+            setTimeout(() => {
+                html2canvas(popup).then(canvas => {
+                    const image = canvas.toDataURL('image/png');
+                    const a = document.createElement('a');
+                    a.href = image;
+                    a.download = 'notice.png';
+                    a.click();
+                });
+            }, 100);
+        });
+
+        const closeBtn = createButton('Back', '#dc3545', () => popup.remove());
+
+        buttonContainer.append(downloadBtn, closeBtn);
+        popup.appendChild(buttonContainer);
+        document.body.appendChild(popup);
+    }
+
+    // প্রথম লোডে ডাটা আনুন
+    fetchNotices();
+
+});
 </script>
 
-  <div id="notice-board"></div>
-  <div class="pagination">
-    <button onclick="prevPage()" id="prevBtn">⏪ Back</button>
-    <span id="pageNumber">Page 1</span>
-    <button onclick="nextPage()" id="nextBtn">⏩ Next</button>
-  </div>
-  <div id="popupModal" style="display: none;" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header"><strong id="popupTitle">বিষয়</strong></div>
-    <div class="modal-date"><strong>তারিখ:</strong> <span id="popupDate">তারিখ</span></div>
-    <div class="modal-body" id="popupBody">মূল বিজ্ঞপ্তি</div>
-    <div id="popupLinkArea" style="margin-top: 10px;"></div>
-    <button id="closeModalBtn" onclick="closeModal()">⏪ Back</button>
-  </div>
-</div>
-
-  <script src="notice.js"></script>
-  <script>
-    const noticesPerPage = 10;
-    let currentPage = 1;
-
-    function renderNoticeTable() {
-      const container = document.getElementById('notice-board');
-      container.innerHTML = "";
-
-      const start = (currentPage - 1) * noticesPerPage;
-      const end = start + noticesPerPage;
-      const paginatedNotices = TableNotices.slice(start, end);
-
-      const table = document.createElement('table');
-      table.id = 'notice-table';
-
-      const thead = document.createElement('thead');
-      thead.innerHTML = `
-        <tr>
-          <th>তারিখ</th>
-          <th>বিষয়বস্তু</th>
-          <th>বিজ্ঞপ্তি</th>
-        </tr>
-      `;
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      paginatedNotices.forEach(notice => {
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
-          <td>${notice.date}</td>
-          <td style="color: ${notice.color || '#000'};">${notice.text}</td>
-<td>
-  <button onclick="showPopup('${notice.text}', '${notice.date}', '${notice.link || ''}', '${notice.subj || ''}')"
-           onmouseover="this.style.opacity=0.8"
-           onmouseout="this.style.opacity=1">
-    View
-  </button>
-</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      table.appendChild(tbody);
-      container.appendChild(table);
-
-      const totalPages = Math.ceil(TableNotices.length / noticesPerPage);
-      document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
-      document.getElementById('prevBtn').disabled = currentPage === 1;
-      document.getElementById('nextBtn').disabled = currentPage === totalPages;
-    }
-
-    function nextPage() {
-      if (currentPage < Math.ceil(TableNotices.length / noticesPerPage)) {
-        currentPage++;
-        renderNoticeTable();
-      }
-    }
-
-    function prevPage() {
-      if (currentPage > 1) {
-        currentPage--;
-        renderNoticeTable();
-      }
-    }
-    // প্রথমবার পেজ লোড হলে টেবিল রেন্ডার করুন
-    renderNoticeTable();
-  </script>
-    </div>
-	</div>
 	  
  <!-- ✅ আপলোড নোটিশ --> 
 <div class="main-section-container">
@@ -486,10 +598,10 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="shaded-info-box" id="uploda-teacher-notice-section">
             <div class="sub-section-heading">
                 <h2 class="shaded-info-box-heading">Upload Teacher Notice</h2>
-				<h3 class="login-instruction-heading">If you wish to upload a notice for Teacher, please click the button below:<span class="emoji">👇</span></h3>
+				<h3 class="login-instruction-heading">If you wish to upload a notice for Teacher, please click the button below. Uploaded notices will be displayed in the 'Notice Board' section on this page:<span class="emoji">👇</span></h3>
             </div>
             <div class="sub-section-content">
-		<a href="https://demo.com" target="_blank" class="exam-link">UPLOAD TEACHER NOTICE</a>
+		<a href="https://script.google.com/macros/s/AKfycbyp9ZJPAza692OVL0ppMfA5ZZ8L2Yp7QW_PgO7jh-RAUGUbkiY1ZDQ7VHfXOnXL-fPc/exec" target="_blank" class="exam-link">UPLOAD TEACHER NOTICE</a>
     </div>
     </div>
 	
