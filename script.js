@@ -227,322 +227,165 @@ function getExamText(key) {
     }
 }
 
-// NOTICE লোড করা
-document.addEventListener('DOMContentLoaded', function () {
+// NOTICE & HELP লোড করা
+fetch('files.json')
+    .then(response => response.json())
+    .then(data => {
+        populateList('notice-list', data.notices);
+        populateList('help-list', data.help);
+    });
 
-    /* =================================
-     * Digital Notice Board Functions
-     * ================================= */
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGMBUZ2nDhM4MFp374KywpxSQQ-V3gXfcsXUUVi9jo9Jlfx-B4liTtV5VvgR5PfTs1/exec?action=read";
-    const NOTICES_PER_PAGE = 10;
-    let currentPage = 1;
-    let totalPages = 0;
-    let Helping = [];
-
-    async function fetchNotices() {
-        try {
-            const response = await fetch(APPS_SCRIPT_URL);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
-            Helping = Array.isArray(data.notices) ? data.notices : [];
-            renderHelpList();
-        } catch (error) {
-            console.error("Failed to fetch notices:", error);
-            const container = document.getElementById('help-list');
-            if (container) {
-                container.innerHTML = errorBox("Error!", "Failed to load notices.");
-            }
-        }
-    }
-
-    function errorBox(title, message) {
-        return `
-            <div style="
-                border: 2px solid #ff9999; background-color: #ffe6e6;
-                color: #cc0000; font-size: 18px; font-weight: bold;
-                padding: 10px; border-radius: 8px; text-align: center;
-                max-width: 320px; margin: 0 auto;
-            ">
-                <strong>${title}</strong><br>${message}
-            </div>
-        `;
-    }
-
-    function renderHelpList() {
-        const container = document.getElementById('help-list');
-        if (!container) return console.error("Error: 'help-list' container not found.");
-        container.innerHTML = "";
-
-        if (!Array.isArray(Helping) || Helping.length === 0) {
-            container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
-            return;
-        }
-
-        totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
-        const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
-        const endIndex = startIndex + NOTICES_PER_PAGE;
-        const noticesToRender = Helping.slice(startIndex, endIndex);
-
-        noticesToRender.forEach(item => {
-            const itemDiv = document.createElement('div');
-            itemDiv.innerText = item.text || "No Title";
-            itemDiv.style.cssText = `
-                cursor: pointer; margin: 10px 0; padding: 8px 10px;
-                background-color: #f9f9f9; border-left: 6px solid #386641;
-                border-radius: 4px; transition: background-color 0.3s;
-            `;
-            itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
-            itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
-            itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
-            container.appendChild(itemDiv);
-        });
-
-        renderPaginationControls();
-    }
-
-    function renderPaginationControls() {
-        const paginationContainer = document.getElementById('pagination-controls');
-        if (!paginationContainer) return;
-        paginationContainer.innerHTML = '';
-        if (totalPages <= 1) return;
-
-        const backBtn = createButton('BACK', '#ff9800', () => {
-    if (currentPage > 1) { currentPage--; renderHelpList(); }
-}, currentPage === 1);
-
-const pageInfo = document.createElement('span');
-pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
-pageInfo.style.cssText = `margin: 0 10px; font-weight: bold;`;
-
-const nextBtn = createButton('NEXT', '#ff9800', () => {
-    if (currentPage < totalPages) { currentPage++; renderHelpList(); }
-}, currentPage === totalPages);
-
-paginationContainer.append(backBtn, pageInfo, nextBtn);
+function populateList(elementId, items) {
+    const ul = document.getElementById(elementId);
+    items.forEach(item => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = item.url;
+        a.textContent = `${item.name} (${item.date})`;
+        a.target = '_blank';
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
 }
 
-function createButton(text, bgColor, onClick, disabled = false) {
-    const btn = document.createElement('button');
-    btn.innerText = text;
-    btn.onclick = onClick;
-    btn.disabled = disabled;
-    btn.style.cssText = `
-        background-color: ${bgColor};
-        color: #ffffff;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
-    `;
-    
-    // :hover স্টাইল যোগ করা
-    btn.onmouseover = () => { btn.style.backgroundColor = '#e65100'; };
-    btn.onmouseout = () => { btn.style.backgroundColor = bgColor; };
-    
-    return btn;
-}
+//Teacher Table Notice
 
-    function showPopup(titleText, date, link, subjText) {
-        const existing = document.getElementById('notice-popup');
-        if (existing) existing.remove();
+ window.onload = () => {
+    // loadStudentExamLinks() ফাংশনটি সংজ্ঞায়িত নয়, তাই এরর এড়াতে এটিকে কমেন্ট করা হয়েছে।
+    // আপনার script.js ফাইলে loadExamLinks() ফাংশন থাকতে পারে।
+    // loadStudentExamLinks();
+    renderNoticeTable();      // টেবিল নোটিশ লোড
+  };
+  function showPopup(titleText, date, link, subjText) {
+  // পপ-আপ কনটেইনার তৈরি
+  const popup = document.createElement('div');
+  popup.style.position = 'fixed';
+  popup.style.top = '50%';
+  popup.style.left = '50%';
+  popup.style.transform = 'translate(-50%, -50%)';
+  popup.style.background = '#f0f8ff'; // হালকা নীল
+  popup.style.padding = '20px';
+  popup.style.margin = '0 auto';        // সেন্টারে রাখবে
+  popup.style.border = '2px solid #333';
+  popup.style.borderRadius = '10px';
+  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+  popup.style.zIndex = '9999';
+  popup.style.textAlign = 'center';
+  popup.style.maxWidth = '90%'; // স্ক্রিনে overflow না হয়
+  popup.style.minWidth = '240px'; // খুব ছোট না হয়
+  popup.style.width = '300px'; // সর্বোচ্চ চওড়া
+  popup.style.fontFamily = 'Arial, sans-serif';
+  // হেডিং (Text) — বড়ো, সাদা, সবুজ ব্যাকগ্রাউন্ড
+  const titleElem = document.createElement('div');
+  titleElem.innerText = titleText;
+  titleElem.style.backgroundColor = 'green';
+  titleElem.style.color = 'white';
+  titleElem.style.fontWeight = 'bold';
+  titleElem.style.fontSize = '15px';
+  titleElem.style.padding = '10px';
+  titleElem.style.borderRadius = '5px';
+  titleElem.style.marginBottom = '15px';
+  popup.appendChild(titleElem);
 
-        const popup = document.createElement('div');
-        popup.id = 'notice-popup';
-        popup.style.cssText = `
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #f0f8ff; padding: 20px; border: 2px solid #333;
-            border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            z-index: 9999; text-align: center; max-width: 90%; min-width: 240px;
-            width: 300px; font-family: Arial, sans-serif;
-        `;
+  // তারিখ (Date)
+  const dateElem = document.createElement('div');
+  dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+  dateElem.style.marginBottom = '10px';
+  popup.appendChild(dateElem);
 
-        const titleElem = document.createElement('div');
-        titleElem.innerText = titleText || "No Title";
-        titleElem.style.cssText = `
-            background-color: green; color: white; font-weight: bold;
-            font-size: 15px; padding: 10px; border-radius: 5px; margin-bottom: 15px;
-        `;
-        popup.appendChild(titleElem);
-
-        if (date) {
-            const dateElem = document.createElement('div');
-            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-            dateElem.style.marginBottom = '10px';
-            popup.appendChild(dateElem);
-        }
-
-        if (subjText && subjText.trim() !== '') {
-            const subjElem = document.createElement('div');
-            subjElem.innerText = subjText;
-            subjElem.style.cssText = `
-                color: darkgreen; background-color: #e6ffe6;
-                font-weight: bold; font-size: 14px; padding: 6px;
-                border-radius: 4px; margin-bottom: 12px;
-            `;
-            popup.appendChild(subjElem);
-        }
-
-        const buttonContainer = document.createElement('div');
-        buttonContainer.style.cssText = `
-            margin-top: 20px; display: flex; flex-wrap: wrap;
-            justify-content: center; gap: 10px;
-        `;
-
-        if (link && link.trim() !== '') {
-            const linkBtn = document.createElement('a');
-            linkBtn.href = link;
-            linkBtn.innerText = 'Open Link';
-            linkBtn.target = '_blank';
-            linkBtn.style.cssText = `
-                background-color: #007bff; color: white; padding: 6px 10px;
-                border-radius: 5px; font-weight: bold; font-size: 12px;
-                text-decoration: none;
-            `;
-            buttonContainer.appendChild(linkBtn);
-        }
-
-        const downloadBtn = createButton('Download', '#28a745', () => {
-            setTimeout(() => {
-                html2canvas(popup).then(canvas => {
-                    const image = canvas.toDataURL('image/png');
-                    const a = document.createElement('a');
-                    a.href = image;
-                    a.download = 'notice.png';
-                    a.click();
-                });
-            }, 100);
-        });
-
-        const closeBtn = createButton('Back', '#dc3545', () => popup.remove());
-
-        buttonContainer.append(downloadBtn, closeBtn);
-        popup.appendChild(buttonContainer);
-        document.body.appendChild(popup);
-    }
-
-    // প্রথম লোডে ডাটা আনুন
-    fetchNotices();
-
-});
-
- // নম্বর আপলোডের শেষ তারিখ এর জাভা স্ক্রিপ্ট
-    // Apps Script Web App এর URL এখানে দিন
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfcYA8sdD__TgIe-mHKE9n1fabVv_pDFam1K59O9FdD13r5rVcg5_Mf005mcAWsa6xjA/exec';
-
-const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
-
-// Google Apps Script থেকে ডেটা লোড করা
-async function loadExamDates() {
-  try {
-    const response = await fetch(`${APPS_SCRIPT_URL}?action=get_github_data`);
-    const data = await response.json();
-    
-    if (data && data.data) {
-      examDatesMarquee.innerHTML = ''; // পুরোনো ডেটা মুছে নতুন করে যোগ করো
-      
-      const formattedData = data.data.map(item => {
-        const span = document.createElement("span");
-        span.textContent = item.text;
-        span.style.color = item.color;
-        return span.outerHTML;
-      }).join(', ');
-      
-      const fullSpan = document.createElement("span");
-      fullSpan.innerHTML = formattedData;
-      examDatesMarquee.appendChild(fullSpan);
-    }
-  } catch (error) {
-    console.error('Error loading exam dates:', error);
-    // যদি ডেটা লোড করতে সমস্যা হয়, একটি বার্তা দেখাও
-    examDatesMarquee.textContent = 'No exam dates available.';
+  // subj থাকলে তা দেখাও — গাঢ় সবুজ রঙ, হালকা সবুজ ব্যাকগ্রাউন্ড, ছোট হরফে
+  if (subjText && subjText.trim() !== '') {
+    const subjElem = document.createElement('div');
+    subjElem.innerText = subjText;
+    subjElem.style.color = 'darkgreen';
+    subjElem.style.backgroundColor = '#e6ffe6'; // হালকা সবুজ
+    subjElem.style.fontWeight = 'bold';
+    subjElem.style.fontSize = '14px';
+    subjElem.style.padding = '6px';
+    subjElem.style.borderRadius = '4px';
+    subjElem.style.marginBottom = '12px';
+    popup.appendChild(subjElem);
   }
+// বোতাম কন্টেইনার
+const buttonContainer = document.createElement('div');
+buttonContainer.style.marginTop = '20px';
+buttonContainer.style.display = 'flex';
+buttonContainer.style.flexWrap = 'wrap';
+buttonContainer.style.justifyContent = 'center';
+buttonContainer.style.gap = '20px'; // বোতামের মাঝে দূরত্ব
+
+// ফাইল খুলুন বোতাম লিঙ্ক থাকলে তা দেখাও
+if (link && link.trim() !== '') {
+  const linkBtn = document.createElement('a');
+  linkBtn.href = link;
+  linkBtn.innerText = 'Open Link';
+  linkBtn.target = '_blank';
+  linkBtn.style.backgroundColor = '#007bff';
+  linkBtn.style.color = 'white';
+  linkBtn.style.padding = '10px 16px';
+  linkBtn.style.border = 'none';
+  linkBtn.style.borderRadius = '5px';
+  linkBtn.style.textDecoration = 'none';
+  linkBtn.style.fontWeight = 'bold';
+  linkBtn.style.fontSize = '12px'; // ছোট ফন্ট
+  linkBtn.style.transition = 'background-color 0.3s';
+  linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#0056b3';
+  linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#007bff';
+  buttonContainer.appendChild(linkBtn);
 }
 
-// Initial load
-loadExamDates();
+// ✅ PNG Download Button (fixed) যোগ করা হয়েছে
+    const downloadBtn = document.createElement('button');
+    downloadBtn.innerText = 'Download';
+    downloadBtn.style.backgroundColor = '#28a745';
+    downloadBtn.style.color = 'white';
+    downloadBtn.style.padding = '6px 10px';
+    downloadBtn.style.border = 'none';
+    downloadBtn.style.borderRadius = '5px';
+    downloadBtn.style.fontWeight = 'bold';
+    downloadBtn.style.fontSize = '12px'; // ছোট ফন্ট
+    downloadBtn.style.cursor = 'pointer';
+    downloadBtn.onclick = () => {
+        // Ensure reflow before capturing
+        setTimeout(() => {
+            html2canvas(popup).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'notice.png';
+                link.click();
+            });
+        }, 100); // slight delay for reflow
+    };
+    buttonContainer.appendChild(downloadBtn);
 
-// Mouse hover করলে স্ক্রল থামানো
-examDatesMarquee.addEventListener("mouseover", () => {
-  examDatesMarquee.style.animationPlayState = 'paused';
-});
-examDatesMarquee.addEventListener("mouseout", () => {
-  examDatesMarquee.style.animationPlayState = 'running';
-});
+// বন্ধ করুন বোতাম
+const closeBtn = document.createElement('button');
+closeBtn.innerText = 'Back';
+closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.style.color = 'white';
+closeBtn.style.padding = '6px 10px';
+closeBtn.style.border = 'none';
+closeBtn.style.borderRadius = '5px';
+closeBtn.style.fontWeight = 'bold';
+closeBtn.style.fontSize = '12px'; // ছোট ফন্ট
+closeBtn.style.cursor = 'pointer';
+closeBtn.style.transition = 'background-color 0.3s';
+closeBtn.onmouseover = () => closeBtn.style.backgroundColor = '#a71d2a';
+closeBtn.onmouseout = () => closeBtn.style.backgroundColor = '#dc3545';
+closeBtn.onclick = () => document.body.removeChild(popup);
+buttonContainer.appendChild(closeBtn);
 
-// মোবাইলে touch করলে স্ক্রল থামানো
-examDatesMarquee.addEventListener("touchstart", () => {
-  examDatesMarquee.style.animationPlayState = 'paused';
-});
-examDatesMarquee.addEventListener("touchend", () => {
-  examDatesMarquee.style.animationPlayState = 'running';
-});
+// পপআপে বোতাম কন্টেইনার যোগ করুন
+popup.appendChild(buttonContainer);
 
-// ✅ সাইড বার মেনুঃ জাভা স্ক্রিপ্ট
-document.addEventListener("DOMContentLoaded", function() {
-    const menuButton = document.getElementById('menu-toggle-button');
-    const sidebar = document.getElementById('sidebar-menu');
-    const overlay = document.getElementById('overlay');
-    const navLinks = sidebar.querySelectorAll("a");
+  // স্ক্রিনে দেখাও
+  document.body.appendChild(popup);
+}
 
-    // সব id টার্গেট লিস্ট তৈরি
-    const targetIds = Array.from(navLinks)
-        .map(link => link.getAttribute("href"))
-        .filter(href => href && href.startsWith("#"))
-        .map(href => href.substring(1));
-
-    // মেনু বোতাম ক্লিক করলে সাইডবার টগল হবে
-    menuButton.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-    });
-
-    // ওভারলে ক্লিক করলে সাইডবার বন্ধ হবে
-    overlay.addEventListener('click', () => {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-    });
-
-    // ন্যাভ লিঙ্ক ক্লিক ইভেন্ট
-    navLinks.forEach(link => {
-        link.addEventListener("click", function(event) {
-            event.preventDefault();
-
-            // সব লিংক থেকে active-link সরানো
-            navLinks.forEach(item => item.classList.remove("active-link"));
-            this.classList.add("active-link");
-
-            // সাইডবার বন্ধ
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-
-            // টার্গেট সেকশন খুঁজে বের করা
-            const targetSectionId = this.getAttribute("href").substring(1);
-            const targetSection = document.getElementById(targetSectionId);
-
-            if (targetSection) {
-                targetSection.classList.add("highlight-section");
-
-                // হেডার উচ্চতা গণনা করুন
-                const headerHeight = document.querySelector('.main-header')?.offsetHeight || 0;
-
-                // স্ক্রল করার জন্য লক্ষ্যস্থান নির্ধারণ করুন
-                const targetPosition = targetSection.offsetTop - headerHeight - 20;
-
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-
-                // ৩ সেকেন্ড পরে হাইলাইট সরানো হবে
-                setTimeout(() => {
-                    targetSection.classList.remove("highlight-section");
-                }, 3000);
-            }
-        });
-    });
-});
+function closeModal() {
+  document.getElementById('popupModal').style.display = 'none';
+}
 
     // পেজ লোড হওয়ার সাথে সাথে ফাংশনটি কল করুন
     document.addEventListener('DOMContentLoaded', loadStudentExamLinks);
