@@ -251,46 +251,58 @@ document.addEventListener("DOMContentLoaded", function() {
 	</div>
 </div>
 
-<script src="teacher_dates.js"></script>
 <script>
     // নম্বর আপলোডের শেষ তারিখ এর জাভা স্ক্রিপ্ট
-    const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
+    // Apps Script Web App এর URL এখানে দিন
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVLmvYe0fPaZZ7ZJO1fx68UGolaQov9LGFZ4u4etlaVeNA8FmRyzZruWMfSJxAR0Kzlw/exec';
 
-    // Exam dates যুক্ত করা
-    if (typeof examDates !== 'undefined' && Array.isArray(examDates)) {
-        examDates.forEach(exam => {
-            if (exam.date) {
-                const span = document.createElement("span");
-                span.textContent = `${exam.text} ${exam.date}, `;
+const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
 
-                // রং প্রয়োগ পুরো লাইনের জন্য
-                span.style.color = exam.color;
-                span.style.fontWeight = "bold";
-
-                if (exam.backgroundColor) {
-                    span.style.backgroundColor = exam.backgroundColor;
-                }
-
-                examDatesMarquee.appendChild(span);
-            }
-        });
+// Google Apps Script থেকে ডেটা লোড করা
+async function loadExamDates() {
+  try {
+    const response = await fetch(`${APPS_SCRIPT_URL}?action=get_github_data`);
+    const data = await response.json();
+    
+    if (data && data.data) {
+      examDatesMarquee.innerHTML = ''; // পুরোনো ডেটা মুছে নতুন করে যোগ করো
+      
+      const formattedData = data.data.map(item => {
+        const span = document.createElement("span");
+        span.textContent = item.text;
+        span.style.color = item.color;
+        return span.outerHTML;
+      }).join(', ');
+      
+      const fullSpan = document.createElement("span");
+      fullSpan.innerHTML = formattedData;
+      examDatesMarquee.appendChild(fullSpan);
     }
+  } catch (error) {
+    console.error('Error loading exam dates:', error);
+    // যদি ডেটা লোড করতে সমস্যা হয়, একটি বার্তা দেখাও
+    examDatesMarquee.textContent = 'No exam dates available.';
+  }
+}
 
-    // Mouse hover করলে স্ক্রল থামানো
-    examDatesMarquee.addEventListener("mouseover", () => {
-        examDatesMarquee.classList.add("paused");
-    });
-    examDatesMarquee.addEventListener("mouseout", () => {
-        examDatesMarquee.classList.remove("paused");
-    });
+// Initial load
+loadExamDates();
 
-    // মোবাইলে touch করলে স্ক্রল থামানো
-    examDatesMarquee.addEventListener("touchstart", () => {
-        examDatesMarquee.classList.add("paused");
-    });
-    examDatesMarquee.addEventListener("touchend", () => {
-        examDatesMarquee.classList.remove("paused");
-    });
+// Mouse hover করলে স্ক্রল থামানো
+examDatesMarquee.addEventListener("mouseover", () => {
+  examDatesMarquee.style.animationPlayState = 'paused';
+});
+examDatesMarquee.addEventListener("mouseout", () => {
+  examDatesMarquee.style.animationPlayState = 'running';
+});
+
+// মোবাইলে touch করলে স্ক্রল থামানো
+examDatesMarquee.addEventListener("touchstart", () => {
+  examDatesMarquee.style.animationPlayState = 'paused';
+});
+examDatesMarquee.addEventListener("touchend", () => {
+  examDatesMarquee.style.animationPlayState = 'running';
+});
 </script>
 
 	  <!--✅ নম্বর আপলোড -->  
@@ -620,7 +632,7 @@ function createButton(text, bgColor, onClick, disabled = false) {
 				<h3 class="login-instruction-heading">To set the time limit for uploading students' exam marks, grades & comments, click the button below:<span class="emoji">👇</span></h3>
             </div>
             <div class="sub-section-content">
-		<a href="https://demo.com" target="_blank" class="exam-link">SET MARKS UPLOAD DEADLINE</a>
+		<a href="https://script.google.com/macros/s/AKfycbxVLmvYe0fPaZZ7ZJO1fx68UGolaQov9LGFZ4u4etlaVeNA8FmRyzZruWMfSJxAR0Kzlw/exec" target="_blank" class="exam-link">SET MARKS UPLOAD DEADLINE</a>
     </div>
     </div>
 		
