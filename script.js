@@ -1,6 +1,13 @@
 let credentials = {};
 let masterCredential = {};
 
+// ✅ পেজ লোড হওয়ার পর স্ক্রলিং বন্ধ করা
+// **এই কোড ব্লকটি নতুন যোগ করা হয়েছে**
+document.addEventListener("DOMContentLoaded", () => {
+    // যেহেতু পপআপটি home.html লোড হওয়ার সাথে সাথেই আসে, তাই স্ক্রলিং বন্ধ করে দেওয়া হলো।
+    document.body.classList.add('no-scroll');
+});
+
 // ✅ মাস্টার লগইনের তথ্য লোড ফাংশন
 async function getCredentials() {
     try {
@@ -76,6 +83,7 @@ async function submitMasterLogin() {
             } else {
                 // Teacher লগইন
                 document.getElementById('masterLoginOverlay').style.display = "none";
+                document.body.classList.remove('no-scroll'); // **লগ ইন সফল হলে পেজ স্ক্রলিং করা যাবে**
                 loadExamLinks(); // এক্সাম লিঙ্ক লোড
             }
         }, 1000);
