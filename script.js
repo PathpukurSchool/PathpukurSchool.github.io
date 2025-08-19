@@ -143,7 +143,8 @@ function renderButtons() {
             if (credentials[key]) { // যদি এই নির্দিষ্ট পরীক্ষার জন্য ডেটা config.json-এ থাকে
                 const button = document.createElement('button');
                 button.className = 'box-button exam-link'; // CSS ক্লাস যা বোতামের স্টাইল দেবে
-                
+                button.dataset.key = key;
+
                 // বোতামের লেবেল নির্ধারণ
                 let label = exam;
                 switch (exam) {
@@ -180,27 +181,26 @@ function renderButtons() {
 
 function showAvailableSoonMessage(key) {
     const container = document.getElementById('exam-buttons');
-    const links = container.getElementsByClassName('exam-link');
+    // data-key অ্যাট্রিবিউটের মাধ্যমে সরাসরি সঠিক বোতামটি খুঁজুন
+    const link = container.querySelector(`[data-key="${key}"]`); 
+    
+    if (link) {
+        // আগে থেকে কোন বার্তা থাকলে সরাও
+        const next = link.nextElementSibling;
+        if (next && next.classList.contains('avail-msg')) next.remove();
 
-    for (let link of links) {
-        if (link.textContent === getExamText(key)) {
-            // আগে থেকে কোন বার্তা থাকলে সরাও
-            const next = link.nextElementSibling;
-            if (next && next.classList.contains('avail-msg')) next.remove();
+        const msg = document.createElement('div');
+        msg.className = 'avail-msg';
+        msg.textContent = '🔔 Available Soon 🔔';
 
-            const msg = document.createElement('div');
-            msg.className = 'avail-msg';
-            msg.textContent = '🔔 Available Soon 🔔';
+        link.parentNode.insertBefore(msg, link.nextSibling);
 
-            link.parentNode.insertBefore(msg, link.nextSibling);
-
-            // 3 সেকেন্ড পরে মুছে ফেল
-            setTimeout(() => {
-                msg.remove();
-            }, 3000);
-
-            break;
-        }
+        // 3 সেকেন্ড পরে মুছে ফেল
+        setTimeout(() => {
+            if (msg.parentNode) {
+                 msg.remove();
+            }
+        }, 3000);
     }
 }
 
