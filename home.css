@@ -149,11 +149,22 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--primary-color); /* সম্পূর্ণ কালো (#000) বা গাঢ় ধূসর (#212121) ব্যবহার করুন */
+    /* background-color: var(--primary-color); /* সম্পূর্ণ কালো (#000) বা গাঢ় ধূসর (#212121) ব্যবহার করুন */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
+
+      /* ছবির URL এখানে দিন */
+    background-image: url('photo/phs_7.jpg');
+    
+    /* ছবি কিভাবে প্রদর্শিত হবে তা সেট করুন */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; /* ছবিটি পুরো স্ক্রিন জুড়ে থাকবে */
+    
+    /* ওয়াটারমার্কের জন্য অপাসিটি সেট করুন */
+    /* opacity: 0.3; /* এটি ব্যাকগ্রাউন্ডকে হালকা স্বচ্ছ করবে */
 }
 
 #masterLoginBox {
