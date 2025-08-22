@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 const links = {
                     'exam-marks-link': data['exam-marks-url'],
+                    'student-code-link': data['student-code-url'],
                     'class-routine-link': data['class-routine-url'],
                     'exam-routine-link': data['exam-routine-url'],
                     'xi-tab-form-link': data['xi-tab-form-url'],
