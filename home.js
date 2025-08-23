@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // ৩. মেসেজ তৈরি করে যোগ করুন
         const message = document.createElement('div');
         message.className = 'avail-msg';
-        message.textContent = '(🔔 Available Soon 🔔)';
+        message.textContent = '🔔 Available Soon 🔔';
         button.parentNode.appendChild(message);
 
         // ৪. ৩ সেকেন্ড পর মেসেজটি সরান এবং বোতামটি আবার দেখান
