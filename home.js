@@ -20,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     button.setAttribute("href", data[id]);   // url সেট করা
                     button.setAttribute("target", "_self");  // একই ট্যাবে ওপেন হবে
                 } else {
+    // যদি URL না থাকে, তাহলে href অ্যাট্রিবিউট সেট করুন
+    button.setAttribute("href", "#");
     // একটি নতুন এলিমেন্ট তৈরি করা
     const message = document.createElement('div');
     message.className = 'avail-msg';
