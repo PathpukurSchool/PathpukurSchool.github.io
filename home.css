@@ -164,9 +164,6 @@ body.no-scroll {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover; /* ছবিটি পুরো স্ক্রিন জুড়ে থাকবে */
-    
-    /* ওয়াটারমার্কের জন্য অপাসিটি সেট করুন */
-    opacity: 0.3; /* এটি ব্যাকগ্রাউন্ডকে হালকা স্বচ্ছ করবে */
 }
 
 #masterLoginBox {
