@@ -158,17 +158,15 @@ body.no-scroll {
     justify-content: center;
     align-items: center;
     z-index: 2000;
-
       /* মাস্টার লগইন ব্যাকগ্রাউন্ড ছবির URL এখানে দিন */
     background-image: url('photo/master_login_image.jpg');
-    
     /* ছবি কিভাবে প্রদর্শিত হবে তা সেট করুন */
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover; /* ছবিটি পুরো স্ক্রিন জুড়ে থাকবে */
     
     /* ওয়াটারমার্কের জন্য অপাসিটি সেট করুন */
-    /* opacity: 0.3; /* এটি ব্যাকগ্রাউন্ডকে হালকা স্বচ্ছ করবে */
+    opacity: 0.3; /* এটি ব্যাকগ্রাউন্ডকে হালকা স্বচ্ছ করবে */
 }
 
 #masterLoginBox {
@@ -177,7 +175,7 @@ body.no-scroll {
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     text-align: center;
-    width: 90%;
+    width: 80%;
     max-width: 400px;
 }
 
