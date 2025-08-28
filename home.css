@@ -694,7 +694,7 @@ footer p {
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 120px; /* বক্সের নূন্যতম উচ্চতা */
+    min-height: 90px; /* বক্সের নূন্যতম উচ্চতা */
     padding: 1rem;
     text-decoration: none;
     background-color: var(--card-background);
@@ -703,7 +703,7 @@ footer p {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-    border-left: 5px solid var(--secondary-color); /* নতুন ডিজাইনের জন্য রং পরিবর্তন */
+    border-left: 5px solid var(--primary-color); /* নতুন ডিজাইনের জন্য রং পরিবর্তন */
 }
 
 .new-info-box:hover {
