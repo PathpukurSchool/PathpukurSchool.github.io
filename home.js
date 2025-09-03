@@ -18,7 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const id = button.id;   // প্রতিটি বোতামের id
                 if (data[id]) {         // JSON-এ সেই id এর url আছে কিনা
                     button.setAttribute("href", data[id]);   // url সেট করা
-                    button.setAttribute("target", "_self");  // একই ট্যাবে ওপেন হবে
+                    button.setAttribute("target", "_blank");  // URL নতুন ট্যাবে ওপেন হবে
+                    // button.setAttribute("target", "_self");  // URL একই ট্যাবে ওপেন হবে
                 } else {
     // URL না পেলে বোতামে একটি ক্লিক ইভেন্ট লিসেনার যোগ করুন
     button.addEventListener('click', (event) => {
