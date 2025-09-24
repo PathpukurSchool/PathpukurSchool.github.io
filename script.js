@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* =================================
      * Digital Notice Board Functions
      * ================================= */
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGMBUZ2nDhM4MFp374KywpxSQQ-V3gXfcsXUUVi9jo9Jlfx-B4liTtV5VvgR5PfTs1/exec?action=read";
+    const APPS_SCRIPT_NOTICE_URL = "https://script.google.com/macros/s/AKfycbyGMBUZ2nDhM4MFp374KywpxSQQ-V3gXfcsXUUVi9jo9Jlfx-B4liTtV5VvgR5PfTs1/exec?action=read";
     const NOTICES_PER_PAGE = 10;
     let currentPage = 1;
     let totalPages = 0;
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchNotices() {
         try {
-            const response = await fetch(APPS_SCRIPT_URL);
+            const response = await fetch(APPS_SCRIPT_NOTICE_URL);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             Helping = Array.isArray(data.notices) ? data.notices : [];
