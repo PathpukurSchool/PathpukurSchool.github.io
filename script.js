@@ -1,36 +1,37 @@
+// ✅ Google Apps Script এর URL, যা GitHub লগইন যাচাই করবে।
+const APPS_SCRIPT_GITHUB_URL = "https://script.google.com/macros/s/AKfycbxplpAx91EW7szhs8n3XFQNOsQ6Vq06TFzRatbWot-fhcpAY-aU7IvEZkGzrkvZmeWzXw/exec";
+
 let credentials = {};
 let masterCredential = {};
 
 // ✅ পেজ লোড হওয়ার পর স্ক্রলিং বন্ধ করা
-// **এই কোড ব্লকটি নতুন যোগ করা হয়েছে**
 document.addEventListener("DOMContentLoaded", () => {
-    // যেহেতু পপআপটি home.html লোড হওয়ার সাথে সাথেই আসে, তাই স্ক্রলিং বন্ধ করে দেওয়া হলো।
     document.body.classList.add('no-scroll');
 });
 
-// ✅ মাস্টার লগইনের তথ্য লোড ফাংশন
-async function getCredentials() {
-    try {
-        const response = await fetch('masterConfig.json');
-        if (!response.ok) {
-            throw new Error('Failed to load masterConfig.json');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching config:', error);
-        return null;
+// ✅ পাসওয়ার্ড দেখা ও হাইড করার জন্য আইকন
+function toggleMasterPasswordVisibility() {
+    const passInput = document.getElementById('masterPass');
+    const toggleIcon = document.getElementById('masterPassToggle');
+    if (passInput.type === "password") {
+        passInput.type = "text";
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    } else {
+        passInput.type = "password";
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
     }
 }
 
-// ✅ মাস্টার লগইন সাবমিট ফাংশন
+// ✅ মাস্টার লগইন সাবমিট ফাংশন (পরিবর্তিত)
 async function submitMasterLogin() {
-    const type = 'teacher'; // সরাসরি teacher সেট করা
     const id = document.getElementById('masterId').value.trim();
     const pass = document.getElementById('masterPass').value.trim();
 
     const errorDiv = document.getElementById('masterLoginError');
     const successDiv = document.getElementById('masterLoginSuccess');
+    const loginBtn = document.querySelector('#masterLoginBox button');
 
     // পুরোনো মেসেজ ক্লিয়ার
     errorDiv.innerText = "";
@@ -43,54 +44,41 @@ async function submitMasterLogin() {
         errorDiv.style.color = "red";
         return;
     }
+    
+    // ✅ লোডিং স্টেট
+    loginBtn.innerText = "Loading...";
+    loginBtn.disabled = true;
 
-    // JSON থেকে ক্রেডেনশিয়াল লোড
-    const allCredentials = await getCredentials();
-    if (!allCredentials) {
-        errorDiv.innerText = "Unable to load login configuration.";
-        errorDiv.style.color = "red";
-        return;
-    }
+    // ✅ Apps Script এর মাধ্যমে লগইন ভেরিফাই
+    try {
+        const response = await fetch(`${APPS_SCRIPT_GITHUB_URL}?action=verify&id=${encodeURIComponent(id)}&pass=${encodeURIComponent(pass)}`);
+        const data = await response.json();
 
-    // টাইপ অনুযায়ী ইউজার ডেটা নিন
-    const user = allCredentials[type.toLowerCase()];
-    if (!user) {
-        errorDiv.innerText = "Invalid user type!";
-        errorDiv.style.color = "red";
-        return;
-    }
+        if (data.success) {
+            sessionStorage.setItem("userType", "teacher");
+            sessionStorage.setItem("teacherLoggedIn", "true");
+            
+            successDiv.innerText = "✔️ Login Successful.";
+            successDiv.style.display = "block";
 
-    // ✅ লগইন ভেরিফাই
-    if (id === user.id && pass === user.pass) {
-        sessionStorage.setItem("userType", type.toLowerCase());
-        if (type.toLowerCase() === "student") {
-            sessionStorage.setItem("studentLoggedIn", "true");
-        }
-
-        // সফল লগইন মেসেজ
-        successDiv.innerText = "✔️ Login Successful.";
-        successDiv.style.display = "block";
-
-        setTimeout(() => {
-            if (type.toLowerCase() === 'student' || type.toLowerCase() === 'school') {
-                // রিডাইরেক্ট
-                if (user.redirect) {
-                    window.location.href = user.redirect;
-                } else {
-                    errorDiv.innerText = "No redirect link found!";
-                    errorDiv.style.color = "red";
-                }
-            } else {
-                // Teacher লগইন
+            setTimeout(() => {
                 document.getElementById('masterLoginOverlay').style.display = "none";
-                document.body.classList.remove('no-scroll'); // **লগ ইন সফল হলে পেজ স্ক্রলিং করা যাবে**
-                loadExamLinks(); // এক্সাম লিঙ্ক লোড
-            }
-        }, 1000);
+                document.body.classList.remove('no-scroll');
+                loadExamLinks();
+            }, 1000);
 
-    } else {
-        errorDiv.innerText = "Incorrect ID or Password!";
+        } else {
+            errorDiv.innerText = "Incorrect ID or Password!";
+            errorDiv.style.color = "red";
+            loginBtn.innerText = "LOGIN";
+            loginBtn.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error fetching credentials:', error);
+        errorDiv.innerText = "Error connecting to server.";
         errorDiv.style.color = "red";
+        loginBtn.innerText = "LOGIN";
+        loginBtn.disabled = false;
     }
 }
 
