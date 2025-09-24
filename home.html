@@ -41,20 +41,28 @@
   <body>
 	  
     <!-- ✅ মাস্টার লগ ইন : টিচার লগইন -->
-   <div id="masterLoginOverlay">
-    <div id="masterLoginBox">
-        <h2 class="red-text">Pathpukur High School</h2>
-        <h2 class="shaded-info-box-heading">Teacher Login</h2>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<div id="masterLoginOverlay">
+  <div id="masterLoginBox">
+    <h2 class="red-text">Pathpukur High School</h2>
+    <h2 class="shaded-info-box-heading">Teacher Login</h2>
 
-        <input type="hidden" id="loginType" value="teacher">
+    <input type="hidden" id="loginType" value="teacher">
 
-        <input type="text" id="masterId" placeholder="Enter ID"><br>
-        <input type="password" id="masterPass" placeholder="Enter Password"><br>
-        <div id="masterLoginError" class="error"></div>
-        <div id="masterLoginSuccess" class="success" style="display:none;"></div>
-
-        <button onclick="submitMasterLogin()">LOGIN</button>
+    <input type="text" id="masterId" placeholder="Enter ID"><br>
+    
+    <div style="position: relative;">
+        <input type="password" id="masterPass" placeholder="Enter Password">
+        <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
+            <i id="masterPassToggle" class="fa-solid fa-eye"></i>
+        </span>
     </div>
+
+    <div id="masterLoginError" class="error"></div>
+    <div id="masterLoginSuccess" class="success" style="display:none;"></div>
+
+    <button onclick="submitMasterLogin()">LOGIN</button>
+  </div>
 </div>
 	          <!-- ✅ মেন হেডার -->
 	  <div id="top-bar-section">
