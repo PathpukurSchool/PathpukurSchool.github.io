@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Admission Form (Fast Load)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS কোড */
+        /* ... আপনার আগের CSS কোড ... */
+        body { font-family: 'Noto Sans Bengali', Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; color: #333; }
+        .header { text-align: center; margin-bottom: 20px; }
+        /* ... অন্যান্য CSS ... */
+        #service-unavailable {
+            background-color: #ffebee; border: 2px solid #c62828; color: #c62828; padding: 30px; border-radius: 8px; text-align: center; font-size: 20px; font-weight: bold; margin-top: 50px; display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="service-unavailable">
+        <p>❌ এই পরিষেবা শীঘ্রই উপলব্ধ হবে। অসুবিধার জন্য আন্তরিক ভাবে দুঃখিত।</p>
+    </div>
+    
+    <div id="mainForm" style="display: none;">
+        <div class="header">
+            <img src="https://pathpukurschool.github.io/PHS-LOGO.png" alt="School Logo" class="logo">
+            <h1 class="school-name">Pathpukur High School (HS)</h1>
+            <h2 class="form-title">New Admission Form</h2>
+            <p class="highlighted-text"><b>বাংলার শিক্ষা পোর্টালের ট্রান্সফার সার্টিফিকেট অনুযায়ী সকল তথ্য<br>
+                                এন্ট্রি করতে হবে। ভুল তথ্য এন্ট্রির জন্য ফর্ম বাতিল করা হবে।</b></p>
+        </div>
+        <div class="form-container">
+            <form id="admissionForm">
+                <div class="input-row">
+                    <label for="studentCode">স্টুডেন্ট কোড:</label>
+                    <input type="text" id="studentCode" placeholder="14 সংখ্যার স্টুডেন্ট কোড" maxlength="14" required>
+                </div>
+                <span id="codeError" class="error-message"></span>
+                
+                <div class="input-row">
+                    <label for="studentName">ছাত্র-ছাত্রীর নাম:</label>
+                    <input type="text" id="studentName" placeholder="ছাত্র-ছাত্রীর নাম লিখুন" required>
+                </div>
+                <span id="nameError" class="error-message"></span>
+
+                <div class="input-row">
+                    <label for="admissionClass">ভর্তির ক্লাস:</label>
+                    <select id="admissionClass" required>
+                        <option value="">ক্লাস নির্বাচন করুন</option>
+                        <option value="V">V</option>
+                        <option value="VI">VI</option>
+                        <option value="VII">VII</option>
+                        <option value="VIII">VIII</option>
+                        <option value="IX">IX</option>
+                    </select>
+                </div>
+
+                <div class="input-row">
+                    <label for="admissionDate">ভর্তির তারিখ:</label>
+                    <select id="admissionDate" required>
+                        <option value="">ক্লাস নির্বাচন করুন</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="submitBtn" class="form-button">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="reviewOverlay" class="review-overlay" style="display: none;">
+        <div id="reviewPage" class="review-page">
+            <h3 class="success-message">পূরণ করা সকল তথ্য কি সর্বাংশে সঠিক?</h3>
+            <div class="review-item"><b>স্টুডেন্ট কোড:</b> <span id="reviewCode"></span></div>
+            <div class="review-item"><b>ছাত্র-ছাত্রীর নাম:</b> <span id="reviewName"></span></div>
+            <div class="review-item"><b>ভর্তির ক্লাস:</b> <span id="reviewClass"></span></div>
+            <div class="review-item"><b>ভর্তির তারিখ:</b> <span id="reviewDate"></span></div>
+            <div class="review-buttons">
+                <button class="form-button yes-btn" id="confirmYes">Yes</button>
+                <button class="form-button no-btn" id="confirmNo">No</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ✅ Apps Script-এর স্থাপন করা URL এখানে বসান
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLAy2q5JoWM05CT71lGEV_fjCSMn0VswamI01reqOCHRl5TytATxeOJWWmAtUxNjVieg/exec'; 
+        
+        // ... আপনার বাকি JavaScript লজিক এখানে থাকবে, 
+        // কিন্তু google.script.run-এর বদলে Fetch API ব্যবহার করতে হবে।
+
+        const studentCodeInput = document.getElementById('studentCode');
+        const admissionClassSelect = document.getElementById('admissionClass');
+        const admissionDateSelect = document.getElementById('admissionDate');
+        const submitBtn = document.getElementById('submitBtn');
+        const mainFormDiv = document.getElementById('mainForm');
+        const unavailableDiv = document.getElementById('service-unavailable');
+
+        // B3 স্ট্যাটাস চেক ফাংশন (Fetch API ব্যবহার করে)
+        async function checkStatusAndDisplay() {
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=checkStatus`);
+                const result = await response.json();
+                
+                if (result.status === 'ON') {
+                    mainFormDiv.style.display = 'block';
+                    unavailableDiv.style.display = 'none';
+                } else {
+                    mainFormDiv.style.display = 'none';
+                    unavailableDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error("Status check failed:", error);
+                mainFormDiv.style.display = 'none';
+                unavailableDiv.style.display = 'block';
+            }
+        }
+        
+        // ভর্তির তারিখ লোড ফাংশন (Fetch API ব্যবহার করে)
+        async function populateAdmissionDates() {
+            const selectedClass = admissionClassSelect.value;
+            admissionDateSelect.innerHTML = '<option value="">লোডিং...অপেক্ষা করুন...</option>';
+            
+            if (!selectedClass) {
+                 admissionDateSelect.innerHTML = '<option value="">ক্লাস নির্বাচন করুন</option>';
+                 return;
+            }
+            
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=getDates&class=${selectedClass}`);
+                const result = await response.json();
+                
+                admissionDateSelect.innerHTML = '';
+                if (result.dates && result.dates.length > 0) {
+                    admissionDateSelect.innerHTML += '<option value="">তারিখ নির্বাচন করুন</option>';
+                    result.dates.forEach(date => {
+                        admissionDateSelect.innerHTML += `<option value="${date}">${date}</option>`;
+                    });
+                } else {
+                    admissionDateSelect.innerHTML = '<option value="">কোনো তারিখ পাওয়া যায়নি</option>';
+                }
+            } catch (error) {
+                console.error("Date loading failed:", error);
+                admissionDateSelect.innerHTML = '<option value="">তারিখ লোড করতে সমস্যা</option>';
+            }
+        }
+
+        // ফর্ম সাবমিট ফাংশন (Fetch API ব্যবহার করে)
+        async function onFormSubmit(formData) {
+            submitBtn.textContent = 'Saving Data & Generating PDF...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'text/plain' }, // Apps Script এর জন্য
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+
+                if (result.success) {
+                    submitBtn.textContent = 'PDF Ready! Opening for Print...';
+                    
+                    // 1. PDF ডাউনলোড
+                    const a = document.createElement('a');
+                    a.href = result.downloadUrl;
+                    a.download = `Admission_Form_${formData.studentCode}_${formData.admissionClass}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    // 2. নিউ ট্যাবে ওপেন করা
+                    window.open(result.downloadUrl, '_blank'); 
+                    
+                    setTimeout(() => {
+                        alert("ফর্ম সফলভাবে জমা হয়েছে এবং PDF ফাইল ডাউনলোড শুরু হয়েছে। নতুন ট্যাবে প্রিন্টের জন্য ওপেন হয়েছে।");
+                        resetForm(); // আপনার resetForm ফাংশনটি এখানে যোগ করুন
+                    }, 3000);
+                } else {
+                    alert("ফর্ম জমা দিতে ব্যর্থ: " + (result.error || 'অজানা ত্রুটি'));
+                    console.error("Server Error:", result.error);
+                    submitBtn.textContent = 'Submit';
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                alert("নেটওয়ার্ক বা সার্ভার ত্রুটি। অনুগ্রহ করে আবার চেষ্টা করুন।");
+                console.error("Fetch Error:", error);
+                submitBtn.textContent = 'Submit';
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // **অন্যান্য ইভেন্ট লিসেনার ও ভ্যালিডেশন কোড এখানে থাকবে**
+        // [আপনার আগের Index.html এর বাকি JavaScript (input validation, resetForm, form submit event, review buttons) কোড এখানে কপি করে বসান]
+
+        // পেজ লোড হবার সাথে সাথে পরিষেবা স্থিতি পরীক্ষা করা
+        window.onload = checkStatusAndDisplay;
+        
+        // ক্লাস পরিবর্তনের সময় তারিখ লোড করা
+        admissionClassSelect.addEventListener('change', populateAdmissionDates);
+        
+        // ফর্ম সাবমিট ইভেন্ট
+        document.getElementById('admissionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // ... (formData তৈরি ও রিভিউ দেখানোর লজিক) ...
+            
+            // রিভিউ কনফার্ম হওয়ার পর
+            document.getElementById('confirmYes').addEventListener('click', function() {
+                // ... (ডিসেবেল করার কোড) ...
+                onFormSubmit(formData); // ডেটা সেভ ও পিডিএফ তৈরির জন্য ফাংশন কল
+            });
+        });
+        
+    </script>
+</body>
+</html>
