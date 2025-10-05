@@ -1200,3 +1200,25 @@ section[id] {
     transform: scale(1);
   }
 }
+
+/* নতুন ক্লাস .form-link-button-এর জন্য স্টাইল */
+.form-link-button {
+    display: block; /* পুরো প্রস্থ জুড়ে দেখানোর জন্য */
+    cursor: pointer;
+    margin: 10px 0;
+    padding: 8px 15px;
+    background-color: #f9f9f9;
+    color: #333; /* টেক্সটের রঙ */
+    text-decoration: none; /* আন্ডারলাইন সরানো হয়েছে */
+    border-left: 6px solid #8B4513; /* গাঢ় বাদামী (SaddleBrown) বর্ডার */
+    border-radius: 4px;
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: 600; /* লেখাটিকে আরো বোল্ড করা হয়েছে */
+}
+
+.form-link-button:hover {
+    background-color: #e5e5e5; /* হোভার ইফেক্ট */
+    transform: translateX(2px); /* সামান্য স্লাইড ইফেক্ট */
+}
+
+
