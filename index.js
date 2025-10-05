@@ -162,31 +162,33 @@ document.addEventListener('DOMContentLoaded', function () {
             const itemDiv = document.createElement('div');
             const titleText = item.title || "No Title";
             const linkUrl = item.url || '';
+            
+            // [নতুন লজিক] item.isNew এর উপর ভিত্তি করে "New" ব্যাজ তৈরি করা
+            const isItemNew = item.isNew === true; // JSON ফাইলে isNew: true আছে কিনা চেক করা হচ্ছে
+            let itemContent = titleText;
 
-            // [পরিবর্তন] এখানে Description যোগ করা হয়েছে, যদিও এটি কেবল স্টাইল হিসেবে ব্যবহৃত হবে।
-            // আসল Link Open লজিকটি onclick-এ থাকবে।
-            let displayText = titleText;
-            if (item.description) {
-                 // প্রয়োজন হলে description-কে ছোট ফন্টে title-এর নিচে দেখানো যেতে পারে।
-                 // তবে শুধুমাত্র title-টিই বাইরে দেখানো হচ্ছে, যেমন Notices-এ ছিল।
+            if (isItemNew) {
+                // 'New' ব্যাজ যুক্ত করা হলো
+                itemContent += ` <span class="new-badge">NEW</span>`; 
             }
-            itemDiv.innerText = titleText; 
+            
+            itemDiv.innerHTML = itemContent; 
 
-            // [পরিবর্তন] Notices সেকশনের স্টাইল ব্যবহার করা হয়েছে।
+            // [Notices সেকশনের স্টাইল]
             itemDiv.style.cssText = `
                 cursor: pointer; margin: 10px 0; padding: 8px 10px;
                 background-color: #f9f9f9; border-left: 6px solid #8B4513;
                 border-radius: 4px; transition: background-color 0.3s;
+                display: flex; justify-content: space-between; align-items: center;
             `;
             itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
             itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
             
-            // [পরিবর্তন] Students ও Forms সেকশনের জন্য সরাসরি লিংক ওপেন করার লজিক
+            // [Students ও Forms সেকশনের জন্য সরাসরি লিংক ওপেন করার লজিক]
             itemDiv.onclick = () => {
                 if (linkUrl && linkUrl.trim() !== '') {
-                    window.open(linkUrl, '_blank'); // সরাসরি নতুন ট্যাবে ওপেন হবে
+                    window.open(linkUrl, '_blank'); 
                 } else {
-                    // লিংক না পাওয়া গেলে Notices সেকশনের অনুরূপ মেসেজ দেখাবে।
                     showAvailableSoonMessage(itemDiv); 
                 }
             };
