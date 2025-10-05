@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // [পরিবর্তন] একটি জেনারেলাইজড ফাংশন যা নোটিশের মতো errorBox তৈরি করে
     function errorBox(title, message) {
         return `
             <div style="
@@ -37,14 +36,13 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     }
 
-    // [Notices সেকশনের জন্য] fetchNotices, renderHelpList, renderPaginationControls অপরিবর্তিত রইল
     async function fetchNotices() {
         try {
             const response = await fetch(APPS_SCRIPT_URL);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             Helping = Array.isArray(data.notices) ? data.notices : [];
-            currentPage = 1; // নোটিশ ডেটা লোড হলে প্রথম পেজে সেট করা
+            currentPage = 1; 
             renderHelpList();
         } catch (error) {
             console.error("Failed to fetch notices:", error);
@@ -73,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
         noticesToRender.forEach(item => {
             const itemDiv = document.createElement('div');
             itemDiv.innerText = item.text || "No Title";
-            // [Notices স্টাইল]
             itemDiv.style.cssText = `
                 cursor: pointer; margin: 10px 0; padding: 8px 10px;
                 background-color: #f9f9f9; border-left: 6px solid #8B4513;
@@ -108,33 +105,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         paginationContainer.append(backBtn, pageInfo, nextBtn);
     }
-
-    //ডাউনলোড কোড
-    const downloadBtn = createButton('Download', '#28a745', () => {
-            setTimeout(() => {
-                html2canvas(popup).then(canvas => {
-                    const image = canvas.toDataURL('image/png');
-                    const link = document.createElement('a');
-                    link.href = image;
-                    link.download = 'notice.png';
-                    link.click();
-                });
-            }, 100);
-        });
-
-        const closeBtn = createButton('Back', '#dc3545', () => popup.remove());
-
-        buttonContainer.append(downloadBtn, closeBtn);
-        popup.appendChild(buttonContainer);
-        document.body.appendChild(popup);
-    }
     // [Notices সেকশনের কোড শেষ]
 
     /* =================================
      * Students & Forms Section (Notices-এর স্টাইল ব্যবহার করে)
      * ================================= */
     
-    // [নতুন কোড] Students ও Forms সেকশনের ডেটা লোড করার জন্য জেনারেলাইজড ফাংশন
+    // [নতুন কোড] Students ও Forms সেকশনের ডেটা লোড করার জন্য ফাংশন
     async function fetchDynamicSectionData(sectionId) {
         const container = document.getElementById(sectionId);
         const dataKey = sectionId === 'students-list' ? 'students' : 'forms'; // JSON থেকে সঠিক কী নেওয়া
@@ -147,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             // ধরে নিচ্ছি JSON-এ dataKey-এর নামে একটি অ্যারে আছে
             state.data = Array.isArray(data[dataKey]) ? data[dataKey] : [];
-            state.currentPage = 1; // ডেটা লোড হওয়ার পর প্রথম পেজে সেট করা
+            state.currentPage = 1;
             
             renderDynamicList(sectionId);
 
@@ -164,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderDynamicList(sectionId) {
         const state = dynamicSectionsState[sectionId];
         const container = document.getElementById(sectionId);
-        // [পরিবর্তন] পেজিনেশন কন্টেইনারের ID পরিবর্তন করা হয়েছে
         const paginationContainer = document.getElementById(sectionId.replace('-list', '-pagination')); 
 
         if (!container) return;
@@ -177,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // পেজিনেশন লজিক
+        // পেজিনেশন লজিক (Notices-এর অনুরূপ)
         state.totalPages = Math.ceil(state.data.length / NOTICES_PER_PAGE);
         const startIndex = (state.currentPage - 1) * NOTICES_PER_PAGE;
         const endIndex = startIndex + NOTICES_PER_PAGE;
@@ -199,10 +175,10 @@ document.addEventListener('DOMContentLoaded', function () {
             itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
             itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
             
-            // [পরিবর্তন] ক্লিক ইভেন্ট: লিংক থাকলে পপআপ দেখাবে, না থাকলে Unavailable মেসেজ দেখাবে।
+            // [পরিবর্তন] ক্লিক ইভেন্ট: Notices-এর মতো পপআপ/Unavailable মেসেজ দেখাবে।
             itemDiv.onclick = () => {
                 if (linkUrl && linkUrl.trim() !== '') {
-                    // Notices-এর মতো পপআপ দেখাবে
+                    // Notices-এর মতো showPopup ফাংশন ব্যবহার
                     showPopup(titleText, item.date || '', linkUrl, description);
                 } else {
                     // লিংক না পাওয়া গেলে Notices সেকশনের অনুরূপ মেসেজ দেখাবে।
@@ -212,11 +188,10 @@ document.addEventListener('DOMContentLoaded', function () {
             container.appendChild(itemDiv);
         });
 
-        // পেজিনেশন কন্ট্রোল রেন্ডার করা
         renderDynamicPagination(sectionId);
     }
     
-    // [নতুন কোড] Students ও Forms সেকশনের জন্য পেজিনেশন কন্ট্রোল রেন্ডার
+    // [নতুন কোড] Students ও Forms সেকশনের জন্য পেজিনেশন কন্ট্রোল রেন্ডার (Notices-এর অনুরূপ)
     function renderDynamicPagination(sectionId) {
         const state = dynamicSectionsState[sectionId];
         const paginationContainer = document.getElementById(sectionId.replace('-list', '-pagination'));
@@ -246,9 +221,8 @@ document.addEventListener('DOMContentLoaded', function () {
         paginationContainer.append(backBtn, pageInfo, nextBtn);
     }
 
-    // [নতুন কোড] লিংক না থাকলে মেসেজ দেখানোর জন্য ফাংশন
+    // [নতুন কোড] লিংক না থাকলে মেসেজ দেখানোর জন্য ফাংশন (Notices-এর অনুরূপ)
     function showAvailableSoonMessage(element) {
-        // এই ফাংশনটি Notices-এর মতো লিংক না থাকলে মেসেজ দেখানোর কাজ করবে
         const parentContainer = element.closest('.section-content-wrapper');
         if (!parentContainer) return;
         const existingMessage = parentContainer.querySelector('.avail-msg');
@@ -256,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const msg = document.createElement('div');
         msg.className = 'avail-msg';
         msg.textContent = '🔔 Link Unavailable/Available Soon 🔔';
-        // Notices সেকশনের ত্রুটি বার এর রঙের কাছাকাছি মেসেজ স্টাইল ব্যবহার করা যেতে পারে
         msg.style.cssText = `
             color: #cc0000; background-color: #ffe6e6; 
             border: 1px solid #ff9999; padding: 5px; border-radius: 5px; 
@@ -284,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return btn;
     }
 
-    // Notices সেকশনের showPopup ফাংশনটি অপরিবর্তিত রইল
+    // [পরিবর্তন] showPopup ফাংশনে ডাউনলোড বাটন ফিরিয়ে আনা হয়েছে
     function showPopup(titleText, date, link, subjText) {
         const existing = document.getElementById('notice-popup');
         if (existing) existing.remove();
@@ -344,19 +317,31 @@ document.addEventListener('DOMContentLoaded', function () {
             buttonContainer.appendChild(linkBtn);
         }
 
+        // [পরিবর্তন] ডাউনলোড বাটন যুক্ত করা হয়েছে (Notices-এর জন্য প্রয়োজনীয়)
+        const downloadBtn = createButton('Download', '#28a745', () => {
+            setTimeout(() => {
+                if (typeof html2canvas === 'function') {
+                    html2canvas(popup).then(canvas => {
+                        const image = canvas.toDataURL('image/png');
+                        const link = document.createElement('a');
+                        link.href = image;
+                        link.download = (titleText || 'notice') + '.png';
+                        link.click();
+                    });
+                } else {
+                    alert("Error: html2canvas library is not loaded for download function.");
+                }
+            }, 100);
+        });
+
         const closeBtn = createButton('Back', '#dc3545', () => popup.remove());
-        
-        // এখানে Download বাটন-এর কোড রাখা হয়নি কারণ এটি html2canvas-এর উপর নির্ভরশীল।
-        buttonContainer.appendChild(closeBtn);
-        
+
+        buttonContainer.append(downloadBtn, closeBtn); 
         popup.appendChild(buttonContainer);
         document.body.appendChild(popup);
     }
     
-    /* =================================
-     * Other UI Logic (More/Less, Menu, Gallery etc.)
-     * ================================= */
-    // --- More/Less Button Logic ---
+    // ... (বাকি UI লজিক - অপরিবর্তিত) ...
     const toggleButtons = document.querySelectorAll('.toggle-button');
     toggleButtons.forEach(button => {
         const sectionContentWrapper = button.previousElementSibling;
@@ -369,7 +354,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ... (Menu Bar Logic) ...
     const menuToggleButton = document.getElementById('menu-toggle-button');
     const sidebarMenu = document.getElementById('sidebar-menu');
     const overlay = document.querySelector('.overlay');
@@ -423,7 +407,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ... (Gallery Fullscreen Logic) ...
     const galleryImages = document.querySelectorAll('.gallery-image');
     const fullscreenOverlay = document.getElementById('fullscreen-overlay');
     const fullscreenImage = document.getElementById('fullscreen-image');
@@ -447,8 +430,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initial function calls
-    fetchNotices(); // Notices সেকশনের কার্যপদ্ধতি (API)
-    // [পরিবর্তন] Students ও Forms সেকশনের নতুন কার্যপদ্ধতি (JSON)
-    fetchDynamicSectionData('students-list');
-    fetchDynamicSectionData('forms-list');
+    fetchNotices(); // Notices সেকশন
+    fetchDynamicSectionData('students-list'); // Students সেকশন
+    fetchDynamicSectionData('forms-list'); // Forms সেকশন
 });
