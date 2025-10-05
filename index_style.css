@@ -1201,24 +1201,28 @@ section[id] {
   }
 }
 
-/* নতুন ক্লাস .form-link-button-এর জন্য স্টাইল */
-.form-link-button {
-    display: block; /* পুরো প্রস্থ জুড়ে দেখানোর জন্য */
-    cursor: pointer;
-    margin: 10px 0;
-    padding: 8px 15px;
-    background-color: #f9f9f9;
-    color: #333; /* টেক্সটের রঙ */
-    text-decoration: none; /* আন্ডারলাইন সরানো হয়েছে */
-    border-left: 6px solid #8B4513; /* গাঢ় বাদামী (SaddleBrown) বর্ডার */
+/* New ব্যাজের স্টাইল */
+.new-badge {
+    background-color: #ff4500; /* উজ্জ্বল কমলা */
+    color: white;
+    padding: 2px 6px;
     border-radius: 4px;
-    transition: background-color 0.3s, transform 0.2s;
-    font-weight: 600; /* লেখাটিকে আরো বোল্ড করা হয়েছে */
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 10px;
+    /* অ্যানিমেশন যোগ করা */
+    animation: pulse 1s infinite alternate; 
+    display: inline-block;
 }
 
-.form-link-button:hover {
-    background-color: #e5e5e5; /* হোভার ইফেক্ট */
-    transform: translateX(2px); /* সামান্য স্লাইড ইফেক্ট */
+/* অ্যানিমেশন সংজ্ঞায়িত করা */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.7);
+    }
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 0 5px 5px rgba(255, 69, 0, 0);
+    }
 }
-
-
