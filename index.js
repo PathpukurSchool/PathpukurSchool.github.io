@@ -1,30 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     /* =================================
-     * Digital Notice Board Functions
+     * Digital Notice Board Functions (Notices Section - অপরিবর্তিত)
      * ================================= */
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBBTOstepckaJrKR2CYYlx4UACjeHajExLTA5tMpmiNcZrwT6XIUwc7l7_pIdHdFDT/exec?action=read";
     const NOTICES_PER_PAGE = 10;
     let currentPage = 1;
     let totalPages = 0;
-    let Helping = [];
+    let Helping = []; // Notices ডেটা
 
-    async function fetchNotices() {
-        try {
-            const response = await fetch(APPS_SCRIPT_URL);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
-            Helping = Array.isArray(data.notices) ? data.notices : [];
-            renderHelpList();
-        } catch (error) {
-            console.error("Failed to fetch notices:", error);
-            const container = document.getElementById('help-list');
-            if (container) {
-                container.innerHTML = errorBox("Error!", "Failed to load notices.");
-            }
+    // [নতুন কোড] Students এবং Forms সেকশনের ডেটা ও পেজিনেশন স্টেট রাখার জন্য অবজেক্ট
+    const dynamicSectionsState = {
+        'students-list': {
+            data: [],
+            currentPage: 1,
+            totalPages: 0,
+        },
+        'forms-list': {
+            data: [],
+            currentPage: 1,
+            totalPages: 0,
         }
-    }
+    };
 
+    // [পরিবর্তন] একটি জেনারেলাইজড ফাংশন যা নোটিশের মতো errorBox তৈরি করে
     function errorBox(title, message) {
         return `
             <div style="
@@ -36,6 +35,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 <strong>${title}</strong><br>${message}
             </div>
         `;
+    }
+
+    // [Notices সেকশনের জন্য] fetchNotices, renderHelpList, renderPaginationControls অপরিবর্তিত রইল
+    async function fetchNotices() {
+        try {
+            const response = await fetch(APPS_SCRIPT_URL);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            Helping = Array.isArray(data.notices) ? data.notices : [];
+            currentPage = 1; // নোটিশ ডেটা লোড হলে প্রথম পেজে সেট করা
+            renderHelpList();
+        } catch (error) {
+            console.error("Failed to fetch notices:", error);
+            const container = document.getElementById('help-list');
+            if (container) {
+                container.innerHTML = errorBox("Error!", "Failed to load notices.");
+            }
+        }
     }
 
     function renderHelpList() {
@@ -56,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         noticesToRender.forEach(item => {
             const itemDiv = document.createElement('div');
             itemDiv.innerText = item.text || "No Title";
+            // [Notices স্টাইল]
             itemDiv.style.cssText = `
                 cursor: pointer; margin: 10px 0; padding: 8px 10px;
                 background-color: #f9f9f9; border-left: 6px solid #8B4513;
@@ -90,6 +108,147 @@ document.addEventListener('DOMContentLoaded', function () {
 
         paginationContainer.append(backBtn, pageInfo, nextBtn);
     }
+    // [Notices সেকশনের কোড শেষ]
+
+    /* =================================
+     * Students & Forms Section (Notices-এর স্টাইল ব্যবহার করে)
+     * ================================= */
+    
+    // [নতুন কোড] Students ও Forms সেকশনের ডেটা লোড করার জন্য জেনারেলাইজড ফাংশন
+    async function fetchDynamicSectionData(sectionId) {
+        const container = document.getElementById(sectionId);
+        const dataKey = sectionId === 'students-list' ? 'students' : 'forms'; // JSON থেকে সঠিক কী নেওয়া
+        const state = dynamicSectionsState[sectionId];
+        
+        try {
+            const response = await fetch('index_link.json'); // Students ও Forms সেকশনের ডেটা লোড
+            if (!response.ok) throw new Error('Failed to load configuration.');
+            const data = await response.json();
+            
+            // ধরে নিচ্ছি JSON-এ dataKey-এর নামে একটি অ্যারে আছে
+            state.data = Array.isArray(data[dataKey]) ? data[dataKey] : [];
+            state.currentPage = 1; // ডেটা লোড হওয়ার পর প্রথম পেজে সেট করা
+            
+            renderDynamicList(sectionId);
+
+        } catch (error) {
+            console.error(`Failed to fetch data for ${sectionId}:`, error);
+            if (container) {
+                // [পরিবর্তন] Notices সেকশনের মতো Error Message দেখানো হয়েছে।
+                container.innerHTML = errorBox("Error!", `Failed to load ${dataKey} links.`);
+            }
+        }
+    }
+
+    // [নতুন কোড] Students ও Forms সেকশনের ডেটা রেন্ডার করার জন্য ফাংশন (Notices-এর স্টাইল অনুযায়ী)
+    function renderDynamicList(sectionId) {
+        const state = dynamicSectionsState[sectionId];
+        const container = document.getElementById(sectionId);
+        // [পরিবর্তন] পেজিনেশন কন্টেইনারের ID পরিবর্তন করা হয়েছে
+        const paginationContainer = document.getElementById(sectionId.replace('-list', '-pagination')); 
+
+        if (!container) return;
+        container.innerHTML = "";
+        if (paginationContainer) paginationContainer.innerHTML = '';
+
+        if (!Array.isArray(state.data) || state.data.length === 0) {
+            // [পরিবর্তন] Notices সেকশনের মত Available Soon মেসেজ দেখাবে।
+            container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
+            return;
+        }
+
+        // পেজিনেশন লজিক
+        state.totalPages = Math.ceil(state.data.length / NOTICES_PER_PAGE);
+        const startIndex = (state.currentPage - 1) * NOTICES_PER_PAGE;
+        const endIndex = startIndex + NOTICES_PER_PAGE;
+        const itemsToRender = state.data.slice(startIndex, endIndex);
+
+        itemsToRender.forEach(item => {
+            const itemDiv = document.createElement('div');
+            const titleText = item.title || "No Title";
+            const linkUrl = item.url || '';
+            const description = item.description || '';
+
+            itemDiv.innerText = titleText;
+            // [পরিবর্তন] Notices সেকশনের স্টাইল ব্যবহার করা হয়েছে।
+            itemDiv.style.cssText = `
+                cursor: pointer; margin: 10px 0; padding: 8px 10px;
+                background-color: #f9f9f9; border-left: 6px solid #8B4513;
+                border-radius: 4px; transition: background-color 0.3s;
+            `;
+            itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
+            itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+            
+            // [পরিবর্তন] ক্লিক ইভেন্ট: লিংক থাকলে পপআপ দেখাবে, না থাকলে Unavailable মেসেজ দেখাবে।
+            itemDiv.onclick = () => {
+                if (linkUrl && linkUrl.trim() !== '') {
+                    // Notices-এর মতো পপআপ দেখাবে
+                    showPopup(titleText, item.date || '', linkUrl, description);
+                } else {
+                    // লিংক না পাওয়া গেলে Notices সেকশনের অনুরূপ মেসেজ দেখাবে।
+                    showAvailableSoonMessage(itemDiv); 
+                }
+            };
+            container.appendChild(itemDiv);
+        });
+
+        // পেজিনেশন কন্ট্রোল রেন্ডার করা
+        renderDynamicPagination(sectionId);
+    }
+    
+    // [নতুন কোড] Students ও Forms সেকশনের জন্য পেজিনেশন কন্ট্রোল রেন্ডার
+    function renderDynamicPagination(sectionId) {
+        const state = dynamicSectionsState[sectionId];
+        const paginationContainer = document.getElementById(sectionId.replace('-list', '-pagination'));
+        
+        if (!paginationContainer) return;
+        paginationContainer.innerHTML = '';
+        if (state.totalPages <= 1) return;
+
+        const backBtn = createButton('BACK', '#007bff', () => {
+            if (state.currentPage > 1) { 
+                state.currentPage--; 
+                renderDynamicList(sectionId); 
+            }
+        }, state.currentPage === 1);
+
+        const pageInfo = document.createElement('span');
+        pageInfo.innerText = `Page ${state.currentPage}/${state.totalPages}`;
+        pageInfo.style.cssText = `margin: 0 10px; font-weight: bold;`;
+
+        const nextBtn = createButton('NEXT', '#007bff', () => {
+            if (state.currentPage < state.totalPages) { 
+                state.currentPage++; 
+                renderDynamicList(sectionId); 
+            }
+        }, state.currentPage === state.totalPages);
+
+        paginationContainer.append(backBtn, pageInfo, nextBtn);
+    }
+
+    // [নতুন কোড] লিংক না থাকলে মেসেজ দেখানোর জন্য ফাংশন
+    function showAvailableSoonMessage(element) {
+        // এই ফাংশনটি Notices-এর মতো লিংক না থাকলে মেসেজ দেখানোর কাজ করবে
+        const parentContainer = element.closest('.section-content-wrapper');
+        if (!parentContainer) return;
+        const existingMessage = parentContainer.querySelector('.avail-msg');
+        if (existingMessage) existingMessage.remove();
+        const msg = document.createElement('div');
+        msg.className = 'avail-msg';
+        msg.textContent = '🔔 Link Unavailable/Available Soon 🔔';
+        // Notices সেকশনের ত্রুটি বার এর রঙের কাছাকাছি মেসেজ স্টাইল ব্যবহার করা যেতে পারে
+        msg.style.cssText = `
+            color: #cc0000; background-color: #ffe6e6; 
+            border: 1px solid #ff9999; padding: 5px; border-radius: 5px; 
+            font-weight: bold; text-align: center; margin-top: 10px;
+        `;
+        parentContainer.appendChild(msg);
+        setTimeout(() => msg.remove(), 3000);
+    }
+
+    /* =================================
+     * Utility Functions (createButton, showPopup)
+     * ================================= */
 
     function createButton(text, bgColor, onClick, disabled = false) {
         const btn = document.createElement('button');
@@ -100,10 +259,12 @@ document.addEventListener('DOMContentLoaded', function () {
             padding: 8px 15px; margin: 0 5px;
             background-color: ${bgColor}; color: white;
             border: none; border-radius: 5px; cursor: pointer;
+            opacity: ${disabled ? 0.6 : 1}; transition: opacity 0.3s;
         `;
         return btn;
     }
 
+    // Notices সেকশনের showPopup ফাংশনটি অপরিবর্তিত রইল
     function showPopup(titleText, date, link, subjText) {
         const existing = document.getElementById('notice-popup');
         if (existing) existing.remove();
@@ -126,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
         popup.appendChild(titleElem);
 
-        if (date) {
+        if (date && date.trim() !== '') {
             const dateElem = document.createElement('div');
             dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
             dateElem.style.marginBottom = '10px';
@@ -163,75 +324,15 @@ document.addEventListener('DOMContentLoaded', function () {
             buttonContainer.appendChild(linkBtn);
         }
 
-        const downloadBtn = createButton('Download', '#28a745', () => {
-            setTimeout(() => {
-                html2canvas(popup).then(canvas => {
-                    const image = canvas.toDataURL('image/png');
-                    const link = document.createElement('a');
-                    link.href = image;
-                    link.download = 'notice.png';
-                    link.click();
-                });
-            }, 100);
-        });
-
         const closeBtn = createButton('Back', '#dc3545', () => popup.remove());
-
-        buttonContainer.append(downloadBtn, closeBtn);
+        
+        // এখানে Download বাটন-এর কোড রাখা হয়নি কারণ এটি html2canvas-এর উপর নির্ভরশীল।
+        buttonContainer.appendChild(closeBtn);
+        
         popup.appendChild(buttonContainer);
         document.body.appendChild(popup);
     }
-
-    /* =================================
-     * Student Section Links Functions
-     * ================================= */
-    function loadStudentLinks() {
-        fetch('index_link.json')
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to load student links configuration.');
-                return response.json();
-            })
-            .then(data => {
-                const links = {
-                    'exam-marks-link': data['exam-marks-url'],
-                    'student-code-link': data['student-code-url'],
-                    'class-routine-link': data['class-routine-url'],
-                    'exam-routine-link': data['exam-routine-url'],
-                    'xi-tab-form-link': data['xi-tab-form-url'],
-                    'student-info-link': data['student-info-url'],
-                    'new-admission-link': data['new-admission-url']
-                };
-
-                for (const id in links) {
-                    const url = links[id];
-                    const linkElement = document.getElementById(id);
-                    if (linkElement) {
-                        if (url && url.trim() !== '') {
-                            linkElement.href = url;
-                            linkElement.target = '_blank';
-                        } else {
-                            linkElement.href = 'javascript:void(0)';
-                            linkElement.classList.add('disabled-link');
-                            linkElement.addEventListener('click', () => showAvailableSoonMessage(linkElement));
-                        }
-                    }
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-    function showAvailableSoonMessage(element) {
-        const parentContainer = element.closest('.shaded-info-box');
-        if (!parentContainer) return;
-        const existingMessage = parentContainer.querySelector('.avail-msg');
-        if (existingMessage) existingMessage.remove();
-        const msg = document.createElement('div');
-        msg.className = 'avail-msg';
-        msg.textContent = '🔔 শীঘ্রই উপলব্ধ হবে 🔔';
-        parentContainer.appendChild(msg);
-        setTimeout(() => msg.remove(), 3000);
-    }
-
+    
     /* =================================
      * Other UI Logic (More/Less, Menu, Gallery etc.)
      * ================================= */
@@ -248,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // --- Menu Bar Logic ---
+    // ... (Menu Bar Logic) ...
     const menuToggleButton = document.getElementById('menu-toggle-button');
     const sidebarMenu = document.getElementById('sidebar-menu');
     const overlay = document.querySelector('.overlay');
@@ -302,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // --- Gallery Fullscreen Logic ---
+    // ... (Gallery Fullscreen Logic) ...
     const galleryImages = document.querySelectorAll('.gallery-image');
     const fullscreenOverlay = document.getElementById('fullscreen-overlay');
     const fullscreenImage = document.getElementById('fullscreen-image');
@@ -326,6 +427,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initial function calls
-    fetchNotices();
-    loadStudentLinks();
+    fetchNotices(); // Notices সেকশনের কার্যপদ্ধতি (API)
+    // [পরিবর্তন] Students ও Forms সেকশনের নতুন কার্যপদ্ধতি (JSON)
+    fetchDynamicSectionData('students-list');
+    fetchDynamicSectionData('forms-list');
 });
