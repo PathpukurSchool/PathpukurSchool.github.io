@@ -1,9 +1,23 @@
+
 {
-    "exam-marks-url": "https://script.google.com/macros/s/AKfycbzKrLFSZ_ISBtVxTtVu78POgAKJeWravkFK90yTzst8xmK7ZpV08LyWZqPUFKkc0dNgPw/exec",
-    "student-code-url": "https://script.google.com/macros/s/AKfycbwp6Blp0QV-WdcNZMIWqFQPuFwleIo1xNZhyY3v3VnTAq8u9N-BN52x7ZZDyQKWTsr6Ag/exec",
-    "class-routine-url": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student",
-    "exam-routine-url": "https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec",
-    "xi-tab-form-url": "https://script.google.com/macros/s/AKfycbwWNuUjNeSHEiLZ682NcGi4AwCWLONQBIdeTOk8HuL0xPfoaNpsDJcgRlZos8ntYD_4Rw/exec",
-    "student-info-url": "https://script.google.com/macros/s/AKfycbym4dKChBBxDp8rKhm-HmAdKH_mFGc366_gfnE-rX7N4IKbzf2PdMhBlI6RDr3vQeMu/exec",
-    "new-admission-url": "https://script.google.com/macros/s/AKfycbx6B92Tlh2RAqpIp923YQRLT9jTYGs0qsy3ogjSlexiSx6riopsSMFady_8zp6Lw6gW/exec"
+    "students": [
+        {"title": "Written Exam Marks", "description": "View all written exam results.", "url": "https://script.google.com/macros/s/AKfycbzKrLFSZ_ISBtVxTtVu78POgAKJeWravkFK90yTzst8xmK7ZpV08LyWZqPUFKkc0dNgPw/exec"},
+        {"title": "Know Your Student Code/ID", "description": "Find your student Code.", "url": "https://script.google.com/macros/s/AKfycbwp6Blp0QV-WdcNZMIWqFQPuFwleIo1xNZhyY3v3VnTAq8u9N-BN52x7ZZDyQKWTsr6Ag/exec"},
+        {"title": "Class Routine", "description": "Download the latest class routine.", "url": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=student"},
+        {"title": "School Exam Routine", "description": "Download the latest School Exam routine.", "url": "https://script.google.com/macros/s/AKfycbykz5KNLXrqC4F_osm1EHD_Db1OUAjOiD-yeONI6WI6_CqYOBCimhWHUl0Wc1AmXXQ/exec"},
+        {"title": "Admission Receive", 
+        "description": "Download the duplicate admission receive.", 
+        "url": "" }
+    
+    ],
+    
+    "forms": [
+        {"title": "New Admission Form", "description": "Apply for new admission here.", "url": "https://script.google.com/macros/s/AKfycbx6B92Tlh2RAqpIp923YQRLT9jTYGs0qsy3ogjSlexiSx6riopsSMFady_8zp6Lw6gW/exec"},
+        {"title": "Student Data Vefication Form", "description": "View Student Information.", "url": "https://script.google.com/macros/s/AKfycbym4dKChBBxDp8rKhm-HmAdKH_mFGc366_gfnE-rX7N4IKbzf2PdMhBlI6RDr3vQeMu/exec"},
+        {"title": "Class XI Bank Mandet Form for TAB", "description": "Download XI bank mandet form for TAB.", "url": "https://script.google.com/macros/s/AKfycbwWNuUjNeSHEiLZ682NcGi4AwCWLONQBIdeTOk8HuL0xPfoaNpsDJcgRlZos8ntYD_4Rw/exec"},
+        {"title": "Form Annexure-F for Class XI TAB", 
+        "description": "Download form annexure-F for TAB.", 
+        "url": ""}
+
+    ]
 }
