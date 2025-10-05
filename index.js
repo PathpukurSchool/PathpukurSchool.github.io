@@ -108,6 +108,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
         paginationContainer.append(backBtn, pageInfo, nextBtn);
     }
+
+    //ডাউনলোড কোড
+    const downloadBtn = createButton('Download', '#28a745', () => {
+            setTimeout(() => {
+                html2canvas(popup).then(canvas => {
+                    const image = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.href = image;
+                    link.download = 'notice.png';
+                    link.click();
+                });
+            }, 100);
+        });
+
+        const closeBtn = createButton('Back', '#dc3545', () => popup.remove());
+
+        buttonContainer.append(downloadBtn, closeBtn);
+        popup.appendChild(buttonContainer);
+        document.body.appendChild(popup);
+    }
     // [Notices সেকশনের কোড শেষ]
 
     /* =================================
