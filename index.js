@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* =================================
      * Digital Notice Board Functions (Notices Section - অপরিবর্তিত)
      * ================================= */
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBBTOstepckaJrKR2CYYlx4UACjeHajExLTA5tMpmiNcZrwT6XIUwc7l7_pIdHdFDT/exec?action=read";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPH3UIUpNeEoi8NcxxKWf9KKohIvKP4MnTdRMcfnKh2K9VSjEz1RctPF2utTQRZKwt-A/exec?action=read";
     const NOTICES_PER_PAGE = 10;
     let currentPage = 1;
     let totalPages = 0;
@@ -56,36 +56,50 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderHelpList() {
-        const container = document.getElementById('help-list');
-        if (!container) return console.error("Error: 'help-list' container not found.");
-        container.innerHTML = "";
+    const container = document.getElementById('help-list');
+    if (!container) return console.error("Error: 'help-list' container not found.");
+    container.innerHTML = "";
 
-        if (!Array.isArray(Helping) || Helping.length === 0) {
-            container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
-            return;
-        }
-
-        totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
-        const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
-        const endIndex = startIndex + NOTICES_PER_PAGE;
-        const noticesToRender = Helping.slice(startIndex, endIndex);
-
-        noticesToRender.forEach(item => {
-            const itemDiv = document.createElement('div');
-            itemDiv.innerText = item.text || "No Title";
-            itemDiv.style.cssText = `
-                cursor: pointer; margin: 10px 0; padding: 8px 10px;
-                background-color: #f9f9f9; border-left: 6px solid #8B4513;
-                border-radius: 4px; transition: background-color 0.3s;
-            `;
-            itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
-            itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
-            itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
-            container.appendChild(itemDiv);
-        });
-
-        renderPaginationControls();
+    if (!Array.isArray(Helping) || Helping.length === 0) {
+        container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
+        return;
     }
+
+    totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
+    const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
+    const endIndex = startIndex + NOTICES_PER_PAGE;
+    const noticesToRender = Helping.slice(startIndex, endIndex);
+
+    noticesToRender.forEach(item => {
+        const itemDiv = document.createElement('div');
+        const titleText = item.text || "No Title";
+        
+        // [পরিবর্তন] item.isNew এর উপর ভিত্তি করে "New" ব্যাজ তৈরি করা হলো
+        const isItemNew = item.isNew === true; // Google Sheet থেকে আসা isNew স্ট্যাটাস
+        let itemContent = titleText;
+
+        if (isItemNew) {
+            // 'New' ব্যাজ যুক্ত করা হলো
+            itemContent += ` <span class="new-badge">NEW</span>`; 
+        }
+        
+        itemDiv.innerHTML = itemContent; // HTML কন্টেন্ট হিসাবে সেট করা হলো
+
+        // [Notices স্টাইল]
+        itemDiv.style.cssText = `
+            cursor: pointer; margin: 10px 0; padding: 8px 10px;
+            background-color: #f9f9f9; border-left: 6px solid #8B4513;
+            border-radius: 4px; transition: background-color 0.3s;
+            display: flex; justify-content: space-between; align-items: center; /* ব্যাজের জন্য */
+        `;
+        itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
+        itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+        itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
+        container.appendChild(itemDiv);
+    });
+
+    renderPaginationControls();
+}
 
     function renderPaginationControls() {
         const paginationContainer = document.getElementById('pagination-controls');
