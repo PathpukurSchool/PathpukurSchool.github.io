@@ -1216,7 +1216,7 @@ section[id] {
     letter-spacing: 0.5px; /* অক্ষরের মধ্যে সামান্য ব্যবধান */
     text-transform: uppercase; /* পাঠ্যকে বড় হাতের অক্ষরে রূপান্তর */
     box-shadow: 0 0 15px rgba(255, 69, 0, 0.9), 0 0 25px rgba(255, 136, 0, 0.7);
-    animation: pulse-glow 1.2s infinite alternate ease-in-out, floatUp 2s infinite ease-in-out;
+    animation: colorShift 4s linear infinite, pulseGlow 1.2s infinite alternate ease-in-out, floatUp 2s infinite ease-in-out;
 }
 
 /* 🎨 রঙ পরিবর্তনের অ্যানিমেশন */
