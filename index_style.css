@@ -1203,26 +1203,52 @@ section[id] {
 
 /* New ব্যাজের স্টাইল */
 .new-badge {
-    background-color: #ff4500; /* উজ্জ্বল কমলা */
-    color: white;
+    background: linear-gradient(45deg, #ff4500, #ff8800, #ffcc00);
+    background-size: 200% 200%;
+    color: #fff;
     padding: 2px 6px;
     border-radius: 4px;
     font-size: 10px;
     font-weight: bold;
-    margin-left: 10px;
-    /* অ্যানিমেশন যোগ করা */
-    animation: pulse 1s infinite alternate; 
+    margin-left: 8px;
     display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 12px rgba(255, 69, 0, 0.9), 0 0 25px rgba(255, 136, 0, 0.7);
+    animation: colorShift 3s linear infinite, pulseGlow 1.2s infinite alternate ease-in-out, floatUp 2s infinite ease-in-out;
 }
 
-/* অ্যানিমেশন সংজ্ঞায়িত করা */
-@keyframes pulse {
+/* 🔥 উজ্জ্বল রঙ পরিবর্তন (গ্রেডিয়েন্ট শিফট) */
+@keyframes colorShift {
     0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.7);
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
     }
     100% {
-        transform: scale(1.05);
-        box-shadow: 0 0 5px 5px rgba(255, 69, 0, 0);
+        background-position: 0% 50%;
+    }
+}
+
+/* 💫 উজ্জ্বল পালস অ্যানিমেশন */
+@keyframes pulseGlow {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 0 0 20px rgba(255, 136, 0, 0.6);
+    }
+    100% {
+        transform: scale(1.15);
+        box-shadow: 0 0 20px rgba(255, 255, 100, 1), 0 0 40px rgba(255, 136, 0, 0.9);
+    }
+}
+
+/* ☁️ হালকা ভাসমান অ্যানিমেশন */
+@keyframes floatUp {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px);
     }
 }
