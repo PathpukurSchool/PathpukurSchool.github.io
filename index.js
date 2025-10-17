@@ -203,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (linkUrl && linkUrl.trim() !== '') {
                     window.open(linkUrl, '_blank'); 
                 } else {
+                    // *** এখানে সংশোধন করা হলো: `itemDiv` কে আর্গুমেন্ট হিসাবে পাঠানো হলো ***
                     showAvailableSoonMessage(itemDiv); 
                 }
             };
@@ -242,19 +243,27 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showAvailableSoonMessage(element) {
+        // পূর্বের মেসেজটি মুছে ফেলার জন্য, এটি একই সেকশনের সব মেসেজ খুঁজবে
         const parentContainer = element.closest('.section-content-wrapper');
-        if (!parentContainer) return;
-        const existingMessage = parentContainer.querySelector('.avail-msg');
-        if (existingMessage) existingMessage.remove();
+        if (parentContainer) {
+            const existingMessages = parentContainer.querySelectorAll('.avail-msg');
+            existingMessages.forEach(msg => msg.remove());
+        }
+
         const msg = document.createElement('div');
         msg.className = 'avail-msg';
-        msg.textContent = '🔔 Link Unavailable/Available Soon 🔔';
+        msg.textContent = '🔔 Available Soon 🔔';
         msg.style.cssText = `
             color: #cc0000; background-color: #ffe6e6; 
             border: 1px solid #ff9999; padding: 5px; border-radius: 5px; 
-            font-weight: bold; text-align: center; margin-top: 10px;
+            font-weight: bold; text-align: center; 
+            margin: 5px 0 15px 0; /* উপরে ও নিচে মার্জিন যোগ করা হলো */
         `;
-        parentContainer.appendChild(msg);
+        
+        // **সংশোধন:** ক্লিক করা আইটেম (`element`) এর ঠিক পরে মেসেজটি ঢোকানো হলো।
+        element.after(msg); 
+        
+        // ৩ সেকেন্ড পরে মেসেজটি মুছে ফেলার জন্য
         setTimeout(() => msg.remove(), 3000);
     }
 
