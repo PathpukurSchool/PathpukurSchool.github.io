@@ -263,8 +263,8 @@ document.addEventListener('DOMContentLoaded', function () {
             font-weight: 700; /* ফন্ট ওয়েট বোল্ড রাখা হলো */
             font-size: 16px; /* ফন্টের আকার বাড়ানো হলো */
             text-align: center; 
-            margin: 10px 0;
-            width: 100%;
+            margin: 10px auto; /* উপরে/নীচে 10px মার্জিন, ডানে/বামে auto */
+            width: 90%;
             display: block;
             letter-spacing: 0.5px; /* অক্ষরগুলির মধ্যে সামান্য ব্যবধান যোগ করা হলো */
         `;
