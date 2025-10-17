@@ -73,7 +73,7 @@ body.no-scroll {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: blur(1px); 
+    filter: blur(1।.2px); 
     width: 160px;
     height: 160px;
     border-radius: 50%;
@@ -110,7 +110,7 @@ body.no-scroll {
     z-index: 11;
     pointer-events: none;
     text-shadow: 0 0 5px rgba(255,255,255,0.8);
-    opacity: 0.7; /* সামান্য স্পষ্টতা বাড়ানো হলো */
+    opacity: 0.8; /* সামান্য স্পষ্টতা বাড়ানো হলো */
 }
 
 /* ➖ ওয়াটারমার্কের অনুভূমিক বার (S/লাইন) - ::after ব্যবহার করে */
@@ -137,7 +137,7 @@ body.no-scroll {
     z-index: 11;
     pointer-events: none;
     text-shadow: 0 0 5px rgba(255,255,255,0.8);
-    opacity: 0.5;
+    opacity: 0.8;
     
     text-align: center;
 }
