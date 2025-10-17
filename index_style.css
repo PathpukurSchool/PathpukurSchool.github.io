@@ -82,7 +82,7 @@ body.no-scroll {
     border-radius: 50%;
     border: 6px solid rgba(255, 255, 255, 0.9);
     margin-bottom: 20px;
-    background-color: white; /* ব্যাকগ্রাউন্ড কালার বজায় রাখা হলো */
+    background-color: black; /* ব্যাকগ্রাউন্ড কালার বজায় রাখা হলো */
     /* 2. Shine Effect-এর জন্য পজিশনিং ও অতিরিক্ত সুরক্ষা */
     position: relative; 
     overflow: hidden; /* Shine Effect যাতে বক্সের বাইরে না যায় */
