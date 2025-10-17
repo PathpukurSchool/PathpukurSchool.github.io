@@ -111,12 +111,12 @@ body.no-scroll {
     
     /* ওয়াটার মার্ক স্টাইল (স্পষ্ট ও গাঢ়) */
     color: rgba(0, 0, 0, 0.5); 
-    font-size: 2.5em; 
+    font-size: 2em; 
     font-weight: 900; 
     z-index: 11;
     pointer-events: none;
     text-shadow: 0 0 5px rgba(255,255,255,0.8);
-    opacity: 0.8;
+    opacity: 0.5;
 }
 
 /* ➖ ওয়াটারমার্কের অনুভূমিক বার (S) - ::after ব্যবহার করে */
@@ -137,13 +137,12 @@ body.no-scroll {
     z-index: 11;
     pointer-events: none;
     text-shadow: 0 0 5px rgba(255,255,255,0.8);
-    opacity: 0.8;
+    opacity: 0.5;
     
     /* 💡 লোগোটিকে আরো ঢেকে রাখার জন্য width: 200px যোগ করা হলো */
     width: 200px;
     text-align: center;
 }
-
 
 @keyframes pulse {
     0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
