@@ -5,6 +5,16 @@
                 "description": "View all written exam results.", 
                 "url": "https://script.google.com/macros/s/AKfycbzKrLFSZ_ISBtVxTtVu78POgAKJeWravkFK90yTzst8xmK7ZpV08LyWZqPUFKkc0dNgPw/exec",
                 "isNew": true},
+
+         {"title": "Academic Calendar", 
+                "description": "View Academic Calendar.", 
+                "url": "",
+                "isNew": true},
+
+         {"title": "Holiday List", 
+                "description": "View Holiday List.", 
+                "url": "",
+                "isNew": },
             
             {"title": "Know Your Student Code/ID", 
                 "description": "Find your student Code.", 
