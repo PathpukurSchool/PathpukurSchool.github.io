@@ -67,15 +67,34 @@ body.no-scroll {
     /* padding-right: 70px; /* ছোট স্ক্রিনে বোতামের জন্য পর্যাপ্ত জায়গা (যদি হেডার কন্টেন্ট সরানোর প্রয়োজন হয়) */
 }
 
-.main-header .logo {
-    width: 160px; /* লোগোর সাইজ বাড়ানো হয়েছে */
+
+/* ✅ নতুন .logo-container স্টাইল যোগ করুন */
+.main-header .logo-container {
+    /* 1. লোগোটিকে CSS ব্যাকগ্রাউন্ড হিসাবে সেট করা হলো */
+    background-image: url('PHS-LOGO.png');
+    background-size: cover; /* ইমেজটিকে পুরোপুরি কভার করার জন্য */
+    background-position: center; /* ইমেজটিকে সেন্টারে আনার জন্য */
+    background-repeat: no-repeat;
+    
+    /* 2. পুরনো লোগোর ডাইমেনশন এবং স্টাইল */
+    width: 160px; /* লোগোর সাইজ */
     height: 160px;
     border-radius: 50%;
     border: 6px solid rgba(255, 255, 255, 0.9);
-    object-fit: cover;
     margin-bottom: 20px;
+    background-color: white; /* ব্যাকগ্রাউন্ড কালার বজায় রাখা হলো */
+    
+    /* 3. রাইট-ক্লিক, ড্র্যাগিং এবং সিলেকশন ব্লক করার জন্য CSS */
+    -webkit-touch-callout: none; /* iOS লং প্রেস প্রিভেন্ট করে */
+    -webkit-user-select: none; /* Chrome/Safari সিলেকশন প্রিভেন্ট করে */
+    -khtml-user-select: none; /* Konqueror সিলেকশন প্রিভেন্ট করে */
+    -moz-user-select: none; /* Firefox সিলেকশন প্রিভেন্ট করে */
+    -ms-user-select: none; /* IE/Edge সিলেকশন প্রিভেন্ট করে */
+    user-select: none; /* স্ট্যান্ডার্ড সিলেকশন প্রিভেন্ট করে */
+    pointer-events: none; /* মাউসের ইভেন্টগুলো (যেমন রাইট-ক্লিক) এড়িয়ে যায় */
+
+    /* 4. অ্যানিমেশন (আগের মতোই) */
     animation: pulse 2s infinite alternate ease-in-out;
-    background-color: white
 }
 
 @keyframes pulse {
@@ -661,7 +680,7 @@ ul {
     .main-header {
         padding: 30px 15px;
     }
-    .main-header .logo {
+    .main-header .logo-container {
         width: 130px;
         height: 130px;
     }
