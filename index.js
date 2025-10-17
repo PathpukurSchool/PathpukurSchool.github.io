@@ -1,5 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+ /* =================================
+     * স্কুল লোগো কে সুরক্ষিত রাখার জন্য কোড
+     * ================================= */
+
+    // রাইট-ক্লিক মেনু ব্লক করার জন্য ফাংশন
+    function blockContextMenu(event) {
+        // যদি ইভেন্টটি লোগো কন্টেইনারের উপর ঘটে, তবে ব্লক করা হবে।
+        // অথবা পুরো পেজেই ব্লক করতে পারেন। নিচে শুধু লোগো ব্লক করার কোড দেওয়া হলো:
+        const logoContainer = document.querySelector('.logo-container');
+        
+        if (logoContainer && logoContainer.contains(event.target)) {
+            event.preventDefault(); // রাইট-ক্লিক মেনু দেখাবে না
+        }
+    }
+    // রাইট-ক্লিক ইভেন্ট লিসেনার যোগ করা
+    document.addEventListener('contextmenu', blockContextMenu);
+
+    
+
     /* =================================
      * Digital Notice Board Functions (Notices Section - অপরিবর্তিত)
      * ================================= */
