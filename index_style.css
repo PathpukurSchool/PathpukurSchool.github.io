@@ -73,7 +73,7 @@ body.no-scroll {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: blur(1।.2px); 
+    filter: blur(1.0px); /* লোগো ব্লার করা হলো */
     width: 160px;
     height: 160px;
     border-radius: 50%;
@@ -117,8 +117,7 @@ body.no-scroll {
 .main-header .logo-container::after {
     /* অনুভূমিক বার হিসেবে শুধুমাত্র একটি ছোট ড্যাশ (-) ব্যবহার করা হলো, 
        যাতে এটি একটি পরিষ্কার অনুভূমিক লাইন তৈরি করতে পারে। */
-    content: "—"; /* অনুভূমিক লাইন তৈরি করতে একটি লম্বা ড্যাশ ব্যবহার */
-    
+    content: "P  S"; /* অনুভূমিক লাইন তৈরি করতে একটি লম্বা ড্যাশ ব্যবহার */
     position: absolute;
     top: 50%; 
     left: 50%;
