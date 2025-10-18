@@ -697,7 +697,7 @@ ul {
 /* Responsive Design */
 @media (max-width: 1024px) {
     .main-header h1 {
-        font-size: 3.2em;
+        font-size: 3.0em;
     }
     .hero-section {
         height: 450px;
@@ -729,13 +729,13 @@ ul {
         padding: 30px 15px;
     }
     .main-header h1 {
-        font-size: 2.8em;
+        font-size: 2.2em;
     }
     .main-header .tagline {
-        font-size: 1.3em;
+        font-size: 0.8em;
     }
     .main-header .slogan {
-        font-size: 1.5em;
+        font-size: 1.0em;
     }
     .hero-section {
         height: 400px;
@@ -789,13 +789,13 @@ ul {
 
 @media (max-width: 480px) {
     .main-header h1 {
-        font-size: 2.2em;
+        font-size: 1.8em;
     }
     .main-header .tagline {
-        font-size: 1em;
+        font-size: 0.6em;
     }
     .main-header .slogan {
-        font-size: 1.3em;
+        font-size: 10.8em;
     }
     .hero-section {
         height: 350px;
