@@ -1,6 +1,69 @@
 document.addEventListener('DOMContentLoaded', function () {
 
  /* =================================
+     * হিরো সেকশনের ছবি স্ক্রলিং এর জন্য কোড
+     * ================================= */ 
+const heroImagesContainer = document.querySelector('.hero-images');
+    const totalImages = heroImagesContainer.querySelectorAll('.hero-image').length;
+    let imageIndex = 0;
+    let scrollInterval;
+    const scrollDuration = 4000; // 4 সেকেন্ড পর পর ছবি পরিবর্তন হবে
+    
+    // ম্যানুয়াল স্ক্রল বা হোভার ইভেন্টের জন্য ফ্যাগ
+    let isManualScrolling = false;
+
+    // 💡 স্বয়ংক্রিয় স্ক্রল শুরু করার ফাংশন
+    function startAutoScroll() {
+        if (scrollInterval) clearInterval(scrollInterval);
+        
+        scrollInterval = setInterval(() => {
+            if (isManualScrolling) return; // ম্যানুয়াল স্ক্রল চললে থামবে
+            
+            imageIndex = (imageIndex + 1) % totalImages;
+            const scrollDistance = imageIndex * heroImagesContainer.clientWidth;
+            
+            // স্মুথ স্ক্রল ফাংশন
+            heroImagesContainer.scrollTo({
+                left: scrollDistance,
+                behavior: 'smooth'
+            });
+
+        }, scrollDuration);
+    }
+    
+    // 💡 ম্যানুয়াল স্ক্রল ইভেন্ট লিসেনার
+    heroImagesContainer.addEventListener('scroll', function() {
+        // ব্যবহারকারী স্ক্রল শুরু করলেই অটো-স্ক্রল বন্ধ করতে হবে
+        isManualScrolling = true;
+        
+        // স্ক্রল শেষ হওয়ার পর আবার চালু করার জন্য একটি ছোট ডিলে দেওয়া হলো
+        clearTimeout(heroImagesContainer.scrollTimeout);
+        heroImagesContainer.scrollTimeout = setTimeout(() => {
+            isManualScrolling = false;
+            // এইখানে চাইলে স্ক্রল শেষ হবার পর current imageIndex update করতে পারেন
+            const scrollLeft = heroImagesContainer.scrollLeft;
+            const imageWidth = heroImagesContainer.clientWidth;
+            imageIndex = Math.round(scrollLeft / imageWidth);
+        }, 300); // 300ms পর মনে করা হবে যে স্ক্রল শেষ হয়েছে
+    });
+
+    // 💡 হোভার ইভেন্ট: হোভার করলে অটো-স্ক্রল বন্ধ হবে
+    heroImagesContainer.closest('.hero-section').addEventListener('mouseenter', function() {
+        if (scrollInterval) clearInterval(scrollInterval);
+    });
+
+    // 💡 হোভার শেষ হলে অটো-স্ক্রল আবার চালু হবে
+    heroImagesContainer.closest('.hero-section').addEventListener('mouseleave', function() {
+        if (!isManualScrolling) {
+            startAutoScroll();
+        }
+    });
+
+    // ওয়েব পেজ লোড হওয়ার পর স্বয়ংক্রিয় স্ক্রল শুরু
+    startAutoScroll();
+});
+
+ /* =================================
      * স্কুল লোগো কে সুরক্ষিত রাখার জন্য কোড
      * ================================= */
 
