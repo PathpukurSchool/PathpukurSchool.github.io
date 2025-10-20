@@ -1,86 +1,90 @@
 document.addEventListener('DOMContentLoaded', function () {
 
- /* =================================
-     * হিরো সেকশনের ছবি স্ক্রলিং এর জন্য কোড
-     * ================================= */ 
-const heroImagesContainer = document.querySelector('.hero-images');
-    const totalImages = heroImagesContainer.querySelectorAll('.hero-image').length;
-    let imageIndex = 0;
-    let scrollInterval;
-    const scrollDuration = 4000; // 4 সেকেন্ড পর পর ছবি পরিবর্তন হবে
-    
-    // ম্যানুয়াল স্ক্রল বা হোভার ইভেন্টের জন্য ফ্যাগ
-    let isManualScrolling = false;
+    /* =================================
+     * হিরো সেকশনের ছবি স্ক্রলিং এর জন্য সংশোধিত কোড
+     * ================================= */
+    const heroImagesContainer = document.querySelector('.hero-images');
 
-    // 💡 স্বয়ংক্রিয় স্ক্রল শুরু করার ফাংশন
-    function startAutoScroll() {
-        if (scrollInterval) clearInterval(scrollInterval);
+    // 💡 সংশোধন ১: heroImagesContainer বিদ্যমান থাকলে তবেই কোড চালাও
+    if (heroImagesContainer) {
+        // এই ভেরিয়েবলগুলিকে অবশ্যই if ব্লকের ভিতরে সংজ্ঞায়িত করতে হবে
+        const totalImages = heroImagesContainer.querySelectorAll('.hero-image').length;
+        let imageIndex = 0;
+        let scrollInterval;
+        const scrollDuration = 4000; // 4 সেকেন্ড পর পর ছবি পরিবর্তন হবে
         
-        scrollInterval = setInterval(() => {
-            if (isManualScrolling) return; // ম্যানুয়াল স্ক্রল চললে থামবে
+        // ম্যানুয়াল স্ক্রল বা হোভার ইভেন্টের জন্য ফ্যাগ
+        let isManualScrolling = false;
+
+        // 💡 স্বয়ংক্রিয় স্ক্রল শুরু করার ফাংশন
+        function startAutoScroll() {
+            if (scrollInterval) clearInterval(scrollInterval);
             
-            imageIndex = (imageIndex + 1) % totalImages;
-            const scrollDistance = imageIndex * heroImagesContainer.clientWidth;
+            scrollInterval = setInterval(() => {
+                if (isManualScrolling) return; // ম্যানুয়াল স্ক্রল চললে থামবে
+                
+                imageIndex = (imageIndex + 1) % totalImages;
+                const scrollDistance = imageIndex * heroImagesContainer.clientWidth;
+                
+                // স্মুথ স্ক্রল ফাংশন
+                heroImagesContainer.scrollTo({
+                    left: scrollDistance,
+                    behavior: 'smooth'
+                });
+
+            }, scrollDuration);
+        }
+        
+        // 💡 সংশোধন ২: ম্যানুয়াল স্ক্রল ইভেন্ট লিসেনারে startAutoScroll() যোগ করা হলো
+        heroImagesContainer.addEventListener('scroll', function() {
+            // ব্যবহারকারী স্ক্রল শুরু করলেই অটো-স্ক্রল বন্ধ করতে হবে
+            isManualScrolling = true;
             
-            // স্মুথ স্ক্রল ফাংশন
-            heroImagesContainer.scrollTo({
-                left: scrollDistance,
-                behavior: 'smooth'
+            // স্ক্রল শেষ হওয়ার পর আবার চালু করার জন্য একটি ছোট ডিলে দেওয়া হলো
+            clearTimeout(heroImagesContainer.scrollTimeout);
+            heroImagesContainer.scrollTimeout = setTimeout(() => {
+                isManualScrolling = false;
+                
+                // স্ক্রল শেষ হবার পর current imageIndex update
+                const scrollLeft = heroImagesContainer.scrollLeft;
+                const imageWidth = heroImagesContainer.clientWidth;
+                imageIndex = Math.round(scrollLeft / imageWidth);
+
+                // ✅ ফিক্স: স্ক্রল শেষ হলে অটো স্ক্রল পুনরায় চালু
+                startAutoScroll(); 
+            }, 300); // 300ms পর মনে করা হবে যে স্ক্রল শেষ হয়েছে
+        });
+
+        // 💡 হোভার ইভেন্ট: হোভার করলে অটো-স্ক্রল বন্ধ হবে
+        const heroSection = heroImagesContainer.closest('.hero-section');
+        if (heroSection) {
+            heroSection.addEventListener('mouseenter', function() {
+                if (scrollInterval) clearInterval(scrollInterval);
             });
 
-        }, scrollDuration);
-    }
-    
-    // 💡 ম্যানুয়াল স্ক্রল ইভেন্ট লিসেনার
-    heroImagesContainer.addEventListener('scroll', function() {
-        // ব্যবহারকারী স্ক্রল শুরু করলেই অটো-স্ক্রল বন্ধ করতে হবে
-        isManualScrolling = true;
-        
-        // স্ক্রল শেষ হওয়ার পর আবার চালু করার জন্য একটি ছোট ডিলে দেওয়া হলো
-        clearTimeout(heroImagesContainer.scrollTimeout);
-        heroImagesContainer.scrollTimeout = setTimeout(() => {
-            isManualScrolling = false;
-            // এইখানে চাইলে স্ক্রল শেষ হবার পর current imageIndex update করতে পারেন
-            const scrollLeft = heroImagesContainer.scrollLeft;
-            const imageWidth = heroImagesContainer.clientWidth;
-            imageIndex = Math.round(scrollLeft / imageWidth);
-        }, 300); // 300ms পর মনে করা হবে যে স্ক্রল শেষ হয়েছে
-    });
-
-    // 💡 হোভার ইভেন্ট: হোভার করলে অটো-স্ক্রল বন্ধ হবে
-    heroImagesContainer.closest('.hero-section').addEventListener('mouseenter', function() {
-        if (scrollInterval) clearInterval(scrollInterval);
-    });
-
-    // 💡 হোভার শেষ হলে অটো-স্ক্রল আবার চালু হবে
-    heroImagesContainer.closest('.hero-section').addEventListener('mouseleave', function() {
-        if (!isManualScrolling) {
-            startAutoScroll();
+            // 💡 হোভার শেষ হলে অটো-স্ক্রল আবার চালু হবে
+            heroSection.addEventListener('mouseleave', function() {
+                if (!isManualScrolling) {
+                    startAutoScroll();
+                }
+            });
         }
-    });
 
-    // ওয়েব পেজ লোড হওয়ার পর স্বয়ংক্রিয় স্ক্রল শুরু
-    startAutoScroll();
-});
+        // ওয়েব পেজ লোড হওয়ার পর স্বয়ংক্রিয় স্ক্রল শুরু
+        startAutoScroll();
+    } 
 
- /* =================================
-     * স্কুল লোগো কে সুরক্ষিত রাখার জন্য কোড
+    /* =================================
+     * স্কুল লোগো কে সুরক্ষিত রাখার জন্য সংশোধিত কোড
      * ================================= */
 
-    // রাইট-ক্লিক মেনু ব্লক করার জন্য ফাংশন
-    function blockContextMenu(event) {
-        // যদি ইভেন্টটি লোগো কন্টেইনারের উপর ঘটে, তবে ব্লক করা হবে।
-        // অথবা পুরো পেজেই ব্লক করতে পারেন। নিচে শুধু লোগো ব্লক করার কোড দেওয়া হলো:
-        const logoContainer = document.querySelector('.logo-container');
-        
-        if (logoContainer && logoContainer.contains(event.target)) {
-            event.preventDefault(); // রাইট-ক্লিক মেনু দেখাবে না
-        }
+    const logoContainer = document.querySelector('.logo-container');
+    // 💡 সংশোধন ৩: সরাসরি লোগো কন্টেইনারের উপর ইভেন্ট লিসেনার যোগ করা
+    if (logoContainer) {
+        logoContainer.addEventListener('contextmenu', function(event) {
+            event.preventDefault(); // রাইট-ক্লিক মেনু ব্লক করা হলো
+        });
     }
-    // রাইট-ক্লিক ইভেন্ট লিসেনার যোগ করা
-    document.addEventListener('contextmenu', blockContextMenu);
-
-    
 
     /* =================================
      * Digital Notice Board Functions (Notices Section - অপরিবর্তিত)
@@ -91,7 +95,7 @@ const heroImagesContainer = document.querySelector('.hero-images');
     let totalPages = 0;
     let Helping = []; // Notices ডেটা
 
-    // [নতুন কোড] Students এবং Forms সেকশনের ডেটা ও পেজিনেশন স্টেট রাখার জন্য অবজেক্ট
+    // Students এবং Forms সেকশনের ডেটা ও পেজিনেশন স্টেট রাখার জন্য অবজেক্ট
     const dynamicSectionsState = {
         'students-list': {
             data: [],
@@ -126,7 +130,6 @@ const heroImagesContainer = document.querySelector('.hero-images');
             Helping = Array.isArray(data.notices) ? data.notices : [];
             currentPage = 1; 
             renderHelpList();
-            // [নতুন কোড] ডেটা লোড হওয়ার পরে More/Less বোতাম আপডেট করা হলো
             updateMoreLessButton('important-links-section-notice'); 
         } catch (error) {
             console.error("Failed to fetch notices:", error);
@@ -138,50 +141,48 @@ const heroImagesContainer = document.querySelector('.hero-images');
     }
 
     function renderHelpList() {
-    const container = document.getElementById('help-list');
-    if (!container) return console.error("Error: 'help-list' container not found.");
-    container.innerHTML = "";
+        const container = document.getElementById('help-list');
+        if (!container) return console.error("Error: 'help-list' container not found.");
+        container.innerHTML = "";
 
-    if (!Array.isArray(Helping) || Helping.length === 0) {
-        container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
-        return;
-    }
-
-    totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
-    const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
-    const endIndex = startIndex + NOTICES_PER_PAGE;
-    const noticesToRender = Helping.slice(startIndex, endIndex);
-
-    noticesToRender.forEach(item => {
-        const itemDiv = document.createElement('div');
-        const titleText = item.text || "No Title";
-        
-        // [পরিবর্তন] item.isNew এর উপর ভিত্তি করে "New" ব্যাজ তৈরি করা হলো
-        const isItemNew = item.isNew === true; // Google Sheet থেকে আসা isNew স্ট্যাটাস
-        let itemContent = titleText;
-
-        if (isItemNew) {
-            // 'New' ব্যাজ যুক্ত করা হলো
-            itemContent += ` <span class="new-badge">NEW</span>`; 
+        if (!Array.isArray(Helping) || Helping.length === 0) {
+            container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
+            return;
         }
-        
-        itemDiv.innerHTML = itemContent; // HTML কন্টেন্ট হিসাবে সেট করা হলো
 
-        // [Notices স্টাইল]
-        itemDiv.style.cssText = `
-            cursor: pointer; margin: 10px 0; padding: 8px 10px;
-            background-color: #f9f9f9; border-left: 6px solid #8B4513;
-            border-radius: 4px; transition: background-color 0.3s;
-            display: flex; justify-content: space-between; align-items: center; /* ব্যাজের জন্য */
-        `;
-        itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
-        itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
-        itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
-        container.appendChild(itemDiv);
-    });
+        totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
+        const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
+        const endIndex = startIndex + NOTICES_PER_PAGE;
+        const noticesToRender = Helping.slice(startIndex, endIndex);
 
-    renderPaginationControls();
-}
+        noticesToRender.forEach(item => {
+            const itemDiv = document.createElement('div');
+            const titleText = item.text || "No Title";
+            
+            const isItemNew = item.isNew === true; 
+            let itemContent = titleText;
+
+            if (isItemNew) {
+                itemContent += ` <span class="new-badge">NEW</span>`; 
+            }
+            
+            itemDiv.innerHTML = itemContent;
+
+            // [Notices স্টাইল]
+            itemDiv.style.cssText = `
+                cursor: pointer; margin: 10px 0; padding: 8px 10px;
+                background-color: #f9f9f9; border-left: 6px solid #8B4513;
+                border-radius: 4px; transition: background-color 0.3s;
+                display: flex; justify-content: space-between; align-items: center;
+            `;
+            itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
+            itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+            itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
+            container.appendChild(itemDiv);
+        });
+
+        renderPaginationControls();
+    }
 
     function renderPaginationControls() {
         const paginationContainer = document.getElementById('pagination-controls');
@@ -223,8 +224,7 @@ const heroImagesContainer = document.querySelector('.hero-images');
             state.currentPage = 1;
             
             renderDynamicList(sectionId);
-            // [নতুন কোড] ডেটা লোড হওয়ার পরে More/Less বোতাম আপডেট করা হলো
-            const parentSectionId = sectionId.replace('-list', '-section'); // students-list -> student-section
+            const parentSectionId = sectionId.replace('-list', '-section');
             updateMoreLessButton(parentSectionId); 
 
         } catch (error) {
@@ -259,12 +259,10 @@ const heroImagesContainer = document.querySelector('.hero-images');
             const titleText = item.title || "No Title";
             const linkUrl = item.url || '';
             
-            // [নতুন লজিক] item.isNew এর উপর ভিত্তি করে "New" ব্যাজ তৈরি করা
-            const isItemNew = item.isNew === true; // JSON ফাইলে isNew: true আছে কিনা চেক করা হচ্ছে
+            const isItemNew = item.isNew === true;
             let itemContent = titleText;
 
             if (isItemNew) {
-                // 'New' ব্যাজ যুক্ত করা হলো
                 itemContent += ` <span class="new-badge">NEW</span>`; 
             }
             
@@ -285,7 +283,6 @@ const heroImagesContainer = document.querySelector('.hero-images');
                 if (linkUrl && linkUrl.trim() !== '') {
                     window.open(linkUrl, '_blank'); 
                 } else {
-                    // *** এখানে সংশোধন করা হলো: `itemDiv` কে আর্গুমেন্ট হিসাবে পাঠানো হলো ***
                     showAvailableSoonMessage(itemDiv); 
                 }
             };
@@ -325,7 +322,6 @@ const heroImagesContainer = document.querySelector('.hero-images');
     }
 
     function showAvailableSoonMessage(element) {
-        // পূর্বের মেসেজটি মুছে ফেলার জন্য, এটি একই সেকশনের সব মেসেজ খুঁজবে
         const parentContainer = element.closest('.section-content-wrapper');
         if (parentContainer) {
             const existingMessages = parentContainer.querySelectorAll('.avail-msg');
@@ -336,25 +332,23 @@ const heroImagesContainer = document.querySelector('.hero-images');
         msg.className = 'avail-msg';
         msg.textContent = '🔔 Available Soon! Please Wait. 🔔';
         msg.style.cssText = `
-            color: #FFFFFF; /* ফন্টের রং সাদা */
-            background-color: #E74C3C; /* গাঢ় লাল ব্যাকগ্রাউন্ড */
-            border: 1px solid #C0392B; /* ব্যাকগ্রাউন্ডের চেয়ে সামান্য গাঢ় বর্ডার */
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); /* ছায়াতেও লাল রঙের ব্যবহার */
-            padding: 10px 15px; /* প্যাডিং আরও বাড়ানো হলো */
+            color: #FFFFFF;
+            background-color: #E74C3C;
+            border: 1px solid #C0392B;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+            padding: 10px 15px;
             border-radius: 5px; 
-            font-weight: 700; /* ফন্ট ওয়েট বোল্ড রাখা হলো */
-            font-size: 16px; /* ফন্টের আকার বাড়ানো হলো */
-            text-align: center; 
-            margin: 10px auto; /* উপরে/নীচে 10px মার্জিন, ডানে/বামে auto */
+            font-weight: 700;
+            font-size: 16px;
+            text-align: center;
+            margin: 10px auto; 
             width: 90%;
             display: block;
-            letter-spacing: 0.5px; /* অক্ষরগুলির মধ্যে সামান্য ব্যবধান যোগ করা হলো */
+            letter-spacing: 0.5px;
         `;
         
-        // **সংশোধন:** ক্লিক করা আইটেম (`element`) এর ঠিক পরে মেসেজটি ঢোকানো হলো।
         element.after(msg); 
         
-        // ৩ সেকেন্ড পরে মেসেজটি মুছে ফেলার জন্য
         setTimeout(() => msg.remove(), 3000);
     }
 
@@ -459,7 +453,7 @@ const heroImagesContainer = document.querySelector('.hero-images');
         document.body.appendChild(popup);
     }
 
-    // [পরিবর্তন] ডাইনামিক কন্টেন্ট লোড হওয়ার পর More/Less বোতাম চেক করার জন্য নতুন ফাংশন
+    // ডাইনামিক কন্টেন্ট লোড হওয়ার পর More/Less বোতাম চেক করার জন্য নতুন ফাংশন
     function updateMoreLessButton(sectionId) {
         const section = document.getElementById(sectionId);
         if (!section) return;
@@ -469,7 +463,7 @@ const heroImagesContainer = document.querySelector('.hero-images');
         
         if (!sectionContentWrapper || !button) return;
 
-        // ডেটা লোড হওয়ার পরে DOM রেন্ডার নিশ্চিত করতে একটি ছোট ডিলে দেওয়া হলো
+        // ডেটা লোড হওয়ার পরে DOM রেন্ডার নিশ্চিত করতে একটি ছোট ডিলে দেওয়া হলো
         setTimeout(() => {
             // যদি স্ক্রল করার মতো কন্টেন্ট না থাকে, তবে বোতামটি লুকিয়ে ফেলা হবে
             if (sectionContentWrapper.scrollHeight <= sectionContentWrapper.clientHeight) {
@@ -477,7 +471,7 @@ const heroImagesContainer = document.querySelector('.hero-images');
             } else {
                 button.style.display = 'block'; // কন্টেন্ট থাকলে বোতামটি দেখানো হবে
                 button.textContent = 'More...'; // নিশ্চিত করা হলো যে প্রাথমিক লেখাটি 'More...'
-                sectionContentWrapper.classList.remove('expanded'); // নিশ্চিত করা হলো যে প্রাথমিক অবস্থায় কলাপসড আছে
+                sectionContentWrapper.classList.remove('expanded'); // নিশ্চিত করা হলো যে প্রাথমিক অবস্থায় কলাপসড আছে
             }
         }, 50); // ছোট ডিলে (50ms)
 
@@ -485,7 +479,6 @@ const heroImagesContainer = document.querySelector('.hero-images');
     
     /* =================================
      * Other UI Logic (More/Less, Menu, Gallery etc.)
-     * [পরিবর্তন] প্রাথমিক More/Less লজিকটি সরানো হয়েছে, কারণ এটি এখন ডাইনামিক্যালি আপডেট হবে।
      * ================================= */
 
     // --- More/Less Button Logic (EventListener বজায় রাখা হলো) ---
@@ -578,7 +571,9 @@ const heroImagesContainer = document.querySelector('.hero-images');
     }
 
     // Initial function calls
+    // ✅ ফিক্স: ডেটা লোডিং এখন সঠিকভাবে কাজ করবে
     fetchNotices(); // Notices সেকশন
     fetchDynamicSectionData('students-list'); // Students সেকশন
     fetchDynamicSectionData('forms-list'); // Forms সেকশন
-});
+    
+}); // ✅ এই বন্ধনীটি নিশ্চিত করে যে সমস্ত কোড DOMContentLoaded এর স্কোপের মধ্যে আছে।
