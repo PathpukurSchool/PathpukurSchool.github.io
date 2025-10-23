@@ -81,12 +81,17 @@
         <a href="#important-links-section-website">Important Websites</a>
         <a href="#location-section">Our Location</a>
         <a href="home.html" id="sidebar-login-link">Teacher Login</a>
-        <a href="#" class="logout-link" onclick="closePage()">Logout</a>
+        <a href="#" class="logout-link" onclick="goBack()"><b>Logout</b></a>
     </nav>
 
     <script>
-        function closePage() {
-            window.close();
+       function goBack() {
+            window.history.back();
+            setTimeout(function() {
+            if (window.history.length <= 1) { // যদি ইতিহাসে আর কোনো পেজ না থাকে
+            window.location.href = "https://www.google.com"; // গুগল-এ নিয়ে যাবে
+            }
+            }, 500); 
         }
     </script>
     
