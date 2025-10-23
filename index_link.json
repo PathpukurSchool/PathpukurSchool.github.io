@@ -42,7 +42,7 @@
     "forms": [
             {"title": "New Admission Form (V-IX)", 
                 "description": "Apply for new admission here.", 
-                "url": "https://script.google.com/macros/s/AKfycbxaavmHLbvADqUZygJGT8m8-2FDtAF66dINhG8xC3qQtN4SILMmj6nvDnaKKbOW639A/exec",
+                "url": "https://script.google.com/macros/s/AKfycbwO_0OCeAgNJ-wuRsO1FAkaLaXVEx3SB57A0D25G9tY5b8eJq9ifO2f0hRLwb8cYmXA/exec",
                 "isNew": true},
             
             {"title": "Student Data Vefication Form", 
