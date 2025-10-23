@@ -338,11 +338,11 @@ document.addEventListener('DOMContentLoaded', function () {
             box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
             padding: 10px 15px;
             border-radius: 5px; 
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: 600;
+            font-size: 14px;
             text-align: center;
             margin: 10px auto; 
-            width: 90%;
+            width: 80%;
             display: block;
             letter-spacing: 0.5px;
         `;
