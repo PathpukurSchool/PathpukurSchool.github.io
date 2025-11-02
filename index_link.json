@@ -14,6 +14,11 @@
          {"title": "Holiday List", 
                 "description": "View Holiday List.", 
                 "url": ""},
+
+        {"title": "Book List", 
+                "description": "View Student Book List.", 
+                "url": "https://script.google.com/macros/s/AKfycbxI-HnLEnlOpDqBW8bc0DMDmAP_AgP0lFKvU_OoEeDBLplc2gDe9NRZjZc5s4AQYAg2/exec",
+                "isNew": },
             
             {"title": "Know Your Student Code/ID", 
                 "description": "Find your student Code.", 
