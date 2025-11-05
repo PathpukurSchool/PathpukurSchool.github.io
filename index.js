@@ -160,13 +160,22 @@ document.addEventListener('DOMContentLoaded', function () {
             const titleText = item.text || "No Title";
             
             const isItemNew = item.isNew === true; 
-            let itemContent = titleText;
-
-            if (isItemNew) {
-                itemContent += ` <span class="new-badge">NEW</span>`; 
-            }
+            // C কলাম (নোটিশ হেডিং)
+            const titleText = item.text || "No Title";
+            // B কলাম (ডেট) - ডেট না থাকলে ফাঁকা স্ট্রিং হবে
+            const dateText = item.date ? ` [${item.date}]` : ''; // <--- B কলামের ডেট [ ] বন্ধনীর মধ্যে যুক্ত করা হলো
             
-            itemDiv.innerHTML = itemContent;
+            const isItemNew = item.isNew === true; 
+            
+            // প্রথমে শিরোনাম এবং ডেট একসাথে রাখা হলো
+            let itemContent = titleText + dateText; // <--- শিরোনাম ও ডেট একসাথে রেন্ডার হবে
+            
+            if (isItemNew) {
+                // NEW ব্যাজটি শিরোনাম ও ডেটের পরে যুক্ত করা হলো
+                itemContent += ` <span class="new-badge">NEW</span>`; 
+            }
+             
+            itemDiv.innerHTML = itemContent; // <--- সংশোধিত কন্টেন্ট এখন itemDiv এ বসানো হলো
 
             // [Notices স্টাইল]
             itemDiv.style.cssText = `
