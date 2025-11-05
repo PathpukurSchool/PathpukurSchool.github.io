@@ -155,28 +155,27 @@ document.addEventListener('DOMContentLoaded', function () {
         const endIndex = startIndex + NOTICES_PER_PAGE;
         const noticesToRender = Helping.slice(startIndex, endIndex);
 
-        noticesToRender.forEach(item => {
-            const itemDiv = document.createElement('div');
-            const titleText = item.text || "No Title";
-            
-            const isItemNew = item.isNew === true; 
-            // C কলাম (নোটিশ হেডিং)
-            const titleText = item.text || "No Title";
-            // B কলাম (ডেট) - ডেট না থাকলে ফাঁকা স্ট্রিং হবে
-            const dateText = item.date ? ` [${item.date}]` : ''; // <--- B কলামের ডেট [ ] বন্ধনীর মধ্যে যুক্ত করা হলো
-            
-            const isItemNew = item.isNew === true; 
-            
-            // প্রথমে শিরোনাম এবং ডেট একসাথে রাখা হলো
-            let itemContent = titleText + dateText; // <--- শিরোনাম ও ডেট একসাথে রেন্ডার হবে
-            
-            if (isItemNew) {
-                // NEW ব্যাজটি শিরোনাম ও ডেটের পরে যুক্ত করা হলো
-                itemContent += ` <span class="new-badge">NEW</span>`; 
-            }
-             
-            itemDiv.innerHTML = itemContent; // <--- সংশোধিত কন্টেন্ট এখন itemDiv এ বসানো হলো
+        noticesToRender.forEach(item => {
+            const itemDiv = document.createElement('div');
+            
+            // 1. নোটিশ হেডিং (C কলাম)
+            const titleText = item.text || "No Title";
+            
+            // 2. ডেট ফরম্যাট করা (B কলাম) - আপনার নতুন লজিক
+            const dateText = item.date ? ` [${item.date}]` : ''; 
+            
+            const isItemNew = item.isNew === true;
+            
+            // 3. হেডিং এবং ডেট একসাথে করে itemContent তৈরি
+            let itemContent = titleText + dateText; 
+            
+            if (isItemNew) {
+                itemContent += ` <span class="new-badge">NEW</span>`; 
+            }
+             
+            itemDiv.innerHTML = itemContent; // 4. DOM এ রেন্ডার
 
+            
             // [Notices স্টাইল]
             itemDiv.style.cssText = `
                 cursor: pointer; margin: 10px 0; padding: 8px 10px;
