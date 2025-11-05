@@ -123,6 +123,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function fetchNotices() {
+        const container = document.getElementById('help-list');
+    if (container) {
+        container.innerHTML = errorBox("Loading...", "Notice is loading... Please wait...");
+    }
         try {
             const response = await fetch(APPS_SCRIPT_URL);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -141,9 +145,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderHelpList() {
-        const container = document.getElementById('help-list');
-        if (!container) return console.error("Error: 'help-list' container not found.");
-        container.innerHTML = "";
+    const container = document.getElementById('help-list');
+    if (!container) return console.error("Error: 'help-list' container not found.");
+    container.innerHTML = ""; // ✅ এই লাইনটিই লোডিং মেসেজটি মুছে দেবে
 
         if (!Array.isArray(Helping) || Helping.length === 0) {
             container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
