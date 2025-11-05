@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const titleText = item.text || "No Title";
             
             // 2. ডেট ফরম্যাট করা (B কলাম) - আপনার নতুন লজিক
-            const dateText = item.date ? ` [${item.date}]` : ''; 
+            const dateText = item.date ? ` [Date: ${item.date}]` : ''; 
             
             const isItemNew = item.isNew === true;
             
