@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
     async function fetchNotices() {
         const container = document.getElementById('help-list');
     if (container) {
-        container.innerHTML = errorBox("Loading...", "Notice is loading... Please wait...");
+        container.innerHTML = errorBox("Loading...", "Please wait...");
     }
         try {
             const response = await fetch(APPS_SCRIPT_URL);
