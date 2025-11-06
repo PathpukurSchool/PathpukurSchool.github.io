@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* =================================
      * Digital Notice Board Functions (Notices Section - অপরিবর্তিত)
      * ================================= */
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDb_1xNjReWRzuQxMhdfBkJFwIXS9q3FkvrppjLXFFzfPdutarWlkIHmWw8aa6lvLzTQ/exec?action=read";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjes-oH2NNNl0mEIPOoYizfzP4QvKdR3y_ZM8F4qXNunoWRNie92sZqyjmg53ZTqTA/exec?action=read";
     const NOTICES_PER_PAGE = 10;
     let currentPage = 1;
     let totalPages = 0;
