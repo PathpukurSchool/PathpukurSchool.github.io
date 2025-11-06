@@ -110,12 +110,23 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function errorBox(title, message) {
+        let borderColor = '#ff9999'; // Error/Available Soon
+        let bgColor = '#ffe6e6';
+        let textColor = '#cc0000';
+        
+        // ✅ Loading মেসেজের জন্য হালকা নীল স্টাইল
+        if (title === "Loading...") {
+            borderColor = '#6495ED'; // CornflowerBlue
+            bgColor = '#E6F0FF';
+            textColor = '#4169E1'; // RoyalBlue
+        }
+        
         return `
             <div style="
-                border: 2px solid #ff9999; background-color: #ffe6e6;
-                color: #cc0000; font-size: 20px; font-weight: bold;
+                border: 2px solid ${borderColor}; background-color: ${bgColor};
+                color: ${textColor}; font-size: 18px; font-weight: bold;
                 padding: 10px; border-radius: 8px; text-align: center;
-                max-width: 300px; margin: 0 auto;
+                max-width: 320px; margin: 0 auto;
             ">
                 <strong>${title}</strong><br>${message}
             </div>
