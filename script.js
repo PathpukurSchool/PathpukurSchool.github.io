@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* =================================
      * Digital Notice Board Functions
      * ================================= */
-    const APPS_SCRIPT_NOTICE_URL = "https://script.google.com/macros/s/AKfycbyGMBUZ2nDhM4MFp374KywpxSQQ-V3gXfcsXUUVi9jo9Jlfx-B4liTtV5VvgR5PfTs1/exec?action=read";
+    const APPS_SCRIPT_NOTICE_URL = "https://script.google.com/macros/s/AKfycbyPzKTQUYuzWH3bK7WzFPs9f7mqIcAZhp7I_ghWXthZFnmiLYHhkHfRkcMFfKdhElC7/exec?action=read";
     const NOTICES_PER_PAGE = 10;
     let currentPage = 1;
     let totalPages = 0;
