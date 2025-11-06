@@ -236,15 +236,23 @@ document.addEventListener('DOMContentLoaded', function () {
     let Helping = [];
 
     async function fetchNotices() {
+        const container = document.getElementById('help-list'); // কন্টেইনার ভেরিয়েবল আগে থেকে তৈরি
+        
+        // ✅ সংশোধন ১: লোডিং মেসেজ সেট করা হলো
+        if (container) {
+            container.innerHTML = errorBox("Loading...", "Please wait...");
+        }
+        
         try {
             const response = await fetch(APPS_SCRIPT_NOTICE_URL);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             Helping = Array.isArray(data.notices) ? data.notices : [];
+            // ডেটা পেলে renderHelpList() স্বয়ংক্রিয়ভাবে লোডিং মেসেজ মুছে দেবে।
             renderHelpList();
         } catch (error) {
             console.error("Failed to fetch notices:", error);
-            const container = document.getElementById('help-list');
+            // ✅ ত্রুটি হলে আগের Error মেসেজ দেখাবে (আগে থেকেই ছিল)
             if (container) {
                 container.innerHTML = errorBox("Error!", "Failed to load notices.");
             }
@@ -252,10 +260,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function errorBox(title, message) {
+        let borderColor = '#ff9999'; // Error/Available Soon
+        let bgColor = '#ffe6e6';
+        let textColor = '#cc0000';
+        
+        // ✅ Loading মেসেজের জন্য হালকা নীল স্টাইল
+        if (title === "Loading...") {
+            borderColor = '#6495ED'; // CornflowerBlue
+            bgColor = '#E6F0FF';
+            textColor = '#4169E1'; // RoyalBlue
+        }
+        
         return `
             <div style="
-                border: 2px solid #ff9999; background-color: #ffe6e6;
-                color: #cc0000; font-size: 18px; font-weight: bold;
+                border: 2px solid ${borderColor}; background-color: ${bgColor};
+                color: ${textColor}; font-size: 18px; font-weight: bold;
                 padding: 10px; border-radius: 8px; text-align: center;
                 max-width: 320px; margin: 0 auto;
             ">
@@ -267,8 +286,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderHelpList() {
         const container = document.getElementById('help-list');
         if (!container) return console.error("Error: 'help-list' container not found.");
-        container.innerHTML = "";
-
+        container.innerHTML = ""; // নোটিশ লোড হলে লোডিং মেসেজ মুছে দেবে
+        
         if (!Array.isArray(Helping) || Helping.length === 0) {
             container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
             return;
@@ -281,7 +300,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         noticesToRender.forEach(item => {
             const itemDiv = document.createElement('div');
-            itemDiv.innerText = item.text || "No Title";
+            const dateText = item.date ? ` [Date: ${item.date}]` : '';
+            itemDiv.innerHTML = (item.text || "No Title") + dateText; 
+            
             itemDiv.style.cssText = `
                 cursor: pointer; margin: 10px 0; padding: 8px 10px;
                 background-color: #f9f9f9; border-left: 6px solid #386641;
