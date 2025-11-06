@@ -8,8 +8,8 @@
 
          {"title": "Academic Calendar", 
                 "description": "View Academic Calendar.", 
-                "url": "",
-                "isNew": true},
+                "url": ""
+                },
 
          {"title": "Holiday List", 
                 "description": "View Holiday List.", 
@@ -32,8 +32,8 @@
             
             {"title": "School Exam Routine", 
                 "description": "Download the latest School Exam routine.", 
-                "url": "https://script.google.com/macros/s/AKfycbzX89f_946DzQ2ZyLQLCp4jgsGno1fA1Jiee2phYK9G5GIt9n6HyeKiT4NDphqezp3pfQ/exec"
-                },
+                "url": "https://script.google.com/macros/s/AKfycbzX89f_946DzQ2ZyLQLCp4jgsGno1fA1Jiee2phYK9G5GIt9n6HyeKiT4NDphqezp3pfQ/exec",
+                "isNew": true},
             
             {"title": "Admission Receive", 
                 "description": "Download the duplicate admission receive.", 
