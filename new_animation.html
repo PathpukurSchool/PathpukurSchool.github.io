@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>'NEW' অ্যানিমেশন কন্ট্রোল প্যানেল</title>
+
+    <style>
+        /* --------------------
+           COMMON & BASE STYLES (home.css থেকে নেওয়া)
+        -------------------- */
+        :root {
+            --primary-color: #386641; /* ডিপ ফরেস্ট গ্রিন */
+            --secondary-color: #ff9800; /* Amber for highlights and accents */
+            --background-color: #f0f2f5; /* Light gray for the main background */
+            --card-background: #ffffff;
+            --text-color-dark: #212121;
+            --text-color-light: #555555;
+            --success-color: #4caf50;
+            --error-color: #f44336;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color-dark);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .main-section-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-background);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .new-info-box-link {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 8px 8px 0 0;
+            display: block;
+            text-decoration: none;
+        }
+
+        .new-info-box-heading {
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* --------------------
+           NEW কন্ট্রোল প্যানেল স্টাইল
+        -------------------- */
+        #new-animation-control-panel-section {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #new-animation-control-panel {
+            background-color: #f8fcf8; 
+            padding: 15px;
+            width: 100%;
+        }
+
+        .control-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: var(--card-background);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .control-table thead tr {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .control-table th, .control-table td {
+            border: 1px solid #e0f2f1;
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        .control-table th {
+            font-weight: 500;
+        }
+
+        .control-table tbody tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+
+        .control-table td:last-child {
+            text-align: center;
+        }
+
+        /* টগল সুইচ CSS */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 45px;
+            height: 25px;
+            margin: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 17px;
+            width: 17px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--success-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        
+        /* ছোট স্ক্রিনের জন্য */
+        @media (max-width: 600px) {
+            .main-section-container {
+                padding: 10px;
+            }
+            .control-table th, .control-table td {
+                padding: 8px 6px;
+                font-size: 0.8rem;
+            }
+            .switch {
+                width: 40px; 
+                height: 22px;
+            }
+            .slider:before {
+                height: 14px;
+                width: 14px;
+                left: 4px;
+                bottom: 4px;
+            }
+            input:checked + .slider:before {
+                transform: translateX(16px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-section-container">
+        <div id="new-animation-control-panel-section" class="new-info-box">
+            <a id="control-panel-container" class="new-info-box-link">
+                <h2 class="new-info-box-heading">✨ 'NEW' Animation Controller ✨</h2>
+            </a>
+            <div id="new-animation-control-panel">
+                Loading Control Panel...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================================
+        // ✅ NEW স্ট্যাটাস কন্ট্রোল প্যানেল লজিক
+        // ===================================
+
+        let NEW_STATUS_CONTROL = {};
+
+        // LocalStorage-এ স্ট্যাটাস সেভ করার ফাংশন
+        function saveNewStatusControl() {
+            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
+            console.log("NEW Status saved to LocalStorage:", NEW_STATUS_CONTROL);
+            // ছোট একটি ভিজ্যুয়াল ফিডব্যাক দেওয়া যেতে পারে
+            const feedback = document.createElement('div');
+            feedback.textContent = 'স্ট্যাটাস সেভ করা হয়েছে!';
+            feedback.style.cssText = 'position: fixed; top: 10px; right: 10px; background-color: var(--success-color); color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999; opacity: 0; transition: opacity 0.5s;';
+            document.body.appendChild(feedback);
+
+            setTimeout(() => {
+                feedback.style.opacity = 1;
+            }, 10);
+            
+            setTimeout(() => {
+                feedback.style.opacity = 0;
+                feedback.addEventListener('transitionend', () => feedback.remove());
+            }, 2500);
+        }
+
+        // কন্ট্রোল প্যানেল রেন্ডার করার ফাংশন
+        function renderNewStatusControlPanel() {
+            const container = document.getElementById('new-animation-control-panel');
+            if (!container) return;
+
+            let html = `
+                <table class="control-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 70%;">Title</th>
+                            <th style="width: 30%; text-align: center;">NEW (ON/OFF)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            // বর্তমান স্ট্যাটাস থেকে টেবিলের row গুলো তৈরি
+            for (const title in NEW_STATUS_CONTROL) {
+                const isNew = NEW_STATUS_CONTROL[title];
+                const checked = isNew ? 'checked' : '';
+
+                html += `
+                    <tr>
+                        <td>${title}</td>
+                        <td style="text-align: center;">
+                            <label class="switch">
+                                <input type="checkbox" data-title="${title}" ${checked} onchange="toggleNewStatus(this)">
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+            container.innerHTML = html;
+        }
+
+        // স্লাইড বাটন টগল করার লজিক (গ্লোবাল ফাংশন হিসেবে সংজ্ঞায়িত)
+        window.toggleNewStatus = function(checkbox) {
+            const title = checkbox.getAttribute('data-title');
+            NEW_STATUS_CONTROL[title] = checkbox.checked;
+            saveNewStatusControl(); // পরিবর্তন LocalStorage এ সেভ করা হবে
+        };
+
+        // JSON ফাইল থেকে সব Title এবং ডিফল্ট স্ট্যাটাস লোড করা
+        async function loadAndInitializeControl() {
+            try {
+                // 'index_link.json' ফাইলটি লোড করা
+                const response = await fetch('index_link.json');
+                if (!response.ok) {
+                    throw new Error('index_link.json ফাইলটি লোড করা যায়নি। ফাইল পাথ নিশ্চিত করুন।');
+                }
+                const data = await response.json();
+                
+                // Students এবং Forms ডেটা একসাথে করা
+                const dynamicItems = [...(data.students || []), ...(data.forms || [])];
+                
+                const storedStatus = localStorage.getItem('newStatusControl');
+                let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
+
+                // JSON-এ থাকা সব আইটেম কন্ট্রোল অবজেক্টে যোগ করা বা আপডেট করা
+                dynamicItems.forEach(item => {
+                    const title = item.title;
+                    // যদি LocalStorage এ এই title না থাকে, তবে JSON থেকে ডিফল্ট (isNew: true/false) নেওয়া হবে
+                    if (newStatusControl[title] === undefined) {
+                         newStatusControl[title] = item.isNew === true; // JSON থেকে ডিফল্ট নেওয়া
+                    }
+                });
+                
+                NEW_STATUS_CONTROL = newStatusControl;
+                renderNewStatusControlPanel();
+
+            } catch (error) {
+                console.error("Error initializing control panel:", error);
+                const container = document.getElementById('new-animation-control-panel');
+                if (container) {
+                    container.innerHTML = `<p style="color: var(--error-color); font-weight: bold;">❌ Error: ${error.message}</p>`;
+                }
+            }
+        }
+
+
+        // ===================================
+        // DOMContentLoaded
+        // ===================================
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // NEW স্ট্যাটাস কন্ট্রোল প্যানেল লোড করা
+            loadAndInitializeControl();
+        });
+    </script>
+</body>
+</html>
