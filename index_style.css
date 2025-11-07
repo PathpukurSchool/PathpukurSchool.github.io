@@ -1426,9 +1426,6 @@ body {
     0%   { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
 }
-.scrolling-text::after {
-    content: "  "; /* ফাঁকা জায়গা */
-}
 
 @media (max-width: 768px) {
     .scrolling-line-container {
