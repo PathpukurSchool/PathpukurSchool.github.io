@@ -43,18 +43,22 @@ async function initializeNewStatusControl() {
 }
 
 // ===================================
-// ✅ নতুন: স্ক্রল বার (Marquee) রেন্ডারিং লজিক (গ্লোবাল)
+// ✅ নতুন: স্ক্রল বার (Marquee) রেন্ডারিং লজিক (গ্লোবাল) - সংশোধিত
 // ===================================
 
 function renderMarquee() {
+    // HTML-এর আইডি 'new-marquee-content' এবার CSS ক্লাস 'scrolling-text' পাবে
     const marqueeContent = document.getElementById('new-marquee-content');
-    const marqueeContainer = document.getElementById('new-marquee-container');
+    
+    // HTML-এ ব্যবহৃত ক্লাস 'scrolling-line-container' (যা মার্জিন ও শ্যাডো দেবে)
+    const marqueeContainer = document.querySelector('.scrolling-line-container'); 
+
     if (!marqueeContent || !marqueeContainer) return;
 
     // 1. LocalStorage অনুযায়ী NEW চিহ্নিত আইটেমগুলি ফিল্টার করা
     const newItems = ALL_ITEMS_DETAILS.filter(item => {
         const title = item.title;
-        return NEW_STATUS_CONTROL[title] === true; // শুধুমাত্র NEW স্ট্যাটাস True হলে
+        return NEW_STATUS_CONTROL[title] === true; 
     });
 
     let htmlContent = '';
@@ -66,7 +70,7 @@ function renderMarquee() {
             const url = item.url || '#';
             
             // প্রতিটি আইটেমকে লিঙ্ক সহ যুক্ত করা
-            return `<a href="${url}" target="_blank" class="marquee-link" onclick="handleMarqueeClick(event)">
+            return `<a href="${url}" target="_blank" class="marquee-link">
                         <span class="new-badge blink">✨ NEW</span> ${title} 
                     </a>`;
         });
@@ -74,46 +78,16 @@ function renderMarquee() {
         // আইটেমগুলির মধ্যে সেপারেটর (|) যোগ করা
         htmlContent = newMarqueeItems.join(' <span class="marquee-separator">|</span> ');
         
+        // ✅ ফিক্স: কন্টেইনারে কন্টেন্ট ইনজেক্ট করা
+        marqueeContent.innerHTML = htmlContent;
+        
     } else {
         // 3. কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
         const welcomeMessage = "স্বাগতম আমাদের অফিসিয়াল ওয়েবসাইটে";
         htmlContent = `<span class="marquee-default-msg">${welcomeMessage}</span>`;
+        marqueeContent.innerHTML = htmlContent;
     }
-
-    // 4. কন্টেইনারে কন্টেন্ট ইনজেক্ট করা
-    marqueeContent.innerHTML = htmlContent;
-    
-    // 5. ক্লিক/টাচ করলে পজ/রিজিউম লজিক
-    let resumeTimer;
-
-    const pauseScrolling = () => {
-        marqueeContainer.style.animationPlayState = 'paused';
-        clearTimeout(resumeTimer);
-    };
-
-    const resumeScrolling = () => {
-        resumeTimer = setTimeout(() => {
-            marqueeContainer.style.animationPlayState = 'running';
-        }, 3000); // 3 সেকেন্ড পর পুনরায় শুরু
-    };
-    
-    // ইভেন্ট লিসেনার যোগ করা
-    marqueeContainer.addEventListener('mouseover', pauseScrolling);
-    marqueeContainer.addEventListener('touchstart', pauseScrolling);
-    marqueeContainer.addEventListener('mouseout', resumeScrolling);
-    marqueeContainer.addEventListener('touchend', resumeScrolling);
 }
-
-
-// গ্লোবাল স্কোপে ক্লিক হ্যান্ডেলার রাখা, যাতে HTML থেকে কল করা যায়
-window.handleMarqueeClick = function(event) {
-    // এখানে pauseScrolling ট্রিগার হবে না, কারণ এটি DOMContentLoaded-এর বাইরে
-    // শুধু লিঙ্কে যাওয়া নিশ্চিত করতে হবে
-    if (event.currentTarget.getAttribute('href') === '#') {
-         event.preventDefault();
-         console.log("No valid URL for this item.");
-    }
-};
 
 /* =================================
  * Digital Notice Board Functions (গ্লোবাল)
