@@ -1,6 +1,50 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     /* =================================
+     * NEW স্ট্যাটাস কন্ট্রোল লজিক (LocalStorage ভিত্তিক)
+     * ================================= */
+    
+    // গ্লোবাল ভেরিয়েবল: LocalStorage থেকে লোড করা হয়
+    let NEW_STATUS_CONTROL = {};
+
+    // JSON থেকে শুধুমাত্র আইটেমের Title সংগ্রহ করে
+    async function loadAllItemTitles() {
+        try {
+            const response = await fetch('index_link.json');
+            if (!response.ok) throw new Error('Failed to load config.');
+            const data = await response.json();
+            // Notices ডেটা (যদি Notices সেকশনেও isNew ব্যবহার হয়)
+            const notices = Helping.map(item => ({ title: item.text, isNew: item.isNew === true }));
+            
+            // Students এবং Forms ডেটা
+            const dynamicItems = [...(data.students || []), ...(data.forms || [])];
+            
+            return [...notices, ...dynamicItems];
+
+        } catch (error) {
+            console.error("Failed to load base JSON data for titles:", error);
+            return [];
+        }
+    }
+
+    // LocalStorage থেকে বা ডিফল্ট থেকে 'NEW' স্ট্যাটাস লোড করার লজিক
+    async function initializeNewStatusControl() {
+        const baseData = await loadAllItemTitles();
+        const storedStatus = localStorage.getItem('newStatusControl');
+        let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
+
+        // LocalStorage এ নেই এমন আইটেমগুলির জন্য JSON থেকে ডিফল্ট স্ট্যাটাস নেওয়া
+        baseData.forEach(item => {
+            const title = item.title;
+            if (newStatusControl[title] === undefined) {
+                 newStatusControl[title] = item.isNew === true; // JSON থেকে ডিফল্ট নেওয়া
+            }
+        });
+        
+        NEW_STATUS_CONTROL = newStatusControl;
+    }
+
+    /* =================================
      * হিরো সেকশনের ছবি স্ক্রলিং এর জন্য সংশোধিত কোড
      * ================================= */
     const heroImagesContainer = document.querySelector('.hero-images');
@@ -155,10 +199,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function renderHelpList() {
-    const container = document.getElementById('help-list');
-    if (!container) return console.error("Error: 'help-list' container not found.");
-    container.innerHTML = ""; // ✅ এই লাইনটিই লোডিং মেসেজটি মুছে দেবে
+function renderHelpList() {
+        const container = document.getElementById('help-list');
+        if (!container) return console.error("Error: 'help-list' container not found.");
+        container.innerHTML = ""; 
 
         if (!Array.isArray(Helping) || Helping.length === 0) {
             container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
@@ -170,26 +214,22 @@ document.addEventListener('DOMContentLoaded', function () {
         const endIndex = startIndex + NOTICES_PER_PAGE;
         const noticesToRender = Helping.slice(startIndex, endIndex);
 
-        noticesToRender.forEach(item => {
-            const itemDiv = document.createElement('div');
-            
-            // 1. নোটিশ হেডিং (C কলাম)
-            const titleText = item.text || "No Title";
-            
-            // 2. ডেট ফরম্যাট করা (B কলাম) - আপনার নতুন লজিক
-            const dateText = item.date ? ` [Date: ${item.date}]` : ''; 
-            
-            const isItemNew = item.isNew === true;
-            
-            // 3. হেডিং এবং ডেট একসাথে করে itemContent তৈরি
-            let itemContent = titleText + dateText; 
-            
-            if (isItemNew) {
-                itemContent += ` <span class="new-badge">NEW</span>`; 
-            }
-             
-            itemDiv.innerHTML = itemContent; // 4. DOM এ রেন্ডার
-
+        noticesToRender.forEach(item => {
+            const itemDiv = document.createElement('div');
+            
+            const titleText = item.text || "No Title";
+            const dateText = item.date ? ` [Date: ${item.date}]` : '';  
+            
+            // ✅ নতুন লজিক: LocalStorage-নিয়ন্ত্রিত গ্লোবাল অবজেক্ট থেকে স্ট্যাটাস পড়া
+            const isItemNew = NEW_STATUS_CONTROL[titleText] === true; 
+            
+            let itemContent = titleText + dateText;  
+            
+            if (isItemNew) {
+                itemContent += ` <span class="new-badge">NEW</span>`;  
+            }
+            
+            itemDiv.innerHTML = itemContent; // 4. DOM এ রেন্ডার
             
             // [Notices স্টাইল]
             itemDiv.style.cssText = `
@@ -282,11 +322,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const titleText = item.title || "No Title";
             const linkUrl = item.url || '';
             
-            const isItemNew = item.isNew === true;
+            // ✅ নতুন লজিক: LocalStorage-নিয়ন্ত্রিত গ্লোবাল অবজেক্ট থেকে স্ট্যাটাস পড়া
+            const isItemNew = NEW_STATUS_CONTROL[titleText] === true;
+            
             let itemContent = titleText;
 
             if (isItemNew) {
-                itemContent += ` <span class="new-badge">NEW</span>`; 
+                itemContent += ` <span class="new-badge">NEW</span>`;  
             }
             
             itemDiv.innerHTML = itemContent; 
@@ -593,10 +635,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Initial function calls
-    // ✅ ফিক্স: ডেটা লোডিং এখন সঠিকভাবে কাজ করবে
-    fetchNotices(); // Notices সেকশন
-    fetchDynamicSectionData('students-list'); // Students সেকশন
-    fetchDynamicSectionData('forms-list'); // Forms সেকশন
+  // Initial function calls
+    // ✅ প্রথমে LocalStorage স্ট্যাটাস লোড করা হবে
+    initializeNewStatusControl().then(() => {
+        // LocalStorage লোড হওয়ার পর ডেটা লোড শুরু হবে
+        fetchNotices(); // Notices সেকশন
+        fetchDynamicSectionData('students-list'); // Students সেকশন
+        fetchDynamicSectionData('forms-list'); // Forms সেকশন
+    });
     
-}); // ✅ এই বন্ধনীটি নিশ্চিত করে যে সমস্ত কোড DOMContentLoaded এর স্কোপের মধ্যে আছে।
+});
