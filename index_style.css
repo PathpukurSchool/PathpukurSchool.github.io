@@ -1400,6 +1400,7 @@ body {
     padding: 10px 0;
     border-radius: 8px;
     border-left: 5px solid var(--primary-red);
+    position: relative;
 }
 
 .scrolling-text {
@@ -1429,3 +1430,18 @@ body {
     content: "  "; /* ফাঁকা জায়গা */
 }
 
+@media (max-width: 768px) {
+    .scrolling-line-container {
+        /* মোবাইলে মার্জিন কমানো যেতে পারে */
+        margin-top: 20px;
+    }
+    
+    .scrolling-text {
+        /* ✅ ফিক্স ২: মোবাইলে অ্যানিমেশন স্পিড বাড়ানো, যাতে এটি আরও মসৃণ দেখায় 
+           (সময় বাড়ালে গতি কমবে, সময় কমালে গতি বাড়বে) */
+        animation: scrollText 35s linear infinite; 
+        
+        /* ✅ ফিক্স ৩: ফন্ট সাইজ ছোট স্ক্রিনের জন্য একটু কমানো */
+        font-size: 1.2em; 
+    }
+}
