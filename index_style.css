@@ -1350,7 +1350,7 @@ section[id] {
 }
 
 /* 📌 স্ক্রল বারের জন্য কাস্টম স্টাইল (Webkit Browsers: Chrome, Safari, Edge) */
-/* 📌 স্ক্রল বারের জন্য কাস্টম স্টাইল (Webkit Browsers: Chrome, Safari, Edge) */
+
 body::-webkit-scrollbar {
     width: 12px;
     height: 12px;
@@ -1385,33 +1385,28 @@ body {
     padding: 10px 0;
     border-radius: 8px;
     position: relative;
-    background: transparent;
+    margin-bottom: 0; /* নিচের ফাঁক পুরোপুরি সরিয়ে দেয় */
 }
 
 .scrolling-wrapper {
-    display: inline-block;
-    white-space: nowrap;
-    position: absolute;
-    right: -100%; /* শুরু হবে স্ক্রিনের বাইরে থেকে (ডান দিক) */
-    animation: scrollRightToLeft 20s linear infinite;
+    display: flex;
+    width: max-content;
+    animation: scrollText 20s linear infinite;
 }
 
 .scrolling-text {
-    display: inline-block;
+    white-space: nowrap;
+    flex-shrink: 0; /* স্ক্রল করার সময় টেক্সট সংকুচিত হওয়া আটকায় */
     font-size: 1.2em;
     color: var(--dark-khaki);
     font-weight: 900;
-    padding-right: 50px; /* ফাঁকা জায়গা */
+    padding-right: 100px; /* 🧩 দুই লাইনের মাঝে ফাঁকা */
 }
 
-/* 🌀 অবিরাম স্ক্রল (ডান থেকে বাম) */
-@keyframes scrollRightToLeft {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-200%);
-    }
+/* 🌀 অবিরাম স্ক্রল */
+@keyframes scrollText {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
 }
 
 /* ✅ হোভার করলে থেমে যাবে */
@@ -1425,6 +1420,6 @@ body {
         font-size: 1em;
     }
     .scrolling-wrapper {
-        animation: scrollRightToLeft 15s linear infinite;
+        animation: scrollText 15s linear infinite; /* সামান্য দ্রুত গতি */
     }
 }
