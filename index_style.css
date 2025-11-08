@@ -1382,7 +1382,7 @@ body {
 .scrolling-line-container {
     width: 100%;
     overflow: hidden;
-    padding: 10px 0px 5px 0px;   /* ✅ পরিবর্তন: উপরে 10px, ডানে 10px, নিচে 5px, বামে 10px */
+    padding: 10px 0px 0px 0px;   /* ✅ পরিবর্তন: উপরে 10px, ডানে 0px, নিচে 0px, বামে 0px */
     border-radius: 8px;
     position: relative;
     margin-bottom: 0; /* নিচের ফাঁক পুরোপুরি সরিয়ে দেয় */
