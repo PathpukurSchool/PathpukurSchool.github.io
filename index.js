@@ -80,8 +80,7 @@ function renderMarquee() {
         // স্ক্রলিংটি জাম্প-মুক্ত করার জন্য একই কন্টেন্ট দুবার যোগ করা হলো।
         // মাঝখানে একটি বড় সেপারেটর যোগ করা হলো, যাতে দুটি সেটের মধ্যে দূরত্ব থাকে।
         const space = ' <span style="padding: 0 80px;">| | |</span> ';
-        htmlContent = `<div class="marquee-content">${singleContent}</div><div class="marquee-content">${singleContent}</div>`;
-
+        htmlContent = singleContent + space + singleContent;
         
     } else {
         // 4. কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
