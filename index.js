@@ -47,13 +47,11 @@ async function initializeNewStatusControl() {
 // ===================================
 
 function renderMarquee() {
-    // HTML-এর আইডি 'new-marquee-content' এবার CSS ক্লাস 'scrolling-text' পাবে
-    const marqueeContent = document.getElementById('new-marquee-content');
-    
-    // HTML-এ ব্যবহৃত ক্লাস 'scrolling-line-container' (যা মার্জিন ও শ্যাডো দেবে)
+    // HTML-এর আইডি 'new-marquee-wrapper' এখন কন্টেন্ট রাখবে
+    const marqueeWrapper = document.getElementById('new-marquee-wrapper');
     const marqueeContainer = document.querySelector('.scrolling-line-container'); 
 
-    if (!marqueeContent || !marqueeContainer) return;
+    if (!marqueeWrapper || !marqueeContainer) return;
 
     // 1. LocalStorage অনুযায়ী NEW চিহ্নিত আইটেমগুলি ফিল্টার করা
     const newItems = ALL_ITEMS_DETAILS.filter(item => {
@@ -76,17 +74,24 @@ function renderMarquee() {
         });
         
         // আইটেমগুলির মধ্যে সেপারেটর (|) যোগ করা
-        htmlContent = newMarqueeItems.join(' <span class="marquee-separator">|</span> ');
+        const singleContent = newMarqueeItems.join(' <span class="marquee-separator">|</span> ');
         
-        // ✅ ফিক্স: কন্টেইনারে কন্টেন্ট ইনজেক্ট করা
-        marqueeContent.innerHTML = htmlContent;
+        // 3. ✅ মূল ফিক্স: কন্টেন্ট ডুপ্লিকেট করা
+        // স্ক্রলিংটি জাম্প-মুক্ত করার জন্য একই কন্টেন্ট দুবার যোগ করা হলো।
+        // মাঝখানে একটি বড় সেপারেটর যোগ করা হলো, যাতে দুটি সেটের মধ্যে দূরত্ব থাকে।
+        const space = ' <span style="padding: 0 80px;">| | |</span> ';
+        
+        htmlContent = singleContent + space + singleContent;
         
     } else {
-        // 3. কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
-        const welcomeMessage = "স্বাগতম আমাদের অফিসিয়াল ওয়েবসাইটে";
-        htmlContent = `<span class="marquee-default-msg">${welcomeMessage}</span>`;
-        marqueeContent.innerHTML = htmlContent;
+        // 4. কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
+        const welcomeMessage = "🙏 Welcome to our official website 🙏";
+        htmlContent = `<div class="marquee-default-msg" style="width: max-content; padding-left: 100px;">${welcomeMessage}</div>`;
+        // ডিফল্ট মেসেজের জন্য স্ক্রলিং দরকার নেই, তাই এটি wrapper-এর মধ্যেই থাকবে।
     }
+
+    // 5. কন্টেইনারে কন্টেন্ট ইনজেক্ট করা
+    marqueeWrapper.innerHTML = htmlContent;
 }
 
 /* =================================
