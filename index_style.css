@@ -1383,13 +1383,11 @@ body {
     width: 100%;
     overflow: hidden;
     padding: 10px 0px 0px 0px;   /* ✅ পরিবর্তন: উপরে 10px, ডানে 0px, নিচে 0px, বামে 0px */
-    border-radius: 8px;
     position: relative;
-    margin-bottom: 0; /* নিচের ফাঁক পুরোপুরি সরিয়ে দেয় */
 }
 
 .scrolling-wrapper {
-    display: flex;
+    display: inline-flex;
     width: max-content;
     flex-shrink: 0;
     animation: scrollText 30s linear infinite; 
@@ -1400,13 +1398,18 @@ body {
 }
 
 @keyframes scrollText {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); } 
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); } /* পুরোটা স্ক্রল হবে */
 }
 
 /* ✅ হোভার করলে থেমে যাবে */
 .scrolling-line-container:hover .scrolling-wrapper {
     animation-play-state: paused;
+}
+
+.marquee-content {
+  display: inline-block;
+  padding-right: 30px; /* দুটি ব্লকের মাঝে ফাঁকা রাখে */
 }
 
 /* 📱 মোবাইলের জন্য */
