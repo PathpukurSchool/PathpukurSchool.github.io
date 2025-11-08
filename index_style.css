@@ -1398,18 +1398,13 @@ body {
 }
 
 @keyframes scrollText {
-    from { transform: translateX(100%); }
-    to { transform: translateX(-50%); } 
+    from { transform: translateX(0); }
+    to { transform: translateX(-90%); } 
 }
 
 /* ✅ হোভার করলে থেমে যাবে */
 .scrolling-line-container:hover .scrolling-wrapper {
     animation-play-state: paused;
-}
-
-.marquee-content {
-  display: inline-block;
-  padding-right: 30px; /* দুটি ব্লকের মাঝে ফাঁকা রাখে */
 }
 
 /* 📱 মোবাইলের জন্য */
