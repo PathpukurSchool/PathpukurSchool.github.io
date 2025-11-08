@@ -1382,7 +1382,7 @@ body {
 .scrolling-line-container {
     width: 100%;
     overflow: hidden;
-    padding: 10px 0;
+    padding: 10px 0px 5px 0px;   /* ✅ পরিবর্তন: উপরে 10px, ডানে 10px, নিচে 5px, বামে 10px */
     border-radius: 8px;
     position: relative;
     margin-bottom: 0; /* নিচের ফাঁক পুরোপুরি সরিয়ে দেয় */
@@ -1391,6 +1391,7 @@ body {
 .scrolling-wrapper {
     display: flex;
     width: max-content;
+    flex-shrink: 0;
     animation: scrollText 20s linear infinite;
 }
 
@@ -1403,10 +1404,9 @@ body {
     padding-right: 100px; /* 🧩 দুই লাইনের মাঝে ফাঁকা */
 }
 
-/* 🌀 অবিরাম স্ক্রল */
 @keyframes scrollText {
     from { transform: translateX(0); }
-    to { transform: translateX(-90%); }
+    to { transform: translateX(-50%); } 
 }
 
 /* ✅ হোভার করলে থেমে যাবে */
