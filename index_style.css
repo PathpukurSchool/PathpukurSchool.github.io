@@ -1392,16 +1392,11 @@ body {
     display: flex;
     width: max-content;
     flex-shrink: 0;
-    animation: scrollText 20s linear infinite;
-}
-
-.scrolling-text {
+    animation: scrollText 30s linear infinite; 
     white-space: nowrap;
-    flex-shrink: 0; /* স্ক্রল করার সময় টেক্সট সংকুচিত হওয়া আটকায় */
     font-size: 1.2em;
     color: var(--dark-khaki);
     font-weight: 900;
-    padding-right: 100px; /* 🧩 দুই লাইনের মাঝে ফাঁকা */
 }
 
 @keyframes scrollText {
@@ -1416,10 +1411,8 @@ body {
 
 /* 📱 মোবাইলের জন্য */
 @media (max-width: 768px) {
-    .scrolling-text {
-        font-size: 1em;
-    }
     .scrolling-wrapper {
-        animation: scrollText 15s linear infinite; /* সামান্য দ্রুত গতি */
+        animation: scrollText 35s linear infinite; /* মোবাইলে মসৃণতার জন্য সময় বাড়ানো হলো */
+        font-size: 1em; /* ফন্ট সাইজ ছোট করা হলো */
     }
 }
