@@ -1350,11 +1350,7 @@ section[id] {
 }
 
 /* 📌 স্ক্রল বারের জন্য কাস্টম স্টাইল (Webkit Browsers: Chrome, Safari, Edge) */
-/* ========================================================= */
-/* 🎨 কাস্টম স্ক্রল বার স্টাইল (Webkit & Firefox) */
-/* ========================================================= */
 
-/* ১. Webkit Browsers (Chrome, Safari, Edge) */
 body::-webkit-scrollbar {
     width: 12px;
     height: 12px;
@@ -1367,78 +1363,61 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar-thumb {
-    background-color: var(--primary-red); /* প্রধান রঙ */
+    background-color: var(--primary-red);
     border-radius: 10px;
     border: 3px solid var(--light-gray);
     transition: background-color 0.3s ease;
 }
 
 body::-webkit-scrollbar-thumb:hover {
-    background-color: var(--dark-khaki); /* হোভার রঙ */
+    background-color: var(--dark-khaki);
 }
 
-/* ২. Firefox */
 body {
-    /* স্ক্রলবারের জন্য অপ্রয়োজনীয় margin-top 0px বাদ দেওয়া হলো, কারণ body এর জন্য সাধারণত margin-top দরকার হয় না */
     scrollbar-width: thin;
     scrollbar-color: var(--primary-red) var(--light-gray);
 }
 
-/* ========================================================= */
-/* 🏃 অনুভূমিক স্ক্রলিং লাইন স্টাইল (Marquee Effect) */
-/* ✅ লেখা মোটা করা এবং উপর থেকে দূরত্ব বাড়ানো */
-/* ========================================================= */
-
+/* ✅ স্ক্রলিং টেক্সট */
 .scrolling-line-container {
-    /* উপর থেকে অতিরিক্ত দূরত্ব যোগ */
-    margin-top: 40px; /* ✅ উপর থেকে দূরত্ব বাড়ানো হয়েছে */
-    margin-bottom: 20px;
     width: 100%;
-    overflow: hidden; /* ভেতরের টেক্সট লুকিয়ে দেবে */
-    box-shadow: 0 4px 10px var(--box-shadow-light);
-    background-color: var(--card-bg);
+    overflow: hidden;
     padding: 10px 0;
     border-radius: 8px;
-    border-left: 5px solid var(--primary-red);
     position: relative;
+}
+
+.scrolling-wrapper {
+    display: flex;
+    width: max-content;
+    animation: scrollText 20s linear infinite;
 }
 
 .scrolling-text {
     white-space: nowrap;
-    display: inline-block;
-
-    /* লেখা মোটা ও স্টাইল */
-    font-size: 1.5em;
+    font-size: 1.2em;
     color: var(--dark-khaki);
     font-weight: 900;
-
-    /* 🌀 ডান থেকে বাম দিকে চলবে */
-    animation: scrollText 25s linear infinite;
+    padding-right: 100px; /* 🧩 দুই লাইনের মাঝে ফাঁকা */
 }
 
-/* হোভার করলে স্ক্রলিং থেমে যাবে */
-.scrolling-line-container:hover .scrolling-text {
+/* 🌀 অবিরাম স্ক্রল */
+@keyframes scrollText {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* ✅ হোভার করলে থেমে যাবে */
+.scrolling-line-container:hover .scrolling-wrapper {
     animation-play-state: paused;
 }
 
-/* 🌀 অনুভূমিক স্ক্রলিং এর জন্য @keyframes */
-@keyframes scrollText {
-    0%   { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-}
-
+/* 📱 মোবাইলের জন্য */
 @media (max-width: 768px) {
-    .scrolling-line-container {
-        /* মোবাইলে মার্জিন কমানো যেতে পারে */
-        margin-top: 20px;
-    }
-    
     .scrolling-text {
-        /* ✅ ফিক্স ২: মোবাইলে অ্যানিমেশন স্পিড বাড়ানো, যাতে এটি আরও মসৃণ দেখায় 
-           (সময় বাড়ালে গতি কমবে, সময় কমালে গতি বাড়বে) */
-        animation: scrollText 35s linear infinite; 
-        
-        /* ✅ ফিক্স ৩: ফন্ট সাইজ ছোট স্ক্রিনের জন্য একটু কমানো */
-        font-size: 1.2em; 
+        font-size: 1em;
+    }
+    .scrolling-wrapper {
+        animation: scrollText 15s linear infinite; /* সামান্য দ্রুত গতি */
     }
 }
