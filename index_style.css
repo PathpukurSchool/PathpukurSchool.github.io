@@ -1387,7 +1387,7 @@ body {
 }
 
 .scrolling-wrapper {
-    display: inline-flex;
+    display: flex;
     width: max-content;
     flex-shrink: 0;
     animation: scrollText 30s linear infinite; 
@@ -1398,8 +1398,8 @@ body {
 }
 
 @keyframes scrollText {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); } /* পুরোটা স্ক্রল হবে */
+    from { transform: translateX(100%); }
+    to { transform: translateX(-50%); } 
 }
 
 /* ✅ হোভার করলে থেমে যাবে */
