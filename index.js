@@ -422,7 +422,9 @@ function showPopup(titleText, date, link, subjText) {
     const schoolHeader = document.createElement('div');
     schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice';
     schoolHeader.style.cssText = `
-        color: #8B4513; font-size: 16px; margin-bottom: 10px; font-family: 'Times New Roman', serif;
+       color: darkgreen; background-color: #e6ffe6;
+       font-size: 18px; font-weight: bold; margin-bottom: 10px;
+       font-family: 'Times New Roman', serif;
     `;
     popup.appendChild(schoolHeader);
 
