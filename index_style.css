@@ -1398,7 +1398,7 @@ body {
 }
 
 @keyframes scrollText {
-    from { transform: translateX(0); }
+    from { transform: translateX(50%); }
     to { transform: translateX(-90%); } 
 }
 
