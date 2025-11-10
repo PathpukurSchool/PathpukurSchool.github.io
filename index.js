@@ -391,9 +391,22 @@ function createButton(text, bgColor, onClick, disabled = false) {
 
 // [Notices সেকশনের জন্য প্রয়োজনীয় showPopup ফাংশন, ডাউনলোড বাটন সহ]
 function showPopup(titleText, date, link, subjText) {
-    // ... (Popup function logic remains the same) ...
-    const existing = document.getElementById('notice-popup');
-    if (existing) existing.remove();
+    const existingOverlay = document.getElementById('notice-popup-overlay');
+    if (existingOverlay) existingOverlay.remove();
+
+    // ✅ নতুন: ওভারলে তৈরি করা (২ নম্বর পরিবর্তন)
+    const overlay = document.createElement('div');
+    overlay.id = 'notice-popup-overlay';
+    overlay.style.cssText = `
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.7); z-index: 9998;
+    `;
+    overlay.addEventListener('click', function(event) {
+        if (event.target === overlay) {
+            overlay.remove();
+        }
+    });
+    document.body.appendChild(overlay);
 
     const popup = document.createElement('div');
     popup.id = 'notice-popup';
@@ -404,6 +417,14 @@ function showPopup(titleText, date, link, subjText) {
         z-index: 9999; text-align: center; max-width: 90%; min-width: 240px;
         width: 300px; font-family: Arial, sans-serif;
     `;
+
+    // ✅ নতুন: স্কুলের নাম এবং নোটিস হেডিং যুক্ত করা (১ নম্বর পরিবর্তন)
+    const schoolHeader = document.createElement('div');
+    schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice';
+    schoolHeader.style.cssText = `
+        color: #8B4513; font-size: 16px; margin-bottom: 10px; font-family: 'Times New Roman', serif;
+    `;
+    popup.appendChild(schoolHeader);
 
     const titleElem = document.createElement('div');
     titleElem.innerText = titleText || "No Title";
@@ -432,6 +453,7 @@ function showPopup(titleText, date, link, subjText) {
     }
 
     const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'popup-buttons'; // ✅ ক্লাস যুক্ত করা হয়েছে
     buttonContainer.style.cssText = `
         margin-top: 20px; display: flex; flex-wrap: wrap;
         justify-content: center; gap: 10px;
@@ -451,27 +473,42 @@ function showPopup(titleText, date, link, subjText) {
     }
 
     const downloadBtn = createButton('Download', '#28a745', () => {
+        // ৩ নম্বর পরিবর্তন
+        const buttons = popup.querySelector('.popup-buttons');
+        if (buttons) {
+            buttons.style.display = 'none'; // বোতাম লুকানো
+        }
+
         setTimeout(() => {
             if (typeof html2canvas === 'function') {
-                html2canvas(popup).then(canvas => {
+                html2canvas(popup, { logging: false, useCORS: true }).then(canvas => {
                     const image = canvas.toDataURL('image/png');
                     const link = document.createElement('a');
                     link.href = image;
                     link.download = (titleText || 'notice') + '.png';
                     link.click();
+                }).finally(() => {
+                    if (buttons) {
+                        buttons.style.display = 'flex'; // বোতাম দেখানো
+                    }
                 });
             } else {
                 alert("Error: html2canvas library is not loaded for download function.");
+                if (buttons) {
+                    buttons.style.display = 'flex';
+                }
             }
         }, 100);
     });
 
-    const closeBtn = createButton('Back', '#dc3545', () => popup.remove());
+    const closeBtn = createButton('Back', '#dc3545', () => overlay.remove()); // ২ নম্বর পরিবর্তন
 
-    buttonContainer.append(downloadBtn, closeBtn); 
+    buttonContainer.append(downloadBtn, closeBtn);
     popup.appendChild(buttonContainer);
-    document.body.appendChild(popup);
+    // document.body.appendChild(popup); // এই লাইনটি মুছে দেওয়া হয়েছে
+    overlay.appendChild(popup); // ✅ পপ-আপকে ওভারলের ভিতরে যুক্ত করা হয়েছে
 }
+// [Popup function logic end]
 
 // ডাইনামিক কন্টেন্ট লোড হওয়ার পর More/Less বোতাম চেক করার জন্য ফাংশন
 function updateMoreLessButton(sectionId) {
@@ -495,6 +532,16 @@ function updateMoreLessButton(sectionId) {
 }
 // [Popup function logic end]
 
+// ✅ নতুন: মোবাইলের ব্যাক বোতাম (Escape Key) দিয়ে পপ-আপ বন্ধ করার লজিক
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+        const popupOverlay = document.getElementById('notice-popup-overlay');
+        if (popupOverlay) {
+            popupOverlay.remove();
+            event.preventDefault(); // ব্রাউজারের ডিফল্ট আচরণ বন্ধ করা
+        }
+    }
+});
 
 /* =================================
  * DOMContentLoaded - ইভেন্ট লিসেনারের ভেতরের অংশ
