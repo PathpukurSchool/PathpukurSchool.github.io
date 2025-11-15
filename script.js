@@ -67,10 +67,10 @@ async function submitMasterLogin() {
         });
 
         // ID + salt → hash
-        const idHashed = await sha256(id + config.idSalt); // <--- আপনার কোডটি এখানে config.idSalt ব্যবহার করছে
+        const idHashed = await sha256(id + config.id);
 
         // Password + salt → hash
-        const passHashed = await sha256(pass + config.passSalt); // <--- আপনার কোডটি এখানে config.passSalt ব্যবহার করছে
+        const passHashed = await sha256(pass + config.password);
 
         // Match test
         if (idHashed === config.idHash && passHashed === config.passHash) {
