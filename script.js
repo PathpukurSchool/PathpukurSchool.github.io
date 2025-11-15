@@ -1,15 +1,26 @@
-// ✅ Google Apps Script এর URL, যা GitHub লগইন যাচাই করবে।
-const APPS_SCRIPT_GITHUB_URL = "https://script.google.com/macros/s/AKfycbxplpAx91EW7szhs8n3XFQNOsQ6Vq06TFzRatbWot-fhcpAY-aU7IvEZkGzrkvZmeWzXw/exec";
+// =======================
+// SALT + HASH UTILITIES
+// =======================
 
-let credentials = {};
-let masterCredential = {};
+// SHA-256 hash function
+async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2,'0'))
+        .join('');
+}
 
-// ✅ পেজ লোড হওয়ার পর স্ক্রলিং বন্ধ করা
+// =======================
+// MASTER LOGIN (Salt + Hash)
+// =======================
+
+// পেজ লোডে স্ক্রল বন্ধ
 document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add('no-scroll');
 });
 
-// ✅ পাসওয়ার্ড দেখা ও হাইড করার জন্য আইকন
+// পাসওয়ার্ড দেখানোর টগল
 function toggleMasterPasswordVisibility() {
     const passInput = document.getElementById('masterPass');
     const toggleIcon = document.getElementById('masterPassToggle');
@@ -24,7 +35,9 @@ function toggleMasterPasswordVisibility() {
     }
 }
 
-// ✅ মাস্টার লগইন সাবমিট ফাংশন (পরিবর্তিত)
+// ===========================================
+// 🔐 MASTER LOGIN WITH SALT + HASH
+// ===========================================
 async function submitMasterLogin() {
     const id = document.getElementById('masterId').value.trim();
     const pass = document.getElementById('masterPass').value.trim();
@@ -33,31 +46,34 @@ async function submitMasterLogin() {
     const successDiv = document.getElementById('masterLoginSuccess');
     const loginBtn = document.querySelector('#masterLoginBox button');
 
-    // পুরোনো মেসেজ ক্লিয়ার
     errorDiv.innerText = "";
     successDiv.innerText = "";
     successDiv.style.display = "none";
 
-    // ইনপুট চেক
     if (!id || !pass) {
         errorDiv.innerText = "Please fill ID & Password.";
         errorDiv.style.color = "red";
         return;
     }
-    
-    // ✅ লোডিং স্টেট
+
     loginBtn.innerText = "Loading...";
     loginBtn.disabled = true;
 
-    // ✅ Apps Script এর মাধ্যমে লগইন ভেরিফাই
     try {
-        const response = await fetch(`${APPS_SCRIPT_GITHUB_URL}?action=verify&id=${encodeURIComponent(id)}&pass=${encodeURIComponent(pass)}`);
-        const data = await response.json();
+        // masterConfig.json লোড
+        const config = await fetch("masterConfig.json").then(r => r.json());
 
-        if (data.success) {
+        // ID + salt → hash
+        const idHashed = await sha256(id + config.idSalt);
+
+        // Password + salt → hash
+        const passHashed = await sha256(pass + config.passSalt);
+
+        // Match test
+        if (idHashed === config.idHash && passHashed === config.passHash) {
             sessionStorage.setItem("userType", "teacher");
             sessionStorage.setItem("teacherLoggedIn", "true");
-            
+
             successDiv.innerText = "✔️ Login Successful.";
             successDiv.style.display = "block";
 
@@ -66,23 +82,26 @@ async function submitMasterLogin() {
                 document.body.classList.remove('no-scroll');
                 loadExamLinks();
             }, 1000);
-
         } else {
             errorDiv.innerText = "Incorrect ID or Password!";
             errorDiv.style.color = "red";
             loginBtn.innerText = "LOGIN";
             loginBtn.disabled = false;
         }
+
     } catch (error) {
-        console.error('Error fetching credentials:', error);
-        errorDiv.innerText = "Error connecting to server.";
+        console.error("Error loading masterConfig.json", error);
+        errorDiv.innerText = "Error loading configuration.";
         errorDiv.style.color = "red";
         loginBtn.innerText = "LOGIN";
         loginBtn.disabled = false;
     }
 }
 
-// ✅ এক্সাম লিঙ্ক লোড ফাংশন
+// ===============================
+// EXAM LINKS LOADING (unchanged)
+// ===============================
+let credentials = {};
 
 function loadExamLinks() {
     fetch('config.json')
