@@ -59,15 +59,18 @@ async function submitMasterLogin() {
     loginBtn.innerText = "Loading...";
     loginBtn.disabled = true;
 
-    try {
+     try {
         // masterConfig.json লোড
-        const config = await fetch("masterConfig.json").then(r => r.json());
+        const config = await fetch("masterConfig.json").then(r => {
+            if (!r.ok) throw new Error('Teacher Login load failed');
+            return r.json();
+        });
 
         // ID + salt → hash
-        const idHashed = await sha256(id + config.idSalt);
+        const idHashed = await sha256(id + config.idSalt); // <--- আপনার কোডটি এখানে config.idSalt ব্যবহার করছে
 
         // Password + salt → hash
-        const passHashed = await sha256(pass + config.passSalt);
+        const passHashed = await sha256(pass + config.passSalt); // <--- আপনার কোডটি এখানে config.passSalt ব্যবহার করছে
 
         // Match test
         if (idHashed === config.idHash && passHashed === config.passHash) {
@@ -90,7 +93,7 @@ async function submitMasterLogin() {
         }
 
     } catch (error) {
-        console.error("Error loading masterConfig.json", error);
+        console.error("Error loading teacher login", error);
         errorDiv.innerText = "Error loading configuration.";
         errorDiv.style.color = "red";
         loginBtn.innerText = "LOGIN";
