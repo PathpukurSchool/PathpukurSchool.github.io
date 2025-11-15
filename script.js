@@ -67,10 +67,10 @@ async function submitMasterLogin() {
         });
 
         // ID + salt → hash
-        const idHashed = await sha256(id + config.id);
+        const idHashed = await sha256(id + config.Logid);
 
         // Password + salt → hash
-        const passHashed = await sha256(pass + config.password);
+        const passHashed = await sha256(pass + config.Logpassword);
 
         // Match test
         if (idHashed === config.idHash && passHashed === config.passHash) {
