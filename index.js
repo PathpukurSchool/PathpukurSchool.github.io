@@ -84,7 +84,7 @@ function renderMarquee() {
         
     } else {
         // 4. কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
-        const welcomeMessage = "🙏 Welcome to our official website 🙏";
+        const welcomeMessage = "🙏 Welcome to our Official Website 🙏";
         htmlContent = `<div class="marquee-default-msg" style="width: max-content; padding-left: 100px;">${welcomeMessage}</div>`;
         // ডিফল্ট মেসেজের জন্য স্ক্রলিং দরকার নেই, তাই এটি wrapper-এর মধ্যেই থাকবে।
     }
@@ -413,9 +413,11 @@ function showPopup(titleText, date, link, subjText) {
     popup.style.cssText = `
         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
         background: #f0f8ff; padding: 20px; border: 2px solid #333;
-        border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        z-index: 9999; text-align: center; max-width: 90%; min-width: 240px;
-        width: 300px; font-family: Arial, sans-serif;
+        border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.7);
+        z-index: 9999; text-align: center; max-width: 90%; 
+        min-width: 240px; 
+        font-family: Arial, sans-serif;
+        pointer-events: auto;
     `;
 
     // ✅ নতুন: স্কুলের নাম এবং নোটিস হেডিং যুক্ত করা (১ নম্বর পরিবর্তন)
