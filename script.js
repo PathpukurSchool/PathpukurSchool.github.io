@@ -384,83 +384,142 @@ function createButton(text, bgColor, onClick, disabled = false) {
 }
 
     function showPopup(titleText, date, link, subjText) {
-        const existing = document.getElementById('notice-popup');
-        if (existing) existing.remove();
+    const existing = document.getElementById('notice-popup');
+    if (existing) existing.remove();
 
-        const popup = document.createElement('div');
-        popup.id = 'notice-popup';
-        popup.style.cssText = `
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #f0f8ff; padding: 20px; border: 2px solid #333;
-            border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            z-index: 9999; text-align: center; max-width: 90%; min-width: 240px;
-            width: 300px; font-family: Arial, sans-serif;
-        `;
+    // 🌟 পরিবর্তন ১: Overlay তৈরি করা (পপ-আপের বাইরে ক্লিক করার জন্য)
+    const overlay = document.createElement('div');
+    overlay.id = 'notice-popup-overlay';
+    overlay.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 9998;
+    `;
+    // ফাঁকা স্থানে ক্লিক করলে পপ-আপ বন্ধ হবে
+    overlay.onclick = () => {
+        popup.remove();
+        overlay.remove();
+    };
 
-        const titleElem = document.createElement('div');
-        titleElem.innerText = titleText || "No Title";
-        titleElem.style.cssText = `
-            background-color: green; color: white; font-weight: bold;
-            font-size: 15px; padding: 10px; border-radius: 5px; margin-bottom: 15px;
-        `;
-        popup.appendChild(titleElem);
+    const popup = document.createElement('div');
+    popup.id = 'notice-popup';
+    popup.style.cssText = `
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background: #f0f8ff; padding: 20px; border: 2px solid #333;
+        border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.7);
+        z-index: 9999; text-align: center; max-width: 90%; min-width: 240px;
+        width: 300px; font-family: Arial, sans-serif;
+        /* Overlay-এর ক্লিক ইভেন্ট যেন পপ-আপের উপর কাজ না করে */
+        pointer-events: auto;
+    `;
+    // ✅ নতুন: স্কুলের নাম এবং নোটিস হেডিং যুক্ত করা (১ নম্বর পরিবর্তন)
+    const schoolHeader = document.createElement('div');
+    schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice Board';
+    schoolHeader.style.cssText = `
+       color: darkgreen; background-color: #e6ffe6;
+       font-size: 18px; font-weight: bold; margin-bottom: 10px;
+       font-family: 'Times New Roman', serif;
+    `;
+    popup.appendChild(schoolHeader);
+    // পপ-আপের উপর ক্লিক ইভেন্ট বন্ধ করা (যাতে এটি বন্ধ না হয়)
+    popup.onclick = (e) => e.stopPropagation();
 
-        if (date) {
-            const dateElem = document.createElement('div');
-            dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-            dateElem.style.marginBottom = '10px';
-            popup.appendChild(dateElem);
-        }
+    const titleElem = document.createElement('div');
+    titleElem.innerText = titleText || "No Title";
+    titleElem.style.cssText = `
+        background-color: green; color: white; font-weight: bold;
+        font-size: 15px; padding: 10px; border-radius: 5px; margin-bottom: 15px;
+    `;
+    popup.appendChild(titleElem);
 
-        if (subjText && subjText.trim() !== '') {
-            const subjElem = document.createElement('div');
-            subjElem.innerText = subjText;
-            subjElem.style.cssText = `
-                color: darkgreen; background-color: #e6ffe6;
-                font-weight: bold; font-size: 14px; padding: 6px;
-                border-radius: 4px; margin-bottom: 12px;
-            `;
-            popup.appendChild(subjElem);
-        }
-
-        const buttonContainer = document.createElement('div');
-        buttonContainer.style.cssText = `
-            margin-top: 20px; display: flex; flex-wrap: wrap;
-            justify-content: center; gap: 10px;
-        `;
-
-        if (link && link.trim() !== '') {
-            const linkBtn = document.createElement('a');
-            linkBtn.href = link;
-            linkBtn.innerText = 'Open Link';
-            linkBtn.target = '_blank';
-            linkBtn.style.cssText = `
-                background-color: #007bff; color: white; padding: 6px 10px;
-                border-radius: 5px; font-weight: bold; font-size: 12px;
-                text-decoration: none;
-            `;
-            buttonContainer.appendChild(linkBtn);
-        }
-
-        const downloadBtn = createButton('Download', '#28a745', () => {
-            setTimeout(() => {
-                html2canvas(popup).then(canvas => {
-                    const image = canvas.toDataURL('image/png');
-                    const a = document.createElement('a');
-                    a.href = image;
-                    a.download = 'notice.png';
-                    a.click();
-                });
-            }, 100);
-        });
-
-        const closeBtn = createButton('Back', '#dc3545', () => popup.remove());
-
-        buttonContainer.append(downloadBtn, closeBtn);
-        popup.appendChild(buttonContainer);
-        document.body.appendChild(popup);
+    if (date) {
+        const dateElem = document.createElement('div');
+        dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+        dateElem.style.marginBottom = '10px';
+        popup.appendChild(dateElem);
     }
 
+    if (subjText && subjText.trim() !== '') {
+        const subjElem = document.createElement('div');
+        subjElem.innerText = subjText;
+        subjElem.style.cssText = `
+            color: darkgreen; background-color: #e6ffe6;
+            font-weight: bold; font-size: 14px; padding: 6px;
+            border-radius: 4px; margin-bottom: 12px;
+        `;
+        popup.appendChild(subjElem);
+    }
+    // 🌟 (পূর্বের কোড থেকে) শেষ
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.id = 'popup-button-container'; // ID যোগ করা
+    buttonContainer.style.cssText = `
+        margin-top: 20px; display: flex; flex-wrap: wrap;
+        justify-content: center; gap: 10px;
+    `;
+
+    if (link && link.trim() !== '') {
+        const linkBtn = document.createElement('a');
+        linkBtn.href = link;
+        linkBtn.innerText = 'Open Link';
+        linkBtn.target = '_blank';
+        linkBtn.style.cssText = `
+            background-color: #007bff; color: white; padding: 6px 10px;
+            border-radius: 5px; font-weight: bold; font-size: 12px;
+            text-decoration: none;
+        `;
+        buttonContainer.appendChild(linkBtn);
+    }
+
+    // 🌟 পরিবর্তন ২: ডাউনলোড লজিক আপডেট
+    const downloadBtn = createButton('Download', '#28a745', () => {
+        // ডাউনলোড শুরু হওয়ার আগে বোতাম লুকিয়ে ফেলা
+        downloadBtn.innerText = 'Processing...';
+        downloadBtn.disabled = true;
+        closeBtn.disabled = true;
+        
+        // বোতাম কন্টেইনার সাময়িকভাবে লুকিয়ে ফেলা
+        buttonContainer.style.visibility = 'hidden'; 
+        // 100ms অপেক্ষা করা যাতে UI রেন্ডার করার সময় পায়
+        setTimeout(() => {
+            html2canvas(popup, {
+                allowTaint: true, 
+                useCORS: true
+            }).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = image;
+                a.download = 'notice.png';
+                a.click();
+
+                // কাজ শেষ হলে বোতাম ফিরিয়ে আনা
+                buttonContainer.style.visibility = 'visible';
+                downloadBtn.innerText = 'Download';
+                downloadBtn.disabled = false;
+                closeBtn.disabled = false;
+            }).catch(err => {
+                console.error("Error during download:", err);
+                // ত্রুটি হলেও বোতাম ফিরিয়ে আনা
+                buttonContainer.style.visibility = 'visible';
+                downloadBtn.innerText = 'Download Failed';
+                downloadBtn.disabled = false;
+                closeBtn.disabled = false;
+                setTimeout(() => downloadBtn.innerText = 'Download', 1500);
+            });
+        }, 100);
+    });
+
+    const closeBtn = createButton('Back', '#dc3545', () => {
+        popup.remove();
+        overlay.remove(); // Overlay-ও সরাতে হবে
+    });
+
+    buttonContainer.append(downloadBtn, closeBtn);
+    popup.appendChild(buttonContainer);
+    
+    // 🌟 পরিবর্তন ৩: Overlay এবং Popup যোগ করা
+    document.body.appendChild(overlay);
+    document.body.appendChild(popup);
+}
     // প্রথম লোডে ডাটা আনুন
     fetchNotices();
 
