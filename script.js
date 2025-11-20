@@ -406,9 +406,9 @@ function createButton(text, bgColor, onClick, disabled = false) {
         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
         background: #f0f8ff; padding: 20px; border: 2px solid #333;
         border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.7);
-        z-index: 9999; text-align: center; max-width: 90%; min-width: 240px;
-        width: 300px; font-family: Arial, sans-serif;
-        /* Overlay-এর ক্লিক ইভেন্ট যেন পপ-আপের উপর কাজ না করে */
+        z-index: 9999; text-align: center; max-width: 90%; 
+        min-width: 240px; 
+        font-family: Arial, sans-serif;
         pointer-events: auto;
     `;
     // ✅ নতুন: স্কুলের নাম এবং নোটিস হেডিং যুক্ত করা (১ নম্বর পরিবর্তন)
