@@ -420,7 +420,7 @@ function showPopup(titleText, date, link, subjText) {
 
     // ✅ নতুন: স্কুলের নাম এবং নোটিস হেডিং যুক্ত করা (১ নম্বর পরিবর্তন)
     const schoolHeader = document.createElement('div');
-    schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice';
+    schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice Board';
     schoolHeader.style.cssText = `
        color: darkgreen; background-color: #e6ffe6;
        font-size: 18px; font-weight: bold; margin-bottom: 10px;
