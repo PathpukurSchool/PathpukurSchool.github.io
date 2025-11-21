@@ -312,8 +312,6 @@ body.no-scroll {
     font-size: 2rem;
     font-weight: 700;
     color: var(--primary-color);
-     border-radius: 8px;
-     border-bottom: 5px solid var(--primary-color);
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
@@ -614,7 +612,9 @@ footer p {
     ইউটিলিটি ক্লাস এবং অ্যানিমেশন
 -------------------- */
 .blink {
-    animation: blink-animation 1s steps(5, start) infinite;
+     border-radius: 8px;
+     border-bottom: 6px solid var(--primary-color);
+     animation: blink-animation 1s steps(5, start) infinite;
 }
 
 @keyframes blink-animation {
