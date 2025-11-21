@@ -312,6 +312,8 @@ body.no-scroll {
     font-size: 2rem;
     font-weight: 700;
     color: var(--primary-color);
+     border-radius: 8px;
+     border-bottom: 5px solid var(--primary-color);
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
