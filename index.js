@@ -520,8 +520,15 @@ const downloadBtn = createButton('Download', '#28a745', () => {
 
         html2canvas(popup).then(canvas => {
 
+            // ⭐⭐ নতুন: Title থেকে File Name তৈরি ⭐⭐
+            let fileName = (titleText || "notice")
+                .replace(/[^a-zA-Z0-9 ]/g, "")   // special characters remove
+                .trim()
+                .replace(/\s+/g, "_")           // space → underscore
+                + ".png";
+
             const link = document.createElement('a');
-            link.download = 'notice.png';
+            link.download = fileName;   // ⭐ ফাইল নাম সেট করা ⭐
             link.href = canvas.toDataURL();
             link.click();
 
