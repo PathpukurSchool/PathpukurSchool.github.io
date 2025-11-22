@@ -501,34 +501,53 @@ function showPopup(titleText, date, link, subjText) {
         buttonContainer.appendChild(linkBtn);
     }
 
-    const downloadBtn = createButton('Download', '#28a745', () => {
-        // ৩ নম্বর পরিবর্তন
-        const buttons = popup.querySelector('.popup-buttons');
-        if (buttons) {
-            buttons.style.display = 'none'; // বোতাম লুকানো
-        }
+    // 🌟 পরিবর্তন ২: ডাউনলোড লজিক আপডেট (সংশোধিত)
+    const downloadBtn = createButton('Download', '#28a745', () => {
+        // ডাউনলোড শুরু হওয়ার আগে বোতাম লুকিয়ে ফেলা
+        downloadBtn.innerText = 'Processing...';
+        downloadBtn.disabled = true;
+        closeBtn.disabled = true;
+        
+        // বোতাম কন্টেইনার সাময়িকভাবে লুকিয়ে ফেলা
+        buttonContainer.style.visibility = 'hidden'; 
+        // 100ms অপেক্ষা করা যাতে UI রেন্ডার করার সময় পায়
+        setTimeout(() => {
+            html2canvas(popup, {
+                allowTaint: true, 
+                useCORS: true,
+                
+                // ⭐⭐ মূল সংশোধন ⭐⭐
+                scrollX: 0, /* স্ক্রল পজিশন উপেক্ষা করবে */
+                scrollY: 0,
+                
+                // যদি কনটেন্ট ঠিকঠাক ক্যাপচার না হয়, তাহলে height এবং width যোগ করতে পারেন
+                height: popup.scrollHeight, 
+                width: popup.scrollWidth 
+                // ⭐⭐ মূল সংশোধন শেষ ⭐⭐
 
-        setTimeout(() => {
-            if (typeof html2canvas === 'function') {
-                html2canvas(popup, { logging: false, useCORS: true }).then(canvas => {
-                    const image = canvas.toDataURL('image/png');
-                    const link = document.createElement('a');
-                    link.href = image;
-                    link.download = (titleText || 'notice') + '.png';
-                    link.click();
-                }).finally(() => {
-                    if (buttons) {
-                        buttons.style.display = 'flex'; // বোতাম দেখানো
-                    }
-                });
-            } else {
-                alert("Error: html2canvas library is not loaded for download function.");
-                if (buttons) {
-                    buttons.style.display = 'flex';
-                }
-            }
-        }, 100);
-    });
+            }).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = image;
+                a.download = 'notice.png';
+                a.click();
+
+                // কাজ শেষ হলে বোতাম ফিরিয়ে আনা
+                buttonContainer.style.visibility = 'visible';
+                downloadBtn.innerText = 'Download';
+                downloadBtn.disabled = false;
+                closeBtn.disabled = false;
+            }).catch(err => {
+                console.error("Error during download:", err);
+                // ত্রুটি হলেও বোতাম ফিরিয়ে আনা
+                buttonContainer.style.visibility = 'visible';
+                downloadBtn.innerText = 'Download Failed';
+                downloadBtn.disabled = false;
+                closeBtn.disabled = false;
+                setTimeout(() => downloadBtn.innerText = 'Download', 1500);
+            });
+        }, 100);
+    });
 
     const closeBtn = createButton('Back', '#dc3545', () => overlay.remove()); // ২ নম্বর পরিবর্তন
 
