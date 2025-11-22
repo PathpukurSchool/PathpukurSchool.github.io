@@ -753,3 +753,35 @@ footer p {
         max-width: 50%;
     }
 }
+/* NEW ব্যাজের জন্য স্টাইল */
+.new-badge {
+    background-color: #e74c3c; /* লাল রং */
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7em;
+    font-weight: 700;
+    margin-left: 10px;
+    display: inline-block;
+    animation: blinker 1s linear infinite; /* অ্যানিমেশন যুক্ত করা */
+}
+
+/* অ্যানিমেশন কিফ্রেম: জ্বলজ্বল করার এফেক্ট */
+@keyframes blinker {
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05); /* হালকা বড় হবে */
+    }
+}
+
+/* নতুন নোটিসের জন্য পুরো বক্স হাইলাইট */
+.new-notice-highlight {
+    border: 2px solid #e74c3c !important; /* লাল বর্ডার */
+    border-left: 6px solid #e74c3c !important; /* বাম দিকে হাইলাইট */
+    background-color: #fcecec !important; /* হালকা গোলাপি ব্যাকগ্রাউন্ড */
+}
+
+/* যখন মাউস হোভার করা হবে */
+.new-notice-highlight:hover {
+    background-color: #fae4e4 !important;
+}
