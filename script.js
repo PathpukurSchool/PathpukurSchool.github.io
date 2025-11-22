@@ -421,6 +421,7 @@ function createButton(text, bgColor, onClick, disabled = false) {
     popup.id = 'notice-popup';
     popup.style.cssText = `
         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        max-height: 90vh; overflow-y: auto;
         background: #f0f8ff; padding: 20px; border: 2px solid #333;
         border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.7);
         z-index: 9999; text-align: center; max-width: 90%; 
