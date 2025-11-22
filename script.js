@@ -320,10 +320,27 @@ document.addEventListener('DOMContentLoaded', function () {
         const endIndex = startIndex + NOTICES_PER_PAGE;
         const noticesToRender = Helping.slice(startIndex, endIndex);
 
-        noticesToRender.forEach(item => {
-            const itemDiv = document.createElement('div');
-            const dateText = item.date ? ` [Date: ${item.date}]` : '';
-            itemDiv.innerHTML = (item.text || "No Title") + dateText; 
+       noticesToRender.forEach(item => {
+            const itemDiv = document.createElement('div');
+            const titleText = item.text || "No Title";
+            const dateText = item.date ? ` [Date: ${item.date}]` : '';
+
+            // ⭐ নতুন লজিক: Google Sheet ডেটা চেক করা হচ্ছে ⭐
+            // ধরে নেওয়া হয়েছে, Google Sheet থেকে isNew স্ট্যাটাস আসছে
+            const isItemNew = item.isNew === true || item.isNew === 'Yes' || item.isNew === 'NEW';
+            
+            let itemContent = titleText + dateText;
+
+            if (isItemNew) {
+                // 'NEW' ব্যাজ যোগ করা
+                itemContent += ` <span class="new-badge">✨ NEW</span>`;
+                
+                // যদি আপনি নতুন নোটিসকে আলাদাভাবে হাইলাইট করতে চান
+                itemDiv.classList.add('new-notice-highlight');
+            }
+            // ⭐ নতুন লজিক শেষ ⭐
+            
+            itemDiv.innerHTML = itemContent;
             
             itemDiv.style.cssText = `
                 cursor: pointer; margin: 10px 0; padding: 8px 10px;
