@@ -1348,15 +1348,6 @@ section[id] {
         transform: translateY(-3px);
     }
 }
-/* নতুন নোটিসের জন্য পুরো বক্স হাইলাইট */
-.new-notice-highlight {
-    border: 2px solid #e74c3c !important; /* লাল বর্ডার */
-    background-color: #fcecec !important; /* হালকা গোলাপি ব্যাকগ্রাউন্ড */
-}
-/* যখন মাউস হোভার করা হবে */
-.new-notice-highlight:hover {
-    background-color: #fae4e4 !important;
-}
 
 /* 📌 স্ক্রল বারের জন্য কাস্টম স্টাইল (Webkit Browsers: Chrome, Safari, Edge) */
 
