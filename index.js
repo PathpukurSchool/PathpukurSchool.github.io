@@ -142,6 +142,30 @@ async function fetchNotices() {
         const data = await response.json();
         Helping = Array.isArray(data.notices) ? data.notices : [];
         currentPage = 1; 
+        // ⭐ নতুন কোড: নোটিসগুলির স্ট্যাটাস LocalStorage-এ যোগ করা ⭐
+        let updatedStatusControl = { ...NEW_STATUS_CONTROL }; // বিদ্যমান স্ট্যাটাস কপি করা
+        let statusChanged = false;
+
+        Helping.forEach(notice => {
+            const title = notice.text;
+            const isNewFromSheet = notice.isNew === true; // Sheet থেকে আসা স্ট্যাটাস
+            
+            // যদি LocalStorage এ না থাকে, তবে Google Sheet এর স্ট্যাটাস নেওয়া হবে
+            if (updatedStatusControl[title] === undefined) {
+                updatedStatusControl[title] = isNewFromSheet;
+                statusChanged = true;
+            }
+        });
+        
+        NEW_STATUS_CONTROL = updatedStatusControl; // গ্লোবাল অবজেক্ট আপডেট করা
+        
+        // যদি নতুন কোনো আইটেম যোগ হয়, তবে LocalStorage-এ সেভ করা
+       if (statusChanged) {
+            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
+            renderMarquee(); // ⭐ নতুন: LocalStorage আপডেট হলে Marquee আপডেট করা
+        }
+        // ⭐ নতুন কোড শেষ ⭐
+        
         renderHelpList();
         updateMoreLessButton('important-links-section-notice'); 
     } catch (error) {
