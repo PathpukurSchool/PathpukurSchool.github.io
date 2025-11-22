@@ -521,11 +521,12 @@ const downloadBtn = createButton('Download', '#28a745', () => {
         html2canvas(popup).then(canvas => {
 
             // ⭐⭐ নতুন: Title থেকে File Name তৈরি ⭐⭐
-            let fileName = (titleText || "notice")
-                .replace(/[^a-zA-Z0-9 ]/g, "")   // special characters remove
+            let safeTitle = (titleText || "notice")
+                .replace(/[\\/:*?"<>|]+/g, "")   // ❌ ফাইল নাম নিষিদ্ধ ক্যারেক্টার remove
                 .trim()
-                .replace(/\s+/g, "_")           // space → underscore
-                + ".png";
+                .replace(/\s+/g, "_");          // space → underscore
+            
+            let fileName = safeTitle + ".png";
 
             const link = document.createElement('a');
             link.download = fileName;   // ⭐ ফাইল নাম সেট করা ⭐
