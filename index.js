@@ -501,45 +501,38 @@ function showPopup(titleText, date, link, subjText) {
         buttonContainer.appendChild(linkBtn);
     }
 
-   // 🌟 পরিবর্তন ২: ডাউনলোড লজিক আপডেট (সংশোধিত)
-    const downloadBtn = createButton('Download', '#28a745', () => {
-        // ... অন্যান্য বোতাম ডিসেবল করার লজিক ...
-        buttonContainer.style.visibility = 'hidden'; 
-        
-        // ⭐⭐ CSS ফিক্স (সংশোধন) ⭐⭐
-        const originalMaxHeight = popup.style.maxHeight;
-        const originalOverflowY = popup.style.overflowY;
-        
-        popup.style.maxHeight = 'unset'; // max-height মুছে ফেলা হলো
-        popup.style.overflowY = 'unset'; // overflow-y মুছে ফেলা হলো
-        // ⭐⭐ CSS ফিক্স শেষ ⭐⭐
+ // 🌟 পরিবর্তন ২: ডাউনলোড লজিক আপডেট (সম্পূর্ণ ফিক্স)
+const downloadBtn = createButton('Download', '#28a745', () => {
 
-        setTimeout(() => {
-            html2canvas(popup, {
-                allowTaint: true, 
-                useCORS: true,
-                scrollX: 0, 
-                scrollY: 0,
-                height: popup.scrollHeight, 
-                width: popup.scrollWidth 
-            }).then(canvas => {
-                // ... ডাউনলোড লজিক ...
-                
-                // ⭐⭐ CSS স্টাইলগুলি ফিরিয়ে আনা ⭐⭐
-                popup.style.maxHeight = originalMaxHeight;
-                popup.style.overflowY = originalOverflowY;
-                // ⭐⭐ স্টাইলগুলি ফিরিয়ে আনা শেষ ⭐⭐
-                
-                // ... বোতাম দৃশ্যমান করার লজিক ...
+    // Download শুরু হলে বোতামগুলো লুকানো
+    buttonContainer.style.visibility = 'hidden';
 
-            }).catch(err => {
-                // ⭐⭐ ত্রুটি হলেও CSS স্টাইলগুলি ফিরিয়ে আনা নিশ্চিত করুন ⭐⭐
-                popup.style.maxHeight = originalMaxHeight;
-                popup.style.overflowY = originalOverflowY;
-                // ... এরর হ্যান্ডলিং লজিক ...
-            });
-        }, 100);
-    });
+    // ⭐⭐ Capture এর আগে popup-এর height overflow ঠিক করা ⭐⭐
+    const originalMaxHeight = popup.style.maxHeight;
+    const originalOverflowY = popup.style.overflowY;
+
+    // popup কে সম্পূর্ণ উচ্চতায় আনা
+    popup.style.maxHeight = 'none';
+    popup.style.overflowY = 'visible';
+
+    // 50ms delay → Browser কে style apply করার সময় দেওয়া
+    setTimeout(() => {
+
+        html2canvas(popup).then(canvas => {
+
+            const link = document.createElement('a');
+            link.download = 'notice.png';
+            link.href = canvas.toDataURL();
+            link.click();
+
+            // ⭐⭐ capture শেষ হলে আগের অবস্থায় ফেরত ⭐⭐
+            popup.style.maxHeight = originalMaxHeight;
+            popup.style.overflowY = originalOverflowY;
+            buttonContainer.style.visibility = 'visible';
+        });
+
+    }, 50);
+});
 
     const closeBtn = createButton('Back', '#dc3545', () => overlay.remove()); // ২ নম্বর পরিবর্তন
 
