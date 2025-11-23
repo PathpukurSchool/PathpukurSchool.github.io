@@ -488,53 +488,46 @@ function createButton(text, bgColor, onClick, disabled = false) {
         buttonContainer.appendChild(linkBtn);
     }
 
-  // 🌟 পরিবর্তন ২: ডাউনলোড লজিক আপডেট (সংশোধিত)
-    const downloadBtn = createButton('Download', '#28a745', () => {
-        // ডাউনলোড শুরু হওয়ার আগে বোতাম লুকিয়ে ফেলা
-        downloadBtn.innerText = 'Processing...';
-        downloadBtn.disabled = true;
-        closeBtn.disabled = true;
-        
-        // বোতাম কন্টেইনার সাময়িকভাবে লুকিয়ে ফেলা
-        buttonContainer.style.visibility = 'hidden'; 
-        // 100ms অপেক্ষা করা যাতে UI রেন্ডার করার সময় পায়
-        setTimeout(() => {
-            html2canvas(popup, {
-                allowTaint: true, 
-                useCORS: true,
-                
-                // ⭐⭐ মূল সংশোধন ⭐⭐
-                scrollX: 0, /* স্ক্রল পজিশন উপেক্ষা করবে */
-                scrollY: 0,
-                
-                // যদি কনটেন্ট ঠিকঠাক ক্যাপচার না হয়, তাহলে height এবং width যোগ করতে পারেন
-                height: popup.scrollHeight, 
-                width: popup.scrollWidth 
-                // ⭐⭐ মূল সংশোধন শেষ ⭐⭐
+ // 🌟 পরিবর্তন ২: ডাউনলোড লজিক আপডেট (সম্পূর্ণ ফিক্স)
+const downloadBtn = createButton('Download', '#28a745', () => {
 
-            }).then(canvas => {
-                const image = canvas.toDataURL('image/png');
-                const a = document.createElement('a');
-                a.href = image;
-                a.download = 'notice.png';
-                a.click();
+    // Download শুরু হলে বোতামগুলো লুকানো
+    buttonContainer.style.visibility = 'hidden';
 
-                // কাজ শেষ হলে বোতাম ফিরিয়ে আনা
-                buttonContainer.style.visibility = 'visible';
-                downloadBtn.innerText = 'Download';
-                downloadBtn.disabled = false;
-                closeBtn.disabled = false;
-            }).catch(err => {
-                console.error("Error during download:", err);
-                // ত্রুটি হলেও বোতাম ফিরিয়ে আনা
-                buttonContainer.style.visibility = 'visible';
-                downloadBtn.innerText = 'Download Failed';
-                downloadBtn.disabled = false;
-                closeBtn.disabled = false;
-                setTimeout(() => downloadBtn.innerText = 'Download', 1500);
-            });
-        }, 100);
-    });
+    // ⭐⭐ Capture এর আগে popup-এর height overflow ঠিক করা ⭐⭐
+    const originalMaxHeight = popup.style.maxHeight;
+    const originalOverflowY = popup.style.overflowY;
+
+    // popup কে সম্পূর্ণ উচ্চতায় আনা
+    popup.style.maxHeight = 'none';
+    popup.style.overflowY = 'visible';
+
+    // 50ms delay → Browser কে style apply করার সময় দেওয়া
+    setTimeout(() => {
+
+        html2canvas(popup).then(canvas => {
+
+            // ⭐⭐ নতুন: Title থেকে File Name তৈরি ⭐⭐
+            let safeTitle = (titleText || "notice")
+                .replace(/[\\/:*?"<>|]+/g, "")   // ❌ ফাইল নাম নিষিদ্ধ ক্যারেক্টার remove
+                .trim()
+                .replace(/\s+/g, "_");          // space → underscore
+            
+            let fileName = safeTitle + ".png";
+
+            const link = document.createElement('a');
+            link.download = fileName;   // ⭐ ফাইল নাম সেট করা ⭐
+            link.href = canvas.toDataURL();
+            link.click();
+
+            // ⭐⭐ capture শেষ হলে আগের অবস্থায় ফেরত ⭐⭐
+            popup.style.maxHeight = originalMaxHeight;
+            popup.style.overflowY = originalOverflowY;
+            buttonContainer.style.visibility = 'visible';
+        });
+
+    }, 50);
+});
 
     const closeBtn = createButton('Back', '#dc3545', () => {
         popup.remove();
