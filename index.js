@@ -10,22 +10,16 @@ const CONSTANTS = {
     FORMS_SECTION_ID: 'forms-list',
 };
 
-// গ্লোবাল স্টেট ম্যানেজমেন্ট অবজেক্ট (সকল ডেটা ও স্টেট এক স্থানে)
+// গ্লোবাল স্টেট ম্যানেজমেন্ট অবজেক্ট
 const globalAppState = {
-    // LocalStorage থেকে লোড করা বা ডিফল্ট NEW স্ট্যাটাস
     newStatusControl: {}, 
-    // index_link.json থেকে লোড করা সমস্ত ডেটা (Students + Forms)
     dynamicItems: [], 
-    // Google Sheet থেকে লোড করা Notices
     notices: [], 
-    // Notices-এর জন্য পেজিনেশন স্টেট
     noticePage: { currentPage: 1, totalPages: 0 }, 
-    // dynamicItems-এর জন্য পেজিনেশন স্টেট
     dynamicSectionsState: {
         [CONSTANTS.STUDENTS_SECTION_ID]: { data: [], currentPage: 1, totalPages: 0, linkType: 'url' },
         [CONSTANTS.FORMS_SECTION_ID]: { data: [], currentPage: 1, totalPages: 0, linkType: 'url' }
     },
-    // index_link.json ডেটা একবার লোড হয়েছে কি না তার ফ্ল্যাগ
     isIndexDataLoaded: false,
 };
 
@@ -34,25 +28,52 @@ const globalAppState = {
 // ===================================
 
 /**
- * একটি কাস্টম বাটন তৈরি করে।
+ * সাইডবার মেনু টগল করে।
+ */
+function toggleMenu() {
+    const sidebarMenu = document.getElementById('sidebar-menu');
+    const overlay = document.querySelector('.overlay');
+    
+    if (sidebarMenu) sidebarMenu.classList.toggle('active');
+    if (overlay) overlay.classList.toggle('active');
+    document.body.classList.toggle('no-scroll', sidebarMenu && sidebarMenu.classList.contains('active'));
+}
+
+/**
+ * লগআউট বাটন থেকে কল করা হয়, ব্যবহারকারীকে লগইন পেজে নিয়ে যায়।
+ * index.html এ onclick="goBack()" এর মাধ্যমে ব্যবহৃত হয়।
+ */
+function goBack() {
+    const loginLink = document.getElementById('sidebar-login-link');
+    
+    // লগআউট মানে ব্যবহারকারীকে টিচার লগইন পেজে নিয়ে যাওয়া
+    if (loginLink && loginLink.href) {
+        window.location.href = loginLink.href;
+    } else {
+        // ফলব্যাক
+        window.location.href = "home.html"; 
+    }
+}
+
+/**
+ * একটি কাস্টম বাটন তৈরি করে। (স্টাইল CSS-এ সরানো উচিত)
  */
 function createButton(text, bgColor, onClick, disabled = false) {
     const btn = document.createElement('button');
     btn.innerText = text;
     btn.onclick = onClick;
     btn.disabled = disabled;
-    // ইনলাইন স্টাইল কমিয়ে ক্লাস বা স্টাইল ভেরিয়েবল ব্যবহারের পরামর্শ দেওয়া হয়
-    btn.style.cssText = `
-        padding: 8px 15px; margin: 0 5px;
-        background-color: ${bgColor}; color: white;
-        border: none; border-radius: 5px; cursor: pointer;
-        opacity: ${disabled ? 0.6 : 1}; transition: opacity 0.3s;
-    `;
+    
+    // ইনলাইন স্টাইল কমিয়ে ক্লাস ব্যবহার করা হলো
+    btn.className = 'custom-btn'; // এই ক্লাসটি CSS-এ সংজ্ঞায়িত করুন
+    btn.style.backgroundColor = bgColor; // শুধু ব্যাকগ্রাউন্ড কালার ডাইনামিক রাখা হলো
+    btn.style.opacity = disabled ? 0.6 : 1;
+    
     return btn;
 }
 
 /**
- * লোডিং বা এরর মেসেজের জন্য স্ট্যান্ডার্ড HTML বক্স তৈরি করে।
+ * লোডিং বা এরর মেসেজের জন্য স্ট্যান্ডার্ড HTML বক্স তৈরি করে। (স্টাইল CSS-এ সরানো উচিত)
  */
 function errorBox(title, message, isError = false) {
     let borderColor, bgColor, textColor;
@@ -61,22 +82,26 @@ function errorBox(title, message, isError = false) {
         borderColor = '#ff9999'; 
         bgColor = '#ffe6e6';
         textColor = '#cc0000';
+        boxClass = 'error-box';
     } else if (title === "Loading...") {
         borderColor = '#6495ED'; 
         bgColor = '#E6F0FF';
         textColor = '#4169E1'; 
+        boxClass = 'loading-box';
     } else { // Available Soon/No Data
         borderColor = '#FFD700'; 
         bgColor = '#FFFACD';
         textColor = '#B8860B'; 
+        boxClass = 'info-box';
     }
     
     return `
-        <div style="
-            border: 2px solid ${borderColor}; background-color: ${bgColor};
-            color: ${textColor}; font-size: 18px; font-weight: bold;
-            padding: 10px; border-radius: 8px; text-align: center;
-            max-width: 320px; margin: 20px auto;
+        <div class="status-box ${boxClass}" style="
+            border-color: ${borderColor}; background-color: ${bgColor};
+            color: ${textColor};
+            /* অন্যান্য স্টাইল CSS-এ সরানো উচিত */
+            font-size: 18px; font-weight: bold; padding: 10px; 
+            border-radius: 8px; text-align: center; max-width: 320px; margin: 20px auto;
         ">
             <strong>${title}</strong><br>${message}
         </div>
@@ -89,7 +114,6 @@ function errorBox(title, message, isError = false) {
 
 /**
  * index_link.json থেকে ডেটা লোড করে এবং গ্লোবাল স্টেটে সেভ করে।
- * মেমোইজেশন ব্যবহার করা হয়েছে যাতে একবার লোড হলে আর কল না হয়।
  */
 async function loadIndexData() {
     if (globalAppState.isIndexDataLoaded) {
@@ -100,7 +124,6 @@ async function loadIndexData() {
         if (!response.ok) throw new Error('Failed to load config.');
         const data = await response.json();
         
-        // Students এবং Forms ডেটা একসাথে করা
         const dynamicItems = [
             ...(data.students || []).map(item => ({ ...item, type: 'student' })),
             ...(data.forms || []).map(item => ({ ...item, type: 'form' }))
@@ -121,20 +144,17 @@ async function loadIndexData() {
 
 /**
  * LocalStorage থেকে 'NEW' স্ট্যাটাস লোড করে বা ডিফল্ট থেকে ইনিসিয়ালাইজ করে।
- * @param {Array} baseData - index_link.json থেকে লোড করা Students এবং Forms ডেটা
  */
 function initializeNewStatusControl(baseData) {
     const storedStatus = localStorage.getItem(CONSTANTS.LOCAL_STORAGE_KEY);
     let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
     let statusChanged = false;
 
-    // index_link.json-এর ডেটা দিয়ে LocalStorage আপডেট করা
+    // index_link.json-এর ডেটা দিয়ে LocalStorage আপডেট করা
     baseData.forEach(item => {
-        // null/undefined Title এড়িয়ে যাওয়া
         const title = item.title;
         if (!title) return; 
 
-        // যদি LocalStorage-এ না থাকে, তবে JSON থেকে ডিফল্ট নেওয়া হবে
         if (newStatusControl[title] === undefined) {
             newStatusControl[title] = item.isNew === true;
             statusChanged = true;
@@ -143,7 +163,6 @@ function initializeNewStatusControl(baseData) {
     
     globalAppState.newStatusControl = newStatusControl;
 
-    // যদি নতুন কোনো আইটেম যোগ হয়, তবে LocalStorage-এ সেভ করা
     if (statusChanged) {
         localStorage.setItem(CONSTANTS.LOCAL_STORAGE_KEY, JSON.stringify(globalAppState.newStatusControl));
     }
@@ -174,21 +193,19 @@ function renderMarquee() {
     });
 
     let htmlContent = '';
+    marqueeContainer.classList.remove('no-scroll');
 
     if (newItems.length > 0) {
-        // NEW আইটেম থাকলে, সেই কন্টেন্ট তৈরি করা
         const newMarqueeItems = newItems.map(item => {
-            // URL থাকলে, সেই URL ব্যবহার করে লিঙ্ক তৈরি করা
             const url = item.url && item.url.trim() !== '' ? item.url : '#'; 
             return `<a href="${url}" target="_blank" class="marquee-link">
                         <span class="new-badge blink">✨ NEW</span> ${item.title} 
                     </a>`;
         });
         
-        // আইটেমগুলির মধ্যে সেপারেটর (|) যোগ করা
         const singleContent = newMarqueeItems.join(' <span class="marquee-separator">|</span> ');
         
-        // কন্টেন্ট ডুপ্লিকেট করা (নির্দোষ স্ক্রলিং-এর জন্য)
+        // কন্টেন্ট ডুপ্লিকেট করা
         const space = ' <span style="padding: 0 80px;">| | |</span> ';
         htmlContent = singleContent + space + singleContent + space + singleContent;
         
@@ -196,7 +213,7 @@ function renderMarquee() {
         // কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
         const welcomeMessage = `🙏 Welcome to ${CONSTANTS.SCHOOL_NAME} Official Website 🙏`;
         htmlContent = `<div class="marquee-default-msg" style="width: max-content; padding-left: 100px;">${welcomeMessage}</div>`;
-        // CSS-এ স্ক্রলিং বন্ধ করার জন্য একটি ক্লাস যোগ করা যেতে পারে
+        // CSS-এ স্ক্রলিং বন্ধ করার জন্য ক্লাস যোগ করা
         marqueeContainer.classList.add('no-scroll'); 
     }
 
@@ -232,7 +249,6 @@ async function fetchNotices() {
             const title = notice.text;
             const isNewFromSheet = notice.isNew === true;
             
-            // যদি LocalStorage-এ না থাকে, তবে Google Sheet এর স্ট্যাটাস নেওয়া হবে
             if (updatedStatusControl[title] === undefined) {
                 updatedStatusControl[title] = isNewFromSheet;
                 statusChanged = true;
@@ -246,7 +262,6 @@ async function fetchNotices() {
         }
 
         renderList(CONSTANTS.NOTICE_SECTION_ID);
-        // Notices ডেটা লোড হওয়ার পরে Marquee রেন্ডার করা
         renderMarquee(); 
         updateMoreLessButton('important-links-section-notice'); 
 
@@ -260,25 +275,22 @@ async function fetchNotices() {
 
 /**
  * Students এবং Forms সেকশনের ডেটা লোড করে।
- * Note: এখন loadIndexData() কল করে গ্লোবাল স্টেট ব্যবহার করা হবে।
  */
 async function fetchDynamicSectionData(sectionId) {
     const container = document.getElementById(sectionId);
     if (container) container.innerHTML = errorBox("Loading...", "Please wait...");
     
     try {
-        // ডেটা লোড হবে (যদি না হয়ে থাকে) এবং গ্লোবাল স্টেটে সেভ হবে
+        // মেমোইজেশনের কারণে শুধু একবার ডেটা লোড হবে
         await loadIndexData(); 
         
-        // গ্লোবাল স্টেট থেকে সংশ্লিষ্ট ডেটা নেওয়া 
-        // ডেটা লোড করার লজিক initializeNewStatusControl-এ নিয়ে যাওয়া হয়েছে
+        // initializeNewStatusControl-এ LocalStorage আপডেট করার লজিক একবার লোড হয়ে গেছে
         
         renderList(sectionId);
 
         const parentSectionId = sectionId.replace('-list', '-section');
         updateMoreLessButton(parentSectionId); 
         
-        // Dynamic Data লোড হওয়ার পরে Marquee রেন্ডার করা
         renderMarquee(); 
 
     } catch (error) {
@@ -306,13 +318,11 @@ function renderList(sectionId) {
         data = globalAppState.notices;
         state = globalAppState.noticePage;
         linkKey = 'link';
-        // Notices-এর জন্য পপ-আপ দেখানোর হ্যান্ডলার
         clickHandler = (item) => showPopup(item.text, item.date, item.link, item.subj);
     } else {
         state = globalAppState.dynamicSectionsState[sectionId];
         data = state.data;
         linkKey = 'url';
-        // Students/Forms-এর জন্য সরাসরি লিঙ্ক খোলার হ্যান্ডলার
         clickHandler = (item, element) => {
             const linkUrl = item[linkKey];
             if (linkUrl && linkUrl.trim() !== '') {
@@ -327,7 +337,7 @@ function renderList(sectionId) {
 
     if (!Array.isArray(data) || data.length === 0) {
         container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
-        renderPaginationControls(sectionId); // ডেটা না থাকলে পেজিনেশন মুছে ফেলা
+        renderPaginationControls(sectionId); 
         return;
     }
 
@@ -340,7 +350,6 @@ function renderList(sectionId) {
         const itemDiv = document.createElement('div');
         const titleText = item.text || item.title || "No Title";
         
-        // LocalStorage-নিয়ন্ত্রিত গ্লোবাল অবজেক্ট থেকে স্ট্যাটাস পড়া
         const isItemNew = globalAppState.newStatusControl[titleText] === true; 
         
         let itemContent = titleText;
@@ -354,11 +363,11 @@ function renderList(sectionId) {
         
         itemDiv.innerHTML = itemContent; 
         
-        // স্টাইলগুলি CSS-এ ক্লাস হিসেবে যোগ করার পরামর্শ দেওয়া হলো:
         itemDiv.className = 'list-item-style'; 
+        // ইনলাইন স্টাইল সরিয়ে CSS ক্লাস ব্যবহার করা হয়েছে:
         itemDiv.onclick = () => clickHandler(item, itemDiv);
-        itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
-        itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+        itemDiv.onmouseover = () => itemDiv.classList.add('hover'); 
+        itemDiv.onmouseout = () => itemDiv.classList.remove('hover');
         
         container.appendChild(itemDiv);
     });
@@ -407,8 +416,6 @@ function renderPaginationControls(sectionId) {
 }
 
 
-// অন্যান্য অপ্রয়োজনীয় ফাংশনগুলি সংক্ষেপিত করা হলো:
-
 /**
  * More/Less বোতামের দৃশ্যমানতা আপডেট করে।
  */
@@ -423,7 +430,7 @@ function updateMoreLessButton(sectionId) {
 
     // DOM রেন্ডার হওয়ার জন্য অপেক্ষা
     setTimeout(() => {
-        const hasOverflow = sectionContentWrapper.scrollHeight > sectionContentWrapper.clientHeight + 5; // ছোট মার্জিন যোগ করা হয়েছে
+        const hasOverflow = sectionContentWrapper.scrollHeight > sectionContentWrapper.clientHeight + 5; 
         button.style.display = hasOverflow ? 'block' : 'none';
         if (hasOverflow) {
             button.textContent = sectionContentWrapper.classList.contains('expanded') ? 'Less...' : 'More...';
@@ -432,7 +439,7 @@ function updateMoreLessButton(sectionId) {
 }
 
 /**
- * Notices-এর জন্য পপ-আপ দেখায় (showPopup-এর লজিক অপরিবর্তিত রাখা হলো)।
+ * Notices-এর জন্য পপ-আপ দেখায় (ইনলাইন স্টাইল সরানো উচিত)।
  */
 function showPopup(titleText, date, link, subjText) {
     const existingOverlay = document.getElementById('notice-popup-overlay');
@@ -440,8 +447,7 @@ function showPopup(titleText, date, link, subjText) {
 
     const overlay = document.createElement('div');
     overlay.id = 'notice-popup-overlay';
-    // CSS-এ সরানো উচিত
-    overlay.style.cssText = `position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9998;`;
+    overlay.className = 'notice-popup-overlay-style'; // CSS-এ সরান
     overlay.addEventListener('click', function(event) {
         if (event.target === overlay) {
             overlay.remove();
@@ -451,50 +457,47 @@ function showPopup(titleText, date, link, subjText) {
 
     const popup = document.createElement('div');
     popup.id = 'notice-popup';
-    // CSS-এ সরানো উচিত
-    popup.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); max-height: 90vh; overflow-y: auto; background: #f0f8ff; padding: 20px; border: 2px solid #333; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.7); z-index: 9999; text-align: center; max-width: 90%; min-width: 240px; font-family: Arial, sans-serif; pointer-events: auto;`;
+    popup.className = 'notice-popup-style'; // CSS-এ সরান
 
     // স্কুলের নাম এবং নোটিস হেডিং যুক্ত করা
     const schoolHeader = document.createElement('div');
     schoolHeader.innerHTML = `<strong>${CONSTANTS.SCHOOL_NAME}</strong><br>Notice Board`;
-    schoolHeader.style.cssText = `color: darkgreen; background-color: #e6ffe6; font-size: 18px; font-weight: bold; margin-bottom: 10px; font-family: 'Times New Roman', serif;`;
+    schoolHeader.className = 'school-header-style'; // CSS-এ সরান
     popup.appendChild(schoolHeader);
 
-    // অন্যান্য পপ-আপ কন্টেন্ট (title, date, subject) এবং ডাউনলোড লজিক... (অপরিবর্তিত)
+    // অন্যান্য পপ-আপ কন্টেন্ট (title, date, subject)
     const titleElem = document.createElement('div');
     titleElem.innerText = titleText || "No Title";
-    titleElem.style.cssText = `background-color: green; color: white; font-weight: bold; font-size: 15px; padding: 10px; border-radius: 5px; margin-bottom: 15px;`;
+    titleElem.className = 'notice-title-style'; // CSS-এ সরান
     popup.appendChild(titleElem);
 
     if (date && date.trim() !== '') {
         const dateElem = document.createElement('div');
         dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-        dateElem.style.marginBottom = '10px';
+        dateElem.className = 'notice-date-style'; // CSS-এ সরান
         popup.appendChild(dateElem);
     }
 
     if (subjText && subjText.trim() !== '') {
         const subjElem = document.createElement('div');
         subjElem.innerText = subjText;
-        subjElem.style.cssText = `color: darkgreen; background-color: #e6ffe6; font-weight: bold; font-size: 14px; padding: 6px; border-radius: 4px; margin-bottom: 12px;`;
+        subjElem.className = 'notice-subject-style'; // CSS-এ সরান
         popup.appendChild(subjElem);
     }
 
     const buttonContainer = document.createElement('div');
     buttonContainer.className = 'popup-buttons';
-    buttonContainer.style.cssText = `margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;`;
 
     if (link && link.trim() !== '') {
         const linkBtn = document.createElement('a');
         linkBtn.href = link;
         linkBtn.innerText = 'Open Link';
         linkBtn.target = '_blank';
-        linkBtn.style.cssText = `background-color: #007bff; color: white; padding: 6px 10px; border-radius: 5px; font-weight: bold; font-size: 12px; text-decoration: none;`;
+        linkBtn.className = 'popup-link-btn'; // CSS-এ সরান
         buttonContainer.appendChild(linkBtn);
     }
     
-    // ডাউনলোড লজিক (html2canvas নির্ভর, লজিকটি অপরিবর্তিত রাখা হলো)
-    // ডাউনলোড বোতাম তৈরির লজিক... 
+    // ডাউনলোড লজিক
     const downloadBtn = createButton('Download', '#28a745', () => {
         buttonContainer.style.visibility = 'hidden';
         const originalMaxHeight = popup.style.maxHeight;
@@ -504,9 +507,8 @@ function showPopup(titleText, date, link, subjText) {
         popup.style.overflowY = 'visible';
 
         setTimeout(() => {
-            // html2canvas ফাংশনটি যেহেতু কোডে নেই, তাই ধরে নেওয়া হচ্ছে এটি গ্লোবালি উপলব্ধ
-            // if (typeof html2canvas !== 'undefined') { 
-                html2canvas(popup).then(canvas => {
+            if (typeof html2canvas !== 'undefined') {
+                 html2canvas(popup).then(canvas => {
                     let safeTitle = (titleText || "notice").replace(/[\\/:*?"<>|]+/g, "").trim().replace(/\s+/g, "_");
                     let fileName = safeTitle + ".png";
 
@@ -519,13 +521,12 @@ function showPopup(titleText, date, link, subjText) {
                     popup.style.overflowY = originalOverflowY;
                     buttonContainer.style.visibility = 'visible';
                 });
-            // } else {
-            //     alert('html2canvas library is missing.');
-            //     popup.style.maxHeight = originalMaxHeight;
-            //     popup.style.overflowY = originalOverflowY;
-            //     buttonContainer.style.visibility = 'visible';
-            // }
-
+            } else {
+                 console.error('html2canvas library is missing.');
+                 popup.style.maxHeight = originalMaxHeight;
+                 popup.style.overflowY = originalOverflowY;
+                 buttonContainer.style.visibility = 'visible';
+            }
         }, 50);
     });
     
@@ -537,7 +538,7 @@ function showPopup(titleText, date, link, subjText) {
 }
 
 /**
- * 'Available Soon' বার্তা দেখায়।
+ * 'Available Soon' বার্তা দেখায়। (ইনলাইন স্টাইল সরানো উচিত)
  */
 function showAvailableSoonMessage(element) {
     const parentContainer = element.closest('.section-content-wrapper');
@@ -546,10 +547,8 @@ function showAvailableSoonMessage(element) {
     }
 
     const msg = document.createElement('div');
-    msg.className = 'avail-msg';
+    msg.className = 'avail-msg'; // এই ক্লাসটি CSS-এ সংজ্ঞায়িত করুন
     msg.textContent = '🔔 Available Soon! Please Wait. 🔔';
-    // স্টাইলগুলিকে CSS-এ সরানো উচিত
-    msg.style.cssText = `color: #FFFFFF; background-color: #E74C3C; border: 1px solid #C0392B; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); padding: 10px 15px; border-radius: 5px; font-weight: 600; font-size: 14px; text-align: center; margin: 10px auto; width: 80%; display: block; letter-spacing: 0.5px;`;
     
     element.after(msg); 
     
@@ -563,7 +562,13 @@ function showAvailableSoonMessage(element) {
 
 document.addEventListener('DOMContentLoaded', function () {
     
-    // --- Hero Images Scrolling Logic --- (লজিক প্রায় অপরিবর্তিত, তবে আরও সুগঠিত)
+    // --- Menu Toggle Logic --- (সংশোধিত)
+    const menuToggleButton = document.getElementById('menu-toggle-button');
+    if (menuToggleButton) {
+        menuToggleButton.addEventListener('click', toggleMenu);
+    }
+
+    // --- Hero Images Scrolling Logic ---
     const heroImagesContainer = document.querySelector('.hero-images');
 
     if (heroImagesContainer) {
@@ -633,7 +638,7 @@ document.addEventListener('DOMContentLoaded', function () {
         logoContainer.addEventListener('contextmenu', event => event.preventDefault()); 
     }
 
-    // --- More/Less Button Logic --- (অপরিবর্তিত)
+    // --- More/Less Button Logic ---
     document.querySelectorAll('.toggle-button').forEach(button => {
         const sectionContentWrapper = button.previousElementSibling;
         if (sectionContentWrapper) {
@@ -643,10 +648,30 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+    
+    // --- Gallery Fullscreen Logic ---
+    const galleryImages = document.querySelectorAll('.gallery-image');
+    const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+    const fullscreenImage = document.getElementById('fullscreen-image');
 
-    // --- Menu & Gallery Logic --- (অপরিবর্তিত রাখা হলো)
+    if (galleryImages.length > 0 && fullscreenOverlay && fullscreenImage) {
+        galleryImages.forEach(image => {
+            image.addEventListener('click', function() {
+                fullscreenImage.src = this.getAttribute('data-src') || this.src;
+                fullscreenOverlay.style.display = 'flex';
+                document.body.classList.add('no-scroll');
+            });
+        });
 
-    // Initial function calls (অপ্টিমাইজড লোড সিকোয়েন্স)
+        fullscreenOverlay.addEventListener('click', function(event) {
+            if (event.target === fullscreenOverlay || event.target === fullscreenImage) {
+                fullscreenOverlay.style.display = 'none';
+                document.body.classList.remove('no-scroll');
+            }
+        });
+    }
+
+    // Initial function calls
     loadIndexData()
         .then(data => {
             initializeNewStatusControl(data); // LocalStorage ইনিসিয়ালাইজ করা
@@ -656,10 +681,9 @@ document.addEventListener('DOMContentLoaded', function () {
             fetchNotices();
             fetchDynamicSectionData(CONSTANTS.STUDENTS_SECTION_ID);
             fetchDynamicSectionData(CONSTANTS.FORMS_SECTION_ID);
-            // Marquee-কে প্রথমবার রেন্ডার করার জন্য fetchDynamicSectionData/fetchNotices-এর ভেতরে কল করা হয়েছে।
         });
         
-    // --- Escape Key Logic (Popup & Menu) --- (একত্রিত ও পরিচ্ছন্ন)
+    // --- Escape Key Logic (Popup & Menu) --- (সংশোধিত)
     document.addEventListener('keydown', event => {
         if (event.key === 'Escape') {
             // 1. Popup বন্ধ করা
@@ -672,13 +696,14 @@ document.addEventListener('DOMContentLoaded', function () {
             // 2. Menu বন্ধ করা
             const sidebarMenu = document.getElementById('sidebar-menu');
             if (sidebarMenu && sidebarMenu.classList.contains('active')) {
-                // toggleMenu ফাংশনটিকে উপরে গ্লোবালি ডিফাইন করা প্রয়োজন
-                // বর্তমানে এটি DOMContentLoaded-এর বাইরে নেই, তাই লজিকটি এখানে রিপিট করা হলো
-                if (sidebarMenu) sidebarMenu.classList.toggle('active');
-                const overlay = document.querySelector('.overlay');
-                if (overlay) overlay.classList.toggle('active');
-                document.body.classList.toggle('no-scroll', sidebarMenu && sidebarMenu.classList.contains('active'));
+                toggleMenu(); // গ্লোবাল ফাংশন কল করা
                 event.preventDefault();
+            }
+            
+            // 3. Fullscreen Gallery বন্ধ করা
+            if (fullscreenOverlay && fullscreenOverlay.style.display === 'flex') {
+                fullscreenOverlay.style.display = 'none';
+                document.body.classList.remove('no-scroll');
             }
         }
     });
