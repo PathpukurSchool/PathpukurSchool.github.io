@@ -46,9 +46,7 @@
         </div>
         
         <div class="header-content">
-            <div class="logo-container">
-                <img src="PHS-LOGO.png" alt="Pathpukur High School Logo" class="header-logo">
-            </div>
+            <div class="logo-container"></div>
             <h1>Pathpukur High School (H.S.)</h1>
             <p class="tagline">Higher Secondary, Government Sponsored Co-Education School; West Bengal</p>
             <p class="slogan"><span class="sparkle-emoji">✨</span> "शिक्षा ददाति विनयम्" <span class="sparkle-emoji">✨</span></p>
@@ -83,10 +81,21 @@
         <a href="#important-links-section-website">Important Websites</a>
         <a href="#location-section">Our Location</a>
         <a href="home.html" id="sidebar-login-link">Teacher Login</a>
-        <a href="#" style="font-weight: bold; color: #6B0000;" onclick="goBack()">Logout</a> 
+        <a href="#" style="font-weight: bold; color: #6B0000;" onclick="goBack()">Logout</a>
     </nav>
 
-    <div class="scrolling-line-container">
+    <script>
+       function goBack() {
+            window.history.back();
+            setTimeout(function() {
+            if (window.history.length <= 1) { // যদি ইতিহাসে আর কোনো পেজ না থাকে
+            window.location.href = "https://www.google.com"; // গুগল-এ নিয়ে যাবে
+            }
+            }, 500); 
+        }
+    </script>
+
+<div class="scrolling-line-container">
     <div class="scrolling-wrapper" id="new-marquee-wrapper">
     </div>
 </div>
@@ -256,7 +265,7 @@
             <div class="section-content-wrapper">
                 <p><i class="fas fa-map-marker-alt icon"></i> <strong>Address:</strong> Vill: Pathpukur, P.O.: Bokultala Hat, P.S.: Bokultala, Circle: Jaynagar II, Dist.: South 24 Parganas, State: West Bengal, Pin Code: 743338</p>
                 <p><i class="fas fa-phone-alt icon"></i> <strong>Landline:</strong> <a href="tel:+913218248083">+91 3218248083</a></p>
-                <p><i class="fas fa-envelope icon"></i> <strong>Email:</strong> <a href="mailto:pathpukur1954@gmail.com">pathpukur1954@gmail.com</a></p>
+                <p><i class="fas fa-envelope icon"></i> <strong>Email:</strong> <a href="mailto:pathpukur1954@gmail.com"></a></p>
                 <p class="blinking-text"><i class="fas fa-bell"></i> Call us to connect!</p>
             </div>
             <button class="toggle-button more-btn">More...</button>
@@ -323,7 +332,7 @@
         <section id="location-section" class="location card animated-card fade-in delay-13">
             <h2><i class="fas fa-map-marked-alt icon"></i> Our Location</h2>
             <div class="map-container">
-                <iframe src="YOUR_GOOGLE_MAPS_EMBED_LINK_GOES_HERE" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3695.7657554878074!2d88.49233607413503!3d22.134905148872374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0238b4c0b17541%3A0x88e12a2d33998b38!2z4Kaq4Ka-4Kak4Kaq4KeB4KaV4KeB4KawIOCmueCmvuCmhyDgprjgp43gppXgp4HgprIo4KaJ4KaDIOCmruCmvuCmgyk!5e0!3m2!1sbn!2sin!4v1748601954798!5m2!1sbn!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </section>
 
@@ -342,6 +351,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="index.js" defer></script> 
+     <script src="index.js"></script>
+ 
 </body>
 </html>
