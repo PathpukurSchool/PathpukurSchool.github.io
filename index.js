@@ -47,50 +47,39 @@ async function initializeNewStatusControl() {
 // ===================================
 
 function renderMarquee() {
-    // HTML-এর আইডি 'new-marquee-wrapper' এখন কন্টেন্ট রাখবে
     const marqueeWrapper = document.getElementById('new-marquee-wrapper');
-    const marqueeContainer = document.querySelector('.scrolling-line-container'); 
+    const marqueeContainer = document.querySelector('.scrolling-line-container');
 
     if (!marqueeWrapper || !marqueeContainer) return;
 
-    // 1. LocalStorage অনুযায়ী NEW চিহ্নিত আইটেমগুলি ফিল্টার করা
-    const newItems = ALL_ITEMS_DETAILS.filter(item => {
-        const title = item.title;
-        return NEW_STATUS_CONTROL[title] === true; 
-    });
+    // NEW status অনুযায়ী ফিল্টার
+    const newItems = ALL_ITEMS_DETAILS.filter(item => NEW_STATUS_CONTROL[item.title] === true);
 
-    let htmlContent = '';
+    let html = "";
 
     if (newItems.length > 0) {
-        // 2. NEW আইটেম থাকলে, সেই কন্টেন্ট তৈরি করা
-        const newMarqueeItems = newItems.map(item => {
-            const title = item.title;
-            const url = item.url || '#';
-            
-            // প্রতিটি আইটেমকে লিঙ্ক সহ যুক্ত করা
-            return `<a href="${url}" target="_blank" class="marquee-link">
-                        <span class="new-badge blink">✨ NEW</span> ${title} 
-                    </a>`;
-        });
-        
-        // আইটেমগুলির মধ্যে সেপারেটর (|) যোগ করা
-        const singleContent = newMarqueeItems.join(' <span class="marquee-separator">|</span> ');
-        
-        // 3. ✅ মূল ফিক্স: কন্টেন্ট ডুপ্লিকেট করা
-        // স্ক্রলিংটি জাম্প-মুক্ত করার জন্য একই কন্টেন্ট দুবার যোগ করা হলো।
-        // মাঝখানে একটি বড় সেপারেটর যোগ করা হলো, যাতে দুটি সেটের মধ্যে দূরত্ব থাকে।
-        const space = ' <span style="padding: 0 80px;">| | |</span> ';
-        htmlContent = singleContent + space + singleContent + space + singleContent;
-        
+        const main = newItems.map(item => {
+            const url = item.url || "#";
+            return `
+                <a href="${url}" target="_blank" class="marquee-link">
+                    <span class="new-badge blink">✨ NEW</span> ${item.title}
+                </a>
+            `;
+        }).join('<span class="marquee-separator">|</span>');
+
+        // জাম্প-মুক্ত স্ক্রলিংয়ের জন্য ট্রিপল ব্লক
+        const gap = `<span class="marquee-gap"> &nbsp;&nbsp;&nbsp; | | | &nbsp;&nbsp;&nbsp; </span>`;
+        html = main + gap + main + gap + main;
+
     } else {
-        // 4. কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
-        const welcomeMessage = "🙏 Welcome to our Official Website 🙏";
-        htmlContent = `<div class="marquee-default-msg" style="width: max-content; padding-left: 100px;">${welcomeMessage}</div>`;
-        // ডিফল্ট মেসেজের জন্য স্ক্রলিং দরকার নেই, তাই এটি wrapper-এর মধ্যেই থাকবে।
+        html = `
+            <div class="marquee-default-msg">
+                🙏 Welcome to our Official Website 🙏
+            </div>
+        `;
     }
 
-    // 5. কন্টেইনারে কন্টেন্ট ইনজেক্ট করা
-    marqueeWrapper.innerHTML = htmlContent;
+    marqueeWrapper.innerHTML = html;
 }
 
 /* =================================
