@@ -43,20 +43,17 @@ async function initializeNewStatusControl() {
 }
 
 // ===================================
-// ✅ নতুন: স্ক্রল বার (Marquee) রেন্ডারিং লজিক (গ্লোবাল) - সংশোধিত
+// ✅ নতুন: স্ক্রল বার রেন্ডারিং লজিক (গ্লোবাল)
 // ===================================
 
-function renderMarquee() {
+function renderMainMarquee() { // ডান থেকে বাম দিকে চলমান (Students & Forms)
     const marqueeWrapper = document.getElementById('new-marquee-wrapper');
-    const marqueeContainer = document.querySelector('.scrolling-line-container');
+    if (!marqueeWrapper) return;
 
-    if (!marqueeWrapper || !marqueeContainer) return;
-
-    // NEW status অনুযায়ী ফিল্টার
+    // Students এবং Forms থেকে NEW status অনুযায়ী ফিল্টার
     const newItems = ALL_ITEMS_DETAILS.filter(item => NEW_STATUS_CONTROL[item.title] === true);
 
     let html = "";
-
     if (newItems.length > 0) {
         const main = newItems.map(item => {
             const url = item.url || "#";
@@ -66,20 +63,44 @@ function renderMarquee() {
                 </a>
             `;
         }).join('<span class="marquee-separator">|</span>');
+        
+        const gap = `<span class="marquee-gap"> &nbsp;&nbsp;&nbsp; | | | &nbsp;&nbsp;&nbsp; </span>`;
+        html = main + gap + main + gap + main; // জাম্প-মুক্ত স্ক্রলিংয়ের জন্য
+    } else {
+        html = `<div class="marquee-default-msg">🙏 Welcome to our Official Website 🙏</div>`;
+    }
+    marqueeWrapper.innerHTML = html;
+}
 
-        // জাম্প-মুক্ত স্ক্রলিংয়ের জন্য ট্রিপল ব্লক
+function renderNoticeMarquee() { // ✅ বাম থেকে ডান দিকে চলমান (Notices)
+    const noticeMarqueeWrapper = document.getElementById('notice-marquee');
+    if (!noticeMarqueeWrapper) return;
+
+    // Notices (Helping) থেকে NEW status অনুযায়ী ফিল্টার
+    const newNotices = Helping.filter(notice => NEW_STATUS_CONTROL[notice.text] === true).map(notice => ({
+        title: notice.text,
+        url: notice.link || '#'
+    }));
+
+    let html = "";
+    if (newNotices.length > 0) {
+        const main = newNotices.map(item => {
+            const url = item.url || "#";
+            return `
+                <a href="${url}" target="_blank" class="marquee-link">
+                    <span class="new-badge blink">🔔 NOTICE</span> ${item.title}
+                </a>
+            `;
+        }).join('<span class="marquee-separator">|</span>');
+
         const gap = `<span class="marquee-gap"> &nbsp;&nbsp;&nbsp; | | | &nbsp;&nbsp;&nbsp; </span>`;
         html = main + gap + main + gap + main;
-
     } else {
-        html = `
-            <div class="marquee-default-msg">
-                🙏 Welcome to our Official Website 🙏
-            </div>
-        `;
+        // যদি কোনো নতুন নোটিশ না থাকে, তবে Welcome বার্তা যোগ করা যেতে পারে, অথবা খালি রাখা যেতে পারে।
+        // এখানে অন্য একটি ডিফল্ট বার্তা ব্যবহার করা হলো:
+        html = `<div class="marquee-default-msg">🔔 Latest Notices are Available! 🔔</div>`;
     }
-
-    marqueeWrapper.innerHTML = html;
+    noticeMarqueeWrapper.innerHTML = html;
 }
 
 /* =================================
@@ -150,9 +171,10 @@ async function fetchNotices() {
         
         // যদি নতুন কোনো আইটেম যোগ হয়, তবে LocalStorage-এ সেভ করা
        if (statusChanged) {
-            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
-            renderMarquee(); // ⭐ নতুন: LocalStorage আপডেট হলে Marquee আপডেট করা
-        }
+            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
+            renderMainMarquee(); // ⭐ নতুন: Students/Forms-এর জন্য
+            renderNoticeMarquee(); // ⭐ নতুন: Notices-এর জন্য
+        }
         // ⭐ নতুন কোড শেষ ⭐
         
         renderHelpList();
@@ -747,12 +769,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initial function calls
     initializeNewStatusControl().then(() => {
-        // LocalStorage লোড হওয়ার পর ডেটা লোড এবং UI রেন্ডার শুরু হবে
-        fetchNotices();
-        fetchDynamicSectionData('students-list');
-        fetchDynamicSectionData('forms-list');
-        
-        // ✅ স্ক্রল বার লোড করা
-        renderMarquee(); 
+    // LocalStorage লোড হওয়ার পর ডেটা লোড এবং UI রেন্ডার শুরু হবে
+    fetchNotices();
+    fetchDynamicSectionData('students-list');
+    fetchDynamicSectionData('forms-list');
+
+    // ✅ স্ক্রল বার লোড করা
+    renderMainMarquee(); // ⭐ নতুন ফাংশন কল
+    renderNoticeMarquee(); // ⭐ নতুন ফাংশন কল
     });
 });
