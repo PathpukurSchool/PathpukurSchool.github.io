@@ -1379,14 +1379,16 @@ body {
 }
 
 /* ✅ স্ক্রলিং টেক্সট */
-.scrolling-line-container {
+.scrolling-line-container,
+.notice-scrolling-container {
     width: 100%;
     overflow: hidden;
     padding: 10px 0px 0px 0px;   /* ✅ পরিবর্তন: উপরে 10px, ডানে 0px, নিচে 0px, বামে 0px */
     position: relative;
 }
 
-.scrolling-wrapper {
+.scrolling-wrapper, 
+.notice-scrolling-wrapper {
     display: flex;
     width: max-content;
     flex-shrink: 0;
@@ -1403,12 +1405,14 @@ body {
 }
 
 /* ✅ হোভার করলে থেমে যাবে */
-.scrolling-line-container:hover .scrolling-wrapper {
+.scrolling-line-container:hover .scrolling-wrapper,
+.notice-scrolling-wrapper {
     animation-play-state: paused;
 }
 
 /* 📱 মোবাইলের জন্য */
 @media (max-width: 768px) {
+    .notice-scrolling-wrapper,
     .scrolling-wrapper {
         animation: scrollText 35s linear infinite; /* মোবাইলে মসৃণতার জন্য সময় বাড়ানো হলো */
         font-size: 1em; /* ফন্ট সাইজ ছোট করা হলো */
