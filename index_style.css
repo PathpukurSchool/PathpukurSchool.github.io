@@ -1388,26 +1388,39 @@ body {
     white-space: nowrap;
 }
 
-.scrolling-wrapper, 
+.scrolling-wrapper,
 .notice-scrolling-wrapper {
     display: flex;
     width: max-content;
     flex-shrink: 0;
-    animation: scrollText 30s linear infinite; 
     white-space: nowrap;
     font-size: 1.2em;
     color: var(--dark-khaki);
     font-weight: 900;
 }
 
+.notice-scrolling-wrapper {
+    /* বাম থেকে ডান দিকে স্ক্রল করার জন্য নতুন Keyframe ব্যবহার করা হলো */
+    animation: scrollTextReverse 35s linear infinite; /* 35s, গতি ঠিক করার জন্য */
+    color: darkred; /* ভিন্ন স্ক্রল বারের জন্য ভিন্ন রঙ ব্যবহার করা যেতে পারে */
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+/* ✅ নতুন: ডান থেকে বাম দিকে স্ক্রল করার জন্য Keyframes */
 @keyframes scrollText {
     from { transform: translateX(10%); }
     to { transform: translateX(-90%); } 
 }
+/* ✅ নতুন: বাম থেকে ডান দিকে স্ক্রল করার জন্য Keyframes */
+@keyframes scrollTextReverse {
+    from { transform: translateX(-90%); } /* ডান দিক থেকে শুরু */
+    to { transform: translateX(10%); } /* বাম দিকে শেষ */
+}
 
 /* ✅ হোভার করলে থেমে যাবে */
 .scrolling-line-container:hover .scrolling-wrapper,
-.notice-scrolling-wrapper {
+.notice-scrolling-container:hover .notice-scrolling-wrapper { 
     animation-play-state: paused;
 }
 
