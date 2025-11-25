@@ -43,64 +43,54 @@ async function initializeNewStatusControl() {
 }
 
 // ===================================
-// ✅ নতুন: স্ক্রল বার রেন্ডারিং লজিক (গ্লোবাল)
+// ✅ নতুন: স্ক্রল বার (Marquee) রেন্ডারিং লজিক (গ্লোবাল) - সংশোধিত
 // ===================================
 
-function renderMainMarquee() { // ডান থেকে বাম দিকে চলমান (Students & Forms)
+function renderMarquee() {
+    // HTML-এর আইডি 'new-marquee-wrapper' এখন কন্টেন্ট রাখবে
     const marqueeWrapper = document.getElementById('new-marquee-wrapper');
-    if (!marqueeWrapper) return;
+    const marqueeContainer = document.querySelector('.scrolling-line-container'); 
 
-    // Students এবং Forms থেকে NEW status অনুযায়ী ফিল্টার
-    const newItems = ALL_ITEMS_DETAILS.filter(item => NEW_STATUS_CONTROL[item.title] === true);
+    if (!marqueeWrapper || !marqueeContainer) return;
 
-    let html = "";
+    // 1. LocalStorage অনুযায়ী NEW চিহ্নিত আইটেমগুলি ফিল্টার করা
+    const newItems = ALL_ITEMS_DETAILS.filter(item => {
+        const title = item.title;
+        return NEW_STATUS_CONTROL[title] === true; 
+    });
+
+    let htmlContent = '';
+
     if (newItems.length > 0) {
-        const main = newItems.map(item => {
-            const url = item.url || "#";
-            return `
-                <a href="${url}" target="_blank" class="marquee-link">
-                    <span class="new-badge blink">✨ NEW</span> ${item.title}
-                </a>
-            `;
-        }).join('<span class="marquee-separator">|</span>');
+        // 2. NEW আইটেম থাকলে, সেই কন্টেন্ট তৈরি করা
+        const newMarqueeItems = newItems.map(item => {
+            const title = item.title;
+            const url = item.url || '#';
+            
+            // প্রতিটি আইটেমকে লিঙ্ক সহ যুক্ত করা
+            return `<a href="${url}" target="_blank" class="marquee-link">
+                        <span class="new-badge blink">✨ NEW</span> ${title} 
+                    </a>`;
+        });
         
-        const gap = `<span class="marquee-gap"> &nbsp;&nbsp;&nbsp; | | | &nbsp;&nbsp;&nbsp; </span>`;
-        html = main + gap + main + gap + main; // জাম্প-মুক্ত স্ক্রলিংয়ের জন্য
+        // আইটেমগুলির মধ্যে সেপারেটর (|) যোগ করা
+        const singleContent = newMarqueeItems.join(' <span class="marquee-separator">|</span> ');
+        
+        // 3. ✅ মূল ফিক্স: কন্টেন্ট ডুপ্লিকেট করা
+        // স্ক্রলিংটি জাম্প-মুক্ত করার জন্য একই কন্টেন্ট দুবার যোগ করা হলো।
+        // মাঝখানে একটি বড় সেপারেটর যোগ করা হলো, যাতে দুটি সেটের মধ্যে দূরত্ব থাকে।
+        const space = ' <span style="padding: 0 80px;">| | |</span> ';
+        htmlContent = singleContent + space + singleContent + space + singleContent;
+        
     } else {
-        html = `<div class="marquee-default-msg">🙏 Welcome to our Official Website 🙏</div>`;
+        // 4. কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
+        const welcomeMessage = "🙏 Welcome to our Official Website 🙏";
+        htmlContent = `<div class="marquee-default-msg" style="width: max-content; padding-left: 100px;">${welcomeMessage}</div>`;
+        // ডিফল্ট মেসেজের জন্য স্ক্রলিং দরকার নেই, তাই এটি wrapper-এর মধ্যেই থাকবে।
     }
-    marqueeWrapper.innerHTML = html;
-}
 
-function renderNoticeMarquee() { // ✅ বাম থেকে ডান দিকে চলমান (Notices)
-    const noticeMarqueeWrapper = document.getElementById('notice-marquee');
-    if (!noticeMarqueeWrapper) return;
-
-    // Notices (Helping) থেকে NEW status অনুযায়ী ফিল্টার
-    const newNotices = Helping.filter(notice => NEW_STATUS_CONTROL[notice.text] === true).map(notice => ({
-        title: notice.text,
-        url: notice.link || '#'
-    }));
-
-    let html = "";
-    if (newNotices.length > 0) {
-        const main = newNotices.map(item => {
-            const url = item.url || "#";
-            return `
-                <a href="${url}" target="_blank" class="marquee-link">
-                    <span class="new-badge blink">🔔 NOTICE</span> ${item.title}
-                </a>
-            `;
-        }).join('<span class="marquee-separator">|</span>');
-
-        const gap = `<span class="marquee-gap"> &nbsp;&nbsp;&nbsp; | | | &nbsp;&nbsp;&nbsp; </span>`;
-        html = main + gap + main + gap + main;
-    } else {
-        // যদি কোনো নতুন নোটিশ না থাকে, তবে Welcome বার্তা যোগ করা যেতে পারে, অথবা খালি রাখা যেতে পারে।
-        // এখানে অন্য একটি ডিফল্ট বার্তা ব্যবহার করা হলো:
-        html = `<div class="marquee-default-msg">🔔 Latest Notices are Available! 🔔</div>`;
-    }
-    noticeMarqueeWrapper.innerHTML = html;
+    // 5. কন্টেইনারে কন্টেন্ট ইনজেক্ট করা
+    marqueeWrapper.innerHTML = htmlContent;
 }
 
 /* =================================
@@ -171,10 +161,9 @@ async function fetchNotices() {
         
         // যদি নতুন কোনো আইটেম যোগ হয়, তবে LocalStorage-এ সেভ করা
        if (statusChanged) {
-            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
-            renderMainMarquee(); // ⭐ নতুন: Students/Forms-এর জন্য
-            renderNoticeMarquee(); // ⭐ নতুন: Notices-এর জন্য
-        }
+            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
+            renderMarquee(); // ⭐ নতুন: LocalStorage আপডেট হলে Marquee আপডেট করা
+        }
         // ⭐ নতুন কোড শেষ ⭐
         
         renderHelpList();
@@ -769,13 +758,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initial function calls
     initializeNewStatusControl().then(() => {
-    // LocalStorage লোড হওয়ার পর ডেটা লোড এবং UI রেন্ডার শুরু হবে
-    fetchNotices();
-    fetchDynamicSectionData('students-list');
-    fetchDynamicSectionData('forms-list');
-
-    // ✅ স্ক্রল বার লোড করা
-    renderMainMarquee(); // ⭐ নতুন ফাংশন কল
-    renderNoticeMarquee(); // ⭐ নতুন ফাংশন কল
+        // LocalStorage লোড হওয়ার পর ডেটা লোড এবং UI রেন্ডার শুরু হবে
+        fetchNotices();
+        fetchDynamicSectionData('students-list');
+        fetchDynamicSectionData('forms-list');
+        
+        // ✅ স্ক্রল বার লোড করা
+        renderMarquee(); 
     });
 });
