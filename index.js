@@ -79,13 +79,13 @@ function renderMarquee() {
         // 3. ✅ মূল ফিক্স: কন্টেন্ট ডুপ্লিকেট করা
         // স্ক্রলিংটি জাম্প-মুক্ত করার জন্য একই কন্টেন্ট দুবার যোগ করা হলো।
         // মাঝখানে একটি বড় সেপারেটর যোগ করা হলো, যাতে দুটি সেটের মধ্যে দূরত্ব থাকে।
-        const space = ' <span style="padding: 0 80px;">| | |</span> ';
+        const space = ' <span class="marquee-spacer">| | |</span> ';
         htmlContent = singleContent + space + singleContent + space + singleContent;
         
     } else {
         // 4. কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
         const welcomeMessage = "🙏 Welcome to our Official Website 🙏";
-        htmlContent = `<div class="marquee-default-msg" style="width: max-content; padding-left: 100px;">${welcomeMessage}</div>`;
+        htmlContent = `<div class="marquee-default-msg">${welcomeMessage}</div>`;
         // ডিফল্ট মেসেজের জন্য স্ক্রলিং দরকার নেই, তাই এটি wrapper-এর মধ্যেই থাকবে।
     }
 
@@ -109,23 +109,16 @@ const dynamicSectionsState = {
 };
 
 function errorBox(title, message) {
-    let borderColor = '#ff9999'; // Error/Available Soon
-    let bgColor = '#ffe6e6';
-    let textColor = '#cc0000';
+    let boxClass = '';
     
     if (title === "Loading...") {
-        borderColor = '#6495ED'; // CornflowerBlue
-        bgColor = '#E6F0FF';
-        textColor = '#4169E1'; // RoyalBlue
+        boxClass = 'loading-box';
+    } else {
+        boxClass = 'error-box';
     }
     
     return `
-        <div style="
-            border: 2px solid ${borderColor}; background-color: ${bgColor};
-            color: ${textColor}; font-size: 18px; font-weight: bold;
-            padding: 10px; border-radius: 8px; text-align: center;
-            max-width: 320px; margin: 0 auto;
-        ">
+        <div class="info-box ${boxClass}">
             <strong>${title}</strong><br>${message}
         </div>
     `;
@@ -143,28 +136,28 @@ async function fetchNotices() {
         Helping = Array.isArray(data.notices) ? data.notices : [];
         currentPage = 1; 
         // ⭐ নতুন কোড: নোটিসগুলির স্ট্যাটাস LocalStorage-এ যোগ করা ⭐
-        let updatedStatusControl = { ...NEW_STATUS_CONTROL }; // বিদ্যমান স্ট্যাটাস কপি করা
-        let statusChanged = false;
+        let updatedStatusControl = { ...NEW_STATUS_CONTROL }; // বিদ্যমান স্ট্যাটাস কপি করা
+        let statusChanged = false;
 
-        Helping.forEach(notice => {
-            const title = notice.text;
-            const isNewFromSheet = notice.isNew === true; // Sheet থেকে আসা স্ট্যাটাস
-            
-            // যদি LocalStorage এ না থাকে, তবে Google Sheet এর স্ট্যাটাস নেওয়া হবে
-            if (updatedStatusControl[title] === undefined) {
-                updatedStatusControl[title] = isNewFromSheet;
-                statusChanged = true;
-            }
-        });
-        
-        NEW_STATUS_CONTROL = updatedStatusControl; // গ্লোবাল অবজেক্ট আপডেট করা
-        
-        // যদি নতুন কোনো আইটেম যোগ হয়, তবে LocalStorage-এ সেভ করা
-       if (statusChanged) {
-            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
-            renderMarquee(); // ⭐ নতুন: LocalStorage আপডেট হলে Marquee আপডেট করা
-        }
-        // ⭐ নতুন কোড শেষ ⭐
+        Helping.forEach(notice => {
+            const title = notice.text;
+            const isNewFromSheet = notice.isNew === true; // Sheet থেকে আসা স্ট্যাটাস
+            
+            // যদি LocalStorage এ না থাকে, তবে Google Sheet এর স্ট্যাটাস নেওয়া হবে
+            if (updatedStatusControl[title] === undefined) {
+                updatedStatusControl[title] = isNewFromSheet;
+                statusChanged = true;
+            }
+        });
+        
+        NEW_STATUS_CONTROL = updatedStatusControl; // গ্লোবাল অবজেক্ট আপডেট করা
+        
+        // যদি নতুন কোনো আইটেম যোগ হয়, তবে LocalStorage-এ সেভ করা
+       if (statusChanged) {
+            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
+            renderMarquee(); // ⭐ নতুন: LocalStorage আপডেট হলে Marquee আপডেট করা
+        }
+        // ⭐ নতুন কোড শেষ ⭐
         
         renderHelpList();
         updateMoreLessButton('important-links-section-notice'); 
@@ -194,6 +187,7 @@ function renderHelpList() {
 
     noticesToRender.forEach(item => {
         const itemDiv = document.createElement('div');
+        itemDiv.classList.add('notice-item'); // [Notices স্টাইল ক্লাস]
         
         const titleText = item.text || "No Title";
         const dateText = item.date ? ` [Date: ${item.date}]` : '';  
@@ -209,15 +203,8 @@ function renderHelpList() {
         
         itemDiv.innerHTML = itemContent; 
         
-        // [Notices স্টাইল]
-        itemDiv.style.cssText = `
-            cursor: pointer; margin: 10px 0; padding: 8px 10px;
-            background-color: #f9f9f9; border-left: 6px solid #8B4513;
-            border-radius: 4px; transition: background-color 0.3s;
-            display: flex; justify-content: space-between; align-items: center;
-        `;
-        itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
-        itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+        itemDiv.onmouseover = () => itemDiv.classList.add('hover');
+        itemDiv.onmouseout = () => itemDiv.classList.remove('hover');
         itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
         container.appendChild(itemDiv);
     });
@@ -230,18 +217,24 @@ function renderPaginationControls() {
     if (!paginationContainer) return;
     paginationContainer.innerHTML = '';
     if (totalPages <= 1) return;
+    
+    paginationContainer.classList.add('pagination-controls'); // নতুন ক্লাস যোগ করা হয়েছে
 
-    const backBtn = createButton('BACK', '#007bff', () => {
+    const backBtn = createButton('BACK', () => {
         if (currentPage > 1) { currentPage--; renderHelpList(); }
     }, currentPage === 1);
 
     const pageInfo = document.createElement('span');
+    pageInfo.classList.add('page-info'); // নতুন ক্লাস যোগ করা হয়েছে
     pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
-    pageInfo.style.cssText = `margin: 0 10px; font-weight: bold;`;
 
-    const nextBtn = createButton('NEXT', '#007bff', () => {
+    const nextBtn = createButton('NEXT', () => {
         if (currentPage < totalPages) { currentPage++; renderHelpList(); }
     }, currentPage === totalPages);
+    
+    backBtn.classList.add('pagination-btn');
+    nextBtn.classList.add('pagination-btn');
+
 
     paginationContainer.append(backBtn, pageInfo, nextBtn);
 }
@@ -297,6 +290,8 @@ function renderDynamicList(sectionId) {
 
     itemsToRender.forEach(item => {
         const itemDiv = document.createElement('div');
+        itemDiv.classList.add('notice-item'); // [Notices সেকশনের স্টাইল ক্লাস]
+        
         const titleText = item.title || "No Title";
         const linkUrl = item.url || '';
         
@@ -311,15 +306,8 @@ function renderDynamicList(sectionId) {
         
         itemDiv.innerHTML = itemContent; 
 
-        // [Notices সেকশনের স্টাইল]
-        itemDiv.style.cssText = `
-            cursor: pointer; margin: 10px 0; padding: 8px 10px;
-            background-color: #f9f9f9; border-left: 6px solid #8B4513;
-            border-radius: 4px; transition: background-color 0.3s;
-            display: flex; justify-content: space-between; align-items: center;
-        `;
-        itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
-        itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '#f9f9f9';
+        itemDiv.onmouseover = () => itemDiv.classList.add('hover');
+        itemDiv.onmouseout = () => itemDiv.classList.remove('hover');
         
         // [Students ও Forms সেকশনের জন্য সরাসরি লিংক ওপেন করার লজিক]
         itemDiv.onclick = () => {
@@ -342,8 +330,11 @@ function renderDynamicPagination(sectionId) {
     if (!paginationContainer) return;
     paginationContainer.innerHTML = '';
     if (state.totalPages <= 1) return;
+    
+    paginationContainer.classList.add('pagination-controls'); // নতুন ক্লাস যোগ করা হয়েছে
 
-    const backBtn = createButton('BACK', '#007bff', () => {
+
+    const backBtn = createButton('BACK', () => {
         if (state.currentPage > 1) { 
             state.currentPage--; 
             renderDynamicList(sectionId); 
@@ -351,15 +342,19 @@ function renderDynamicPagination(sectionId) {
     }, state.currentPage === 1);
 
     const pageInfo = document.createElement('span');
+    pageInfo.classList.add('page-info'); // নতুন ক্লাস যোগ করা হয়েছে
     pageInfo.innerText = `Page ${state.currentPage}/${state.totalPages}`;
-    pageInfo.style.cssText = `margin: 0 10px; font-weight: bold;`;
 
-    const nextBtn = createButton('NEXT', '#007bff', () => {
+    const nextBtn = createButton('NEXT', () => {
         if (state.currentPage < state.totalPages) { 
             state.currentPage++; 
             renderDynamicList(sectionId); 
         }
     }, state.currentPage === state.totalPages);
+    
+    backBtn.classList.add('pagination-btn');
+    nextBtn.classList.add('pagination-btn');
+
 
     paginationContainer.append(backBtn, pageInfo, nextBtn);
 }
@@ -374,21 +369,6 @@ function showAvailableSoonMessage(element) {
     const msg = document.createElement('div');
     msg.className = 'avail-msg';
     msg.textContent = '🔔 Available Soon! Please Wait. 🔔';
-    msg.style.cssText = `
-        color: #FFFFFF;
-        background-color: #E74C3C;
-        border: 1px solid #C0392B;
-        box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
-        padding: 10px 15px;
-        border-radius: 5px; 
-        font-weight: 600;
-        font-size: 14px;
-        text-align: center;
-        margin: 10px auto; 
-        width: 80%;
-        display: block;
-        letter-spacing: 0.5px;
-    `;
     
     element.after(msg); 
     
@@ -399,17 +379,15 @@ function showAvailableSoonMessage(element) {
  * Utility Functions (গ্লোবাল)
  * ================================= */
 
-function createButton(text, bgColor, onClick, disabled = false) {
+function createButton(text, onClick, disabled = false) {
     const btn = document.createElement('button');
     btn.innerText = text;
     btn.onclick = onClick;
     btn.disabled = disabled;
-    btn.style.cssText = `
-        padding: 8px 15px; margin: 0 5px;
-        background-color: ${bgColor}; color: white;
-        border: none; border-radius: 5px; cursor: pointer;
-        opacity: ${disabled ? 0.6 : 1}; transition: opacity 0.3s;
-    `;
+    btn.classList.add('custom-button'); // নতুন ক্লাস যোগ করা হয়েছে
+    if (disabled) {
+        btn.classList.add('disabled');
+    }
     return btn;
 }
 
@@ -421,10 +399,6 @@ function showPopup(titleText, date, link, subjText) {
     // ✅ নতুন: ওভারলে তৈরি করা (২ নম্বর পরিবর্তন)
     const overlay = document.createElement('div');
     overlay.id = 'notice-popup-overlay';
-    overlay.style.cssText = `
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.7); z-index: 9998;
-    `;
     overlay.addEventListener('click', function(event) {
         if (event.target === overlay) {
             overlay.remove();
@@ -434,88 +408,63 @@ function showPopup(titleText, date, link, subjText) {
 
     const popup = document.createElement('div');
     popup.id = 'notice-popup';
-    popup.style.cssText = `
-        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        max-height: 90vh; overflow-y: auto; 
-        background: #f0f8ff; padding: 20px; border: 2px solid #333;
-        border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.7);
-        z-index: 9999; text-align: center; max-width: 90%; 
-        min-width: 240px; 
-        font-family: Arial, sans-serif;
-        pointer-events: auto;
-    `;
+    // CSS ক্লাস যুক্ত করা হয়েছে
+    popup.classList.add('notice-popup-box'); 
 
     // ✅ নতুন: স্কুলের নাম এবং নোটিস হেডিং যুক্ত করা (১ নম্বর পরিবর্তন)
     const schoolHeader = document.createElement('div');
     schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice Board';
-    schoolHeader.style.cssText = `
-       color: darkgreen; background-color: #e6ffe6;
-       font-size: 18px; font-weight: bold; margin-bottom: 10px;
-       font-family: 'Times New Roman', serif;
-    `;
+    schoolHeader.classList.add('school-header'); // CSS ক্লাস যুক্ত করা হয়েছে
     popup.appendChild(schoolHeader);
 
     const titleElem = document.createElement('div');
     titleElem.innerText = titleText || "No Title";
-    titleElem.style.cssText = `
-        background-color: green; color: white; font-weight: bold;
-        font-size: 15px; padding: 10px; border-radius: 5px; margin-bottom: 15px;
-    `;
+    titleElem.classList.add('notice-title'); // CSS ক্লাস যুক্ত করা হয়েছে
     popup.appendChild(titleElem);
 
     if (date && date.trim() !== '') {
         const dateElem = document.createElement('div');
         dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-        dateElem.style.marginBottom = '10px';
+        dateElem.classList.add('notice-date'); // CSS ক্লাস যুক্ত করা হয়েছে
         popup.appendChild(dateElem);
     }
 
     if (subjText && subjText.trim() !== '') {
         const subjElem = document.createElement('div');
         subjElem.innerText = subjText;
-        subjElem.style.cssText = `
-            color: darkgreen; background-color: #e6ffe6;
-            font-weight: bold; font-size: 14px; padding: 6px;
-            border-radius: 4px; margin-bottom: 12px;
-        `;
+        subjElem.classList.add('notice-subject'); // CSS ক্লাস যুক্ত করা হয়েছে
         popup.appendChild(subjElem);
     }
 
     const buttonContainer = document.createElement('div');
     buttonContainer.className = 'popup-buttons'; // ✅ ক্লাস যুক্ত করা হয়েছে
-    buttonContainer.style.cssText = `
-        margin-top: 20px; display: flex; flex-wrap: wrap;
-        justify-content: center; gap: 10px;
-    `;
+    popup.appendChild(buttonContainer);
 
     if (link && link.trim() !== '') {
         const linkBtn = document.createElement('a');
         linkBtn.href = link;
         linkBtn.innerText = 'Open Link';
         linkBtn.target = '_blank';
-        linkBtn.style.cssText = `
-            background-color: #007bff; color: white; padding: 6px 10px;
-            border-radius: 5px; font-weight: bold; font-size: 12px;
-            text-decoration: none;
-        `;
+        linkBtn.classList.add('popup-link-btn'); // CSS ক্লাস যুক্ত করা হয়েছে
         buttonContainer.appendChild(linkBtn);
     }
 
- // 🌟 পরিবর্তন ২: ডাউনলোড লজিক আপডেট (সম্পূর্ণ ফিক্স)
-const downloadBtn = createButton('Download', '#28a745', () => {
+// 🌟 পরিবর্তন ২: ডাউনলোড লজিক আপডেট (সম্পূর্ণ ফিক্স)
+const downloadBtn = createButton('Download', () => {
 
     // Download শুরু হলে বোতামগুলো লুকানো
     buttonContainer.style.visibility = 'hidden';
+    downloadBtn.classList.add('download-btn'); // স্টাইল করার জন্য
 
     // ⭐⭐ Capture এর আগে popup-এর height overflow ঠিক করা ⭐⭐
     const originalMaxHeight = popup.style.maxHeight;
     const originalOverflowY = popup.style.overflowY;
 
-    // popup কে সম্পূর্ণ উচ্চতায় আনা
+    // popup কে সম্পূর্ণ উচ্চতায় আনা
     popup.style.maxHeight = 'none';
     popup.style.overflowY = 'visible';
 
-    // 50ms delay → Browser কে style apply করার সময় দেওয়া
+    // 50ms delay → Browser কে style apply করার সময় দেওয়া
     setTimeout(() => {
 
         html2canvas(popup).then(canvas => {
@@ -524,7 +473,7 @@ const downloadBtn = createButton('Download', '#28a745', () => {
             let safeTitle = (titleText || "notice")
                 .replace(/[\\/:*?"<>|]+/g, "")   // ❌ ফাইল নাম নিষিদ্ধ ক্যারেক্টার remove
                 .trim()
-                .replace(/\s+/g, "_");          // space → underscore
+                .replace(/\s+/g, "_");       // space → underscore
             
             let fileName = safeTitle + ".png";
 
@@ -533,7 +482,7 @@ const downloadBtn = createButton('Download', '#28a745', () => {
             link.href = canvas.toDataURL();
             link.click();
 
-            // ⭐⭐ capture শেষ হলে আগের অবস্থায় ফেরত ⭐⭐
+            // ⭐⭐ capture শেষ হলে আগের অবস্থায় ফেরত ⭐⭐
             popup.style.maxHeight = originalMaxHeight;
             popup.style.overflowY = originalOverflowY;
             buttonContainer.style.visibility = 'visible';
@@ -542,11 +491,10 @@ const downloadBtn = createButton('Download', '#28a745', () => {
     }, 50);
 });
 
-    const closeBtn = createButton('Back', '#dc3545', () => overlay.remove()); // ২ নম্বর পরিবর্তন
+    const closeBtn = createButton('Back', () => overlay.remove()); // ২ নম্বর পরিবর্তন
+    closeBtn.classList.add('close-btn'); // স্টাইল করার জন্য
 
     buttonContainer.append(downloadBtn, closeBtn);
-    popup.appendChild(buttonContainer);
-    // document.body.appendChild(popup); // এই লাইনটি মুছে দেওয়া হয়েছে
     overlay.appendChild(popup); // ✅ পপ-আপকে ওভারলের ভিতরে যুক্ত করা হয়েছে
 }
 // [Popup function logic end]
@@ -573,7 +521,7 @@ function updateMoreLessButton(sectionId) {
 }
 // [Popup function logic end]
 
-// ✅ নতুন: মোবাইলের ব্যাক বোতাম (Escape Key) দিয়ে পপ-আপ বন্ধ করার লজিক
+// ✅ নতুন: মোবাইলের ব্যাক বোতাম (Escape Key) দিয়ে পপ-আপ বন্ধ করার লজিক
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
         const popupOverlay = document.getElementById('notice-popup-overlay');
