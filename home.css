@@ -1,23 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
 
+/* =================================
+ * ১. CSS ভেরিয়েবল এবং বেস স্টাইল
+ * ================================= */
 :root {
-     --primary-color: #386641; /* ডিপ ফরেস্ট গ্রিন */
-    --secondary-color: #ff9800; /* Amber for highlights and accents */
-    --background-color: #f0f2f5; /* Light gray for the main background */
+    /* css2 থেকে: ডিপ ফরেস্ট গ্রিন */
+    --primary-color: #386641; 
+    /* css2 থেকে: Amber হাইলাইট এবং অ্যাকসেন্টের জন্য */
+    --secondary-color: #ff9800; 
+    /* css2 থেকে: প্রধান ব্যাকগ্রাউন্ডের জন্য হালকা ধূসর */
+    --background-color: #f0f2f5; 
     --card-background: #ffffff;
     --text-color-dark: #212121;
     --text-color-light: #555555;
     --border-color: #e0e0e0;
     --success-color: #4caf50;
     --error-color: #f44336;
-    --link-color: #1a73e8; /* A standard blue for links */
+    /* css2 থেকে: লিঙ্কের জন্য স্ট্যান্ডার্ড নীল */
+    --link-color: #1a73e8; 
     --hover-bg: #f8f9fa;
+
+    /* css1 থেকে: info-box-এর জন্য কাস্টম রঙ (ভেরিয়েবলে সংহত) */
+    --info-box-error-border: #ff9999; 
+    --info-box-error-bg: #ffe6e6;
+    --info-box-error-text: #cc0000;
+    --info-box-loading-border: #6495ED;
+    --info-box-loading-bg: #E6F0FF;
+    --info-box-loading-text: #4169E1;
+    --notice-bg: #f9f9f9;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -27,140 +47,30 @@ body {
     line-height: 1.6;
 }
 
-html {
-    scroll-behavior: smooth;
-}
+/* =================================
+ * ২. লেআউট, হেডার এবং লগইন ওভারলে
+ * ================================= */
 
-body.no-scroll {
+/* মাস্টার লগইন ওভারলে (css1 + css2) */
+.no-scroll, body.no-scroll {
     overflow: hidden;
 }
 
-/* --------------------
-    লেআউট এবং কন্টেইনার
--------------------- */
-.main-section-container {
-    padding: 2rem 1.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 2rem; /* আগের padding-top বজায় রাখুন */
-    padding-bottom: 2rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    scroll-margin-top: 6rem; /* 👈 এই লাইনটি যোগ করুন */
-    /* 6rem বা প্রায় 96px ব্যবহার করা হয়েছে, যা হেডারের উচ্চতার চেয়ে বেশি।
-    এটি নিশ্চিত করবে যে সেকশনটি হেডারের নিচে চাপা পড়বে না। */
-}
-
-/* ✅ সেকশন হেডিং এর জন্য স্টাইল */
-.section-heading-container {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.sub-sections-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* বড় স্ক্রিনে একাধিক কলাম দেখাবে */
-    gap: 0.5rem; /* কন্টেন্টগুলোর মধ্যে দূরত্ব */
-    margin-top: 0.5rem;
-}
-
-.sub-sections-wrapper .shaded-info-box {
-    /* এই কোডটি প্রতিটি বক্সকে সঠিক আকার দেবে */
-    width: auto;
-}
-
-.shaded-info-box {
-    background-color: var(--card-background);
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-left: 5px solid var(--primary-color);
-}
-
-.shaded-info-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* --------------------
-    হেডার এবং লগইন
--------------------- */
-#top-bar-section {
-    background-color: var(--primary-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.main-header {
-    display: flex;
-    justify-content: space-between; /* উপাদানগুলোকে দুই প্রান্তে ঠেলে দেবে */
-    align-items: center;           /* উলম্বভাবে মাঝখানে আনবে */
-    padding: 1rem 1.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative; /* স্কুলের নামকে মাঝখানে আনার জন্য এটি জরুরি */
-    color: #ffffff;
-}
-
-.header-content {
-    display: flex;
-    align-items: center;
-    gap: 0rem;
-}
-
-.logo {
-    height: 40px;
-    width: auto;
-    background: white;
-    border-radius: 50%;
-}
-
-.school-name {
-    position: absolute;      /* এটিকে অন্য উপাদান নিরপেক্ষভাবে সরায় */
-    left: 50%;               /* বাম থেকে ৫০% দূরে সরায় */
-    transform: translateX(-50%); /* নিজের আকারের ৫০% বামে এসে ঠিক মাঝখানে বসে */
-    margin: 0;               /* অপ্রয়োজনীয় মার্জিন সরায় */
-    text-align: center;
-}
-
-.logout-button {
-    background-color: var(--secondary-color);
-    color: #ffffff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-.logout-button:hover {
-    background-color: #e65100;
-}
-
-/* --------------------
-    লগইন ওভারলে
--------------------- */
 #masterLoginOverlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--primary-color); /* সম্পূর্ণ কালো (#000) বা গাঢ় ধূসর (#212121) ব্যবহার করুন */
+    background-color: var(--primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
-      /* মাস্টার লগইন ব্যাকগ্রাউন্ড ছবির URL এখানে দিন */
     background-image: url('photo/master_login_image.jpg');
-    /* ছবি কিভাবে প্রদর্শিত হবে তা সেট করুন */
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover; /* ছবিটি পুরো স্ক্রিন জুড়ে থাকবে */
+    background-size: cover;
 }
 
 #masterLoginBox {
@@ -203,7 +113,7 @@ body.no-scroll {
     margin-bottom: 0.5rem;
 }
 
-.error {
+.error, .exam-link-error {
     color: var(--error-color);
     margin-top: -0.5rem;
     margin-bottom: 1rem;
@@ -218,7 +128,65 @@ body.no-scroll {
 }
 
 /* --------------------
-    সাইডবার মেনু
+    হেডার এবং মেনু (css2)
+-------------------- */
+#top-bar-section {
+    background-color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    color: #ffffff;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 0rem;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+    background: white;
+    border-radius: 50%;
+}
+
+.school-name {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    text-align: center;
+}
+
+.logout-button {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #e65100;
+}
+
+/* --------------------
+    সাইডবার মেনু (css2)
 -------------------- */
 .overlay {
     position: fixed;
@@ -250,7 +218,7 @@ body.no-scroll {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     transition: left 0.3s ease;
     z-index: 1000;
-    overflow-y: auto; /* মেনু অনেক বড় হলে স্ক্রলবার আসবে */
+    overflow-y: auto;
 }
 
 .sidebar-menu.active {
@@ -300,9 +268,21 @@ body.no-scroll {
     cursor: pointer;
 }
 
-/* --------------------
-    সেকশন হেডিং এবং কন্টেন্ট
--------------------- */
+/* =================================
+ * ৩. কন্টেইনার এবং সেকশন স্টাইল
+ * ================================= */
+.main-section-container {
+    padding: 2rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    scroll-margin-top: 6rem;
+}
+
+.section-heading-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
 .section-heading-wrapper {
     margin-bottom: 2rem;
     text-align: center;
@@ -317,6 +297,31 @@ body.no-scroll {
     align-items: center;
     justify-content: center;
     gap: 10px;
+}
+
+.sub-sections-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.sub-sections-wrapper .shaded-info-box {
+    width: auto;
+}
+
+.shaded-info-box {
+    background-color: var(--card-background);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 5px solid var(--primary-color);
+}
+
+.shaded-info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
 .shaded-info-box-heading {
@@ -336,121 +341,98 @@ body.no-scroll {
     text-align: center;
 }
 
-.exam-link {
-    display: inline-block;
-    background-color: var(--secondary-color);
-    color: #ffffff;
-    padding: 0.75rem 1.5rem;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-.exam-link:hover {
-    background-color: #e65100;
-}
-
-.static-text {
+/* =================================
+ * ৪. নোটিশ বোর্ডের মেসেজ বক্স (css1 থেকে)
+ * ================================= */
+.info-box {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 8px;
     text-align: center;
-    color: var(--text-color-light);
-    font-style: italic;
-    margin-top: 1rem;
+    max-width: 320px;
+    margin: 0 auto;
+    border: 2px solid;
 }
 
-/* --------------------
-    নম্বর আপলোড বোতাম
--------------------- */
-.exam-buttons-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 1.5rem;
+/* ত্রুটি / Available Soon স্টাইল (ভেরিয়েবল ব্যবহার করে) */
+.error-message {
+    border-color: var(--info-box-error-border);
+    background-color: var(--info-box-error-bg);
+    color: var(--info-box-error-text);
 }
 
-.box-heading {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 1rem;
+/* লোডিং মেসেজ স্টাইল (ভেরিয়েবল ব্যবহার করে) */
+.loading-message {
+    border-color: var(--info-box-loading-border);
+    background-color: var(--info-box-loading-bg);
+    color: var(--info-box-loading-text);
 }
 
-.box-button {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    border: none;
-    padding: 0.75rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.box-button:hover {
-    background-color: #00382e;
-    transform: translateY(-2px);
-}
-
-.disabled-exam-link {
-    background-color: #ccc;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-.disabled-exam-link:hover {
-    background-color: #ccc;
-    transform: none;
-}
-
-/* শীঘ্রই উপলব্ধ বার্তা */
+/* শীঘ্রই উপলব্ধ বার্তা (css2) */
 .avail-msg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px; /* আইকন এবং টেক্সটের মধ্যে ফাঁকা স্থান */
-  
-  font-family: 'Arial', sans-serif;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-  
-  background: linear-gradient(45deg, #ff4e50, #fc913a); /* আকর্ষণীয় গ্রেডিয়েন্ট */
-  border-radius: 10px;
-  padding: 15px 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  
-  margin: 20px auto;
-  max-width: fit-content;
-  
-  animation: pulse 1.5s infinite ease-in-out; /* পালস অ্যানিমেশন যোগ করা হয়েছে */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(45deg, #ff4e50, #fc913a);
+    border-radius: 10px;
+    padding: 15px 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    max-width: fit-content;
+    animation: pulse 1.5s infinite ease-in-out;
 }
 
-/* পালস অ্যানিমেশনের কীফ্রেম */
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05); /* হালকা বড় হবে */
-  }
-  100% {
-    transform: scale(1);
-  }
+/* =================================
+ * ৫. নোটিশ তালিকা এবং মারকিউ
+ * ================================= */
+
+/* নোটিশ তালিকা আইটেম (css1) */
+.notice-item {
+    cursor: pointer;
+    margin: 10px 0;
+    padding: 8px 10px;
+    background-color: var(--notice-bg);
+    border-left: 6px solid var(--primary-color);
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
-@keyframes fadeInOut {
-    0% { opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
+/* নতুন নোটিশ হাইলাইট (css1 এবং css2 থেকে সংহত) */
+.new-notice-highlight {
+    border: 2px solid #e74c3c !important;
+    border-left: 6px solid #e74c3c !important;
+    background-color: #fcecec !important;
 }
 
-/* --------------------
-    নোটিশ বোর্ড
--------------------- */
+.new-notice-highlight:hover {
+    background-color: #fae4e4 !important;
+}
+
+/* NEW ব্যাজ স্টাইল (css1 এবং css2 থেকে সংহত) */
+.new-badge {
+    background-color: #e74c3c; /* css2-এর লাল রঙ */
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 5px;
+    display: inline-block;
+    animation: blinker 1s linear infinite;
+}
+
+/* Marquee স্টাইল (css1 এবং css2 থেকে সংহত) */
+.marquee-item {
+    padding: 0 15px;
+    white-space: nowrap;
+}
 .marquee-container {
     background-color: var(--hover-bg);
     border: 1px solid var(--border-color);
@@ -471,15 +453,11 @@ body.no-scroll {
     animation-play-state: paused;
 }
 
-@keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
-
 #notice-board-marquee-content {
     animation-duration: 30s;
 }
 
+/* নোটিশ টেবিল (css2) */
 #notice-table {
     width: 100%;
     border-collapse: collapse;
@@ -512,6 +490,11 @@ body.no-scroll {
     transition: opacity 0.3s ease;
 }
 
+/* =================================
+ * ৬. পেজিনেশন এবং বোতাম
+ * ================================= */
+
+/* পেজিনেশন কন্টেইনার (css2) */
 .pagination {
     text-align: center;
     margin-top: 1.5rem;
@@ -521,14 +504,37 @@ body.no-scroll {
     gap: 1rem;
 }
 
-.pagination button {
-    background-color: var(--primary-color);
+/* পেজিনেশন কন্ট্রোল (css1 এবং css2 থেকে সংহত) */
+.page-info {
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.pagination-btn, .pagination button {
     color: #ffffff;
     border: none;
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: 500;
     transition: background-color 0.3s ease;
+}
+
+/* বোতামের ব্যাকগ্রাউন্ড কালার (css1 এবং css2 থেকে সংহত) */
+.btn-back, .btn-next {
+    background-color: var(--secondary-color);
+}
+.btn-download {
+    background-color: #28a745; /* css1-এর রঙ */
+}
+/* Close Button in Popup (css1-এর রঙ ব্যবহার করে) */
+.btn-back:not(.pagination-btn) { 
+    background-color: #dc3545; 
+}
+/* Pagination বোতামের প্রধান রঙ */
+.pagination button {
+    background-color: var(--primary-color);
+    padding: 8px 16px;
 }
 
 .pagination button:disabled {
@@ -536,58 +542,183 @@ body.no-scroll {
     cursor: not-allowed;
 }
 
-.modal-overlay {
+/* নম্বর আপলোড বোতাম (css2) */
+.exam-buttons-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.box-heading {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.box-button {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.box-button:hover {
+    background-color: #00382e;
+    transform: translateY(-2px);
+}
+
+.exam-link {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.exam-link:hover {
+    background-color: #e65100;
+}
+
+.disabled-exam-link {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.disabled-exam-link:hover {
+    background-color: #ccc;
+    transform: none;
+}
+
+/* =================================
+ * ৭. নোটিশ পপআপ/মোডাল স্টাইল
+ * (css1-এর ক্লাসগুলিকে প্রাধান্য দেওয়া হয়েছে, css2-এর modal-overlay/content কে বাদ দিয়ে)
+ * ================================= */
+
+.popup-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
 }
 
-.modal-content {
-    background-color: var(--card-background);
-    padding: 2rem;
+/* #notice-popup ID এর জন্য css2-এর রেসপনসিভ স্টাইল, যা popup-content এ প্রযোজ্য হবে */
+.popup-content, #notice-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #f0f8ff; /* css1-এর রঙ */
+    padding: 20px;
+    border: 2px solid #333;
     border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 600px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.7);
+    z-index: 9999;
+    text-align: center;
+    max-width: 90%;
+    min-width: 240px;
+    font-family: Arial, sans-serif;
+    pointer-events: auto;
+    /* css2-এর বেস উইডথ */
+    width: 300px; 
+    box-sizing: border-box;
 }
 
-.modal-header {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
+/* পপ-আপের ভেতরের স্টাইল (css1) */
+.school-header {
+    color: darkgreen;
+    background-color: #e6ffe6;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', serif;
 }
 
-.modal-date {
-    color: var(--text-color-light);
-    margin-bottom: 1.5rem;
-}
-
-.modal-body {
-    white-space: pre-wrap;
-    font-size: 1rem;
-    color: var(--text-color-dark);
-}
-
-#closeModalBtn {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
+.notice-title {
+    background-color: green;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px;
     border-radius: 5px;
-    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.notice-date {
+    margin-bottom: 10px;
+}
+
+.notice-subject {
+    color: darkgreen;
+    background-color: #e6ffe6;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 6px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.popup-button-container {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.popup-link-btn {
+    background-color: var(--link-color); /* ভেরিয়েবল ব্যবহার */
+    color: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+/* =================================
+ * ৮. অতিরিক্ত ইউটিলিটি এবং ফুটার
+ * ================================= */
+.static-text {
+    text-align: center;
+    color: var(--text-color-light);
+    font-style: italic;
     margin-top: 1rem;
 }
 
-/* --------------------
-    ফুটার
--------------------- */
+/* হাইলাইট সেকশন ডিজাইন (css2) */
+.highlight-section {
+    position: relative;
+    border-radius: 8px;
+    transition: all 0.4s ease;
+    animation: highlight-fade 3s ease-in-out;
+}
+
+.highlight-section * {
+    transition: color 0.3s ease;
+}
+
+.highlight-section:hover * {
+    color: #ff5722;
+}
+
+/* ফুটার (css2) */
 footer {
     background-color: var(--primary-color);
     color: #ffffff;
@@ -600,39 +731,87 @@ footer p {
     margin: 0.5rem 0;
     color: #f0f2f5;
 }
-/*ফুটারের হেডিং ও ইমোজি */
+
 #school-address-section .section-heading {
-    color: #ffffff; /* হেডিং এর কালার সাদা করে দিন */
+    color: #ffffff;
 }
 #school-address-section .section-heading .emoji {
-    color: #ffffff; /* ইমোজির কালারও সাদা করে দিন */
+    color: #ffffff;
 }
 
 /* --------------------
-    ইউটিলিটি ক্লাস এবং অ্যানিমেশন
+    নতুন ডিজাইনের জন্য অতিরিক্ত স্টাইল (css2)
 -------------------- */
-.blink {
-     border-radius: 8px;
-     border-bottom: 6px solid var(--primary-color);
-     animation: blink-animation 1s steps(5, start) infinite;
+.sub-sections-wrapper.new-design {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.new-info-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 90px;
+    padding: 1rem;
+    text-decoration: none;
+    background-color: var(--card-background);
+    color: var(--text-color-dark);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    border-left: 5px solid var(--primary-color);
+}
+
+.new-info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    background-color: var(--hover-bg);
+}
+
+.new-info-box-heading {
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.new-info-box-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 120px;
+    padding: 1rem;
+    color: inherit;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+}
+
+/* =================================
+ * ৯. অ্যানিমেশন এবং মিডিয়া কোয়েরি (keyframes এবং Responsive Design)
+ * ================================= */
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
 }
 
 @keyframes blink-animation {
     to { visibility: hidden; }
-}
-
-.emoji {
-    font-size: 1.5rem;
-    margin-right: 5px;
-}
-
-/* ✅ মূল পেজের সেকশন হাইলাইট করার স্টাইল */
-/* ✨ হাইলাইট সেকশন ডিজাইন */
-.highlight-section {
-    position: relative;
-    border-radius: 8px;
-    transition: all 0.4s ease;
-    animation: highlight-fade 3s ease-in-out;
 }
 
 @keyframes highlight-fade {
@@ -640,23 +819,19 @@ footer p {
     100% { background-color: var(--background-color); }
 }
 
-/* হাইলাইটের ভেতরের কনটেন্টে একটু গ্লো এফেক্ট */
-.highlight-section * {
-    transition: color 0.3s ease;
+@keyframes blinker {
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05);
+    }
 }
 
-.highlight-section:hover * {
-    color: #ff5722;
-}
-
-/* --------------------
-    রেসপনসিভ ডিজাইন
--------------------- */
+/* মিডিয়া কোয়েরি */
 @media (max-width: 768px) {
     .main-header {
         flex-direction: column;
         align-items: flex-start;
-        padding: 1rem; /* ছোট স্ক্রিনের জন্য প্যাডিং কমানো হলো */
+        padding: 1rem;
     }
 
     .header-content {
@@ -670,8 +845,8 @@ footer p {
     }
 
     .school-name {
-        font-size: 0.9rem; /* ছোট স্ক্রিনের জন্য ফন্টের আকার কমানো হলো */
-        width: 60%;      /* নিশ্চিত করে যেন নামটি বোতামের উপর না যায় */
+        font-size: 0.9rem;
+        width: 60%;
     }
 
     .section-heading {
@@ -679,117 +854,17 @@ footer p {
     }
 }
 
-/* --------------------
-    নতুন ডিজাইনের জন্য অতিরিক্ত স্টাইল
--------------------- */
-.sub-sections-wrapper.new-design {
-    /* নতুন ডিজাইনের জন্য গ্রিড লেআউট */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* বক্সগুলো কিছুটা ছোট করা হয়েছে */
-    gap: 1rem; /* বক্সগুলোর মধ্যে দূরত্ব বাড়ানো হয়েছে */
-}
-
-.new-info-box {
-    display: flex; /* ভেতরের টেক্সটকে মাঝখানে আনার জন্য */
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 90px; /* বক্সের নূন্যতম উচ্চতা */
-    padding: 1rem;
-    text-decoration: none;
-    background-color: var(--card-background);
-    color: var(--text-color-dark);
-    text-decoration: none; /* লিঙ্কের আন্ডারলাইন সরাতে */
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-    border-left: 5px solid var(--primary-color); /* নতুন ডিজাইনের জন্য রং পরিবর্তন */
-}
-
-.new-info-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-    background-color: var(--hover-bg);
-}
-
-.new-info-box-heading {
-    font-size: 1rem; /* ফন্ট সাইজ ছোট করা হয়েছে */
-    margin: 0; /* অতিরিক্ত মার্জিন সরাতে */
-    line-height: 1.3;
-}
-.new-info-box-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 120px;
-    padding: 1rem;
-    color: inherit; /* parent color inherit করবে */
-    text-decoration: none;
-    width: 100%; /* পুরো বক্স জুড়ে লিঙ্ক বিস্তৃত করবে */
-    height: 100%;
-}
-
-/* ===================================== */
-/* 🎨 নোটিশ পপ-আপের জন্য রেসপনসিভ CSS (সংশোধিত) */
-/* ===================================== */
-#notice-popup {
-    /* 1. প্রস্থের স্টাইল (আপনার আগের কোড) */
-    width: 300px; 
-
-    /* 2. ⭐ মূল ফিক্স: উচ্চতা ও স্ক্রলিং যোগ করা ⭐ */
-    position: fixed; /* নিশ্চিত করার জন্য যে এটি স্ক্রিনের সাথে স্থির থাকবে */
-    max-height: 90vh; /* Viewport Height-এর 90% এর বেশি হবে না */
-    overflow-y: auto; /* কনটেন্ট বেশি হলে উল্লম্ব স্ক্রলবার দেখাবে */
-    
-    /* 3. প্যাডিং (ঐচ্ছিক): যাতে একদম উপরে বা নিচে আটকে না যায় */
-    padding: 20px 20px 20px 20px !important; 
-    box-sizing: border-box; /* padding যাতে width/max-width এর মধ্যে থাকে */
-}
-
-/* 💻 বড়ো স্ক্রিন (যেমন 601px বা তার বেশি স্ক্রিনের জন্য) */
+/* পপ-আপের রেসপনসিভ স্টাইল (popup-content এবং #notice-popup এর জন্য প্রযোজ্য) */
 @media (min-width: 601px) {
-    #notice-popup {
+    .popup-content, #notice-popup {
         width: 500px;
         max-width: 60%;
     }
 }
 
-/* 🖥️ অতিরিক্ত বড়ো স্ক্রিনের জন্য (ঐচ্ছিক: যেমন 1024px বা তার বেশি) */
 @media (min-width: 1024px) {
-    #notice-popup {
+    .popup-content, #notice-popup {
         width: 650px;
         max-width: 50%;
     }
-}
-/* NEW ব্যাজের জন্য স্টাইল */
-.new-badge {
-    background-color: #e74c3c; /* লাল রং */
-    color: white;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.7em;
-    font-weight: 700;
-    margin-left: 10px;
-    display: inline-block;
-    animation: blinker 1s linear infinite; /* অ্যানিমেশন যুক্ত করা */
-}
-
-/* অ্যানিমেশন কিফ্রেম: জ্বলজ্বল করার এফেক্ট */
-@keyframes blinker {
-    50% {
-        opacity: 0.5;
-        transform: scale(1.05); /* হালকা বড় হবে */
-    }
-}
-
-/* নতুন নোটিসের জন্য পুরো বক্স হাইলাইট */
-.new-notice-highlight {
-    border: 2px solid #e74c3c !important; /* লাল বর্ডার */
-    border-left: 6px solid #e74c3c !important; /* বাম দিকে হাইলাইট */
-    background-color: #fcecec !important; /* হালকা গোলাপি ব্যাকগ্রাউন্ড */
-}
-
-/* যখন মাউস হোভার করা হবে */
-.new-notice-highlight:hover {
-    background-color: #fae4e4 !important;
 }
