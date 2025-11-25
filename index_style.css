@@ -1,1449 +1,202 @@
 /* Custom CSS Variables for Easy Theming */
-:root {
-    --primary-red: #E63946;    /* লোগোর নরম লাল */
-    --dark-khaki: #6B0000;     /* খয়েরি */
-    --light-khaki: #b84b00;    /* হালকা খয়েরি */
-    --white: #FFFFFF;
-    --black: #333333;
-    --light-gray: #f0f2f5;
-    --medium-gray: #777777;
-    --card-bg: #FFFFFF;
-    --box-shadow-light: rgba(0, 0, 0, 0.1);
-    --box-shadow-dark: rgba(0, 0, 0, 0.15);
-    --animation-duration: 0.8s;
-    --accent-color: #C82333; /* হোভারের জন্য একটু ভিন্ন শেডের লাল */
-    --light-accent-color: #f7e6e8; /* এটি যোগ করুন */
-}
-
+:root{--primary-red:#E63946;--dark-khaki:#6B0000;--light-khaki:#b84b00;--white:#FFF;--black:#333;--light-gray:#f0f2f5;--medium-gray:#777;--card-bg:#FFF;--box-shadow-light:rgba(0,0,0,.1);--box-shadow-dark:rgba(0,0,0,.15);--animation-duration:.8s;--accent-color:#C82333;--light-accent-color:#f7e6e8}
 /* General Body & Typography */
-html, body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    background-color: var(--light-gray);
-    color: var(--black);
-    line-height: 1.7;
-    scroll-behavior: smooth;
-    overflow-x: hidden; /* অনুভূমিক স্ক্রলবার লুকান */
-}
-body.no-scroll {
-    overflow: hidden;
-}
-
-.container {
-    max-width: 1200px; /* কন্টেইনারের প্রস্থ বাড়ানো হয়েছে */
-    margin: 30px auto;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* কার্ডের প্রস্থ বাড়ানো হয়েছে */
-    gap: 30px; /* কার্ডগুলোর মধ্যে ব্যবধান */
-}
-
+html,body{font-family:'Poppins',sans-serif;margin:0;padding:0;width:100%;background-color:var(--light-gray);color:var(--black);line-height:1.7;scroll-behavior:smooth;overflow-x:hidden}
+body.no-scroll{overflow:hidden}
+.container{max-width:1200px;margin:30px auto;padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px}
 /* Header Section */
-.main-header {
-    display: flex;
-    justify-content: space-between; /* বোতাম এবং কন্টেন্টকে দুই পাশে ঠেলে দেবে */
-    align-items: center;
-    background: linear-gradient(135deg, var(--primary-red) 0%, #B83227 50%, var(--dark-khaki) 100%);
-    color: var(--white);
-    padding: 20px; /* হেডার এর প্যাডিং, টপ ও বটম প্যাডিং আলাদাভাবে সেট করা আছে */
-    text-align: center;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    position: relative; /* মেনু বারের জন্য পজিশন - এটি ঠিক আছে */
-    overflow: hidden;
-    padding-top: 60px; /* উপরের লগইন বোতামের জন্য একটু জায়গা নিশ্চিত করবে */
-    padding-bottom: 20px; /* প্রয়োজন অনুযায়ী সামঞ্জস্য করুন */
-    z-index: 900; /* মেনু বারের (1001) এবং ওভারলের (1000) নিচে রাখুন */
-    width: 100%; /* সম্পূর্ণ প্রস্থ নিশ্চিত করুন */
-    box-sizing: border-box; /* padding সহ প্রস্থ হিসাব করবে */
-}
-.header-content {
-    position: relative;
-    z-index: 2; /* অন্যান্য কন্টেন্টের উপরে থাকবে */
-    flex-grow: 1; /* উপলব্ধ স্থান পূরণ করবে */
-    text-align: center; /* হেডার কন্টেন্ট মাঝখানে থাকবে */
-    /* যদি আপনার হেডার কন্টেন্ট মাঝখানে থাকে এবং মেনু বাটন ও লগইন বাটন absolute হয়, তাহলে এই padding-right প্রয়োজন নাও হতে পারে। */
-    /* padding-right: 70px; /* ছোট স্ক্রিনে বোতামের জন্য পর্যাপ্ত জায়গা (যদি হেডার কন্টেন্ট সরানোর প্রয়োজন হয়) */
-}
-
-/* ✅ নতুন .logo-container স্টাইল যোগ করুন */
-/* index.css */
-
-/* ✅ .logo-container স্টাইল (অপরিবর্তিত) */
-.main-header .logo-container {
-    background-image: url('PHS-LOGO.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    filter: blur(0.8px); /* লোগো ব্লার করা হলো */
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    border: 6px solid rgba(255, 255, 255, 0.9);
-    margin: 0 auto 20px auto; 
-    background-color: white; 
-    position: relative; 
-    overflow: hidden; 
-    z-index: 10;
-    /* সুরক্ষা বৈশিষ্ট্য এবং অ্যানিমেশন অপরিবর্তিত */
-    -webkit-touch-callout: none; -webkit-user-select: none; 
-    -khtml-user-select: none; -moz-user-select: none; 
-    -ms-user-select: none; user-select: none; 
-    pointer-events: none; 
-    animation: pulse 2s infinite alternate ease-in-out;
-}
-
-/* ➕ ওয়াটারমার্কের উল্লম্ব বার (P, H, S) - ::before ব্যবহার করে */
-.main-header .logo-container::before {
-    content: "P\A H\A S"; 
-    white-space: pre; 
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(0deg); 
-    
-    /* 1️⃣ P, H, S এর দূরত্ব কমানো হলো */
-    line-height: 0.8; 
-    
-    /* ওয়াটার মার্ক স্টাইল (স্পষ্ট ও গাঢ়) */
-    color: rgba(0, 0, 0, 0.6); 
-    font-size: 2.5em; 
-    font-weight: 900; 
-    z-index: 11;
-    pointer-events: none;
-    text-shadow: 0 0 5px rgba(255,255,255,0.8);
-    opacity: 0.8; 
-}
-
-/* ➖ ওয়াটারমার্কের অনুভূমিক বার (P এবং S) - ::after ব্যবহার করে */
-.main-header .logo-container::after {
-    /* 🔴 প্রধান পরিবর্তন: অনুভূমিক P এবং S */
-    content: "P S"; /* P এবং S এর মধ্যে বড় ফাঁকা স্থান (space) ব্যবহার করা হয়েছে */
-    white-space: nowrap; /* টেক্সট যাতে এক লাইনে থাকে */
-    
-    position: absolute;
-    top: 50%; 
-    left: 55%;
-    
-    /* 🔴 অনুভূমিকভাবে স্থাপন করা */
-    transform: translate(-50%, -50%); /* কেন্দ্রে বসানো */
-    
-    /* 2️⃣ অনুভূমিক লেখা দৃশ্যমান করার জন্য পরিবর্তন */
-    letter-spacing: 15px; /* ড্যাশটিকে লোগোর প্রস্থ বরাবর প্রসারিত করার জন্য */
-    font-size: 2.5em; /* উল্লম্ব অক্ষরের সাথে ফন্ট সাইজ মেলানো হলো */
-    width: 100%;
-    
-    /* ওয়াটার মার্ক স্টাইল */
-    color: rgba(0, 0, 0, 0.6);
-    font-weight: 900; 
-    z-index: 11;
-    pointer-events: none;
-    text-shadow: 0 0 5px rgba(255,255,255,0.8);
-    opacity: 0.8;
-    
-    text-align: center;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
-    100% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
-}
-
-.main-header h1 {
-    margin: 0;
-    font-size: 3.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
-    letter-spacing: 2px;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-    font-weight: 700;
-}
-
-.main-header .tagline {
-    font-size: 1.5em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
-    font-style: italic;
-    opacity: 0.9;
-    margin-top: 15px;
-    font-weight: 300;
-}
-
-.main-header .slogan {
-    font-size: 1.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
-    margin-top: 25px;
-    font-weight: 600;
-    animation: fadeIn 2s ease-in-out forwards; /* স্লোগানে ফেড ইন অ্যানিমেশন */
-}
-
+.main-header{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--primary-red) 0%,#B83227 50%,var(--dark-khaki) 100%);color:var(--white);padding:60px 20px 20px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.3);position:relative;overflow:hidden;z-index:900;width:100%;box-sizing:border-box}
+.header-content{position:relative;z-index:2;flex-grow:1;text-align:center}
+/* .logo-container Style */
+.main-header .logo-container{background:url('PHS-LOGO.png') center/cover no-repeat var(--white);filter:blur(.8px);width:130px;height:130px;border-radius:50%;border:6px solid rgba(255,255,255,.9);margin:0 auto 20px;position:relative;overflow:hidden;z-index:10;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none;animation:pulse 2s infinite alternate ease-in-out}
+/* Watermark ::before */
+.main-header .logo-container::before{content:"P\A H\A S";white-space:pre;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);line-height:.8;color:rgba(0,0,0,.6);font-size:2.5em;font-weight:900;z-index:11;pointer-events:none;text-shadow:0 0 5px rgba(255,255,255,.8);opacity:.8}
+/* Watermark ::after */
+.main-header .logo-container::after{content:"P S";white-space:nowrap;position:absolute;top:50%;left:55%;transform:translate(-50%,-50%);letter-spacing:15px;font-size:2.5em;width:100%;color:rgba(0,0,0,.6);font-weight:900;z-index:11;pointer-events:none;text-shadow:0 0 5px rgba(255,255,255,.8);opacity:.8;text-align:center}
+@keyframes pulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,.7)}100%{transform:scale(1.05);box-shadow:0 0 0 15px rgba(255,255,255,0)}}
+.main-header h1{margin:0;font-size:3.8em;letter-spacing:2px;text-shadow:3px 3px 6px rgba(0,0,0,.7);font-weight:700}
+.main-header .tagline{font-size:1.5em;font-style:italic;opacity:.9;margin-top:15px;font-weight:300}
+.main-header .slogan{font-size:1.8em;margin-top:25px;font-weight:600;animation:fadeIn 2s ease-in-out forwards}
 /* Hero Section (Scrolling Images) */
-.hero-section {
-    position: relative;
-    height: 500px;
-    overflow: hidden; 
-    background-color: #eee;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    z-index: 500;
-}
-
-/* 🔄 সংশোধিত: ম্যানুয়াল স্ক্রল এবং ছবির স্বয়ংক্রিয় ফিটিংয়ের জন্য */
-.hero-images {
-    display: flex;
-    /* 🔴 ১. ছবির কন্টেইনারের প্রস্থ 100% করা হলো */
-    width: 100%; 
-    height: 100%;
-    
-    /* 🔴 ২. ম্যানুয়াল স্ক্রল যোগ করা হলো */
-    overflow-x: auto; 
-    
-    /* 🔴 ৩. স্বয়ংক্রিয় স্ক্রল চালু রাখতে, তবে এটি এখন JavaScript দ্বারা নিয়ন্ত্রিত */
-    /* animation: slideShow 20s infinite ease-in-out; - এই লাইনটি মুছে দেওয়া হলো বা বাদ দেওয়া হলো */
-    
-    /* ৪. স্ক্রলবারে উন্নত ইউজার এক্সপেরিয়েন্স এবং গোপন করার ব্যবস্থা */
-    scroll-snap-type: x mandatory; /* স্ক্রলিং থামলে ছবিটি স্ক্রিন জুড়ে স্ন্যাপ হবে */
-    scrollbar-width: none; /* Firefox-এর জন্য স্ক্রলবার আড়াল করা হলো */
-}
-
-/* 💡 স্ক্রলবার আড়াল করা (Chrome, Safari, Edge) */
-.hero-images::-webkit-scrollbar {
-    display: none; 
-}
-
-/* 🖼️ সংশোধিত: প্রতিটি ছবি স্ক্রিন জুড়ে ফিট করার জন্য */
-.hero-image {
-    /* 🔴 ১. ছবি ছোট হওয়া আটকানো এবং পূর্ণ প্রস্থ নিশ্চিত করা */
-    flex-shrink: 0; /* ছবিকে ছোট হওয়া থেকে বিরত রাখে */
-    width: 100%; /* প্রতিটি ছবি কন্টেইনারের 100% প্রস্থ নেবে */
-    
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.7); 
-    transform: scale(1); 
-    transition: filter 0.5s ease, transform 0.5s ease;
-    
-    /* ২. স্ন্যাপ-টু-স্টার্ট যোগ করা হলো */
-    scroll-snap-align: start;
-}
-
-/* যখন hero-section এর উপর হোভার করা হবে (অপরিবর্তিত) */
-.hero-section:hover .hero-image {
-    filter: brightness(1); 
-    transform: scale(1.02); 
-}
-
-/* @keyframes slideShow ব্লকটি সম্পূর্ণভাবে বাদ দিন, কারণ এটি JavaScript দিয়ে প্রতিস্থাপিত হয়েছে */
-
-
-/* .hero-overlay এবং হোভার স্টাইল (অপরিবর্তিত) */
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--white);
-    font-size: 3em;
-    font-weight: 700;
-    text-align: center;
-    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
-    opacity: 1; 
-    transform: translateY(0); 
-    animation: fadeInOverlay 3s forwards 1.5s; 
-    transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-/* যখন hero-section এর উপর হোভার করা হবে (অপরিবর্তিত) */
-.hero-section:hover .hero-overlay {
-    opacity: 0; 
-    transform: translateY(-100%); 
-}
-/* @keyframes fadeInOverlay অপরিবর্তিত থাকবে */
-@keyframes fadeInOverlay {
-    to { opacity: 1; }
-}
-
+.hero-section{position:relative;height:500px;overflow:hidden;background-color:#eee;box-shadow:0 6px 20px rgba(0,0,0,.2);z-index:500}
+.hero-images{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.hero-images::-webkit-scrollbar{display:none}
+.hero-image{flex-shrink:0;width:100%;height:100%;object-fit:cover;filter:brightness(.7);transform:scale(1);transition:filter .5s ease,transform .5s ease;scroll-snap-align:start}
+.hero-section:hover .hero-image{filter:brightness(1);transform:scale(1.02)}
+.hero-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center;color:var(--white);font-size:3em;font-weight:700;text-align:center;text-shadow:3px 3px 8px rgba(0,0,0,.8);opacity:1;transform:translateY(0);animation:fadeInOverlay 3s forwards 1.5s;transition:opacity .5s ease,transform .5s ease}
+.hero-section:hover .hero-overlay{opacity:0;transform:translateY(-100%)}
+@keyframes fadeInOverlay{to{opacity:1}}
 /* Card Styles for Sections */
-.card {
-    background: var(--card-bg);
-    border-radius: 15px; /* বর্ডার রেডিয়াস বাড়ানো হয়েছে */
-    box-shadow: 0 10px 30px var(--box-shadow-light); /* শ্যাডো বাড়ানো হয়েছে */
-    padding: 35px; /* প্যাডিং বাড়ানো হয়েছে */
-    padding-bottom: 30px; /* কার্ডের নিচে প্যাডিং বাড়ানো হয়েছে, যাতে বোতামের জন্য পর্যাপ্ত স্থান থাকে */
-    padding-top: 25px; /* প্রয়োজনে উপরের প্যাডিংও বাড়ানো হলো */
-    padding-left: 20px;
-    padding-right: 20px;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    border-top: 8px solid var(--dark-khaki); /* খয়েরি রঙের বর্ডার */
-    overflow: hidden;
-    position: relative;
-}
-
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px var(--box-shadow-dark);
-}
-
-h2 {
-    color: var(--dark-khaki);
-    font-size: 2.5em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
-    margin-bottom: 25px;
-    padding-bottom: 12px;
-    border-bottom: 3px solid var(--primary-red); /* লাল বর্ডার */
-    display: inline-block;
-    position: relative;
-    overflow: hidden;
-    width: 100%; /* যদি আপনি চান আন্ডারলাইনটি পুরো কন্টেইনার জুড়ে থাকুক */
-    text-align: center; /* হেডিং টেক্সটকে মাঝখানে রাখার জন্য */
-}
-
-h2 .icon {
-    margin-right: 18px;
-    color: var(--primary-red);
-    font-size: 1.4em; /* আইকনের সাইজ বাড়ানো হয়েছে */
-    animation: iconBounce 1s infinite alternate; /* আইকনে বাউন্স অ্যানিমেশন */
-    vertical-align: middle;
-}
-
-@keyframes iconBounce {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-5px); }
-}
-
-h3 {
-    color: var(--black);
-    font-size: 1.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
-    margin-top: 30px;
-    margin-bottom: 15px;
-    border-left: 5px solid var(--light-khaki);
-    padding-left: 15px;
-}
-
-p {
-    margin-bottom: 18px;
-    font-size: 1.15em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
-    line-height: 1.8;
-}
-
-a {
-    color: var(--primary-red);
-    text-decoration: none;
-    transition: color 0.3s ease, text-decoration 0.3s ease;
-}
-
-a:hover {
-    color: var(--dark-khaki);
-    text-decoration: underline;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.class-list li {
-    background-color: var(--light-gray);
-    margin-bottom: 10px;
-    padding: 15px 20px;
-    border-left: 6px solid var(--dark-khaki);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    font-size: 1.1em;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.class-list li:hover {
-    transform: translateX(5px);
-    background-color: #e0e6eb;
-}
-
-.check-icon {
-    color: #28a745; /* সবুজ টিক আইকন */
-    margin-right: 12px;
-    font-size: 1.2em;
-}
-
-.subject-combo strong {
-    color: var(--dark-khaki);
-}
-
-.uniform-description p, .uniform-description ul {
-    background-color: #fff8e1; /* হালকা হলুদ ব্যাকগ্রাউন্ড */
-    padding: 15px 25px;
-    border-radius: 10px;
-    border-left: 6px solid #FFC107; /* হলুদ বর্ডার */
-    margin-bottom: 15px;
-    font-style: italic;
-    color: #555;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.uniform-description .note {
-    font-size: 1em;
-    color: var(--medium-gray);
-    background: none;
-    border: none;
-    padding: 0;
-    margin-top: 20px;
-    font-style: normal;
-}
-
+.card{background:var(--card-bg);border-radius:15px;box-shadow:0 10px 30px var(--box-shadow-light);padding:25px 20px 30px;transition:transform .4s ease,box-shadow .4s ease;border-top:8px solid var(--dark-khaki);overflow:hidden;position:relative}
+.card:hover{transform:translateY(-10px);box-shadow:0 15px 40px var(--box-shadow-dark)}
+h2{color:var(--dark-khaki);font-size:2.5em;margin-bottom:25px;padding-bottom:12px;border-bottom:3px solid var(--primary-red);display:inline-block;position:relative;overflow:hidden;width:100%;text-align:center}
+h2 .icon{margin-right:18px;color:var(--primary-red);font-size:1.4em;animation:iconBounce 1s infinite alternate;vertical-align:middle}
+@keyframes iconBounce{0%{transform:translateY(0)}100%{transform:translateY(-5px)}}
+h3{color:var(--black);font-size:1.8em;margin:30px 0 15px;border-left:5px solid var(--light-khaki);padding-left:15px}
+p{margin-bottom:18px;font-size:1.15em;line-height:1.8}
+a{color:var(--primary-red);text-decoration:none;transition:color .3s ease,text-decoration .3s ease}
+a:hover{color:var(--dark-khaki);text-decoration:underline}
+ul{list-style:none;padding:0;margin:0}
+.class-list li{background-color:var(--light-gray);margin-bottom:10px;padding:15px 20px;border-left:6px solid var(--dark-khaki);border-radius:8px;display:flex;align-items:center;font-size:1.1em;box-shadow:0 3px 8px rgba(0,0,0,.08);transition:transform .2s ease,background-color .2s ease}
+.class-list li:hover{transform:translateX(5px);background-color:#e0e6eb}
+.check-icon{color:#28a745;margin-right:12px;font-size:1.2em}
+.subject-combo strong{color:var(--dark-khaki)}
+.uniform-description p,.uniform-description ul{background-color:#fff8e1;padding:15px 25px;border-radius:10px;border-left:6px solid #FFC107;margin-bottom:15px;font-style:italic;color:#555;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.uniform-description .note{font-size:1em;color:var(--medium-gray);background:none;border:none;padding:0;margin-top:20px;font-style:normal}
 /* Principal Section */
-.principal-message {
-    background: linear-gradient(135deg, #fefefe 0%, #fefefe 100%);
-    border-top: 8px solid var(--dark-khaki); /* বর্ডার */
-}
-
-/* এই অংশেই মূল পরিবর্তনগুলো করা হয়েছে */
-.principal-info {
-    display: flex;
-    flex-direction: column; /* ডিফল্ট: ছোট স্ক্রিনের জন্য কলাম লেআউট */
-    align-items: center;   /* ছোট স্ক্রিনে ছবি ও টেক্সটকে মাঝখানে রাখে */
-    text-align: center;    /* ছোট স্ক্রিনে টেক্সটকে মাঝখানে রাখে */
-    gap: 25px;             /* ছবি এবং টেক্সট ব্লক এর মধ্যে ব্যবধান */
-    width: 100%;
-}
-
-.principal-photo {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    object-fit: cover; /* ছবির অনুপাত ঠিক রেখে কন্টেইনার পূরণ করে */
-    /* object-position: center;  এটি সাধারণত ডিফল্ট, তবে প্রয়োজনে ব্যবহার করতে পারেন */
-    border: 5px solid var(--primary-red);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    flex-shrink: 0; /* ছোট স্ক্রিনে ছবিকে সংকুচিত হওয়া থেকে আটকায় */
-    margin-bottom: 15px; /* ছোট স্ক্রিনের জন্য ছবির নিচে মার্জিন */
-    margin-top: 25px; /* ছবির উপরের অংশে 25px ফাঁকা জায়গা */
-    /* নতুন অ্যানিমেশন যোগ করা হলো */
-    animation: principalPulse 2.5s infinite alternate ease-in-out;
-}
-
-@media (min-width: 768px) {
-    .principal-photo {
-        margin-right: 30px; /* ডেস্কটপে ছবির ডানদিকে ফাঁকা জায়গা (একটু বাড়ানো হয়েছে) */
-        margin-bottom: 0;   /* ডেস্কটপে ছবির নিচে অতিরিক্ত মার্জিন লাগবে না */
-        margin-top: 0;      /* ডেস্কটপে উপরের মার্জিন সাধারণত প্রয়োজন হয় না */
-    }
-}
-
-/* নতুন @keyframes অ্যানিমেশন principalPulse */
-@keyframes principalPulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(230, 57, 70, 0.7); /* প্রাথমিক শ্যাডো এবং বর্ডার গ্লো শুরু */
-    }
-    100% {
-        transform: scale(1.03); /* হালকা জুম ইন */
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 0 15px rgba(230, 57, 70, 0); /* শ্যাডো বাড়বে এবং বর্ডার গ্লো অদৃশ্য হবে */
-    }
-}
-
-.principal-text {
-    flex-grow: 1; /* অবশিষ্ট স্থান পূরণ করার জন্য */
-}
-
-.principal-text h3 {
-    margin-top: 0;
-    font-size: 1.5em;
-    color: var(--dark-khaki);
-    border-left: none; /* এই সেকশনের জন্য বর্ডার বাদ */
-    padding-left: 0;
-}
-
-.principal-text p {
-    font-size: 1.1em;
-    line-height: 1.7;
-    color: var(--black);
-}
+.principal-message{background:linear-gradient(135deg,#fefefe 0%,#fefefe 100%);border-top:8px solid var(--dark-khaki)}
+.principal-info{display:flex;flex-direction:column;align-items:center;text-align:center;gap:25px;width:100%}
+.principal-photo{width:180px;height:180px;border-radius:50%;object-fit:cover;border:5px solid var(--primary-red);box-shadow:0 8px 20px rgba(0,0,0,.2);flex-shrink:0;margin:25px 0 15px;animation:principalPulse 2.5s infinite alternate ease-in-out}
+@media (min-width: 768px){.principal-photo{margin:0 30px 0 0}}
+@keyframes principalPulse{0%{transform:scale(1);box-shadow:0 8px 20px rgba(0,0,0,.2),0 0 0 0 rgba(230,57,70,.7)}100%{transform:scale(1.03);box-shadow:0 12px 30px rgba(0,0,0,.3),0 0 0 15px rgba(230,57,70,0)}}
+.principal-text{flex-grow:1}
+.principal-text h3{margin-top:0;font-size:1.5em;color:var(--dark-khaki);border-left:none;padding-left:0}
+.principal-text p{font-size:1.1em;line-height:1.7;color:var(--black)}
 /* Quotes Section */
-.quotes {
-    background: linear-gradient(135deg, #e6f7ff 0%, #cceeff 100%); /* হালকা নীল ব্যাকগ্রাউন্ড */
-    border-top: 8px solid #007bff; /* নীল বর্ডার */
-}
-.quote-item {
-    margin-bottom: 25px;
-    padding: 20px;
-    border-left: 6px solid #0056b3; /* গাঢ় নীল বর্ডার */
-    background-color: #f0faff; /* আরও হালকা নীল */
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: background-color 0.3s ease;
-}
-.quote-item:hover {
-    background-color: #e3f2fd;
-}
-.quote-text {
-    font-size: 1.3em;
-    font-style: italic;
-    color: #444;
-    margin-bottom: 10px;
-}
-.quote-author {
-    text-align: right;
-    font-weight: 600;
-    color: var(--dark-khaki);
-    font-size: 1.1em;
-    margin-bottom: 5px;
-}
-.quote-english {
-    font-size: 1.1em;
-    color: #666;
-    margin-top: 10px;
-    border-top: 1px dashed #ccc;
-    padding-top: 10px;
-}
-.quote-author-english {
-    text-align: right;
-    font-weight: 400;
-    color: #888;
-    font-size: 0.95em;
-}
-
+.quotes{background:linear-gradient(135deg,#e6f7ff 0%,#cceeff 100%);border-top:8px solid #007bff}
+.quote-item{margin-bottom:25px;padding:20px;border-left:6px solid #0056b3;background-color:#f0faff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.08);transition:background-color .3s ease}
+.quote-item:hover{background-color:#e3f2fd}
+.quote-text{font-size:1.3em;font-style:italic;color:#444;margin-bottom:10px}
+.quote-author{text-align:right;font-weight:600;color:var(--dark-khaki);font-size:1.1em;margin-bottom:5px}
+.quote-english{font-size:1.1em;color:#666;margin-top:10px;border-top:1px dashed #ccc;padding-top:10px}
+.quote-author-english{text-align:right;font-weight:400;color:#888;font-size:.95em}
 /* Gallery Section */
-.gallery {
-    background: linear-gradient(135deg, #fdf6e3 0%, #fae6b5 100%); /* হালকা কমলা ব্যাকগ্রাউন্ড */
-    border-top: 8px solid var(--dark-khaki); /* কমলা বর্ডার */
-}
-
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmin(250px, 1fr)); /* ছবির গ্রিড */
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.gallery-image {
-    width: 100%;
-    height: 200px; /* ছবির উচ্চতা নির্দিষ্ট করা হয়েছে */
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
-    cursor: pointer; /* ক্লিকযোগ্য বোঝাতে কার্সার পরিবর্তন */
-}
-
-/* এই হোভার ইফেক্টটি আগের মতই থাকবে */
-.gallery-image:hover {
-    transform: scale(1.05) rotate(2deg); /* হোভারে জুম ও হালকা ঘোরানো */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    filter: brightness(1.1);
-}
-
-/* Fullscreen Overlay Styles (নতুন যোগ করা হয়েছে) */
-.fullscreen-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* কালচে ব্যাকগ্রাউন্ড */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* অন্যান্য সব কিছুর উপরে রাখতে */
-    opacity: 0; /* প্রাথমিকভাবে অদৃশ্য */
-    visibility: hidden; /* প্রাথমিকভাবে লুকানো */
-    transition: opacity 0.3s ease, visibility 0.3s ease; /* স্মুথ ট্রানজিশন */
-    cursor: pointer; /* ক্লিক করে বন্ধ করার জন্য কার্সার পরিবর্তন */
-}
-
-.fullscreen-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.fullscreen-overlay img {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain; /* ছবি পুরোটা দেখাবে, কাটবে না */
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-    transform: scale(0.8); /* অ্যানিমেশনের জন্য প্রাথমিকভাবে ছোট */
-    transition: transform 0.3s ease;
-}
-
-.fullscreen-overlay.active img {
-    transform: scale(1); /* ফুল স্ক্রিনে বড় হবে */
-}
-
+.gallery{background:linear-gradient(135deg,#fdf6e3 0%,#fae6b5 100%);border-top:8px solid var(--dark-khaki)}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin-top:20px}
+.gallery-image{width:100%;height:200px;object-fit:cover;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,.1);transition:transform .3s ease,box-shadow .3s ease,filter .3s ease;cursor:pointer}
+.gallery-image:hover{transform:scale(1.05) rotate(2deg);box-shadow:0 10px 25px rgba(0,0,0,.2);filter:brightness(1.1)}
+/* Fullscreen Overlay Styles */
+.fullscreen-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.9);display:flex;justify-content:center;align-items:center;z-index:9999;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;cursor:pointer}
+.fullscreen-overlay.active{opacity:1;visibility:visible}
+.fullscreen-overlay img{max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;box-shadow:0 0 20px rgba(255,255,255,.5);transform:scale(.8);transition:transform .3s ease}
+.fullscreen-overlay.active img{transform:scale(1)}
 /* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* ছোট স্ক্রিনে ছবির গ্রিড */
-    }
-    .gallery-image {
-        height: 150px;
-    }
-}
-
-@media (max-width: 480px) {
-    .gallery-grid {
-        grid-template-columns: 1fr; /* খুব ছোট স্ক্রিনে একটি কলামে দেখাবে */
-    }
-}
-
+@media (max-width: 768px){.gallery-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}.gallery-image{height:150px}}
+@media (max-width: 480px){.gallery-grid{grid-template-columns:1fr}}
 /* Contact Info Icons */
-.contact-info p .icon {
-    color: var(--primary-red);
-    margin-right: 12px;
-    font-size: 1.2em;
-}
-
-.blinking-text {
-    color: var(--primary-red); /* লাল ব্লিঙ্কিং টেক্সট */
-    font-weight: 700;
-    font-size: 1.2em;
-    animation: blink 1s infinite alternate; /* ব্লিঙ্কিং অ্যানিমেশন */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    padding: 10px;
-    border: 2px dashed var(--primary-red);
-    border-radius: 8px;
-}
-
-@keyframes blink {
-    0% { opacity: 1; }
-    100% { opacity: 0.4; }
-}
-
+.contact-info p .icon{color:var(--primary-red);margin-right:12px;font-size:1.2em}
+.blinking-text{color:var(--primary-red);font-weight:700;font-size:1.2em;animation:blink 1s infinite alternate;display:flex;align-items:center;justify-content:center;margin-top:20px;padding:10px;border:2px dashed var(--primary-red);border-radius:8px}
+@keyframes blink{0%{opacity:1}100%{opacity:.4}}
 /* Map Container */
-.map-container {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.map-container iframe {
-    width: 100%;
-    max-width: 900px;
-    height: 500px; /* ম্যাপের উচ্চতা বাড়ানো হয়েছে */
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    transition: all 0.4s ease;
-}
-
-.map-container iframe:hover {
-    transform: scale(1.01);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
-}
-
+.map-container{text-align:center;margin-top:30px}
+.map-container iframe{width:100%;max-width:900px;height:500px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,.15);transition:all .4s ease}
+.map-container iframe:hover{transform:scale(1.01);box-shadow:0 12px 25px rgba(0,0,0,.25)}
 /* Login Button */
-.login-button-container {
-    text-align: center;
-    margin: 60px auto;
-}
-
-.login-button {
-    display: inline-block;
-    background-color: var(--dark-khaki);
-    color: var(--white);
-    padding: 20px 45px; /* প্যাডিং বাড়ানো হয়েছে */
-    font-size: 1.8em; /* ফন্ট সাইজ বাড়ানো হয়েছে */
-    border-radius: 60px; /* গোলাকার বোতাম */
-    text-decoration: none;
-    transition: all 0.4s ease;
-    box-shadow: 0 10px 25px rgba(230, 57, 70, 0.5);
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-}
-
-.login-button:hover {
-    background-color: var(--accent-color); /* হোভার */
-    transform: translateY(-8px) scale(1.03); /* উপরে ওঠানো ও হালকা বড় হওয়া */
-    box-shadow: 0 15px 35px rgba(230, 57, 70, 0.7);
-}
-
-.login-button .fas {
-    margin-right: 15px;
-    font-size: 1em; /* আইকনের সাইজ */
-}
-
+.login-button-container{text-align:center;margin:60px auto}
+.login-button{display:inline-block;background-color:var(--dark-khaki);color:var(--white);padding:20px 45px;font-size:1.8em;border-radius:60px;text-decoration:none;transition:all .4s ease;box-shadow:0 10px 25px rgba(230,57,70,.5);font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+.login-button:hover{background-color:var(--accent-color);transform:translateY(-8px) scale(1.03);box-shadow:0 15px 35px rgba(230,57,70,.7)}
+.login-button .fas{margin-right:15px;font-size:1em}
 /* Footer */
-.main-footer {
-    background-color: var(--black);
-    color: var(--light-gray);
-    text-align: center;
-    padding: 30px 20px;
-    font-size: 1em;
-    margin-top: 50px;
-    border-top: 8px solid var(--dark-khaki); /* খয়েরি বর্ডার */
-    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.main-footer p {
-    margin: 8px 0;
-}
-
+.main-footer{background-color:var(--black);color:var(--light-gray);text-align:center;padding:30px 20px;font-size:1em;margin-top:50px;border-top:8px solid var(--dark-khaki);box-shadow:0 -4px 15px rgba(0,0,0,.2)}
+.main-footer p{margin:8px 0}
 /* Animations for Cards (Fade In Effect) */
-.animated-card {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInSlideUp var(--animation-duration) ease-out forwards;
-}
-
-.animated-card.fade-in { animation-delay: 0.1s; }
-.animated-card.fade-in.delay-1 { animation-delay: 0.3s; }
-.animated-card.fade-in.delay-2 { animation-delay: 0.5s; }
-.animated-card.fade-in.delay-3 { animation-delay: 0.7s; }
-.animated-card.fade-in.delay-4 { animation-delay: 0.9s; }
-.animated-card.fade-in.delay-5 { animation-delay: 1.1s; }
-.animated-card.fade-in.delay-6 { animation-delay: 1.3s; }
-.animated-card.fade-in.delay-7 { animation-delay: 1.5s; }
-
-@keyframes fadeInSlideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
+.animated-card{opacity:0;transform:translateY(20px);animation:fadeInSlideUp var(--animation-duration) ease-out forwards}
+.animated-card.fade-in{animation-delay:.1s}
+.animated-card.fade-in.delay-1{animation-delay:.3s}
+.animated-card.fade-in.delay-2{animation-delay:.5s}
+.animated-card.fade-in.delay-3{animation-delay:.7s}
+.animated-card.fade-in.delay-4{animation-delay:.9s}
+.animated-card.fade-in.delay-5{animation-delay:1.1s}
+.animated-card.fade-in.delay-6{animation-delay:1.3s}
+.animated-card.fade-in.delay-7{animation-delay:1.5s}
+@keyframes fadeInSlideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 /* Animated Button */
-.animated-button {
-    opacity: 0;
-    animation: fadeInScaleUp 1s ease-out forwards 1.8s; /* দেরিতে অ্যানিমেশন */
-}
-
-@keyframes fadeInScaleUp {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-}
-
+.animated-button{opacity:0;animation:fadeInScaleUp 1s ease-out forwards 1.8s}
+@keyframes fadeInScaleUp{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
 /* Responsive Design */
-@media (max-width: 1024px) {
-    .main-header h1 {
-        font-size: 3.0em;
-    }
-    .hero-section {
-        height: 450px;
-    }
-    .hero-overlay {
-        font-size: 2.5em;
-    }
-    .container {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 25px;
-    }
-    .card {
-        padding: 30px;
-    }
-    h2 {
-        font-size: 2.2em;
-    }
-    .principal-info {
-        flex-direction: column;
-        text-align: center;
-    }
-    .principal-photo {
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .main-header {
-        padding: 30px 15px;
-    }
-    .main-header h1 {
-        font-size: 2.0em;
-    }
-    .main-header .tagline {
-        font-size: 0.8em;
-    }
-    .main-header .slogan {
-        font-size: 1.0em;
-    }
-    .hero-section {
-        height: 400px;
-    }
-    .hero-overlay {
-        font-size: 2em;
-    }
-    .container {
-        grid-template-columns: 1fr; /* এক কলামে সব কার্ড */
-        padding: 15px;
-        gap: 25px;
-    }
-    
-    h2 {
-        font-size: 2em;
-        margin-bottom: 20px;
-    }
-    h3 {
-        font-size: 1.6em;
-    }
-    p {
-        font-size: 1.05em;
-    }
-    .principal-photo {
-        width: 150px;
-        height: 150px;
-    }
-    .principal-text h3 {
-        font-size: 1.8em;
-    }
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* ছোট স্ক্রিনে ছবির গ্রিড */
-    }
-    .gallery-image {
-        height: 150px;
-    }
-    .map-container iframe {
-        height: 400px;
-    }
-    .login-button {
-        padding: 16px 35px;
-        font-size: 1.6em;
-        width: 90%;
-        box-sizing: border-box;
-    }
-    .blinking-text {
-        font-size: 1.1em;
-        padding: 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-header h1 {
-        font-size: 1.4em;
-    }
-    .main-header .tagline {
-        font-size: 0.6em;
-    }
-    .main-header .slogan {
-        font-size: 0.8em;
-    }
-    .main-header .logo-container {
-    width: 100px;
-    height: 100px;
-    }
-    .main-header .logo-container::before,
-    .main-header .logo-container::after {
-    font-size: 2.2em;
-    }
-    .hero-section {
-        height: 350px;
-    }
-    .hero-overlay {
-        font-size: 1.6em;
-    }
-    h2 {
-        font-size: 1.7em;
-    }
-    .quote-text {
-        font-size: 1.1em;
-    }
-    .login-button {
-        font-size: 1.3em;
-        padding: 14px 25px;
-    }
-    .map-container iframe {
-        height: 300px;
-    }
-}
-
+@media (max-width: 1024px){.main-header h1{font-size:3em}.hero-section{height:450px}.hero-overlay{font-size:2.5em}.container{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px}.card{padding:30px}h2{font-size:2.2em}.principal-info{flex-direction:column;text-align:center}.principal-photo{margin-bottom:20px}}
+@media (max-width: 768px){.main-header{padding:30px 15px}.main-header h1{font-size:2em}.main-header .tagline{font-size:.8em}.main-header .slogan{font-size:1em}.hero-section{height:400px}.hero-overlay{font-size:2em}.container{grid-template-columns:1fr;padding:15px;gap:25px}h2{font-size:2em;margin-bottom:20px}h3{font-size:1.6em}p{font-size:1.05em}.principal-photo{width:150px;height:150px}.principal-text h3{font-size:1.8em}.gallery-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}.gallery-image{height:150px}.map-container iframe{height:400px}.login-button{padding:16px 35px;font-size:1.6em;width:90%;box-sizing:border-box}.blinking-text{font-size:1.1em;padding:8px}}
+@media (max-width: 480px){.main-header h1{font-size:1.4em}.main-header .tagline{font-size:.6em}.main-header .slogan{font-size:.8em}.main-header .logo-container{width:100px;height:100px}.main-header .logo-container::before,.main-header .logo-container::after{font-size:2.2em}.hero-section{height:350px}.hero-overlay{font-size:1.6em}h2{font-size:1.7em}.quote-text{font-size:1.1em}.login-button{font-size:1.3em;padding:14px 25px}.map-container iframe{height:300px}}
 /* Sparkling Emoji Effect */
-.slogan .sparkle-emoji {
-    animation: sparkle 1.5s infinite alternate; /* অ্যানিমেশন প্রপার্টি: 1.5 সেকেন্ড ধরে চলবে, বারবার হবে এবং একবার জ্বলে আবার নিভে যাবে */
-    display: inline-block; /* ইমোজিকে অ্যানিমেট করার জন্য */
-    transform: scale(1); /* প্রাথমিক স্কেল */
-    transition: transform 0.3s ease; /* মসৃণ ট্রানজিশনের জন্য */
-}
-
-@keyframes sparkle {
-    0% {
-        opacity: 0.5; /* হালকা স্বচ্ছতা */
-        text-shadow: 0 0 5px rgba(255, 255, 0, 0.7); /* হালকা হলুদ গ্লো */
-        transform: scale(1);
-    }
-    50% {
-        opacity: 1; /* সম্পূর্ণ অস্বচ্ছ */
-        text-shadow: 0 0 10px rgba(255, 255, 0, 0.9), /* উজ্জ্বল হলুদ গ্লো */
-                     0 0 20px rgba(255, 255, 200, 0.6); /* অতিরিক্ত উজ্জ্বলতা */
-        transform: scale(1.1); /* সামান্য জুম */
-    }
-    100% {
-        opacity: 0.5; /* আবার হালকা স্বচ্ছতা */
-        text-shadow: 0 0 5px rgba(255, 255, 0, 0.7); /* আবার হালকা হলুদ গ্লো */
-        transform: scale(1);
-    }
-}
-
-/* হোভার ইফেক্ট (ঐচ্ছিক): মাউস নিলে আরও উজ্জ্বল হবে */
-.slogan .sparkle-emoji:hover {
-    animation-play-state: paused; /* হোভার করলে অ্যানিমেশন থামবে না, বরং আরও উজ্জ্বল হবে */
-    opacity: 1;
-    text-shadow: 0 0 15px rgba(255, 255, 0, 1), 
-                 0 0 25px rgba(255, 255, 200, 0.8),
-                 0 0 35px rgba(255, 255, 255, 0.5);
-    transform: scale(1.2);
-        }
-
+.slogan .sparkle-emoji{animation:sparkle 1.5s infinite alternate;display:inline-block;transform:scale(1);transition:transform .3s ease}
+@keyframes sparkle{0%{opacity:.5;text-shadow:0 0 5px rgba(255,255,0,.7);transform:scale(1)}50%{opacity:1;text-shadow:0 0 10px rgba(255,255,0,.9),0 0 20px rgba(255,255,200,.6);transform:scale(1.1)}100%{opacity:.5;text-shadow:0 0 5px rgba(255,255,0,.7);transform:scale(1)}}
+.slogan .sparkle-emoji:hover{animation-play-state:paused;opacity:1;text-shadow:0 0 15px #ff0,0 0 25px rgba(255,255,200,.8),0 0 35px rgba(255,255,255,.5);transform:scale(1.2)}
 /* Important Links Section */
-.important-links {
-    /* আগের ব্যাকগ্রাউন্ড এবং বক্স-শ্যাডো ঠিক আছে */
-    background: linear-gradient(135deg, #fefefe 0%, #fefefe 100%);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-    border-left: none; /* সমগ্র সেকশনের বাম দিকের বর্ডার থাকবে না */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.important-links:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
-.important-links h2 {
-    /* শিরোনামের রঙ --primary-red হবে */
-    color: var(--dark-khaki); /* আপনার --primary-color (লাল) ব্যবহার করা হয়েছে */
-    font-size: 2em;
-    margin-bottom: 25px;
-    text-align: center;
-    position: relative;
-    border-bottom: none;
-    padding-bottom: 0px;
-}
-
-.important-links h2 .icon {
-    /* শিরোনামের বাম পাশের ইমোজির রঙ --primary-red হবে */
-    margin-right: 10px;
-    color: var(--primary-red); /* আপনার --primary-color (লাল) ব্যবহার করা হয়েছে */
-}
-
-.important-links h2::after {
-    content: '';
-    display: block;
-    width: 100%; /* এটি 100% রাখা আছে */
-    height: 3px;
-    background-color: var(--accent-color);
-    margin-top: 10px;
-    margin-left: 0;
-    margin-right: 0;
-    border-radius: 5px;
-}
-
-.links-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* 180px এর কম নয়, গ্রিড লেআউট */
-    gap: 20px; /* আইটেমগুলোর মধ্যে ব্যবধান */
-    justify-content: center;
-}
-
-.link-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    text-decoration: none; /* আন্ডারলাইন সরান */
-    color: var(--text-color); /* লিঙ্কের লেখার জন্য সাধারণ টেক্সট কালার */
-    font-weight: 600;
-    /* প্রতিটি লিঙ্কের বাম দিকে var(--dark-khaki) বর্ডার হবে */
-    border-left: 6px solid var(--dark-khaki); /* প্রতিটি লিঙ্কের বাম দিকের বর্ডার যোগ করা হয়েছে */
-}
-
-.link-item:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-    /* হোভারে হালকা রং পরিবর্তন - এটি ঠিক করা হয়েছে, আগেরটি ভুল প্রপার্টি ছিল */
-    background-color: var(--light-accent-color); /* আপনার থিমের হালকা অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে */
-}
-
+.important-links{background:linear-gradient(135deg,#fefefe 0%,#fefefe 100%);padding:30px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.1);margin-bottom:30px;border-left:none;transition:transform .3s ease,box-shadow .3s ease}
+.important-links:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(0,0,0,.15)}
+.important-links h2{color:var(--dark-khaki);font-size:2em;margin-bottom:25px;text-align:center;position:relative;border-bottom:0;padding-bottom:0}
+.important-links h2 .icon{margin-right:10px;color:var(--primary-red)}
+.important-links h2::after{content:'';display:block;width:100%;height:3px;background-color:var(--accent-color);margin-top:10px;border-radius:5px}
+.links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;justify-content:center}
+.link-item{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background-color:#f9f9f9;padding:15px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.08);transition:all .3s ease;text-decoration:none;color:var(--text-color);font-weight:600;border-left:6px solid var(--dark-khaki)}
+.link-item:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 8px 15px rgba(0,0,0,.15);background-color:var(--light-accent-color)}
 /* Icon Styling for Links */
-.link-item .link-icon {
-    font-size: 3em; /* আইকনের আকার */
-    /* আইকনের রঙ --primary-red হবে */
-    color: var(--primary-red); /* আপনার --primary-color (লাল) ব্যবহার করা হয়েছে */
-    margin-bottom: 10px;
-    transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.link-item:hover .link-icon {
-    transform: scale(1.1); /* হোভার করলে আইকন সামান্য বড় হবে */
-    /* হোভারে আইকনের রঙ পরিবর্তন - আগেরটি নির্দিষ্ট কালার ছিল, এখন থিম কালার */
-    color: var(--dark-khaki); /* আপনার অ্যাকসেন্ট কালার ব্যবহার করা হয়েছে */
-}
-
+.link-item .link-icon{font-size:3em;color:var(--primary-red);margin-bottom:10px;transition:transform .3s ease,color .3s ease}
+.link-item:hover .link-icon{transform:scale(1.1);color:var(--dark-khaki)}
 /* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-    .links-grid {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    }
-    .link-item .link-icon {
-        font-size: 2.5em; /* ছোট স্ক্রিনে আইকনের আকার */
-    }
-    .link-text {
-        font-size: 0.95em;
-    }
-}
-
-@media (max-width: 480px) {
-    .links-grid {
-        grid-template-columns: 1fr; /* খুব ছোট স্ক্রিনে একটি কলামে দেখাবে */
-    }
-}
-
+@media (max-width: 768px){.links-grid{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}.link-item .link-icon{font-size:2.5em}.link-text{font-size:.95em}}
+@media (max-width: 480px){.links-grid{grid-template-columns:1fr}}
 /* Top Login Button */
-.top-login-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: var(--primary-red);
-    color: var(--white);
-    padding: 6px 15px;
-    border: 1px solid var(--white);
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-    z-index: 1002; /* মেনু বারের উপরে থাকবে */
-    display: inline-block;
-    white-space: nowrap;
-}
-
-.top-login-button:hover {
-    background-color: var(--accent-color);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-    border-color: var(--light-gray);
-}
-
+.top-login-button{position:absolute;top:20px;right:20px;background-color:var(--primary-red);color:var(--white);padding:6px 15px;border:1px solid var(--white);border-radius:5px;text-decoration:none;font-weight:600;font-size:.9em;transition:background-color .3s ease,transform .3s ease,box-shadow .3s ease;box-shadow:0 3px 8px rgba(0,0,0,.25);z-index:1002;display:inline-block;white-space:nowrap}
+.top-login-button:hover{background-color:var(--accent-color);transform:translateY(-2px) scale(1.02);box-shadow:0 6px 15px rgba(0,0,0,.4);border-color:var(--light-gray)}
 /* Media Queries for Top Login Button */
-@media (max-width: 768px) {
-    .top-login-button {
-        top: 15px;
-        right: 15px;
-        padding: 4px 12px;
-        font-size: 0.8em;
-    }
-}
-
-@media (max-width: 480px) {
-    .top-login-button {
-        top: 10px;
-        right: 10px;
-        padding: 3px 10px;
-        font-size: 0.75em;
-    }
-}
-
+@media (max-width: 768px){.top-login-button{top:15px;right:15px;padding:4px 12px;font-size:.8em}}
+@media (max-width: 480px){.top-login-button{top:10px;right:10px;padding:3px 10px;font-size:.75em}}
 /* Styles for the menu button itself */
-.menu-button {
-    background-color: #FF5733; /* Example background */
-    color: #FFFFFF; /* White icon color for contrast */
-    border: 2px solid #FF5733; /* Border matching background for cleaner look */
-    padding: 10px 12px;
-    width: 40px; /* একটি নির্দিষ্ট প্রস্থ দিতে পারেন যাতে এটি একটি বর্গাকার বা বৃত্তাকার হয় */
-    height: 40px; /* একটি নির্দিষ্ট উচ্চতা দিতে পারেন */
-    border-radius: 50%; /* Make it circular for a modern, distinct look */
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    justify-content: center; /* আইকনটিকে অনুভূমিকভাবে কেন্দ্রীভূত করবে */
-    align-items: center;     /* আইকনটিকে উল্লম্বভাবে কেন্দ্রীভূত করবে */
-    position: relative; /* If you want to position it specifically in header */
-    z-index: 1001; /* Ensure button is clickable above the overlay when closed */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); /* Adds depth, makes it pop */
-    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover */
-}
-/* Ensure the Font Awesome icon inside the button inherits color */
-.menu-button i {
-    color: inherit; /* Icon color will be white from .menu-button */
-}
-
-/* Add an optional subtle animation if you like for the icon itself */
-.menu-button i {
-    transition: transform 0.3s ease;
-}
-
-.menu-button:hover i {
-    transform: rotate(90deg); /* Optional: Rotate icon on hover */
-}
-.menu-button:hover {
-    background-color: #E64A19; /* Darker orange on hover */
-    border-color: #E64A19;
-    transform: scale(1.05); /* Slightly enlarge on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35); /* More prominent shadow on hover */
-}
-.menu-button:active {
-    background-color: #BF360C; /* Even darker on click for tactile feedback */
-    border-color: #BF360C;
-    transform: scale(0.98); /* Slightly shrink on active state */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Smaller shadow on active */
-}
+.menu-button{background-color:#FF5733;color:#FFF;border:2px solid #FF5733;padding:10px 12px;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;justify-content:center;align-items:center;position:relative;z-index:1001;box-shadow:0 4px 8px rgba(0,0,0,.25);transition:background-color .3s ease,border-color .3s ease,transform .3s ease,box-shadow .3s ease}
+.menu-button i{color:inherit;transition:transform .3s ease}
+.menu-button:hover i{transform:rotate(90deg)}
+.menu-button:hover{background-color:#E64A19;border-color:#E64A19;transform:scale(1.05);box-shadow:0 6px 12px rgba(0,0,0,.35)}
+.menu-button:active{background-color:#BF360C;border-color:#BF360C;transform:scale(.98);box-shadow:0 2px 4px rgba(0,0,0,.2)}
 /* Ensure header-buttons has a position context for the button */
-.header-buttons {
-   position: fixed; /* Or fixed, depending on where you want it visually */
-    top: 10px; /* Adjust as needed for padding from top */
-    left: 20px; /* Adjust as needed for padding from left */
-    z-index: 1001; /* Must be higher than overlay */
-}
-
+.header-buttons{position:fixed;top:10px;left:20px;z-index:1001}
 /* Media Queries for Menu Button */
-@media (max-width: 768px) {
-    .menu-button {
-        top: 15px;
-        left: 15px;
-        padding: 6px 12px;
-        font-size: 0.8em;
-    }
-    .main-header {
-        padding-left: 70px;
-        padding-right: 70px;
-    }
-}
-
-@media (max-width: 480px) {
-    .menu-button {
-        top: 10px;
-        left: 10px;
-        padding: 5px 10px;
-        font-size: 0.75em;
-    }
-    .main-header {
-        padding-left: 60px;
-        padding-right: 60px;
-    }
-}
-
+@media (max-width: 768px){.menu-button{top:15px;left:15px;padding:6px 12px;font-size:.8em}.main-header{padding-left:70px;padding-right:70px}}
+@media (max-width: 480px){.menu-button{top:10px;left:10px;padding:5px 10px;font-size:.75em}.main-header{padding-left:60px;padding-right:60px}}
+@media (max-width: 480px){.menu-button{top:10px;left:10px;padding:5px 10px;font-size:.75em}.main-header{padding-left:60px;padding-right:60px}}
 /* Sidebar Menu Styles */
-.sidebar-menu {
-    position: fixed; /* Fixed position so it overlays content */
-    top: 0;
-    left: -320px; /* Initially off-screen to the left (adjust based on your desired width) */
-    width: 300px; /* Width of your sidebar */
-    height: 100%; /* Full height of the viewport */
-    background: linear-gradient(to bottom, #E6FFE6, #FFF0F5); /* Background color of the sidebar */
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4); /* Shadow for depth */
-    transition: left 0.4s ease-in-out; /* Smooth transition for opening/closing */
-    z-index: 1000; /* High z-index to be above all content (and overlay) */
-    overflow-y: auto; /* Enable vertical scrolling if content overflows */
-    padding-top: 20px; /* Space from the top */
-    display: flex; /* For vertical alignment of links */
-    flex-direction: column; /* Stack links vertically */
-    /* Add any other styling for the sidebar links here */
-}
-.sidebar-menu.active {
-    left: 0; /* Moves the sidebar into view when active */
-}
-.sidebar-menu a {
-    padding: 15px 20px;
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
-    display: block; /* Make links take full width */
-    transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.3s ease; /* Smooth transition for hover effects */
-    border-bottom: 1px solid #eee; /* Separator between links */
-}
-    /* লেখার চারপাশে সাদা বর্ডার যোগ করতে text-shadow ব্যবহার করুন */
-    text-shadow:
-        -1px -1px 0 var(--white),  /* উপরের বামে */
-        1px -1px 0 var(--white),   /* উপরের ডানে */
-        -1px 1px 0 var(--white),   /* নিচের বামে */
-        1px 1px 0 var(--white);    /* নিচের ডানে */
-}
-
-.sidebar-menu a:hover {
-    background-color: #E0FFFF; /* A light blue background on hover */
-    color: #0056b3; /* Darker blue text color on hover */
-    padding-left: 25px; /* Slight indent on hover for visual feedback */
-}
-.sidebar-menu a:active {
-    background-color: #007bff; /* Bright Blue */
-    color: #FFFFFF; /* White text on click */
-}
-.sidebar-menu a.active-link {
-    background-color: #00008B;
-    color: white;
-    font-weight: bold;
-}
-    .sidebar-menu a:last-child {
-    border-bottom: 2px solid #ccc; /* Ensure it has a border if you want it */
-    margin-bottom: 10px; /* Small margin to push it slightly from the bottom of the menu */
-    }
-}
-section[id] {
-    scroll-margin-top: 320px;
-}
+.sidebar-menu{position:fixed;top:0;left:-320px;width:300px;height:100%;background:linear-gradient(to bottom,#E6FFE6,#FFF0F5);box-shadow:2px 0 10px rgba(0,0,0,.4);transition:left .4s ease-in-out;z-index:1000;overflow-y:auto;padding-top:20px;display:flex;flex-direction:column}
+.sidebar-menu.active{left:0}
+.sidebar-menu a{padding:15px 20px;text-decoration:none;color:#333;font-size:16px;display:block;transition:background-color .3s ease,color .3s ease,padding-left .3s ease;border-bottom:1px solid #eee;text-shadow:-1px -1px 0 var(--white),1px -1px 0 var(--white),-1px 1px 0 var(--white),1px 1px 0 var(--white)}
+.sidebar-menu a:hover{background-color:#E0FFFF;color:#0056b3;padding-left:25px}
+.sidebar-menu a:active{background-color:#007bff;color:#FFF}
+.sidebar-menu a.active-link{background-color:#00008B;color:white;font-weight:bold}
+.sidebar-menu a:last-child{border-bottom:2px solid #ccc;margin-bottom:10px}
+section[id]{scroll-margin-top:320px}
 /* Overlay for when the sidebar is open */
-.overlay {
-    position: fixed; /* Fixed position to cover the entire viewport */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
-    z-index: 999; /* Lower than sidebar (1000), but above main content */
-    opacity: 0; /* Initially invisible */
-    visibility: hidden; /* Hidden from screen readers and interactions */
-    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out; /* Smooth fade effect */
-}
-
-.overlay.active {
-    opacity: 1; /* Fully visible when active */
-    visibility: visible; /* Make it interactive */
-}
-
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);z-index:999;opacity:0;visibility:hidden;transition:opacity .4s ease-in-out,visibility .4s ease-in-out}
+.overlay.active{opacity:1;visibility:visible}
 /* More..., Less... বোটাম তৈরি */
-.section-content-wrapper {
-    max-height: 180px; /* সেকশনের প্রাথমিক উচ্চতা বাড়ানো হয়েছে (আগে ছিল 120px) */
-    overflow: hidden;
-    position: relative;
-    transition: max-height 0.5s ease-out; /* প্রসারণ/সংকোচনের জন্য মসৃণ ট্রানজিশন */
-    padding-bottom: 30px; /* Fade প্রভাবের জন্য স্থান */
-}
-
-.section-content-wrapper.expanded {
-    max-height: fit-content; /* সম্পূর্ণ বিষয়বস্তু দেখানোর অনুমতি দেয় */
-    max-height: 1500px; /* যথেষ্ট বড় মান যাতে সমস্ত বিষয়বস্তু ধরে (আপনি প্রয়োজন অনুযায়ী এটি সামঞ্জস্য করতে পারেন) */
-    padding-bottom: 0;
-}
-
-.section-content-wrapper::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50px; /* Fade প্রভাবের উচ্চতা */
-    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
-    pointer-events: none; /* ক্লিককে এর মাধ্যমে যেতে দেয় */
-}
-
-.section-content-wrapper.expanded::after {
-    display: none; /* যখন প্রসারিত হয় তখন Fade প্রভাব লুকানো হয় */
-}
-
+.section-content-wrapper{max-height:180px;overflow:hidden;position:relative;transition:max-height .5s ease-out;padding-bottom:30px}
+.section-content-wrapper.expanded{max-height:1500px;padding-bottom:0}
+.section-content-wrapper::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:50px;background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,1));pointer-events:none}
+.section-content-wrapper.expanded::after{display:none}
 /* Toggle Button Styling */
-.toggle-button {
-    display: block;
-    width: fit-content;
-    margin: 15px auto 0;
-    padding: 4px 8px; /* বোতামের প্যাডিং কমানো হয়েছে (আগে ছিল 8px 15px) */
-    background-color: #4CAF50; /* "More..." এর জন্য সবুজ রঙ */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.85rem; /* ফন্ট সাইজ কমানো হয়েছে (আগে ছিল 1rem) */
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-}
-
-.toggle-button:hover {
-    background-color: #45a049;
-}
-
-.toggle-button.less-btn {
-    background-color: #f44336; /* "Less..." এর জন্য লাল রঙ */
-}
-
-.toggle-button.less-btn:hover {
-    background-color: #da190b;
-}
+.toggle-button{display:block;width:fit-content;margin:15px auto 0;padding:4px 8px;background-color:#4CAF50;color:white;border:none;border-radius:5px;cursor:pointer;font-size:.85rem;font-weight:600;transition:background-color .3s ease}
+.toggle-button:hover{background-color:#45a049}
+.toggle-button.less-btn{background-color:#f44336}
+.toggle-button.less-btn:hover{background-color:#da190b}
 /* শীঘ্রই উপলব্ধ বার্তা */
-.avail-msg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px; /* আইকন এবং টেক্সটের মধ্যে ফাঁকা স্থান */
-  
-  font-family: 'Arial', sans-serif;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-  
-  background: linear-gradient(45deg, #ff4e50, #fc913a); /* আকর্ষণীয় গ্রেডিয়েন্ট */
-  border-radius: 10px;
-  padding: 15px 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  
-  margin: 20px auto;
-  max-width: fit-content;
-  
-  animation: pulse 1.5s infinite ease-in-out; /* পালস অ্যানিমেশন যোগ করা হয়েছে */
-}
-
+.avail-msg{display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Arial',sans-serif;font-size:1.2rem;font-weight:bold;color:#fff;text-shadow:1px 1px 2px rgba(0,0,0,.4);background:linear-gradient(45deg,#ff4e50,#fc913a);border-radius:10px;padding:15px 30px;box-shadow:0 4px 8px rgba(0,0,0,.2);margin:20px auto;max-width:fit-content;animation:pulse 1.5s infinite ease-in-out}
 /* পালস অ্যানিমেশনের কীফ্রেম */
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05); /* হালকা বড় হবে */
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
 /* New ব্যাজের স্টাইল */
-.new-badge {
-    background: linear-gradient(45deg, #ff4500, #0047ab, #ff007f, #ffd700); /* উজ্জ্বল গ্রেডিয়েন্ট */
-    background-size: 400% 400%;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: 700;
-    margin-left: 6px;
-    display: inline-block;
-    text-transform: uppercase;
-    letter-spacing: 0.5px; /* অক্ষরের মধ্যে সামান্য ব্যবধান */
-    text-transform: uppercase; /* পাঠ্যকে বড় হাতের অক্ষরে রূপান্তর */
-    box-shadow: 0 0 15px rgba(255, 69, 0, 0.9), 0 0 25px rgba(255, 136, 0, 0.7);
-    animation: colorShift 4s linear infinite, pulseGlow 1.2s infinite alternate ease-in-out, floatUp 2s infinite ease-in-out;
-}
-
+.new-badge{background:linear-gradient(45deg,#ff4500,#0047ab,#ff007f,#ffd700);background-size:400% 400%;color:white;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-left:6px;display:inline-block;text-transform:uppercase;letter-spacing:.5px;box-shadow:0 0 15px rgba(255,69,0,.9),0 0 25px rgba(255,136,0,.7);animation:colorShift 4s linear infinite,pulseGlow 1.2s infinite alternate ease-in-out,floatUp 2s infinite ease-in-out}
 /* 🎨 রঙ পরিবর্তনের অ্যানিমেশন */
-@keyframes colorShift {
-    0% {
-        background-position: 0% 50%;
-    }
-    25% {
-        background-position: 100% 50%;
-    }
-    50% {
-        background-position: 0% 50%;
-    }
-    75% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
+@keyframes colorShift{0%,50%,100%{background-position:0% 50%}25%,75%{background-position:100% 50%}}
 /* 💫 আলো ঝলমল পালস */
-@keyframes pulseGlow {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 0 0 20px rgba(0, 71, 171, 0.6);
-    }
-    100% {
-        transform: scale(1.15);
-        box-shadow: 0 0 25px rgba(255, 0, 127, 1), 0 0 45px rgba(255, 215, 0, 0.9);
-    }
-}
-
+@keyframes pulseGlow{0%{transform:scale(1);box-shadow:0 0 10px rgba(255,69,0,.8),0 0 20px rgba(0,71,171,.6)}100%{transform:scale(1.15);box-shadow:0 0 25px rgba(255,0,127,1),0 0 45px rgba(255,215,0,.9)}}
 /* ☁️ হালকা ভাসমান ইফেক্ট */
-@keyframes floatUp {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-3px);
-    }
-}
-
+@keyframes floatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 /* 📌 স্ক্রল বারের জন্য কাস্টম স্টাইল (Webkit Browsers: Chrome, Safari, Edge) */
-
-body::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-}
-
-body::-webkit-scrollbar-track {
-    background: var(--light-gray);
-    border-radius: 10px;
-    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1);
-}
-
-body::-webkit-scrollbar-thumb {
-    background-color: var(--primary-red);
-    border-radius: 10px;
-    border: 3px solid var(--light-gray);
-    transition: background-color 0.3s ease;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-    background-color: var(--dark-khaki);
-}
-
-body {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-red) var(--light-gray);
-}
-
+body::-webkit-scrollbar{width:12px;height:12px}
+body::-webkit-scrollbar-track{background:var(--light-gray);border-radius:10px;box-shadow:inset 0 0 4px rgba(0,0,0,.1)}
+body::-webkit-scrollbar-thumb{background-color:var(--primary-red);border-radius:10px;border:3px solid var(--light-gray);transition:background-color .3s ease}
+body::-webkit-scrollbar-thumb:hover{background-color:var(--dark-khaki)}
+body{scrollbar-width:thin;scrollbar-color:var(--primary-red) var(--light-gray)}
 /* ✅ স্ক্রলিং টেক্সট */
-.scrolling-line-container {
-    width: 100%;
-    overflow: hidden;
-    padding: 10px 0px 0px 0px;   /* ✅ পরিবর্তন: উপরে 10px, ডানে 0px, নিচে 0px, বামে 0px */
-    position: relative;
-}
-
-.scrolling-wrapper {
-    display: flex;
-    width: max-content;
-    flex-shrink: 0;
-    animation: scrollText 30s linear infinite; 
-    white-space: nowrap;
-    font-size: 1.2em;
-    color: var(--dark-khaki);
-    font-weight: 900;
-}
-
-@keyframes scrollText {
-    from { transform: translateX(10%); }
-    to { transform: translateX(-90%); } 
-}
-
+.scrolling-line-container{width:100%;overflow:hidden;padding:10px 0 0 0;position:relative}
+.scrolling-wrapper{display:flex;width:max-content;flex-shrink:0;animation:scrollText 30s linear infinite;white-space:nowrap;font-size:1.2em;color:var(--dark-khaki);font-weight:900}
+@keyframes scrollText{from{transform:translateX(10%)}to{transform:translateX(-90%)}}
 /* ✅ হোভার করলে থেমে যাবে */
-.scrolling-line-container:hover .scrolling-wrapper {
-    animation-play-state: paused;
-}
-
+.scrolling-line-container:hover .scrolling-wrapper{animation-play-state:paused}
 /* 📱 মোবাইলের জন্য */
-@media (max-width: 768px) {
-    .scrolling-wrapper {
-        animation: scrollText 35s linear infinite; /* মোবাইলে মসৃণতার জন্য সময় বাড়ানো হলো */
-        font-size: 1em; /* ফন্ট সাইজ ছোট করা হলো */
-    }
-}
-
+@media (max-width: 768px){.scrolling-wrapper{animation:scrollText 35s linear infinite;font-size:1em}}
 /* ===================================== */
 /* 🎨 নোটিশ পপ-আপের জন্য রেসপনসিভ CSS (সংশোধিত) */
 /* ===================================== */
-#notice-popup {
-    /* 1. প্রস্থের স্টাইল (আপনার আগের কোড) */
-    width: 300px; 
-
-    /* 2. ⭐ মূল ফিক্স: উচ্চতা ও স্ক্রলিং যোগ করা ⭐ */
-    position: fixed; /* নিশ্চিত করার জন্য যে এটি স্ক্রিনের সাথে স্থির থাকবে */
-    max-height: 90vh; /* Viewport Height-এর 90% এর বেশি হবে না */
-    overflow-y: auto; /* কনটেন্ট বেশি হলে উল্লম্ব স্ক্রলবার দেখাবে */
-    
-    /* 3. প্যাডিং (ঐচ্ছিক): যাতে একদম উপরে বা নিচে আটকে না যায় */
-    padding: 20px 20px 20px 20px !important; 
-    box-sizing: border-box; /* padding যাতে width/max-width এর মধ্যে থাকে */
-}
-
+#notice-popup{width:300px;position:fixed;max-height:90vh;overflow-y:auto;padding:20px !important;box-sizing:border-box}
 /* 💻 বড়ো স্ক্রিন (যেমন 601px বা তার বেশি স্ক্রিনের জন্য) */
-@media (min-width: 601px) {
-    #notice-popup {
-        width: 500px;
-        max-width: 60%;
-    }
-}
-
+@media (min-width: 601px){#notice-popup{width:500px;max-width:60%}}
 /* 🖥️ অতিরিক্ত বড়ো স্ক্রিনের জন্য (ঐচ্ছিক: যেমন 1024px বা তার বেশি) */
-@media (min-width: 1024px) {
-    #notice-popup {
-        width: 650px;
-        max-width: 50%;
-    }
-}
+@media (min-width: 1024px){#notice-popup{width:650px;max-width:50%}}
