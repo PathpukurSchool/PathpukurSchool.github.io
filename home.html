@@ -133,9 +133,15 @@
 		
         <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
         <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
+		<li><a href="#" onclick="toggleDarkMode()" class="logout-button">🌙 Dark Mode</a></li>
     </ul>
 </nav>
 
+	   <script>
+       function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+}
+    </script>
 	  <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য  --->
 <div class="main-section-container" id="marks-information-section">
     <div class="section-heading-wrapper">
