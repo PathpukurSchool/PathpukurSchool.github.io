@@ -133,15 +133,27 @@
 		
         <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
         <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
-		<li><a href="#" onclick="toggleDarkMode()" class="logout-button">🌙 Dark Mode</a></li>
+		<li><a href="#" onclick="toggleDarkMode()" class="logout-button">🌙 Dark/☀️ Light Mode</a></li>
     </ul>
 </nav>
 
-	   <script>
-       function toggleDarkMode() {
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+    }
+});
+
+function toggleTheme() {
     document.body.classList.toggle("dark-mode");
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
 }
-    </script>
+</script>
 	  <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য  --->
 <div class="main-section-container" id="marks-information-section">
     <div class="section-heading-wrapper">
