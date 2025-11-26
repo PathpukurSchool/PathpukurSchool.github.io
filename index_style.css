@@ -202,7 +202,7 @@ h2{font-size:2.2em}
 }
 @media (min-width: 1024px) {
 #notice-popup {width: 650px;max-width: 50%;}
-.school-header {font-size: 24px;}
+.notice-popup-box .school-header {font-size: 24px;}
 }
 @media (max-width: 768px){
 .gallery-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
@@ -231,8 +231,8 @@ p{font-size:1.05em}
 .menu-button{top:15px;left:15px;padding:6px 12px;font-size:.8em}
 }
 @media (min-width: 601px) {
-#notice-popup{width:500px;max-width:70%;padding:15px !important}
-.school-header {font-size: 22px;}
+#notice-popup{width:600px;max-width:60%;}
+.notice-popup-box .school-header {font-size: 22px;}
 }
 @media (max-width: 480px){
 .links-grid{grid-template-columns:1fr}
