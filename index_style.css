@@ -199,6 +199,8 @@ section[id]{scroll-margin-top:320px}
 h2{font-size:2.2em}
 .principal-info{flex-direction:column;text-align:center}
 .principal-photo{margin-bottom:20px}
+}
+@media (min-width: 1024px) {
 #notice-popup {width: 650px;max-width: 50%;}
 .school-header {font-size: 24px;}
 }
@@ -228,7 +230,7 @@ p{font-size:1.05em}
 .top-login-button{top:15px;right:15px;padding:4px 12px;font-size:.8em}
 .menu-button{top:15px;left:15px;padding:6px 12px;font-size:.8em}
 }
-@media (max-width: 601px){
+@media (min-width: 601px) {
 #notice-popup{width:500px;max-width:70%;padding:15px !important}
 .school-header {font-size: 22px;}
 }
