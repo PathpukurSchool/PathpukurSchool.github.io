@@ -18,6 +18,63 @@
      --hover-bg: #f8f9fa;
 }
 
+/* ===========================================
+   🌙 DARK MODE THEME (class="dark-mode" হলে সক্রিয়)
+=========================================== */
+.dark-mode {
+    --primary-color: #2ecc71;           /* slightly brighter green */
+    --secondary-color: #ffa726;
+    --background-color: #121212;        /* main background */
+    --card-background: #1e1e1e;         /* card / box background */
+    --text-color-dark: #e0e0e0;         /* normal text */
+    --text-color-light: #bdbdbd;        /* light text */
+    --border-color: #333;
+    --link-color: #64b5f6;              /* link color */
+    --hover-bg: #1f1f1f;
+}
+
+/* কার্ড, বক্স, হেডার ইত্যাদি Dark Mode এর সাথে মানিয়ে নেবে */
+.dark-mode body {
+    background-color: var(--background-color);
+    color: var(--text-color-dark);
+}
+
+.dark-mode .shaded-info-box {
+    background-color: var(--card-background);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+}
+
+.dark-mode .main-header {
+    background-color: var(--primary-color);
+}
+
+.dark-mode .sidebar-menu {
+    background-color: #1a1a1a;
+}
+
+.dark-mode .nav-link:hover,
+.dark-mode .nav-link.active-link {
+    background-color: #333;
+}
+
+/* Popup Dark Theme */
+.dark-mode .popup-content {
+    background: #1f1f1f;
+    color: var(--text-color-dark);
+    border-color: #444;
+}
+
+.dark-mode .notice-title {
+    background-color: #2ecc71;
+    color: #000;
+}
+
+.dark-mode .notice-subject {
+    background-color: #2f3e2f;
+    color: #bbffbb;
+}
+
+
 /* ================================================= */
 /* বেসিক রিসেট (CSS2)              */
 /* ================================================= */
