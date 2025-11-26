@@ -18,62 +18,95 @@
      --hover-bg: #f8f9fa;
 }
 
-/* ===========================================
-   🌙 DARK MODE THEME (class="dark-mode" হলে সক্রিয়)
-=========================================== */
-.dark-mode {
-    --primary-color: #2ecc71;           /* slightly brighter green */
-    --secondary-color: #ffa726;
-    --background-color: #121212;        /* main background */
-    --card-background: #1e1e1e;         /* card / box background */
-    --text-color-dark: #e0e0e0;         /* normal text */
-    --text-color-light: #bdbdbd;        /* light text */
-    --border-color: #333;
-    --link-color: #64b5f6;              /* link color */
-    --hover-bg: #1f1f1f;
+/* ================================================= */
+/* ডার্ক মোড ভ্যারিয়েবল এবং স্টাইলসমূহ */
+/* ================================================= */
+
+/* ডার্ক মোডের জন্য নতুন ভেরিয়েবল সেট */
+/* যখন body-তে .dark-mode ক্লাস যুক্ত হবে */
+body.dark-mode {
+    --primary-color: #8fbc8f; /* হালকা ফরেস্ট গ্রিন */
+    --secondary-color: #ffa726; /* হালকা অ্যাম্বার */
+    --background-color: #121212; /* গাঢ় ব্যাকগ্রাউন্ড */
+    --card-background: #1e1e1e; /* কার্ডের গাঢ় ব্যাকগ্রাউন্ড */
+    --text-color-dark: #e0e0e0; /* হালকা টেক্সট */
+    --text-color-light: #aaaaaa; /* হালকা ধূসর টেক্সট */
+    --border-color: #333333;
+    --hover-bg: #2a2a2a;
+    --popup-bg: #282828; /* পপআপের গাঢ় ব্যাকগ্রাউন্ড */
 }
 
-/* কার্ড, বক্স, হেডার ইত্যাদি Dark Mode এর সাথে মানিয়ে নেবে */
-.dark-mode body {
-    background-color: var(--background-color);
-    color: var(--text-color-dark);
+/* ডার্ক মোডের জন্য নির্দিষ্ট উপাদান স্টাইল */
+
+/* সাধারণ টেক্সট কালার পরিবর্তন */
+body.dark-mode {
+    color: var(--text-color-dark); /* সাধারণ টেক্সট গাঢ় মোডে পরিবর্তন */
 }
 
-.dark-mode .shaded-info-box {
+/* কার্ড, বক্স ও নোটিশ স্টাইল পরিবর্তন */
+body.dark-mode .shaded-info-box,
+body.dark-mode .notice-item {
     background-color: var(--card-background);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    border-left-color: var(--primary-color);
 }
 
-.dark-mode .main-header {
-    background-color: var(--primary-color);
+body.dark-mode .shaded-info-box:hover,
+body.dark-mode .notice-item:hover {
+    background-color: var(--hover-bg);
 }
 
-.dark-mode .sidebar-menu {
-    background-color: #1a1a1a;
+/* হেডার/ফুটার স্টাইল পরিবর্তন */
+body.dark-mode #top-bar-section,
+body.dark-mode footer {
+    background-color: #00382e; /* আরো গাঢ় প্রাইমারি কালার ব্যবহার করা হলো */
 }
 
-.dark-mode .nav-link:hover,
-.dark-mode .nav-link.active-link {
-    background-color: #333;
+/* লগইন বক্স স্টাইল */
+body.dark-mode #masterLoginBox {
+    background-color: #1e1e1e;
 }
 
-/* Popup Dark Theme */
-.dark-mode .popup-content {
-    background: #1f1f1f;
-    color: var(--text-color-dark);
-    border-color: #444;
+/* নোটিশ পপআপ স্টাইল (CSS1 এর .popup-content এর জন্য) */
+body.dark-mode .popup-content {
+    background: var(--popup-bg);
+    border: 2px solid #555;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
-.dark-mode .notice-title {
-    background-color: #2ecc71;
-    color: #000;
+body.dark-mode .school-header,
+body.dark-mode .notice-subject {
+    color: var(--primary-color);
+    background-color: #2a3a2a; /* গাঢ় ব্যাকগ্রাউন্ড */
 }
 
-.dark-mode .notice-subject {
-    background-color: #2f3e2f;
-    color: #bbffbb;
+body.dark-mode .notice-title {
+    background-color: #004d40; /* গাঢ় সবুজ */
+    color: #fff;
 }
 
+/* নোটিশ টেবিল */
+body.dark-mode #notice-table th {
+    background-color: #00382e;
+}
+
+/* নোটিশ হাইলাইট (New Notice Highlight) */
+body.dark-mode .new-notice-highlight {
+    background-color: #331f24 !important; /* গাঢ় গোলাপি */
+    border-color: #e74c3c !important; 
+    border-left-color: #e74c3c !important;
+}
+
+/* ডার্ক মোডে স্ক্রলবার স্টাইল (ঐচ্ছিক) */
+body.dark-mode::-webkit-scrollbar {
+    width: 10px;
+}
+body.dark-mode::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+body.dark-mode::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 5px;
+}
 
 /* ================================================= */
 /* বেসিক রিসেট (CSS2)              */
