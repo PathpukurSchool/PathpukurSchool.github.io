@@ -188,126 +188,118 @@
     </div>
 
     <script>
-        // ===================================
-        // ✅ NEW স্ট্যাটাস কন্ট্রোল প্যানেল লজিক
-        // ===================================
+    // ===================================
+    // ✅ NEW স্ট্যাটাস কন্ট্রোল প্যানেল লজিক
+    // ===================================
 
-        let NEW_STATUS_CONTROL = {};
+    let NEW_STATUS_CONTROL = {};
 
-        // LocalStorage-এ স্ট্যাটাস সেভ করার ফাংশন
-        function saveNewStatusControl() {
-            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
-            console.log("NEW Status saved to LocalStorage:", NEW_STATUS_CONTROL);
-            // ছোট একটি ভিজ্যুয়াল ফিডব্যাক দেওয়া যেতে পারে
-            const feedback = document.createElement('div');
-            feedback.textContent = 'স্ট্যাটাস সেভ করা হয়েছে!';
-            feedback.style.cssText = 'position: fixed; top: 10px; right: 10px; background-color: var(--success-color); color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999; opacity: 0; transition: opacity 0.5s;';
-            document.body.appendChild(feedback);
+    // LocalStorage-এ স্ট্যাটাস সেভ করার ফাংশন
+    function saveNewStatusControl() {
+        localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
+        alert('Status Saved Successfully! Refresh the main page (index.html) to see changes.');
+    }
+    
+    // LocalStorage থেকে স্ট্যাটাস লোড করা
+    function loadNewStatusControl() {
+        const storedStatus = localStorage.getItem('newStatusControl');
+        NEW_STATUS_CONTROL = storedStatus ? JSON.parse(storedStatus) : {};
+    }
 
-            setTimeout(() => {
-                feedback.style.opacity = 1;
-            }, 10);
+    // index_link.json থেকে শুধুমাত্র Students ও Forms ডেটা লোড করা
+    async function loadDynamicItems() {
+        try {
+            const response = await fetch('index_link.json');
+            if (!response.ok) throw new Error('Failed to load config.');
+            const data = await response.json();
             
-            setTimeout(() => {
-                feedback.style.opacity = 0;
-                feedback.addEventListener('transitionend', () => feedback.remove());
-            }, 2500);
+            // শুধুমাত্র Students এবং Forms ডেটা একসাথে করে, সেকশন নাম যোগ করা
+            const dynamicItems = [
+                // Students আইটেম যোগ করা
+                ...(data.students || []).map(item => ({ ...item, section: 'Students (index_link.json)' })),
+                // Forms আইটেম যোগ করা
+                ...(data.forms || []).map(item => ({ ...item, section: 'Forms (index_link.json)' }))
+            ];
+            return dynamicItems;
+
+        } catch (error) {
+            console.error("Failed to load dynamic item details:", error);
+            document.getElementById('new-animation-control-panel').innerHTML = 
+                '<p style="color: var(--error-color);">Error loading data. Check console for details.</p>';
+            return [];
+        }
+    }
+
+    // টগল পরিবর্তন হলে স্ট্যাটাস আপডেট করার ফাংশন
+    function handleToggleChange(title, isChecked) {
+        // সিঙ্গেল কোটেশন মার্ক যুক্ত টাইটেল হ্যান্ডেল করার জন্য replace করা
+        const itemTitle = title.replace(/\\'/g, "'"); 
+        NEW_STATUS_CONTROL[itemTitle] = isChecked;
+        saveNewStatusControl();
+    }
+
+    // কন্ট্রোল প্যানেল রেন্ডার করা
+    async function renderControlPanel() {
+        loadNewStatusControl();
+        const items = await loadDynamicItems();
+        const panelContainer = document.getElementById('new-animation-control-panel');
+        
+        if (items.length === 0) {
+            panelContainer.innerHTML = '<p>No Students or Forms items found in config.</p>';
+            return;
         }
 
-        // কন্ট্রোল প্যানেল রেন্ডার করার ফাংশন
-        function renderNewStatusControlPanel() {
-            const container = document.getElementById('new-animation-control-panel');
-            if (!container) return;
-
-            let html = `
-                <table class="control-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 70%;">Title</th>
-                            <th style="width: 30%; text-align: center;">NEW (ON/OFF)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            // বর্তমান স্ট্যাটাস থেকে টেবিলের row গুলো তৈরি
-            for (const title in NEW_STATUS_CONTROL) {
-                const isNew = NEW_STATUS_CONTROL[title];
-                const checked = isNew ? 'checked' : '';
-
-                html += `
+        let tableHTML = `
+            <p style="border-left: 4px solid var(--secondary-color); padding-left: 10px; margin-bottom: 20px;">
+                ⚠️ এখানে করা পরিবর্তনগুলি <strong>Students</strong> এবং <strong>Forms</strong> সেকশনের জন্য 'NEW' স্ট্যাটাস নিয়ন্ত্রণ করবে। এই স্ট্যাটাসটি হোমপেজের প্রধান **Marquee** ব্যানারকেও নিয়ন্ত্রণ করে।
+            </p>
+            <table class="control-table">
+                <thead>
                     <tr>
-                        <td>${title}</td>
-                        <td style="text-align: center;">
-                            <label class="switch">
-                                <input type="checkbox" data-title="${title}" ${checked} onchange="toggleNewStatus(this)">
-                                <span class="slider round"></span>
-                            </label>
-                        </td>
+                        <th>Link Title</th>
+                        <th>Section</th>
+                        <th>NEW Status (Toggle)</th>
                     </tr>
-                `;
-            }
+                </thead>
+                <tbody>
+        `;
 
-            html += `
-                    </tbody>
-                </table>
+        items.forEach(item => {
+            const title = item.title;
+            const section = item.section;
+            
+            // LocalStorage থেকে বর্তমান স্ট্যাটাস পড়া
+            const isNew = NEW_STATUS_CONTROL[title] !== undefined ? NEW_STATUS_CONTROL[title] : item.isNew === true;
+            
+            const checked = isNew ? 'checked' : '';
+            
+            // টাইটেল স্ট্রিং-এ সিঙ্গেল কোট থাকলে, টগল ফাংশনে পাঠানোর আগে সেটাকে এস্কেপ করা (e.g. O'Brien -> O\'Brien)
+            const escapedTitle = title.replace(/'/g, "\\'");
+
+            tableHTML += `
+                <tr>
+                    <td>${title}</td>
+                    <td>${section}</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" ${checked} onchange="handleToggleChange('${escapedTitle}', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                </tr>
             `;
-            container.innerHTML = html;
-        }
-
-        // স্লাইড বাটন টগল করার লজিক (গ্লোবাল ফাংশন হিসেবে সংজ্ঞায়িত)
-        window.toggleNewStatus = function(checkbox) {
-            const title = checkbox.getAttribute('data-title');
-            NEW_STATUS_CONTROL[title] = checkbox.checked;
-            saveNewStatusControl(); // পরিবর্তন LocalStorage এ সেভ করা হবে
-        };
-
-        // JSON ফাইল থেকে সব Title এবং ডিফল্ট স্ট্যাটাস লোড করা
-        async function loadAndInitializeControl() {
-            try {
-                // 'index_link.json' ফাইলটি লোড করা
-                const response = await fetch('index_link.json');
-                if (!response.ok) {
-                    throw new Error('index_link.json ফাইলটি লোড করা যায়নি। ফাইল পাথ নিশ্চিত করুন।');
-                }
-                const data = await response.json();
-                
-                // Students এবং Forms ডেটা একসাথে করা
-                const dynamicItems = [...(data.students || []), ...(data.forms || [])];
-                
-                const storedStatus = localStorage.getItem('newStatusControl');
-                let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
-
-                // JSON-এ থাকা সব আইটেম কন্ট্রোল অবজেক্টে যোগ করা বা আপডেট করা
-                dynamicItems.forEach(item => {
-                    const title = item.title;
-                    // যদি LocalStorage এ এই title না থাকে, তবে JSON থেকে ডিফল্ট (isNew: true/false) নেওয়া হবে
-                    if (newStatusControl[title] === undefined) {
-                         newStatusControl[title] = item.isNew === true; // JSON থেকে ডিফল্ট নেওয়া
-                    }
-                });
-                
-                NEW_STATUS_CONTROL = newStatusControl;
-                renderNewStatusControlPanel();
-
-            } catch (error) {
-                console.error("Error initializing control panel:", error);
-                const container = document.getElementById('new-animation-control-panel');
-                if (container) {
-                    container.innerHTML = `<p style="color: var(--error-color); font-weight: bold;">❌ Error: ${error.message}</p>`;
-                }
-            }
-        }
-
-
-        // ===================================
-        // DOMContentLoaded
-        // ===================================
-
-        document.addEventListener("DOMContentLoaded", () => {
-            // NEW স্ট্যাটাস কন্ট্রোল প্যানেল লোড করা
-            loadAndInitializeControl();
         });
-    </script>
+
+        tableHTML += `
+                </tbody>
+            </table>
+        `;
+
+        panelContainer.innerHTML = tableHTML;
+    }
+
+    // DOM লোড হওয়ার পর শুরু করা
+    document.addEventListener('DOMContentLoaded', renderControlPanel);
+</script>
 </body>
 </html>
