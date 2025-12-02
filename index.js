@@ -27,19 +27,21 @@ async function loadAllItemDetails() {
 
 // LocalStorage থেকে বা ডিফল্ট থেকে 'NEW' স্ট্যাটাস লোড করার লজিক
 async function initializeNewStatusControl() {
-    const baseData = await loadAllItemDetails(); 
-    const storedStatus = localStorage.getItem('newStatusControl');
-    let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
+    const baseData = await loadAllItemDetails(); 
+    const storedStatus = localStorage.getItem('newStatusControl');
+    let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
 
-    baseData.forEach(item => {
-        const title = item.title;
-        // যদি LocalStorage এ না থাকে, তবে JSON থেকে ডিফল্ট নেওয়া হবে
-        if (newStatusControl[title] === undefined) {
-             newStatusControl[title] = item.isNew === true;
-        }
-    });
-    
-    NEW_STATUS_CONTROL = newStatusControl;
+    // 💡 পরিবর্তন: LocalStorage-এ যাই থাকুক না কেন, সার্ভার থেকে আসা
+    //     JSON ডেটা দ্বারা নতুন স্ট্যাটাস ওভাররাইড করা হবে।
+    baseData.forEach(item => {
+        const title = item.title;
+        // সার্ভার থেকে আসা isNew স্ট্যাটাস দ্বারা LocalStorage স্ট্যাটাস সেট করা
+        newStatusControl[title] = item.isNew === true; 
+    });
+    
+    NEW_STATUS_CONTROL = newStatusControl;
+    // 💡 পরিবর্তন: গ্লোবাল ভেরিয়েবল আপডেট করার সাথে সাথে LocalStorage-এও সেভ করা
+    localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
 }
 
 // ===================================
@@ -135,29 +137,6 @@ async function fetchNotices() {
         const data = await response.json();
         Helping = Array.isArray(data.notices) ? data.notices : [];
         currentPage = 1; 
-        // ⭐ নতুন কোড: নোটিসগুলির স্ট্যাটাস LocalStorage-এ যোগ করা ⭐
-        let updatedStatusControl = { ...NEW_STATUS_CONTROL }; // বিদ্যমান স্ট্যাটাস কপি করা
-        let statusChanged = false;
-
-        Helping.forEach(notice => {
-            const title = notice.text;
-            const isNewFromSheet = notice.isNew === true; // Sheet থেকে আসা স্ট্যাটাস
-            
-            // যদি LocalStorage এ না থাকে, তবে Google Sheet এর স্ট্যাটাস নেওয়া হবে
-            if (updatedStatusControl[title] === undefined) {
-                updatedStatusControl[title] = isNewFromSheet;
-                statusChanged = true;
-            }
-        });
-        
-        NEW_STATUS_CONTROL = updatedStatusControl; // গ্লোবাল অবজেক্ট আপডেট করা
-        
-        // যদি নতুন কোনো আইটেম যোগ হয়, তবে LocalStorage-এ সেভ করা
-       if (statusChanged) {
-            localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
-            renderMarquee(); // ⭐ নতুন: LocalStorage আপডেট হলে Marquee আপডেট করা
-        }
-        // ⭐ নতুন কোড শেষ ⭐
         
         renderHelpList();
         updateMoreLessButton('important-links-section-notice'); 
