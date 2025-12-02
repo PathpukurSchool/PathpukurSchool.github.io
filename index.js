@@ -27,20 +27,39 @@ async function loadAllItemDetails() {
 
 // LocalStorage থেকে বা ডিফল্ট থেকে 'NEW' স্ট্যাটাস লোড করার লজিক
 async function initializeNewStatusControl() {
-    const baseData = await loadAllItemDetails(); 
-    const storedStatus = localStorage.getItem('newStatusControl');
-    let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
+    // 1. Students ও Forms-এর ডেটা লোড করা
+    const baseData = await loadAllItemDetails(); 
+    
+    // 2. Notices-এর ডেটা লোড করা (Google Sheet থেকে)
+    let noticesData = [];
+    try {
+        const noticeResponse = await fetch(APPS_SCRIPT_URL);
+        if (noticeResponse.ok) {
+            const data = await noticeResponse.json();
+            noticesData = Array.isArray(data.notices) ? data.notices : [];
+        }
+    } catch (error) {
+        console.error("Failed to fetch notices for initial status control:", error);
+    }
 
-    // 💡 পরিবর্তন: LocalStorage-এ যাই থাকুক না কেন, সার্ভার থেকে আসা
-    //     JSON ডেটা দ্বারা নতুন স্ট্যাটাস ওভাররাইড করা হবে।
-    baseData.forEach(item => {
-        const title = item.title;
-        // সার্ভার থেকে আসা isNew স্ট্যাটাস দ্বারা LocalStorage স্ট্যাটাস সেট করা
-        newStatusControl[title] = item.isNew === true; 
-    });
-    
-    NEW_STATUS_CONTROL = newStatusControl;
-    // 💡 পরিবর্তন: গ্লোবাল ভেরিয়েবল আপডেট করার সাথে সাথে LocalStorage-এও সেভ করা
+    const allItems = [...baseData, ...noticesData]; // সমস্ত ডেটা একত্রিত করা
+    let newStatusControl = {};
+
+    // 💡 মূল সমাধান: সমস্ত আইটেমের জন্য সার্ভার থেকে আসা স্ট্যাটাস দ্বারা LocalStorage স্ট্যাটাস ওভাররাইড করা
+    allItems.forEach(item => {
+        // এখানে item.title ব্যবহার করা হয়েছে, যা সব ধরনের আইটেমের (Notice, Student, Form) জন্য কাজ করবে
+        // যদি Notice-এর জন্য 'title' প্রপার্টি না থাকে, তবে item.text ব্যবহার করা উচিত
+        const title = item.text || item.title; 
+        if (title) {
+             // isNew প্রপার্টিটি Apps Script থেকে boolean (true/false) হিসেবে আসার কথা,
+             // কিন্তু index_link.json থেকে এলে তা ভিন্ন হতে পারে।
+             // তবে Notices-এর ক্ষেত্রে, Apps Script এটিকে boolean হিসাবে পাঠায়।
+            newStatusControl[title] = item.isNew === true; // ✅ Google Sheet-কে মাস্টার কন্ট্রোল বানানো
+        }
+    });
+    
+    NEW_STATUS_CONTROL = newStatusControl;
+    // গ্লোবাল ভেরিয়েবল আপডেট করার সাথে সাথে LocalStorage-এও সেভ করা
     localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
 }
 
@@ -683,14 +702,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    // Initial function calls
-    initializeNewStatusControl().then(() => {
-        // LocalStorage লোড হওয়ার পর ডেটা লোড এবং UI রেন্ডার শুরু হবে
-        fetchNotices();
-        fetchDynamicSectionData('students-list');
-        fetchDynamicSectionData('forms-list');
-        
-        // ✅ স্ক্রল বার লোড করা
-        renderMarquee(); 
-    });
+   // Initial function calls
+initializeNewStatusControl().then(() => {
+    // LocalStorage লোড হওয়ার পর ডেটা লোড এবং UI রেন্ডার শুরু হবে
+    fetchNotices(); // Notices লোড হচ্ছে
+    fetchDynamicSectionData('students-list'); // Students লোড হচ্ছে
+    fetchDynamicSectionData('forms-list'); // Forms লোড হচ্ছে
+    
+    // ✅ স্ক্রল বার লোড করা
+    renderMarquee(); 
+});
 });
