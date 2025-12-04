@@ -208,6 +208,16 @@ function renderHelpList() {
     });
 
     renderPaginationControls();
+
+    const noticeSection = document.getElementById('important-links-section-notice'); 
+    
+    if (noticeSection) {
+        // সেকশনটিকে স্ক্রিনের উপরে নিয়ে যাওয়ার জন্য স্ক্রল করুন
+        noticeSection.scrollIntoView({
+            behavior: 'smooth', // স্মুথ স্ক্রলিং এর জন্য
+            block: 'start'      // সেকশনটি স্ক্রিনের উপরে (start) দেখানোর জন্য
+        });
+    }
 }
 
 function renderPaginationControls() {
