@@ -117,7 +117,7 @@ function renderMarquee() {
 /* =================================
  * Digital Notice Board Functions (গ্লোবাল)
  * ================================= */
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjes-oH2NNNl0mEIPOoYizfzP4QvKdR3y_ZM8F4qXNunoWRNie92sZqyjmg53ZTqTA/exec?action=read";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsMTAcwAwgo-bvbYAQYe2YbU02zLdGxnt0EBlJclW1LvlIzGG5NME690uQz1fGMK56Xw/exec?action=read";
 const NOTICES_PER_PAGE = 10;
 let currentPage = 1;
 let totalPages = 0;
