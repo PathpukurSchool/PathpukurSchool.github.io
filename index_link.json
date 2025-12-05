@@ -3,13 +3,11 @@
     "students": [
             {"title": "Written Exam Marks", 
                 "description": "View all written exam results.", 
-                "url": "https://script.google.com/macros/s/AKfycbxTrGafyuj2VnyzjVs_xnaAuP8MOY0vivOSX0jOSJ_ON3iUovSBdFo236qx8Xt7HYinKg/exec",
-                "isNew": true},
+                "url": "https://script.google.com/macros/s/AKfycbxTrGafyuj2VnyzjVs_xnaAuP8MOY0vivOSX0jOSJ_ON3iUovSBdFo236qx8Xt7HYinKg/exec"},
 
          {"title": "Academic Calendar", 
                 "description": "View Academic Calendar.", 
-                "url": ""
-                },
+                "url": ""},
 
          {"title": "Holiday List", 
                 "description": "View Holiday List.", 
@@ -17,29 +15,25 @@
 
         {"title": "Book List", 
                 "description": "View Student Book List.", 
-                "url": "https://script.google.com/macros/s/AKfycbxrwdENTeiCKqQ3y78SSvf5zOVOl45KVLjgSHXUakg-zYJbM1PYck591l6WPyzNe9Kn/exec"
-                },
+                "url": "https://script.google.com/macros/s/AKfycbxrwdENTeiCKqQ3y78SSvf5zOVOl45KVLjgSHXUakg-zYJbM1PYck591l6WPyzNe9Kn/exec"},
             
             {"title": "Know Your Student Code/ID", 
                 "description": "Find your student Code.", 
-                "url": "https://script.google.com/macros/s/AKfycbwsgScsUk64jOhW1USOpWAl7t8v5ud_BkOAvlaF5SHXqaGVJn4w-lB4qH8yM6BnC6KGuA/exec"
-                },
+                "url": "https://script.google.com/macros/s/AKfycbwsgScsUk64jOhW1USOpWAl7t8v5ud_BkOAvlaF5SHXqaGVJn4w-lB4qH8yM6BnC6KGuA/exec"},
             
             {"title": "Class Routine", 
                 "description": "Download the latest class routine.", 
-                "url": "https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student"
-                },
+                "url": "https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student"},
             
             {"title": "School Exam Routine", 
                 "description": "Download the latest School Exam routine.", 
-                "url": "https://script.google.com/macros/s/AKfycbzX89f_946DzQ2ZyLQLCp4jgsGno1fA1Jiee2phYK9G5GIt9n6HyeKiT4NDphqezp3pfQ/exec",
-                "isNew": true},
+                "url": "https://script.google.com/macros/s/AKfycbzX89f_946DzQ2ZyLQLCp4jgsGno1fA1Jiee2phYK9G5GIt9n6HyeKiT4NDphqezp3pfQ/exec"},
             
             {"title": "Admission Receive", 
                 "description": "Download the duplicate admission receive.", 
-                "url": "" }
+                "url": ""}
         
-    ],
+           ],
 
 
 
@@ -47,22 +41,19 @@
     "forms": [
             {"title": "New Admission Form (V-IX)", 
                 "description": "Apply for new admission here.", 
-                "url": "https://script.google.com/macros/s/AKfycbxcpLN_nlb0P1aq7SOlv38GGrxsuwD9SHXcs_pjaEiVS-lNgtW75riXH-yVpvSQpAbE/exec",
-                "isNew": true},
+                "url": "https://script.google.com/macros/s/AKfycbxcpLN_nlb0P1aq7SOlv38GGrxsuwD9SHXcs_pjaEiVS-lNgtW75riXH-yVpvSQpAbE/exec"},
             
             {"title": "Student Data Vefication Form", 
                 "description": "View Student Information.", 
-                "url": "https://script.google.com/macros/s/AKfycbym4dKChBBxDp8rKhm-HmAdKH_mFGc366_gfnE-rX7N4IKbzf2PdMhBlI6RDr3vQeMu/exec",
-                "isNew": true},
+                "url": "https://script.google.com/macros/s/AKfycbym4dKChBBxDp8rKhm-HmAdKH_mFGc366_gfnE-rX7N4IKbzf2PdMhBlI6RDr3vQeMu/exec"},
             
             {"title": "Class XI Bank Mandate Form for TAB", 
                 "description": "Download XI Bank Mandate form for TAB.",
-                "url": "https://script.google.com/macros/s/AKfycbwB5Ow42mJjDuuOCGGgFcrlJ9Zb5osXpTpyDjT7vMGUkgRZYvKrWFBtrAc-Wpy4ljz_/exec"
-                },
+                "url": "https://script.google.com/macros/s/AKfycbwB5Ow42mJjDuuOCGGgFcrlJ9Zb5osXpTpyDjT7vMGUkgRZYvKrWFBtrAc-Wpy4ljz_/exec"},
             
             {"title": "Annexure-F (TAB)", 
                 "description": "Download form annexure-F for TAB.", 
                 "url": "https://drive.google.com/file/d/15Vx6DnqSQOB-WeufcF_m2veb_rVqomiy/view?usp=sharing"}
 
-    ]
+            ]
 }
