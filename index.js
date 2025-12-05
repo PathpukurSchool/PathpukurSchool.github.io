@@ -5,6 +5,7 @@
 // গ্লোবাল ভেরিয়েবল: LocalStorage থেকে লোড করা হয়
 let NEW_STATUS_CONTROL = {};
 let ALL_ITEMS_DETAILS = [];
+const LOCAL_STORAGE_KEY = 'newStatusControl'; // LocalStorage-এর জন্য নতুন ধ্রুবক যোগ করা হলো
 
 // JSON থেকে শুধুমাত্র আইটেমের Title সংগ্রহ করে
 async function loadAllItemDetails() {
@@ -42,25 +43,33 @@ async function initializeNewStatusControl() {
         console.error("Failed to fetch notices for initial status control:", error);
     }
 
+    // LocalStorage থেকে পূর্বের স্ট্যাটাস লোড করা
+    const storedStatus = localStorage.getItem(LOCAL_STORAGE_KEY);
+    let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
+    
     const allItems = [...baseData, ...noticesData]; // সমস্ত ডেটা একত্রিত করা
-    let newStatusControl = {};
 
-    // 💡 মূল সমাধান: সমস্ত আইটেমের জন্য সার্ভার থেকে আসা স্ট্যাটাস দ্বারা LocalStorage স্ট্যাটাস ওভাররাইড করা
+    // ✅ পরিবর্তন: NEW স্ট্যাটাস নিয়ন্ত্রণ লজিক
+    // এখন LocalStorage-এর মানকে অগ্রাধিকার দেওয়া হবে। যদি LocalStorage-এ কোনো মান না থাকে:
+    // - Notices (Google Sheet) থেকে আসা `isNew` (যদি থাকে) ব্যবহার করা হবে।
+    // - Students/Forms (index_link.json)-এর জন্য `isNew` প্রপার্টি না থাকলে ডিফল্ট `false` হবে।
+
     allItems.forEach(item => {
-        // এখানে item.title ব্যবহার করা হয়েছে, যা সব ধরনের আইটেমের (Notice, Student, Form) জন্য কাজ করবে
-        // যদি Notice-এর জন্য 'title' প্রপার্টি না থাকে, তবে item.text ব্যবহার করা উচিত
         const title = item.text || item.title; 
         if (title) {
-             // isNew প্রপার্টিটি Apps Script থেকে boolean (true/false) হিসেবে আসার কথা,
-             // কিন্তু index_link.json থেকে এলে তা ভিন্ন হতে পারে।
-             // তবে Notices-এর ক্ষেত্রে, Apps Script এটিকে boolean হিসাবে পাঠায়।
-            newStatusControl[title] = item.isNew === true; // ✅ Google Sheet-কে মাস্টার কন্ট্রোল বানানো
+            // যদি LocalStorage-এ এই আইটেমের স্ট্যাটাস না থাকে, তবে ডিফল্ট মান সেট করা হবে।
+            if (newStatusControl[title] === undefined) {
+                 // Notices-এর ক্ষেত্রে, isNew: true/false আসবে।
+                 // Students/Forms-এর ক্ষেত্রে, index_link.json থেকে isNew সরিয়ে দেওয়ায়, item.isNew হবে undefined, 
+                 // ফলে item.isNew === true হবে false। এটিই আমাদের প্রয়োজন।
+                 newStatusControl[title] = item.isNew === true; 
+            }
         }
     });
     
     NEW_STATUS_CONTROL = newStatusControl;
     // গ্লোবাল ভেরিয়েবল আপডেট করার সাথে সাথে LocalStorage-এও সেভ করা
-    localStorage.setItem('newStatusControl', JSON.stringify(NEW_STATUS_CONTROL));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(NEW_STATUS_CONTROL));
 }
 
 // ===================================
@@ -215,7 +224,7 @@ function renderHelpList() {
         // সেকশনটিকে স্ক্রিনের উপরে নিয়ে যাওয়ার জন্য স্ক্রল করুন
         noticeSection.scrollIntoView({
             behavior: 'smooth', // স্মুথ স্ক্রলিং এর জন্য
-            block: 'start'      // সেকশনটি স্ক্রিনের উপরে (start) দেখানোর জন্য
+            block: 'start'       // সেকশনটি স্ক্রিনের উপরে (start) দেখানোর জন্য
         });
     }
 }
@@ -416,31 +425,31 @@ function showPopup(titleText, date, link, subjText) {
 
     const popup = document.createElement('div');
     popup.id = 'notice-popup';
-    // CSS ক্লাস যুক্ত করা হয়েছে
+    // CSS ক্লাস যুক্ত করা হয়েছে
     popup.classList.add('notice-popup-box'); 
 
     // ✅ নতুন: স্কুলের নাম এবং নোটিস হেডিং যুক্ত করা (১ নম্বর পরিবর্তন)
     const schoolHeader = document.createElement('div');
     schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice Board';
-    schoolHeader.classList.add('school-header'); // CSS ক্লাস যুক্ত করা হয়েছে
+    schoolHeader.classList.add('school-header'); // CSS ক্লাস যুক্ত করা হয়েছে
     popup.appendChild(schoolHeader);
 
     const titleElem = document.createElement('div');
     titleElem.innerText = titleText || "No Title";
-    titleElem.classList.add('notice-title'); // CSS ক্লাস যুক্ত করা হয়েছে
+    titleElem.classList.add('notice-title'); // CSS ক্লাস যুক্ত করা হয়েছে
     popup.appendChild(titleElem);
 
     if (date && date.trim() !== '') {
         const dateElem = document.createElement('div');
         dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-        dateElem.classList.add('notice-date'); // CSS ক্লাস যুক্ত করা হয়েছে
+        dateElem.classList.add('notice-date'); // CSS ক্লাস যুক্ত করা হয়েছে
         popup.appendChild(dateElem);
     }
 
     if (subjText && subjText.trim() !== '') {
         const subjElem = document.createElement('div');
         subjElem.innerText = subjText;
-        subjElem.classList.add('notice-subject'); // CSS ক্লাস যুক্ত করা হয়েছে
+        subjElem.classList.add('notice-subject'); // CSS ক্লাস যুক্ত করা হয়েছে
         popup.appendChild(subjElem);
     }
 
@@ -453,7 +462,7 @@ function showPopup(titleText, date, link, subjText) {
         linkBtn.href = link;
         linkBtn.innerText = 'Open Link';
         linkBtn.target = '_blank';
-        linkBtn.classList.add('popup-link-btn'); // CSS ক্লাস যুক্ত করা হয়েছে
+        linkBtn.classList.add('popup-link-btn'); // CSS ক্লাস যুক্ত করা হয়েছে
         buttonContainer.appendChild(linkBtn);
     }
 
@@ -479,14 +488,14 @@ const downloadBtn = createButton('Download', () => {
 
             // ⭐⭐ নতুন: Title থেকে File Name তৈরি ⭐⭐
             let safeTitle = (titleText || "notice")
-                .replace(/[\\/:*?"<>|]+/g, "")   // ❌ ফাইল নাম নিষিদ্ধ ক্যারেক্টার remove
+                .replace(/[\\/:*?"<>|]+/g, "")    // ❌ ফাইল নাম নিষিদ্ধ ক্যারেক্টার remove
                 .trim()
-                .replace(/\s+/g, "_");       // space → underscore
+                .replace(/\s+/g, "_");         // space → underscore
             
             let fileName = safeTitle + ".png";
 
             const link = document.createElement('a');
-            link.download = fileName;   // ⭐ ফাইল নাম সেট করা ⭐
+            link.download = fileName;    // ⭐ ফাইল নাম সেট করা ⭐
             link.href = canvas.toDataURL();
             link.click();
 
