@@ -42,7 +42,7 @@
             position: relative;
             cursor: default;
             border: 5px solid #fff;
-            overflow: hidden; /* কনফেটি ক্লিপিং এর জন্য */
+            overflow: hidden; 
         }
 
         #closeButton {
@@ -72,13 +72,10 @@
             70% { transform: scale(0.9); }
             100% { transform: scale(1); }
         }
-
         @keyframes confettiFall {
             0% { transform: translateY(-10vh) rotateZ(0deg); opacity: 1; }
             100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0.5; }
         }
-        
-        /* কনফেটি স্টাইল */
         .confetti {
             position: absolute;
             width: 8px;
@@ -94,30 +91,42 @@
         =======================================
         */
         
-        /* শুভ নববর্ষ (জানুয়ারি ১) */
+        /* কমন হেডারের স্টাইল */
+        .school-header {
+            font-family: 'Noto Serif Bengali', serif;
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+        }
+
+        /* শুভ নববর্ষ, প্রতিষ্ঠা দিবস */
         .style-new-year {
             background: linear-gradient(135deg, #ff6b6b, #48dbfb, #1dd1a1, #feca57);
             border-color: #ffeaa7;
         }
         .style-new-year h1 { color: #fff; text-shadow: 4px 4px #c23616, 6px 6px #000; }
         .style-new-year p { color: #ffeaa7; text-shadow: 1px 1px #333; }
+        .style-new-year .school-header { border-bottom: 2px solid #fff; color: #fff; }
 
-        /* নেতাজী জন্মজয়ন্তী (জানুয়ারি ২৩) ও প্রজাতন্ত্র দিবস (জানুয়ারি ২৬) */
+        /* জাতীয় দিবস (প্রজাতন্ত্র, স্বাধীনতা, নেতাজী, গান্ধী, ক্ষুদিরাম) */
         .style-national {
             background: linear-gradient(180deg, #ff9933 0%, #ffffff 50%, #138808 100%);
             border-color: #000080; 
         }
-        .style-national h1 { color: #000080; text-shadow: 2px 2px #fff; }
-        .style-national h2 { color: #333; }
-        .style-national p { color: #000080; }
-
-        /* রবীন্দ্র জয়ন্তী (মে ৭) */
+        .style-national h1, .style-national h2, .style-national p { color: #000080; }
+        .style-national .school-header { border-bottom: 2px solid #000080; color: #000080; }
+        
+        /* কবি জয়ন্তী, মাতৃভাষা, বিদ্যাসাগর (জ্ঞান/সাহিত্য থিম) */
         .style-tagore {
             background: linear-gradient(135deg, #f0e68c, #fff8dc, #f0e68c);
             border-color: #8b4513;
         }
         .style-tagore h1, .style-tagore h2 { color: #8b4513; text-shadow: 1px 1px #fff; font-family: 'Noto Serif Bengali', serif; }
         .style-tagore p { color: #333; }
+        .style-tagore .school-header { border-bottom: 2px solid #8b4513; color: #8b4513; }
 
         /* বিশ্ব পরিবেশ দিবস (জুন ৫) */
         .style-environment {
@@ -126,36 +135,36 @@
         }
         .style-environment h1, .style-environment h2 { color: #fff; text-shadow: 1px 1px #16a085; }
         .style-environment p { color: #ecf0f1; }
+        .style-environment .school-header { border-bottom: 2px solid #ecf0f1; color: #ecf0f1; }
 
-        /* স্বাধীনতা দিবস (আগস্ট ১৫) */
-        .style-independence {
-            background: #ffffff;
-            border-color: #ff9933;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 50px #138808;
+        /* জাতীয় বিজ্ঞান দিবস (নতুন ক্লাস) */
+        .style-science {
+            background: linear-gradient(135deg, #4285f4, #0f9d58);
+            border-color: #f4b400;
         }
-        .style-independence h1 { color: #000080; text-shadow: 3px 3px #ff9933; }
-        .style-independence h2 { color: #138808; }
-        .style-independence p { color: #333; }
+        .style-science h1, .style-science h2 { color: #fff; text-shadow: 2px 2px #333; }
+        .style-science p { color: #e6e6e6; }
+        .style-science .school-header { border-bottom: 2px solid #f4b400; color: #f4b400; }
         
-        /* শিক্ষক দিবস (সেপ্টেম্বর ৫) */
+        /* শিক্ষক দিবস */
         .style-teachers-day {
             background: linear-gradient(135deg, #f39c12, #e67e22);
             border-color: #795548;
         }
-        .style-teachers-day h1 { color: #fff; text-shadow: 2px 2px #c0392b; }
-        .style-teachers-day h2 { color: #fff; }
+        .style-teachers-day h1, .style-teachers-day h2 { color: #fff; text-shadow: 2px 2px #c0392b; }
         .style-teachers-day p { color: #ffe0b2; }
+        .style-teachers-day .school-header { border-bottom: 2px solid #ffe0b2; color: #ffe0b2; }
 
-        /* শিশু দিবস (নভেম্বর ১৪) */
+        /* শিশু দিবস */
         .style-childrens-day {
             background: radial-gradient(circle, #f4b400, #ea4335);
             border-color: #4285f4;
         }
-        .style-childrens-day h1 { color: #fff; text-shadow: 2px 2px #34a853; }
-        .style-childrens-day h2 { color: #fff; }
+        .style-childrens-day h1, .style-childrens-day h2 { color: #fff; text-shadow: 2px 2px #34a853; }
         .style-childrens-day p { color: #f8d484; }
+        .style-childrens-day .school-header { border-bottom: 2px solid #fff; color: #fff; }
 
-        /* শুভ বড়দিন (ডিসেম্বর ২৫) */
+        /* শুভ বড়দিন */
         .style-christmas {
             background: linear-gradient(135deg, #c0392b, #27ae60);
             border-color: #f1c40f;
@@ -163,6 +172,8 @@
         .style-christmas h1 { color: #f1c40f; text-shadow: 2px 2px #000; }
         .style-christmas h2 { color: #fff; }
         .style-christmas p { color: #ecf0f1; }
+        .style-christmas .school-header { border-bottom: 2px solid #f1c40f; color: #f1c40f; }
+
 
         /* সাধারণ টেক্সট স্টাইল */
         #popupContent h1 {
@@ -198,6 +209,9 @@
             #popupContent h2 {
                 font-size: 1.5em;
             }
+            .school-header {
+                font-size: 1em;
+            }
         }
     </style>
 </head>
@@ -212,56 +226,72 @@
     <script>
         // =======================================
         // ১. ইভেন্ট সময়সূচি (মাস: 0=জানুয়ারি থেকে 11=ডিসেম্বর)
+        // **গুরুত্বপূর্ণ:** সরস্বতী পূজা পরিবর্তনশীল, তাই প্রতি বছর তারিখটি নিশ্চিত করে আপডেট করুন।
         // =======================================
         const eventSchedule = [
-            // { name: "ইভেন্টের নাম", month: 0-11, date: 1-31, durationDays: 1/3/7, styleClass: "CSS ক্লাস" }
+            // { name: "ইভেন্টের নাম", month: 0-11, date: 1-31, durationDays: 1/3/7, styleClass: "CSS ক্লাস", icon: "Emoji", title: "বড় শিরোনাম", subtitle: "ছোট বিবরণ" }
+            
+            // জানুয়ারি
             { name: "শুভ ইরাজী নববর্ষ!", month: 0, date: 1, durationDays: 7, styleClass: "style-new-year", icon: "🎉", title: "নতুন বছর আপনার জীবনে বয়ে আনুক আনন্দ, শান্তি ও সাফল্য।", subtitle: "Happy New Year! ✨" },
-            { name: "স্বামী বিবেকানন্দের জন্মজয়ন্তী", month: 0, date: 12, durationDays: 1, styleClass: "style-tagore", icon: "💡", title: '"জাগো, ওঠো, এবং লক্ষ্য পূরণ না হওয়া পর্যন্ত থেমো না!"', subtitle: "স্বামী বিবেকানন্দ (Parivrajak)" },
-            { name: "নেতাজী জন্মজয়ন্তী", month: 0, date: 23, durationDays: 1, styleClass: "style-national", icon: "🇮🇳", title: "আমরা যেন দেশের সেবায় নিজেদের নিয়োজিত করি।", subtitle: "নেতাজী সুভাষ চন্দ্র বসু" },
-            { name: "প্রজাতন্ত্র দিবস", month: 0, date: 26, durationDays: 1, styleClass: "style-national", icon: "🇮🇳", title: "ভারতীয় সংবিধান কার্যকর হওয়ার ঐতিহাসিক দিন।", subtitle: "শুভ প্রজাতন্ত্র দিবস! জয় হিন্দ!" },
-            { name: "সরস্বতী পূজা", month: 1, date: 15, durationDays: 3, styleClass: "style-tagore", icon: "🦢", title: "বিদ্যার দেবী মা সরস্বতীর চরণে জানাই প্রণাম।", subtitle: "জ্ঞান, শিক্ষা ও বিদ্যার প্রার্থনা।" },
-            { name: "রবীন্দ্র জয়ন্তী", month: 4, date: 7, durationDays: 1, styleClass: "style-tagore", icon: "🖋️", title: '"চিত্ত যেথা ভয়শূন্য, উচ্চ যেথা শির..."', subtitle: "কবিগুরু রবীন্দ্রনাথ ঠাকুরের জন্মবার্ষিকী" },
+            { name: "বিদ্যালয় প্রতিষ্ঠা দিবস", month: 0, date: 2, durationDays: 1, styleClass: "style-new-year", icon: "🏫", title: "আমাদের ঐতিহ্য ও জ্ঞানের পীঠস্থানের প্রতিষ্ঠা দিবস।", subtitle: "Pathpukur High School (HS)-এর প্রতিষ্ঠা দিবস।" },
+            { name: "স্বামী বিবেকানন্দের জন্মজয়ন্তী", month: 0, date: 12, durationDays: 1, styleClass: "style-tagore", icon: "💡", title: '"জাগো, ওঠো, এবং লক্ষ্য পূরণ না হওয়া পর্যন্ত থেমো না!"', subtitle: "স্বামী বিবেকানন্দ (জাতীয় যুব দিবস)" },
+            { name: "নেতাজী জন্মজয়ন্তী", month: 0, date: 23, durationDays: 1, styleClass: "style-national", icon: "🇮🇳", title: "আমরা যেন দেশের সেবায় নিজেদের নিয়োজিত করি।", subtitle: "নেতাজী সুভাষ চন্দ্র বসু (পরাক্রম দিবস)" },
+            { name: "প্রজাতন্ত্র দিবস", month: 0, date: 26, durationDays: 1, styleClass: "style-national", icon: "🇮🇳", title: "ভারতীয় সংবিধান কার্যকর হওয়ার ঐতিহাসিক দিন।", subtitle: "প্রজাতন্ত্র দিবস! জয় হিন্দ!" },
+
+            // ফেব্রুয়ারি
+            { name: "সরস্বতী পূজা", month: 1, date: 15, durationDays: 3, styleClass: "style-tagore", icon: "🦢", title: "বিদ্যার দেবী মা সরস্বতীর চরণে জানাই প্রণাম।", subtitle: "**দ্রষ্টব্য: এই তারিখটি প্রতি বছর পরিবর্তনশীল।**" },
+            { name: "মাতৃভাষা দিবস", month: 1, date: 21, durationDays: 1, styleClass: "style-tagore", icon: "🇧🇩", title: "ভাষাশহীদদের প্রতি সশ্রদ্ধ শ্রদ্ধাঞ্জলি।", subtitle: "আন্তর্জাতিক মাতৃভাষা দিবস। বাংলা ভাষা জিন্দাবাদ।" },
+            { name: "জাতীয় বিজ্ঞান দিবস", month: 1, date: 28, durationDays: 1, styleClass: "style-science", icon: "🔬", title: "বিজ্ঞান ও প্রযুক্তির গুরুত্ব উপলব্ধি করি।", subtitle: "Sir C.V. Raman-এর আবিষ্কারের দিনটি স্মরণ করি।" },
+            
+            // মে
+            { name: "রবীন্দ্র জয়ন্তী", month: 4, date: 7, durationDays: 1, styleClass: "style-tagore", icon: "🖋️", title: '"চিত্ত যেথা ভয়শূন্য, উচ্চ যেথা শির..."', subtitle: "কবিগুরু রবীন্দ্রনাথ ঠাকুরের জন্মবার্ষিকী" },
+            { name: "নজরুল জয়ন্তী", month: 4, date: 25, durationDays: 1, styleClass: "style-tagore", icon: "🎶", title: '"দুর্গম গিরি কান্তার মরু দুস্তর পারাবার..."', subtitle: "জাতীয় কবি কাজী নজরুল ইসলামের জন্মবার্ষিকী" },
+
+            // জুন
             { name: "বিশ্ব পরিবেশ দিবস", month: 5, date: 5, durationDays: 1, styleClass: "style-environment", icon: "🌳", title: "আমাদের ধরিত্রীকে রক্ষা করার অঙ্গীকার করি।", subtitle: "একটি সবুজ পৃথিবীর জন্য এগিয়ে আসুন।" },
-            { name: "স্বাধীনতা দিবস", month: 7, date: 15, durationDays: 1, styleClass: "style-independence", icon: "🇮🇳", title: "দেশপ্রেম ও আত্মত্যাগের মহান উৎসব।", subtitle: "শুভ স্বাধীনতা দিবস! বন্দে মাতরম্।" },
+
+            // আগস্ট
+            { name: "স্বাধীনতা দিবস", month: 7, date: 15, durationDays: 1, styleClass: "style-national", icon: "🇮🇳", title: "দেশপ্রেম ও আত্মত্যাগের মহান উৎসব।", subtitle: "স্বাধীনতা দিবস! বন্দে মাতরম্।" },
+
+            // সেপ্টেম্বর
             { name: "শিক্ষক দিবস", month: 8, date: 5, durationDays: 1, styleClass: "style-teachers-day", icon: "👨‍🏫", title: "জ্ঞানদানকারী সকল গুরুজনদের জানাই সশ্রদ্ধ প্রণাম।", subtitle: "ড. সর্বপল্লী রাধাকৃষ্ণনের জন্মবার্ষিকী।" },
+            { name: "বিদ্যাসাগর জন্মজয়ন্তী", month: 8, date: 26, durationDays: 1, styleClass: "style-tagore", icon: "📚", title: '"দয়া ও বিদ্যার সাগর" - সমাজ সংস্কারকের প্রতি শ্রদ্ধা।', subtitle: "ঈশ্বরচন্দ্র বিদ্যাসাগরের জন্মবার্ষিকী।" },
+
+            // অক্টোবর
+            { name: "গান্ধী জয়ন্তী", month: 9, date: 2, durationDays: 1, styleClass: "style-national", icon: "🕊️", title: "অহিংসা ও শান্তির পথে চলার অঙ্গীকার করি।", subtitle: "জাতির জনক মহাত্মা গান্ধীর জন্মদিবস" },
+
+            // নভেম্বর
             { name: "শিশু দিবস", month: 10, date: 14, durationDays: 1, styleClass: "style-childrens-day", icon: "👶", title: "সকল শিশুর জন্য নিরাপদ ও উজ্জ্বল ভবিষ্যৎ কামনা করি।", subtitle: "পন্ডিত জওহরলাল নেহেরুর জন্মদিবস।" },
-            { name: "শুভ বড়দিন", month: 11, date: 08, durationDays: 6, styleClass: "style-christmas", icon: "🎄", title: "বড়দিনের আনন্দ ও শান্তি সকলের জীবনে আসুক।", subtitle: "Merry Christmas! 🎁" }
+            
+            // ডিসেম্বর
+            { name: "খুদিরামের জন্মদিবস", month: 11, date: 8, durationDays: 1, styleClass: "style-national", icon: "💣", title: "দেশের জন্য আত্মবলিদানকারী বীর শহিদের প্রতি শ্রদ্ধা।", subtitle: "শহিদ ক্ষুদিরাম বসুর জন্মবার্ষিকী" },
+            { name: "শুভ বড়দিন", month: 11, date: 25, durationDays: 5, styleClass: "style-christmas", icon: "🎄", title: "বড়দিনের আনন্দ ও শান্তি সকলের জীবনে আসুক।", subtitle: "Merry Christmas! 🎁" }
         ];
         
         // =======================================
-        // ২. কনফেটি ও ক্লোজ ফাংশন
+        // ২. কনফেটি ও ক্লোজ ফাংশন (পূর্বের মতোই থাকবে)
         // =======================================
         
-        // কনফেটি কণা তৈরি করার ফাংশন
         function createConfetti(count = 50) {
             const colors = ['#f7d794', '#ff6b81', '#70a1ff', '#2ed573', '#ffa502', '#fff'];
-            const overlay = document.getElementById('eventPopupOverlay');
             const confettiContainer = document.getElementById('confetti-container');
-            
-            // পূর্বের কনফেটি থাকলে তা মুছে ফেলা
             confettiContainer.innerHTML = ''; 
 
             for (let i = 0; i < count; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
-                
-                // র্যান্ডম স্টাইল
                 confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.animationDelay = Math.random() * 5 + 's';
                 confetti.style.animationDuration = Math.random() * 5 + 5 + 's'; 
                 confetti.style.width = Math.random() * 8 + 5 + 'px';
                 confetti.style.height = confetti.style.width;
-
                 confettiContainer.appendChild(confetti);
             }
         }
 
-        // পপ-আপ বন্ধ করার ফাংশন (index.html থেকে কল হবে)
         window.closePopup = function(event) {
             const overlay = document.getElementById('eventPopupOverlay');
-
-            // নিশ্চিত করা যেন শুধুমাত্র ওভারলে বা ক্রস বাটনে ক্লিক করলেই বন্ধ হয়
             if (overlay && (event.target === overlay || event.target.id === 'closeButton')) {
                 overlay.style.opacity = '0'; 
                 setTimeout(() => {
@@ -271,7 +301,7 @@
         }
 
         // =======================================
-        // ৩. ইভেন্ট লজিক এবং কন্টেন্ট ইনজেকশন
+        // ৩. ইভেন্ট লজিক এবং কন্টেন্ট ইনজেকশন (Header যুক্ত করা হয়েছে)
         // =======================================
         
         function getActiveEvent() {
@@ -281,17 +311,14 @@
             const currentYear = today.getFullYear();
 
             for (const event of eventSchedule) {
-                // ইভেন্টের শুরুর তারিখ
                 const eventStart = new Date(currentYear, event.month, event.date);
-                // ইভেন্টের শেষের তারিখ (durationDays - 1 যোগ করা হয়েছে কারণ শুরু দিনটি অন্তর্ভুক্ত)
                 const eventEnd = new Date(eventStart);
                 eventEnd.setDate(eventEnd.getDate() + event.durationDays - 1); 
                 
-                // আজকের তারিখ, ইভেন্টের শুরু ও শেষের মধ্যে আছে কিনা পরীক্ষা করা
                 const todayStartOfDay = new Date(currentYear, currentMonth, currentDay);
 
                 if (todayStartOfDay >= eventStart && todayStartOfDay <= eventEnd) {
-                    return event; // সক্রিয় ইভেন্টের অবজেক্ট রিটার্ন করা
+                    return event; 
                 }
             }
             return null;
@@ -306,9 +333,10 @@
                 contentDiv.className = '';
                 contentDiv.classList.add(event.styleClass);
 
-                // ২. কন্টেন্ট ইনজেক্ট করা
+                // ২. কন্টেন্ট ইনজেক্ট করা (স্কুলের পক্ষ থেকে লেখাটি যুক্ত করা হয়েছে)
                 contentDiv.innerHTML = `
                     <span id="closeButton" onclick="closePopup(event)">&#xD7;</span>
+                    <p class="school-header">পাতপুকুর হাই স্কুলের পক্ষ থেকে -</p>
                     <h2>${event.name} ${event.icon}</h2>
                     <h1>${event.title}</h1>
                     <p>**${event.subtitle}**</p>
@@ -317,12 +345,14 @@
                 // ৩. পপ-আপ দেখানো
                 overlayDiv.style.display = 'flex';
                 
-                // ৪. কনফেটি শুরু করা (যদি থাকে)
+                // ৪. কনফেটি শুরু করা 
                 if (event.styleClass === 'style-new-year' || event.styleClass === 'style-christmas') {
-                    createConfetti(80); // বেশি কনফেটি
-                } else if (event.styleClass === 'style-national' || event.styleClass === 'style-independence') {
-                    // জাতীয় দিবসের জন্য কম কনফেটি
+                    createConfetti(80); 
+                } else if (event.styleClass === 'style-national' || event.styleClass === 'style-childrens-day') {
                     createConfetti(40);
+                } else {
+                    // অন্যান্য ইভেন্টের জন্য হালকা কনফেটি
+                    createConfetti(20); 
                 }
             }
         }
