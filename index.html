@@ -355,29 +355,19 @@
      <script src="index.js"></script>
     
 <script>
-        (async function() {
-            try {
-                const resp = await fetch('animation_popup.html');
-                
-                if (!resp.ok) {
-                    console.warn('Animation popup file not found or failed to load:', resp.status);
-                    return;
-                }
-                
-                const html = await resp.text();
-                const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-                
-                if (bodyMatch && bodyMatch[1]) {
-                    document.body.insertAdjacentHTML('beforeend', bodyMatch[1]);
-                } else {
-                    console.warn('Could not find body content in animation_popup.html');
-                }
-                
-            } catch (e) {
-                console.error('Error loading popup content:', e);
-            }
-        })();
-    </script>
+  (async function(){
+    try {
+      const resp = await fetch('/animation_popup.html');
+      if(!resp.ok) return;
+      const html = await resp.text();
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      document.body.appendChild(div);
+    } catch(e) {
+      console.warn('Popup load failed', e);
+    }
+  })();
+</script>
         
 </body>
 </html>
