@@ -353,47 +353,31 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
      <script src="index.js"></script>
- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const popupFilePath = 'animation_popup.html';
-
-        fetch(popupFilePath)
-            .then(response => {
-                
-                if (!response.ok) {
-                    console.error('New Year Popup file not found:', response.statusText);
-                    return null;
-                }
-                return response.text();
-            })
-            .then(htmlContent => {
-                if (htmlContent) {
-                    const popupContainer = document.createElement('div');
-                    popupContainer.innerHTML = htmlContent;
-                    const popupBodyContent = popupContainer.querySelector('body').innerHTML;
-
-                    document.body.insertAdjacentHTML('beforeend', popupBodyContent);
-
-                    window.closePopup = function(event) {
-                        const overlay = document.getElementById('newYearPopupOverlay');
-                        if (overlay) {
-                            if (event.target === overlay || event.target.id === 'closeButton') {
-                                overlay.style.opacity = '0'; 
-                                setTimeout(() => {
-                                    overlay.remove();
-                                }, 500);
-                            }
-                        }
-                    };
-
-                    if (typeof createConfetti === 'function') {
-                        createConfetti();
-                    }
-                }
-            })
-            .catch(error => console.error('Error fetching New Year Popup:', error));
-    });
-</script>
     
+<script>
+        (async function() {
+            try {
+                const resp = await fetch('animation_popup.html');
+                
+                if (!resp.ok) {
+                    console.warn('Animation popup file not found or failed to load:', resp.status);
+                    return;
+                }
+                
+                const html = await resp.text();
+                const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+                
+                if (bodyMatch && bodyMatch[1]) {
+                    document.body.insertAdjacentHTML('beforeend', bodyMatch[1]);
+                } else {
+                    console.warn('Could not find body content in animation_popup.html');
+                }
+                
+            } catch (e) {
+                console.error('Error loading popup content:', e);
+            }
+        })();
+    </script>
+        
 </body>
 </html>
