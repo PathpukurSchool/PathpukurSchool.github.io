@@ -242,6 +242,9 @@
             { name: "সরস্বতী পূজা", month: 1, date: 15, durationDays: 3, styleClass: "style-tagore", icon: "🦢", title: "বিদ্যার দেবী মা সরস্বতীর চরণে জানাই প্রণাম।", subtitle: "**দ্রষ্টব্য: এই তারিখটি প্রতি বছর পরিবর্তনশীল।**" },
             { name: "মাতৃভাষা দিবস", month: 1, date: 21, durationDays: 1, styleClass: "style-tagore", icon: "🇧🇩", title: "ভাষাশহীদদের প্রতি সশ্রদ্ধ শ্রদ্ধাঞ্জলি।", subtitle: "আন্তর্জাতিক মাতৃভাষা দিবস। বাংলা ভাষা জিন্দাবাদ।" },
             { name: "জাতীয় বিজ্ঞান দিবস", month: 1, date: 28, durationDays: 1, styleClass: "style-science", icon: "🔬", title: "বিজ্ঞান ও প্রযুক্তির গুরুত্ব উপলব্ধি করি।", subtitle: "Sir C.V. Raman-এর আবিষ্কারের দিনটি স্মরণ করি।" },
+
+            // এপ্রিল মাস (মাস: 0=জানুয়ারি থেকে 11=ডিসেম্বর)
+            { name: "শুভ বাংলা নববর্ষ!", month: 3, date: 14, durationDays: 4, styleClass: "style-new-year", icon: "🎊", title: "নতুনের আগমনে সবার জীবন ভরে উঠুক আনন্দ আর শান্তিতে।", subtitle: "শুভ পয়লা বৈশাখ!" },
             
             // মে
             { name: "রবীন্দ্র জয়ন্তী", month: 4, date: 7, durationDays: 1, styleClass: "style-tagore", icon: "🖋️", title: '"চিত্ত যেথা ভয়শূন্য, উচ্চ যেথা শির..."', subtitle: "কবিগুরু রবীন্দ্রনাথ ঠাকুরের জন্মবার্ষিকী" },
@@ -296,6 +299,14 @@
                 overlay.style.opacity = '0'; 
                 setTimeout(() => {
                     overlay.style.display = 'none';
+                    
+                    // নতুন যোগ: আইফ্রেমকে অদৃশ্য করা
+                    if (window.parent && window.parent.document) {
+                        const iframe = window.parent.document.getElementById('popup-iframe');
+                        if (iframe) {
+                            iframe.style.display = 'none';
+                        }
+                    }
                 }, 500); 
             }
         }
@@ -324,11 +335,18 @@
             return null;
         }
         
-        function injectPopupContent(event) {
-            const contentDiv = document.getElementById('popupContent');
-            const overlayDiv = document.getElementById('eventPopupOverlay');
-
-            if (contentDiv && overlayDiv) {
+       function injectPopupContent(event) {
+                const contentDiv = document.getElementById('popupContent');
+                const overlayDiv = document.getElementById('eventPopupOverlay');
+            
+                if (contentDiv && overlayDiv) {
+                    // নতুন যোগ: আইফ্রেমকে দৃশ্যমান করা
+                    if (window.parent && window.parent.document) {
+                        const iframe = window.parent.document.getElementById('popup-iframe');
+                        if (iframe) {
+                            iframe.style.display = 'block'; 
+                        }
+                    }
                 // ১. স্টাইল ক্লাস যুক্ত করা
                 contentDiv.className = '';
                 contentDiv.classList.add(event.styleClass);
@@ -347,6 +365,7 @@
 
                 // ৩. পপ-আপ দেখানো
                 overlayDiv.style.display = 'flex';
+                overlayDiv.style.opacity = '1'; // নিশ্চিত করা হলো যে অপাসিটি ১ হবে
                 
                 // ৪. কনফেটি শুরু করা 
                 if (event.styleClass === 'style-new-year' || event.styleClass === 'style-christmas') {
