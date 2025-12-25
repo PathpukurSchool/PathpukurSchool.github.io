@@ -313,118 +313,62 @@
         // ২. কনফেটি ও ক্লোজ ফাংশন (পূর্বের মতোই থাকবে)
         // =======================================
         
-        function createConfetti(count = 50) {
-            const colors = ['#f7d794', '#ff6b81', '#70a1ff', '#2ed573', '#ffa502', '#fff'];
-            const confettiContainer = document.getElementById('confetti-container');
-            confettiContainer.innerHTML = ''; 
-
+        function createConfetti(count) {
+            const container = document.getElementById('confetti-container');
+            container.innerHTML = '';
+            const colors = ['#f7d794', '#ff6b81', '#70a1ff', '#2ed573', '#fff'];
             for (let i = 0; i < count; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 5 + 's';
-                confetti.style.animationDuration = Math.random() * 5 + 5 + 's'; 
-                confetti.style.width = Math.random() * 8 + 5 + 'px';
-                confetti.style.height = confetti.style.width;
-                confettiContainer.appendChild(confetti);
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                c.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                c.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(c);
             }
         }
 
-        window.closePopup = function(event) {
+        function injectPopupContent(event) {
+            const contentDiv = document.getElementById('popupContent');
+            const overlayDiv = document.getElementById('eventPopupOverlay');
+
+            contentDiv.className = event.styleClass;
+            contentDiv.innerHTML = `
+                <span id="closeButton" onclick="closePopup(event)">&times;</span>
+                <p class="school-header">পাতপুকুর হাই স্কুলের পক্ষ থেকে [Pathpukur High School]</p>
+                ${event.image ? `<img src="${event.image}" class="event-img animate__animated animate__fadeInDown" onerror="this.style.display='none'">` : ''}
+                <h2>${event.icon} ${event.name}</h2>
+                <h1 class="animate__animated animate__zoomIn">${event.title}</h1>
+                <p class="subtitle"><b>${event.subtitle}</b></p>
+            `;
+
+            overlayDiv.style.display = 'flex';
+            setTimeout(() => {
+                overlayDiv.classList.add('active');
+                overlayDiv.style.opacity = '1';
+                createConfetti(50);
+            }, 100);
+        }
+
+        function closePopup(event) {
             const overlay = document.getElementById('eventPopupOverlay');
-            if (overlay && (event.target === overlay || event.target.id === 'closeButton')) {
-                overlay.style.opacity = '0'; 
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                    
-                    // নতুন যোগ: আইফ্রেমকে অদৃশ্য করা
-                    if (window.parent && window.parent.document) {
-                        const iframe = window.parent.document.getElementById('popup-iframe');
-                        if (iframe) {
-                            iframe.style.display = 'none';
-                        }
-                    }
-                }, 500); 
-            }
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                overlay.classList.remove('active');
+            }, 500);
         }
 
-        // =======================================
-        // ৩. ইভেন্ট লজিক এবং কন্টেন্ট ইনজেকশন (Header যুক্ত করা হয়েছে)
-        // =======================================
-        
-        function getActiveEvent() {
+        document.addEventListener('DOMContentLoaded', () => {
             const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentDay = today.getDate();
-            const currentYear = today.getFullYear();
-
-            for (const event of eventSchedule) {
-                const eventStart = new Date(currentYear, event.month, event.date);
-                const eventEnd = new Date(eventStart);
-                eventEnd.setDate(eventEnd.getDate() + event.durationDays - 1); 
-                
-                const todayStartOfDay = new Date(currentYear, currentMonth, currentDay);
-
-                if (todayStartOfDay >= eventStart && todayStartOfDay <= eventEnd) {
-                    return event; 
-                }
-            }
-            return null;
-        }
-        
-       function injectPopupContent(event) {
-                const contentDiv = document.getElementById('popupContent');
-                const overlayDiv = document.getElementById('eventPopupOverlay');
-            
-                if (contentDiv && overlayDiv) {
-                    // নতুন যোগ: আইফ্রেমকে দৃশ্যমান করা
-                    if (window.parent && window.parent.document) {
-                        const iframe = window.parent.document.getElementById('popup-iframe');
-                        if (iframe) {
-                            iframe.style.display = 'block'; 
-                        }
-                    }
-                // ১. স্টাইল ক্লাস যুক্ত করা
-                contentDiv.className = '';
-                contentDiv.classList.add(event.styleClass);
-
-                // ২. কন্টেন্ট ইনজেক্ট করা (স্কুলের পক্ষ থেকে লেখাটি যুক্ত করা হয়েছে)
-                contentDiv.innerHTML = `
-    <span id="closeButton" onclick="closePopup(event)">&#xD7;</span>
-    <p class="school-header">
-        পাতপুকুর হাই স্কুলের পক্ষ থেকে -<br>
-        <span style="font-size: 0.8em; font-weight: 500;">[On behalf of Pathpukur High School (H.S.)]</span>
-    </p>
-    <h2>${event.name} ${event.icon}</h2>
-    <h1>${event.title}</h1>
-    <p>**${event.subtitle}**</p>
-`;
-
-                // ৩. পপ-আপ দেখানো
-                overlayDiv.style.display = 'flex';
-                overlayDiv.style.opacity = '1'; // নিশ্চিত করা হলো যে অপাসিটি ১ হবে
-                
-                // ৪. কনফেটি শুরু করা 
-                if (event.styleClass === 'style-new-year' || event.styleClass === 'style-christmas') {
-                    createConfetti(80); 
-                } else if (event.styleClass === 'style-national' || event.styleClass === 'style-childrens-day') {
-                    createConfetti(40);
-                } else {
-                    // অন্যান্য ইভেন্টের জন্য হালকা কনফেটি
-                    createConfetti(20); 
-                }
-            }
-        }
-        
-        // ডোম লোড হওয়ার পর মূল লজিক শুরু
-        document.addEventListener('DOMContentLoaded', function() {
-            const activeEvent = getActiveEvent();
-            if (activeEvent) {
-                injectPopupContent(activeEvent);
-            }
+            const activeEvent = eventSchedule.find(e => {
+                const start = new Date(today.getFullYear(), e.month, e.date);
+                const end = new Date(start);
+                end.setDate(end.getDate() + e.durationDays);
+                return today >= start && today < end;
+            });
+            if (activeEvent) injectPopupContent(activeEvent);
         });
     </script>
-
 </body>
 </html>
