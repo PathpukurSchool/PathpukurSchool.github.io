@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
+        :root {
+            --gold: #ffd700;
+            --white: #ffffff;
+        }
         /* =======================================
         ১. সাধারণ স্টাইল ও অ্যানিমেশন 
         =======================================
@@ -27,39 +31,45 @@
             cursor: pointer; 
             backdrop-filter: blur(5px);
             opacity: 1;
-            transition: opacity 0.5s ease-out;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #popupContent {
-            border-radius: 20px;
-            padding: 40px 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 50px 40px;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-            transform: scale(0.9);
-            animation: bounceIn 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 90%;
-            width: 500px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255,255,255,0.2);
+            max-width: 550px;
+            width: 90%;
             position: relative;
-            cursor: default;
-            border: 5px solid #fff;
-            overflow: hidden; 
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transform: scale(0.7) rotate(-5deg);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        #closeButton {
+        #eventPopupOverlay.active #popupContent {
+            transform: scale(1) rotate(0deg);
+        }
+
+       #closeButton {
             position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 30px;
-            color: #fff;
+            top: -20px; right: -20px;
+            width: 45px; height: 45px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
             cursor: pointer;
-            transition: transform 0.3s, color 0.3s;
-            line-height: 1;
-            font-family: Arial, sans-serif;
-            font-weight: bold;
-            text-shadow: 0 0 5px #000;
-            z-index: 10001;
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.4);
+            transition: 0.3s;
+            border: 3px solid #fff;
         }
-
+        
         #closeButton:hover {
             color: #ff0055;
             transform: rotate(90deg) scale(1.1);
@@ -89,7 +99,11 @@
         /* =======================================
         ২. ইভেন্ট-নির্দিষ্ট স্টাইল 
         =======================================
-        */
+        */ @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         
         /* কমন হেডারের স্টাইল */
         .school-header {
@@ -104,18 +118,18 @@
 
         /* শুভ নববর্ষ, প্রতিষ্ঠা দিবস */
         .style-new-year {
-            background: linear-gradient(135deg, #ff6b6b, #48dbfb, #1dd1a1, #feca57);
+            background: linear-gradient(-45deg, #ff6b6b, #e73c7e, #23a6d5, #23d5ab);
+            animation: gradientMove 10s ease infinite;
             border-color: #ffeaa7;
         }
         .style-new-year h1 { color: #fff; text-shadow: 4px 4px #c23616, 6px 6px #000; }
         .style-new-year p { color: #ffeaa7; text-shadow: 1px 1px #333; }
         .style-new-year .school-header { border-bottom: 2px solid #fff; color: #fff; }
+        .style-new-year { background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); background-size: 400% 400%; animation: gradientBG 15s ease infinite; border-color: var(--gold) !important; }
+        .style-national { background: linear-gradient(180deg, #FF9933, #FFFFFF, #138808); border-color: #000080 !important; }
+        .style-tagore { background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); border-color: #8b4513 !important; }
+        .style-science { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); border-color: #00d2ff !important; }
 
-        /* জাতীয় দিবস (প্রজাতন্ত্র, স্বাধীনতা, নেতাজী, গান্ধী, ক্ষুদিরাম) */
-        .style-national {
-            background: linear-gradient(180deg, #ff9933 0%, #ffffff 50%, #138808 100%);
-            border-color: #000080; 
-        }
         .style-national h1, .style-national h2, .style-national p { color: #000080; }
         .style-national .school-header { border-bottom: 2px solid #000080; color: #000080; }
         
@@ -176,17 +190,24 @@
 
 
         /* সাধারণ টেক্সট স্টাইল */
-        #popupContent h1 {
-            font-family: 'Baloo Da 2', sans-serif;
-            font-size: 3.5em;
-            margin: 0 0 10px 0;
-            letter-spacing: 3px;
+        #popupContent h2 {
+            font-family: 'Baloo Da 2', cursive;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: var(--white);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
         }
 
-        #popupContent h2 {
-            font-family: 'Noto Serif Bengali', serif;
-            font-size: 2em;
-            margin: 0 0 15px 0;
+        #popupContent h1 {
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 2.8em;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(to bottom, #fff, #ddd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
+            margin-bottom: 20px;
         }
         
         #popupContent p {
