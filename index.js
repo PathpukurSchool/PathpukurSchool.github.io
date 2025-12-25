@@ -288,9 +288,9 @@ function renderDynamicList(sectionId) {
         const isItemNew = NEW_STATUS_CONTROL[titleText] === true;
         
         let itemContent = titleText;
-
+        
         if (isItemNew) {
-            itemContent += ` <span class="new-badge">NEW</span>`;  
+            itemContent += ` <span class="new-badge blink">NEW</span>`;  
         }
         
         itemDiv.innerHTML = itemContent; 
