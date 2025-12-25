@@ -199,15 +199,14 @@ function renderHelpList() {
         const titleText = item.text || "No Title";
         const dateText = item.date ? ` [Date: ${item.date}]` : '';  
         
-        // যদি আপনার API তে F কলামের ডাটা 'isNew' কী (Key) তে আসে
-    const isItemNew = (item.isNew && item.isNew.trim() === "Yes");
+       // ✅ F কলামের স্ট্যাটাস চেক: যদি মান 'Yes' হয় তবেই NEW দেখাবে
+        const isItemNew = (item.isNew && item.isNew.toString().trim().toLowerCase() === "yes");
         
         let itemContent = titleText + dateText;  
         
-        // কন্ডিশনাল অ্যানিমেশন/ব্যাজ প্রদর্শন
-    if (isItemNew) {
-        itemContent += ` <span class="new-badge">NEW</span>`;  
-    }
+        if (isItemNew) {
+            itemContent += ` <span class="new-badge">NEW</span>`;  
+        }
         
         itemDiv.innerHTML = itemContent; 
         
