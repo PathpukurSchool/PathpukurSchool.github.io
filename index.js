@@ -28,50 +28,22 @@ async function loadAllItemDetails() {
 
 // LocalStorage থেকে বা ডিফল্ট থেকে 'NEW' স্ট্যাটাস লোড করার লজিক
 async function initializeNewStatusControl() {
-    // 1. Students ও Forms-এর ডেটা লোড করা
-    const baseData = await loadAllItemDetails(); 
+    const baseData = await loadAllItemDetails(); // Students & Forms
     
-    // 2. Notices-এর ডেটা লোড করা (Google Sheet থেকে)
-    let noticesData = [];
-    try {
-        const noticeResponse = await fetch(APPS_SCRIPT_URL);
-        if (noticeResponse.ok) {
-            const data = await noticeResponse.json();
-            noticesData = Array.isArray(data.notices) ? data.notices : [];
-        }
-    } catch (error) {
-        console.error("Failed to fetch notices for initial status control:", error);
-    }
-
-    // LocalStorage থেকে পূর্বের স্ট্যাটাস লোড করা
     const storedStatus = localStorage.getItem(LOCAL_STORAGE_KEY);
     let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
     
-    const allItems = [...baseData, ...noticesData]; // সমস্ত ডেটা একত্রিত করা
-
-    // ✅ পরিবর্তন: NEW স্ট্যাটাস নিয়ন্ত্রণ লজিক
-    // এখন LocalStorage-এর মানকে অগ্রাধিকার দেওয়া হবে। যদি LocalStorage-এ কোনো মান না থাকে:
-    // - Notices (Google Sheet) থেকে আসা `isNew` (যদি থাকে) ব্যবহার করা হবে।
-    // - Students/Forms (index_link.json)-এর জন্য `isNew` প্রপার্টি না থাকলে ডিফল্ট `false` হবে।
-
-    allItems.forEach(item => {
-        const title = item.text || item.title; 
-        if (title) {
-            // যদি LocalStorage-এ এই আইটেমের স্ট্যাটাস না থাকে, তবে ডিফল্ট মান সেট করা হবে।
-            if (newStatusControl[title] === undefined) {
-                 // Notices-এর ক্ষেত্রে, isNew: true/false আসবে।
-                 // Students/Forms-এর ক্ষেত্রে, index_link.json থেকে isNew সরিয়ে দেওয়ায়, item.isNew হবে undefined, 
-                 // ফলে item.isNew === true হবে false। এটিই আমাদের প্রয়োজন।
-                 newStatusControl[title] = item.isNew === true; 
-            }
+    // শুধুমাত্র Students এবং Forms-এর জন্য LocalStorage ইনিশিয়ালাইজ করুন
+    baseData.forEach(item => {
+        const title = item.title;
+        if (title && newStatusControl[title] === undefined) {
+            newStatusControl[title] = false; // ডিফল্ট No
         }
     });
     
     NEW_STATUS_CONTROL = newStatusControl;
-    // গ্লোবাল ভেরিয়েবল আপডেট করার সাথে সাথে LocalStorage-এও সেভ করা
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(NEW_STATUS_CONTROL));
 }
-
 // ===================================
 // ✅ নতুন: স্ক্রল বার (Marquee) রেন্ডারিং লজিক (গ্লোবাল) - সংশোধিত
 // ===================================
@@ -177,6 +149,9 @@ async function fetchNotices() {
     }
 }
 
+/* =================================
+ * ১) নোটিস সেকশন: সরাসরি গুগল শিটের (F কলাম) Yes স্ট্যাটাস নেবে
+ * ================================= */
 function renderHelpList() {
     const container = document.getElementById('help-list');
     if (!container) return;
@@ -187,10 +162,10 @@ function renderHelpList() {
         return;
     }
 
+    // পেজিনেশন লজিক (অপরিবর্তিত)
     totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
     const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
-    const endIndex = startIndex + NOTICES_PER_PAGE;
-    const noticesToRender = Helping.slice(startIndex, endIndex);
+    const noticesToRender = Helping.slice(startIndex, startIndex + NOTICES_PER_PAGE);
 
     noticesToRender.forEach(item => {
         const itemDiv = document.createElement('div');
@@ -199,25 +174,20 @@ function renderHelpList() {
         const titleText = item.text || "No Title";
         const dateText = item.date ? ` [Date: ${item.date}]` : '';  
         
-        // ✅ ফিক্স: সরাসরি Apps Script থেকে আসা 'isNew' প্রপার্টি ব্যবহার করা
-        // এখানে item.isNew হলো Apps Script-এর পাঠানো সেই Boolean মান
+        // সরাসরি গুগল শিট থেকে আসা Boolean মান (F কলামে Yes থাকলে true আসবে)
         const isItemNew = (item.isNew === true); 
         
         let itemContent = titleText + dateText;  
         
-        // ✅ যদি শিটে Yes থাকে, তবেই এই ব্যাজটি যোগ হবে
         if (isItemNew) {
-            itemContent += ` <span class="new-badge">NEW</span>`;  
+            // নোটিস সেকশনে সরাসরি "NEW" এনিমেশন
+            itemContent += ` <span class="new-badge blink">NEW</span>`;  
         }
         
         itemDiv.innerHTML = itemContent; 
-        
-        itemDiv.onmouseover = () => itemDiv.classList.add('hover');
-        itemDiv.onmouseout = () => itemDiv.classList.remove('hover');
         itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
         container.appendChild(itemDiv);
     });
-
     renderPaginationControls();
 
     const noticeSection = document.getElementById('important-links-section-notice'); 
