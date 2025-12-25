@@ -199,14 +199,15 @@ function renderHelpList() {
         const titleText = item.text || "No Title";
         const dateText = item.date ? ` [Date: ${item.date}]` : '';  
         
-        // LocalStorage-নিয়ন্ত্রিত গ্লোবাল অবজেক্ট থেকে স্ট্যাটাস পড়া
-        const isItemNew = NEW_STATUS_CONTROL[titleText] === true; 
+        // যদি আপনার API তে F কলামের ডাটা 'isNew' কী (Key) তে আসে
+    const isItemNew = (item.isNew && item.isNew.trim() === "Yes");
         
         let itemContent = titleText + dateText;  
         
-        if (isItemNew) {
-            itemContent += ` <span class="new-badge">NEW</span>`;  
-        }
+        // কন্ডিশনাল অ্যানিমেশন/ব্যাজ প্রদর্শন
+    if (isItemNew) {
+        itemContent += ` <span class="new-badge">NEW</span>`;  
+    }
         
         itemDiv.innerHTML = itemContent; 
         
