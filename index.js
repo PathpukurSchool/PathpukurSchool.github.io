@@ -179,7 +179,7 @@ async function fetchNotices() {
 
 function renderHelpList() {
     const container = document.getElementById('help-list');
-    if (!container) return console.error("Error: 'help-list' container not found.");
+    if (!container) return;
     container.innerHTML = ""; 
 
     if (!Array.isArray(Helping) || Helping.length === 0) {
@@ -194,16 +194,18 @@ function renderHelpList() {
 
     noticesToRender.forEach(item => {
         const itemDiv = document.createElement('div');
-        itemDiv.classList.add('notice-item'); // [Notices স্টাইল ক্লাস]
+        itemDiv.classList.add('notice-item'); 
         
         const titleText = item.text || "No Title";
         const dateText = item.date ? ` [Date: ${item.date}]` : '';  
         
-       // ✅ F কলামের স্ট্যাটাস চেক: যদি মান 'Yes' হয় তবেই NEW দেখাবে
-        const isItemNew = (item.isNew && item.isNew.toString().trim().toLowerCase() === "yes");
+        // ✅ ফিক্স: সরাসরি Apps Script থেকে আসা 'isNew' প্রপার্টি ব্যবহার করা
+        // এখানে item.isNew হলো Apps Script-এর পাঠানো সেই Boolean মান
+        const isItemNew = (item.isNew === true); 
         
         let itemContent = titleText + dateText;  
         
+        // ✅ যদি শিটে Yes থাকে, তবেই এই ব্যাজটি যোগ হবে
         if (isItemNew) {
             itemContent += ` <span class="new-badge">NEW</span>`;  
         }
