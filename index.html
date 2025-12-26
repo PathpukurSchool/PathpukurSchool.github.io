@@ -41,12 +41,13 @@
   style="
     position: fixed;
     inset: 0;
-    width: 95%;
-    height: 95%;
+    width: 100vw;   /* 100% এর বদলে ১০০vw দিলে স্ক্রিনের বাইরে যাওয়ার ভয় থাকে না */
+    height: 100vh;  /* 100% এর বদলে ১০০vh ব্যবহার করা ভালো */
     border: none;
     z-index: 999999;
     background: transparent;
-    display: none; /* এটি গুরুত্বপূর্ণ: প্রথমে অদৃশ্য থাকবে */
+    display: none;  /* জাভাস্ক্রিপ্ট ইভেন্ট পেলেই কেবল ব্লক হবে */
+    color-scheme: light;/* এটি গুরুত্বপূর্ণ: প্রথমে অদৃশ্য থাকবে */
   ">
 </iframe>
 
