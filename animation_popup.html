@@ -14,21 +14,20 @@
         =======================================
         */
        #eventPopupOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;       /* পুরো স্ক্রিন প্রস্থ নিশ্চিত করে */
-    height: 100vh;      /* পুরো স্ক্রিন উচ্চতা নিশ্চিত করে */
-    background-color: rgba(0, 0, 0, 0.6); /* হালকা কালো স্বচ্ছ ব্যাকগ্রাউন্ড */
-    /* backdrop-filter: blur(8px);           /* পেছনের পেজকে অস্পষ্ট (Blur) করবে */
-    display: flex;
-    justify-content: center; /* মাঝখানে রাখার জন্য */
-    align-items: center;     /* মাঝখানে রাখার জন্য */
-    z-index: 10000; 
-    cursor: pointer; 
-    opacity: 1;
-    transition: opacity 0.5s ease-out;
-}
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw; 
+            height: 100vh; 
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000; 
+            cursor: pointer; 
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
 
         #popupContent {
             border-radius: 20px;
