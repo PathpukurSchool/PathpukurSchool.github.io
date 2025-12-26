@@ -36,7 +36,7 @@
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             transform: scale(0.9);
-            animation: bounceIn 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: smoothPop 1.2s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-width: 90%;
             width: 500px;
             position: relative;
@@ -65,13 +65,23 @@
             transform: rotate(90deg) scale(1.1);
         }
 
-        /* অ্যানিমেশন ফ্রেম */
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.1); opacity: 1; }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); }
-        }
+       /* বাউন্স এবং রোটেশন একসাথে */
+@keyframes smoothPop {
+    0% { 
+        transform: scale(0.3) rotate(-15deg); 
+        opacity: 0; 
+    }
+    60% { 
+        transform: scale(1.1) rotate(5deg); 
+        opacity: 1; 
+    }
+    80% { 
+        transform: scale(0.95) rotate(-2deg); 
+    }
+    100% { 
+        transform: scale(1) rotate(0deg); 
+    }
+}
         @keyframes confettiFall {
             0% { transform: translateY(-10vh) rotateZ(0deg); opacity: 1; }
             100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0.5; }
@@ -315,9 +325,14 @@
 
         window.closePopup = function(event) {
             const overlay = document.getElementById('eventPopupOverlay');
+            const content = document.getElementById('popupContent'); // কন্টেন্টটি ধরুন
             if (overlay && (event.target === overlay || event.target.id === 'closeButton')) {
-                overlay.style.opacity = '0'; 
-                setTimeout(() => {
+        // বন্ধ হওয়ার সময় ঘুরবে এবং ছোট হবে
+        content.style.transition = "transform 0.5s ease-in, opacity 0.5s";
+        content.style.transform = "scale(0.5) rotate(15deg)";
+        overlay.style.opacity = '0'; 
+
+        setTimeout(() => {
                     overlay.style.display = 'none';
                     
                     // নতুন যোগ: আইফ্রেমকে অদৃশ্য করা
