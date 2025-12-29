@@ -10,9 +10,9 @@
                 "description": "View Academic Calendar.", 
                 "url": ""},
 
-         {"title": "Holiday List", 
+         {"title": "School Holiday List", 
                 "description": "View Holiday List.", 
-                "url": "https://script.google.com/macros/s/AKfycbz3NZbUweZgdAlqpCmob4icQmRe5Pq2wVjVmebj89oSUrFXH28NTrLP_sxMdWc6d3Riew/exec"},
+                "url": "https://script.google.com/macros/s/AKfycbxcr7UIKfaDAEjCfxvqV6WK7ubLTLAdZYOhuRfB60p4AlRG47rqDxNzTZCe3zweATUkHA/exec"},
 
         {"title": "Book List", 
                 "description": "View Student Book List.", 
