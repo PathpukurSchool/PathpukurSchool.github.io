@@ -28,20 +28,19 @@ async function loadAllItemDetails() {
 
 // LocalStorage থেকে বা ডিফল্ট থেকে 'NEW' স্ট্যাটাস লোড করার লজিক
 async function initializeNewStatusControl() {
-    const baseData = await loadAllItemDetails(); // Students & Forms
+    const baseData = await loadAllItemDetails(); // Students & Forms লোড হচ্ছে
     
-    const storedStatus = localStorage.getItem(LOCAL_STORAGE_KEY);
-    let newStatusControl = storedStatus ? JSON.parse(storedStatus) : {};
-    
-    // শুধুমাত্র Students এবং Forms-এর জন্য LocalStorage ইনিশিয়ালাইজ করুন
+    // সরাসরি JSON ডাটা থেকে NEW স্ট্যাটাস ম্যাপ তৈরি করা
+    let newStatusControl = {};
     baseData.forEach(item => {
-        const title = item.title;
-        if (title && newStatusControl[title] === undefined) {
-            newStatusControl[title] = false; // ডিফল্ট No
+        if (item.title) {
+            // যদি JSON-এ isNew: true থাকে তবেই true হবে
+            newStatusControl[item.title] = item.isNew === true; 
         }
     });
     
     NEW_STATUS_CONTROL = newStatusControl;
+    // LocalStorage এ আপডেট রাখা (ঐচ্ছিক)
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(NEW_STATUS_CONTROL));
 }
 // ===================================
@@ -53,12 +52,11 @@ function renderMarquee() {
     const marqueeWrapper = document.getElementById('new-marquee-wrapper');
     const marqueeContainer = document.querySelector('.scrolling-line-container'); 
 
-    if (!marqueeWrapper || !marqueeContainer) return;
+    if (!marqueeWrapper) return;
 
-    // 1. LocalStorage অনুযায়ী NEW চিহ্নিত আইটেমগুলি ফিল্টার করা
+    // JSON থেকে পাওয়া ডাটা অনুযায়ী NEW আইটেম ফিল্টার
     const newItems = ALL_ITEMS_DETAILS.filter(item => {
-        const title = item.title;
-        return NEW_STATUS_CONTROL[title] === true; 
+        return item.isNew === true; 
     });
 
     let htmlContent = '';
