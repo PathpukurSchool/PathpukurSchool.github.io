@@ -10,9 +10,9 @@ body.no-scroll{overflow:hidden}
 .main-header{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--primary-red) 0%,#B83227 50%,var(--dark-khaki) 100%);color:var(--white);padding:60px 20px 20px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.3);position:relative;overflow:hidden;z-index:900;width:100%;box-sizing:border-box}
 .header-content{position:relative;z-index:2;flex-grow:1;text-align:center}
 /* .logo-container Style */
-.main-header .logo-container{background:url('PHS-LOGO.png') center/cover no-repeat var(--white);filter:blur(.8px);width:130px;height:130px;border-radius:50%;border:6px solid rgba(255,255,255,.9);margin:0 auto 20px;position:relative;overflow:hidden;z-index:10;user-select:none;pointer-events:none;animation:pulse 2s infinite alternate ease-in-out}
+.main-header .logo-container{background:url('PHS-LOGO.png') center/contain no-repeat var(--white);width:130px;height:130px;border-radius:50%;border:6px solid rgba(255,255,255,.9);margin:0 auto 20px;position:relative;overflow:hidden;z-index:10;user-select:none;pointer-events:none;animation:pulse 2s infinite alternate ease-in-out}
 /* Watermark ::before and ::after */
-.main-header .logo-container::before{content:"P\A H\A S";white-space:pre;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);line-height:.8;color:rgba(0,0,0,.6);font-size:2.5em;font-weight:900;z-index:11;pointer-events:none;text-shadow:0 0 5px rgba(255,255,255,.8);opacity:.8}
+.main-header .logo-container::before{content:"P\A H\A S";white-space:pre;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);line-height:.8;color:rgba(0,0,0,.10);font-size:2.5em;font-weight:900;z-index:11;pointer-events:none;text-shadow:0 0 5px rgba(255,255,255,.8);opacity:.8}
 .main-header .logo-container::after{content:"P S";white-space:nowrap;position:absolute;top:50%;left:55%;transform:translate(-50%,-50%);letter-spacing:15px;font-size:2.5em;width:100%;color:rgba(0,0,0,.6);font-weight:900;z-index:11;pointer-events:none;text-shadow:0 0 5px rgba(255,255,255,.8);opacity:.8;text-align:center}
 @keyframes pulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,.7)}100%{transform:scale(1.05);box-shadow:0 0 0 15px rgba(255,255,255,0)}}
 .main-header h1{margin:0;font-size:3.8em;letter-spacing:2px;text-shadow:3px 3px 6px rgba(0,0,0,.7);font-weight:700}
