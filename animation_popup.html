@@ -138,7 +138,6 @@
         ২. ইভেন্ট-নির্দিষ্ট স্টাইল 
         =======================================
         */
-        
         /* কমন হেডারের স্টাইল */
         .school-header {
             font-family: 'Noto Serif Bengali', serif;
@@ -148,6 +147,38 @@
             padding-bottom: 10px;
             border-bottom: 2px solid rgba(255, 255, 255, 0.5);
             font-weight: 600;
+        }
+
+        /* রেজাল্ট ও বিশেষ ঘোষণার আকর্ষণীয় স্টাইল */
+        .style-result {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-color: #f1c40f;
+            color: #fff;
+        }
+        .style-result h1 { color: #f1c40f; text-shadow: 2px 2px #000; }
+        .style-result h2 { color: #fff; }
+        .style-result p { color: #e0e0e0; }
+        .style-result .school-header { border-bottom: 2px solid #f1c40f; color: #f1c40f; }
+        .style-result #closeButton { color: #f1c40f; }
+        
+        /* রেজাল্ট টেবিল স্টাইল */
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            font-family: 'Noto Serif Bengali', serif;
+        }
+        .result-table th, .result-table td {
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        .result-table th {
+            background-color: rgba(241, 197, 15, 0.2);
+            color: #f1c40f;
         }
 
         /* শুভ নববর্ষ, প্রতিষ্ঠা দিবস */
@@ -288,7 +319,31 @@
     </div>
 
     <script>
+        // =======================================
+        // ১. ইভেন্ট সময়সূচি ও স্থায়ী নোটিশ তালিকা
+        // =======================================
         const eventSchedule = [
+
+            // --- স্থায়ী নোটিশ (তারিখের ওপর নির্ভরশীল নয়, সব সময় দেখাবে যতদিন কোডে থাকবে) ---
+            { 
+                name: "মাধ্যমিক পরীক্ষা ২০২৬-এর গৌরবোজ্জ্বল ফলাফল 🏆", 
+                alwaysShow: true, // এটি যুক্ত করার কারণে নোটিশটি স্থায়ীভাবে প্রতিদিন দেখাবে
+                styleClass: "style-result", 
+                icon: "⭐", 
+                title: "আমাদের কৃতি ছাত্র-ছাত্রীদের আন্তরিক অভিনন্দন!", 
+                // subtitle বা customHTML এর মাধ্যমে টেবিল বা অন্যান্য কন্টেন্ট যুক্ত করা যাবে
+                customHTML: `
+                    <table class="result-table">
+                        <tr><th>স্থান</th><th>শিক্ষার্থীর নাম</th><th>প্রাপ্ত নম্বর</th></tr>
+                        <tr><td>১ম</td><td>রাহুল নস্কর</td><td>৬৮২ (৯৭.৪%)</td></tr>
+                        <tr><td>২য়</td><td>অঙ্কিতা মন্ডল</td><td>৬৭৫ (৯৬.৪%)</td></tr>
+                        <tr><td>৩য়</td><td>সায়ন্তন বৈদ্য</td><td>৬৬8 (৯৫.৪%)</td></tr>
+                    </table>
+                    <p style="font-size:1.1em; margin-top:15px; font-weight:bold; color:#f1c40f;">বিদ্যালয়ের সামগ্রিক পাশের হার: ১০০%</p>
+                `
+            },
+
+            // --- সাধারণ ক্যালেন্ডার ইভেন্টসমূহ ---
             // জানুয়ারি (মাস: 0)
             { name: "বিদ্যালয় প্রতিষ্ঠা দিবস", month: 0, date: 2, durationDays: 1, styleClass: "style-new-year", icon: "🏫", title: "আমাদের ঐতিহ্য ও জ্ঞানের পীঠস্থানের প্রতিষ্ঠা দিবস।", subtitle: "Pathpukur High School (HS)-এর প্রতিষ্ঠা দিবস।" },
             { name: "শুভ ইংরাজী নববর্ষ!", month: 0, date: 1, durationDays: 7, styleClass: "style-new-year", icon: "🎉", title: "নতুন বছর আপনার জীবনে বয়ে আনুক আনন্দ, শান্তি ও সাফল্য।", subtitle: "Happy New Year! ✨" },
@@ -354,6 +409,11 @@
             { name: "জাতীয় গণিত দিবস", month: 11, date: 22, durationDays: 1, styleClass: "style-science", icon: "🧮", title: "গণিতজ্ঞ শ্রীনিবাস রামানুজনের জন্মবার্ষিকীতে গণিতের গুরুত্ব স্মরণ করি।", subtitle: "National Mathematics Day" },
             { name: "শুভ বড়দিন", month: 11, date: 25, durationDays: 5, styleClass: "style-christmas", icon: "🎄", title: "বড়দিনের আনন্দ ও শান্তি সকলের জীবনে আসুক।", subtitle: "Merry Christmas! 🎁" }
         ];
+
+        // =======================================
+        // ২. কনফেটি ও ক্রমান্বয়িক ক্লোজ ফাংশন (Queue Logic)
+        // =======================================
+        let activeEventsQueue = []; // আজকের সব ম্যাচিং ইভেন্টের তালিকা রাখার ফাঁকা কিউ
         
         function createConfetti(count = 50) {
             const colors = ['#f7d794', '#ff6b81', '#70a1ff', '#2ed573', '#ffa502', '#fff'];
@@ -377,43 +437,61 @@
             const overlay = document.getElementById('eventPopupOverlay');
             const content = document.getElementById('popupContent');
             
-            // ব্যাকগ্রাউন্ড ওভারলে, ক্রস বাটন অথবা ক্যানসেল বাটন যেকোনো একটায় ক্লিক করলেই বন্ধ হবে
             if (overlay && (event.target === overlay || event.target.id === 'closeButton' || event.target.classList.contains('popup-cancel-btn'))) {
                 
-                content.style.transition = "transform 0.5s cubic-bezier(0.36, 0, 0.66, -0.56), opacity 0.5s";
+                // বর্তমান পপ-আপ বন্ধের ছোট অ্যানিমেশন
+                content.style.transition = "transform 0.4s cubic-bezier(0.36, 0, 0.66, -0.56), opacity 0.4s";
                 content.style.transform = "scale(0) rotate(-10deg)"; 
-                overlay.style.opacity = '0'; 
+                
+                // কিউ (Queue) থেকে বর্তমান প্রদর্শিত ইভেন্টটি বাদ দেওয়া হচ্ছে
+                activeEventsQueue.shift();
                 
                 setTimeout(() => {
-                    overlay.style.display = 'none';
-                    if (window.parent && window.parent.document) {
-                        const iframe = window.parent.document.getElementById('popup-iframe');
-                        if (iframe) {
-                            iframe.style.display = 'none';
-                        }
+                    // যদি আরও ইভেন্ট লাইনে বাকি থাকে, তবে সেটি ক্রমান্বয়ে দেখাবে
+                    if (activeEventsQueue.length > 0) {
+                        content.style.transform = "scale(0.9)"; // পরবর্তী অ্যানিমেশনের জন্য রিসেট
+                        injectPopupContent(activeEventsQueue[0]); 
+                    } else {
+                        // কোনো ইভেন্ট বাকি না থাকলে সম্পূর্ণ উইন্ডো বন্ধ হবে
+                        overlay.style.opacity = '0'; 
+                        setTimeout(() => {
+                            overlay.style.display = 'none';
+                            if (window.parent && window.parent.document) {
+                                const iframe = window.parent.document.getElementById('popup-iframe');
+                                if (iframe) iframe.style.display = 'none';
+                            }
+                        }, 400);
                     }
-                }, 500); 
+                }, 400); 
             }
         }
 
-        function getActiveEvent() {
+        // আজকের দিনের সকল সঠিক ইভেন্ট খুঁজে বের করার ফাংশন
+        function getActiveEventsList() {
             const today = new Date();
             const currentMonth = today.getMonth();
             const currentDay = today.getDate();
             const currentYear = today.getFullYear();
+            const matchingEvents = [];
 
             for (const event of eventSchedule) {
+                // ১. যদি কোনো নোটিশ সব সময়ের জন্য (alwaysShow) সেট করা থাকে
+                if (event.alwaysShow) {
+                    matchingEvents.push(event);
+                    continue;
+                }
+
+                // ২. সাধারণ নির্দিষ্ট তারিখের ইভেন্ট যাচাই
                 const eventStart = new Date(currentYear, event.month, event.date);
                 const eventEnd = new Date(eventStart);
                 eventEnd.setDate(eventEnd.getDate() + event.durationDays - 1); 
-                
                 const todayStartOfDay = new Date(currentYear, currentMonth, currentDay);
 
                 if (todayStartOfDay >= eventStart && todayStartOfDay <= eventEnd) {
-                    return event; 
+                    matchingEvents.push(event); 
                 }
             }
-            return null;
+            return matchingEvents;
         }
         
         function injectPopupContent(event) {
@@ -423,43 +501,54 @@
             if (contentDiv && overlayDiv) {
                 if (window.parent && window.parent.document) {
                     const iframe = window.parent.document.getElementById('popup-iframe');
-                    if (iframe) {
-                        iframe.style.display = 'block'; 
-                    }
+                    if (iframe) iframe.style.display = 'block'; 
                 }
+                
                 contentDiv.className = '';
                 contentDiv.classList.add(event.styleClass);
 
-                // কন্টেন্ট ইনজেকশন করার সময় নিচে Cancel বোতাম যুক্ত করা হলো
+                // ডাইনামিক কন্টেন্ট তৈরিতে সাবটাইটেল নাকি কাস্টম HTML (যেমন টেবিল) বসবে তা নির্ধারণ করা
+                let bodyContent = '';
+                if (event.customHTML) {
+                    bodyContent = event.customHTML;
+                } else {
+                    bodyContent = `<p>**${event.subtitle || ''}**</p>`;
+                }
+
                 contentDiv.innerHTML = `
                     <span id="closeButton" onclick="closePopup(event)">&times;</span>
                     <p class="school-header">
                         পাতপুকুর হাই স্কুলের পক্ষ থেকে -<br>
                         <span style="font-size: 0.8em; font-weight: 500;">[On behalf of Pathpukur High School (H.S.)]</span>
                     </p>
-                    <h2>${event.name} ${event.icon}</h2>
-                    <h1>${event.title}</h1>
-                    <p>**${event.subtitle}**</p>
+                    <h2>${event.name} ${event.icon || ''}</h2>
+                    <h1>${event.title || ''}</h1>
+                    ${bodyContent}
+                    <br>
                     <button class="popup-cancel-btn" onclick="closePopup(event)">Cancel</button>
                 `;
 
                 overlayDiv.style.display = 'flex';
                 overlayDiv.style.opacity = '1'; 
                 
+                // কনফেটি ইফেক্ট ম্যানেজমেন্ট
                 if (event.styleClass === 'style-new-year' || event.styleClass === 'style-christmas') {
                     createConfetti(80); 
-                } else if (event.styleClass === 'style-national' || event.styleClass === 'style-childrens-day') {
-                    createConfetti(40);
+                } else if (event.styleClass === 'style-national' || event.styleClass === 'style-childrens-day' || event.styleClass === 'style-result') {
+                    createConfetti(45);
                 } else {
-                    createConfetti(20); 
+                    createConfetti(15); 
                 }
             }
         }
         
         document.addEventListener('DOMContentLoaded', function() {
-            const activeEvent = getActiveEvent();
-            if (activeEvent) {
-                injectPopupContent(activeEvent);
+            // আজকের সব ইভেন্টের লিস্ট কিউ (Queue) তে নেওয়া হলো
+            activeEventsQueue = getActiveEventsList();
+            
+            // যদি অন্তত একটি ইভেন্টও থাকে, তবে প্রথমটি প্রদর্শন করা হবে
+            if (activeEventsQueue.length > 0) {
+                injectPopupContent(activeEventsQueue[0]);
             }
         });
     </script>
