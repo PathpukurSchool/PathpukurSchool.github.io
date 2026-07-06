@@ -27,13 +27,13 @@
             cursor: pointer; 
             opacity: 1;
             transition: opacity 0.5s ease-out;
-            padding: 20px; /* ছোট স্ক্রিনে সেফটি স্পেস */
+            padding: 20px;
             box-sizing: border-box;
         }
 
         #popupContent {
             border-radius: 20px;
-            padding: 40px 40px 30px; /* নিচের প্যাডিং সামান্য সামঞ্জস্য করা হলো */
+            padding: 40px 40px 30px; 
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             transform: scale(0.9);
@@ -41,15 +41,14 @@
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-width: 95%;
             width: 500px;
-            max-height: 85vh; /* স্ক্রিন সাইজ থেকে সামান্য ছোট রাখার জন্য */
-            overflow-y: auto; /* কন্টেন্ট বেশি হলে যেন স্ক্রল করা যায় */
+            max-height: 85vh; 
+            overflow-y: auto; 
             position: relative;
             cursor: default;
             border: 5px solid #fff;
             box-sizing: border-box;
         }
 
-        /* স্ক্রলবার দেখতে সুন্দর করার জন্য কাস্টমাইজেশন */
         #popupContent::-webkit-scrollbar {
             width: 6px;
         }
@@ -63,7 +62,7 @@
             top: 15px;
             right: 20px;
             font-size: 30px;
-            color: inherit; /* প্যারেন্ট ক্লাসের টেক্সট কালার অটোমেটিক পাবে */
+            color: inherit; 
             cursor: pointer;
             transition: transform 0.3s, color 0.3s;
             line-height: 1;
@@ -79,7 +78,6 @@
             opacity: 1;
         }
 
-        /* নিচের ছোট Cancel বোতামের স্টাইল */
         .popup-cancel-btn {
             display: inline-block;
             margin-top: 25px;
@@ -103,22 +101,11 @@
             transform: translateY(-2px);
         }
 
-       /* বাউন্স এবং রোটেশন একসাথে */
         @keyframes smoothPop {
-            0% { 
-                transform: scale(0.3) rotate(-15deg); 
-                opacity: 0; 
-            }
-            60% { 
-                transform: scale(1.1) rotate(5deg); 
-                opacity: 1; 
-            }
-            80% { 
-                transform: scale(0.95) rotate(-2deg); 
-            }
-            100% { 
-                transform: scale(1) rotate(0deg); 
-            }
+            0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+            80% { transform: scale(0.95) rotate(-2deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
         @keyframes confettiFall {
             0% { transform: translateY(-10vh) rotateZ(0deg); opacity: 1; }
@@ -135,10 +122,9 @@
         }
 
         /* =======================================
-        ২. ইভেন্ট-নির্দিষ্ট স্টাইল 
+        ২. ইভেন্ট ও রেজাল্ট-নির্দিষ্ট স্টাইল 
         =======================================
         */
-        /* কমন হেডারের স্টাইল */
         .school-header {
             font-family: 'Noto Serif Bengali', serif;
             font-size: 1.1em;
@@ -181,140 +167,73 @@
             color: #f1c40f;
         }
 
-        /* শুভ নববর্ষ, প্রতিষ্ঠা দিবস */
-        .style-new-year {
-            background: linear-gradient(135deg, #ff6b6b, #48dbfb, #1dd1a1, #feca57);
-            border-color: #ffeaa7;
-        }
+        /* অন্যান্য পূর্ববর্তী স্টাইলসমূহ */
+        .style-new-year { background: linear-gradient(135deg, #ff6b6b, #48dbfb, #1dd1a1, #feca57); border-color: #ffeaa7; }
         .style-new-year h1 { color: #fff; text-shadow: 4px 4px #c23616, 6px 6px #000; }
         .style-new-year p { color: #ffeaa7; text-shadow: 1px 1px #333; }
         .style-new-year .school-header { border-bottom: 2px solid #fff; color: #fff; }
         .style-new-year #closeButton { color: #fff; }
 
-        /* জাতীয় দিবস (প্রজাতন্ত্র, স্বাধীনতা, নেতাজী, গান্ধী, ক্ষুদিরাম) */
-        .style-national {
-            background: linear-gradient(180deg, #ff9933 0%, #ffffff 50%, #138808 100%);
-            border-color: #000080; 
-        }
+        .style-national { background: linear-gradient(180deg, #ff9933 0%, #ffffff 50%, #138808 100%); border-color: #000080; }
         .style-national h1, .style-national h2, .style-national p { color: #000080; }
         .style-national .school-header { border-bottom: 2px solid #000080; color: #000080; }
         .style-national #closeButton { color: #000080; }
         
-        /* কবি জয়ন্তী, মাতৃভাষা, বিদ্যাসাগর (জ্ঞান/সাহিত্য থিম) */
-        .style-tagore {
-            background: linear-gradient(135deg, #f0e68c, #fff8dc, #f0e68c);
-            border-color: #8b4513;
-        }
+        .style-tagore { background: linear-gradient(135deg, #f0e68c, #fff8dc, #f0e68c); border-color: #8b4513; }
         .style-tagore h1, .style-tagore h2 { color: #8b4513; text-shadow: 1px 1px #fff; font-family: 'Noto Serif Bengali', serif; }
         .style-tagore p { color: #333; }
         .style-tagore .school-header { border-bottom: 2px solid #8b4513; color: #8b4513; }
         .style-tagore #closeButton { color: #8b4513; }
 
-        /* বিশ্ব পরিবেশ দিবস */
-        .style-environment {
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-            border-color: #16a085;
-        }
+        .style-environment { background: linear-gradient(135deg, #2ecc71, #27ae60); border-color: #16a085; }
         .style-environment h1, .style-environment h2 { color: #fff; text-shadow: 1px 1px #16a085; }
         .style-environment p { color: #ecf0f1; }
         .style-environment .school-header { border-bottom: 2px solid #ecf0f1; color: #ecf0f1; }
         .style-environment #closeButton { color: #fff; }
 
-        /* জাতীয় বিজ্ঞান দিবস */
-        .style-science {
-            background: linear-gradient(135deg, #4285f4, #0f9d58);
-            border-color: #f4b400;
-        }
+        .style-science { background: linear-gradient(135deg, #4285f4, #0f9d58); border-color: #f4b400; }
         .style-science h1, .style-science h2 { color: #fff; text-shadow: 2px 2px #333; }
         .style-science p { color: #e6e6e6; }
         .style-science .school-header { border-bottom: 2px solid #f4b400; color: #f4b400; }
         .style-science #closeButton { color: #fff; }
         
-        /* শিক্ষক দিবস */
-        .style-teachers-day {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-            border-color: #795548;
-        }
+        .style-teachers-day { background: linear-gradient(135deg, #f39c12, #e67e22); border-color: #795548; }
         .style-teachers-day h1, .style-teachers-day h2 { color: #fff; text-shadow: 2px 2px #c0392b; }
         .style-teachers-day p { color: #ffe0b2; }
         .style-teachers-day .school-header { border-bottom: 2px solid #ffe0b2; color: #ffe0b2; }
         .style-teachers-day #closeButton { color: #fff; }
 
-        /* শিশু দিবস */
-        .style-childrens-day {
-            background: radial-gradient(circle, #f4b400, #ea4335);
-            border-color: #4285f4;
-        }
+        .style-childrens-day { background: radial-gradient(circle, #f4b400, #ea4335); border-color: #4285f4; }
         .style-childrens-day h1, .style-childrens-day h2 { color: #fff; text-shadow: 2px 2px #34a853; }
         .style-childrens-day p { color: #f8d484; }
         .style-childrens-day .school-header { border-bottom: 2px solid #fff; color: #fff; }
         .style-childrens-day #closeButton { color: #fff; }
 
-        /* শুভ বড়দিন */
-        .style-christmas {
-            background: linear-gradient(135deg, #c0392b, #27ae60);
-            border-color: #f1c40f;
-        }
+        .style-christmas { background: linear-gradient(135deg, #c0392b, #27ae60); border-color: #f1c40f; }
         .style-christmas h1 { color: #f1c40f; text-shadow: 2px 2px #000; }
         .style-christmas h2 { color: #fff; }
         .style-christmas p { color: #ecf0f1; }
         .style-christmas .school-header { border-bottom: 2px solid #f1c40f; color: #f1c40f; }
         .style-christmas #closeButton { color: #f1c40f; }
 
-
-        /* সাধারণ টেক্সট স্টাইল */
-        #popupContent h1 {
-            font-family: 'Baloo Da 2', sans-serif;
-            font-size: 3.5em;
-            margin: 0 0 10px 0;
-            letter-spacing: 3px;
-        }
-
-        #popupContent h2 {
-            font-family: 'Noto Serif Bengali', serif;
-            font-size: 2em;
-            margin: 0 0 15px 0;
-        }
+        #popupContent h1 { font-family: 'Baloo Da 2', sans-serif; font-size: 3.5em; margin: 0 0 10px 0; letter-spacing: 3px; }
+        #popupContent h2 { font-family: 'Noto Serif Bengali', serif; font-size: 2em; margin: 0 0 15px 0; }
+        #popupContent p { font-family: 'Noto Serif Bengali', serif; font-size: 1.3em; margin: 10px 0 0 0; line-height: 1.5; }
         
-        #popupContent p {
-            font-family: 'Noto Serif Bengali', serif;
-            font-size: 1.3em;
-            margin: 10px 0 0 0;
-            line-height: 1.5;
-        }
-        
-        /* মিডিয়া কোয়েরি */
         @media (max-width: 600px) {
-            #popupContent {
-                padding: 30px 20px 20px;
-                width: 100%;
-            }
-            #popupContent h1 {
-                font-size: 2.2em;
-                letter-spacing: 1px;
-            }
-            #popupContent h2 {
-                font-size: 1.4em;
-            }
-            #popupContent p {
-                font-size: 1.1em;
-            }
-            .school-header {
-                font-size: 0.95em;
-            }
-            #closeButton {
-                top: 10px;
-                right: 15px;
-                font-size: 26px;
-            }
+            #popupContent { padding: 30px 20px 20px; width: 100%; }
+            #popupContent h1 { font-size: 2.2em; letter-spacing: 1px; }
+            #popupContent h2 { font-size: 1.4em; }
+            #popupContent p { font-size: 1.1em; }
+            .school-header { font-size: 0.95em; }
+            #closeButton { top: 10px; right: 15px; font-size: 26px; }
         }
     </style>
 </head>
 <body>
 
     <div id="eventPopupOverlay" onclick="closePopup(event)" style="display: none;">
-        <div id="popupContent" onclick="event.stopPropagation()">
-            </div>
+        <div id="popupContent" onclick="event.stopPropagation()"></div>
         <div id="confetti-container"></div>
     </div>
 
@@ -323,7 +242,6 @@
         // ১. ইভেন্ট সময়সূচি ও স্থায়ী নোটিশ তালিকা
         // =======================================
         const eventSchedule = [
-
             // --- স্থায়ী নোটিশ (তারিখের ওপর নির্ভরশীল নয়, সব সময় দেখাবে যতদিন কোডে থাকবে) ---
             { 
                 name: "মাধ্যমিক পরীক্ষা ২০২৬-এর গৌরবোজ্জ্বল ফলাফল 🏆", 
@@ -385,11 +303,11 @@
             // আগস্ট (মাস: 7)
             { name: "আচার্য প্রফুল্ল চন্দ্র রায়ের জন্মজয়ন্তী", month: 7, date: 2, durationDays: 1, styleClass: "style-science", icon: "🧪", title: "বাঙালি বিজ্ঞানী ও বেঙ্গল কেমিক্যালসের প্রতিষ্ঠাতার প্রতি শ্রদ্ধা।", subtitle: "Acharya Prafulla Chandra Ray Jayanti" },
             { name: "ক্ষুদিরাম বসুর আত্মবলিদান দিবস", month: 7, date: 11, durationDays: 1, styleClass: "style-national", icon: "🔥", title: "দেশের জন্য শহিদ বীরের প্রতি সশ্রদ্ধ প্রণাম।", subtitle: "শহিদ ক্ষুদিরাম বসুর আত্মবলিদান দিবস" },
-            { name: "Independence Day", month: 7, date: 15, durationDays: 1, styleClass: "style-national", icon: "🇮🇳", title: "দেশপ্রেম ও আত্মত্যাগের মহান উৎসব।", subtitle: " স্বাধীনতা দিবস! বন্দে মাতরম্।" },
-            { name: "জাতীয় ক্রীড়া দিবস", month: 7, date: 29, durationDays: 1, styleClass: "style-childrens-day", icon: "🏅", title: "খেলাধুলা মানসিক ও শারীরিক স্বাস্থ্যের জন্য অপরিহার্য।", subtitle: "National Sports Day! সুস্থ থাকুন, খেলুন।" },
+            { name: "Independence Day", month: 7, date: 15, durationDays: 1, styleClass: "style-national", icon: "🇮🇳", title: "দেশপ্রেম ও আত্মত্যাগের মহান উৎসব।", subtitle: "স্বাধীনতা দিবস! বন্দে মাতরম্।" },
+            { name: "জাতীয় ক্রীড়া দিবস", month: 7, date: 29, durationDays: 1, styleClass: "style-childrens-day", icon: "🏅", title: "খেलाধুলা মানসিক ও শারীরিক স্বাস্থ্যের জন্য অপরিহার্য।", subtitle: "National Sports Day! সুস্থ থাকুন, খেলুন।" },
 
             // সেপ্টেম্বর (মাস: 8)
-            { name: "শিক্ষক দিবস", month: 8, date: 5, durationDays: 1, styleClass: "style-teachers-day", icon: "👨‍🏫", title: "জ্ঞানদানকারী সকল গুরুজনদের জানাই সশ্রদ্ধ প্রণাম।", subtitle: "ড. সর্বপল্লী রাধাকൃষ্ণনের জন্মবার্ষিকী।" },
+            { name: "শিক্ষক দিবস", month: 8, date: 5, durationDays: 1, styleClass: "style-teachers-day", icon: "👨‍🏫", title: "জ্ঞানদানকারী সকল গুরুজনদের জানাই সশ্রদ্ধ প্রণাম।", subtitle: "ড. সর্বপল্লী রাধাকৃষ্ণনের জন্মবার্ষিকী।" },
             { name: "আন্তর্জাতিক সাক্ষরতা দিবস", month: 8, date: 8, durationDays: 1, styleClass: "style-tagore", icon: "📖", title: "সাক্ষরতা অর্জনই হোক আমাদের অঙ্গীকার।", subtitle: "International Literacy Day" },
             { name: "বিদ্যাসাগর জন্মজয়ন্তী", month: 8, date: 26, durationDays: 1, styleClass: "style-tagore", icon: "📚", title: '"দয়া ও বিদ্যার সাগর" - সমাজ সংস্কারকের প্রতি শ্রদ্ধা।', subtitle: "ঈশ্বরচন্দ্র বিদ্যাসাগরের জন্মবার্ষিকী।" },
             { name: "বিশ্ব পর্যটন দিবস", month: 8, date: 27, durationDays: 1, styleClass: "style-environment", icon: "🗺️", title: "ভ্রমণ ও সংস্কৃতির মাধ্যমে বিশ্বকে জানা জরুরি।", subtitle: "World Tourism Day!" },
@@ -409,7 +327,7 @@
             { name: "জাতীয় গণিত দিবস", month: 11, date: 22, durationDays: 1, styleClass: "style-science", icon: "🧮", title: "গণিতজ্ঞ শ্রীনিবাস রামানুজনের জন্মবার্ষিকীতে গণিতের গুরুত্ব স্মরণ করি।", subtitle: "National Mathematics Day" },
             { name: "শুভ বড়দিন", month: 11, date: 25, durationDays: 5, styleClass: "style-christmas", icon: "🎄", title: "বড়দিনের আনন্দ ও শান্তি সকলের জীবনে আসুক।", subtitle: "Merry Christmas! 🎁" }
         ];
-
+        
         // =======================================
         // ২. কনফেটি ও ক্রমান্বয়িক ক্লোজ ফাংশন (Queue Logic)
         // =======================================
