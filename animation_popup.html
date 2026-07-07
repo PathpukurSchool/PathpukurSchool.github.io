@@ -80,10 +80,10 @@
 
         .popup-cancel-btn {
             display: inline-block;
-            margin-top: 25px;
+            margin-top: 15px;
             padding: 8px 20px;
             font-family: 'Noto Serif Bengali', serif;
-            font-size: 0.95em;
+            font-size: 0.75em;
             font-weight: bold;
             text-decoration: none;
             background-color: rgba(0, 0, 0, 0.1);
@@ -127,7 +127,7 @@
         */
         .school-header {
             font-family: 'Noto Serif Bengali', serif;
-            font-size: 1.1em;
+            font-size: 1.0em;
             color: rgba(255, 255, 255, 0.9);
             margin-bottom: 20px;
             padding-bottom: 10px;
@@ -222,11 +222,11 @@
         
         @media (max-width: 600px) {
             #popupContent { padding: 30px 20px 20px; width: 100%; }
-            #popupContent h1 { font-size: 2.2em; letter-spacing: 1px; }
-            #popupContent h2 { font-size: 1.4em; }
-            #popupContent p { font-size: 1.1em; }
-            .school-header { font-size: 0.95em; }
-            #closeButton { top: 10px; right: 15px; font-size: 26px; }
+            #popupContent h1 { font-size: 2.0em; letter-spacing: 1px; }
+            #popupContent h2 { font-size: 1.2em; }
+            #popupContent p { font-size: 1.0em; }
+            .school-header { font-size: 0.85em; }
+            #closeButton { top: 10px; right: 15px; font-size: 20px; }
         }
     </style>
 </head>
@@ -459,7 +459,6 @@
                     <span id="closeButton" onclick="closePopup(event)">&times;</span>
                     <p class="school-header">
                         পাতপুকুর হাই স্কুলের পক্ষ থেকে -<br>
-                        <span style="font-size: 0.8em; font-weight: 500;">[On behalf of Pathpukur High School (H.S.)]</span>
                     </p>
                     <h2>${event.name} ${event.icon || ''}</h2>
                     <h1>${event.title || ''}</h1>
