@@ -14,8 +14,7 @@ async function loadAllItemDetails() {
         if (!response.ok) throw new Error('Failed to load config.');
         const data = await response.json();
         
-        // Students এবং Forms ডেটা একসাথে করা
-        const dynamicItems = [...(data.students || []), ...(data.forms || [])];
+    const dynamicItems = [...(data.students || []), ...(data.forms || []), ...(data.routine || [])];
         
         ALL_ITEMS_DETAILS = dynamicItems; // সমস্ত ডেটা সেভ করা
         return dynamicItems;
@@ -105,7 +104,8 @@ let Helping = []; // Notices ডেটা
 // Students এবং Forms সেকশনের ডেটা ও পেজিনেশন স্টেট রাখার জন্য অবজেক্ট
 const dynamicSectionsState = {
     'students-list': { data: [], currentPage: 1, totalPages: 0, },
-    'forms-list': { data: [], currentPage: 1, totalPages: 0, }
+    'forms-list': { data: [], currentPage: 1, totalPages: 0, },
+    'routine-list': { data: [], currentPage: 1, totalPages: 0, }
 };
 
 function errorBox(title, message) {
@@ -233,7 +233,13 @@ function renderPaginationControls() {
 
 async function fetchDynamicSectionData(sectionId) {
     const container = document.getElementById(sectionId);
-    const dataKey = sectionId === 'students-list' ? 'students' : 'forms'; 
+    // নতুন সংশোধিত কোড:
+let dataKey = 'forms';
+if (sectionId === 'students-list') {
+    dataKey = 'students';
+} else if (sectionId === 'routine-list') {
+    dataKey = 'routine';
+}
     const state = dynamicSectionsState[sectionId];
     
     try {
@@ -690,13 +696,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-
-   // Initial function calls
+// Initial function calls
 initializeNewStatusControl().then(() => {
-    // LocalStorage লোড হওয়ার পর ডেটা লোড এবং UI রেন্ডার শুরু হবে
     fetchNotices(); // Notices লোড হচ্ছে
     fetchDynamicSectionData('students-list'); // Students লোড হচ্ছে
     fetchDynamicSectionData('forms-list'); // Forms লোড হচ্ছে
+    fetchDynamicSectionData('routine-list'); // এই নতুন লাইনটি যোগ করুন (Routine লোড হচ্ছে)
     
     // ✅ স্ক্রল বার লোড করা
     renderMarquee(); 
