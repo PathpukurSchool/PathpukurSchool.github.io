@@ -1,13 +1,8 @@
 
 {
-    "students": [
-        
-            {"title": "Written Exam Marks", 
-                "description": "View all written exam results.", 
-                "url": "https://script.google.com/macros/s/AKfycbxTrGafyuj2VnyzjVs_xnaAuP8MOY0vivOSX0jOSJ_ON3iUovSBdFo236qx8Xt7HYinKg/exec",
-                "isNew": true},
-
-         {"title": "Academic Calendar", 
+     "routine": [
+         
+             {"title": "Academic Calendar", 
                 "description": "View Academic Calendar.", 
                 "url": "",
                 "isNew": false},
@@ -15,6 +10,25 @@
          {"title": "School Holiday List", 
                 "description": "View Holiday List.", 
                 "url": "https://script.google.com/macros/s/AKfycbyBen3vuqPeKcOEh9Uj8BOpGAE43C4ma14g-Le3gGaRzv4baZuoNRap4VuTLyl4Og6DVw/exec",
+                "isNew": true},
+
+            {"title": "Class Routine", 
+                "description": "Download the latest class routine.", 
+                "url": "https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student",
+                "isNew": true},
+            
+            {"title": "School Exam Routine", 
+                "description": "Download the latest School Exam routine.", 
+                "url": "https://script.google.com/macros/s/AKfycbwvUmtT8FbPWQUOGK1jW52ZZQIP79A8yl1g9UEccDncw3S7JTK6xk5pmuGchOCbgAWEBA/exec",
+                "isNew": false},
+            ] 
+    
+    
+    "students": [
+        
+            {"title": "Written Exam Marks", 
+                "description": "View all written exam results.", 
+                "url": "https://script.google.com/macros/s/AKfycbxTrGafyuj2VnyzjVs_xnaAuP8MOY0vivOSX0jOSJ_ON3iUovSBdFo236qx8Xt7HYinKg/exec",
                 "isNew": true},
 
         {"title": "Book List", 
@@ -27,24 +41,12 @@
                 "url": "https://script.google.com/macros/s/AKfycbwsgScsUk64jOhW1USOpWAl7t8v5ud_BkOAvlaF5SHXqaGVJn4w-lB4qH8yM6BnC6KGuA/exec",
                 "isNew": false},
             
-            {"title": "Class Routine", 
-                "description": "Download the latest class routine.", 
-                "url": "https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student",
-                "isNew": true},
-            
-            {"title": "School Exam Routine", 
-                "description": "Download the latest School Exam routine.", 
-                "url": "https://script.google.com/macros/s/AKfycbwvUmtT8FbPWQUOGK1jW52ZZQIP79A8yl1g9UEccDncw3S7JTK6xk5pmuGchOCbgAWEBA/exec",
-                "isNew": false},
-            
             {"title": "Admission Receive", 
                 "description": "Download the duplicate admission receive.", 
                 "url": "",
                 "isNew": false}
         
            ],
-
-
 
     
     "forms": [
