@@ -3,20 +3,20 @@
     {
       "title": "Academic Calendar",
       "description": "View Academic Calendar.",
-      "url": "",
+      "url": "https://script.google.com/macros/s/AKfycbyjJvCf5yFDhtVOlE7BsUOaaEfbvzogRpXpHzpcas6SAnN6NiylWmq7K8rYRaNROonq2Q/exec",
       "isNew": false
     },
     {
       "title": "School Holiday List",
       "description": "View Holiday List.",
       "url": "https://script.google.com/macros/s/AKfycbyBen3vuqPeKcOEh9Uj8BOpGAE43C4ma14g-Le3gGaRzv4baZuoNRap4VuTLyl4Og6DVw/exec",
-      "isNew": true
+      "isNew": false
     },
     {
       "title": "Class Routine",
       "description": "Download the latest class routine.",
       "url": "https://script.google.com/macros/s/AKfycbxt0BkY0rGGdyhxhga3izLp1DqNea6SjIe2b1gS9qMQMSmZZhljZqRFAjlWZt5Zv9CuNQ/exec?page=student",
-      "isNew": true
+      "isNew": false
     },
     {
       "title": "School Exam Routine",
@@ -36,13 +36,13 @@
       "title": "Written Exam Marks",
       "description": "View all written exam results.",
       "url": "https://script.google.com/macros/s/AKfycbxTrGafyuj2VnyzjVs_xnaAuP8MOY0vivOSX0jOSJ_ON3iUovSBdFo236qx8Xt7HYinKg/exec",
-      "isNew": true
+      "isNew": false
     },
     {
       "title": "Book List",
       "description": "View Student Book List.",
       "url": "https://script.google.com/macros/s/AKfycbxrwdENTeiCKqQ3y78SSvf5zOVOl45KVLjgSHXUakg-zYJbM1PYck591l6WPyzNe9Kn/exec",
-      "isNew": true
+      "isNew": false
     },
     {
       "title": "Know Your Student Code/ID",
@@ -68,7 +68,7 @@
       "title": "Student Data Verification Form",
       "description": "View Student Information.",
       "url": "https://script.google.com/macros/s/AKfycbym4dKChBBxDp8rKhm-HmAdKH_mFGc366_gfnE-rX7N4IKbzf2PdMhBlI6RDr3vQeMu/exec",
-      "isNew": true
+      "isNew": false
     },
     {
       "title": "Class XI Bank Mandate Form for TAB",
