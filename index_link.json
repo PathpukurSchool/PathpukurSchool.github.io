@@ -33,12 +33,6 @@
   ],
   "students": [
     {
-      "title": "Written Exam Marks",
-      "description": "View all written exam results.",
-      "url": "https://script.google.com/macros/s/AKfycbxTrGafyuj2VnyzjVs_xnaAuP8MOY0vivOSX0jOSJ_ON3iUovSBdFo236qx8Xt7HYinKg/exec",
-      "isNew": false
-    },
-    {
       "title": "Book List",
       "description": "View Student Book List.",
       "url": "https://script.google.com/macros/s/AKfycbxrwdENTeiCKqQ3y78SSvf5zOVOl45KVLjgSHXUakg-zYJbM1PYck591l6WPyzNe9Kn/exec",
