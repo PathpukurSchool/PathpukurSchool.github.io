@@ -21,7 +21,7 @@
     {
       "title": "School Exam Routine",
       "description": "Download the latest School Exam routine.",
-      "url": "https://script.google.com/macros/s/AKfycbw4UdmxdUi5RVPVoJHvqoxXmvTZ3xtBj76dznDRgjPOdG30e08qPh0LcbnkYU8XOfx9SQ/exec",
+      "url": "https://script.google.com/macros/s/AKfycbzUdoNit0-ifZvVgswLJoQEixG7kpxv6MBUeE5dg6zIFjEIiyPkIMw68QDbOnfvvAMqtA/exec",
       "isNew": true
     },
     {
@@ -80,6 +80,50 @@
       "title": "Annexure-F (TAB)",
       "description": "Download form annexure-F for TAB.",
       "url": "https://drive.google.com/file/d/15Vx6DnqSQOB-WeufcF_m2veb_rVqomiy/view?usp=sharing",
+      "isNew": false
+    }
+  ],
+  "results": [
+    {
+      "title": "Class V Result",
+      "description": "View Class 5 exam results.",
+      "url": "",
+      "isNew": false
+    },
+    {
+      "title": "Class VI Result",
+      "description": "View Class 6 exam results.",
+      "url": "",
+      "isNew": false
+    },
+    {
+      "title": "Class VII Result",
+      "description": "View Class 7 exam results.",
+      "url": "",
+      "isNew": false
+    },
+    {
+      "title": "Class VIII Result",
+      "description": "View Class 8 exam results.",
+      "url": "",
+      "isNew": false
+    },
+    {
+      "title": "Class IX Result",
+      "description": "View Class 9 exam results.",
+      "url": "",
+      "isNew": false
+    },
+    {
+      "title": "Class X Result",
+      "description": "View Class 10 exam results.",
+      "url": "",
+      "isNew": false
+    },
+    {
+      "title": "Class XI Result",
+      "description": "View Class 11 exam results.",
+      "url": "",
       "isNew": false
     }
   ]
