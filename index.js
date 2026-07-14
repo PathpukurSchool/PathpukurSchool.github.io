@@ -14,7 +14,7 @@ async function loadAllItemDetails() {
         if (!response.ok) throw new Error('Failed to load config.');
         const data = await response.json();
         
-    const dynamicItems = [...(data.students || []), ...(data.forms || []), ...(data.routine || [])];
+const dynamicItems = [...(data.students || []), ...(data.forms || []), ...(data.routine || []), ...(data.results || [])];
         
         ALL_ITEMS_DETAILS = dynamicItems; // সমস্ত ডেটা সেভ করা
         return dynamicItems;
@@ -105,7 +105,8 @@ let Helping = []; // Notices ডেটা
 const dynamicSectionsState = {
     'students-list': { data: [], currentPage: 1, totalPages: 0, },
     'forms-list': { data: [], currentPage: 1, totalPages: 0, },
-    'routine-list': { data: [], currentPage: 1, totalPages: 0, }
+    'routine-list': { data: [], currentPage: 1, totalPages: 0, },
+    'results-list': { data: [], currentPage: 1, totalPages: 0, }
 };
 
 function errorBox(title, message) {
@@ -239,6 +240,8 @@ if (sectionId === 'students-list') {
     dataKey = 'students';
 } else if (sectionId === 'routine-list') {
     dataKey = 'routine';
+} else if (sectionId === 'results-list') {
+    dataKey = 'results';
 }
     const state = dynamicSectionsState[sectionId];
     
@@ -702,6 +705,7 @@ initializeNewStatusControl().then(() => {
     fetchDynamicSectionData('students-list'); // Students লোড হচ্ছে
     fetchDynamicSectionData('forms-list'); // Forms লোড হচ্ছে
     fetchDynamicSectionData('routine-list'); // এই নতুন লাইনটি যোগ করুন (Routine লোড হচ্ছে)
+    fetchDynamicSectionData('results-list'); // নতুন যোগ করা হলো
     
     // ✅ স্ক্রল বার লোড করা
     renderMarquee(); 
