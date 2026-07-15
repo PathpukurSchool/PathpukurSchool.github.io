@@ -49,7 +49,7 @@ body.no-scroll {
 
 
 /* ================================================= */
-/* CSS1 এর স্টাইলসমূহ               */
+/* CSS1 এর স্টাইলসমূহ                */
 /* ================================================= */
 
 /* ১. নো-স্ক্রল (উপরে body.no-scroll এর সাথে একত্রিত) */
@@ -214,7 +214,7 @@ body.no-scroll {
 
 
 /* ================================================= */
-/* CSS2 এর স্টাইলসমূহ               */
+/* CSS2 এর স্টাইলসমূহ                */
 /* ================================================= */
 
 /* --------------------
@@ -321,7 +321,7 @@ body.no-scroll {
 }
 
 /* --------------------
-    লগইন ওভারলে
+    لগইন ওভারলে
 -------------------- */
 #masterLoginOverlay {
     position: fixed;
@@ -538,36 +538,12 @@ body.no-scroll {
 /* --------------------
     নম্বর আপলোড বোতাম
 -------------------- */
-.exam-buttons-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 1.5rem;
-}
-
 .box-heading {
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--primary-color);
     text-align: center;
     margin-bottom: 1rem;
-}
-
-.box-button {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    border: none;
-    padding: 0.75rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.box-button:hover {
-    background-color: #00382e;
-    transform: translateY(-2px);
 }
 
 .disabled-exam-link {
@@ -963,14 +939,69 @@ footer p {
     }
 }
 
-/* নতুন নোটিসের জন্য পুরো বক্স হাইলাইট (CSS2 থেকে উন্নত সংস্করণ) */
+/* নতুন নোটিসের জন্য পুরো باکس হাইলাইট (CSS2 থেকে উন্নত সংস্করণ) */
 .new-notice-highlight {
     border: 2px solid #e74c3c !important; /* লাল বর্ডার */
-    border-left: 6px solid #e74c3c !important; /* বাম দিকে হাইলাইট */
+    border-left: 6px solid #e74c3c !important; /*বাম দিকে হাইলাইট */
     background-color: #fcecec !important; /* হালকা গোলাপি ব্যাকগ্রাউন্ড */
 }
 
 /* যখন মাউস হোভার করা হবে */
 .new-notice-highlight:hover {
     background-color: #fae4e4 !important;
+}
+
+/* ================================================= */
+/* 🎨 নতুন ৭টি ক্লাসের বোতামের গ্রিড লেআউট স্টাইল      */
+/* ================================================= */
+
+/* বোতামগুলোর মূল কন্টেইনার গ্রিড */
+.class-buttons-grid {
+    display: grid;
+    /* ছোট স্ক্রিনে ২টি এবং বড় স্ক্রিনে সর্বোচ্চ ৪টি বা তার বেশি বোতাম পাশাপাশি বসবে */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px; /* বোতামগুলোর মাঝখানের ফাঁকা জায়গা */
+    width: 100%;
+    max-width: 900px; /* গ্রিডের সর্বোচ্চ চওড়া সাইজ */
+    margin: 1.5rem auto; /* সেন্টারে রাখার জন্য */
+    padding: 10px;
+}
+
+/* প্রতিটি ক্লাসের নির্দিষ্ট বোতামের স্টাইল */
+.class-link-btn.box-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px; /* বোতামের উচ্চতা */
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 8px; /* কোণাগুলো হালকা গোল করার জন্য */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    /* 🌟 নতুন সংযোজিত প্রয়োজনীয় কোড (রঙ ও বর্ডার ঠিক করার জন্য) */
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+/* মাউস হোভার করলে সুন্দর ইফেক্ট */
+.class-link-btn.box-button:hover {
+    background-color: #00382e;
+    transform: translateY(-3px); /* হালকা উপরে উঠবে */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* রেসপন্সিভনেস: খুব ছোট মোবাইলের জন্য (যেমন width ৩২০px এর নিচে) */
+@media (max-width: 360px) {
+    .class-buttons-grid {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 10px;
+    }
+    .class-link-btn.box-button {
+        font-size: 0.9rem;
+        min-height: 50px;
+    }
 }
