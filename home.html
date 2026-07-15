@@ -27,321 +27,389 @@
   <meta name="author" content="Pathpukur High School">
   <meta name="robots" content="index, follow">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
   <link rel="apple-touch-icon" href="PHS-LOGO.png">
 
   <link rel="stylesheet" href="home.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
-<body>
-      
-  <!-- ✅ মাস্টার লগ ইন : টিচার লগইন -->
+  <body>
+	  
+    <!-- ✅ মাস্টার লগ ইন : টিচার লগইন -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <div id="masterLoginOverlay">
-    <div id="masterLoginBox">
-      <h2 class="red-text">Pathpukur High School</h2>
-      <h2 class="shaded-info-box-heading">Teacher Login</h2>
+<div id="masterLoginOverlay">
+  <div id="masterLoginBox">
+    <h2 class="red-text">Pathpukur High School</h2>
+    <h2 class="shaded-info-box-heading">Teacher Login</h2>
 
-      <input type="hidden" id="loginType" value="teacher">
+    <input type="hidden" id="loginType" value="teacher">
 
-      <input type="text" id="masterId" placeholder="Enter ID"><br>
-      
-      <div style="position: relative;">
-          <input type="password" id="masterPass" placeholder="Enter Password">
-          <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
-              <i id="masterPassToggle" class="fa-solid fa-eye"></i>
-          </span>
-      </div>
-
-      <div id="masterLoginError" class="error"></div>
-      <div id="masterLoginSuccess" class="success" style="display:none;"></div>
-
-      <button onclick="submitMasterLogin()">LOGIN</button>
+    <input type="text" id="masterId" placeholder="Enter ID"><br>
+    
+    <div style="position: relative;">
+        <input type="password" id="masterPass" placeholder="Enter Password">
+        <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
+            <i id="masterPassToggle" class="fa-solid fa-eye"></i>
+        </span>
     </div>
-  </div>
 
-  <!-- ✅ মেন হেডার -->
-  <div id="top-bar-section">
+    <div id="masterLoginError" class="error"></div>
+    <div id="masterLoginSuccess" class="success" style="display:none;"></div>
+
+    <button onclick="submitMasterLogin()">LOGIN</button>
+  </div>
+</div>
+	          <!-- ✅ মেন হেডার -->
+	  <div id="top-bar-section">
     <header class="main-header">
         <div class="header-content">
             <div class="header-buttons">
                 <button id="menu-toggle-button" class="menu-button">☰</button>
             </div>
+            
+            <!--<img src="PHS-LOGO.png" alt="School Logo" class="logo">-->
             <h1 class="school-name">Pathpukur High School (H.S.)</h1>
         </div>
+        
         <button onclick="logout()" class="logout-button">Logout</button>
     </header>
-  </div>
+	  </div>
 
-  <!-- ✅ সাইড বার মেনু (সংশোধিত) -->
-  <div class="overlay" id="overlay"></div>
-  <nav id="sidebar-menu" class="sidebar-menu">
-      <ul>
-          <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
-          
-          <li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
-          <li><a href="#marks-uploading-section" class="nav-link">Marks Uploading Status</a></li>
-          <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
-          <li><a href="#student-score-sheet-section" class="nav-link">Student Score Sheet</a></li>
-          <li><a href="#student-roll-strength-section" class="nav-link">Student Roll Strength</a></li>
-          
-          <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Exam Marks</a></li>
-          <li><a href="#class-V" class="nav-link">Class V</a></li>
-          <li><a href="#class-VI" class="nav-link">Class VI</a></li>
-          <li><a href="#class-VII" class="nav-link">Class VII</a></li>
-          <li><a href="#class-VIII" class="nav-link">Class VIII</a></li>
-          <li><a href="#class-IX" class="nav-link">Class IX</a></li>
-          <li><a href="#class-X" class="nav-link">Class X</a></li>
-          <li><a href="#class-XI" class="nav-link">Class XI</a></li>
-          
-          <li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
-          <li><a href="#staff-routine-section" class="nav-link">Staff Routine</a></li>
-          <li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
-          <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
-          <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
-          <li><a href="#exam-routine-section" class="nav-link">Exam Routine</a></li>
+	     <!-- ✅ সাইড বার মেনু -->
+<div class="overlay" id="overlay"></div>
+<nav id="sidebar-menu" class="sidebar-menu">
+    <ul>
+        <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
+		
+        <li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
+        <li><a href="#last-date-section" class="nav-link">Mark Submission Date</a></li>
+        <li><a href="#marks-uploading-section" class="nav-link">Marks Uploading Status</a></li>
+        <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
+		<li><a href="#student-score-sheet-section" class="nav-link">Student Score Sheet</a></li>
+		<li><a href="#student-roll-strength-section" class="nav-link">Student Roll Strength</a></li>
+        
+        <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Exam Marks</a></li>
+        <li><a href="#class-V" class="nav-link">Class V</a></li>
+        <li><a href="#class-VI" class="nav-link">Class VI</a></li>
+        <li><a href="#class-VII" class="nav-link">Class VII</a></li>
+        <li><a href="#class-VIII" class="nav-link">Class VIII</a></li>
+        <li><a href="#class-IX" class="nav-link">Class IX</a></li>
+        <li><a href="#class-X" class="nav-link">Class X</a></li>
+        <li><a href="#class-XI" class="nav-link">Class XI</a></li>
+        <li><a href="#class-XII" class="nav-link">Class XII</a></li>
+        
+        <li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
+        <li><a href="#staff-routine-section" class="nav-link">Staff Routine</a></li>
+		<li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
+        <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
+        <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
+        <li><a href="#exam-routine-section" class="nav-link">Exam Routine</a></li>
 
-          <li><a href="#student-benefit-section" class="nav-link menu-header">For Students' Benefit</a></li>
-          <li><a href="#school-certificate-section" class="nav-link">School Certificate (Regular)</a></li>
-          <li><a href="#school-certificate-ex-section" class="nav-link">School Certificate (Ex.)</a></li>
-          <li><a href="#school-tc-section" class="nav-link">Manual T.C.</a></li>
-          <li><a href="#student-code-section" class="nav-link">Student Code / ID</a></li>
-          <li><a href="#xi-tab-form-section" class="nav-link">Bank Mandate Form for XI TAB</a></li>
-          <li><a href="#data-check-section" class="nav-link">Student Data Verification Form</a></li>
-          <li><a href="#summative-sheet-section" class="nav-link">Download Written Exam Marks</a></li>
+		<li><a href="#student-benefit-section" class="nav-link menu-header">For Students' Benefit</a></li>
+		<li><a href="#id-card-section" class="nav-link">Student ID Card</a></li>
+		<li><a href="#school-certificate-section" class="nav-link">School Certificate (Regular)</a></li>
+		<li><a href="#school-certificate-ex-section" class="nav-link">School Certificate (Ex.)</a></li>
+		<li><a href="#school-tc-section" class="nav-link">Manual T.C.</a></li>
+		<li><a href="#student-code-section" class="nav-link">Student Code / ID</a></li>
+		<li><a href="#xi-tab-form-section" class="nav-link">Bank Mandate Form for XI TAB</a></li>
+		<li><a href="#data-check-section" class="nav-link">Student Data Verification Form</a></li>
+		<li><a href="#summative-sheet-section" class="nav-link">Download Written Exam Marks</a></li>
+		<li><a href="#book-list-section" class="nav-link">Book List</a></li>
 
-          <li><a href="#upload-notice-date-section" class="nav-link menu-header">Upload Notices & Dates</a></li>
-          <li><a href="#upload-student-notice-section" class="nav-link">Upload Student Notice</a></li>
-          
-          <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
-          <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
-      </ul>
-  </nav>
-      
-  <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য (Time Limit অপশনটি মুছে ফেলা হয়েছে) --->
-  <div class="main-section-container" id="marks-information-section">
-      <div class="section-heading-wrapper">
-          <h2 class="section-heading">
-              <span class="emoji"><i class="fa-solid fa-list-check"></i></span>
-              <span class="blink">Marks Upload & Student Information</span>
-          </h2>
-          <h3 class="login-instruction-heading">This section provides the current marks uploading status, and a searchable student list to help you find student information by name, class, roll number, etc.</h3>
-      </div>
+        <li><a href="#notice-board-section" class="nav-link menu-header">Notices</a></li>
+        <li><a href="#notice-board-section" class="nav-link">Notice Board</a></li>
+		
+		<li><a href="#upload-notice-date-section" class="nav-link menu-header">Upload Notices & Dates</a></li>
+        <li><a href="#upload-student-notice-section" class="nav-link">Upload Student Notice</a></li>
+		<li><a href="#upload-teacher-notice-section" class="nav-link">Upload Teacher Notice</a></li>
+		<li><a href="#upload-mark-submission-last-date-section" class="nav-link">Set Marks Upload Time Limit</a></li>
+		<li><a href="#download-student-result-section" class="nav-link">Download & Control Result Sheet</a></li>
+		
+        <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
+        <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
+    </ul>
+</nav>
+	  
+	  <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য  --->
+<div class="main-section-container" id="marks-information-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji"><i class="fa-solid fa-list-check"></i></span>
+            <span class="blink">Marks Upload & Student Information</span>
+        </h2>
+        <h3 class="login-instruction-heading">This section provides the deadline for marks submission, the current marks uploading status, and a searchable student list to help you find student information by name, class, roll number, etc.</h3>
+    </div>
 
-      <div class="sub-sections-wrapper"> 
-          <!-- ✅ নম্বর আপলোড এর তথ্য --->
-          <div class="shaded-info-box" id="marks-uploading-section">
-              <div class="sub-section-heading">
-                  <h2 class="shaded-info-box-heading">Marks Uploading Report</h2>
-                  <h3 class="login-instruction-heading">To know how many students' exam marks have been uploaded, please click the button below:<span class="emoji">👇</span></h3>
-              </div>
-              <div class="sub-section-content">
-                  <a id="marks-uploading-link" class="exam-link">VIEW MARK UPLOADING STATUS</a>
-              </div>
-          </div>
+	  <!-- ✅ নম্বর আপলোড এর সময়সীমা  --->
+    <div class="sub-sections-wrapper"> <div class="shaded-info-box" id="last-date-section">
+            <div class="sub-section-heading">
+                <h2 class="shaded-info-box-heading">Time Limit for Mark Submission</h2>
+                <h3 class="login-instruction-heading">Kindly submit all marks, grades & comments within the given time frame:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="static-text">
+                <div class="marquee-container">
+                    <div id="exam-dates-marquee-content" class="marquee-content"></div>
+                </div>
+            </div>
+        </div>
 
-          <!-- ✅ সারচেবল স্টুডেন্ট তথ্য --->
-          <div class="shaded-info-box" id="student-list-section">
-              <div class="sub-section-heading">
-                  <h2 class="shaded-info-box-heading">Student Information</h2>
-                  <h3 class="login-instruction-heading">To view student information or search the student database, please click the button below:<span class="emoji">👇</span></h3>
-              </div>
-              <div class="sub-section-content">
-                  <a id="student-list-link" class="exam-link">VIEW STUDENT DATABASE</a>
-              </div>
-          </div>
-      
-          <!-- ✅ স্কোর শীট --->
-          <div class="shaded-info-box" id="student-score-sheet-section">
-              <div class="sub-section-heading">
-                  <h2 class="shaded-info-box-heading">Score Sheet / Marks Foil</h2>
-                  <h3 class="login-instruction-heading">To view student score sheets / marks foil, please click the button below:<span class="emoji">👇</span></h3>
-              </div>
-              <div class="sub-section-content">
-                  <a id="student-score-sheet-link" class="exam-link">VIEW STUDENT SCORE SHEET</a>
-              </div>
-          </div>
+		  <!-- ✅ নম্বর আপলোড এর তথ্য  --->
+        <div class="shaded-info-box" id="marks-uploading-section">
+            <div class="sub-section-heading">
+                <h2 class="shaded-info-box-heading">Marks Uploading Report</h2>
+                <h3 class="login-instruction-heading">To know how many students' exam marks have been uploaded, please click the button below:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="sub-section-content">
+                <a id="marks-uploading-link" class="exam-link">VIEW MARK UPLOADING STATUS</a>
+            </div>
+        </div>
 
-          <!-- ✅ রোল স্ট্রেন্থ --->
-          <div class="shaded-info-box" id="student-roll-strength-section">
-              <div class="sub-section-heading">
-                  <h2 class="shaded-info-box-heading">Student Roll Strength</h2>
-                  <h3 class="login-instruction-heading">To view student Roll Strength, please click the button below:<span class="emoji">👇</span></h3>
-              </div>
-              <div class="sub-section-content">
-                  <a id="student-roll-strength-link" class="exam-link">VIEW STUDENT ROLL STRENGTH</a>
-              </div>
-          </div>
-      </div>
-  </div>
+		  <!-- ✅ সারচেবল স্টুডেন্ট তথ্য  --->
+        <div class="shaded-info-box" id="student-list-section">
+            <div class="sub-section-heading">
+                <h2 class="shaded-info-box-heading">Student Information</h2>
+                <h3 class="login-instruction-heading">To view student information or search the student database, please click the button below:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="sub-section-content">
+                <a id="student-list-link" class="exam-link">VIEW STUDENT DATABASE</a>
+            </div>
+        </div>
+    
+	  <!-- ✅ স্কোর শীট  --->
+		 <div class="shaded-info-box" id="student-score-sheet-section">
+            <div class="sub-section-heading">
+                <h2 class="shaded-info-box-heading">Score Sheet / Marks  Foil</h2>
+                <h3 class="login-instruction-heading">To view student score sheets / marks foil, please click the button below:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="sub-section-content">
+                <a id="student-score-sheet-link" class="exam-link">VIEW STUDENT SCORE SHEET</a>
+            </div>
+        </div>
 
-  <!--✅ নম্বর আপলোড (সংশোধিত লেআউট ও নতুন ৭টি ক্লাস বোতাম) -->  
-  <div class="main-section-container" id="upload-your-marks-section">
-      <div class="section-heading-wrapper">
-          <h2 class="section-heading">
-              <span class="emoji"><i class="fa-solid fa-square-poll-vertical"></i></span>
-              <span class="blink">Upload Student Exam Marks</span>
-          </h2>
-          <h3 class="login-instruction-heading">Click the button below to upload student grades, marks & comments. You will need to log in with your ID and password:<span class="emoji">👇</span></h3>
-      </div>
-      
-      <!-- নতুন ৭টি নির্দিষ্ট ক্লাসের বোতামের কন্টেইনার -->
-      <div class="class-buttons-grid">
-          <button class="class-upload-btn" id="class-V" onclick="openUploadPanel('V')">CLASS V</button>
-          <button class="class-upload-btn" id="class-VI" onclick="openUploadPanel('VI')">CLASS VI</button>
-          <button class="class-upload-btn" id="class-VII" onclick="openUploadPanel('VII')">CLASS VII</button>
-          <button class="class-upload-btn" id="class-VIII" onclick="openUploadPanel('VIII')">CLASS VIII</button>
-          <button class="class-upload-btn" id="class-IX" onclick="openUploadPanel('IX')">CLASS IX</button>
-          <button class="class-upload-btn" id="class-X" onclick="openUploadPanel('X')">CLASS X</button>
-          <button class="class-upload-btn" id="class-XI" onclick="openUploadPanel('XI')">CLASS XI</button>
-      </div>
-  </div>
+ <!-- ✅ রোল স্ট্রেন্থ  --->
+		 <div class="shaded-info-box" id="student-roll-strength-section">
+            <div class="sub-section-heading">
+                <h2 class="shaded-info-box-heading">Student Roll Strength</h2>
+                <h3 class="login-instruction-heading">To view student Roll Strength, please click the button below:<span class="emoji">👇</span></h3>
+            </div>
+            <div class="sub-section-content">
+                <a id="student-roll-strength-link" class="exam-link">VIEW STUDENT ROLL STRENGTH</a>
+            </div>
+        </div>
+		
+	</div>
+</div>
 
-  <!-- ✅ স্কুল রুটিন --->
-  <div class="main-section-container" id="school-routine-section">
-      <div class="section-heading-wrapper">
-          <h2 class="section-heading">
-              <span class="emoji"><i class="fa-solid fa-calendar-alt"></i></span>
-              <span class="blink">School Routine</span>
-          </h2>
-          <h3 class="login-instruction-heading">This is a draft timetable and should not be considered final. It may change as needed by the school.</h3>
-      </div>
+	  <!--✅ নম্বর আপলোড -->  
+<div class="main-section-container" id="upload-your-marks-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji"><i class="fa-solid fa-square-poll-vertical"></i></span>
+            <span class="blink">Upload Student Exam Marks</span>
+        </h2>
+        <h3 class="login-instruction-heading">Click the button below to upload student grades, marks & comments. You will need to log in with your ID and password:<span class="emoji">👇</span></h3>
+    </div>
+	  <!-- ✅ নম্বর আপলোডের বোতাম তৈরি -->
+    <div id="exam-buttons" class="sub-sections-wrapper"> </div>
+    </div>
 
-      <div class="sub-sections-wrapper new-design">
-          <!-- ✅ স্টাফ রুটিন -->
-          <div id="staff-routine-section" class="new-info-box">
-              <a id="staff-routine-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">Staff Routine</h2>
-              </a>
-          </div>
-          
-          <!-- ✅ টিচার রুটিন -->
-          <div id="teacher-routine-section" class="new-info-box">
-              <a id="teacher-routine-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">Teacher Routine</h2>
-              </a>
-          </div>
-          <!-- ✅ স্টুডেন্ট রুটিন -->
-          <div id="class-routine-section" class="new-info-box">
-              <a id="class-routine-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">Student Routine</h2>
-              </a>
-          </div>
-          <!-- ✅ সাবজেক্ট রুটিন -->
-          <div id="subject-routine-section" class="new-info-box">
-              <a id="subject-routine-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">Subject Routine</h2>
-              </a>
-          </div>
-          <!-- ✅ বিদ্যালয় পরীক্ষার রুটিন -->
-          <div id="exam-routine-section" class="new-info-box">
-              <a id="exam-routine-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">School Exam Routine</h2>
-              </a>
-          </div>
-      </div>
-  </div>
-      
-  <!-- ✅ স্টুডেন্ট হেল্প জোন (ID Card এবং Book List মুছে ফেলা হয়েছে) --->
-  <div class="main-section-container" id="student-benefit-section">
-      <div class="section-heading-wrapper">
-          <h2 class="section-heading">
-              <span class="emoji"><i class="fa-solid fa-graduation-cap"></i></span>
-              <span class="blink">For Students' Benefit (Official Use)</span>
-          </h2>
-          <h3 class="login-instruction-heading">This section has been created to help and support regular & ex-students.</h3>
-      </div>
+	  <!-- ✅ স্কুল রুটিন  --->
+<div class="main-section-container" id="school-routine-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji"><i class="fa-solid fa-calendar-alt"></i></span>
+            <span class="blink">School Routine</span>
+        </h2>
+        <h3 class="login-instruction-heading">This is a draft timetable and should not be considered final. It may change as needed by the school.</h3>
+    </div>
 
-      <div class="sub-sections-wrapper new-design">
-          <!-- ✅ স্কুল সার্টিফিকেট রেগুলার -->
-          <div id="school-certificate-section" class="new-info-box">
-              <a id="school-certificate-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">School Certificate <br>(Regular Students)</h2>
-              </a>
-          </div>
-          <!-- ✅ স্কুল সার্টিফিকেট প্রাক্তন -->
-          <div id="school-certificate-ex-section" class="new-info-box">
-              <a id="school-certificate-ex-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">School Certificate <br>(Ex-Students)</h2>
-              </a>
-          </div>
-          <!-- ✅ ম্যানুয়াল স্কুল লিভিং সার্টিফিকেট (টি সি) -->
-          <div id="school-tc-section" class="new-info-box">
-              <a id="school-tc-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">School Leaving Certificate<br>(Manual T.C.)</h2>
-              </a>
-          </div>
-          <!-- ✅ স্টুডেন্ট কোড -->
-          <div id="student-code-section" class="new-info-box">
-              <a id="student-code-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">Student Code / ID Details</h2>
-              </a>
-          </div>
-          <!-- ✅ ট্যাব ফর্ম -->
-          <div id="xi-tab-form-section" class="new-info-box">
-              <a id="xi-tab-form-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">Class XI Bank Mandate Form for TAB</h2>
-              </a>
-          </div>
-          <!-- ✅ তথ্য সংশোধন ফর্ম -->
-          <div id="data-check-section" class="new-info-box">
-              <a id="data-check-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">Student Data Verification / Correction Form</h2>
-              </a>
-          </div>
-          <!-- ✅ ডাউনলোড সামেটিভ রেজাল্ট -->
-          <div id="summative-sheet-section" class="new-info-box">
-              <a id="summative-sheet-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">Download the Written Exam Marks for Wallup</h2>
-              </a>
-          </div>
-      </div>
-  </div>
-      
-  <!-- ✅ আপলোড নোটিশ ও ডেট (সংশোধিত Administration & Control Panel) --> 
-  <div class="main-section-container" id="upload-notice-date-section">
-      <div class="section-heading-wrapper">
-          <h2 class="section-heading">
-              <span class="emoji"><i class="fa-solid fa-file-alt"></i></span>
-              <span class="blink">Administration & Control Panel</span>
-          </h2>
-          <h3 class="login-instruction-heading">
-              After logging in with the specific ID & password, you can upload & control student notices.
-          </h3>
-      </div>
+    <div class="sub-sections-wrapper new-design">
+		
+<!-- ✅ টিচার রুটিন -->
+        <div id="staff-routine-section" class="new-info-box">
+            <a id="staff-routine-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Staff Routine</h2>
+            </a>
+        </div>
+		
+<!-- ✅ টিচার রুটিন -->
+        <div id="teacher-routine-section" class="new-info-box">
+            <a id="teacher-routine-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Teacher Routine</h2>
+            </a>
+        </div>
+<!-- ✅ স্টুডেন্ট রুটিন -->
+        <div id="class-routine-section" class="new-info-box">
+            <a id="class-routine-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Student Routine</h2>
+            </a>
+        </div>
+<!-- ✅ সাবজেক্ট রুটিন -->
+        <div id="subject-routine-section" class="new-info-box">
+            <a id="subject-routine-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Subject Routine</h2>
+            </a>
+        </div>
+<!-- ✅ বিদ্যালয় পরীক্ষার রুটিন -->
+        <div id="exam-routine-section" class="new-info-box">
+            <a id="exam-routine-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">School Exam Routine</h2>
+            </a>
+        </div>
+		
+    </div>
+</div>
+	  
+<!-- ✅ স্টুডেন্ট হেল্প জোন  --->
+<div class="main-section-container" id="student-benefit-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji"><i class="fa-solid fa-graduation-cap"></i></span>
+            <span class="blink">For Students' Benefit (Official Use)</span>
+        </h2>
+        <h3 class="login-instruction-heading">This section has been created to help and support regular & ex-students.</h3>
+    </div>
 
-      <div class="sub-sections-wrapper new-design">
-          <div id="upload-student-notice-section" class="new-info-box">
-              <a id="upload-student-notice-link" href="#" class="new-info-box-link exam-link">
-                  <h2 class="new-info-box-heading">Upload Student Notice</h2>
-              </a>
-          </div>
-      </div>
-  </div>
-      
-  <!-- ✅ ফুটার  -->     
-  <div id="school-address-section">
-      <footer>
-          <div class="section-heading-wrapper">
-              <h2 class="section-heading">
-                  <span class="emoji"><i class="fa-solid fa-phone"></i></span>
-                  <span class="blink">Contact Details</span>
-              </h2>
-          </div>
-          <p><strong>School Name:</strong> Pathpukur High School (H.S.)</p>
-          <p><strong>Address:</strong> Vill: Pathpukur, P.O.: Bokultala Hat, P.S.: Bokultala, Block: Joynagar II, Circle: Joynagar, Dist.: South 24 Parganas, State: West Bengal, Pin Code: 743338, India</p>
-          <p><strong>High School Memo No: </strong> 11775/G, Dt. - 11.11.1970 w.e.f. 01.01.1969;   <strong>HS Memo No: </strong> DS(A)148/Recos/10, Dt. - 22.06.2010 w.e.f. 2010-11</p>
-          <p>UDISE Code: 19181600802, Index No: C1 194, HS Code: 102376</p>
-          <p><strong>Phone No:</strong> +91 3218248083</p>
-          <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
-      </footer>
-  </div>
-      
-  <script src="home.js"></script>
+    <div class="sub-sections-wrapper new-design">
+		
+		<!-- ✅ স্টুডেন্ট আইডেন্টিটি কার্ড -->
+        <div id="id-card-section" class="new-info-box">
+            <a id="id-card-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Student ID Card</h2>
+            </a>
+        </div>
+		<!-- ✅ স্কুল সার্টিফিকেট রেগুলার -->
+        <div id="school-certificate-section" class="new-info-box">
+            <a id="school-certificate-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">School Certificate <br>(Regular Students)</h2>
+            </a>
+        </div>
+<!-- ✅ স্কুল সার্টিফিকেট প্রাক্তন -->
+        <div id="school-certificate-ex-section" class="new-info-box">
+            <a id="school-certificate-ex-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">School Certificate <br>(Ex-Students)</h2>
+            </a>
+        </div>
+ <!-- ✅ ম্যানুয়াল স্কুল লিভিং সার্টিফিকেট (টি সি) -->
+        <div id="school-tc-section" class="new-info-box">
+            <a id="school-tc-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">School Leaving Certificate<br>(Manual T.C.)</h2>
+            </a>
+        </div>
+ <!-- ✅ স্টুডেন্ট কোড -->
+        <div id="student-code-section" class="new-info-box">
+            <a id="student-code-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Student Code / ID Details</h2>
+            </a>
+        </div>
+<!-- ✅ ট্যাব ফর্ম -->
+        <div id="xi-tab-form-section" class="new-info-box">
+            <a id="xi-tab-form-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Class XI Bank Mandate Form for TAB</h2>
+            </a>
+        </div>
+<!-- ✅ তথ্য সংশোধন ফর্ম -->
+        <div id="data-check-section" class="new-info-box">
+            <a id="data-check-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Student Data Verification / Correction Form</h2>
+            </a>
+        </div>
+<!-- ✅ ডাউনলোড সামেটিভ রেজাল্ট -->
+        <div id="summative-sheet-section" class="new-info-box">
+            <a id="summative-sheet-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Download the Written Exam Marks for Wallup</h2>
+            </a>
+        </div>
+
+<!-- ✅ বুক লিস্ট -->
+        <div id="book-list-section" class="new-info-box">
+            <a id="book-list-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Book List<br>(Modification & Download)</h2>
+            </a>
+        </div>
+		
+    </div>
+</div>
+	  
+	  <!-- ✅ নোটিশ বোর্ড -->
+    <div class="main-section-container" id="notice-board-section">
+        <div class="section-heading-wrapper">
+            <h2 class="section-heading">
+                <span class="emoji"><i class="fa-solid fa-bullhorn"></i></span>
+                <span class="blink">Notice Board</span>
+            </h2>
+        </div>
+        
+          <div class="section-content-wrapper">
+                <div id="help-list"></div>
+                <div id="pagination-controls" style="text-align: center; margin-top: 20px;"></div>
+            </div>
+</div>
+  
+  <!-- ✅ আপলোড নোটিশ ও ডেট --> 
+<div class="main-section-container" id="upload-notice-date-section">
+    <div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji"><i class="fa-solid fa-file-alt"></i></span>
+            <span class="blink">Administration & Control Panel</span>
+        </h2>
+        <h3 class="login-instruction-heading">
+            After logging in with the specific ID & password, you can upload & control notices, 'NEW' Animation, marks uploading time limit, result, form etc.
+        </h3>
+    </div>
+
+    <div class="sub-sections-wrapper new-design">
+		
+        <div id="upload-student-notice-section" class="new-info-box">
+            <a id="upload-student-notice-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Upload Student Notice</h2>
+            </a>
+        </div>
+
+        <div id="upload-teacher-notice-section" class="new-info-box">
+            <a id="upload-teacher-notice-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Upload Teacher Notice</h2>
+            </a>
+        </div>
+
+        <div id="upload-mark-submission-last-date-section" class="new-info-box">
+            <a id="upload-mark-submission-last-date-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Set Exam Marks Uploading Time Limit</h2>
+            </a>
+        </div>
+
+		<div id="download-student-result-section" class="new-info-box">
+            <a id="download-student-result-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Download & Control the Result Sheet</h2>
+            </a>
+        </div>
+		
+    </div>
+</div>
+	  
+ <!-- ✅ ফুটার  -->	  
+<div id="school-address-section">
+	<footer>
+		<div class="section-heading-wrapper">
+        <h2 class="section-heading">
+            <span class="emoji"><i class="fa-solid fa-phone"></i></span>
+            <span class="blink">Contact Details</span>
+        </h2>
+    </div>
+        <p><strong>School Name:</strong> Pathpukur High School (H.S.)</p>
+        <p><strong>Address:</strong> Vill: Pathpukur, P.O.: Bokultala Hat, P.S.: Bokultala, Block: Joynagar II, Circle: Joynagar, Dist.: South 24 Parganas, State: West Bengal, Pin Code: 743338, India</p>
+		<p><strong>High School Memo No: </strong> 11775/G, Dt. - 11.11.1970 w.e.f. 01.01.1969;   <strong>HS Memo No: </strong> DS(A)148/Recos/10, Dt. - 22.06.2010 w.e.f. 2010-11</p>
+		<p>UDISE Code: 19181600802, Index No: C1 194, HS Code: 102376</p>
+        <p><strong>Phone No:</strong> +91 3218248083</p>
+        <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
+    </footer>
+</div>
+	  
+<script src="home.js"></script>
 </body>
 </html>
