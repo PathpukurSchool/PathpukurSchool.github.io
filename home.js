@@ -179,71 +179,53 @@ function loadExamLinks() {
         });
 }
 
-// এক্সাম লিংক তৈরি ও দেখানো (js1 থেকে)
+// এক্সাম লিংক তৈরি ও দেখানো (নিখুঁত ও সংশোধিত রূপ)
 function renderButtons() {
     const mainContainer = document.getElementById('exam-buttons');
     mainContainer.innerHTML = '';
 
-    const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
+    // নির্দিষ্ট ৭টি ক্লাস যা আপনি দেখাতে চান (CLASS V থেকে CLASS XI)
+    const requiredClasses = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'];
 
-    const sortedClasses = classes.sort((a, b) => {
-        const order = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-        return order.indexOf(a) - order.indexOf(b);
-    });
+    // ক্লাসগুলোর জন্য একটি গ্রুপ কন্টেইনার তৈরি
+    const classButtonsGroup = document.createElement('div');
+    classButtonsGroup.className = 'class-buttons-grid';
 
-    sortedClasses.forEach(cls => {
-        const classBox = document.createElement('div');
-        classBox.className = 'shaded-info-box';
-        classBox.id = `class-${cls}`;
-
-        const boxHeading = document.createElement('h3');
-        boxHeading.className = 'box-heading shine';
-        boxHeading.textContent = 'CLASS ' + cls;
-        classBox.appendChild(boxHeading);
-
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.className = 'exam-buttons-group';
-
-        const exams = ['1ST', '2ND', '3RD', 'TEST', 'SEM1', 'SEM2'];
-        exams.forEach(exam => {
-            const key = `${cls}_${exam}`;
-            if (credentials[key]) {
-                const button = document.createElement('button');
-                button.className = 'box-button exam-link';
-                button.dataset.key = key;
-
-                let label = exam;
-                switch (exam) {
-                    case 'TEST':
-                        label = 'TEST EXAM';
-                        break;
-                    case 'SEM1':
-                        label = 'SEMESTER I';
-                        break;
-                    case 'SEM2':
-                        label = 'SEMESTER II';
-                        break;
-                }
-                
-                button.textContent = label;
-                
-                if (credentials[key].url && credentials[key].url.trim() !== '') {
-                    button.onclick = () => window.open(credentials[key].url, '_blank');
-                } else {
-                    button.onclick = () => showAvailableSoonMessage(key);
-                    button.classList.add('disabled-exam-link');
-                }
-                buttonsContainer.appendChild(button);
-            }
-        });
+    requiredClasses.forEach(cls => {
+        // প্রতিটি ক্লাসের জন্য একটি একক বোতাম তৈরি
+        const button = document.createElement('button');
         
-        if (buttonsContainer.children.length > 0) {
-            classBox.appendChild(buttonsContainer);
-            mainContainer.appendChild(classBox);
-        }
-    });
-}
+        // স্টুডেন্ট ও টিচার উভয় স্ক্রিপ্টের সাথে মিল রাখার জন্য ক্লাস যুক্ত করা হলো
+        button.className = 'box-button class-link-btn exam-link'; 
+        
+        // আপনার home_url.json ফাইলের ফরম্যাটের সাথে মিল রেখে ID দিন। 
+        // যদি json ফাইলে শুধু 'V', 'VI' থাকে তবে cls দিন। আর যদি 'V_1ST' থাকে তবে `${cls}_1ST` দিন।
+        button.id = cls; 
+        
+        // 'Available Soon' ফাংশনের ব্যাকওয়ার্ড কম্প্যাটিবিলিটির জন্য
+        button.dataset.key = cls; 
 
+        // বোতামের দৃশ্যমান টেক্সট
+        button.textContent = 'CLASS ' + cls;
+        
+        const key = cls; 
+
+        // লিঙ্ক হ্যান্ডলিং লজিক
+        if (credentials[key] && credentials[key].url && credentials[key].url.trim() !== '') {
+            button.onclick = () => window.open(credentials[key].url, '_blank');
+        } else if (credentials[`${cls}_1ST`] && credentials[`${cls}_1ST`].url) { 
+            // আগের ডেটাবেজ ফরম্যাট অ্যাক্সেস করার জন্য ব্যাকআপ লজিক
+            button.onclick = () => window.open(credentials[`${cls}_1ST`].url, '_blank');
+        } else {
+            button.onclick = () => showAvailableSoonMessage(key);
+            button.classList.add('disabled-exam-link');
+        }
+
+        classButtonsGroup.appendChild(button);
+    });
+
+    mainContainer.appendChild(classButtonsGroup);
+}
 // 'Available Soon' বার্তা দেখান (js1 থেকে)
 function showAvailableSoonMessage(key) {
     const container = document.getElementById('exam-buttons');
