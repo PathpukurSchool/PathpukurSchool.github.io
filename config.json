@@ -1,24 +1,9 @@
 {
-  "V_1ST": { "url": "https://script.google.com/macros/s/AKfycbzGyGTXMey27tcwgIF4YjHgwPI2mZ1-K8x76ssGqJZqumEKdZmntFNear0GvSL0-NuR/exec" },
-  "V_2ND": { "url": "https://script.google.com/macros/s/AKfycbwgQ68HNFOrzRF0VKvxuDntY2kdLngMlYMpfAisY0wby_fR4ORNL8ynh0NPChM9vgFciQ/exec" },
-  "V_3RD": { "url": "https://script.google.com/macros/s/AKfycbxVq_nDs0VqGhbACAhbrggplLpxRM2QkoMFej3AuE_MOR0px904hhydt579uwagwXjgtg/exec" },
-  "VI_1ST": { "url": "https://script.google.com/macros/s/AKfycbzKsQFwxM-F407EC2cqvSybuOr49VjXV1Fg5SJIt7JbLM2omEix5WhWfH7pOPQ9eHCU/exec" },
-  "VI_2ND": { "url": "https://script.google.com/macros/s/AKfycbyyIVCS_fSKCsRfoYkoWQpKO7EZ5tsl01HBnuYlg2uD_R-dk8wOGlDYJsNZkQZXTMgeKg/exec" },
-  "VI_3RD": { "url": "https://script.google.com/macros/s/AKfycbxd4nj8AEttu5UcD27dve4Ck7um6g5KycDW_HxAlihGbni7KmnzaFEhHLT4ETCUGUM4/exec" },
-  "VII_1ST": { "url": "https://script.google.com/macros/s/AKfycbw-exbfeOuxGZgfpkBmydrlBceKXygt_EEa8oPNiOF8YgSMQB-9z85A6OcV63EV1wIh/exec" },
-  "VII_2ND": { "url": "https://script.google.com/macros/s/AKfycbwJdAoRZsDUfkB5QCaY2jx_VfZ739pko2qRkfbDXaEzKmuQ6O_ZfQ-9K_Bcr822pCOx5Q/exec" },
-  "VII_3RD": { "url": "https://script.google.com/macros/s/AKfycbxA6Q-M7OC5T2_XyTaZ_x-ZkR0qEY8FCocOJvRxG-gEaDLQ2CEppeSLFJMTw4qbzq3N4w/exec" },
-  "VIII_1ST": { "url": "https://script.google.com/macros/s/AKfycbw_TGDcOuW7rlWScn6ODMTPtMHjjCQsVsj3N4uF9953Vymtk0RZu4Xhht_G2-9COBI/exec" },
-  "VIII_2ND": { "url": "https://script.google.com/macros/s/AKfycbylizotSJspbzRkVLuz_M9-9fdNF7y2y8blRdAxy2Y3LaqJfVrXIrVbZQDSgNIvmFG-/exec" },
-  "VIII_3RD": { "url": "https://script.google.com/macros/s/AKfycbxsAjZKIMUd7oQTL6J8UV7Jelx3w2RsGTR9M4LLmEmRmpSBT_TRts5VET3Kp4RVbrQFxw/exec" },
-  "IX_1ST": { "url": "https://script.google.com/macros/s/AKfycbzCCNXf8ppcfrr2u2LU3-LnSbEiuBxiRVN3JYxeUTYyf8ynj_gZiUFoLUzoG_AvlXrWTA/exec" },
-  "IX_2ND": { "url": "https://script.google.com/macros/s/AKfycbzsQTzAUsyd4Ob1e2zswh2MLKRqOTNhsbN64DPqVr2O3cGecCBZcPJtPNITprBgmtMORQ/exec" },
-  "IX_3RD": { "url": "https://script.google.com/macros/s/AKfycbxa1dL8AfSNHRPGrsuYvC-TInYYlJVhY8ZNyMl4cNpl1QG0q-_99wzp0UnSOzE6jCMN/exec" },
-  "X_1ST": { "url": "https://script.google.com/macros/s/AKfycbyzc91avx7L5aRTksxYLLVF-saQPp1zroEs2DIsRXR_AD1JZ8VudKkUySKADR-sXkaSKw/exec" },
-  "X_2ND": { "url": "https://script.google.com/macros/s/AKfycbz7L-Qk9nk6ug0qCVmN-gQKY3EGIruh0xTF3vM4c3zAUKjRTn1xLkpAlnUgWToWqQmj/exec" },
-  "X_TEST": { "url": "https://script.google.com/macros/s/AKfycbw2SmzydY5a6gNAxPnUQN75xDgT9g3cAho1L0PXEMvjNiOffo7doZEVVgbwXu1QN-y7tg/exec" },
-  "XI_SEM1": { "url": "https://script.google.com/macros/s/AKfycbzkIZ-zKf2ygJ5UgyhVPPOk--tVb1LiVGMs0KzG3lxA5rQUSzQEakMtXk8N7iRDrJtE/exec" },
-  "XI_SEM2": { "url": "https://script.google.com/macros/s/AKfycbwc2OED_CzRF1t3fni3BafRqgsr2wfaX1yd5X4mD-AGDLwcIArRGxW3n_YgsLj07IA/exec" },
-  "XII_TEST": { "url": ""}
-  
+  "V": { "url": "https://script.google.com/macros/s/AKfycbzGyGTXMey27tcwgIF4YjHgwPI2mZ1-K8x76ssGqJZqumEKdZmntFNear0GvSL0-NuR/exec" },
+  "VI": { "url": "https://script.google.com/macros/s/AKfycbzKsQFwxM-F407EC2cqvSybuOr49VjXV1Fg5SJIt7JbLM2omEix5WhWfH7pOPQ9eHCU/exec" },
+  "VII": { "url": "https://script.google.com/macros/s/AKfycbw-exbfeOuxGZgfpkBmydrlBceKXygt_EEa8oPNiOF8YgSMQB-9z85A6OcV63EV1wIh/exec" },
+  "VIII": { "url": "https://script.google.com/macros/s/AKfycbw_TGDcOuW7rlWScn6ODMTPtMHjjCQsVsj3N4uF9953Vymtk0RZu4Xhht_G2-9COBI/exec" },
+  "IX": { "url": "https://script.google.com/macros/s/AKfycbzCCNXf8ppcfrr2u2LU3-LnSbEiuBxiRVN3JYxeUTYyf8ynj_gZiUFoLUzoG_AvlXrWTA/exec" },
+  "X": { "url": "https://script.google.com/macros/s/AKfycbyzc91avx7L5aRTksxYLLVF-saQPp1zroEs2DIsRXR_AD1JZ8VudKkUySKADR-sXkaSKw/exec" },
+  "XI": { "url": "https://script.google.com/macros/s/AKfycbzkIZ-zKf2ygJ5UgyhVPPOk--tVb1LiVGMs0KzG3lxA5rQUSzQEakMtXk8N7iRDrJtE/exec" }
 }
