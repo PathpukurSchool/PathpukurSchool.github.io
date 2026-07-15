@@ -43,18 +43,14 @@ function getExamText(key) {
     }
 }
 
-// পেজিনেশন বোতাম তৈরি করে (ইনলাইন সিএসএস মুক্ত)
-function createButton(text, bgColor, onClick, disabled = false) {
+// পেজিনেশন বোতাম তৈরি করে (ইনলাইন স্টাইল বাদ দিয়ে সম্পূর্ণ ক্লাস ভিত্তিক)
+function createButton(text, onClick, disabled = false) {
     const btn = document.createElement('button');
     btn.innerText = text;
     btn.onclick = onClick;
     btn.disabled = disabled;
-    btn.classList.add('pagination-btn', `btn-${text.toLowerCase()}`);
-    
-    // হোভার ইফেক্ট শুধুমাত্র জাভাস্ক্রিপ্ট দিয়ে ব্যাকআপ হিসেবে রাখা
-    btn.onmouseover = () => { btn.style.backgroundColor = '#e65100'; };
-    btn.onmouseout = () => { btn.style.backgroundColor = ''; }; // CSS থেকে কালার নিবে
-    
+    btn.classList.add('pagination-btn');
+    btn.classList.add(`btn-${text.toLowerCase()}`); 
     return btn;
 }
 
@@ -160,7 +156,6 @@ function renderButtons() {
 
     const classes = [...new Set(Object.keys(credentials).map(k => k.split('_')[0]))];
     const order = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-    
     const sortedClasses = classes.sort((a, b) => order.indexOf(a) - order.indexOf(b));
 
     sortedClasses.forEach(cls => {
@@ -184,8 +179,7 @@ function renderButtons() {
                 button.className = 'box-button exam-link';
                 button.dataset.key = key;
 
-                let label = getExamText(key);
-                button.textContent = label;
+                button.textContent = getExamText(key);
                 
                 if (credentials[key].url && credentials[key].url.trim() !== '') {
                     button.onclick = () => window.open(credentials[key].url, '_blank');
@@ -263,8 +257,8 @@ function renderHelpList() {
 
     noticesToRender.forEach(item => {
         const itemDiv = document.createElement('div');
-        itemDiv.className = 'notice-item';
-        
+        itemDiv.classList.add('notice-item');
+
         const titleText = item.text || "No Title";
         const dateText = item.date ? ` [Date: ${item.date}]` : '';
         const isItemNew = ['Yes', 'NEW', true].includes(item.isNew);
@@ -276,12 +270,7 @@ function renderHelpList() {
         }
         
         itemDiv.innerHTML = itemContent;
-        
-        // CSS এর মাধ্যমে হোভার হ্যান্ডেল করার পরামর্শ (এখানে JS এর ব্যাকআপ রাখা হলো)
-        itemDiv.onmouseover = () => itemDiv.style.backgroundColor = '#eef';
-        itemDiv.onmouseout = () => itemDiv.style.backgroundColor = '';
         itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
-        
         container.appendChild(itemDiv);
     });
 
@@ -290,19 +279,18 @@ function renderHelpList() {
 
 function renderPaginationControls() {
     const paginationContainer = document.getElementById('pagination-controls');
-    if (!paginationContainer) return;
+    if (!paginationContainer || totalPages <= 1) return;
     paginationContainer.innerHTML = '';
-    if (totalPages <= 1) return;
 
-    const backBtn = createButton('BACK', '#ff9800', () => {
+    const backBtn = createButton('BACK', () => {
         if (currentPage > 1) { currentPage--; renderHelpList(); }
     }, currentPage === 1);
 
     const pageInfo = document.createElement('span');
     pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
-    pageInfo.className = 'page-info';
+    pageInfo.classList.add('page-info');
 
-    const nextBtn = createButton('NEXT', '#ff9800', () => {
+    const nextBtn = createButton('NEXT', () => {
         if (currentPage < totalPages) { currentPage++; renderHelpList(); }
     }, currentPage === totalPages);
 
@@ -312,55 +300,56 @@ function renderPaginationControls() {
 function showPopup(titleText, date, link, subjText) {
     const existing = document.getElementById('notice-popup');
     if (existing) existing.remove();
+    const existingOverlay = document.getElementById('notice-popup-overlay');
+    if (existingOverlay) existingOverlay.remove();
 
     const overlay = document.createElement('div');
     overlay.id = 'notice-popup-overlay';
-    overlay.className = 'popup-overlay'; 
+    overlay.classList.add('popup-overlay'); 
     overlay.onclick = () => { popup.remove(); overlay.remove(); };
 
     const popup = document.createElement('div');
     popup.id = 'notice-popup';
-    popup.className = 'popup-content'; 
+    popup.classList.add('popup-content'); 
     popup.onclick = (e) => e.stopPropagation();
 
     const schoolHeader = document.createElement('div');
-    schoolHeader.className = 'school-header';
     schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice Board';
+    schoolHeader.classList.add('school-header'); 
     popup.appendChild(schoolHeader);
 
     const titleElem = document.createElement('div');
-    titleElem.className = 'notice-title';
     titleElem.innerText = titleText || "No Title";
+    titleElem.classList.add('notice-title'); 
     popup.appendChild(titleElem);
 
     if (date) {
         const dateElem = document.createElement('div');
-        dateElem.className = 'notice-date';
         dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
+        dateElem.classList.add('notice-date'); 
         popup.appendChild(dateElem);
     }
 
     if (subjText && subjText.trim() !== '') {
         const subjElem = document.createElement('div');
-        subjElem.className = 'notice-subject';
         subjElem.innerText = subjText;
+        subjElem.classList.add('notice-subject'); 
         popup.appendChild(subjElem);
     }
 
     const buttonContainer = document.createElement('div');
     buttonContainer.id = 'popup-button-container';
-    buttonContainer.className = 'popup-button-container'; 
+    buttonContainer.classList.add('popup-button-container'); 
 
     if (link && link.trim() !== '') {
-        const linkBtn = document.createElement('a');
-        linkBtn.href = link;
+        const linkBtn = document.createElement('button');
         linkBtn.innerText = 'Open Link';
-        linkBtn.target = '_blank';
-        linkBtn.className = 'popup-link-btn'; 
+        linkBtn.classList.add('popup-link-btn'); 
+        linkBtn.onclick = () => window.open(link, '_blank');
         buttonContainer.appendChild(linkBtn);
     }
 
-    const downloadBtn = createButton('Download', '#28a745', () => {
+    const downloadBtn = createButton('Download', () => {
         buttonContainer.style.visibility = 'hidden';
         const originalMaxHeight = popup.style.maxHeight;
         const originalOverflowY = popup.style.overflowY;
@@ -372,12 +361,10 @@ function showPopup(titleText, date, link, subjText) {
             if (typeof html2canvas !== 'undefined') {
                  html2canvas(popup).then(canvas => {
                     let safeTitle = (titleText || "notice").replace(/[\\/:*?"<>|]+/g, "").trim().replace(/\s+/g, "_");
-                    let fileName = safeTitle + ".png";
-
-                    const link = document.createElement('a');
-                    link.download = fileName;
-                    link.href = canvas.toDataURL();
-                    link.click();
+                    const dlLink = document.createElement('a');
+                    dlLink.download = safeTitle + ".png";
+                    dlLink.href = canvas.toDataURL();
+                    dlLink.click();
 
                     popup.style.maxHeight = originalMaxHeight;
                     popup.style.overflowY = originalOverflowY;
@@ -392,8 +379,7 @@ function showPopup(titleText, date, link, subjText) {
         }, 50);
     });
 
-    const closeBtn = createButton('Back', '#dc3545', () => { popup.remove(); overlay.remove(); });
-
+    const closeBtn = createButton('Back', () => { popup.remove(); overlay.remove(); });
     buttonContainer.append(downloadBtn, closeBtn);
     popup.appendChild(buttonContainer);
     
@@ -404,7 +390,6 @@ function showPopup(titleText, date, link, subjText) {
 // =================================
 // 🧭 সাইড বার মেনু ও স্ক্রল ফাংশন
 // =================================
-
 function initializeSidebar() {
     const menuButton = document.getElementById('menu-toggle-button');
     const sidebar = document.getElementById('sidebar-menu');
@@ -426,7 +411,6 @@ function initializeSidebar() {
     navLinks.forEach(link => {
         link.addEventListener("click", function(event) {
             event.preventDefault();
-
             navLinks.forEach(item => item.classList.remove("active-link"));
             this.classList.add("active-link");
 
@@ -442,7 +426,6 @@ function initializeSidebar() {
                 const targetPosition = targetSection.offsetTop - headerHeight - 20;
 
                 window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-
                 setTimeout(() => { targetSection.classList.remove("highlight-section"); }, 3000);
             }
         });
@@ -450,19 +433,18 @@ function initializeSidebar() {
 }
 
 // =================================
-// 🎓 স্টুডেন্ট এক্সাম লিংক লোডিং
+// 🎓 স্টুডেন্ট এক্সাম লিংক লোডিং (বোতামের প্রোপার্টি ফিক্সড)
 // =================================
-
 function loadStudentExamLinks() {
     fetch("home_url.json")
         .then(response => response.json())
         .then(data => {
             document.querySelectorAll(".exam-link").forEach(button => {
                 const id = button.id;
-                
-                // বাটন এলিমেন্টে href অ্যাট্রিবিউট কাজ করে না, তাই click event দিয়ে করা হলো
                 if (data[id]) {
+                    // button-এর ক্ষেত্রে href না দিয়ে click ইভেন্ট হ্যান্ডেল করা ভালো
                     button.onclick = () => window.open(data[id], '_blank');
+                    button.classList.remove('disabled-exam-link');
                 } else {
                     button.onclick = (event) => {
                         event.preventDefault();
@@ -498,7 +480,6 @@ async function loadExamDates() {
         
         if (data && data.data) {
             examDatesMarquee.innerHTML = '';
-            
             const formattedData = data.data.map(item => {
                 return `<span class="marquee-item" style="color: ${item.color};">${item.text}</span>`;
             }).join(', ');
@@ -516,7 +497,6 @@ async function loadExamDates() {
 // =================================
 // 🚀 ইনিশিয়ালাইজেশন এবং ইভেন্ট লিসেনার
 // =================================
-
 function logout() {
     sessionStorage.clear();
     window.location.replace("index.html");
@@ -524,19 +504,18 @@ function logout() {
 
 document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add('no-scroll');
-    
     fetchNotices();
     initializeSidebar();
     loadStudentExamLinks();
     loadExamDates();
 
     if (examDatesMarquee) {
-        const pauseAnimation = () => { examDatesMarquee.style.animationPlayState = 'paused'; };
-        const runAnimation = () => { examDatesMarquee.style.animationPlayState = 'running'; };
+        const pause = () => { examDatesMarquee.style.animationPlayState = 'paused'; };
+        const run = () => { examDatesMarquee.style.animationPlayState = 'running'; };
 
-        examDatesMarquee.addEventListener("mouseover", pauseAnimation);
-        examDatesMarquee.addEventListener("mouseout", runAnimation);
-        examDatesMarquee.addEventListener("touchstart", pauseAnimation);
-        examDatesMarquee.addEventListener("touchend", runAnimation);
+        examDatesMarquee.addEventListener("mouseover", pause);
+        examDatesMarquee.addEventListener("mouseout", run);
+        examDatesMarquee.addEventListener("touchstart", pause);
+        examDatesMarquee.addEventListener("touchend", run);
     }
 });
