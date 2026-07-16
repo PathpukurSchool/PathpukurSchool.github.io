@@ -87,13 +87,13 @@
         <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
 		
         <li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
-        <li><a href="#last-date-section" class="nav-link">Mark Submission Date</a></li>
         <li><a href="#marks-uploading-section" class="nav-link">Marks Uploading Status</a></li>
         <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
 		<li><a href="#student-score-sheet-section" class="nav-link">Student Score Sheet</a></li>
 		<li><a href="#student-roll-strength-section" class="nav-link">Student Roll Strength</a></li>
         
-        <li><a href="#upload-your-marks-section" class="nav-link">Upload Exam Marks</a></li>
+        <li><a href="#notice-board-section" class="nav-link menu-header">Upload Exam Marks</a></li>
+		<li><a href="#upload-your-marks-section" class="nav-link">Upload Marks</a></li>
         
         <li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
         <li><a href="#staff-routine-section" class="nav-link">Staff Routine</a></li>
@@ -103,24 +103,17 @@
         <li><a href="#exam-routine-section" class="nav-link">Exam Routine</a></li>
 
 		<li><a href="#student-benefit-section" class="nav-link menu-header">For Students' Benefit</a></li>
-		<li><a href="#id-card-section" class="nav-link">Student ID Card</a></li>
 		<li><a href="#school-certificate-section" class="nav-link">School Certificate (Regular)</a></li>
 		<li><a href="#school-certificate-ex-section" class="nav-link">School Certificate (Ex.)</a></li>
 		<li><a href="#school-tc-section" class="nav-link">Manual T.C.</a></li>
 		<li><a href="#student-code-section" class="nav-link">Student Code / ID</a></li>
 		<li><a href="#xi-tab-form-section" class="nav-link">Bank Mandate Form for XI TAB</a></li>
 		<li><a href="#data-check-section" class="nav-link">Student Data Verification Form</a></li>
-		<li><a href="#summative-sheet-section" class="nav-link">Download Written Exam Marks</a></li>
 		<li><a href="#book-list-section" class="nav-link">Book List</a></li>
-
-        <li><a href="#notice-board-section" class="nav-link menu-header">Notices</a></li>
-        <li><a href="#notice-board-section" class="nav-link">Notice Board</a></li>
 		
 		<li><a href="#upload-notice-date-section" class="nav-link menu-header">Upload Notices & Dates</a></li>
         <li><a href="#upload-student-notice-section" class="nav-link">Upload Student Notice</a></li>
-		<li><a href="#upload-teacher-notice-section" class="nav-link">Upload Teacher Notice</a></li>
-		<li><a href="#upload-mark-submission-last-date-section" class="nav-link">Set Marks Upload Time Limit</a></li>
-		<li><a href="#download-student-result-section" class="nav-link">Download & Control Result Sheet</a></li>
+		<li><a href="#summative-sheet-section" class="nav-link">Download Written Exam Marks</a></li>
 		
         <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
         <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
@@ -136,19 +129,6 @@
         </h2>
         <h3 class="login-instruction-heading">This section provides the deadline for marks submission, the current marks uploading status, and a searchable student list to help you find student information by name, class, roll number, etc.</h3>
     </div>
-
-	  <!-- ✅ নম্বর আপলোড এর সময়সীমা  --->
-    <div class="sub-sections-wrapper"> <div class="shaded-info-box" id="last-date-section">
-            <div class="sub-section-heading">
-                <h2 class="shaded-info-box-heading">Time Limit for Mark Submission</h2>
-                <h3 class="login-instruction-heading">Kindly submit all marks, grades & comments within the given time frame:<span class="emoji">👇</span></h3>
-            </div>
-            <div class="static-text">
-                <div class="marquee-container">
-                    <div id="exam-dates-marquee-content" class="marquee-content"></div>
-                </div>
-            </div>
-        </div>
 
 		  <!-- ✅ নম্বর আপলোড এর তথ্য  --->
         <div class="shaded-info-box" id="marks-uploading-section">
@@ -269,12 +249,6 @@
 
     <div class="sub-sections-wrapper new-design">
 		
-		<!-- ✅ স্টুডেন্ট আইডেন্টিটি কার্ড -->
-        <div id="id-card-section" class="new-info-box">
-            <a id="id-card-link" href="#" class="new-info-box-link exam-link">
-                <h2 class="new-info-box-heading">Student ID Card</h2>
-            </a>
-        </div>
 		<!-- ✅ স্কুল সার্টিফিকেট রেগুলার -->
         <div id="school-certificate-section" class="new-info-box">
             <a id="school-certificate-link" href="#" class="new-info-box-link exam-link">
@@ -311,36 +285,8 @@
                 <h2 class="new-info-box-heading">Student Data Verification / Correction Form</h2>
             </a>
         </div>
-<!-- ✅ ডাউনলোড সামেটিভ রেজাল্ট -->
-        <div id="summative-sheet-section" class="new-info-box">
-            <a id="summative-sheet-link" href="#" class="new-info-box-link exam-link">
-                <h2 class="new-info-box-heading">Download the Written Exam Marks for Wallup</h2>
-            </a>
-        </div>
 
-<!-- ✅ বুক লিস্ট -->
-        <div id="book-list-section" class="new-info-box">
-            <a id="book-list-link" href="#" class="new-info-box-link exam-link">
-                <h2 class="new-info-box-heading">Book List<br>(Modification & Download)</h2>
-            </a>
-        </div>
-		
     </div>
-</div>
-	  
-	  <!-- ✅ নোটিশ বোর্ড -->
-    <div class="main-section-container" id="notice-board-section">
-        <div class="section-heading-wrapper">
-            <h2 class="section-heading">
-                <span class="emoji"><i class="fa-solid fa-bullhorn"></i></span>
-                <span class="blink">Notice Board</span>
-            </h2>
-        </div>
-        
-          <div class="section-content-wrapper">
-                <div id="help-list"></div>
-                <div id="pagination-controls" style="text-align: center; margin-top: 20px;"></div>
-            </div>
 </div>
   
   <!-- ✅ আপলোড নোটিশ ও ডেট --> 
@@ -363,21 +309,9 @@
             </a>
         </div>
 
-        <div id="upload-teacher-notice-section" class="new-info-box">
-            <a id="upload-teacher-notice-link" href="#" class="new-info-box-link exam-link">
-                <h2 class="new-info-box-heading">Upload Teacher Notice</h2>
-            </a>
-        </div>
-
-        <div id="upload-mark-submission-last-date-section" class="new-info-box">
-            <a id="upload-mark-submission-last-date-link" href="#" class="new-info-box-link exam-link">
-                <h2 class="new-info-box-heading">Set Exam Marks Uploading Time Limit</h2>
-            </a>
-        </div>
-
-		<div id="download-student-result-section" class="new-info-box">
-            <a id="download-student-result-link" href="#" class="new-info-box-link exam-link">
-                <h2 class="new-info-box-heading">Download & Control the Result Sheet</h2>
+        <div id="summative-sheet-section" class="new-info-box">
+            <a id="summative-sheet-link" href="#" class="new-info-box-link exam-link">
+                <h2 class="new-info-box-heading">Download the Written Exam Marks for Wallup</h2>
             </a>
         </div>
 		
