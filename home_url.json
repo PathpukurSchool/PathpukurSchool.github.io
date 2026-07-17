@@ -18,5 +18,6 @@
   "data-check-link": "https://script.google.com/macros/s/AKfycbwKgz79D0qQ3kiPDnNZym0Xaqia0HRPA9mmUkE_J3CuHrCScg8Way1e1FOwKEbCt1YcCQ/exec",
   
   "upload-student-notice-link": "https://script.google.com/macros/s/AKfycbxsMTAcwAwgo-bvbYAQYe2YbU02zLdGxnt0EBlJclW1LvlIzGG5NME690uQz1fGMK56Xw/exec",
-  "download-student-result-link": "https://script.google.com/macros/s/AKfycbz5IJnY-wzimM6wW2iWDjV3nqd_NGtBaHcf9efBFUJiQOPmbTQsn27bYBBhTfYi2QSL/exec"
+  "summative-sheet-excel-link": "https://script.google.com/macros/s/AKfycbz5IJnY-wzimM6wW2iWDjV3nqd_NGtBaHcf9efBFUJiQOPmbTQsn27bYBBhTfYi2QSL/exec",
+  "summative-sheet-pdf-link": "https://script.google.com/macros/s/AKfycbyS_1gQfS6CV84qCYE2tqBO2fJBckYHkuCgujDQHaj8pbOhY1LxhpjHZgNFB3ZBPuvV/exec"
 }
