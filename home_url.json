@@ -8,20 +8,15 @@
   "teacher-routine-link": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher",
   "class-routine-link": "https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student",
   "subject-routine-link": "https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject",
-  "exam-routine-link": "https://script.google.com/macros/s/AKfycbwvUmtT8FbPWQUOGK1jW52ZZQIP79A8yl1g9UEccDncw3S7JTK6xk5pmuGchOCbgAWEBA/exec",
+  "exam-routine-link": "https://script.google.com/macros/s/AKfycbzUdoNit0-ifZvVgswLJoQEixG7kpxv6MBUeE5dg6zIFjEIiyPkIMw68QDbOnfvvAMqtA/exec",
 
-  "id-card-link": "https://script.google.com/macros/s/AKfycbz-cmUL2Dzmj0yks89kdIXDlO1YkbU8lS0vD0UIy5LtkCjHb2v9ObnKmnXY3_87c3nG/exec",
   "school-certificate-link": "https://script.google.com/macros/s/AKfycbytisRx0OKESTVzwNOwz9lPw8Tf32k5zVnQYdiqWnNfJTeIy8pSf8pxlb3ElLCztgZ1/exec",
   "school-certificate-ex-link": "https://script.google.com/macros/s/AKfycbwNonTt5uqn8sJpqiEZTdyNzFSBupKwWRzajAVq1kSzdOpgXbuYZ647MGZ69vxnoQiM4A/exec",
   "school-tc-link": "https://script.google.com/macros/s/AKfycbze5iUVn_CdCluUxUoKdapw_vExsTYq-ZsXW0ShBQ_2bbrbLrUCYqnCyDVaKExFzXKtkw/exec",
   "student-code-link": "https://script.google.com/macros/s/AKfycbz03GANVSV-P4bNSLKKj8TpZMUZSScp-DF6SSVRiUgjosf04sUuSnYXn36zphn25oRRyw/exec",
   "xi-tab-form-link": "https://script.google.com/macros/s/AKfycbxmsHnreZGDTpMnU4IeoIUT38H7gPSkZ_WZPHzGkA28wtvscxpUklB8D3Fh7cSH7fJB5A/exec",
   "data-check-link": "https://script.google.com/macros/s/AKfycbwKgz79D0qQ3kiPDnNZym0Xaqia0HRPA9mmUkE_J3CuHrCScg8Way1e1FOwKEbCt1YcCQ/exec",
-  "summative-sheet-link": "https://script.google.com/macros/s/AKfycbw2GsnsdfUJ3ST923SNfLPLdRiyN2JKKMttJSuVySMqinbUOYHu7X-ZY-nVOLOWlhjs/exec",
-  "book-list-link": "https://script.google.com/macros/s/AKfycbz2qsUUk9UQpRSYsGr2OdE8I9smZMBIixKicnCWAHMCV6rFIfJTtn7DYTs7S-hLi2aw/exec",
   
   "upload-student-notice-link": "https://script.google.com/macros/s/AKfycbxsMTAcwAwgo-bvbYAQYe2YbU02zLdGxnt0EBlJclW1LvlIzGG5NME690uQz1fGMK56Xw/exec",
-  "upload-teacher-notice-link": "https://script.google.com/macros/s/AKfycbzxx7IEJEvQ3TRut_z0f51aI83r7JJ_H125d2eIK5G95IdzX-qs3H3PGVNFYBgc1OaV/exec",
-  "upload-mark-submission-last-date-link": "https://script.google.com/macros/s/AKfycbyfcYA8sdD__TgIe-mHKE9n1fabVv_pDFam1K59O9FdD13r5rVcg5_Mf005mcAWsa6xjA/exec",
-  "download-student-result-link": "https://script.google.com/macros/s/AKfycbzsnOS2cC71O2N_UHAVDTgaoBA9TQzIt9BdANblGqtn29uA9jZJErU2TCeWvyqILIc/exec"
+  "download-student-result-link": "https://script.google.com/macros/s/AKfycbz5IJnY-wzimM6wW2iWDjV3nqd_NGtBaHcf9efBFUJiQOPmbTQsn27bYBBhTfYi2QSL/exec"
 }
