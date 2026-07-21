@@ -79,6 +79,12 @@
   ],
   "results": [
     {
+      "title": "Rank & New Roll",
+      "description": "Search by Class & Roll to view Rank, New Roll, Result and Admission Date.",
+      "url": "",
+      "isNew": false
+    },
+    {
       "title": "Class V Result",
       "description": "View Class 5 exam results.",
       "url": "https://script.google.com/macros/s/AKfycbxY8WHGjuHPf2uBZJ_EaVBiCUxf3GFME-uRZ9Rddq2aYa9iAqPcYUy5T_SzFDBWuoC0/exec",
