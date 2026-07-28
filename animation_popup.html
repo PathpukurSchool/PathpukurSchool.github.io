@@ -33,19 +33,19 @@
 
         #popupContent {
             border-radius: 20px;
-            padding: 40px 40px 30px; 
+            padding: 25px 25px 20px; /* আগে ছিল 40px 40px 30px */
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             transform: scale(0.9);
             animation: smoothPop 1.2s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 95%;
-            width: 500px;
-            max-height: 85vh; 
+            max-width: 90%; /* আগে ছিল 95% */
+            width: 400px; /* আগে ছিল 500px, যা মূল সাইজ ছোট করবে */
+            max-height: 80vh; /* আগে ছিল 85vh */
             overflow-y: auto; 
             position: relative;
             cursor: default;
-            border: 5px solid #fff;
+            border: 4px solid #fff; /* বর্ডার ৫px থেকে ৪px করা হলো */
             box-sizing: border-box;
         }
 
@@ -61,7 +61,7 @@
             position: absolute;
             top: 5px;
             right: 20px;
-            font-size: 30px;
+            font-size: 20px;
             color: inherit; 
             cursor: pointer;
             transition: transform 0.3s, color 0.3s;
@@ -127,7 +127,7 @@
         */
         .school-header {
             font-family: 'Noto Serif Bengali', serif;
-            font-size: 1.0em;
+            font-size: .85em;
             color: rgba(255, 255, 255, 0.9);
             margin-bottom: 10px;
             padding-bottom: 10px;
@@ -216,17 +216,55 @@
         .style-christmas .school-header { border-bottom: 2px solid #f1c40f; color: #f1c40f; }
         .style-christmas #closeButton { color: #f1c40f; }
 
-        #popupContent h1 { font-family: 'Baloo Da 2', sans-serif; font-size: 3.5em; margin: 0 0 10px 0; letter-spacing: 3px; }
-        #popupContent h2 { font-family: 'Noto Serif Bengali', serif; font-size: 2em; margin: 0 0 15px 0; }
-        #popupContent p { font-family: 'Noto Serif Bengali', serif; font-size: 1.3em; margin: 10px 0 0 0; line-height: 1.5; }
+        /* মূল টাইটেল ও টেক্সট সাইজ (Desktop / Standard View) */
+        #popupContent h1 { 
+            font-family: 'Baloo Da 2', sans-serif; 
+            font-size: 1.8em; /* আগে ছিল 2.5em (খুব বড় ছিল) */
+            margin: 0 0 8px 0; 
+            letter-spacing: 1px; 
+        }
+        
+        #popupContent h2 { 
+            font-family: 'Noto Serif Bengali', serif; 
+            font-size: 1.2em; /* আগে ছিল 1.5em */
+            margin: 0 0 10px 0; 
+        }
+        
+        #popupContent p { 
+            font-family: 'Noto Serif Bengali', serif; 
+            font-size: 0.95em; /* আগে ছিল 1.0em */
+            margin: 8px 0 0 0; 
+            line-height: 1.4; 
+        }
         
         @media (max-width: 600px) {
-            #popupContent { padding: 30px 20px 20px; width: 100%; }
-            #popupContent h1 { font-size: 2.0em; letter-spacing: 1px; }
-            #popupContent h2 { font-size: 1.2em; }
-            #popupContent p { font-size: 1.0em; }
-            .school-header { font-size: 0.85em; }
-            #closeButton { top: 10px; right: 15px; font-size: 20px; }
+            #popupContent { 
+                padding: 20px 15px 15px; /* প্যাডিং আরও কমানো হলো */
+                width: 92%; /* স্ক্রীণের দুপাশে কিছুটা ফাঁকা জায়গা রাখবে */
+                max-height: 85vh;
+            }
+            #popupContent h1 { 
+                font-size: 1.2em; /* আগে ছিল 1.5em */
+                letter-spacing: 0.5px; 
+            }
+            #popupContent h2 { 
+                font-size: 0.95em; /* আগে ছিল 1.0em */
+            }
+            #popupContent p { 
+                font-size: 0.80em; /* আগে ছিল 0.85em */
+            }
+            .school-header { 
+                font-size: 0.70em; 
+            }
+            .result-table th, .result-table td {
+                padding: 5px 4px; /* রেজাল্ট টেবিলের ঘরগুলোর সাইজ ছোট করবে */
+                font-size: 0.8em;
+            }
+            #closeButton { 
+                top: 8px; 
+                right: 12px; 
+                font-size: 18px; 
+            }
         }
     </style>
 </head>
@@ -244,14 +282,14 @@
         const eventSchedule = [
     // --- বিশেষ ইভেন্ট ---
         { 
-            name: "দ্বাদশ শ্রেণীর সেমিস্টার III এনরোলমেন্ট ফর্ম ফিলাপ ২০২৬ 📋", 
+            name: "📋 দ্বাদশ শ্রেণীর সেমিস্টার III পরীক্ষার এডমিট কার্ড ২০২৬", 
             month: 6, // জুলাই মাসের কোড হলো 6
-            date: 14, // আজ ১৪ তারিখ থেকেই পপ আপ শুরু হবে
+            date: 28, // আজ ১৪ তারিখ থেকেই পপ আপ শুরু হবে
             durationDays: 4, // নোটিশটি ২৪ দিন ধরে (২৯শে জুলাই পর্যন্ত) দেখাবে
             styleClass: "style-result", 
             icon: "🖋️", 
-            title: "২০শে জুলাই ২০২৬ থেকে দ্বাদশ শ্রেণীর সেমিস্টার III পরীক্ষার এনরোলমেন্ট ফর্ম ফিলাপ চালু হবে।", 
-            subtitle: "দ্বাদশ শ্রেণীর সকল ছাত্র-ছাত্রীকে প্রয়োজনীয় নথিপত্র সহ নির্দিষ্ট সময়ে বিদ্যালয়ে উপস্থিত থাকতে বলা হচ্ছে।" 
+            title: "১লা সেপ্টেম্বর ২০২৬ মঙ্গলবার দ্বাদশ শ্রেণীর সেমিস্টার III পরীক্ষার এডমিট কার্ড দেওয়া হবে।", 
+            subtitle: "দ্বাদশ শ্রেণীর সকল ছাত্র-ছাত্রীকে নির্দিষ্ট সময়ে বিদ্যালয়ে উপস্থিত থাকতে বলা হচ্ছে।" 
         },
     
     // --- মাধ্যমিক ও উচ্চমাধ্যমিকের রেজাল্ট ---
