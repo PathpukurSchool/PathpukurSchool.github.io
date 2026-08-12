@@ -125,6 +125,12 @@
       "description": "View Class 11 exam results.",
       "url": "https://script.google.com/macros/s/AKfycbxZG28s_7vQ-3eK5PZmTruNIohuFNo5KrD-_K29oK-1icn8dhIEJq1cFHf_szhykrlgxw/exec",
       "isNew": false
+    },
+    {
+      "title": "Marks Review & Scrutiny",
+      "description": "Submit your Complain.",
+      "url": "https://script.google.com/macros/s/AKfycbyMSImSLwV1UhUBGhcroPYZdjycZww6urn9O_ssqr_vnw-Dr47h8WSYOvpr8nujtZeMhA/exec",
+      "isNew": false
     }
   ]
 }
