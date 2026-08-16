@@ -102,13 +102,13 @@ function renderMarquee() {
 /* =================================
  * Digital Notice Board Functions (Supabase REST API)
  * ================================= */
-const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co/rest/v1/Notice?select=*&order=sl_no.asc";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs"; // আপনার anon public key
+const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co/rest/v1/Notice?select=*";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
 const NOTICES_PER_PAGE = 10;
 let currentPage = 1;
 let totalPages = 0;
-let Helping = []; // Notices ডেটা
+let Helping = []; // Notices ডাটা এর অ্যারে
 
 function errorBox(title, message) {
     const boxClass = (title === "Loading...") ? 'loading-box' : 'error-box';
@@ -117,6 +117,27 @@ function errorBox(title, message) {
             <strong>${title}</strong><br>${message}
         </div>
     `;
+}
+
+// যেকোনো তারিখ ফরম্যাটকে মিলিটাইমে রূপান্তর করার হেলপার ফাংশন
+function parseFlexibleDate(dateStr) {
+    if (!dateStr) return 0;
+    
+    let cleanStr = dateStr.trim().replace(/-/g, '/').replace(/\./g, '/');
+    let parts = cleanStr.split('/');
+    
+    // যদি DD/MM/YYYY ফরম্যাটে থাকে (যেমন: 25/05/2026)
+    if (parts.length === 3 && parts[0].length <= 2 && parts[2].length === 4) {
+        let day = parseInt(parts[0], 10);
+        let month = parseInt(parts[1], 10) - 1;
+        let year = parseInt(parts[2], 10);
+        let parsedDate = new Date(year, month, day);
+        if (!isNaN(parsedDate.getTime())) return parsedDate.getTime();
+    }
+    
+    // অন্যান্য মানক স্ট্যান্ডার্ড তারিখের জন্য
+    let parsedTime = Date.parse(cleanStr);
+    return isNaN(parsedTime) ? 0 : parsedTime;
 }
 
 async function fetchNotices() {
@@ -134,11 +155,28 @@ async function fetchNotices() {
         
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
-        const data = await response.json();
-        Helping = Array.isArray(data) ? data : [];
-        currentPage = 1; 
+        let data = await response.json();
         
+        if (Array.isArray(data)) {
+            // 🔹 ১) তারিখ অনুযায়ী সর্টিং: নতুন তারিখ উপরে, পুরনো নিচে
+            data.sort((a, b) => {
+                let timeA = parseFlexibleDate(a.date_val || a.date);
+                let timeB = parseFlexibleDate(b.date_val || b.date);
+                
+                if (timeB !== timeA) {
+                    return timeB - timeA; // তারিখের ভিত্তিতে ডিসেন্ডিং সর্ট
+                }
+                return (b.sl_no || 0) - (a.sl_no || 0); // তারিখ এক হলে sl_no অনুযায়ী সর্ট
+            });
+            
+            Helping = data;
+        } else {
+            Helping = [];
+        }
+
+        currentPage = 1; 
         renderHelpList();
+        
         if (typeof updateMoreLessButton === 'function') {
             updateMoreLessButton('important-links-section-notice'); 
         }
@@ -146,7 +184,7 @@ async function fetchNotices() {
         console.error("Failed to fetch notices from Supabase:", error);
         const container = document.getElementById('help-list');
         if (container) {
-            container.innerHTML = errorBox("Error!", "Failed to load notices. Check Console for details.");
+            container.innerHTML = errorBox("Error!", "Failed to load notices.");
         }
     }
 }
@@ -173,8 +211,11 @@ function renderHelpList() {
         itemDiv.classList.add('notice-item'); 
         
         const titleText = item.heading || "No Title";
-        const dateText = item.date_val ? ` [Date: ${item.date_val}]` : '';  
-        const isItemNew = (item.is_new === true); 
+        const dateValText = item.date_val || item.date || '';
+        const dateText = dateValText ? ` [Date: ${dateValText}]` : '';  
+        
+        // 🔹 ২) NEW Animation লজিক (boolean/string চেক)
+        const isItemNew = (item.is_new === true || item.is_new === "true" || String(item.is_new).toLowerCase() === "yes"); 
         
         let itemContent = titleText + dateText;  
         
@@ -185,7 +226,7 @@ function renderHelpList() {
         itemDiv.innerHTML = itemContent; 
         itemDiv.onclick = () => {
             if (typeof showPopup === 'function') {
-                showPopup(item.heading, item.date_val, item.link, item.notice_body);
+                showPopup(item.heading, dateValText, item.link, item.notice_body);
             }
         };
         container.appendChild(itemDiv);
@@ -227,7 +268,6 @@ function renderPaginationControls() {
 
     paginationContainer.append(backBtn, pageInfo, nextBtn);
 }
-
 // [Notices সেকশনের কোড শেষ]
 
 /* =================================
