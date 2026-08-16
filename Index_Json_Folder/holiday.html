@@ -9,46 +9,63 @@
   
   <style>
     * { box-sizing: border-box; font-family: 'Tiro Bangla', serif, Arial, sans-serif; }
-    body { background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-    .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    body { background-color: #f4f7f6; margin: 0; padding: 20px; color: #111; }
+    .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     
-    .header { text-align: center; border-bottom: 3px solid #1a5f7a; padding-bottom: 15px; margin-bottom: 20px; }
-    .school-name { font-size: 28px; color: #1a5f7a; margin: 0; font-weight: bold; }
-    .page-title { font-size: 22px; color: #57606f; margin: 8px 0; }
+    /* Header */
+    .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
+    .school-name { font-size: 26px; color: #1a5f7a; margin: 0; font-weight: bold; }
+    .page-title { font-size: 20px; color: #333; margin: 5px 0 0 0; }
     
+    /* Blinking Notice */
     .notice-box {
-      background-color: #fff3cd; color: #856404; padding: 10px 15px; border-left: 5px solid #ffeba2;
-      border-radius: 4px; font-size: 15px; margin-bottom: 20px; text-align: center;
+      background-color: #fff3cd; color: #856404; padding: 8px 12px; border: 1.5px solid #ffeeba;
+      border-left: 5px solid #ffc107; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center;
       animation: blink 2s infinite;
     }
-    @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-    .filter-section { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
+    /* Filters */
+    .filter-section { display: flex; gap: 15px; margin-bottom: 15px; }
     .filter-section input, .filter-section select {
-      flex: 1; min-width: 200px; padding: 10px 15px; font-size: 16px; border: 2px solid #ddd;
-      border-radius: 6px; outline: none; transition: border-color 0.3s;
+      flex: 1; padding: 8px 12px; font-size: 15px; border: 1.5px solid #555;
+      border-radius: 5px; outline: none; background: #fff;
     }
     .filter-section input:focus, .filter-section select:focus { border-color: #1a5f7a; }
 
-    .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .total-badge { background: #e3f2fd; color: #0d47a1; padding: 8px 16px; font-weight: bold; border-radius: 20px; font-size: 16px; }
+    /* Action Bar */
+    .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .total-badge { background: #e3f2fd; color: #0d47a1; padding: 6px 14px; font-weight: bold; border-radius: 15px; font-size: 15px; border: 1px solid #90caf9; }
     .btn-download {
-      background-color: #2e7d32; color: white; border: none; padding: 10px 20px; font-size: 16px;
-      border-radius: 6px; cursor: pointer; transition: background 0.3s; display: flex; align-items: center; gap: 8px;
+      background-color: #2e7d32; color: white; border: none; padding: 8px 16px; font-size: 15px;
+      border-radius: 5px; cursor: pointer; transition: background 0.2s; font-weight: bold;
     }
     .btn-download:hover { background-color: #1b5e20; }
 
+    /* Table with Clear Borders & Interactive Effects */
     .table-responsive { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; border: 2px solid #1a5f7a; }
-    th, td { padding: 12px 15px; text-align: left; border: 1px solid #ddd; }
-    th { background-color: #1a5f7a; color: white; font-size: 17px; }
-    tr:nth-child(even) { background-color: #f8f9fa; }
-    tr:hover { background-color: #e8f4f8; transition: background-color 0.2s ease-in-out; }
+    table { width: 100%; border-collapse: collapse; border: 2px solid #000; }
+    th, td { padding: 8px 10px; text-align: left; border: 1.5px solid #333; font-size: 14px; }
+    th { background-color: #1a5f7a; color: white; font-size: 15px; text-align: center; }
     
+    /* Hover & Click Effects */
+    tbody tr { cursor: pointer; transition: background-color 0.2s ease, transform 0.1s ease; }
+    tbody tr:nth-child(even) { background-color: #f9f9f9; }
+    tbody tr:hover { background-color: #d0ebff !important; } /* মাউস হোভার এফেক্ট */
+    tbody tr.selected-row { background-color: #c8e6c9 !important; font-weight: bold; } /* ক্লিক করা সারির এফেক্ট */
+    
+    /* A4 Size Print Optimizations */
     @media print {
-      .filter-section, .btn-download { display: none; }
-      body { background: white; padding: 0; }
-      .container { box-shadow: none; max-width: 100%; }
+      @page { size: A4 portrait; margin: 10mm 10mm 10mm 10mm; }
+      body { background: white; padding: 0; font-size: 12pt; color: #000; }
+      .container { box-shadow: none; padding: 0; max-width: 100%; width: 100%; }
+      .filter-section, .btn-download { display: none !important; }
+      .notice-box { animation: none; opacity: 1; border: 1px solid #000; background: #fff; color: #000; margin-bottom: 10mm; }
+      table { border: 2px solid #000; width: 100%; page-break-inside: auto; }
+      tr { page-break-inside: avoid; page-break-after: auto; }
+      th, td { border: 1px solid #000 !important; padding: 5px 8px; font-size: 11pt; }
+      th { background-color: #eee !important; color: #000 !important; }
+      tbody tr:hover { background-color: transparent !important; }
     }
   </style>
 </head>
@@ -85,17 +102,17 @@
 
   <div class="action-bar">
     <div class="total-badge" id="totalDaysBadge">মোট ছুটি: ০ দিন</div>
-    <button class="btn-download" onclick="window.print()">🖨️ ডাউনলোড / প্রিন্ট</button>
+    <button class="btn-download" onclick="window.print()">🖨️ প্রিন্ট / PDF ডাউনলোড (A4)</button>
   </div>
 
   <div class="table-responsive">
     <table>
       <thead>
         <tr>
-          <th>তারিখ</th>
-          <th>উপলক্ষ্য</th>
-          <th>দিন সংখ্যা</th>
-          <th>মন্তব্য</th>
+          <th style="width: 25%;">তারিখ</th>
+          <th style="width: 40%;">উপলক্ষ্য</th>
+          <th style="width: 15%;">দিন সংখ্যা</th>
+          <th style="width: 20%;">মন্তব্য</th>
         </tr>
       </thead>
       <tbody id="holidayTableBody">
@@ -112,26 +129,23 @@
 
   let rawHolidays = [];
 
-  // বাংলা সংখ্যাকে ইংরেজি সংখ্যায় রূপান্তর (সঠিক সোর্টিং ও যোগফলের জন্য)
   function bnToEnNum(str) {
     if (!str) return '0';
     const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
     return str.toString().replace(/[০-৯]/g, d => bn.indexOf(d));
   }
 
-  // ইংরেজি সংখ্যাকে বাংলা সংখ্যায় প্রদর্শন
   function enToBnNum(str) {
     if (str === null || str === undefined) return '';
     const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
     return str.toString().replace(/\d/g, d => bn[d]);
   }
 
-  // Supabase থেকে টেবিলের ID অনুযায়ী ডাটা আনা (যাতে আসল ক্রম ঠিক থাকে)
   async function fetchHolidays() {
     const { data, error } = await _supabase
       .from('Holiday')
       .select('*')
-      .order('id', { ascending: true }); // ID অনুযায়ী সাজানো হচ্ছে
+      .order('id', { ascending: true });
 
     if (error) {
       console.error(error);
@@ -143,7 +157,6 @@
     renderTable(rawHolidays);
   }
 
-  // টেবিল তৈরি ও ডাটা ফিল্টার করা
   function renderTable(dataList) {
     const tbody = document.getElementById('holidayTableBody');
     tbody.innerHTML = '';
@@ -157,36 +170,36 @@
     }
 
     dataList.forEach(item => {
-      // দিন সংখ্যার সঠিক যোগফল নির্ণয় (বাংলা বা ইংরেজি উভয় সংখ্যার জন্যই কাজ করবে)
       const numDays = parseInt(bnToEnNum(item.days)) || 0;
       totalDays += numDays;
 
-      // Supabase-এর আসল ডাটা কোনো পরিবর্তন ছাড়াই টেবিলে বসানো হচ্ছে
-      const row = `<tr>
-        <td>${item.date_val || ''}</td>
+      const row = document.createElement('tr');
+      row.onclick = function() {
+        this.classList.toggle('selected-row'); // ক্লিক করলে সিলেক্ট কালার হবে
+      };
+
+      row.innerHTML = `
+        <td style="text-align:center;">${item.date_val || ''}</td>
         <td><strong>${item.occasion || ''}</strong></td>
-        <td>${item.days !== null && item.days !== undefined ? item.days : ''}</td>
+        <td style="text-align:center;">${item.days !== null && item.days !== undefined ? item.days : ''}</td>
         <td>${item.remarks || ''}</td>
-      </tr>`;
-      tbody.innerHTML += row;
+      `;
+      tbody.appendChild(row);
     });
 
     document.getElementById('totalDaysBadge').innerText = `মোট ছুটি: ${enToBnNum(totalDays)} দিন`;
   }
 
-  // ফিল্টারিং লজিক (মাস ও সার্চ)
   function filterData() {
     const searchText = document.getElementById('searchInput').value.toLowerCase();
     const selectedMonth = document.getElementById('monthSelect').value;
 
     const filtered = rawHolidays.filter(item => {
-      // উপলক্ষ্য বা মন্তব্যে সার্চ
       const matchesSearch = (item.occasion || '').toLowerCase().includes(searchText) || 
                             (item.remarks || '').toLowerCase().includes(searchText);
       
       let matchesMonth = true;
       if (selectedMonth !== 'ALL' && item.date_val) {
-        // তারিখ থেকে মাস এক্সট্র্যাক্ট করা (যেমন 01.02.2026 থেকে 02 বা 2 বের করা)
         const dateParts = item.date_val.split('.');
         if (dateParts.length >= 2) {
           const monthNum = parseInt(bnToEnNum(dateParts[1]), 10);
