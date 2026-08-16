@@ -93,31 +93,18 @@ function renderMarquee() {
 }
 
 /* =================================
- * Digital Notice Board Functions (গ্লোবাল)
+ * Digital Notice Board Functions (Supabase REST API)
  * ================================= */
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsMTAcwAwgo-bvbYAQYe2YbU02zLdGxnt0EBlJclW1LvlIzGG5NME690uQz1fGMK56Xw/exec?action=read";
+const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co/rest/v1/Notice?select=*&order=sl_no.asc";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs"; // আপনার anon public key
+
 const NOTICES_PER_PAGE = 10;
 let currentPage = 1;
 let totalPages = 0;
 let Helping = []; // Notices ডেটা
 
-// Students এবং Forms সেকশনের ডেটা ও পেজিনেশন স্টেট রাখার জন্য অবজেক্ট
-const dynamicSectionsState = {
-    'students-list': { data: [], currentPage: 1, totalPages: 0, },
-    'forms-list': { data: [], currentPage: 1, totalPages: 0, },
-    'routine-list': { data: [], currentPage: 1, totalPages: 0, },
-    'results-list': { data: [], currentPage: 1, totalPages: 0, }
-};
-
 function errorBox(title, message) {
-    let boxClass = '';
-    
-    if (title === "Loading...") {
-        boxClass = 'loading-box';
-    } else {
-        boxClass = 'error-box';
-    }
-    
+    const boxClass = (title === "Loading...") ? 'loading-box' : 'error-box';
     return `
         <div class="info-box ${boxClass}">
             <strong>${title}</strong><br>${message}
@@ -131,16 +118,25 @@ async function fetchNotices() {
         container.innerHTML = errorBox("Loading...", "Please wait...");
     }
     try {
-        const response = await fetch(APPS_SCRIPT_URL);
+        const response = await fetch(SUPABASE_URL, {
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            }
+        });
+        
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
         const data = await response.json();
-        Helping = Array.isArray(data.notices) ? data.notices : [];
+        Helping = Array.isArray(data) ? data : [];
         currentPage = 1; 
         
         renderHelpList();
-        updateMoreLessButton('important-links-section-notice'); 
+        if (typeof updateMoreLessButton === 'function') {
+            updateMoreLessButton('important-links-section-notice'); 
+        }
     } catch (error) {
-        console.error("Failed to fetch notices:", error);
+        console.error("Failed to fetch notices from Supabase:", error);
         const container = document.getElementById('help-list');
         if (container) {
             container.innerHTML = errorBox("Error!", "Failed to load notices.");
@@ -149,7 +145,7 @@ async function fetchNotices() {
 }
 
 /* =================================
- * ১) নোটিস সেকশন: সরাসরি গুগল শিটের (F কলাম) Yes স্ট্যাটাস নেবে
+ * ১) নোটিস সেকশন রেন্ডারিং
  * ================================= */
 function renderHelpList() {
     const container = document.getElementById('help-list');
@@ -161,7 +157,6 @@ function renderHelpList() {
         return;
     }
 
-    // পেজিনেশন লজিক (অপরিবর্তিত)
     totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
     const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
     const noticesToRender = Helping.slice(startIndex, startIndex + NOTICES_PER_PAGE);
@@ -170,32 +165,32 @@ function renderHelpList() {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('notice-item'); 
         
-        const titleText = item.text || "No Title";
-        const dateText = item.date ? ` [Date: ${item.date}]` : '';  
-        
-        // সরাসরি গুগল শিট থেকে আসা Boolean মান (F কলামে Yes থাকলে true আসবে)
-        const isItemNew = (item.isNew === true); 
+        const titleText = item.heading || "No Title";
+        const dateText = item.date_val ? ` [Date: ${item.date_val}]` : '';  
+        const isItemNew = (item.is_new === true); 
         
         let itemContent = titleText + dateText;  
         
         if (isItemNew) {
-            // নোটিস সেকশনে সরাসরি "NEW" এনিমেশন
             itemContent += ` <span class="new-badge blink">NEW</span>`;  
         }
         
         itemDiv.innerHTML = itemContent; 
-        itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
+        itemDiv.onclick = () => {
+            if (typeof showPopup === 'function') {
+                showPopup(item.heading, item.date_val, item.link, item.notice_body);
+            }
+        };
         container.appendChild(itemDiv);
     });
+    
     renderPaginationControls();
 
     const noticeSection = document.getElementById('important-links-section-notice'); 
-    
     if (noticeSection) {
-        // সেকশনটিকে স্ক্রিনের উপরে নিয়ে যাওয়ার জন্য স্ক্রল করুন
         noticeSection.scrollIntoView({
-            behavior: 'smooth', // স্মুথ স্ক্রলিং এর জন্য
-            block: 'start'       // সেকশনটি স্ক্রিনের উপরে (start) দেখানোর জন্য
+            behavior: 'smooth',
+            block: 'start'
         });
     }
 }
@@ -206,14 +201,14 @@ function renderPaginationControls() {
     paginationContainer.innerHTML = '';
     if (totalPages <= 1) return;
     
-    paginationContainer.classList.add('pagination-controls'); // নতুন ক্লাস যোগ করা হয়েছে
+    paginationContainer.classList.add('pagination-controls');
 
     const backBtn = createButton('BACK', () => {
         if (currentPage > 1) { currentPage--; renderHelpList(); }
     }, currentPage === 1);
 
     const pageInfo = document.createElement('span');
-    pageInfo.classList.add('page-info'); // নতুন ক্লাস যোগ করা হয়েছে
+    pageInfo.classList.add('page-info');
     pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
 
     const nextBtn = createButton('NEXT', () => {
@@ -223,9 +218,9 @@ function renderPaginationControls() {
     backBtn.classList.add('pagination-btn');
     nextBtn.classList.add('pagination-btn');
 
-
     paginationContainer.append(backBtn, pageInfo, nextBtn);
 }
+
 // [Notices সেকশনের কোড শেষ]
 
 /* =================================
