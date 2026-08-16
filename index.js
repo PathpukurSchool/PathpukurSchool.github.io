@@ -7,6 +7,13 @@ let NEW_STATUS_CONTROL = {};
 let ALL_ITEMS_DETAILS = [];
 const LOCAL_STORAGE_KEY = 'newStatusControl'; // LocalStorage-এর জন্য নতুন ধ্রুবক যোগ করা হলো
 
+let dynamicSectionsState = {
+    'students-list': { data: [], currentPage: 1, totalPages: 0 },
+    'forms-list': { data: [], currentPage: 1, totalPages: 0 },
+    'routine-list': { data: [], currentPage: 1, totalPages: 0 },
+    'results-list': { data: [], currentPage: 1, totalPages: 0 }
+};
+
 // JSON থেকে শুধুমাত্র আইটেমের Title সংগ্রহ করে
 async function loadAllItemDetails() {
     try {
