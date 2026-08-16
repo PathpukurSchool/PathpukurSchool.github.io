@@ -146,7 +146,7 @@ async function fetchNotices() {
         console.error("Failed to fetch notices from Supabase:", error);
         const container = document.getElementById('help-list');
         if (container) {
-            container.innerHTML = errorBox("Error!", "Failed to load notices.");
+            container.innerHTML = errorBox("Error!", "Failed to load notices. Check Console for details.");
         }
     }
 }
