@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ছুটির তালিকা - পাতপুকুর হাই স্কুল (উঃ মাঃ)</title>
-  <!-- Google Fonts: Tiro Bangla -->
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&display=swap" rel="stylesheet">
-  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <style>
@@ -14,24 +12,17 @@
     body { background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
     .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
     
-    /* Header & Branding */
     .header { text-align: center; border-bottom: 3px solid #1a5f7a; padding-bottom: 15px; margin-bottom: 20px; }
     .school-name { font-size: 28px; color: #1a5f7a; margin: 0; font-weight: bold; }
     .page-title { font-size: 22px; color: #57606f; margin: 8px 0; }
     
-    /* Blinking Notice */
     .notice-box {
       background-color: #fff3cd; color: #856404; padding: 10px 15px; border-left: 5px solid #ffeba2;
       border-radius: 4px; font-size: 15px; margin-bottom: 20px; text-align: center;
       animation: blink 2s infinite;
     }
-    @keyframes blink {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
+    @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-    /* Filter Section */
     .filter-section { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
     .filter-section input, .filter-section select {
       flex: 1; min-width: 200px; padding: 10px 15px; font-size: 16px; border: 2px solid #ddd;
@@ -39,7 +30,6 @@
     }
     .filter-section input:focus, .filter-section select:focus { border-color: #1a5f7a; }
 
-    /* Action Bar (Total & Download) */
     .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
     .total-badge { background: #e3f2fd; color: #0d47a1; padding: 8px 16px; font-weight: bold; border-radius: 20px; font-size: 16px; }
     .btn-download {
@@ -48,7 +38,6 @@
     }
     .btn-download:hover { background-color: #1b5e20; }
 
-    /* Table Styling */
     .table-responsive { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; border: 2px solid #1a5f7a; }
     th, td { padding: 12px 15px; text-align: left; border: 1px solid #ddd; }
@@ -66,44 +55,39 @@
 <body>
 
 <div class="container">
-  <!-- Header -->
   <div class="header">
     <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
-    <h2 class="page-title" id="dynamicTitle">ছুটির তালিকা</h2>
+    <h2 class="page-title">ছুটির তালিকা: ২০২৬</h2>
   </div>
 
-  <!-- Blinking Notice -->
   <div class="notice-box">
     📢 <strong>নির্দেশিকা:</strong> বিশেষ প্রয়োজনে অথবা সরকারি নির্দেশিকা অনুযায়ী এই ছুটির তালিকা পরিবর্তন হতে পারে।
   </div>
 
-  <!-- Filters -->
   <div class="filter-section">
     <input type="text" id="searchInput" placeholder="বাংলায় উপলক্ষ্য খুঁজুন..." onkeyup="filterData()">
     <select id="monthSelect" onchange="filterData()">
       <option value="ALL">সব মাস</option>
-      <option value="01">জানুয়ারি</option>
-      <option value="02">ফেব্রুয়ারি</option>
-      <option value="03">মার্চ</option>
-      <option value="04">এপ্রিল</option>
-      <option value="05">মে</option>
-      <option value="06">জুন</option>
-      <option value="07">জুলাই</option>
-      <option value="08">আগস্ট</option>
-      <option value="09">সেপ্টেম্বর</option>
+      <option value="1">জানুয়ারি</option>
+      <option value="2">ফেব্রুয়ারি</option>
+      <option value="3">মার্চ</option>
+      <option value="4">এপ্রিল</option>
+      <option value="5">মে</option>
+      <option value="6">জুন</option>
+      <option value="7">জুলাই</option>
+      <option value="8">আগস্ট</option>
+      <option value="9">সেপ্টেম্বর</option>
       <option value="10">অক্টোবর</option>
       <option value="11">নভেম্বর</option>
       <option value="12">ডিসেম্বর</option>
     </select>
   </div>
 
-  <!-- Stats & Download -->
   <div class="action-bar">
     <div class="total-badge" id="totalDaysBadge">মোট ছুটি: ০ দিন</div>
     <button class="btn-download" onclick="window.print()">🖨️ ডাউনলোড / প্রিন্ট</button>
   </div>
 
-  <!-- Table -->
   <div class="table-responsive">
     <table>
       <thead>
@@ -122,25 +106,32 @@
 </div>
 
 <script>
-  // Supabase Configuration
   const SUPABASE_URL = 'https://bjjwzgzjjcpnndbuelkh.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs'; // <-- আপনার আসল Anon Key দিন
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs';
   const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   let rawHolidays = [];
 
-  // বাংলা সংখ্যা রূপান্তরকারী
-  function toBanglaNum(num) {
-    const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    return num.toString().replace(/\d/g, d => banglaDigits[d]);
+  // বাংলা সংখ্যাকে ইংরেজি সংখ্যায় রূপান্তর (সঠিক সোর্টিং ও যোগফলের জন্য)
+  function bnToEnNum(str) {
+    if (!str) return '0';
+    const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return str.toString().replace(/[০-৯]/g, d => bn.indexOf(d));
   }
 
-  // ডাটা লোড ফাংশন
+  // ইংরেজি সংখ্যাকে বাংলা সংখ্যায় প্রদর্শন
+  function enToBnNum(str) {
+    if (str === null || str === undefined) return '';
+    const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return str.toString().replace(/\d/g, d => bn[d]);
+  }
+
+  // Supabase থেকে টেবিলের ID অনুযায়ী ডাটা আনা (যাতে আসল ক্রম ঠিক থাকে)
   async function fetchHolidays() {
     const { data, error } = await _supabase
       .from('Holiday')
       .select('*')
-      .order('date_val', { ascending: true });
+      .order('id', { ascending: true }); // ID অনুযায়ী সাজানো হচ্ছে
 
     if (error) {
       console.error(error);
@@ -149,19 +140,10 @@
     }
 
     rawHolidays = data;
-    
-    // প্রথম তারিখ থেকে সাল নিয়ে হেডিং আপডেট
-    if (rawHolidays.length > 0 && rawHolidays[0].date_val) {
-      const year = new Date(rawHolidays[0].date_val).getFullYear();
-      if (!isNaN(year)) {
-        document.getElementById('dynamicTitle').innerText = `ছুটির তালিকা: ${toBanglaNum(year)}`;
-      }
-    }
-
     renderTable(rawHolidays);
   }
 
-  // টেবিল রেন্ডার করা
+  // টেবিল তৈরি ও ডাটা ফিল্টার করা
   function renderTable(dataList) {
     const tbody = document.getElementById('holidayTableBody');
     tbody.innerHTML = '';
@@ -175,42 +157,43 @@
     }
 
     dataList.forEach(item => {
-      // দিন সংখ্যা যোগফল
-      const numDays = parseInt(item.days) || 1;
+      // দিন সংখ্যার সঠিক যোগফল নির্ণয় (বাংলা বা ইংরেজি উভয় সংখ্যার জন্যই কাজ করবে)
+      const numDays = parseInt(bnToEnNum(item.days)) || 0;
       totalDays += numDays;
 
-      // তারিখ বাংলায় ফরম্যাট
-      let dateDisplay = item.date_val;
-      try {
-        const d = new Date(item.date_val);
-        dateDisplay = d.toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' });
-      } catch(e){}
-
+      // Supabase-এর আসল ডাটা কোনো পরিবর্তন ছাড়াই টেবিলে বসানো হচ্ছে
       const row = `<tr>
-        <td>${dateDisplay}</td>
+        <td>${item.date_val || ''}</td>
         <td><strong>${item.occasion || ''}</strong></td>
-        <td>${toBanglaNum(numDays)} দিন</td>
-        <td>${item.remarks || '-'}</td>
+        <td>${item.days !== null && item.days !== undefined ? item.days : ''}</td>
+        <td>${item.remarks || ''}</td>
       </tr>`;
       tbody.innerHTML += row;
     });
 
-    document.getElementById('totalDaysBadge').innerText = `মোট ছুটি: ${toBanglaNum(totalDays)} দিন`;
+    document.getElementById('totalDaysBadge').innerText = `মোট ছুটি: ${enToBnNum(totalDays)} দিন`;
   }
 
-  // সার্চ ও ফিল্টার
+  // ফিল্টারিং লজিক (মাস ও সার্চ)
   function filterData() {
     const searchText = document.getElementById('searchInput').value.toLowerCase();
     const selectedMonth = document.getElementById('monthSelect').value;
 
     const filtered = rawHolidays.filter(item => {
+      // উপলক্ষ্য বা মন্তব্যে সার্চ
       const matchesSearch = (item.occasion || '').toLowerCase().includes(searchText) || 
                             (item.remarks || '').toLowerCase().includes(searchText);
       
       let matchesMonth = true;
       if (selectedMonth !== 'ALL' && item.date_val) {
-        const month = item.date_val.split('-')[1]; // YYYY-MM-DD
-        matchesMonth = (month === selectedMonth);
+        // তারিখ থেকে মাস এক্সট্র্যাক্ট করা (যেমন 01.02.2026 থেকে 02 বা 2 বের করা)
+        const dateParts = item.date_val.split('.');
+        if (dateParts.length >= 2) {
+          const monthNum = parseInt(bnToEnNum(dateParts[1]), 10);
+          matchesMonth = (monthNum === parseInt(selectedMonth, 10));
+        } else {
+          matchesMonth = false;
+        }
       }
 
       return matchesSearch && matchesMonth;
@@ -219,7 +202,6 @@
     renderTable(filtered);
   }
 
-  // পেজ লোড হলে ডাটা আনবে
   fetchHolidays();
 </script>
 
