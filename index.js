@@ -17,7 +17,7 @@ let dynamicSectionsState = {
 // JSON থেকে শুধুমাত্র আইটেমের Title সংগ্রহ করে
 async function loadAllItemDetails() {
     try {
-        const response = await fetch('index_link.json');
+        const response = await fetch(`index_link.json?v=${new Date().getTime()}`);
         if (!response.ok) throw new Error('Failed to load config.');
         const data = await response.json();
         
@@ -248,7 +248,7 @@ if (sectionId === 'students-list') {
     const state = dynamicSectionsState[sectionId];
     
     try {
-        const response = await fetch('index_link.json'); 
+        const response = await fetch(`index_link.json?v=${new Date().getTime()}`);
         if (!response.ok) throw new Error('Failed to load configuration.');
         const data = await response.json();
         
