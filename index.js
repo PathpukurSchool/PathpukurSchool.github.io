@@ -2,10 +2,10 @@
  * NEW স্ট্যাটাস কন্ট্রোল লজিক (LocalStorage ভিত্তিক)
  * ================================= */
 
-// গ্লোবাল ভেরিয়েবল: LocalStorage থেকে লোড করা হয়
+// গ্লোবাল ভেরিয়েবল
 let NEW_STATUS_CONTROL = {};
 let ALL_ITEMS_DETAILS = [];
-const LOCAL_STORAGE_KEY = 'newStatusControl'; // LocalStorage-এর জন্য নতুন ধ্রুবক যোগ করা হলো
+const LOCAL_STORAGE_KEY = 'newStatusControl';
 
 let dynamicSectionsState = {
     'students-list': { data: [], currentPage: 1, totalPages: 0 },
@@ -17,15 +17,10 @@ let dynamicSectionsState = {
 /* =================================
  * HTML Element থেকে Data এবং NEW স্ট্যাটাস রিড করার লজিক
  * ================================= */
-let ALL_ITEMS_DETAILS = [];
-let NEW_STATUS_CONTROL = {};
-
 function collectDetailsFromHTML() {
     ALL_ITEMS_DETAILS = [];
     NEW_STATUS_CONTROL = {};
 
-    // HTML-এর সমস্ত লিঙ্ক বা বাটন এলিমেন্ট (যাদের data-title বা নির্দিষ্ট class আছে)
-    // ধরুন HTML-এ প্রতিটি বাটন বা লিঙ্ক <a class="site-link" data-title="Academic Calendar" data-isnew="true" href="academic_calendar.html"></a> এভাবে লেখা থাকবে
     const links = document.querySelectorAll('.site-link, .notice-item-link');
 
     links.forEach(link => {
@@ -40,53 +35,33 @@ function collectDetailsFromHTML() {
     });
 }
 
-// ===================================
-// ✅ নতুন: স্ক্রল বার (Marquee) রেন্ডারিং লজিক (গ্লোবাল) - সংশোধিত
-// ===================================
-
+/* =================================
+ * স্ক্রল বার (Marquee) রেন্ডারিং লজিক
+ * ================================= */
 function renderMarquee() {
-    // HTML-এর আইডি 'new-marquee-wrapper' এখন কন্টেন্ট রাখবে
     const marqueeWrapper = document.getElementById('new-marquee-wrapper');
-    const marqueeContainer = document.querySelector('.scrolling-line-container'); 
-
     if (!marqueeWrapper) return;
 
-    // JSON থেকে পাওয়া ডাটা অনুযায়ী NEW আইটেম ফিল্টার
-    const newItems = ALL_ITEMS_DETAILS.filter(item => {
-        return item.isNew === true; 
-    });
-
+    const newItems = ALL_ITEMS_DETAILS.filter(item => item.isNew === true);
     let htmlContent = '';
 
     if (newItems.length > 0) {
-        // 2. NEW আইটেম থাকলে, সেই কন্টেন্ট তৈরি করা
         const newMarqueeItems = newItems.map(item => {
             const title = item.title;
             const url = item.url || '#';
-            
-            // প্রতিটি আইটেমকে লিঙ্ক সহ যুক্ত করা
             return `<a href="${url}" target="_blank" class="marquee-link">
                         <span class="new-badge blink">✨ NEW</span> ${title} 
                     </a>`;
         });
         
-        // আইটেমগুলির মধ্যে সেপারেটর (|) যোগ করা
         const singleContent = newMarqueeItems.join(' <span class="marquee-separator">|</span> ');
-        
-        // 3. ✅ মূল ফিক্স: কন্টেন্ট ডুপ্লিকেট করা
-        // স্ক্রলিংটি জাম্প-মুক্ত করার জন্য একই কন্টেন্ট দুবার যোগ করা হলো।
-        // মাঝখানে একটি বড় সেপারেটর যোগ করা হলো, যাতে দুটি সেটের মধ্যে দূরত্ব থাকে।
         const space = ' <span class="marquee-spacer">| | |</span> ';
         htmlContent = singleContent + space + singleContent + space + singleContent;
-        
     } else {
-        // 4. কোনো NEW আইটেম না থাকলে ডিফল্ট বার্তা
         const welcomeMessage = "🙏 Welcome to our Official Website 🙏";
         htmlContent = `<div class="marquee-default-msg">${welcomeMessage}</div>`;
-        // ডিফল্ট মেসেজের জন্য স্ক্রলিং দরকার নেই, তাই এটি wrapper-এর মধ্যেই থাকবে।
     }
 
-    // 5. কন্টেইনারে কন্টেন্ট ইনজেক্ট করা
     marqueeWrapper.innerHTML = htmlContent;
 }
 
@@ -99,7 +74,7 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const NOTICES_PER_PAGE = 10;
 let currentPage = 1;
 let totalPages = 0;
-let Helping = []; // Notices ডাটা এর অ্যারে
+let Helping = [];
 
 function errorBox(title, message) {
     const boxClass = (title === "Loading...") ? 'loading-box' : 'error-box';
@@ -110,14 +85,12 @@ function errorBox(title, message) {
     `;
 }
 
-// যেকোনো তারিখ ফরম্যাটকে মিলিটাইমে রূপান্তর করার হেলপার ফাংশন
 function parseFlexibleDate(dateStr) {
     if (!dateStr) return 0;
     
     let cleanStr = dateStr.trim().replace(/-/g, '/').replace(/\./g, '/');
     let parts = cleanStr.split('/');
     
-    // যদি DD/MM/YYYY ফরম্যাটে থাকে (যেমন: 25/05/2026)
     if (parts.length === 3 && parts[0].length <= 2 && parts[2].length === 4) {
         let day = parseInt(parts[0], 10);
         let month = parseInt(parts[1], 10) - 1;
@@ -126,7 +99,6 @@ function parseFlexibleDate(dateStr) {
         if (!isNaN(parsedDate.getTime())) return parsedDate.getTime();
     }
     
-    // অন্যান্য মানক স্ট্যান্ডার্ড তারিখের জন্য
     let parsedTime = Date.parse(cleanStr);
     return isNaN(parsedTime) ? 0 : parsedTime;
 }
@@ -134,13 +106,11 @@ function parseFlexibleDate(dateStr) {
 async function fetchNotices() {
     const container = document.getElementById('help-list');
     
-    // যদি HTML-এ help-list আইডি না পাওয়া যায়
     if (!container) {
-        console.error("Error: HTML-এ 'help-list' আইডিযুক্ত কোনো Element পাওয়া যায়নি!");
+        console.error("Error: HTML-এ 'help-list' আইডিযুক্ত কোনো Element পাওয়া যায়নি!");
         return;
     }
 
-    // শুরুতে লোডিং মেসেজ ইনজেক্ট করা
     container.innerHTML = errorBox("Loading...", "Please wait...");
 
     try {
@@ -156,7 +126,6 @@ async function fetchNotices() {
         let data = await response.json();
         
         if (Array.isArray(data) && data.length > 0) {
-            // তারিখ অনুযায়ী সর্টিং
             data.sort((a, b) => {
                 let timeA = parseFlexibleDate(a.date_val || a.date);
                 let timeB = parseFlexibleDate(b.date_val || b.date);
@@ -184,9 +153,6 @@ async function fetchNotices() {
     }
 }
 
-/* =================================
- * ১) নোটিস সেকশন রেন্ডারিং
- * ================================= */
 function renderHelpList() {
     const container = document.getElementById('help-list');
     if (!container) return;
@@ -209,7 +175,6 @@ function renderHelpList() {
         const dateValText = item.date_val || item.date || '';
         const dateText = dateValText ? ` [Date: ${dateValText}]` : '';  
         
-        // 🔹 ২) NEW Animation লজিক (boolean/string চেক)
         const isItemNew = (item.is_new === true || item.is_new === "true" || String(item.is_new).toLowerCase() === "yes"); 
         
         let itemContent = titleText + dateText;  
@@ -228,14 +193,6 @@ function renderHelpList() {
     });
     
     renderPaginationControls();
-
-    const noticeSection = document.getElementById('important-links-section-notice'); 
-    if (noticeSection) {
-        noticeSection.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
 }
 
 function renderPaginationControls() {
@@ -263,7 +220,6 @@ function renderPaginationControls() {
 
     paginationContainer.append(backBtn, pageInfo, nextBtn);
 }
-// [Notices সেকশনের কোড শেষ]
 
 /* =================================
  * HTML-এ সরাসরি থাকা বাটনে NEW ব্যাজ যোগ করার ফাংশন
@@ -273,47 +229,10 @@ function applyNewBadgesToHTML() {
     
     links.forEach(link => {
         const isNew = link.getAttribute('data-isnew') === "true";
-        // যদি isNew=true হয় এবং আগে থেকে badge না থাকে
         if (isNew && !link.querySelector('.new-badge')) {
             link.innerHTML += ` <span class="new-badge blink">✨ NEW</span>`;
         }
     });
-}
- 
-function renderDynamicPagination(sectionId) {
-    const state = dynamicSectionsState[sectionId];
-    const paginationContainer = document.getElementById(sectionId.replace('-list', '-pagination'));
-    
-    if (!paginationContainer) return;
-    paginationContainer.innerHTML = '';
-    if (state.totalPages <= 1) return;
-    
-    paginationContainer.classList.add('pagination-controls'); // নতুন ক্লাস যোগ করা হয়েছে
-
-
-    const backBtn = createButton('BACK', () => {
-        if (state.currentPage > 1) { 
-            state.currentPage--; 
-            renderDynamicList(sectionId); 
-        }
-    }, state.currentPage === 1);
-
-    const pageInfo = document.createElement('span');
-    pageInfo.classList.add('page-info'); // নতুন ক্লাস যোগ করা হয়েছে
-    pageInfo.innerText = `Page ${state.currentPage}/${state.totalPages}`;
-
-    const nextBtn = createButton('NEXT', () => {
-        if (state.currentPage < state.totalPages) { 
-            state.currentPage++; 
-            renderDynamicList(sectionId); 
-        }
-    }, state.currentPage === state.totalPages);
-    
-    backBtn.classList.add('pagination-btn');
-    nextBtn.classList.add('pagination-btn');
-
-
-    paginationContainer.append(backBtn, pageInfo, nextBtn);
 }
 
 function showAvailableSoonMessage(element) {
@@ -335,25 +254,22 @@ function showAvailableSoonMessage(element) {
 /* =================================
  * Utility Functions (গ্লোবাল)
  * ================================= */
-
 function createButton(text, onClick, disabled = false) {
     const btn = document.createElement('button');
     btn.innerText = text;
     btn.onclick = onClick;
     btn.disabled = disabled;
-    btn.classList.add('custom-button'); // নতুন ক্লাস যোগ করা হয়েছে
+    btn.classList.add('custom-button');
     if (disabled) {
         btn.classList.add('disabled');
     }
     return btn;
 }
 
-// [Notices সেকশনের জন্য প্রয়োজনীয় showPopup ফাংশন, ডাউনলোড বাটন সহ]
 function showPopup(titleText, date, link, subjText) {
     const existingOverlay = document.getElementById('notice-popup-overlay');
     if (existingOverlay) existingOverlay.remove();
 
-    // ✅ নতুন: ওভারলে তৈরি করা (২ নম্বর পরিবর্তন)
     const overlay = document.createElement('div');
     overlay.id = 'notice-popup-overlay';
     overlay.addEventListener('click', function(event) {
@@ -365,36 +281,34 @@ function showPopup(titleText, date, link, subjText) {
 
     const popup = document.createElement('div');
     popup.id = 'notice-popup';
-    // CSS ক্লাস যুক্ত করা হয়েছে
     popup.classList.add('notice-popup-box'); 
 
-    // ✅ নতুন: স্কুলের নাম এবং নোটিস হেডিং যুক্ত করা (১ নম্বর পরিবর্তন)
     const schoolHeader = document.createElement('div');
     schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice Board';
-    schoolHeader.classList.add('school-header'); // CSS ক্লাস যুক্ত করা হয়েছে
+    schoolHeader.classList.add('school-header');
     popup.appendChild(schoolHeader);
 
     const titleElem = document.createElement('div');
     titleElem.innerText = titleText || "No Title";
-    titleElem.classList.add('notice-title'); // CSS ক্লাস যুক্ত করা হয়েছে
+    titleElem.classList.add('notice-title');
     popup.appendChild(titleElem);
 
     if (date && date.trim() !== '') {
         const dateElem = document.createElement('div');
         dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-        dateElem.classList.add('notice-date'); // CSS ক্লাস যুক্ত করা হয়েছে
+        dateElem.classList.add('notice-date');
         popup.appendChild(dateElem);
     }
 
     if (subjText && subjText.trim() !== '') {
         const subjElem = document.createElement('div');
         subjElem.innerText = subjText;
-        subjElem.classList.add('notice-subject'); // CSS ক্লাস যুক্ত করা হয়েছে
+        subjElem.classList.add('notice-subject');
         popup.appendChild(subjElem);
     }
 
     const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'popup-buttons'; // ✅ ক্লাস যুক্ত করা হয়েছে
+    buttonContainer.className = 'popup-buttons';
     popup.appendChild(buttonContainer);
 
     if (link && link.trim() !== '') {
@@ -402,61 +316,53 @@ function showPopup(titleText, date, link, subjText) {
         linkBtn.href = link;
         linkBtn.innerText = 'Open Link';
         linkBtn.target = '_blank';
-        linkBtn.classList.add('popup-link-btn'); // CSS ক্লাস যুক্ত করা হয়েছে
+        linkBtn.classList.add('popup-link-btn');
         buttonContainer.appendChild(linkBtn);
     }
 
-// 🌟 পরিবর্তন ২: ডাউনলোড লজিক আপডেট (সম্পূর্ণ ফিক্স)
-const downloadBtn = createButton('Download', () => {
+    const downloadBtn = createButton('Download', () => {
+        buttonContainer.style.visibility = 'hidden';
+        downloadBtn.classList.add('download-btn');
 
-    // Download শুরু হলে বোতামগুলো লুকানো
-    buttonContainer.style.visibility = 'hidden';
-    downloadBtn.classList.add('download-btn'); // স্টাইল করার জন্য
+        const originalMaxHeight = popup.style.maxHeight;
+        const originalOverflowY = popup.style.overflowY;
 
-    // ⭐⭐ Capture এর আগে popup-এর height overflow ঠিক করা ⭐⭐
-    const originalMaxHeight = popup.style.maxHeight;
-    const originalOverflowY = popup.style.overflowY;
+        popup.style.maxHeight = 'none';
+        popup.style.overflowY = 'visible';
 
-    // popup কে সম্পূর্ণ উচ্চতায় আনা
-    popup.style.maxHeight = 'none';
-    popup.style.overflowY = 'visible';
+        setTimeout(() => {
+            if (typeof html2canvas === 'function') {
+                html2canvas(popup).then(canvas => {
+                    let safeTitle = (titleText || "notice")
+                        .replace(/[\\/:*?"<>|]+/g, "")
+                        .trim()
+                        .replace(/\s+/g, "_");
+                    
+                    let fileName = safeTitle + ".png";
 
-    // 50ms delay → Browser কে style apply করার সময় দেওয়া
-    setTimeout(() => {
+                    const downloadLink = document.createElement('a');
+                    downloadLink.download = fileName;
+                    downloadLink.href = canvas.toDataURL();
+                    downloadLink.click();
 
-        html2canvas(popup).then(canvas => {
+                    popup.style.maxHeight = originalMaxHeight;
+                    popup.style.overflowY = originalOverflowY;
+                    buttonContainer.style.visibility = 'visible';
+                });
+            } else {
+                alert("Image download library is missing!");
+                buttonContainer.style.visibility = 'visible';
+            }
+        }, 50);
+    });
 
-            // ⭐⭐ নতুন: Title থেকে File Name তৈরি ⭐⭐
-            let safeTitle = (titleText || "notice")
-                .replace(/[\\/:*?"<>|]+/g, "")    // ❌ ফাইল নাম নিষিদ্ধ ক্যারেক্টার remove
-                .trim()
-                .replace(/\s+/g, "_");         // space → underscore
-            
-            let fileName = safeTitle + ".png";
-
-            const link = document.createElement('a');
-            link.download = fileName;    // ⭐ ফাইল নাম সেট করা ⭐
-            link.href = canvas.toDataURL();
-            link.click();
-
-            // ⭐⭐ capture শেষ হলে আগের অবস্থায় ফেরত ⭐⭐
-            popup.style.maxHeight = originalMaxHeight;
-            popup.style.overflowY = originalOverflowY;
-            buttonContainer.style.visibility = 'visible';
-        });
-
-    }, 50);
-});
-
-    const closeBtn = createButton('Back', () => overlay.remove()); // ২ নম্বর পরিবর্তন
-    closeBtn.classList.add('close-btn'); // স্টাইল করার জন্য
+    const closeBtn = createButton('Back', () => overlay.remove());
+    closeBtn.classList.add('close-btn');
 
     buttonContainer.append(downloadBtn, closeBtn);
-    overlay.appendChild(popup); // ✅ পপ-আপকে ওভারলের ভিতরে যুক্ত করা হয়েছে
+    overlay.appendChild(popup);
 }
-// [Popup function logic end]
 
-// ডাইনামিক কন্টেন্ট লোড হওয়ার পর More/Less বোতাম চেক করার জন্য ফাংশন
 function updateMoreLessButton(sectionId) {
     const section = document.getElementById(sectionId);
     if (!section) return;
@@ -476,31 +382,25 @@ function updateMoreLessButton(sectionId) {
         }
     }, 50); 
 }
-// [Popup function logic end]
 
-// ✅ নতুন: মোবাইলের ব্যাক বোতাম (Escape Key) দিয়ে পপ-আপ বন্ধ করার লজিক
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
         const popupOverlay = document.getElementById('notice-popup-overlay');
         if (popupOverlay) {
             popupOverlay.remove();
-            event.preventDefault(); // ব্রাউজারের ডিফল্ট আচরণ বন্ধ করা
+            event.preventDefault();
         }
     }
 });
 
 /* =================================
- * DOMContentLoaded - ইভেন্ট লিসেনারের ভেতরের অংশ
+ * DOMContentLoaded - একমাত্র মূল ইনিশিয়ালাইজেশন অংশ
  * ================================= */
-
 document.addEventListener('DOMContentLoaded', function () {
-    /* =================================
-     * হিরো সেকশনের ছবি স্ক্রলিং এর জন্য সংশোধিত কোড
-     * ================================= */
+    
+    // ১. হিরো সেকশনের ছবি স্ক্রলিং
     const heroImagesContainer = document.querySelector('.hero-images');
-
     if (heroImagesContainer) {
-        // এই ভেরিয়েবলগুলিকে অবশ্যই if ব্লকের ভিতরে সংজ্ঞায়িত করতে হবে
         const totalImages = heroImagesContainer.querySelectorAll('.hero-image').length;
         let imageIndex = 0;
         let scrollInterval;
@@ -520,7 +420,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     left: scrollDistance,
                     behavior: 'smooth'
                 });
-
             }, scrollDuration);
         }
         
@@ -530,47 +429,29 @@ document.addEventListener('DOMContentLoaded', function () {
             clearTimeout(heroImagesContainer.scrollTimeout);
             heroImagesContainer.scrollTimeout = setTimeout(() => {
                 isManualScrolling = false;
-                
                 const scrollLeft = heroImagesContainer.scrollLeft;
                 const imageWidth = heroImagesContainer.clientWidth;
                 imageIndex = Math.round(scrollLeft / imageWidth);
-
                 startAutoScroll(); 
             }, 300); 
         });
 
         const heroSection = heroImagesContainer.closest('.hero-section');
         if (heroSection) {
-            heroSection.addEventListener('mouseenter', function() {
-                if (scrollInterval) clearInterval(scrollInterval);
-            });
-
-            heroSection.addEventListener('mouseleave', function() {
-                if (!isManualScrolling) {
-                    startAutoScroll();
-                }
-            });
+            heroSection.addEventListener('mouseenter', () => { if (scrollInterval) clearInterval(scrollInterval); });
+            heroSection.addEventListener('mouseleave', () => { if (!isManualScrolling) startAutoScroll(); });
         }
 
         startAutoScroll();
     } 
 
-    /* =================================
-     * স্কুল লোগো কে সুরক্ষিত রাখার জন্য সংশোধিত কোড
-     * ================================= */
-
+    // ২. স্কুল লোগো প্রটেকশন
     const logoContainer = document.querySelector('.logo-container');
     if (logoContainer) {
-        logoContainer.addEventListener('contextmenu', function(event) {
-            event.preventDefault(); // রাইট-ক্লিক মেনু ব্লক করা হলো
-        });
+        logoContainer.addEventListener('contextmenu', event => event.preventDefault());
     }
 
-    /* =================================
-     * Other UI Logic (More/Less, Menu, Gallery etc.)
-     * ================================= */
-
-    // --- More/Less Button Logic (EventListener বজায় রাখা হলো) ---
+    // ৩. More/Less Button Logic
     const toggleButtons = document.querySelectorAll('.toggle-button');
     toggleButtons.forEach(button => {
         const sectionContentWrapper = button.previousElementSibling;
@@ -582,7 +463,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // --- Menu Bar Logic (অপরিবর্তিত) ---
+    // ৪. Menu Bar Logic
     const menuToggleButton = document.getElementById('menu-toggle-button');
     const sidebarMenu = document.getElementById('sidebar-menu');
     const overlay = document.querySelector('.overlay');
@@ -630,13 +511,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && sidebarMenu && sidebarMenu.classList.contains('active')) {
-            toggleMenu();
-        }
-    });
-
-    // --- Gallery Fullscreen Logic (অপরিবর্তিত) ---
+    // ৫. Gallery Fullscreen Logic
     const galleryImages = document.querySelectorAll('.gallery-image');
     const fullscreenOverlay = document.getElementById('fullscreen-overlay');
     const fullscreenImage = document.getElementById('fullscreen-image');
@@ -659,15 +534,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-// 1. HTML এলিমেন্ট থেকে ডেটা ও NEW স্ট্যাটাস রিড করা
+    // ৬. ডাটা সংগ্রহ, Marquee ও Supabase Notice ফেচ
     collectDetailsFromHTML();
-    
-    // 2. HTML বাটনে NEW এনিমেশন ব্যাজ বসানো
     applyNewBadgesToHTML();
-
-    // 3. স্ক্রল বার (Marquee) রেন্ডার করা (HTML-এর isNew="true" লিংকগুলো নিয়ে স্ক্রল করবে)
-    renderMarquee(); 
-
-    // 4. Supabase নোটিস বোর্ড (যা আগে থেকেই আলাদা টেবিল মারফত চলে)
+    renderMarquee();
     fetchNotices();
 });
