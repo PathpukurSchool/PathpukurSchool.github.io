@@ -44,8 +44,8 @@ body.no-scroll{overflow:hidden}
 .marquee-default-msg{width:max-content;padding-left:100px}
 
 /* 📰 নোটিস আইটেম এবং পপ-আপ (notice-item & Pop-up) */
-.notice-item{cursor:pointer;margin:10px 0;padding:8px 10px;background-color:var(--notice-item-bg);border-left:6px solid var(--notice-item-border-left);border-radius:4px;transition:background-color 0.3s;display:flex;justify-content:space-between;align-items:center}
-.notice-item.hover{transform:translateY(-5px) scale(1.02);box-shadow:0 8px 15px rgba(0,0,0,.15);background-color:var(--light-accent-color)}
+.notice-item{cursor:pointer;margin:10px 0;padding:8px 10px;background-color:var(--notice-item-bg);border-left:6px solid var(--notice-item-border-left);border-radius:4px;transition:background-color 0.3s;display:flex;justify-content:space-between;align-items:center;color: #000000 !important;font-weight: bold}
+.notice-item.hover{transform:scale(1.1);box-shadow:0 8px 15px rgba(0,0,0,.15);background-color:var(--light-accent-color);color:var(--dark-khaki)}
 
 /* ⚠️ ইনফো/এরর/লোডিং বক্স (Info/Error/Loading Box) */
 .info-box{font-size:18px;font-weight:bold;padding:10px;border-radius:8px;text-align:center;max-width:320px;margin:0 auto}
