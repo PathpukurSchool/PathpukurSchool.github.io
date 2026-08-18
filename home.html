@@ -5,22 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script>
-    function checkPageAccess() {
-      // সেশন চেক
-      var hasAccess = sessionStorage.getItem("PHS_AUTHORIZED_ACCESS");
+    (function() {
+      // ইউজার কোন পেজ থেকে এসেছে তার ইউআরএল (Referrer)
+      var referrer = document.referrer;
+      
+      // মূল ডোমেইন এর নাম
+      var allowedDomain = "pathpukurschool.github.io";
 
-      if (hasAccess !== "true") {
-        alert("সরাসরি এই পেজে প্রবেশ করার অনুমতি নেই! আপনাকে মূল ওয়েবসাইটে নিয়ে যাওয়া হচ্ছে।");
-        // replace ব্যবহার করায় ব্রাউজার হিস্ট্রিতে ভুল লিঙ্ক সেভ হবে না
+      // যদি ইউজার মূল সাইটের কোন লিংক থেকে না আসে (সরাসরি URL Paste করে)
+      if (!referrer || referrer.indexOf(allowedDomain) === -1) {
+        // সরাসরি মূল সাইটে রিডাইরেক্ট করা হচ্ছে
         window.location.replace("https://pathpukurschool.github.io/");
       }
-    }
-
-    // ব্যাক বাটন (Cache) বা প্রথমবার প্রবেশ - উভয় ক্ষেত্রেই রান করবে
-    window.addEventListener('pageshow', function (event) {
-      checkPageAccess();
-    });
-  </script>
+    })();
+     </script>
   <title>PATHPUKUR HIGH SCHOOL (HS)</title>
 
   <!-- SEO & Meta Tags -->
