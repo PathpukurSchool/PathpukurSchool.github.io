@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পুস্তক তালিকা - পাতপুকুর হাই স্কুল (উঃ মাঃ)</title>
+    <!-- Font Awesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Atma:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #0b5ed7;
+            --accent-color: #f8f9fa;
+            --text-dark: #212529;
+            --border-color: #b0c4de;
+        }
+
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background: linear-gradient(135deg, #eef2f3 0%, #8e9eab 100%);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .header-section {
+            text-align: center;
+            border-bottom: 3px double #0d6efd;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .school-name {
+            font-family: 'Atma', cursive;
+            font-size: 28px;
+            color: #1a237e;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .main-heading {
+            font-size: 22px;
+            color: #0d6efd;
+            margin: 8px 0 4px 0;
+            font-weight: 700;
+        }
+
+        .sub-heading {
+            font-size: 14px;
+            color: #d9534f;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* Filter Controls */
+        .controls-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f1f5f9;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        select {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+            cursor: pointer;
+            background-color: white;
+            transition: all 0.3s;
+        }
+
+        select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(13, 110, 253, 0.4);
+        }
+
+        .btn {
+            padding: 9px 20px;
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-success {
+            background-color: #198754;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #157347;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Table Styling */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #ffffff;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        th {
+            background-color: #0d6efd;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        tbody tr {
+            transition: background-color 0.25s ease, transform 0.1s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #e2e8f0;
+            cursor: pointer;
+        }
+
+        td.center-text {
+            text-align: center;
+        }
+
+        /* Loading & Empty State */
+        .status-text {
+            text-align: center;
+            padding: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Print Optimization (Strictly A4 One-Page Setup) */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .controls-container, .btn {
+                display: none !important;
+            }
+
+            .school-name {
+                font-size: 24px;
+                color: #000;
+            }
+
+            .main-heading {
+                font-size: 18px;
+                color: #000;
+            }
+
+            th {
+                background-color: #e2e8f0 !important;
+                color: #000 !important;
+            }
+
+            th, td {
+                border: 1px solid #000 !important;
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header-section">
+        <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
+        <h2 class="main-heading" id="pageTitle">পুস্তক তালিকা : <span id="sessionYear">2026</span></h2>
+        <p class="sub-heading">(সরকারী পাঠ্যপুস্তক ব্যতীত)</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-container">
+        <div class="search-box">
+            <label for="classSelect"><i class="fa-solid fa-filter"></i> ক্লাস নির্বাচন করুন:</label>
+            <select id="classSelect" onchange="filterData()">
+                <option value="ALL">--Select Class--</option>
+                <option value="V">Class V</option>
+                <option value="VI">Class VI</option>
+                <option value="VII">Class VII</option>
+                <option value="VIII">Class VIII</option>
+                <option value="IX">Class IX</option>
+                <option value="X">Class X</option>
+                <option value="XI">Class XI</option>
+                <option value="XII">Class XII</option>
+            </select>
+            <button class="btn btn-primary" onclick="filterData()">
+                <i class="fa-solid fa-magnifying-glass"></i> Search
+            </button>
+        </div>
+
+        <button class="btn btn-success" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> Download / Print
+        </button>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-responsive">
+        <table id="bookTable">
+            <thead>
+                <tr>
+                    <th style="width: 8%;">ক্রমিক নম্বর</th>
+                    <th style="width: 12%;">ক্লাস</th>
+                    <th style="width: 20%;">বিষয়</th>
+                    <th style="width: 30%;">বইয়ের নাম</th>
+                    <th style="width: 15%;">লেখক</th>
+                    <th style="width: 15%;">প্রকাশনী</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td colspan="6" class="status-text"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+
+    let allBooks = [];
+
+    // Fetch Data from Supabase
+    async function fetchBookList() {
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/book_list?select=*&order=id.asc`, {
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                }
+            });
+
+            if (!response.ok) throw new Error("Data fetch failed");
+
+            allBooks = await response.json();
+            
+            // Set session year dynamically from first record if available
+            if (allBooks.length > 0 && allBooks[0].session) {
+                document.getElementById('sessionYear').innerText = allBooks[0].session;
+            }
+
+            renderTable(allBooks);
+        } catch (error) {
+            document.getElementById('tableBody').innerHTML = `
+                <tr>
+                    <td colspan="6" class="status-text" style="color: red;">
+                        <i class="fa-solid fa-triangle-exclamation"></i> ডাটা লোড করতে সমস্যা হয়েছে!
+                    </td>
+                </tr>`;
+        }
+    }
+
+    // Render Data to Table
+    function renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        if (data.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="status-text">কোন তথ্য পাওয়া যায়নি।</td>
+                </tr>`;
+            return;
+        }
+
+        data.forEach((book, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="center-text">${index + 1}</td>
+                <td class="center-text">${book.class || ''}</td>
+                <td>${book.subject || ''}</td>
+                <td><strong>${book.book_name || ''}</strong></td>
+                <td>${book.writer || ''}</td>
+                <td>${book.publisher || ''}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // Filter Functionality
+    function filterData() {
+        const selectedClass = document.getElementById('classSelect').value;
+        if (selectedClass === 'ALL') {
+            renderTable(allBooks);
+        } else {
+            const filtered = allBooks.filter(item => 
+                item.class && item.class.trim().toUpperCase() === selectedClass.toUpperCase()
+            );
+            renderTable(filtered);
+        }
+    }
+
+    // Initial Load
+    window.onload = fetchBookList;
+</script>
+
+</body>
+</html>
