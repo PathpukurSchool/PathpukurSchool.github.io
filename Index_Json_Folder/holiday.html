@@ -5,13 +5,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <script>
-    // চেক করা হচ্ছে ইউজার মূল ওয়েবসাইট হয়ে এসেছে কিনা
-    if (sessionStorage.getItem("PHS_VISITED_MAIN_SITE") !== "true") {
-      alert("সরাসরি এই পেজে প্রবেশ করার অনুমতি নেই! আগে মূল ওয়েবসাইটে যান।");
-      // মূল ওয়েবসাইটে রিডাইরেক্ট করে দেওয়া হচ্ছে
-      window.location.href = "https://pathpukurschool.github.io/";
+<script>
+    function checkPageAccess() {
+      // সেশন চেক
+      var hasAccess = sessionStorage.getItem("PHS_AUTHORIZED_ACCESS");
+
+      if (hasAccess !== "true") {
+        alert("সরাসরি এই পেজে প্রবেশ করা যাবেনা! আপনাকে মূল ওয়েবসাইটে নিয়ে যাওয়া হচ্ছে।");
+        // মূল সাইটে রিডাইরেক্ট
+        window.location.replace("https://pathpukurschool.github.io/");
+      } else {
+        // একবার সাব-পেজে ঢুকে গেলে সিক্রেট সেশন মুছে দেওয়া হচ্ছে,
+        // যাতে পরবর্তীতে এই লিঙ্কে ব্যাক করলে বা নতুন করে পেস্ট করলে আবার মূল সাইটে যেতে বাধ্য হয়।
+        sessionStorage.removeItem("PHS_AUTHORIZED_ACCESS");
+      }
     }
+
+    // ব্রাউজারের Back Button ব্যবহার করলেও যাতে এই চেকটি রান হয়
+    window.addEventListener('pageshow', function (event) {
+      checkPageAccess();
+    });
   </script>
   
   <title>ছুটির তালিকা - পাতপুকুর হাই স্কুল (উঃ মাঃ)</title>
