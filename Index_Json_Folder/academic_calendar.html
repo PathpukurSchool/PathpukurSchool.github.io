@@ -10,22 +10,17 @@
       var hasAccess = sessionStorage.getItem("PHS_AUTHORIZED_ACCESS");
 
       if (hasAccess !== "true") {
-        alert("সরাসরি এই পেজে প্রবেশ করা যাবেনা! আপনাকে মূল ওয়েবসাইটে নিয়ে যাওয়া হচ্ছে।");
-        // মূল সাইটে রিডাইরেক্ট
+        alert("সরাসরি এই পেজে প্রবেশ করার অনুমতি নেই! আপনাকে মূল ওয়েবসাইটে নিয়ে যাওয়া হচ্ছে।");
+        // replace ব্যবহার করায় ব্রাউজার হিস্ট্রিতে ভুল লিঙ্ক সেভ হবে না
         window.location.replace("https://pathpukurschool.github.io/");
-      } else {
-        // একবার সাব-পেজে ঢুকে গেলে সিক্রেট সেশন মুছে দেওয়া হচ্ছে,
-        // যাতে পরবর্তীতে এই লিঙ্কে ব্যাক করলে বা নতুন করে পেস্ট করলে আবার মূল সাইটে যেতে বাধ্য হয়।
-        sessionStorage.removeItem("PHS_AUTHORIZED_ACCESS");
       }
     }
 
-    // ব্রাউজারের Back Button ব্যবহার করলেও যাতে এই চেকটি রান হয়
+    // ব্যাক বাটন (Cache) বা প্রথমবার প্রবেশ - উভয় ক্ষেত্রেই রান করবে
     window.addEventListener('pageshow', function (event) {
       checkPageAccess();
     });
-</script>
-  
+  </script>
   <title>Academic Calendar - পাতপুকুর হাই স্কুল (উঃ মাঃ)</title>
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
