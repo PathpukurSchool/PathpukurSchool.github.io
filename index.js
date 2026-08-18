@@ -133,9 +133,16 @@ function parseFlexibleDate(dateStr) {
 
 async function fetchNotices() {
     const container = document.getElementById('help-list');
-    if (container) {
-        container.innerHTML = errorBox("Loading...", "Please wait...");
+    
+    // যদি HTML-এ help-list আইডি না পাওয়া যায়
+    if (!container) {
+        console.error("Error: HTML-এ 'help-list' আইডিযুক্ত কোনো Element পাওয়া যায়নি!");
+        return;
     }
+
+    // শুরুতে লোডিং মেসেজ ইনজেক্ট করা
+    container.innerHTML = errorBox("Loading...", "Please wait...");
+
     try {
         const response = await fetch(SUPABASE_URL, {
             headers: {
@@ -148,16 +155,16 @@ async function fetchNotices() {
         
         let data = await response.json();
         
-        if (Array.isArray(data)) {
-            // 🔹 ১) তারিখ অনুযায়ী সর্টিং: নতুন তারিখ উপরে, পুরনো নিচে
+        if (Array.isArray(data) && data.length > 0) {
+            // তারিখ অনুযায়ী সর্টিং
             data.sort((a, b) => {
                 let timeA = parseFlexibleDate(a.date_val || a.date);
                 let timeB = parseFlexibleDate(b.date_val || b.date);
                 
                 if (timeB !== timeA) {
-                    return timeB - timeA; // তারিখের ভিত্তিতে ডিসেন্ডিং সর্ট
+                    return timeB - timeA;
                 }
-                return (b.sl_no || 0) - (a.sl_no || 0); // তারিখ এক হলে sl_no অনুযায়ী সর্ট
+                return (b.sl_no || 0) - (a.sl_no || 0);
             });
             
             Helping = data;
@@ -173,10 +180,7 @@ async function fetchNotices() {
         }
     } catch (error) {
         console.error("Failed to fetch notices from Supabase:", error);
-        const container = document.getElementById('help-list');
-        if (container) {
-            container.innerHTML = errorBox("Error!", "Failed to load notices.");
-        }
+        container.innerHTML = errorBox("Error!", "Failed to load notices from server.");
     }
 }
 
