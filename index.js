@@ -14,41 +14,32 @@ let dynamicSectionsState = {
     'results-list': { data: [], currentPage: 1, totalPages: 0 }
 };
 
-// JSON থেকে শুধুমাত্র আইটেমের Title সংগ্রহ করে
-async function loadAllItemDetails() {
-    try {
-        const response = await fetch(`index_link.json?v=${new Date().getTime()}`);
-        if (!response.ok) throw new Error('Failed to load config.');
-        const data = await response.json();
-        
-const dynamicItems = [...(data.students || []), ...(data.forms || []), ...(data.routine || []), ...(data.results || [])];
-        
-        ALL_ITEMS_DETAILS = dynamicItems; // সমস্ত ডেটা সেভ করা
-        return dynamicItems;
+/* =================================
+ * HTML Element থেকে Data এবং NEW স্ট্যাটাস রিড করার লজিক
+ * ================================= */
+let ALL_ITEMS_DETAILS = [];
+let NEW_STATUS_CONTROL = {};
 
-    } catch (error) {
-        console.error("Failed to load all item details for marquee:", error);
-        return [];
-    }
-}
+function collectDetailsFromHTML() {
+    ALL_ITEMS_DETAILS = [];
+    NEW_STATUS_CONTROL = {};
 
-// LocalStorage থেকে বা ডিফল্ট থেকে 'NEW' স্ট্যাটাস লোড করার লজিক
-async function initializeNewStatusControl() {
-    const baseData = await loadAllItemDetails(); // Students & Forms লোড হচ্ছে
-    
-    // সরাসরি JSON ডাটা থেকে NEW স্ট্যাটাস ম্যাপ তৈরি করা
-    let newStatusControl = {};
-    baseData.forEach(item => {
-        if (item.title) {
-            // যদি JSON-এ isNew: true থাকে তবেই true হবে
-            newStatusControl[item.title] = item.isNew === true; 
+    // HTML-এর সমস্ত লিঙ্ক বা বাটন এলিমেন্ট (যাদের data-title বা নির্দিষ্ট class আছে)
+    // ধরুন HTML-এ প্রতিটি বাটন বা লিঙ্ক <a class="site-link" data-title="Academic Calendar" data-isnew="true" href="academic_calendar.html"></a> এভাবে লেখা থাকবে
+    const links = document.querySelectorAll('.site-link, .notice-item-link');
+
+    links.forEach(link => {
+        const title = link.getAttribute('data-title') || link.innerText.trim();
+        const url = link.getAttribute('href') || '#';
+        const isNew = link.getAttribute('data-isnew') === "true";
+
+        if (title) {
+            ALL_ITEMS_DETAILS.push({ title: title, url: url, isNew: isNew });
+            NEW_STATUS_CONTROL[title] = isNew;
         }
     });
-    
-    NEW_STATUS_CONTROL = newStatusControl;
-    // LocalStorage এ আপডেট রাখা (ঐচ্ছিক)
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(NEW_STATUS_CONTROL));
 }
+
 // ===================================
 // ✅ নতুন: স্ক্রল বার (Marquee) রেন্ডারিং লজিক (গ্লোবাল) - সংশোধিত
 // ===================================
@@ -271,94 +262,18 @@ function renderPaginationControls() {
 // [Notices সেকশনের কোড শেষ]
 
 /* =================================
- * Students & Forms Section (গ্লোবাল)
+ * HTML-এ সরাসরি থাকা বাটনে NEW ব্যাজ যোগ করার ফাংশন
  * ================================= */
-
-async function fetchDynamicSectionData(sectionId) {
-    const container = document.getElementById(sectionId);
-    // নতুন সংশোধিত কোড:
-let dataKey = 'forms';
-if (sectionId === 'students-list') {
-    dataKey = 'students';
-} else if (sectionId === 'routine-list') {
-    dataKey = 'routine';
-} else if (sectionId === 'results-list') {
-    dataKey = 'results';
-}
-    const state = dynamicSectionsState[sectionId];
+function applyNewBadgesToHTML() {
+    const links = document.querySelectorAll('.site-link, .notice-item-link');
     
-    try {
-        const response = await fetch(`index_link.json?v=${new Date().getTime()}`);
-        if (!response.ok) throw new Error('Failed to load configuration.');
-        const data = await response.json();
-        
-        state.data = Array.isArray(data[dataKey]) ? data[dataKey] : [];
-        state.currentPage = 1;
-        
-        renderDynamicList(sectionId);
-        const parentSectionId = sectionId.replace('-list', '-section');
-        updateMoreLessButton(parentSectionId); 
-
-    } catch (error) {
-        console.error(`Failed to fetch data for ${sectionId}:`, error);
-        if (container) {
-            container.innerHTML = errorBox("Error!", `Failed to load ${dataKey} links.`);
+    links.forEach(link => {
+        const isNew = link.getAttribute('data-isnew') === "true";
+        // যদি isNew=true হয় এবং আগে থেকে badge না থাকে
+        if (isNew && !link.querySelector('.new-badge')) {
+            link.innerHTML += ` <span class="new-badge blink">✨ NEW</span>`;
         }
-    }
-}
-
-function renderDynamicList(sectionId) {
-    const state = dynamicSectionsState[sectionId];
-    const container = document.getElementById(sectionId);
-    const paginationContainer = document.getElementById(sectionId.replace('-list', '-pagination')); 
-
-    if (!container) return;
-    container.innerHTML = "";
-    if (paginationContainer) paginationContainer.innerHTML = '';
-
-    if (!Array.isArray(state.data) || state.data.length === 0) {
-        container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
-        return;
-    }
-
-    state.totalPages = Math.ceil(state.data.length / NOTICES_PER_PAGE);
-    const startIndex = (state.currentPage - 1) * NOTICES_PER_PAGE;
-    const endIndex = startIndex + NOTICES_PER_PAGE;
-    const itemsToRender = state.data.slice(startIndex, endIndex);
-
-    itemsToRender.forEach(item => {
-        const itemDiv = document.createElement('div');
-        itemDiv.classList.add('notice-item'); // [Notices সেকশনের স্টাইল ক্লাস]
-        
-        const titleText = item.title || "No Title";
-        const linkUrl = item.url || '';
-        
-        // LocalStorage-নিয়ন্ত্রিত গ্লোবাল অবজেক্ট থেকে স্ট্যাটাস পড়া
-        const isItemNew = NEW_STATUS_CONTROL[titleText] === true;
-        
-        let itemContent = titleText;
-        
-        if (isItemNew) {
-            itemContent += ` <span class="new-badge blink">NEW</span>`;  
-        }
-        
-        itemDiv.innerHTML = itemContent; 
-
-        itemDiv.onmouseover = () => itemDiv.classList.add('hover');
-        itemDiv.onmouseout = () => itemDiv.classList.remove('hover');
-        
-        // [Students ও Forms সেকশনের জন্য সরাসরি লিংক ওপেন করার লজিক]
-        itemDiv.onclick = () => {
-            if (linkUrl && linkUrl.trim() !== '') {
-                window.open(linkUrl, '_blank'); 
-            } else {
-                showAvailableSoonMessage(itemDiv); 
-            }
-        };
-        container.appendChild(itemDiv);
     });
-
-    renderDynamicPagination(sectionId);
 }
  
 function renderDynamicPagination(sectionId) {
@@ -740,15 +655,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-// Initial function calls
-initializeNewStatusControl().then(() => {
-    fetchNotices(); // Notices লোড হচ্ছে
-    fetchDynamicSectionData('students-list'); // Students লোড হচ্ছে
-    fetchDynamicSectionData('forms-list'); // Forms লোড হচ্ছে
-    fetchDynamicSectionData('routine-list'); // এই নতুন লাইনটি যোগ করুন (Routine লোড হচ্ছে)
-    fetchDynamicSectionData('results-list'); // নতুন যোগ করা হলো
+// 1. HTML এলিমেন্ট থেকে ডেটা ও NEW স্ট্যাটাস রিড করা
+    collectDetailsFromHTML();
     
-    // ✅ স্ক্রল বার লোড করা
+    // 2. HTML বাটনে NEW এনিমেশন ব্যাজ বসানো
+    applyNewBadgesToHTML();
+
+    // 3. স্ক্রল বার (Marquee) রেন্ডার করা (HTML-এর isNew="true" লিংকগুলো নিয়ে স্ক্রল করবে)
     renderMarquee(); 
-});
+
+    // 4. Supabase নোটিস বোর্ড (যা আগে থেকেই আলাদা টেবিল মারফত চলে)
+    fetchNotices();
 });
