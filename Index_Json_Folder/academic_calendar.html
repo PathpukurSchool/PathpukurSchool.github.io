@@ -3,6 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <script>
+    // চেক করা হচ্ছে ইউজার মূল ওয়েবসাইট হয়ে এসেছে কিনা
+    if (sessionStorage.getItem("PHS_VISITED_MAIN_SITE") !== "true") {
+      alert("সরাসরি এই পেজে প্রবেশ করার অনুমতি নেই! আগে মূল ওয়েবসাইটে যান।");
+      // মূল ওয়েবসাইটে রিডাইরেক্ট করে দেওয়া হচ্ছে
+      window.location.href = "https://pathpukurschool.github.io/";
+    }
+  </script>
+  
   <title>Academic Calendar - পাতপুকুর হাই স্কুল (উঃ মাঃ)</title>
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
