@@ -216,6 +216,7 @@
           <th>শ্রেণি</th>
           <th>সেকশন</th>
           <th>রোল</th>
+          <th>এডমিশন নং</th>
           <th>ছাত্র/ছাত্রীর নাম</th>
           <th>পিতার নাম</th>
           <th>মাতার নাম</th>
@@ -277,7 +278,7 @@
     if (sClass) queryParams.push(`class_name=eq.${encodeURIComponent(sClass)}`);
     if (sSec) queryParams.push(`section=eq.${encodeURIComponent(sSec)}`);
     if (sRoll) queryParams.push(`roll_no=eq.${sRoll}`);
-    if (sGender) queryParams.push(`gender=eq.${encodeURIComponent(sGender)}`);
+    if (sGender) queryParams.push(`gender=ilike.${encodeURIComponent(sGender)}`);
 
     // Flexible DOB Filter Search (Strip all non-digit characters)
     if (sDob) {
@@ -355,9 +356,10 @@
 
       row.innerHTML = `
         <td>${toBengaliNumeral(startIndex + index + 1)}</td>
-        <td><strong>Class ${item.class_name || '-'}</strong></td>
+        <td><strong>${item.class_name || '-'}</strong></td>
         <td>${item.section || '-'}</td>
-        <td>${toBengaliNumeral(item.roll_no || '-')}</td>
+        <td>${item.roll_no || '-'}</td>
+        <td>${item.admission_no || '-'}</td>
         <td><strong>${item.student_name || '-'}</strong></td>
         <td>${item.father_name || '-'}</td>
         <td>${item.mother_name || '-'}</td>
