@@ -236,18 +236,19 @@ function applyNewBadgesToHTML() {
 }
 
 function showAvailableSoonMessage(element) {
-    const parentContainer = element.closest('.section-content-wrapper');
+    const parentContainer = element.closest('.section-content-wrapper') || element.parentElement;
     if (parentContainer) {
         const existingMessages = parentContainer.querySelectorAll('.avail-msg');
         existingMessages.forEach(msg => msg.remove());
     }
-
     const msg = document.createElement('div');
     msg.className = 'avail-msg';
     msg.textContent = '🔔 Available Soon! Please Wait. 🔔';
     
-    element.after(msg); 
+    // মেসেজটি এলিমেন্টের ঠিক নিচে বসানো
+    element.insertAdjacentElement('afterend', msg); 
     
+    // ৩ সেকেন্ড পর মেসেজটি স্বয়ংক্রিয়ভাবে মুছে যাবে
     setTimeout(() => msg.remove(), 3000);
 }
 
@@ -539,4 +540,18 @@ document.addEventListener('DOMContentLoaded', function () {
     applyNewBadgesToHTML();
     renderMarquee();
     fetchNotices();
-});
+
+// ৭. খালি/লিঙ্ক ছাড়া বোতামে ক্লিক করলে 'Available Soon' মেসেজ দেখানোর লজিক
+    const allLinks = document.querySelectorAll('.site-link, .notice-item-link, .link-item, a');
+    
+    allLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            const href = this.getAttribute('href');
+            
+            // যদি href না থাকে, ফাঁকা থাকে, '#' থাকে বা 'javascript:void(0)' থাকে
+            if (!href || href.trim() === '' || href === '#' || href.startsWith('javascript:')) {
+                event.preventDefault(); // ব্রাউজারকে পেজের উপরে লাফিয়ে ওঠা থেকে আটকাবে
+                showAvailableSoonMessage(this); // মেসেজটি দেখাবে
+            }
+        });
+    });
