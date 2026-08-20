@@ -2,7 +2,6 @@
  * NEW স্ট্যাটাস কন্ট্রোল লজিক (LocalStorage ভিত্তিক)
  * ================================= */
 
-// গ্লোবাল ভেরিয়েবল
 let NEW_STATUS_CONTROL = {};
 let ALL_ITEMS_DETAILS = [];
 const LOCAL_STORAGE_KEY = 'newStatusControl';
@@ -15,24 +14,44 @@ let dynamicSectionsState = {
 };
 
 /* =================================
- * HTML Element থেকে Data এবং NEW স্ট্যাটাস রিড করার লজিক
+ * HTML Element থেকে Data এবং LocalStorage ম্যানেজমেন্ট
  * ================================= */
+function getSavedNewStatus() {
+    try {
+        const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+        return savedData ? JSON.parse(savedData) : {};
+    } catch (e) {
+        console.error("LocalStorage read error:", e);
+        return {};
+    }
+}
+
 function collectDetailsFromHTML() {
     ALL_ITEMS_DETAILS = [];
-    NEW_STATUS_CONTROL = {};
+    NEW_STATUS_CONTROL = getSavedNewStatus(); // LocalStorage থেকে আগের ডাটা লোড
 
-    const links = document.querySelectorAll('.site-link, .notice-item-link');
+    const links = document.querySelectorAll('.site-link, .notice-item-link, .link-item');
 
     links.forEach(link => {
         const title = link.getAttribute('data-title') || link.innerText.trim();
         const url = link.getAttribute('href') || '#';
-        const isNew = link.getAttribute('data-isnew') === "true";
+        
+        // HTML attribute অথবা LocalStorage যেকোনো একটি সত্য হলেই NEW দেখাবে
+        const attrIsNew = link.getAttribute('data-isnew')?.toLowerCase() === "true";
+        const isNew = (NEW_STATUS_CONTROL[title] !== undefined) ? NEW_STATUS_CONTROL[title] : attrIsNew;
 
         if (title) {
             ALL_ITEMS_DETAILS.push({ title: title, url: url, isNew: isNew });
             NEW_STATUS_CONTROL[title] = isNew;
         }
     });
+
+    // LocalStorage আপডেট করা
+    try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(NEW_STATUS_CONTROL));
+    } catch (e) {
+        console.error("LocalStorage write error:", e);
+    }
 }
 
 /* =================================
@@ -88,7 +107,7 @@ function errorBox(title, message) {
 function parseFlexibleDate(dateStr) {
     if (!dateStr) return 0;
     
-    let cleanStr = dateStr.trim().replace(/-/g, '/').replace(/\./g, '/');
+    let cleanStr = String(dateStr).trim().replace(/-/g, '/').replace(/\./g, '/');
     let parts = cleanStr.split('/');
     
     if (parts.length === 3 && parts[0].length <= 2 && parts[2].length === 4) {
@@ -225,10 +244,12 @@ function renderPaginationControls() {
  * HTML-এ সরাসরি থাকা বাটনে NEW ব্যাজ যোগ করার ফাংশন
  * ================================= */
 function applyNewBadgesToHTML() {
-    const links = document.querySelectorAll('.site-link, .notice-item-link');
+    const links = document.querySelectorAll('.site-link, .notice-item-link, .link-item');
     
     links.forEach(link => {
-        const isNew = link.getAttribute('data-isnew') === "true";
+        const title = link.getAttribute('data-title') || link.innerText.trim();
+        const isNew = NEW_STATUS_CONTROL[title] || link.getAttribute('data-isnew')?.toLowerCase() === "true";
+        
         if (isNew && !link.querySelector('.new-badge')) {
             link.innerHTML += ` <span class="new-badge blink">✨ NEW</span>`;
         }
@@ -245,10 +266,8 @@ function showAvailableSoonMessage(element) {
     msg.className = 'avail-msg';
     msg.textContent = '🔔 Available Soon! Please Wait. 🔔';
     
-    // মেসেজটি এলিমেন্টের ঠিক নিচে বসানো
     element.insertAdjacentElement('afterend', msg); 
     
-    // ৩ সেকেন্ড পর মেসেজটি স্বয়ংক্রিয়ভাবে মুছে যাবে
     setTimeout(() => msg.remove(), 3000);
 }
 
@@ -541,17 +560,17 @@ document.addEventListener('DOMContentLoaded', function () {
     renderMarquee();
     fetchNotices();
 
-// ৭. খালি/লিঙ্ক ছাড়া বোতামে ক্লিক করলে 'Available Soon' মেসেজ দেখানোর লজিক
+    // ৭. খালি/লিঙ্ক ছাড়া বোতামে ক্লিক করলে 'Available Soon' মেসেজ দেখানোর লজিক
     const allLinks = document.querySelectorAll('.site-link, .notice-item-link, .link-item, a');
     
     allLinks.forEach(link => {
         link.addEventListener('click', function(event) {
             const href = this.getAttribute('href');
             
-            // যদি href না থাকে, ফাঁকা থাকে, '#' থাকে বা 'javascript:void(0)' থাকে
             if (!href || href.trim() === '' || href === '#' || href.startsWith('javascript:')) {
-                event.preventDefault(); // ব্রাউজারকে পেজের উপরে লাফিয়ে ওঠা থেকে আটকাবে
-                showAvailableSoonMessage(this); // মেসেজটি দেখাবে
+                event.preventDefault(); 
+                showAvailableSoonMessage(this); 
             }
         });
     });
+});
