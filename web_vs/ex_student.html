@@ -215,7 +215,7 @@
   // Load Years into Dropdown & Fetch Min/Max Year for Heading
   async function loadYearMeta() {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/students?select=adm_year&order=adm_year.asc`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?select=adm_year&order=adm_year.asc`, {
         headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
       });
       const data = await res.json();
@@ -275,7 +275,7 @@
     const to = from + pageSize - 1;
 
     try {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/students?${queryParams.join('&')}`, {
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?${queryParams.join('&')}`, {
         headers: {
           'apikey': SUPABASE_ANON_KEY,
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
