@@ -156,10 +156,8 @@
         <input type="text" id="searchDob" placeholder="DD/MM/YYYY" oninput="triggerSearch()">
       </div>
       <div class="filter-group">
-        <label><i class="fa-solid fa-graduation-cap"></i> ভর্তির সাল:</label>
-        <select id="searchYear" onchange="triggerSearch()">
-          <option value="">-- সমস্ত সাল --</option>
-        </select>
+        <label><i class="fa-solid fa-graduation-cap"></i> ভর্তির সাল (YYYY):</label>
+        <input type="number" id="searchYear" placeholder="যেমন: 2021" oninput="triggerSearch()" min="1980" max="2023">
       </div>
       <button class="btn-reset" onclick="resetFilters()"><i class="fa-solid fa-rotate-right"></i> ফিল্টার রিসেট করুন</button>
     </div>
@@ -194,8 +192,8 @@
 
   <!-- Pagination Controls -->
   <div class="pagination">
-    <button class="btn-page" id="prevBtn" onclick="changePage(-1)"><i class="fa-solid fa-angle-left"></i>Back </button>
-    <button class="btn-page" id="nextBtn" onclick="changePage(1)">Next <i class="fa-solid fa-angle-right"></i></button>
+    <button class="btn-page" id="prevBtn" onclick="changePage(-1)"><i class="fa-solid fa-angle-left"></i> Back </button>
+    <button class="btn-page" id="nextBtn" onclick="changePage(1)"> Next <i class="fa-solid fa-angle-right"></i></button>
   </div>
 </div>
 
@@ -213,30 +211,32 @@
   }
 
   // Load Years into Dropdown & Fetch Min/Max Year for Heading
+  function cleanDateString(str) {
+    if (!str) return '';
+    return str.replace(/[^0-9]/g, '');
+  }
+
+  // হেডিং-এ সর্বনিম্ন ও সর্বোচ্চ ভর্তির সাল দেখানোর জন্য
   async function loadYearMeta() {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?select=adm_year&order=adm_year.asc`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?select=adm_year&order=adm_year.asc&limit=1`, {
         headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
       });
-      const data = await res.json();
+      const minData = await res.json();
+
+      const resMax = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?select=adm_year&order=adm_year.desc&limit=1`, {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+      });
+      const maxData = await resMax.json();
       
-      if (data.length > 0) {
-        const years = [...new Set(data.map(item => item.adm_year).filter(Boolean))].sort((a,b) => a - b);
-        const minYear = years[0];
-        const maxYear = years[years.length - 1];
+      if (minData.length > 0 && maxData.length > 0) {
+        const minYear = minData[0].adm_year;
+        const maxYear = maxData[0].adm_year;
 
-        // Update Sub-heading
-        document.getElementById('subHeading').innerText = 
-          `বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের তথ্য`;
-
-        // Populate Select Options
-        const select = document.getElementById('searchYear');
-        years.forEach(yr => {
-          const opt = document.createElement('option');
-          opt.value = yr;
-          opt.textContent = `${yr} সাল`;
-          select.appendChild(opt);
-        });
+        if (minYear && maxYear) {
+          document.getElementById('subHeading').innerText = 
+            `বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের তথ্য`;
+        }
       }
     } catch (e) {
       document.getElementById('subHeading').innerText = "প্রাক্তন ছাত্র-ছাত্রীদের তথ্য পরিচিতি";
@@ -248,55 +248,80 @@
     debounceTimer = setTimeout(() => {
       currentPage = 1;
       fetchStudents();
-    }, 300); // Wait 300ms while user types
+    }, 300); // টাইপ করার ৩০০ মিলি-সেকেন্ড পর অটোমেটিক সার্চ হবে
   }
 
   async function fetchStudents() {
     const sName = document.getElementById('searchName').value.trim();
     const sFather = document.getElementById('searchFather').value.trim();
     const sAdm = document.getElementById('searchAdmNo').value.trim();
-    const sDob = document.getElementById('searchDob').value.trim();
-    const sYear = document.getElementById('searchYear').value;
+    const rawDob = document.getElementById('searchDob').value.trim();
+    const sYear = document.getElementById('searchYear').value.trim();
 
-    // Building Query
+    // জন্ম তারিখ থেকে সব চিহ্ন তুলে কেবল সংখ্যাটুকু নেওয়া (যেমন: 19031990)
+    const cleanDobInput = cleanDateString(rawDob);
+
+    // Query Building
     let queryParams = [`select=*`];
 
     if (sName) queryParams.push(`student_name=ilike.*${encodeURIComponent(sName)}*`);
     if (sFather) queryParams.push(`father_name=ilike.*${encodeURIComponent(sFather)}*`);
     if (sAdm) queryParams.push(`admission_no=ilike.*${encodeURIComponent(sAdm)}*`);
-    if (sDob) queryParams.push(`dob=ilike.*${encodeURIComponent(sDob)}*`);
     if (sYear) queryParams.push(`adm_year=eq.${sYear}`);
 
-    // Sorting: Smallest Admission Year & Serial First
+    // তারিখ সোর্টিং: কম ভর্তির সাল ও এডমিশন নম্বর অনুযায়ী ক্রমানুসারে
     queryParams.push(`order=adm_year.asc,adm_sl.asc`);
 
-    // Pagination Range
-    const from = (currentPage - 1) * pageSize;
-    const to = from + pageSize - 1;
+    // যদি জন্ম তারিখে কিছু টাইপ করা হয়
+    let isDobFilteringOnClient = cleanDobInput.length > 0;
 
     try {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?${queryParams.join('&')}`, {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Range-Unit': 'items',
-          'Range': `${from}-${to}`,
-          'Prefer': 'count=exact'
-        }
-      });
+      let url = `${SUPABASE_URL}/rest/v1/ex_students?${queryParams.join('&')}`;
+      
+      // ক্লায়েন্ট সাইড তারিখ ফিল্টারিং চলাকালে নির্দিষ্ট লিমিট ছাড়াই ডাটা ফেচ হবে
+      let headers = {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer': 'count=exact'
+      };
+
+      if (!isDobFilteringOnClient) {
+        const from = (currentPage - 1) * pageSize;
+        const to = from + pageSize - 1;
+        headers['Range-Unit'] = 'items';
+        headers['Range'] = `${from}-${to}`;
+      }
+
+      const response = await fetch(url, { headers });
 
       if (!response.ok) throw new Error("Error fetching data");
 
-      const data = await response.json();
-      
-      // Get total records count from headers
-      const contentRange = response.headers.get('content-range');
-      let totalRecords = data.length;
-      if (contentRange) {
-        totalRecords = parseInt(contentRange.split('/')[1]) || data.length;
+      let data = await response.json();
+
+      // জন্ম তারিখ স্মার্ট ফিল্টারিং (যদি জন্ম তারিখ সার্চ বক্সে কিছু লেখা থাকে)
+      if (isDobFilteringOnClient) {
+        data = data.filter(student => {
+          const dbDobClean = cleanDateString(student.dob);
+          return dbDobClean.includes(cleanDobInput);
+        });
       }
 
-      renderTable(data, from, totalRecords);
+      let totalRecords = data.length;
+      if (!isDobFilteringOnClient) {
+        const contentRange = response.headers.get('content-range');
+        if (contentRange) {
+          totalRecords = parseInt(contentRange.split('/')[1]) || data.length;
+        }
+      }
+
+      // যদি DOB ফিল্টার সক্রিয় থাকে, তবে ক্লায়েন্ট সাইড প্যাজিনেশন হবে
+      let displayData = data;
+      if (isDobFilteringOnClient) {
+        const from = (currentPage - 1) * pageSize;
+        displayData = data.slice(from, from + pageSize);
+      }
+
+      renderTable(displayData, (currentPage - 1) * pageSize, totalRecords);
     } catch (err) {
       document.getElementById('tableBody').innerHTML = 
         `<tr><td colspan="8" style="color: red; padding: 15px;">ডাটা লোড করতে সমস্যা হচ্ছে! ইন্টারনেট সংযোগ যাচাই করুন।</td></tr>`;
@@ -315,7 +340,7 @@
     document.getElementById('nextBtn').disabled = (currentPage >= totalPages);
 
     if (data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" style="padding: 15px;">কোনো ছাত্র-ছাত্রীর তথ্য পাওয়া যায়নি।</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" style="padding: 15px;">কোনো প্রাক্তন ছাত্র-ছাত্রীর তথ্য পাওয়া যায়নি।</td></tr>`;
       return;
     }
 
@@ -360,6 +385,6 @@
     fetchStudents();
   };
 </script>
-
+  
 </body>
 </html>
