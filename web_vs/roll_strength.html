@@ -3,6 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      // ইউজার কোন পেজ থেকে এসেছে তার ইউআরএল (Referrer)
+      var referrer = document.referrer;
+      
+      // মূল ডোমেইন এর নাম
+      var allowedDomain = "pathpukurschool.github.io";
+
+      // যদি ইউজার মূল সাইটের কোন লিংক থেকে না আসে (সরাসরি URL Paste করে)
+      if (!referrer || referrer.indexOf(allowedDomain) === -1) {
+        // সরাসরি মূল সাইটে রিডাইরেক্ট করা হচ্ছে
+        window.location.replace("https://pathpukurschool.github.io/");
+      }
+    })();
+  </script>
   <title>Student Roll Strength Report - Patpukur High School (H.S.)</title>
 
   <!-- Google Fonts & Font Awesome Icons -->
@@ -303,7 +318,7 @@
       <tbody id="tableBody">
         <tr>
           <td colspan="11" style="padding: 24px; color: #64748b;">
-            <i class="fa-solid fa-spinner fa-spin fa-lg"></i> Loading data from Supabase...
+            <i class="fa-solid fa-spinner fa-spin fa-lg"></i> Loading all student records from Supabase...
           </td>
         </tr>
       </tbody>
@@ -318,23 +333,58 @@
 
   let rawStudentData = [];
 
-  // Fetch All Current Students Data from Supabase
+  // Helper to standardize class names (e.g., "Class V", "5", "v" -> "V")
+  function normalizeClass(rawClass) {
+    if (!rawClass) return 'UNKNOWN';
+    let str = rawClass.toString().trim().toUpperCase().replace(/^CLASS\s+/i, '');
+    
+    const mapping = {
+      '5': 'V', 'V': 'V',
+      '6': 'VI', 'VI': 'VI',
+      '7': 'VII', 'VII': 'VII',
+      '8': 'VIII', 'VIII': 'VIII',
+      '9': 'IX', 'IX': 'IX',
+      '10': 'X', 'X': 'X',
+      '11': 'XI', 'XI': 'XI',
+      '12': 'XII', 'XII': 'XII'
+    };
+
+    return mapping[str] || str;
+  }
+
+  // Fetch ALL Student Records from Supabase using Loop Pagination (Bypasses 1000 row limit)
   async function fetchData() {
     const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = `<tr><td colspan="11" style="padding: 24px;"><i class="fa-solid fa-spinner fa-spin fa-lg"></i> Fetching records...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="11" style="padding: 24px;"><i class="fa-solid fa-spinner fa-spin fa-lg"></i> Fetching all student records...</td></tr>`;
+
+    rawStudentData = [];
+    let from = 0;
+    const step = 1000;
+    let hasMore = true;
 
     try {
-      // Fetching all student records with pagination bypass (Up to 5000)
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,gender,caste&limit=5000`, {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      while (hasMore) {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,gender,caste`, {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Range-Unit': 'items',
+            'Range': `${from}-${from + step - 1}`
+          }
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch database records");
+
+        const data = await response.json();
+        rawStudentData = rawStudentData.concat(data);
+
+        if (data.length < step) {
+          hasMore = false;
+        } else {
+          from += step;
         }
-      });
+      }
 
-      if (!response.ok) throw new Error("Failed to fetch database records");
-
-      rawStudentData = await response.json();
       renderReport();
     } catch (err) {
       tbody.innerHTML = `<tr><td colspan="11" style="color: #dc2626; padding: 20px;">Error loading data! Please verify your Supabase API keys.</td></tr>`;
@@ -356,7 +406,7 @@
     const matrix = {};
 
     rawStudentData.forEach(item => {
-      let cls = (item.class_name || 'UNKNOWN').trim().toUpperCase();
+      let cls = normalizeClass(item.class_name);
       let sec = (item.section || 'A').trim().toUpperCase();
       let gender = (item.gender || '').trim().toLowerCase();
       let caste = (item.caste || '').trim().toUpperCase();
@@ -368,8 +418,7 @@
         matrix[cls][sec] = { scBoys: 0, scGirls: 0, minBoys: 0, minGirls: 0 };
       }
 
-      // Classification Logic:
-      // SC = SC | MINORITY = OBC, GENERAL, MINORITY, or any other category
+      // Classification Logic
       const isSC = (caste === 'SC');
       const isBoy = (gender === 'boys' || gender === 'boy' || gender === 'm' || gender === 'male');
 
@@ -385,12 +434,14 @@
     // Grand Totals Accumulator
     let gScBoys = 0, gScGirls = 0, gMinBoys = 0, gMinGirls = 0;
 
-    // Ordered Classes for standard display
+    // Ordered Classes from V to XII
     const classOrder = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
     const sortedClasses = Object.keys(matrix).sort((a, b) => {
       let idxA = classOrder.indexOf(a);
       let idxB = classOrder.indexOf(b);
       if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
       return a.localeCompare(b);
     });
 
