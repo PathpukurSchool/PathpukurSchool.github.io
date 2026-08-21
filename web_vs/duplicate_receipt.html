@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      // ইউজার কোন পেজ থেকে এসেছে তার ইউআরএল (Referrer)
+      var referrer = document.referrer;
+      
+      // মূল ডোমেইন এর নাম
+      var allowedDomain = "pathpukurschool.github.io";
+
+      // যদি ইউজার মূল সাইটের কোন লিংক থেকে না আসে (সরাসরি URL Paste করে)
+      if (!referrer || referrer.indexOf(allowedDomain) === -1) {
+        // সরাসরি মূল সাইটে রিডাইরেক্ট করা হচ্ছে
+        window.location.replace("https://pathpukurschool.github.io/");
+      }
+    })();
+  </script>
+  <title>ডুপ্লিকেট ভর্তি রসিদ - পাতপুকুর হাই স্কুল (উঃ মাঃ)</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 16px;
+      color: #0f172a;
+    }
+
+    .main-container {
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    /* Web Page Bengali Header */
+    .app-card {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .page-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .page-subtitle {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0 0 16px 0;
+    }
+
+    /* Bengali Search Form */
+    .search-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .form-control {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      outline: none;
+      background: #f8fafc;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: #2563eb;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-search {
+      background-color: #1e3a8a;
+      color: #ffffff;
+      padding: 9px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-search:hover {
+      background-color: #1e40af;
+    }
+
+    /* Alert / Status Messages */
+    .status-msg {
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      margin-top: 14px;
+      display: none;
+    }
+    .status-error { background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .status-info { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+
+    /* Print Control Bar */
+    .print-bar {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+    }
+
+    .btn-print {
+      background-color: #16a34a;
+      color: #ffffff;
+      padding: 8px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-print:hover { background-color: #15803d; }
+
+    /* =========================================================
+       ENGLISH ADMISSION RECEIPT STYLES (HALF A4 PORTRAIT / A5)
+       ========================================================= */
+    .receipt-wrapper {
+      display: none;
+      justify-content: center;
+    }
+
+    .receipt-card {
+      width: 100%;
+      max-width: 580px; /* Half A4 proportional width */
+      background: #ffffff;
+      border: 2px solid #0f172a;
+      padding: 18px 22px;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      background-image: radial-gradient(#f1f5f9 0.75px, transparent 0.75px);
+      background-size: 12px 12px;
+    }
+
+    .receipt-border-inner {
+      border: 1px dashed #64748b;
+      padding: 14px 18px;
+      position: relative;
+    }
+
+    .watermark {
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-25deg);
+      font-size: 42px;
+      font-weight: 800;
+      color: rgba(226, 232, 240, 0.55);
+      white-space: nowrap;
+      pointer-events: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-family: 'Cinzel', serif;
+    }
+
+    /* Receipt Header */
+    .rc-header {
+      text-align: center;
+      border-bottom: 1.5px solid #0f172a;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .rc-school-name {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+
+    .rc-school-sub {
+      font-size: 10.5px;
+      color: #475569;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .rc-title-badge {
+      display: inline-block;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 6px;
+    }
+
+    /* Meta Info (Receipt No & Date) */
+    .rc-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 6px;
+    }
+
+    /* Student Information Grid Table */
+    .rc-details-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+
+    .rc-details-table td {
+      padding: 5px 4px;
+      font-size: 12px;
+      vertical-align: top;
+    }
+
+    .rc-label {
+      font-weight: 600;
+      color: #475569;
+      width: 32%;
+    }
+
+    .rc-colon {
+      width: 3%;
+      font-weight: 600;
+    }
+
+    .rc-value {
+      font-weight: 700;
+      color: #0f172a;
+      width: 65%;
+    }
+
+    /* Declaration Text */
+    .rc-declaration {
+      background-color: #f8fafc;
+      border-left: 3px solid #1e3a8a;
+      padding: 8px 10px;
+      font-size: 11px;
+      color: #334155;
+      line-height: 1.45;
+      margin-bottom: 22px;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Signatures Section */
+    .rc-signatures {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 18px;
+      padding-top: 6px;
+    }
+
+    .sig-box {
+      text-align: center;
+      width: 40%;
+    }
+
+    .sig-line {
+      border-top: 1px dashed #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .sig-text {
+      font-size: 10px;
+      font-weight: 700;
+      color: #0f172a;
+      text-transform: uppercase;
+    }
+
+    /* Footer Print Timestamp */
+    .rc-footer-timestamp {
+      margin-top: 14px;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 4px;
+      font-size: 8.5px;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* =========================================================
+       PRINT OPTIMIZATION FOR A4 PORTRAIT (HALF A4 SIZE)
+       ========================================================= */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .app-card, .print-bar {
+        display: none !important;
+      }
+
+      .receipt-wrapper {
+        display: block !important;
+      }
+
+      .receipt-card {
+        max-width: 100% !important;
+        width: 100% !important;
+        /* Height constrained to fit roughly half A4 page */
+        box-shadow: none !important;
+        border: 2px solid #000 !important;
+        page-break-inside: avoid;
+      }
+
+      .receipt-border-inner {
+        border-color: #000 !important;
+      }
+
+      .watermark {
+        color: rgba(200, 200, 200, 0.35) !important;
+      }
+
+      .rc-title-badge {
+        background: #000 !important;
+        color: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .rc-declaration {
+        background-color: #f8fafc !important;
+        border-left-color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+  
+  <!-- Web Page Bengali Header & Search Box -->
+  <div class="app-card">
+    <div class="page-title">
+      <i class="fa-solid fa-file-invoice" style="color: #2563eb;"></i> 
+      ডুপ্লিকেট ভর্তি রসিদ
+    </div>
+    <div class="page-subtitle">
+      ছাত্র-ছাত্রীদের বর্তমান সেশনের ভর্তি প্রমাণের জন্য এখান থেকে ডুপ্লিকেট অ্যাডমিশন রসিদ প্রিন্ট করুন।
+    </div>
+
+    <form id="searchForm" onsubmit="event.preventDefault(); searchStudent();">
+      <div class="search-grid">
+        
+        <div class="form-group">
+          <label for="classSelect"><i class="fa-solid fa-graduation-cap"></i> শ্রেণি (Class)</label>
+          <select id="classSelect" class="form-control" required>
+            <option value="">-- শ্রেণি বেছে নিন --</option>
+            <option value="V">Class V</option>
+            <option value="VI">Class VI</option>
+            <option value="VII">Class VII</option>
+            <option value="VIII">Class VIII</option>
+            <option value="IX">Class IX</option>
+            <option value="X">Class X</option>
+            <option value="XI">Class XI</option>
+            <option value="XII">Class XII</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sectionInput"><i class="fa-solid fa-users-rectangle"></i> সেকশন (Section)</label>
+          <select id="sectionInput" class="form-control" required>
+            <option value="A">Sec A</option>
+            <option value="B">Sec B</option>
+            <option value="C">Sec C</option>
+            <option value="D">Sec D</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="rollInput"><i class="fa-solid fa-hashtag"></i> রোল নং (Roll No)</label>
+          <input type="number" id="rollInput" class="form-control" placeholder="যেমন: 12" min="1" required>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn-search">
+            <i class="fa-solid fa-magnifying-glass"></i> রসিদ খুঁজুন
+          </button>
+        </div>
+
+      </div>
+    </form>
+
+    <div id="statusMsg" class="status-msg"></div>
+  </div>
+
+  <!-- Print Action Bar -->
+  <div class="print-bar" id="printBar">
+    <span style="font-size: 13.5px; font-weight: 600; color: #1e3a8a;">
+      <i class="fa-solid fa-circle-check" style="color: #16a34a;"></i> রসিদ সফলভাবে তৈরি হয়েছে!
+    </span>
+    <button class="btn-print" onclick="printReceipt()">
+      <i class="fa-solid fa-print"></i> রসিদ প্রিন্ট করুন (Print A5/Half A4)
+    </button>
+  </div>
+
+  <!-- Generated English Admission Receipt Container -->
+  <div class="receipt-wrapper" id="receiptWrapper">
+    
+    <div class="receipt-card" id="receiptCard">
+      <div class="receipt-border-inner">
+        
+        <!-- Watermark -->
+        <div class="watermark">PATPUKUR HIGH SCHOOL</div>
+
+        <!-- Receipt Header -->
+        <div class="rc-header">
+          <div class="rc-school-name">PATPUKUR HIGH SCHOOL (H.S.)</div>
+          <div class="rc-school-sub">Vill & P.O. - Patpukur, South 24 Parganas, West Bengal</div>
+          <div><span class="rc-title-badge">DUPLICATE ADMISSION RECEIPT</span></div>
+        </div>
+
+        <!-- Meta Info -->
+        <div class="rc-meta">
+          <div>REC NO: <span id="rcNo">PHS/2026/0000</span></div>
+          <div>DATE OF ISSUE: <span id="rcIssueDate">21/08/2026</span></div>
+        </div>
+
+        <!-- Student Details Table -->
+        <table class="rc-details-table">
+          <tr>
+            <td class="rc-label">Student Name</td>
+            <td class="rc-colon">:</td>
+            <td class="rc-value" id="rcStudentName">---</td>
+          </tr>
+          <tr>
+            <td class="rc-label">Father's Name</td>
+            <td class="rc-colon">:</td>
+            <td class="rc-value" id="rcFatherName">---</td>
+          </tr>
+          <tr>
+            <td class="rc-label">Admission / ID No</td>
+            <td class="rc-colon">:</td>
+            <td class="rc-value" id="rcAdmissionNo">---</td>
+          </tr>
+          <tr>
+            <td class="rc-label">Class & Section</td>
+            <td class="rc-colon">:</td>
+            <td class="rc-value"><span id="rcClass">---</span> (Section: <span id="rcSection">---</span>)</td>
+          </tr>
+          <tr>
+            <td class="rc-label">Roll Number</td>
+            <td class="rc-colon">:</td>
+            <td class="rc-value" id="rcRoll">---</td>
+          </tr>
+          <tr>
+            <td class="rc-label">Academic Session</td>
+            <td class="rc-colon">:</td>
+            <td class="rc-value" id="rcSession">2026 - 2027</td>
+          </tr>
+        </table>
+
+        <!-- School Certificate Declaration -->
+        <div class="rc-declaration">
+          <strong>Certificate of Enrollment:</strong> This is to certify that the above-named student is officially admitted and currently enrolled as a bona fide student of <strong>Patpukur High School (H.S.)</strong> for the current academic session.
+        </div>
+
+        <!-- Signatures -->
+        <div class="rc-signatures">
+          <div class="sig-box">
+            <div class="sig-line"></div>
+            <div class="sig-text">Dealing Assistant</div>
+          </div>
+          <div class="sig-box">
+            <div class="sig-line"></div>
+            <div class="sig-text">Headmaster / Teacher-in-Charge</div>
+          </div>
+        </div>
+
+        <!-- Footer Timestamp -->
+        <div class="rc-footer-timestamp">
+          <div>* Computer generated duplicate receipt. Valid for official record.</div>
+          <div>Printed: <span id="rcPrintTimestamp">--/--/---- --:--</span></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // Supabase Configuration Credentials
+  const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+  
+  // Class Name Standardizer
+  function normalizeClass(rawClass) {
+    if (!rawClass) return '';
+    let str = rawClass.toString().trim().toUpperCase().replace(/^CLASS\s+/i, '');
+    const mapping = {
+      '5': 'V', 'V': 'V',
+      '6': 'VI', 'VI': 'VI',
+      '7': 'VII', 'VII': 'VII',
+      '8': 'VIII', 'VIII': 'VIII',
+      '9': 'IX', 'IX': 'IX',
+      '10': 'X', 'X': 'X',
+      '11': 'XI', 'XI': 'XI',
+      '12': 'XII', 'XII': 'XII'
+    };
+    return mapping[str] || str;
+  }
+
+  // Display Status Message
+  function showStatus(msg, isError = false) {
+    const statusDiv = document.getElementById('statusMsg');
+    statusDiv.style.display = 'block';
+    statusDiv.className = `status-msg ${isError ? 'status-error' : 'status-info'}`;
+    statusDiv.innerHTML = msg;
+  }
+
+  function hideStatus() {
+    document.getElementById('statusMsg').style.display = 'none';
+  }
+
+  // Main Search Function
+  async function searchStudent() {
+    const cls = document.getElementById('classSelect').value;
+    const sec = document.getElementById('sectionInput').value.trim();
+    const roll = document.getElementById('rollInput').value.trim();
+
+    if (!cls || !sec || !roll) {
+      showStatus('<i class="fa-solid fa-triangle-exclamation"></i> অনুগ্রহ করে শ্রেণি, সেকশন এবং রোল নম্বর সঠিকভাব প্রদান করুন।', true);
+      return;
+    }
+
+    showStatus('<i class="fa-solid fa-spinner fa-spin"></i> ডাটাবেসে স্টুডেন্ট রেকর্ড খোঁজা হচ্ছে...');
+    document.getElementById('printBar').style.display = 'none';
+    document.getElementById('receiptWrapper').style.display = 'none';
+
+    try {
+      // Query Supabase for student record
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=*`, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+
+      if (!response.ok) throw new Error("Database network error!");
+
+      const allStudents = await response.json();
+
+      // Find matching student
+      const student = allStudents.find(s => {
+        let matchClass = normalizeClass(s.class_name) === normalizeClass(cls);
+        let matchSec = (s.section || '').trim().toUpperCase() === sec.toUpperCase();
+        let matchRoll = parseInt(s.roll || s.roll_no, 10) === parseInt(roll, 10);
+        return matchClass && matchSec && matchRoll;
+      });
+
+      if (!student) {
+        showStatus(`<i class="fa-solid fa-circle-xmark"></i> <strong>দুঃখিত!</strong> Class ${cls}, Sec ${sec}, Roll ${roll} নম্বরের কোনো স্টুডেন্টের রেকর্ড পাওয়া যায়নি।`, true);
+        return;
+      }
+
+      hideStatus();
+      populateReceipt(student);
+
+    } catch (err) {
+      showStatus('<i class="fa-solid fa-circle-exclamation"></i> ডাটাবেস সংযোগে সমস্যা হয়েছে! আপনার Supabase URL ও Key পরীক্ষা করে দেখুন।', true);
+    }
+  }
+
+  // Populate Data into English Receipt Layout
+  function populateReceipt(student) {
+    const studentName = student.student_name || student.name || 'N/A';
+    const fatherName = student.father_name || student.fathers_name || 'N/A';
+    const admissionNo = student.admission_no || student.student_id || student.id || 'PHS/2026/REG';
+    const cls = normalizeClass(student.class_name);
+    const sec = (student.section || 'A').toUpperCase();
+    const roll = student.roll || student.roll_no;
+
+    // Set Receipt Values
+    document.getElementById('rcStudentName').innerText = studentName.toUpperCase();
+    document.getElementById('rcFatherName').innerText = fatherName.toUpperCase();
+    document.getElementById('rcAdmissionNo').innerText = admissionNo;
+    document.getElementById('rcClass').innerText = `CLASS ${cls}`;
+    document.getElementById('rcSection').innerText = sec;
+    document.getElementById('rcRoll').innerText = roll;
+
+    // Generate Unique Receipt Number
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('rcNo').innerText = `PHS/DUP/${cls}-${roll}/${randomNum}`;
+
+    // Issue Date (Current Date)
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('en-GB'); // DD/MM/YYYY
+    document.getElementById('rcIssueDate').innerText = formattedDate;
+
+    // Display Component Elements
+    document.getElementById('receiptWrapper').style.display = 'flex';
+    document.getElementById('printBar').style.display = 'flex';
+
+    // Scroll to receipt smooth
+    document.getElementById('printBar').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Print Function with Live Timestamp Update
+  function printReceipt() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB');
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    
+    document.getElementById('rcPrintTimestamp').innerText = `${dateStr} at ${timeStr}`;
+    window.print();
+  }
+</script>
+
+</body>
+</html>
