@@ -454,14 +454,14 @@
   <!-- Web Page Top Banner with School Name -->
   <div class="school-main-header">
     <h1>পাতপুকুর হাই স্কুল (উ: মা:)</h1>
-    <p>Vill: Pathpukur, P.O: Bakultala Hat, P.S: Bakultala, South 24 Parganas</p>
+    <p>Vill: Pathpukur, P.O: Bakultala Hat, P.S: Bakultala, South 24 Parganas, West Bengal</p>
   </div>
 
   <!-- Web Page Bengali Header & Search Box -->
   <div class="app-card">
     <div class="page-title">
       <i class="fa-solid fa-file-invoice" style="color: #2563eb;"></i> 
-      ডুপ্লিকেট ভর্তি রসিদ পোর্টাল
+      ডুপ্লিকেট ভর্তির রসিদ
     </div>
     <div class="page-subtitle">
       ছাত্র-ছাত্রীদের বর্তমান সেশনের ভর্তি প্রমাণের জন্য এখান থেকে ডুপ্লিকেট অ্যাডমিশন রসিদ প্রিন্ট করুন।
@@ -518,7 +518,7 @@
       <i class="fa-solid fa-circle-check" style="color: #16a34a;"></i> রসিদ সফলভাবে তৈরি হয়েছে!
     </span>
     <button class="btn-print" onclick="printReceipt()">
-      <i class="fa-solid fa-print"></i> রসিদ প্রিন্ট করুন (Print A5/Half A4)
+      <i class="fa-solid fa-print"></i> Print
     </button>
   </div>
 
@@ -574,7 +574,7 @@
           <tr>
             <td class="rc-label">Academic Session</td>
             <td class="rc-colon">:</td>
-            <td class="rc-value" id="rcSession">20_ _</td>
+            <td class="rc-value" id="rcSession">2026-2027</td>
           </tr>
         </table>
 
@@ -594,7 +594,7 @@
           <div class="sig-box">
             <div class="sig-line"></div>
             <div class="sig-text">Signature of Verifying Authority</div>
-            <div class="sig-subtext">(Headmaster / Class Teacher / Clerk with School Seal)</div>
+            <div class="sig-subtext">(Head of School / Class Teacher / Clerk with School Seal)</div>
           </div>
         </div>
 
@@ -714,11 +714,16 @@
     const recNo = `PHS/DUP/${cls}-${roll}/${randomNum}`;
     document.getElementById('rcNo').innerText = recNo;
 
-    // Issue Date
+    // Dynamic Date of Issue (আজকের তারিখ)
     const today = new Date();
-    const formattedDate = today.toLocaleDateString('en-GB');
+    const formattedDate = today.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
     document.getElementById('rcIssueDate').innerText = formattedDate;
 
+    // Dynamic Academic Session (বর্তমান বছর - পরবর্তী বছর)
+    const currentYear = today.getFullYear();
+    const nextYear = currentYear + 1;
+    document.getElementById('rcSession').innerText = `${currentYear} - ${nextYear}`;
+    
     // Generate QR Code with Student Info
     const qrContainer = document.getElementById("qrcode");
     qrContainer.innerHTML = ""; // Clear existing QR Code
