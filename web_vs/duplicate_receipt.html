@@ -709,11 +709,15 @@
     document.getElementById('rcSection').innerText = sec;
     document.getElementById('rcRoll').innerText = roll;
 
-    // Generate Unique Receipt Number
-    const randomNum = Math.floor(1000 + Math.random() * 9000);
-    const recNo = `PHS/DUP/${cls}-${roll}/${randomNum}`;
-    document.getElementById('rcNo').innerText = recNo;
+    // Extract PEN Number from Database (fallback to 'NA' if empty)
+const penNo = (student.pen_no && student.pen_no.toString().trim() !== '') 
+              ? student.pen_no.toString().trim() 
+              : 'PEN_NA';
 
+// Generate Receipt Number using PEN No
+const recNo = `PHS/DUP/${cls}-${roll}/${penNo}`;
+document.getElementById('rcNo').innerText = recNo;
+    
     // Dynamic Date of Issue (আজকের তারিখ)
     const today = new Date();
     const formattedDate = today.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
