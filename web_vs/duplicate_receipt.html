@@ -26,6 +26,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- Supabase & QRCode.js Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -45,18 +49,40 @@
       margin: 0 auto;
     }
 
-    /* Web Page Bengali Header */
+    /* Web Page Header */
+    .school-main-header {
+      text-align: center;
+      background: #1e3a8a;
+      color: #ffffff;
+      padding: 16px 20px;
+      border-radius: 12px 12px 0 0;
+      margin-bottom: -4px;
+    }
+
+    .school-main-header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .school-main-header p {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
     .app-card {
       background: #ffffff;
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 0 0 12px 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       margin-bottom: 20px;
       border: 1px solid #e2e8f0;
+      border-top: none;
     }
 
     .page-title {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       color: #1e3a8a;
       margin: 0 0 6px 0;
@@ -175,7 +201,7 @@
 
     .receipt-card {
       width: 100%;
-      max-width: 580px; /* Half A4 proportional width */
+      max-width: 580px;
       background: #ffffff;
       border: 2px solid #0f172a;
       padding: 18px 22px;
@@ -225,7 +251,7 @@
     }
 
     .rc-school-sub {
-      font-size: 10.5px;
+      font-size: 10px;
       color: #475569;
       margin-top: 2px;
       font-weight: 500;
@@ -291,15 +317,22 @@
       background-color: #f8fafc;
       border-left: 3px solid #1e3a8a;
       padding: 8px 10px;
-      font-size: 11px;
+      font-size: 10.5px;
       color: #334155;
       line-height: 1.45;
-      margin-bottom: 22px;
+      margin-bottom: 15px;
       border-radius: 0 4px 4px 0;
     }
 
-    /* Signatures Section */
-    .rc-signatures {
+    .validity-note {
+      color: #dc2626;
+      font-weight: 700;
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* Footer Section (Signature & QR Code) */
+    .rc-footer-section {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
@@ -307,9 +340,28 @@
       padding-top: 6px;
     }
 
+    .qr-box-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #qrcode img {
+      padding: 4px;
+      background: #fff;
+      border: 1px solid #cbd5e1;
+    }
+
+    .qr-text {
+      font-size: 8.5px;
+      color: #64748b;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
     .sig-box {
       text-align: center;
-      width: 40%;
+      width: 55%;
     }
 
     .sig-line {
@@ -322,6 +374,11 @@
       font-weight: 700;
       color: #0f172a;
       text-transform: uppercase;
+    }
+
+    .sig-subtext {
+      font-size: 8.5px;
+      color: #475569;
     }
 
     /* Footer Print Timestamp */
@@ -350,7 +407,7 @@
         margin: 0 !important;
       }
 
-      .app-card, .print-bar {
+      .school-main-header, .app-card, .print-bar {
         display: none !important;
       }
 
@@ -361,7 +418,6 @@
       .receipt-card {
         max-width: 100% !important;
         width: 100% !important;
-        /* Height constrained to fit roughly half A4 page */
         box-shadow: none !important;
         border: 2px solid #000 !important;
         page-break-inside: avoid;
@@ -395,11 +451,17 @@
 
 <div class="main-container">
   
+  <!-- Web Page Top Banner with School Name -->
+  <div class="school-main-header">
+    <h1>পাতপুকুর হাই স্কুল (উ: মা:)</h1>
+    <p>Vill: Pathpukur, P.O: Bakultala Hat, P.S: Bakultala, South 24 Parganas</p>
+  </div>
+
   <!-- Web Page Bengali Header & Search Box -->
   <div class="app-card">
     <div class="page-title">
       <i class="fa-solid fa-file-invoice" style="color: #2563eb;"></i> 
-      ডুপ্লিকেট ভর্তি রসিদ
+      ডুপ্লিকেট ভর্তি রসিদ পোর্টাল
     </div>
     <div class="page-subtitle">
       ছাত্র-ছাত্রীদের বর্তমান সেশনের ভর্তি প্রমাণের জন্য এখান থেকে ডুপ্লিকেট অ্যাডমিশন রসিদ প্রিন্ট করুন।
@@ -472,7 +534,7 @@
         <!-- Receipt Header -->
         <div class="rc-header">
           <div class="rc-school-name">PATPUKUR HIGH SCHOOL (H.S.)</div>
-          <div class="rc-school-sub">Vill & P.O. - Patpukur, South 24 Parganas, West Bengal</div>
+          <div class="rc-school-sub">Vill: Pathpukur, PO: Bakultala Hat, PS: Bakultala, South 24 Parganas, West Bengal</div>
           <div><span class="rc-title-badge">DUPLICATE ADMISSION RECEIPT</span></div>
         </div>
 
@@ -495,7 +557,7 @@
             <td class="rc-value" id="rcFatherName">---</td>
           </tr>
           <tr>
-            <td class="rc-label">Admission / ID No</td>
+            <td class="rc-label">Admission No</td>
             <td class="rc-colon">:</td>
             <td class="rc-value" id="rcAdmissionNo">---</td>
           </tr>
@@ -512,30 +574,33 @@
           <tr>
             <td class="rc-label">Academic Session</td>
             <td class="rc-colon">:</td>
-            <td class="rc-value" id="rcSession">2026 - 2027</td>
+            <td class="rc-value" id="rcSession">20_ _</td>
           </tr>
         </table>
 
         <!-- School Certificate Declaration -->
         <div class="rc-declaration">
-          <strong>Certificate of Enrollment:</strong> This is to certify that the above-named student is officially admitted and currently enrolled as a bona fide student of <strong>Patpukur High School (H.S.)</strong> for the current academic session.
+          <strong>Certificate of Enrollment:</strong> This is to certify that the above-named student is officially admitted and currently enrolled as a bona fide student of <strong>Patpukur High School (H.S.)</strong>.
+          <span class="validity-note">* Note: This receipt is valid ONLY with the official signature of the Verifying Authority and School Seal.</span>
         </div>
 
-        <!-- Signatures -->
-        <div class="rc-signatures">
-          <div class="sig-box">
-            <div class="sig-line"></div>
-            <div class="sig-text">Dealing Assistant</div>
+        <!-- Signatures and QR Code -->
+        <div class="rc-footer-section">
+          <div class="qr-box-container">
+            <div id="qrcode"></div>
+            <div class="qr-text">Scan to Verify</div>
           </div>
+          
           <div class="sig-box">
             <div class="sig-line"></div>
-            <div class="sig-text">Headmaster / Teacher-in-Charge</div>
+            <div class="sig-text">Signature of Verifying Authority</div>
+            <div class="sig-subtext">(Headmaster / Class Teacher / Clerk with School Seal)</div>
           </div>
         </div>
 
         <!-- Footer Timestamp -->
         <div class="rc-footer-timestamp">
-          <div>* Computer generated duplicate receipt. Valid for official record.</div>
+          <div>* Computer generated duplicate receipt. Subject to physical verification.</div>
           <div>Printed: <span id="rcPrintTimestamp">--/--/---- --:--</span></div>
         </div>
 
@@ -547,10 +612,12 @@
 </div>
 
 <script>
-  // Supabase Configuration Credentials
+  // Initialize Supabase Client
   const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
   
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   // Class Name Standardizer
   function normalizeClass(rawClass) {
     if (!rawClass) return '';
@@ -580,13 +647,13 @@
     document.getElementById('statusMsg').style.display = 'none';
   }
 
-  // Main Search Function
+  // Main Search Function (Fixes >1000 record issue via direct Supabase query filter)
   async function searchStudent() {
     const cls = document.getElementById('classSelect').value;
     const sec = document.getElementById('sectionInput').value.trim();
-    const roll = document.getElementById('rollInput').value.trim();
+    const roll = parseInt(document.getElementById('rollInput').value.trim(), 10);
 
-    if (!cls || !sec || !roll) {
+    if (!cls || !sec || isNaN(roll)) {
       showStatus('<i class="fa-solid fa-triangle-exclamation"></i> অনুগ্রহ করে শ্রেণি, সেকশন এবং রোল নম্বর সঠিকভাব প্রদান করুন।', true);
       return;
     }
@@ -596,24 +663,19 @@
     document.getElementById('receiptWrapper').style.display = 'none';
 
     try {
-      // Query Supabase for student record
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=*`, {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-        }
-      });
+      // Query database filtered directly to handle dataset larger than 1000 rows
+      const { data: students, error } = await supabaseClient
+        .from('current_students')
+        .select('*')
+        .ilike('section', sec);
 
-      if (!response.ok) throw new Error("Database network error!");
+      if (error) throw error;
 
-      const allStudents = await response.json();
-
-      // Find matching student
-      const student = allStudents.find(s => {
+      // Filter exact class and roll match locally for variations in field naming
+      const student = students.find(s => {
         let matchClass = normalizeClass(s.class_name) === normalizeClass(cls);
-        let matchSec = (s.section || '').trim().toUpperCase() === sec.toUpperCase();
-        let matchRoll = parseInt(s.roll || s.roll_no, 10) === parseInt(roll, 10);
-        return matchClass && matchSec && matchRoll;
+        let matchRoll = parseInt(s.roll || s.roll_no, 10) === roll;
+        return matchClass && matchRoll;
       });
 
       if (!student) {
@@ -625,11 +687,12 @@
       populateReceipt(student);
 
     } catch (err) {
-      showStatus('<i class="fa-solid fa-circle-exclamation"></i> ডাটাবেস সংযোগে সমস্যা হয়েছে! আপনার Supabase URL ও Key পরীক্ষা করে দেখুন।', true);
+      console.error(err);
+      showStatus('<i class="fa-solid fa-circle-exclamation"></i> ডাটাবেস সংযোগে সমস্যা হয়েছে! আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন।', true);
     }
   }
 
-  // Populate Data into English Receipt Layout
+  // Populate Data into Receipt Layout
   function populateReceipt(student) {
     const studentName = student.student_name || student.name || 'N/A';
     const fatherName = student.father_name || student.fathers_name || 'N/A';
@@ -648,22 +711,37 @@
 
     // Generate Unique Receipt Number
     const randomNum = Math.floor(1000 + Math.random() * 9000);
-    document.getElementById('rcNo').innerText = `PHS/DUP/${cls}-${roll}/${randomNum}`;
+    const recNo = `PHS/DUP/${cls}-${roll}/${randomNum}`;
+    document.getElementById('rcNo').innerText = recNo;
 
-    // Issue Date (Current Date)
+    // Issue Date
     const today = new Date();
-    const formattedDate = today.toLocaleDateString('en-GB'); // DD/MM/YYYY
+    const formattedDate = today.toLocaleDateString('en-GB');
     document.getElementById('rcIssueDate').innerText = formattedDate;
+
+    // Generate QR Code with Student Info
+    const qrContainer = document.getElementById("qrcode");
+    qrContainer.innerHTML = ""; // Clear existing QR Code
+    const qrText = `PATPUKUR HIGH SCHOOL (H.S.)\nName: ${studentName.toUpperCase()}\nClass: ${cls} (${sec}), Roll: ${roll}\nID: ${admissionNo}\nStatus: Verified Student`;
+    
+    new QRCode(qrContainer, {
+      text: qrText,
+      width: 68,
+      height: 68,
+      colorDark : "#0f172a",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.M
+    });
 
     // Display Component Elements
     document.getElementById('receiptWrapper').style.display = 'flex';
     document.getElementById('printBar').style.display = 'flex';
 
-    // Scroll to receipt smooth
+    // Smooth Scroll
     document.getElementById('printBar').scrollIntoView({ behavior: 'smooth' });
   }
 
-  // Print Function with Live Timestamp Update
+  // Print Function with Live Timestamp
   function printReceipt() {
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-GB');
