@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      // ইউজার কোন পেজ থেকে এসেছে তার ইউআরএল (Referrer)
+      var referrer = document.referrer;
+      
+      // মূল ডোমেইন এর নাম
+      var allowedDomain = "pathpukurschool.github.io";
+
+      // যদি ইউজার মূল সাইটের কোন লিংক থেকে না আসে (সরাসরি URL Paste করে)
+      if (!referrer || referrer.indexOf(allowedDomain) === -1) {
+        // সরাসরি মূল সাইটে রিডাইরেক্ট করা হচ্ছে
+        window.location.replace("https://pathpukurschool.github.io/");
+      }
+    })();
+  </script>
+  <title>ছাত্র-ছাত্রী তথ্য অনুসন্ধান - পাতপুকুর হাই স্কুল (উঃ মাঃ)</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Tiro Bangla', 'Inter', serif, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 10px;
+      color: #1e293b;
+    }
+
+    .main-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Header Section */
+    .header-card {
+      background: linear-gradient(135deg, #1e3a8a, #0284c7);
+      color: #ffffff;
+      padding: 20px 15px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.25);
+      margin-bottom: 15px;
+    }
+
+    .school-name {
+      font-size: 22px;
+      font-weight: bold;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .portal-subtitle {
+      font-size: 15px;
+      margin-top: 6px;
+      opacity: 0.9;
+      background: rgba(255, 255, 255, 0.15);
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* Search Box Form */
+    .search-card {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .search-card-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-group.full-width {
+      grid-column: span 2;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      color: #334155;
+    }
+
+    .input-group select, .input-group input {
+      padding: 10px 12px;
+      font-size: 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      background: #f8fafc;
+      transition: all 0.2s ease;
+    }
+
+    .input-group select:focus, .input-group input:focus {
+      border-color: #0284c7;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .btn-search {
+      grid-column: span 2;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 5px;
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.3);
+    }
+
+    .btn-search:active {
+      transform: scale(0.98);
+    }
+
+    /* Message Alert */
+    .alert-msg {
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 15px;
+      display: none;
+      font-weight: bold;
+    }
+
+    .alert-error {
+      background-color: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    /* Student Printable Profile Card */
+    .profile-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 2px solid #0f172a;
+      display: none; /* Hidden until search */
+      position: relative;
+    }
+
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 55px;
+      color: rgba(15, 23, 42, 0.03);
+      font-weight: bold;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .form-header {
+      text-align: center;
+      border-bottom: 2px dashed #0f172a;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .form-header h2 {
+      margin: 0;
+      font-size: 20px;
+      color: #0f172a;
+    }
+
+    .form-header p {
+      margin: 3px 0 0 0;
+      font-size: 13px;
+      color: #475569;
+    }
+
+    .form-badge {
+      display: inline-block;
+      background-color: #e0f2fe;
+      color: #0369a1;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-top: 6px;
+    }
+
+    /* রেকর্ড ঘোষণা বার বার্তা */
+    .form-notice {
+      background-color: #f8fafc;
+      border-left: 4px solid #0284c7;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #1e3a8a;
+      margin-bottom: 15px;
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* Key Value Grid Format */
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+
+    .info-table td {
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    .info-table td.label-cell {
+      background-color: #f8fafc;
+      font-weight: bold;
+      color: #334155;
+      width: 32%;
+    }
+
+    .info-table td.value-cell {
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    /* Print & Action Controls */
+    .action-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-print {
+      background-color: #16a34a;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Desktop View Refinement */
+    @media (min-width: 600px) {
+      body { padding: 20px; }
+      .search-grid { grid-template-columns: repeat(4, 1fr); }
+      .input-group.full-width { grid-column: span 2; }
+      .btn-search { grid-column: span 4; }
+      .school-name { font-size: 26px; }
+    }
+
+    /* Print CSS Optimization */
+    @media print {
+      @page { size: A4; margin: 12mm; }
+      body { background: white; padding: 0; color: #000; }
+      .header-card, .search-card, .action-bar, .alert-msg { display: none !important; }
+      .profile-card { display: block !important; box-shadow: none; border: 2px solid #000; padding: 15px; }
+      .info-table td { border: 1px solid #000 !important; padding: 6px 8px; font-size: 11pt; }
+      .info-table td.label-cell { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; }
+      .form-notice { background-color: transparent !important; border-left: 3px solid #000 !important; }
+      .watermark { color: rgba(0,0,0,0.05); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+
+  <!-- Header Banner -->
+  <div class="header-card">
+    <div class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</div>
+    <div class="portal-subtitle"><i class="fa-solid fa-address-card"></i> শিক্ষার্থী তথ্য যাচাইকরণ</div>
+  </div>
+
+  <!-- Search Card -->
+  <div class="search-card">
+    <div class="search-card-title">
+      <i class="fa-solid fa-magnifying-glass" style="color: #0284c7;"></i> শিক্ষার্থীর তথ্য খুঁজতে নিচের ঘরগুলি পূরণ করুন:
+    </div>
+
+    <div class="search-grid">
+      <div class="input-group">
+        <label for="searchClass">শ্রেণি (Class) *</label>
+        <select id="searchClass">
+          <option value="">-- শ্রেণি --</option>
+          <option value="V">Class V</option>
+          <option value="VI">Class VI</option>
+          <option value="VII">Class VII</option>
+          <option value="VIII">Class VIII</option>
+          <option value="IX">Class IX</option>
+          <option value="X">Class X</option>
+          <option value="XI">Class XI</option>
+          <option value="XII">Class XII</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="searchSection">সেকশন (Section)</label>
+        <select id="searchSection">
+          <option value="">-- সমস্ত --</option>
+          <option value="A">Section A</option>
+          <option value="B">Section B</option>
+          <option value="C">Section C</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="searchRoll">রোল (Roll) *</label>
+        <input type="number" id="searchRoll" placeholder="যেমন: 12">
+      </div>
+
+      <div class="input-group full-width">
+        <label for="searchDob">জন্মতারিখ (Date of Birth) *</label>
+        <input type="text" id="searchDob" placeholder="DD/MM/YYYY">
+      </div>
+
+      <button class="btn-search" onclick="searchStudent()">
+        <i class="fa-solid fa-search"></i> অনুসন্ধান
+      </button>
+    </div>
+  </div>
+
+  <!-- Error / Status Message -->
+  <div id="alertMsg" class="alert-msg alert-error"></div>
+
+  <!-- Profile Printable Card (Hidden Initially) -->
+  <div id="profileCard" class="profile-card">
+    <div class="watermark">PATPUKUR HIGH SCHOOL</div>
+
+    <!-- Printable Form Header -->
+    <div class="form-header">
+      <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
+      <p>পোঃ- পাতপুকুর, জেলা- দক্ষিণ ২৪ পরগণা</p>
+      <div class="form-badge">শিক্ষার্থী তথ্য যাচাইকরণ ও প্রোফাইল নথি</div>
+    </div>
+
+    <!-- নতুন যোগ করা ঘোষণাবাক্য -->
+    <div class="form-notice">
+      <i class="fa-solid fa-circle-info"></i> নিম্নে উল্লিখিত তথ্যাবলী বিদ্যালয়ের নথিভুক্ত রেকর্ড অনুযায়ী প্রদান করা হলো:-
+    </div>
+
+    <!-- Student Details Table (Mobile & Sign Removed) -->
+    <table class="info-table">
+      <tr>
+        <td class="label-cell">শিক্ষার্থীর নাম</td>
+        <td class="value-cell" id="resName" colspan="3" style="font-size: 16px; color: #1e3a8a;">-</td>
+      </tr>
+      <tr>
+        <td class="label-cell">শ্রেণি (Class)</td>
+        <td class="value-cell" id="resClass">-</td>
+        <td class="label-cell">সেকশন & রোল</td>
+        <td class="value-cell" id="resSecRoll">-</td>
+      </tr>
+      <tr>
+        <td class="label-cell">পিতার নাম</td>
+        <td class="value-cell" id="resFather" colspan="3">-</td>
+      </tr>
+      <tr>
+        <td class="label-cell">মাতার নাম</td>
+        <td class="value-cell" id="resMother" colspan="3">-</td>
+      </tr>
+      <tr>
+        <td class="label-cell">জন্মতারিখ (DOB)</td>
+        <td class="value-cell" id="resDob">-</td>
+        <td class="label-cell">লিঙ্গ (Gender)</td>
+        <td class="value-cell" id="resGender">-</td>
+      </tr>
+      <tr>
+        <td class="label-cell">স্টুডেন্ট কোড</td>
+        <td class="value-cell" id="resCode">-</td>
+        <td class="label-cell">PEN নম্বর</td>
+        <td class="value-cell" id="resPen">-</td>
+      </tr>
+      <tr>
+        <td class="label-cell">এডমিশন নম্বর (Adm No)</td>
+        <td class="value-cell" id="resAdmNo" colspan="3">-</td>
+      </tr>
+      <tr>
+        <td class="label-cell">ঠিকানা (Address)</td>
+        <td class="value-cell" id="resAddress" colspan="3">-</td>
+      </tr>
+    </table>
+
+  </div>
+
+  <!-- Print Button Bar -->
+  <div id="actionBar" class="action-bar" style="display: none;">
+    <button class="btn-print" onclick="window.print()">
+      <i class="fa-solid fa-print"></i> প্রিন্ট
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // Supabase Connection Settings
+  const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+
+  function toBengaliNumeral(num) {
+    if (num === null || num === undefined || num === '') return '-';
+    const digits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return num.toString().replace(/\d/g, x => digits[x]);
+  }
+
+  async function searchStudent() {
+    const cls = document.getElementById('searchClass').value;
+    const sec = document.getElementById('searchSection').value;
+    const roll = document.getElementById('searchRoll').value.trim();
+    const dob = document.getElementById('searchDob').value.trim();
+
+    const alertMsg = document.getElementById('alertMsg');
+    const profileCard = document.getElementById('profileCard');
+    const actionBar = document.getElementById('actionBar');
+
+    // Reset view
+    alertMsg.style.display = 'none';
+    profileCard.style.display = 'none';
+    actionBar.style.display = 'none';
+
+    // Form Validations
+    if (!cls || !roll || !dob) {
+      alertMsg.innerText = "অনুগ্রহ করে শ্রেণি, রোল নম্বর এবং জন্মতারিখ সঠিকভাবে প্রদান করুন!";
+      alertMsg.style.display = 'block';
+      return;
+    }
+
+    // Build Supabase Query Params
+    let queryParams = [
+      `class_name=eq.${encodeURIComponent(cls)}`,
+      `roll_no=eq.${roll}`
+    ];
+
+    if (sec) {
+      queryParams.push(`section=eq.${encodeURIComponent(sec)}`);
+    }
+
+    // Strip non-digits for flexible DOB Matching
+    const cleanInputDob = dob.replace(/\D/g, '');
+
+    try {
+      alertMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ডাটাবেস অনুসন্ধান করা হচ্ছে...`;
+      alertMsg.style.backgroundColor = '#e0f2fe';
+      alertMsg.style.color = '#0369a1';
+      alertMsg.style.border = '1px solid #90caf9';
+      alertMsg.style.display = 'block';
+
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?${queryParams.join('&')}`, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+
+      if (!response.ok) throw new Error("API request failed");
+
+      const students = await response.json();
+
+      if (students.length === 0) {
+        alertMsg.innerText = "প্রদত্ত শ্রেণি ও রোল নম্বর অনুযায়ী কোনো ছাত্র-ছাত্রীর তথ্য পাওয়া যায়নি!";
+        alertMsg.style.backgroundColor = '#fef2f2';
+        alertMsg.style.color = '#dc2626';
+        alertMsg.style.border = '1px solid #fecaca';
+        return;
+      }
+
+      // DOB Matching Logic
+      let matchedStudent = null;
+
+      for (let st of students) {
+        let stDobClean = st.dob_clean ? st.dob_clean : (st.dob ? st.dob.replace(/\D/g, '') : '');
+        
+        if (cleanInputDob !== '' && stDobClean.includes(cleanInputDob)) {
+          matchedStudent = st;
+          break;
+        } else if (st.dob && st.dob.toLowerCase().includes(dob.toLowerCase())) {
+          matchedStudent = st;
+          break;
+        }
+      }
+
+      if (!matchedStudent) {
+        alertMsg.innerText = "শ্রেণি ও রোল মিললেও জন্মতারিখের সাথে তথ্য মিলছে না! সঠিক জন্মতারিখ লিখুন।";
+        alertMsg.style.backgroundColor = '#fef2f2';
+        alertMsg.style.color = '#dc2626';
+        alertMsg.style.border = '1px solid #fecaca';
+        return;
+      }
+
+      // Populate Form Data
+      document.getElementById('resName').innerText = matchedStudent.student_name || '-';
+      document.getElementById('resClass').innerText = `Class ${matchedStudent.class_name || '-'}`;
+      document.getElementById('resSecRoll').innerText = `Sec: ${matchedStudent.section || '-'}, Roll: ${toBengaliNumeral(matchedStudent.roll_no)}`;
+      document.getElementById('resFather').innerText = matchedStudent.father_name || '-';
+      document.getElementById('resMother').innerText = matchedStudent.mother_name || '-';
+      document.getElementById('resDob').innerText = matchedStudent.dob || '-';
+      document.getElementById('resGender').innerText = matchedStudent.gender || '-';
+      document.getElementById('resCode').innerText = matchedStudent.student_code || '-';
+      document.getElementById('resPen').innerText = matchedStudent.pen_no || '-';
+      document.getElementById('resAdmNo').innerText = matchedStudent.admission_no || '-';
+      document.getElementById('resAddress').innerText = matchedStudent.address || '-';
+
+      // Hide Alert & Show Form
+      alertMsg.style.display = 'none';
+      profileCard.style.display = 'block';
+      actionBar.style.display = 'flex';
+
+      // Smooth Scroll to Result Card
+      profileCard.scrollIntoView({ behavior: 'smooth' });
+
+    } catch (err) {
+      alertMsg.innerText = "ডাটা লোড করতে সমস্যা হয়েছে! ইন্টারনেট কানেকশন পরীক্ষা করুন।";
+      alertMsg.style.backgroundColor = '#fef2f2';
+      alertMsg.style.color = '#dc2626';
+      alertMsg.style.border = '1px solid #fecaca';
+    }
+  }
+</script>
+
+</body>
+</html>
