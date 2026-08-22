@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -313,13 +314,6 @@
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
-    // Convert English numbers to Bengali numerals
-    function toBengaliNumeral(num) {
-      if (num === null || num === undefined || num === '') return '';
-      const digits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-      return num.toString().replace(/\d/g, x => digits[x]);
-    }
-
     // স্টুডেন্টের নাম Proper Case (Title Case) করার ফাংশন
     function toTitleCase(str) {
       if (!str) return '';
@@ -403,6 +397,7 @@
       const headerHTML = `
         <div class="foil-header">
           <div class="foil-meta-grid">
+          <div>Pathpukur High School</div>
             <div><b>Class:</b> ${className}</div>
             <div><b>Section:</b> ${sectionName || 'All'}</div>
             <div><b>Exam:</b> ..............................</div>
@@ -422,7 +417,7 @@
         list.forEach(st => {
           rows += `
             <tr>
-              <td class="col-roll">${toBengaliNumeral(st.roll_no)}</td>
+              <td class="col-roll">${st.roll_no || ''}</td>
               <td class="col-name" title="${st.student_name || ''}">${toTitleCase(st.student_name || '')}</td>
               <td class="col-marks"></td>
             </tr>
