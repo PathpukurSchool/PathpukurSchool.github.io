@@ -692,7 +692,7 @@
     }
   }
 
-  // Populate Data into Receipt Layout
+ // Populate Data into Receipt Layout
   function populateReceipt(student) {
     const studentName = student.student_name || student.name || 'N/A';
     const fatherName = student.father_name || student.fathers_name || 'N/A';
@@ -709,30 +709,29 @@
     document.getElementById('rcSection').innerText = sec;
     document.getElementById('rcRoll').innerText = roll;
 
-    // Extract PEN Number from Database (fallback to 'NA' if empty)
-const penNo = (student.pen_no && student.pen_no.toString().trim() !== '') 
-              ? student.pen_no.toString().trim() 
-              : 'PEN_NA';
+    // Supabase থেকে সরাসরি Session এর মান দেখানো (যেমন: 2026)
+    const academicSession = student.session || student.academic_session || student.year || '2026';
+    document.getElementById('rcSession').innerText = academicSession;
 
-// Generate Receipt Number using PEN No
-const recNo = `PHS/DUP/${cls}-${roll}/${penNo}`;
-document.getElementById('rcNo').innerText = recNo;
-    
+    // Extract PEN Number from Database (fallback to 'NA' if empty)
+    const penNo = (student.pen_no && student.pen_no.toString().trim() !== '') 
+                  ? student.pen_no.toString().trim() 
+                  : 'PEN_NA';
+
+    // Generate Receipt Number using PEN No
+    const recNo = `PHS/DUP/${cls}-${roll}/${penNo}`;
+    document.getElementById('rcNo').innerText = recNo;
+        
     // Dynamic Date of Issue (আজকের তারিখ)
     const today = new Date();
     const formattedDate = today.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
     document.getElementById('rcIssueDate').innerText = formattedDate;
-
-    // Dynamic Academic Session (বর্তমান বছর - পরবর্তী বছর)
-    const currentYear = today.getFullYear();
-    const nextYear = currentYear + 1;
-    document.getElementById('rcSession').innerText = `${currentYear} - ${nextYear}`;
-    
+        
     // Generate QR Code with Student Info
     const qrContainer = document.getElementById("qrcode");
     qrContainer.innerHTML = ""; // Clear existing QR Code
-    const qrText = `PATPUKUR HIGH SCHOOL (H.S.)\nName: ${studentName.toUpperCase()}\nClass: ${cls} (${sec}), Roll: ${roll}\nID: ${admissionNo}\nStatus: Verified Student`;
-    
+    const qrText = `PATPUKUR HIGH SCHOOL (H.S.)\nName: ${studentName.toUpperCase()}\nClass: ${cls} (${sec}), Roll: ${roll}\nID: ${admissionNo}\nSession: ${academicSession}\nStatus: Verified Student`;
+        
     new QRCode(qrContainer, {
       text: qrText,
       width: 68,
