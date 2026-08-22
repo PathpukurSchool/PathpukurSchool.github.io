@@ -350,7 +350,7 @@
     <!-- Header -->
     <div class="header">
       <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
-      <h2 class="page-title">মার্কস ফয়েল / নম্বরপত্র রেকর্ড : <span id="sessionYear">....</span></h2>
+      <h2 class="page-title">মার্কস ফয়েল / নম্বরপত্র রেকর্ড : <span id="headerSessionYear">....</span></h2>
     </div>
 
     <!-- Notice Box -->
@@ -413,82 +413,90 @@
       }).join(' ');
     }
 
-    async function loadStudents() {
-      const cls = document.getElementById('selectClass').value;
-      const sec = document.getElementById('selectSection').value;
-      const statusBadge = document.getElementById('statusBadge');
-      const pagesContainer = document.getElementById('pagesContainer');
+   async function loadStudents() {
+  const cls = document.getElementById('selectClass').value;
+  const sec = document.getElementById('selectSection').value;
+  const statusBadge = document.getElementById('statusBadge');
+  const pagesContainer = document.getElementById('pagesContainer');
+  const mainHeaderSession = document.getElementById('headerSessionYear');
 
-      pagesContainer.innerHTML = '';
+  pagesContainer.innerHTML = '';
 
-      if (!cls) {
-        statusBadge.innerText = "শ্রেণী ও সেকশন নির্বাচন করুন...";
-        return;
+  if (!cls) {
+    statusBadge.innerText = "শ্রেণী ও সেকশন নির্বাচন করুন...";
+    if (mainHeaderSession) mainHeaderSession.innerText = '....';
+    return;
+  }
+
+  statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন';
+
+  let queryParams = [
+    `class_name=eq.${encodeURIComponent(cls)}`,
+    `order=roll_no.asc`
+  ];
+
+  if (sec) {
+    queryParams.push(`section=eq.${encodeURIComponent(sec)}`);
+  }
+
+  try {
+    const fetchUrl = `${SUPABASE_URL}/rest/v1/current_students?${queryParams.join('&')}`;
+    
+    const response = await fetch(fetchUrl, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
       }
+    });
 
-      statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন';
-
-      let queryParams = [
-        `class_name=eq.${encodeURIComponent(cls)}`,
-        `order=roll_no.asc`
-      ];
-
-      if (sec) {
-        queryParams.push(`section=eq.${encodeURIComponent(sec)}`);
-      }
-
-      try {
-        const fetchUrl = `${SUPABASE_URL}/rest/v1/current_students?${queryParams.join('&')}`;
-        
-        const response = await fetch(fetchUrl, {
-          method: 'GET',
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
-        }
-
-        const students = await response.json();
-
-        if (!students || students.length === 0) {
-          statusBadge.innerText = "কোনো ছাত্র-ছাত্রীর রেকর্ড পাওয়া যায়নি!";
-          document.getElementById('sessionYear').innerText = '....'; // রিসেট
-          return;
-        }
-
-        // --- [নতুন যোগ করা কোড] সেশন বছর সেট করার জন্য ---
-        // যদি সুপাবেস টেবিলে 'session' নামে কলাম থাকে:
-        if (students[0].session) {
-          document.getElementById('sessionYear').innerText = students[0].session;
-        } else {
-          // যদি কলাম না থাকে বা কারেন্ট বছর দেখাতে চান:
-          document.getElementById('sessionYear').innerText = new Date().getFullYear(); 
-        }
-
-        // Sub-heading summary for screen display (Class, Section, Total Students)
-        const secText = sec ? `সেকশন: ${sec}` : 'সকল সেকশন';
-        statusBadge.innerHTML = `শ্রেণী: ${cls} | ${secText} | মোট ছাত্র-ছাত্রী: <b>${students.length}</b> জন`;
-
-        // Page setup: 50 Rows x 3 Columns = 150 per A4 Page
-        const ROWS_PER_COLUMN = 50;
-        const STUDENTS_PER_PAGE = ROWS_PER_COLUMN * 3; 
-
-        let totalPages = Math.ceil(students.length / STUDENTS_PER_PAGE);
-
-        for (let pageIdx = 0; pageIdx < totalPages; pageIdx++) {
-          let pageStudents = students.slice(pageIdx * STUDENTS_PER_PAGE, (pageIdx + 1) * STUDENTS_PER_PAGE);
-          renderA4Page(pageStudents, cls, sec);
-        }
-
-      } catch (err) {
-        console.error(err);
-        statusBadge.innerText = "ডাটা লোড করতে সমস্যা হয়েছে! ইন্টারনেট সংযোগ পরীক্ষা করুন।";
-      }
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
     }
+
+    const students = await response.json();
+
+    if (!students || students.length === 0) {
+      statusBadge.innerText = "কোনো ছাত্র-ছাত্রীর রেকর্ড পাওয়া যায়নি!";
+      if (mainHeaderSession) mainHeaderSession.innerText = '....';
+      return;
+    }
+
+    // ১. Supabase থেকে সেশন বছর বের করা (কলাম না থাকলে বর্তমান বছর বসবে)
+    const currentSession = students[0].session ? students[0].session : new Date().getFullYear();
+
+    // ২. মূল পেজের শিরোনামের (Header) সেশন বছর আপডেট
+    if (mainHeaderSession) {
+      mainHeaderSession.innerText = currentSession;
+    }
+
+    // Sub-heading summary for screen display (Class, Section, Total Students)
+    const secText = sec ? `সেকশন: ${sec}` : 'সকল সেকশন';
+    statusBadge.innerHTML = `শ্রেণী: ${cls} | ${secText} | মোট ছাত্র-ছাত্রী: <b>${students.length}</b> জন`;
+
+    // Page setup: 50 Rows x 3 Columns = 150 per A4 Page
+    const ROWS_PER_COLUMN = 50;
+    const STUDENTS_PER_PAGE = ROWS_PER_COLUMN * 3; 
+
+    let totalPages = Math.ceil(students.length / STUDENTS_PER_PAGE);
+
+    // ৩. A4 পেজসমূহ রেন্ডার করা
+    for (let pageIdx = 0; pageIdx < totalPages; pageIdx++) {
+      let pageStudents = students.slice(pageIdx * STUDENTS_PER_PAGE, (pageIdx + 1) * STUDENTS_PER_PAGE);
+      renderA4Page(pageStudents, cls, sec);
+    }
+
+    // ৪. রেন্ডার হওয়া সকল A4 পেজের ভেতরের সেশন বছর আপডেট করা
+    document.querySelectorAll('.a4-session-year').forEach(el => {
+      el.innerText = currentSession;
+    });
+
+  } catch (err) {
+    console.error(err);
+    statusBadge.innerText = "ডাটা লোড করতে সমস্যা হয়েছে! ইন্টারনেট সংযোগ পরীক্ষা করুন।";
+    if (mainHeaderSession) mainHeaderSession.innerText = '....';
+  }
+}
 
     function renderA4Page(studentList, className, sectionName) {
       const pagesContainer = document.getElementById('pagesContainer');
@@ -500,16 +508,16 @@
       const headerHTML = `
         <div class="foil-header">
           <div class="foil-meta-grid">
-          <div>Pathpukur High School; </div>
+            <div>Pathpukur High School; </div>
             <div><b>Class:</b> ${className}; </div>
             <div><b>Section:</b> ${sectionName || 'All'}; </div>
-            <div> ..............................<b>Exam: <span id="sessionYear">....</span></b>; </div>
+            <div><b>Exam: <span class="a4-session-year">....</span></b>; </div>
             <div><b>Subject:</b> ..............................; </div>
             <div><b>Teacher's Sign:</b> .....................; </div>
           </div>
         </div>
       `;
-
+      
       // Split 150 potential students into 3 columns
       const col1 = studentList.slice(0, 50);
       const col2 = studentList.slice(50, 100);
