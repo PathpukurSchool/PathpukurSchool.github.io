@@ -460,8 +460,8 @@
   <!-- Web Page Bengali Header & Search Box -->
   <div class="app-card">
     <div class="page-title">
-      <i class="fa-solid fa-file-invoice" style="color: #2563eb;"></i> 
-      ডুপ্লিকেট ভর্তির রসিদ
+  <i class="fa-solid fa-file-invoice" style="color: #2563eb;"></i> 
+  ডুপ্লিকেট ভর্তির রসিদ : <span id="pageSession">2026</span>
     </div>
     <div class="page-subtitle">
       ছাত্র-ছাত্রীদের বর্তমান সেশনের ভর্তি প্রমাণের জন্য এখান থেকে ডুপ্লিকেট অ্যাডমিশন রসিদ প্রিন্ট করুন।
@@ -693,61 +693,66 @@
   }
 
  // Populate Data into Receipt Layout
-  function populateReceipt(student) {
-    const studentName = student.student_name || student.name || 'N/A';
-    const fatherName = student.father_name || student.fathers_name || 'N/A';
-    const admissionNo = student.admission_no || student.student_id || student.id || 'PHS/2026/REG';
-    const cls = normalizeClass(student.class_name);
-    const sec = (student.section || 'A').toUpperCase();
-    const roll = student.roll || student.roll_no;
+function populateReceipt(student) {
+  const studentName = student.student_name || student.name || 'N/A';
+  const fatherName = student.father_name || student.fathers_name || 'N/A';
+  const admissionNo = student.admission_no || student.student_id || student.id || 'PHS/2026/REG';
+  const cls = normalizeClass(student.class_name);
+  const sec = (student.section || 'A').toUpperCase();
+  const roll = student.roll || student.roll_no;
 
-    // Set Receipt Values
-    document.getElementById('rcStudentName').innerText = studentName.toUpperCase();
-    document.getElementById('rcFatherName').innerText = fatherName.toUpperCase();
-    document.getElementById('rcAdmissionNo').innerText = admissionNo;
-    document.getElementById('rcClass').innerText = `CLASS ${cls}`;
-    document.getElementById('rcSection').innerText = sec;
-    document.getElementById('rcRoll').innerText = roll;
+  // Supabase থেকে Session-এর মান পাওয়া (ডিফল্ট: 2026)
+  const academicSession = student.session || student.academic_session || student.year || '2026';
 
-    // Supabase থেকে সরাসরি Session এর মান দেখানো (যেমন: 2026)
-    const academicSession = student.session || student.academic_session || student.year || '2026';
-    document.getElementById('rcSession').innerText = academicSession;
+  // 1. পেজের উপরের টাইটেলে সেশন আপডেট (ডুপ্লিকেট ভর্তির রসিদ : 2026)
+  document.getElementById('pageSession').innerText = academicSession;
 
-    // Extract PEN Number from Database (fallback to 'NA' if empty)
-    const penNo = (student.pen_no && student.pen_no.toString().trim() !== '') 
-                  ? student.pen_no.toString().trim() 
-                  : 'PEN_NA';
+  // Set Receipt Values
+  document.getElementById('rcStudentName').innerText = studentName.toUpperCase();
+  document.getElementById('rcFatherName').innerText = fatherName.toUpperCase();
+  document.getElementById('rcAdmissionNo').innerText = admissionNo;
+  document.getElementById('rcClass').innerText = `CLASS ${cls}`;
+  document.getElementById('rcSection').innerText = sec;
+  document.getElementById('rcRoll').innerText = roll;
 
-    // Generate Receipt Number using PEN No
-    const recNo = `PHS/DUP/${cls}-${roll}/${penNo}`;
-    document.getElementById('rcNo').innerText = recNo;
-        
-    // Dynamic Date of Issue (আজকের তারিখ)
-    const today = new Date();
-    const formattedDate = today.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
-    document.getElementById('rcIssueDate').innerText = formattedDate;
-        
-    // Generate QR Code with Student Info
-    const qrContainer = document.getElementById("qrcode");
-    qrContainer.innerHTML = ""; // Clear existing QR Code
-    const qrText = `PATPUKUR HIGH SCHOOL (H.S.)\nName: ${studentName.toUpperCase()}\nClass: ${cls} (${sec}), Roll: ${roll}\nID: ${admissionNo}\nSession: ${academicSession}\nStatus: Verified Student`;
-        
-    new QRCode(qrContainer, {
-      text: qrText,
-      width: 68,
-      height: 68,
-      colorDark : "#0f172a",
-      colorLight : "#ffffff",
-      correctLevel : QRCode.CorrectLevel.M
-    });
+  // 2. রসিদের ভেতরে একক বছর হিসেবে সেশন দেখানো
+  document.getElementById('rcSession').innerText = academicSession;
 
-    // Display Component Elements
-    document.getElementById('receiptWrapper').style.display = 'flex';
-    document.getElementById('printBar').style.display = 'flex';
+  // Extract PEN Number from Database
+  const penNo = (student.pen_no && student.pen_no.toString().trim() !== '') 
+                ? student.pen_no.toString().trim() 
+                : 'PEN_NA';
 
-    // Smooth Scroll
-    document.getElementById('printBar').scrollIntoView({ behavior: 'smooth' });
-  }
+  // Generate Receipt Number
+  const recNo = `PHS/DUP/${cls}-${roll}/${penNo}`;
+  document.getElementById('rcNo').innerText = recNo;
+      
+  // Dynamic Date of Issue
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('en-GB');
+  document.getElementById('rcIssueDate').innerText = formattedDate;
+      
+  // Generate QR Code with Student Info
+  const qrContainer = document.getElementById("qrcode");
+  qrContainer.innerHTML = "";
+  const qrText = `PATPUKUR HIGH SCHOOL (H.S.)\nName: ${studentName.toUpperCase()}\nClass: ${cls} (${sec}), Roll: ${roll}\nID: ${admissionNo}\nSession: ${academicSession}\nStatus: Verified Student`;
+      
+  new QRCode(qrContainer, {
+    text: qrText,
+    width: 68,
+    height: 68,
+    colorDark : "#0f172a",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.M
+  });
+
+  // Display Component Elements
+  document.getElementById('receiptWrapper').style.display = 'flex';
+  document.getElementById('printBar').style.display = 'flex';
+
+  // Smooth Scroll
+  document.getElementById('printBar').scrollIntoView({ behavior: 'smooth' });
+}
 
   // Print Function with Live Timestamp
   function printReceipt() {
