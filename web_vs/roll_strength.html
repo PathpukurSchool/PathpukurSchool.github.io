@@ -293,8 +293,8 @@
   <!-- Header -->
   <div class="header">
     <div class="school-name">Pathpukur High School (H.S.)</div>
-    <div class="report-title"><i class="fa-solid fa-chart-pie"></i> Student Roll Strength Report</div>
-    <div class="subtitle">Categorized Breakdown: SC vs MINORITY (OBC, General & Minority)</div>
+    <div class="report-title" id="reportTitle"><i class="fa-solid fa-chart-pie"></i> Student Roll Strength Report</div>
+    <div class="subtitle">Categorized Breakdown: SC & MINORITY (OBC, General, Minority)</div>
   </div>
 
   <!-- Control & Filter Bar -->
@@ -436,7 +436,7 @@
 
     try {
       while (hasMore) {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,gender,caste`, {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,gender,caste,session`, {
           headers: {
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
@@ -472,6 +472,11 @@
     if (rawStudentData.length === 0) {
       tbody.innerHTML = `<tr><td colspan="11" style="padding: 20px;">No student records found in database.</td></tr>`;
       return;
+    }
+    const detectedSession = rawStudentData.find(item => item.session)?.session || '';
+    const reportTitleEl = document.getElementById('reportTitle');
+    if (reportTitleEl) {
+      reportTitleEl.innerHTML = `<i class="fa-solid fa-chart-pie"></i> Student Roll Strength Report ${detectedSession ? ': ' + detectedSession : ''}`;
     }
 
     const matrix = {};
