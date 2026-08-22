@@ -139,7 +139,7 @@
   <!-- Header -->
   <div class="header">
     <div class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</div>
-    <div class="page-title">বর্তমান ছাত্র-ছাত্রীদের তথ্য পরিচিতি</div>
+    <div class="page-title">ছাত্র-ছাত্রীদের তথ্য পরিচিতি <span id="profileSession"></span></div>
   </div>
 
   <!-- Dynamic Sub Heading -->
@@ -311,7 +311,14 @@
       if (!response.ok) throw new Error("Error fetching data");
 
       const data = await response.json();
-      
+
+      // Dynamically set Session from fetched data
+      if (data && data.length > 0 && data[0].session) {
+        document.getElementById('profileSession').innerText = ` : ${toBengaliNumeral(data[0].session)}`;
+      } else {
+        document.getElementById('profileSession').innerText = '';
+      }
+
       const contentRange = response.headers.get('content-range');
       let totalRecords = data.length;
       if (contentRange) {
