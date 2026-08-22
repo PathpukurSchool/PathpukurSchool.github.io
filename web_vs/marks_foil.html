@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>স্কোর শিট / মার্কস ফয়েল - পাতপুকুর হাই স্কুল (উ: মা:)</title>
 
   <!-- Security Redirect Code -->
@@ -355,7 +355,7 @@
 
     <!-- Notice Box -->
     <div class="notice-box">
-      <i class="fa-solid fa-circle-info"></i> অনুগ্রহ করে শ্রেণী ও সেকশন নির্বাচন করে মার্কস ফয়েল লোড করুন এবং প্রিন্ট বা পিডিএফ সেভ করুন।
+      <i class="fa-solid fa-circle-info"></i> অনুগ্রহ করে ক্লাস ও সেকশন নির্বাচন করে মার্কস ফয়েল লোড করুন এবং প্রিন্ট করুন।
     </div>
 
     <!-- Filter Section -->
@@ -476,7 +476,7 @@
 
       } catch (err) {
         console.error(err);
-        statusBadge.innerText = "ডাটা লোড করতে সমস্যা হয়েছে! সংযোগ পরীক্ষা করুন।";
+        statusBadge.innerText = "ডাটা লোড করতে সমস্যা হয়েছে! ইন্টারনেট সংযোগ পরীক্ষা করুন।";
       }
     }
 
@@ -490,11 +490,12 @@
       const headerHTML = `
         <div class="foil-header">
           <div class="foil-meta-grid">
-            <div><b>Class:</b> ${className}</div>
-            <div><b>Section:</b> ${sectionName || 'All'}</div>
-            <div><b>Exam:</b> ..............................</div>
-            <div><b>Subject:</b> ..............................</div>
-            <div><b>Teacher's Sign:</b> .....................</div>
+          <div>Pathpukur High School; </div>
+            <div><b>Class:</b> ${className}; </div>
+            <div><b>Section:</b> ${sectionName || 'All'}; </div>
+            <div><b>Exam:</b> ..............................; </div>
+            <div><b>Subject:</b> ..............................; </div>
+            <div><b>Teacher's Sign:</b> .....................; </div>
           </div>
         </div>
       `;
