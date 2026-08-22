@@ -1,124 +1,168 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>স্কোর শিট / মার্কস ফয়েল - পাতপুকুর হাই স্কুল (উ: মা:)</title>
+
+  <!-- Security Redirect Code -->
   <script>
     (function() {
-      // ইউজার কোন পেজ থেকে এসেছে তার ইউআরএল (Referrer)
       var referrer = document.referrer;
-      
-      // মূল ডোমেইন এর নাম
       var allowedDomain = "pathpukurschool.github.io";
-
-      // যদি ইউজার মূল সাইটের কোন লিংক থেকে না আসে (সরাসরি URL Paste করে)
       if (!referrer || referrer.indexOf(allowedDomain) === -1) {
-        // সরাসরি মূল সাইটে রিডাইরেক্ট করা হচ্ছে
         window.location.replace("https://pathpukurschool.github.io/");
       }
     })();
   </script>
-  <title>স্কোর শিট / মার্কস ফয়েল - পাতপুকুর হাই স্কুল (উ: মা:)</title>
 
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Tiro Bangla', 'Inter', serif, sans-serif;
+    * { 
+      box-sizing: border-box; 
+      font-family: 'Tiro Bangla', serif, Arial, sans-serif; 
+      -webkit-tap-highlight-color: transparent; 
     }
-
-    body {
-      background-color: #f1f5f9;
-      margin: 0;
-      padding: 10px;
-      color: #0f172a;
+    
+    body { 
+      background-color: #f0f4f8; 
+      margin: 0; 
+      padding: 10px; 
+      color: #111; 
     }
-
-    /* Screen UI Control Panel (Mobile Friendly) */
-    .control-panel {
-      background: #ffffff;
-      padding: 12px 15px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      max-width: 1000px;
-      margin: 0 auto 15px auto;
-      border: 1px solid #cbd5e1;
+    
+    .container { 
+      max-width: 1000px; 
+      margin: 0 auto; 
+      background: #fff; 
+      padding: 18px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
     }
-
-    .school-title {
+    
+    /* Header Structure */
+    .header { 
+      text-align: center; 
+      border-bottom: 2.5px solid #0056b3; 
+      padding-bottom: 10px; 
+      margin-bottom: 12px; 
+    }
+    .school-name { 
+      font-size: 23px; 
+      color: #0056b3; 
+      margin: 0; 
+      font-weight: bold; 
+      line-height: 1.3; 
+    }
+    .page-title { 
+      font-size: 18px; 
+      color: #2C3E50; 
+      margin: 4px 0 0 0; 
+      font-weight: bold; 
+    }
+    
+    /* Blinking Notice Box */
+    .notice-box {
+      background-color: #fff8e1; 
+      color: #856404; 
+      padding: 10px 12px; 
+      border: 1.5px solid #ffe082;
+      border-left: 5px solid #ffc107; 
+      border-radius: 6px; 
+      font-size: 13.5px; 
+      margin-bottom: 14px; 
       text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      color: #1e3a8a;
-      margin-bottom: 2px;
+      animation: blink 2.5s infinite;
+    }
+    @keyframes blink { 
+      0% { opacity: 1; } 
+      50% { opacity: 0.55; } 
+      100% { opacity: 1; } 
     }
 
-    .page-heading {
-      text-align: center;
-      font-size: 13px;
-      color: #475569;
-      margin-bottom: 12px;
-      font-weight: bold;
-    }
-
-    .filter-grid {
+    /* Filter Controls */
+    .filter-section { 
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
       justify-content: center;
       align-items: center;
+      margin-bottom: 14px; 
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
     }
-
+    
     .select-group {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .select-group label {
-      font-weight: bold;
-      font-size: 13px;
-    }
-
-    .select-group select {
-      padding: 5px 10px;
-      border-radius: 6px;
-      border: 1px solid #94a3b8;
-      font-size: 13px;
-      outline: none;
-      background-color: #f8fafc;
-    }
-
-    .btn-print {
-      background-color: #16a34a;
-      color: white;
-      border: none;
-      padding: 7px 16px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    /* Status Bar */
-    #statusMsg {
-      text-align: center;
-      font-size: 13px;
+    .select-group label {
       font-weight: bold;
-      margin: 8px 0;
-      color: #0284c7;
+      font-size: 14px;
+      color: #1e293b;
     }
 
-    /* Printable A4 Container */
+    .select-group select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1.5px solid #0056b3;
+      font-size: 14px;
+      outline: none;
+      background-color: #fff;
+      font-weight: bold;
+      color: #0f172a;
+    }
+
+    /* Action Bar & Sub-heading Status */
+    .action-bar { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 14px; 
+      gap: 10px; 
+    }
+    .total-badge { 
+      background: #e3f2fd; 
+      color: #0d47a1; 
+      padding: 9px 14px; 
+      font-weight: bold; 
+      border-radius: 8px; 
+      font-size: 14px; 
+      border: 1px solid #90caf9; 
+      flex: 1; 
+      text-align: center; 
+    }
+    .btn-download {
+      background-color: #1b5e20; 
+      color: white; 
+      border: none; 
+      padding: 10px 18px; 
+      font-size: 14px;
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-weight: bold; 
+      transition: background 0.2s, transform 0.1s; 
+      min-width: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-download:active { 
+      background-color: #0d3b13; 
+      transform: scale(0.98); 
+    }
+
+    /* Printable A4 Layout Setup */
     .pages-wrapper {
       display: flex;
       flex-direction: column;
@@ -137,11 +181,11 @@
       position: relative;
     }
 
-    /* Ultra Compact Single Line Header */
+    /* Compact Header on A4 Sheet */
     .foil-header {
       border: 1px solid #000;
-      padding: 2px 5px;
-      margin-bottom: 3px;
+      padding: 3px 6px;
+      margin-bottom: 4px;
     }
 
     .foil-meta-grid {
@@ -153,14 +197,10 @@
       white-space: nowrap;
     }
 
-    .foil-meta-grid div {
-      display: inline-block;
-    }
-
-    /* 3 Column Layout Setup */
+    /* 3 Column Layout for High Density */
     .columns-container {
       display: flex;
-      gap: 3px;
+      gap: 4px;
       width: 100%;
     }
 
@@ -169,7 +209,7 @@
       width: 33.33%;
     }
 
-    /* Table Formatting for High Density (150 Rows) */
+    /* Clear Bordered Table Formatting */
     .marks-table {
       width: 100%;
       border-collapse: collapse;
@@ -177,57 +217,77 @@
     }
 
     .marks-table th, .marks-table td {
-      border: 1px solid #000;
-      padding: 0px 2px; /* Super tight row padding */
+      border: 1.5px solid #111;
+      padding: 0px 3px;
       font-size: 9.5px;
-      height: 5.1mm; /* Fixed height for exact 50 rows per column fit */
+      height: 5.1mm;
       line-height: 1;
       vertical-align: middle;
     }
 
     .marks-table th {
-      background-color: #f1f5f9;
+      background-color: #0056b3;
+      color: white;
       text-align: center;
-      font-size: 9.5px;
+      font-size: 10px;
       font-weight: bold;
       height: 5.5mm;
     }
 
+    /* Empty Rows styling - Without Borders */
+    .marks-table tr.empty-row td {
+      border: none !important;
+      background: transparent !important;
+    }
+
     .col-roll {
-      width: 14%; /* ১৪% করায় রোল নম্বর খুব সুন্দর আটবে */
+      width: 15%;
       text-align: center;
       font-weight: bold;
     }
 
     .col-name {
-      width: 58%; /* Proper Case করার পর ৫৮% নাম দেখার জন্য যথেষ্ট */
+      width: 57%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .col-marks {
-      width: 28%; /* নম্বর ও শিক্ষকের রিমার্ক লেখার জন্য ২৮% জায়গা পাওয়া যাবে */
+      width: 28%;
     }
 
-    /* Responsive Mobile Adjustments for Web View */
-    @media screen and (max-width: 768px) {
+    /* Hover effect on screen view */
+    .marks-table tbody tr:not(.empty-row):hover {
+      background-color: #e2f0d9 !important;
+      cursor: pointer;
+    }
+
+    @media (min-width: 600px) {
+      body { padding: 20px; }
+      .container { padding: 22px; }
+      .school-name { font-size: 27px; }
+      .page-title { font-size: 21px; }
+    }
+
+    /* Responsive adjustments for screens */
+    @media screen and (max-width: 800px) {
       .a4-wrapper {
         width: 100%;
         height: auto;
-        padding: 5px;
+        padding: 6px;
         overflow-x: auto;
       }
       .columns-container {
-        min-width: 650px; /* Horizontal scroll on smaller screens */
+        min-width: 650px;
       }
     }
 
-    /* PRINT OPTIMIZATION (Zero Margin & Max Density) */
+    /* Print Optimization for Pure A4 Paper */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 0mm; /* Zero Margins */
+        margin: 0mm;
       }
 
       body {
@@ -237,7 +297,15 @@
         -webkit-print-color-adjust: exact;
       }
 
-      .control-panel, #statusMsg {
+      .container {
+        box-shadow: none;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        background: white;
+      }
+
+      .header, .notice-box, .filter-section, .action-bar {
         display: none !important;
       }
 
@@ -260,23 +328,42 @@
       }
 
       .marks-table th {
-        background-color: #e2e8f0 !important;
+        background-color: #eee !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+      }
+
+      .marks-table td {
+        border: 1px solid #000 !important;
+      }
+
+      /* Printable state - Hide borders on empty rows during print */
+      .marks-table tr.empty-row td {
+        border: none !important;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Screen Control Panel -->
-  <div class="control-panel">
-    <div class="school-title">Pathpukur High School (H. S.)</div>
-    <div class="page-heading">Marks Foil / Score Sheet</div>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
+      <h2 class="page-title">মার্কস ফয়েল / নম্বরপত্র রেকর্ড</h2>
+    </div>
 
-    <div class="filter-grid">
+    <!-- Notice Box -->
+    <div class="notice-box">
+      <i class="fa-solid fa-circle-info"></i> অনুগ্রহ করে শ্রেণী ও সেকশন নির্বাচন করে মার্কস ফয়েল লোড করুন এবং প্রিন্ট বা পিডিএফ সেভ করুন।
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
       <div class="select-group">
-        <label for="selectClass">Class:</label>
+        <label for="selectClass">শ্রেণী (Class):</label>
         <select id="selectClass" onchange="loadStudents()">
-          <option value="">-- Select Class--</option>
+          <option value="">-- শ্রেণী বেছে নিন --</option>
           <option value="V">Class V</option>
           <option value="VI">Class VI</option>
           <option value="VII">Class VII</option>
@@ -289,32 +376,36 @@
       </div>
 
       <div class="select-group">
-        <label for="selectSection">Section:</label>
+        <label for="selectSection">সেকশন (Section):</label>
         <select id="selectSection" onchange="loadStudents()">
-          <option value="">-- All Section --</option>
+          <option value="">-- সকল সেকশন --</option>
           <option value="A">Section A</option>
           <option value="B">Section B</option>
           <option value="C">Section C</option>
         </select>
       </div>
+    </div>
 
-      <button class="btn-print" onclick="window.print()">
-        <i class="fa-solid fa-print"></i> Print
+    <!-- Action Bar / Screen Sub-Heading Status -->
+    <div class="action-bar">
+      <div class="total-badge" id="statusBadge">
+        শ্রেণী ও সেকশন নির্বাচন করুন...
+      </div>
+      <button class="btn-download" onclick="window.print()">
+        <i class="fa-solid fa-print"></i> প্রিন্ট করুন
       </button>
     </div>
+
+    <!-- Printable Pages Wrapper Container -->
+    <div id="pagesContainer" class="pages-wrapper"></div>
   </div>
 
-  <div id="statusMsg">Please select Class & Section...</div>
-
-  <!-- A4 Printable Area Container -->
-  <div id="pagesContainer" class="pages-wrapper"></div>
-
   <script>
-    // Supabase Connection Settings
+    // Supabase Settings
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
-    // স্টুডেন্টের নাম Proper Case (Title Case) করার ফাংশন
+    // Convert student name to Proper/Title Case
     function toTitleCase(str) {
       if (!str) return '';
       return str.toLowerCase().split(' ').map(word => {
@@ -325,17 +416,17 @@
     async function loadStudents() {
       const cls = document.getElementById('selectClass').value;
       const sec = document.getElementById('selectSection').value;
-      const statusMsg = document.getElementById('statusMsg');
+      const statusBadge = document.getElementById('statusBadge');
       const pagesContainer = document.getElementById('pagesContainer');
 
       pagesContainer.innerHTML = '';
 
       if (!cls) {
-        statusMsg.innerText = "Please select a Class!";
+        statusBadge.innerText = "শ্রেণী ও সেকশন নির্বাচন করুন...";
         return;
       }
 
-      statusMsg.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Student data loading! Please wait...';
+      statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন';
 
       let queryParams = [
         `class_name=eq.${encodeURIComponent(cls)}`,
@@ -364,13 +455,15 @@
         const students = await response.json();
 
         if (!students || students.length === 0) {
-          statusMsg.innerText = "No student record found in this Class & Section!";
+          statusBadge.innerText = "কোনো ছাত্র-ছাত্রীর রেকর্ড পাওয়া যায়নি!";
           return;
         }
 
-        statusMsg.innerText = `Total Student: ${students.length}`;
+        // Sub-heading summary for screen display (Class, Section, Total Students)
+        const secText = sec ? `সেকশন: ${sec}` : 'সকল সেকশন';
+        statusBadge.innerHTML = `শ্রেণী: ${cls} | ${secText} | মোট ছাত্র-ছাত্রী: <b>${students.length}</b> জন`;
 
-        // 50 Rows per Column * 3 Columns = 150 Students per A4 Page
+        // Page setup: 50 Rows x 3 Columns = 150 per A4 Page
         const ROWS_PER_COLUMN = 50;
         const STUDENTS_PER_PAGE = ROWS_PER_COLUMN * 3; 
 
@@ -383,7 +476,7 @@
 
       } catch (err) {
         console.error(err);
-        statusMsg.innerText = "Data loading failure! Please check your internet connection!";
+        statusBadge.innerText = "ডাটা লোড করতে সমস্যা হয়েছে! সংযোগ পরীক্ষা করুন।";
       }
     }
 
@@ -393,11 +486,10 @@
       const pageElement = document.createElement('div');
       pageElement.className = 'a4-wrapper';
 
-      // Requested Ultra Compact Single-Line Header
+      // Header layout for Printable Document
       const headerHTML = `
         <div class="foil-header">
           <div class="foil-meta-grid">
-          <div>Pathpukur High School</div>
             <div><b>Class:</b> ${className}</div>
             <div><b>Section:</b> ${sectionName || 'All'}</div>
             <div><b>Exam:</b> ..............................</div>
@@ -407,30 +499,32 @@
         </div>
       `;
 
-      // Split 150 students into 3 columns (50 students in each)
+      // Split 150 potential students into 3 columns
       const col1 = studentList.slice(0, 50);
       const col2 = studentList.slice(50, 100);
       const col3 = studentList.slice(100, 150);
 
       function generateTableHTML(list) {
         let rows = '';
+        
+        // Render valid student data (English Roll Numbers maintained as in DB)
         list.forEach(st => {
           rows += `
             <tr>
-              <td class="col-roll">${st.roll_no || ''}</td>
+              <td class="col-roll">${st.roll_no != null ? st.roll_no : ''}</td>
               <td class="col-name" title="${st.student_name || ''}">${toTitleCase(st.student_name || '')}</td>
               <td class="col-marks"></td>
             </tr>
           `;
         });
 
-        // Fill empty rows up to 50 if student count is lower
+        // Fill remaining rows up to 50 WITHOUT borders (empty-row class applied)
         for (let i = list.length; i < 50; i++) {
           rows += `
-            <tr>
-              <td class="col-roll">&nbsp;</td>
-              <td class="col-name">&nbsp;</td>
-              <td class="col-marks">&nbsp;</td>
+            <tr class="empty-row">
+              <td class="col-roll"></td>
+              <td class="col-name"></td>
+              <td class="col-marks"></td>
             </tr>
           `;
         }
