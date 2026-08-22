@@ -585,6 +585,29 @@
       alertMsg.className = 'alert-msg alert-error';
     }
   }
+
+  // পেজ লোড হলেই Supabase থেকে শিক্ষাবর্ষ এনে টাইটেলে বসানোর ফাংশন
+async function loadPortalSession() {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=session&limit=1`, {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      if (data.length > 0 && data[0].session) {
+        document.getElementById('portalSession').innerText = `: ${data[0].session}`;
+      }
+    }
+  } catch (err) {
+    console.error("Session load error:", err);
+  }
+}
+
+// পেজ লোড সম্পন্ন হলে ফাংশনটি কল হবে
+window.addEventListener('DOMContentLoaded', loadPortalSession);
 </script>
 
 </body>
