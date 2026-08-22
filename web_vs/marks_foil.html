@@ -350,7 +350,7 @@
     <!-- Header -->
     <div class="header">
       <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
-      <h2 class="page-title">মার্কস ফয়েল / নম্বরপত্র রেকর্ড</h2>
+      <h2 class="page-title">মার্কস ফয়েল / নম্বরপত্র রেকর্ড : <span id="sessionYear">....</span></h2>
     </div>
 
     <!-- Notice Box -->
@@ -456,7 +456,17 @@
 
         if (!students || students.length === 0) {
           statusBadge.innerText = "কোনো ছাত্র-ছাত্রীর রেকর্ড পাওয়া যায়নি!";
+          document.getElementById('sessionYear').innerText = '....'; // রিসেট
           return;
+        }
+
+        // --- [নতুন যোগ করা কোড] সেশন বছর সেট করার জন্য ---
+        // যদি সুপাবেস টেবিলে 'session' নামে কলাম থাকে:
+        if (students[0].session) {
+          document.getElementById('sessionYear').innerText = students[0].session;
+        } else {
+          // যদি কলাম না থাকে বা কারেন্ট বছর দেখাতে চান:
+          document.getElementById('sessionYear').innerText = new Date().getFullYear(); 
         }
 
         // Sub-heading summary for screen display (Class, Section, Total Students)
@@ -493,7 +503,7 @@
           <div>Pathpukur High School; </div>
             <div><b>Class:</b> ${className}; </div>
             <div><b>Section:</b> ${sectionName || 'All'}; </div>
-            <div><b>Exam:</b> ..............................; </div>
+            <div> ..............................<b>Exam: <span id="sessionYear">....</span></b>; </div>
             <div><b>Subject:</b> ..............................; </div>
             <div><b>Teacher's Sign:</b> .....................; </div>
           </div>
