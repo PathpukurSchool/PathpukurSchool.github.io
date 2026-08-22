@@ -332,11 +332,11 @@
 
 <div class="container">
 
-  <!-- Header -->
-  <div class="header">
-    <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
-    <h2 class="page-title">শিক্ষার্থী তথ্য যাচাইকরণ পোর্টাল</h2>
-  </div>
+  <!-- Header Portion -->
+<div class="header">
+  <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
+  <h2 class="page-title">শিক্ষার্থী তথ্য যাচাইকরণ পোর্টাল <span id="portalSession"></span></h2>
+</div>
 
   <!-- Blinking Notice Box -->
   <div class="notice-box">
@@ -555,6 +555,13 @@
       // Populate Form Fields
       document.getElementById('resName').innerText = toTitleCase(matchedStudent.student_name);
       document.getElementById('resClass').innerText = `Class ${matchedStudent.class_name || '-'}`;
+      const currentSession = matchedStudent.session_year || matchedStudent.academic_year || matchedStudent.session || '2026'; // Supabase-এর কলাম অনুযায়ী
+        document.getElementById('portalSession').innerText = `: ${currentSession}`;
+        
+        const profileSessionElem = document.getElementById('profileSession');
+        if (profileSessionElem) {
+          profileSessionElem.innerText = `| শিক্ষাবর্ষ: ${currentSession}`;
+        }
       document.getElementById('resSecRoll').innerText = `Sec: ${matchedStudent.section || 'All'}, Roll: ${matchedStudent.roll_no}`;
       document.getElementById('resFather').innerText = toTitleCase(matchedStudent.father_name);
       document.getElementById('resMother').innerText = toTitleCase(matchedStudent.mother_name);
