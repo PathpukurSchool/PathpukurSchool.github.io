@@ -193,21 +193,21 @@
     }
 
     .col-roll {
-  width: 14%; /* ১৪% করায় রোল নম্বর খুব সুন্দর আটবে */
-  text-align: center;
-  font-weight: bold;
-}
+      width: 14%; /* ১৪% করায় রোল নম্বর খুব সুন্দর আটবে */
+      text-align: center;
+      font-weight: bold;
+    }
 
-.col-name {
-  width: 58%; /* Proper Case করার পর ৫৮% নাম দেখার জন্য যথেষ্ট */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    .col-name {
+      width: 58%; /* Proper Case করার পর ৫৮% নাম দেখার জন্য যথেষ্ট */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-.col-marks {
-  width: 28%; /* নম্বর ও শিক্ষকের রিমার্ক লেখার জন্য ২৮% জায়গা পাওয়া যাবে */
-}
+    .col-marks {
+      width: 28%; /* নম্বর ও শিক্ষকের রিমার্ক লেখার জন্য ২৮% জায়গা পাওয়া যাবে */
+    }
 
     /* Responsive Mobile Adjustments for Web View */
     @media screen and (max-width: 768px) {
@@ -311,7 +311,7 @@
   <script>
     // Supabase Connection Settings
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
     // Convert English numbers to Bengali numerals
     function toBengaliNumeral(num) {
@@ -321,12 +321,12 @@
     }
 
     // স্টুডেন্টের নাম Proper Case (Title Case) করার ফাংশন
-function toTitleCase(str) {
-  if (!str) return '';
-  return str.toLowerCase().split(' ').map(word => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }).join(' ');
-}
+    function toTitleCase(str) {
+      if (!str) return '';
+      return str.toLowerCase().split(' ').map(word => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }).join(' ');
+    }
 
     async function loadStudents() {
       const cls = document.getElementById('selectClass').value;
@@ -353,23 +353,28 @@ function toTitleCase(str) {
       }
 
       try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?${queryParams.join('&')}`, {
+        const fetchUrl = `${SUPABASE_URL}/rest/v1/current_students?${queryParams.join('&')}`;
+        
+        const response = await fetch(fetchUrl, {
+          method: 'GET',
           headers: {
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
           }
         });
 
-        if (!response.ok) throw new Error("Fetch failed");
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
 
         const students = await response.json();
 
-        if (students.length === 0) {
+        if (!students || students.length === 0) {
           statusMsg.innerText = "No student record found in this Class & Section!";
           return;
         }
 
-        statusMsg.innerText = 'Total Student: ${students.length}`;
+        statusMsg.innerText = `Total Student: ${students.length}`;
 
         // 50 Rows per Column * 3 Columns = 150 Students per A4 Page
         const ROWS_PER_COLUMN = 50;
@@ -383,6 +388,7 @@ function toTitleCase(str) {
         }
 
       } catch (err) {
+        console.error(err);
         statusMsg.innerText = "Data loading failure! Please check your internet connection!";
       }
     }
@@ -417,7 +423,7 @@ function toTitleCase(str) {
           rows += `
             <tr>
               <td class="col-roll">${toBengaliNumeral(st.roll_no)}</td>
-             <td class="col-name" title="${st.student_name}">${toTitleCase(st.student_name)}</td>
+              <td class="col-name" title="${st.student_name || ''}">${toTitleCase(st.student_name || '')}</td>
               <td class="col-marks"></td>
             </tr>
           `;
