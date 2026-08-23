@@ -137,13 +137,18 @@
     </ul>
   </nav>
 
-  <!-- ✅ সার্চ বার সেকশন -->
-<div class="search-section">
-  <div class="search-container">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="search-input" class="search-input" placeholder="Search class or marks link...">
+<!-- ✅ লাইভ ড্রপডাউন অটোসাজেস্ট সহ সার্চ বার -->
+  <div class="search-section" style="position: relative; z-index: 9999; margin: 20px auto; max-width: 500px; padding: 0 15px;">
+    <div class="search-container" style="position: relative;">
+      <span class="search-icon" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">🔍</span>
+      <input type="text" id="search-input" class="search-input" placeholder="Search page links, classes, or forms..." onfocus="showSuggestions()" oninput="filterSuggestions()" style="width: 100%; padding: 12px 12px 12px 40px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px;">
+      
+      <!-- অস্পষ্ট (Semi-transparent) ড্রপডাউন মোট সাজেশন বক্স -->
+      <ul id="search-results-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(8px); border: 1px solid #ddd; border-radius: 0 0 8px 8px; max-height: 280px; overflow-y: auto; list-style: none; margin: 4px 0 0 0; padding: 0; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 10000;">
+      </ul>
+    </div>
   </div>
-</div>
+
       
   <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য -->
   <div class="main-section-container" id="marks-information-section">
@@ -227,55 +232,9 @@
       <h2 class="section-heading">For Students' Benefit</h2>
     </div>
 
-    <div class="sub-sections-wrapper">
-      <div id="school-certificate-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="school-certificate-link" href="https://script.google.com/macros/s/AKfycbytisRx0OKESTVzwNOwz9lPw8Tf32k5zVnQYdiqWnNfJTeIy8pSf8pxlb3ElLCztgZ1/exec" target="_blank" class="exam-link">School Certificate (Regular)</a>
-        </div>
-      </div>
-
-      <div id="school-certificate-ex-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="school-certificate-ex-link" href="https://script.google.com/macros/s/AKfycbwNonTt5uqn8sJpqiEZTdyNzFSBupKwWRzajAVq1kSzdOpgXbuYZ647MGZ69vxnoQiM4A/exec" target="_blank" class="exam-link">School Certificate (Ex-Students)</a>
-        </div>
-      </div>
-
       <div id="school-tc-section" class="shaded-info-box">
         <div class="sub-section-content">
           <a id="school-tc-link" href="https://script.google.com/macros/s/AKfycbze5iUVn_CdCluUxUoKdapw_vExsTYq-ZsXW0ShBQ_2bbrbLrUCYqnCyDVaKExFzXKtkw/exec" target="_blank" class="exam-link">School Leaving Certificate (Manual T.C.)</a>
-        </div>
-      </div>
-
-      <div id="student-code-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="student-code-link" href="https://script.google.com/macros/s/AKfycbz03GANVSV-P4bNSLKKj8TpZMUZSScp-DF6SSVRiUgjosf04sUuSnYXn36zphn25oRRyw/exec" target="_blank" class="exam-link">Student Code / ID Details</a>
-        </div>
-      </div>
-
-      <div id="xi-tab-form-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="xi-tab-form-link" href="https://script.google.com/macros/s/AKfycbxmsHnreZGDTpMnU4IeoIUT38H7gPSkZ_WZPHzGkA28wtvscxpUklB8D3Fh7cSH7fJB5A/exec" target="_blank" class="exam-link">Class XI Bank Mandate Form for TAB</a>
-        </div>
-      </div>
-
-      <div id="data-check-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="data-check-link" href="https://script.google.com/macros/s/AKfycbwKgz79D0qQ3kiPDnNZym0Xaqia0HRPA9mmUkE_J3CuHrCScg8Way1e1FOwKEbCt1YcCQ/exec" target="_blank" class="exam-link">Student Data Verification Form</a>
-        </div>
-      </div>
-    </div>
-  </div>
-    
-  <!-- ✅ নোটিশ ও ডেট কন্ট্রোল প্যানেল --> 
-  <div class="main-section-container" id="upload-notice-date-section">
-    <div class="section-heading-wrapper">
-      <h2 class="section-heading">Administration & Control Panel</h2>
-    </div>
-
-    <div class="sub-sections-wrapper">
-      <div id="upload-student-notice-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="upload-student-notice-link" href="https://script.google.com/macros/s/AKfycbxsMTAcwAwgo-bvbYAQYe2YbU02zLdGxnt0EBlJclW1LvlIzGG5NME690uQz1fGMK56Xw/exec" target="_blank" class="exam-link">Upload Student Notice</a>
         </div>
       </div>
 
