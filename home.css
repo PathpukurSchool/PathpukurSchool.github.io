@@ -1,12 +1,11 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #386641;      /* ডিপ ফরেস্ট গ্রিন */
-    --primary-dark: #27472e;       /* ডার্ক গ্রিন হোভার */
-    --secondary-color: #ff9800;    /* Amber */
-    --secondary-hover: #e65100;    /* Dark Amber */
-    --background-color: #f0f2f5;   /* হালকা ধূসর ব্যাকগ্রাউন্ড */
+    --primary-color: #386641;      
+    --primary-dark: #27472e;       
+    --secondary-color: #ff9800;    
+    --secondary-hover: #e65100;    
+    --background-color: #f0f2f5;   
     --card-background: #ffffff;
     --text-color-dark: #212121;
     --text-color-light: #555555;
@@ -18,7 +17,6 @@
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
 
-    /* 🌟 সাইডবার কালার প্যালেট */
     --sidebar-bg-start: #1e293b;
     --sidebar-bg-end: #0f172a;
     --sidebar-header-bg: #0f172a;
@@ -26,7 +24,6 @@
     --sidebar-active-accent: #38bdf8;
     --sidebar-text: #e2e8f0;
     
-    /* 🎨 অন্যান্য বোতামের কালার */
     --btn-alt-bg: #4f46e5;         
     --btn-alt-hover: #4338ca;
     --btn-soft-bg: #0d9488;        
@@ -64,9 +61,9 @@ body.no-scroll {
     overflow: hidden;
 }
 
-/* 🔒 লগইন না হওয়া পর্যন্ত মূল ওয়েবসাইট কনটেন্ট এবং টপ বার সম্পূর্ণ হাইড থাকবে */
+/* 🔒 লগইন না হওয়া পর্যন্ত মূল কনটেন্ট এবং সার্চ বক্স হাইড থাকবে (হেডার দৃশ্যমান থাকবে) */
 #main-website-content,
-#top-bar-section {
+.search-container {
     display: none;
 }
 
@@ -79,7 +76,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔝 HEADER & TOP BAR                               */
+/* 🔝 HEADER & TOP BAR (সর্বদা স্পষ্ট দৃশ্যমান)        */
 /* ================================================= */
 
 #top-bar-section {
@@ -88,6 +85,7 @@ body.no-scroll {
     position: sticky;
     top: 0;
     z-index: 1000;
+    display: block !important; /* যেকোনো অবস্থায় দৃশ্যমান */
 }
 
 .main-header {
@@ -125,6 +123,7 @@ body.no-scroll {
     font-weight: 600;
     letter-spacing: 0.5px;
     white-space: nowrap;
+    color: #ffffff;
 }
 
 .logout-button {
@@ -158,21 +157,28 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔍 SEARCH CONTAINER                               */
+/* 🔍 DROPDOWN LIVE SEARCH CONTAINER                 */
 /* ================================================= */
 
 .search-container {
+    position: relative;
     max-width: 500px;
-    margin: 1rem auto 1.2rem auto;
-    padding: 0 10px;
+    margin: 1.2rem auto;
+    padding: 0 15px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .search-container input {
     width: 100%;
-    padding: 0.6rem 1.2rem;
+    padding: 0.75rem 2.5rem 0.75rem 1.2rem;
     border: 2px solid var(--border-color);
     border-radius: 25px;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-family: inherit;
     outline: none;
     background-color: #ffffff;
@@ -182,7 +188,84 @@ body.no-scroll {
 
 .search-container input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 8px rgba(56, 102, 65, 0.2);
+    box-shadow: 0 0 10px rgba(56, 102, 65, 0.25);
+}
+
+/* ✖ ক্লিয়ার সার্চ বাটন স্টাইল */
+#clear-search-btn {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    color: #888;
+    cursor: pointer;
+    display: none;
+    padding: 2px 6px;
+    transition: color 0.2s;
+}
+
+#clear-search-btn:hover {
+    color: var(--error-color);
+}
+
+/* 📜 সার্চ ড্রপডাউন ফলাফল তালিকা */
+#search-dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 15px;
+    right: 15px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    max-height: 320px;
+    overflow-y: auto;
+    z-index: 1500;
+    margin-top: 6px;
+    display: none;
+    border: 1px solid var(--border-color);
+}
+
+#search-dropdown-list.active {
+    display: block;
+}
+
+.search-dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.search-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.search-dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.search-dropdown-item .item-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-color-dark);
+}
+
+.search-dropdown-item .item-btn {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.search-dropdown-item .item-btn:hover {
+    background-color: var(--primary-dark);
 }
 
 /* ================================================= */
@@ -227,11 +310,6 @@ body.no-scroll {
     font-size: 0.9rem;
     font-family: inherit;
     outline: none;
-    transition: border-color 0.2s ease;
-}
-
-#masterLoginBox input:focus {
-    border-color: var(--primary-color);
 }
 
 #masterLoginBox button {
@@ -244,15 +322,6 @@ body.no-scroll {
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-}
-
-#masterLoginBox button:hover {
-    background-color: var(--primary-dark);
-}
-
-#masterLoginBox button:active {
-    transform: scale(0.98);
 }
 
 .error, .success {
@@ -348,13 +417,12 @@ body.no-scroll {
     padding: 18px 16px;
     color: #ffffff;
     cursor: default;
-    pointer-events: none;
     letter-spacing: 0.5px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ================================================= */
-/* 📚 CLASS / EXAM BUTTONS & GRID (সমান ও ছোট সাইজ)  */
+/* 📚 CLASS / EXAM BUTTONS & GRID (সমান মাপের ছোট বোতাম) */
 /* ================================================= */
 
 .class-buttons-grid {
@@ -367,15 +435,14 @@ body.no-scroll {
     padding: 0 10px;
 }
 
-/* 🟢 সমস্ত ক্লাস ও এক্সাম বোতামকে নির্দিষ্ট সমান মাপের করা হলো */
 .class-link-btn.box-button, 
 .exam-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 52px;             /* একই নির্দিষ্ট উচ্চতা */
-    padding: 8px 10px;        /* সমান প্যাডিং */
-    font-size: 0.85rem;       /* সুন্দর ও সামঞ্জস্যপূর্ণ সাইজ */
+    height: 52px;             
+    padding: 8px 10px;        
+    font-size: 0.85rem;       
     font-weight: 600;
     line-height: 1.2;
     letter-spacing: 0.3px;
@@ -399,184 +466,8 @@ body.no-scroll {
     box-shadow: var(--shadow-md);
 }
 
-.class-link-btn.box-button:active, 
-.exam-link:active {
-    transform: translateY(0);
-}
-
-/* 🔵 অন্যান্য কালার ভ্যারিয়েন্ট */
-.box-button.btn-alt { background-color: var(--btn-alt-bg); }
-.box-button.btn-alt:hover { background-color: var(--btn-alt-hover); }
-
-.box-button.btn-soft { background-color: var(--btn-soft-bg); }
-.box-button.btn-soft:hover { background-color: var(--btn-soft-hover); }
-
-.box-button.btn-accent { background-color: var(--btn-accent-bg); }
-.box-button.btn-accent:hover { background-color: var(--btn-accent-hover); }
-
-.disabled-exam-link {
-    background-color: #cccccc !important;
-    color: #666666 !important;
-    cursor: not-allowed !important;
-    opacity: 0.7;
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-.avail-msg {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px; 
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #ffffff;
-    background: linear-gradient(45deg, #ff4e50, #fc913a); 
-    border-radius: 6px;
-    padding: 8px 14px;
-    box-shadow: var(--shadow-sm);
-    margin: 10px auto;
-    max-width: fit-content;
-    animation: pulse 1.5s infinite ease-in-out; 
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-}
-
 /* ================================================= */
-/* 📣 NOTICE BOARD & POPUP                           */
-/* ================================================= */
-
-.info-box {
-    font-size: 14px;
-    font-weight: 600;
-    padding: 10px 14px;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 300px;
-    margin: 0 auto;
-    border: 2px solid;
-}
-
-.error-message {
-    border-color: #ff9999;
-    background-color: #ffe6e6;
-    color: #cc0000;
-}
-
-.loading-message {
-    border-color: #6495ED;
-    background-color: #E6F0FF;
-    color: #4169E1;
-}
-
-.notice-item {
-    cursor: pointer;
-    margin: 8px 0;
-    padding: 10px 12px;
-    background-color: #ffffff;
-    border-left: 4px solid var(--primary-color);
-    border-radius: 6px;
-    box-shadow: var(--shadow-sm);
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-}
-
-.notice-item:hover {
-    background-color: #f4f8f5;
-    transform: translateX(3px);
-}
-
-.new-badge {
-    background-color: #e74c3c;
-    color: white;
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-size: 0.7em;
-    font-weight: 700;
-    margin-left: 6px;
-    display: inline-block;
-}
-
-/* Notice Popup */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 9998;
-    backdrop-filter: blur(3px);
-}
-
-.popup-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 340px;
-    max-height: 85vh;
-    overflow-y: auto;
-    background: #ffffff;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: var(--shadow-md);
-    z-index: 9999;
-    text-align: center;
-}
-
-/* ================================================= */
-/* 📅 MARQUEE & FOOTER                               */
-/* ================================================= */
-
-.marquee-container {
-    background-color: #ffffff;
-    border: 1px solid var(--border-color);
-    padding: 0.5rem;
-    border-radius: 8px;
-    margin-top: 1rem;
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-}
-
-.marquee-content {
-    display: inline-block;
-    white-space: nowrap;
-    animation: marquee 20s linear infinite;
-    padding-left: 100%;
-}
-
-@keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
-
-.marquee-item {
-    padding: 0 12px;
-    font-weight: 500;
-    font-size: 0.88rem;
-}
-
-footer {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    text-align: center;
-    padding: 1.2rem 1rem;
-    margin-top: auto;
-}
-
-footer p {
-    margin: 0.2rem 0;
-    color: #e0e0e0;
-    font-size: 0.85rem;
-}
-
-/* ================================================= */
-/* 📱 RESPONSIVE DESIGN (মোবাইল বান্ধব)                */
+/* 📱 RESPONSIVE DESIGN                              */
 /* ================================================= */
 
 @media (max-width: 768px) {
@@ -600,23 +491,18 @@ footer p {
         font-size: 0.8rem;
         width: auto;
     }
-
-    .search-container {
-        margin: 0.8rem auto;
-        padding: 0 15px;
-    }
 }
 
 @media (max-width: 480px) {
     .class-buttons-grid {
-        grid-template-columns: repeat(2, 1fr); /* মোবাইলে সুন্দর ২ কলামের লেআউট */
+        grid-template-columns: repeat(2, 1fr); 
         gap: 10px;
     }
 
     .class-link-btn.box-button, 
     .exam-link {
         font-size: 0.8rem;
-        height: 48px; /* ছোট স্ক্রিনে পারফেক্ট সাইজ */
+        height: 48px; 
         padding: 6px 8px;
     }
 }
