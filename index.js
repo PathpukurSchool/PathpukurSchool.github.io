@@ -574,3 +574,127 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("site-search-input");
+    const suggestionsBox = document.getElementById("search-suggestions");
+    const clearBtn = document.getElementById("clear-search-btn");
+
+    let searchableItems = [];
+
+    // পেজ থেকে স্বয়ংক্রিয়ভাবে সমস্ত লিংক ও তথ্য সংগ্রহ
+    function collectSearchData() {
+        searchableItems = [];
+        
+        // Schedule, Results, Student, Form সেকশন থেকে লিংক সংগ্রহ
+        const sectionLinks = document.querySelectorAll("main section .site-link");
+        sectionLinks.forEach(link => {
+            const title = link.getAttribute("data-title") || link.innerText.trim();
+            const url = link.getAttribute("href");
+            const category = link.closest("section")?.querySelector("h2")?.innerText.trim() || "Link";
+            
+            if (title && url) {
+                searchableItems.push({ title, url, category, isExternal: true });
+            }
+        });
+
+        // Sidebar Menu থেকে নেভিগেশন লিংক সংগ্রহ
+        const menuLinks = document.querySelectorAll("#sidebar-menu a");
+        menuLinks.forEach(link => {
+            const title = link.innerText.trim();
+            const url = link.getAttribute("href");
+            if (title && url && url !== "#") {
+                searchableItems.push({ title: title + " (Section)", url, category: "Section", isExternal: false });
+            }
+        });
+    }
+
+    collectSearchData();
+
+    // সাজেশন তালিকা দেখানোর ফাংশন
+    function renderSuggestions(filteredItems) {
+        suggestionsBox.innerHTML = "";
+        
+        if (filteredItems.length === 0) {
+            suggestionsBox.innerHTML = `<div class="search-dropdown-item" style="cursor:default; color:#888;">কোনো তথ্য পাওয়া যায়নি</div>`;
+            suggestionsBox.style.display = "block";
+            return;
+        }
+
+        filteredItems.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "search-dropdown-item";
+            div.innerHTML = `
+                <span>${item.title}</span>
+                <span class="item-category">${item.category}</span>
+            `;
+            
+            div.addEventListener("mousedown", function (e) {
+                e.preventDefault(); // ইনপুট ব্লার হওয়া থেকে আটকায়
+                if (item.isExternal && item.url.startsWith("http")) {
+                    window.open(item.url, "_blank");
+                } else {
+                    window.location.href = item.url;
+                }
+                suggestionsBox.style.display = "none";
+            });
+
+            suggestionsBox.appendChild(div);
+        });
+
+        suggestionsBox.style.display = "block";
+    }
+
+    // ইনপুট বক্সে ক্লিক/ফোকাস করলে সম্পূর্ণ লিস্ট ভেসে উঠবে
+    searchInput.addEventListener("focus", function () {
+        const query = this.value.trim().toLowerCase();
+        filterAndShow(query);
+    });
+
+    // লেখার সঙ্গে সঙ্গে ফিল্টার হবে
+    searchInput.addEventListener("input", function () {
+        const query = this.value.trim().toLowerCase();
+        
+        if (query.length > 0) {
+            clearBtn.style.display = "block";
+        } else {
+            clearBtn.style.display = "none";
+        }
+
+        filterAndShow(query);
+    });
+
+    // ফিল্টার লজিক
+    function filterAndShow(query) {
+        if (!query) {
+            renderSuggestions(searchableItems);
+            return;
+        }
+
+        const filtered = searchableItems.filter(item => 
+            item.title.toLowerCase().includes(query) || 
+            item.category.toLowerCase().includes(query)
+        );
+
+        renderSuggestions(filtered);
+    }
+
+    // ক্লিয়ার বোতামের কাজ
+    clearBtn.addEventListener("click", function () {
+        searchInput.value = "";
+        clearBtn.style.display = "none";
+        renderSuggestions(searchableItems);
+        searchInput.focus();
+    });
+
+    // বাইরে ক্লিক করলে সাজেশন বক্স বন্ধ হয়ে যাবে
+    document.addEventListener("click", function (e) {
+        if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+            suggestionsBox.style.display = "none";
+        }
+    });
+});
