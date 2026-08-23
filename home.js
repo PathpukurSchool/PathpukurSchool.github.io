@@ -35,7 +35,7 @@ function createButton(text, bgColor, onClick, disabled = false) {
 }
 
 // =================================
-// 🔍 সার্চ ফিল্টারিং ফাংশনালিটি
+// 🔍 সার্চ ফিল্টারিং ফাংশনালিটি (নতুন যুক্ত করা হয়েছে)
 // =================================
 
 function setupLiveSearch() {
@@ -58,7 +58,7 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔐 মাস্টার লগইন ফাংশন
+// 🔐 মাস্টার লগইন ফাংশন (সম্পূর্ণ অপরিবর্তিত)
 // =================================
 
 function toggleMasterPasswordVisibility() {
@@ -134,7 +134,7 @@ async function submitMasterLogin() {
 }
 
 // =================================
-// 🎓 স্টুডেন্ট/ক্লাস এক্সাম লিংক লোডিং
+// 🎓 স্টুডেন্ট/ক্লাস এক্সাম লিংক লোডিং (অপরিবর্তিত)
 // =================================
 
 function loadStudentExamLinks() {
@@ -144,6 +144,7 @@ function loadStudentExamLinks() {
             return response.json();
         })
         .then(data => {
+            // শুধুমাত্র যেসব এলিমেন্টে ID দেওয়া আছে সেগুলোর জন্য জেসন চেক হবে
             document.querySelectorAll(".exam-link[id]").forEach(button => {
                 const id = button.id;
                 if (data[id] && data[id].trim() !== '') {
@@ -177,7 +178,7 @@ function showAvailableSoonMessage(button) {
 }
 
 // =================================
-// 📣 ডিজিটাল নোটিশ বোর্ড ফাংশন
+// 📣 ডিজিটাল নোটিশ বোর্ড ফাংশন (অপরিবর্তিত)
 // =================================
 
 const APPS_SCRIPT_NOTICE_URL = "https://script.google.com/macros/s/AKfycbzxx7IEJEvQ3TRut_z0f51aI83r7JJ_H125d2eIK5G95IdzX-qs3H3PGVNFYBgc1OaV/exec?action=read";
@@ -360,7 +361,7 @@ function showPopup(titleText, date, link, subjText) {
 }
 
 // =================================
-// 🧭 সাইড বার মেনু ও স্ক্রল ফাংশন
+// 🧭 সাইড বার মেনু ও স্ক্রল ফাংশন (অপরিবর্তিত)
 // =================================
 
 function initializeSidebar() {
@@ -413,7 +414,7 @@ function initializeSidebar() {
 }
 
 // =================================
-// 📅 পরীক্ষার তারিখ মারকিউ
+// 📅 পরীক্ষার তারিখ মারকিউ (অপরিবর্তিত)
 // =================================
 
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfcYA8sdD__TgIe-mHKE9n1fabVv_pDFam1K59O9FdD13r5rVcg5_Mf005mcAWsa6xjA/exec';
@@ -457,7 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeSidebar();
     loadStudentExamLinks();
     loadExamDates();
-    setupLiveSearch(); // 🔍 সার্চ ফাংশন সক্রিয় করা হলো
+    setupLiveSearch(); // 🔍 লাইভ সার্চ চালু করা হলো
 
     if (examDatesMarquee) {
         examDatesMarquee.addEventListener("mouseover", () => examDatesMarquee.style.animationPlayState = 'paused');
