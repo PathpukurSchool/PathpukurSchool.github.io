@@ -251,3 +251,135 @@ h2{font-size:1.7em}
 .menu-button{top:10px;left:10px;padding:5px 10px;font-size:.75em}
 .main-header{padding-left:60px;padding-right:60px}
 }
+
+/* ==========================================
+   🔍 সার্চ বক্স সেকশন স্টাইল (Search Box Styles)
+   ========================================== */
+
+/* সম্পূর্ণ সার্চ সেকশনের লেআউট */
+#search-section {
+    grid-column: 1 / -1; /* গ্রিড লেআউটে ফুল-উইডথ জুড়ে থাকবে */
+    margin-bottom: 10px;
+    background: var(--card-bg);
+    border-top: 8px solid var(--primary-red); /* মূল ওয়েবসাইটের প্রাইমারি কালার */
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper .search-icon {
+    position: absolute;
+    left: 18px;
+    color: var(--dark-khaki);
+    font-size: 1.2rem;
+    pointer-events: none;
+}
+
+.search-input-wrapper .clear-icon {
+    position: absolute;
+    right: 18px;
+    color: var(--medium-gray);
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: none;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.search-input-wrapper .clear-icon:hover {
+    color: var(--primary-red);
+    transform: scale(1.1);
+}
+
+/* সার্চ ইনপুট বক্স */
+#site-search-input {
+    width: 100%;
+    padding: 14px 45px 14px 48px;
+    font-size: 1.05rem;
+    font-family: 'Poppins', sans-serif;
+    color: var(--black);
+    background-color: var(--light-gray);
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+#site-search-input:focus {
+    background-color: var(--white);
+    border-color: var(--dark-khaki);
+    box-shadow: 0 4px 15px var(--box-shadow-light);
+}
+
+/* 🌫️ অস্পষ্ট / গ্লাস ইফেক্টযুক্ত ড্রপডাউন সাজেশন লিস্ট */
+.search-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    /* আবছা বা ঝাপসা ব্যাকগ্রাউন্ড ইফেক্ট */
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(230, 57, 70, 0.2);
+    border-radius: 10px;
+    max-height: 280px;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px var(--box-shadow-dark);
+    z-index: 1005;
+    display: none;
+}
+
+/* স্ক্রোলবার স্টাইল (ড্রপডাউনের জন্য) */
+.search-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+.search-dropdown::-webkit-scrollbar-thumb {
+    background: var(--dark-khaki);
+    border-radius: 4px;
+}
+
+/* সাজেশনের প্রতিটি আইটেম */
+.search-dropdown-item {
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    color: var(--black);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.search-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.search-dropdown-item:hover {
+    background-color: var(--light-accent-color);
+    color: var(--dark-khaki);
+    padding-left: 24px; /* হালকা স্লাইড ইফেক্ট */
+}
+
+/* ক্যাটালগ / সেকশন ট্যাগ (ডানপাশের ছোট ব্যাজ) */
+.search-dropdown-item .item-category {
+    font-size: 0.78rem;
+    font-weight: 600;
+    background-color: rgba(107, 0, 0, 0.08);
+    color: var(--dark-khaki);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(107, 0, 0, 0.15);
+}
