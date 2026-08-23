@@ -138,9 +138,12 @@
   </nav>
 
   <!-- ✅ সার্চ বার সেকশন -->
-  <div class="search-container" style="max-width: 900px; margin: 15px auto; padding: 0 10px;">
-    <input type="text" id="siteSearchInput" onkeyup="filterWebsiteContent()" placeholder="Search links or sections..." style="width: 100%; padding: 10px 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box;">
+<div class="search-section">
+  <div class="search-container">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" class="search-input" placeholder="Search class or marks link...">
   </div>
+</div>
       
   <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য -->
   <div class="main-section-container" id="marks-information-section">
@@ -148,24 +151,12 @@
       <h2 class="section-heading">Marks Upload & Student Information</h2>
     </div>
 
-    <div class="sub-sections-wrapper">
-      <div class="shaded-info-box" id="marks-uploading-section">
-        <div class="sub-section-content">
-          <a id="marks-uploading-link" href="https://script.google.com/macros/s/AKfycbwL5-qfoH-qV_WQXGw5YdtlzM1mzjuD51DpZ7E8f_EhhWKostFtYy7-yRLrmW3rPj6kvw/exec" target="_blank" class="exam-link">VIEW MARK UPLOADING STATUS</a>
-        </div>
-      </div>
-
       <div class="shaded-info-box" id="student-list-section">
         <div class="sub-section-content">
           <a id="student-list-link" href="https://pathpukurschool.github.io/web_vs/current_student.html" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
         </div>
       </div>
     
-      <div class="shaded-info-box" id="student-score-sheet-section">
-        <div class="sub-section-content">
-          <a id="student-score-sheet-link" href="https://pathpukurschool.github.io/web_vs/marks_foil.html" target="_blank" class="exam-link">VIEW STUDENT SCORE SHEET</a>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -178,16 +169,16 @@
   <div class="class-buttons-grid">
     <!-- স্কোয়ার শিট ও স্ট্যাটাস বোতাম -->
     <a href="https://pathpukurschool.github.io/web_vs/marks_foil.html" target="_blank" class="exam-link">Score Sheet / Marks Foil</a>
-    <a href="https://script.google.com/macros/s/AKfycbwL5-qfoH-qV_WQXGw5YdtlzM1mzjuD51DpZ7E8f_EhhWKostFtYy7-yRLrmW3rPj6kvw/exec" target="_blank" class="exam-link">Marks Uploading Status</a>
+    <a href="https://script.google.com/macros/s/AKfycbwL5-qfoH-qV_WQXGw5YdtlzM1mzjuD51DpZ7E8f_EhhWKostFtYy7-yRLrmW3rPj6kvw/exec" target="_blank" class="exam-link">Marks Uploading Report</a>
 
     <!-- ক্লাস ভিত্তিক নম্বর আপলোড লিংক -->
-    <a href="https://script.google.com/macros/s/AKfycbyc0PWCuiDwmeD0cMudrZIU-WQ0__ODeiI5nBykC5k0b69sfgAeYyUSzc0bXdciAar20Q/exec" target="_blank" class="exam-link">Upload Marks - Class V</a>
-    <a href="https://script.google.com/macros/s/AKfycbzE-oAzeaS2u4fgnFW5KEdTLn2hKQdWaMT0dX_ZgQhooNTRKbRptSDz9UG8eOB9J2hL/exec" target="_blank" class="exam-link">Upload Marks - Class VI</a>
-    <a href="https://script.google.com/macros/s/AKfycbwEmE4o2CuvAtT1wUuKBP7kb3x3mcYI_zs8OboQizGdanKacWSQy9VYpfeQ7Ycvg6bQ/exec" target="_blank" class="exam-link">Upload Marks - Class VII</a>
-    <a href="https://script.google.com/macros/s/AKfycbxVSeYX564Gpqf6vETSCFQ1dr5kJ013XW7Jzv0G3pt5rxvWBL_aN6lOycCvqPkiagYtQQ/exec" target="_blank" class="exam-link">Upload Marks - Class VIII</a>
-    <a href="https://script.google.com/macros/s/AKfycbw_h0rAmAZQkbexHm-qpdzmEEdZzyuCo7ZrIhs5gEdB4RGrfSGTdefdS81YWro7xIgX/exec" target="_blank" class="exam-link">Upload Marks - Class IX</a>
-    <a href="https://script.google.com/macros/s/AKfycbxGKwBRj5MKS5DwlElJqrhs_tL4ES0eYr-IovdzX4y6Qq7nWDGeqrb-Hj2nCrKYv9CwFA/exec" target="_blank" class="exam-link">Upload Marks - Class X</a>
-    <a href="https://script.google.com/macros/s/AKfycbwy3eLrkWmUdrkwUeXRI-u8xumNc5Rv-kjH1IJijDcuj75frsDTSa2oheXIK48WQD9hcA/exec" target="_blank" class="exam-link">Upload Marks - Class XI</a>
+    <a href="https://script.google.com/macros/s/AKfycbyc0PWCuiDwmeD0cMudrZIU-WQ0__ODeiI5nBykC5k0b69sfgAeYyUSzc0bXdciAar20Q/exec" target="_blank" class="exam-link">Class V</a>
+    <a href="https://script.google.com/macros/s/AKfycbzE-oAzeaS2u4fgnFW5KEdTLn2hKQdWaMT0dX_ZgQhooNTRKbRptSDz9UG8eOB9J2hL/exec" target="_blank" class="exam-link">Class VI</a>
+    <a href="https://script.google.com/macros/s/AKfycbwEmE4o2CuvAtT1wUuKBP7kb3x3mcYI_zs8OboQizGdanKacWSQy9VYpfeQ7Ycvg6bQ/exec" target="_blank" class="exam-link">Class VII</a>
+    <a href="https://script.google.com/macros/s/AKfycbxVSeYX564Gpqf6vETSCFQ1dr5kJ013XW7Jzv0G3pt5rxvWBL_aN6lOycCvqPkiagYtQQ/exec" target="_blank" class="exam-link">Class VIII</a>
+    <a href="https://script.google.com/macros/s/AKfycbw_h0rAmAZQkbexHm-qpdzmEEdZzyuCo7ZrIhs5gEdB4RGrfSGTdefdS81YWro7xIgX/exec" target="_blank" class="exam-link">Class IX</a>
+    <a href="https://script.google.com/macros/s/AKfycbxGKwBRj5MKS5DwlElJqrhs_tL4ES0eYr-IovdzX4y6Qq7nWDGeqrb-Hj2nCrKYv9CwFA/exec" target="_blank" class="exam-link">Class X</a>
+    <a href="https://script.google.com/macros/s/AKfycbwy3eLrkWmUdrkwUeXRI-u8xumNc5Rv-kjH1IJijDcuj75frsDTSa2oheXIK48WQD9hcA/exec" target="_blank" class="exam-link">Class XI</a>
   </div>
 </div>
 
