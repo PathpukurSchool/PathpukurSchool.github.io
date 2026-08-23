@@ -39,7 +39,7 @@ function createButton(text, bgColor, onClick, disabled = false) {
 }
 
 // =================================
-// 🔐 মাস্টার লগইন ফাংশন (অপরিবর্তিত)
+// 🔐 মাস্টার লগইন ফাংশন
 // =================================
 
 function toggleMasterPasswordVisibility() {
@@ -115,7 +115,7 @@ async function submitMasterLogin() {
 }
 
 // =================================
-// 🎓 স্টুডেন্ট/ক্লাস এক্সাম লিংক লোডিং
+// 🎓 স্টুডেন্ট/ক্লাস এক্সাম লিংক লোডিং (সংশোধিত)
 // =================================
 
 function loadStudentExamLinks() {
@@ -125,11 +125,15 @@ function loadStudentExamLinks() {
             return response.json();
         })
         .then(data => {
-            document.querySelectorAll(".exam-link").forEach(button => {
+            // শুধুমাত্র যেসব এলিমেন্টে ID দেওয়া আছে সেগুলোর জন্য জেসন চেক হবে
+            document.querySelectorAll(".exam-link[id]").forEach(button => {
                 const id = button.id;
                 if (data[id] && data[id].trim() !== '') {
-                    button.onclick = () => window.open(data[id], '_blank');
-                } else {
+                    button.onclick = (e) => {
+                        e.preventDefault();
+                        window.open(data[id], '_blank');
+                    };
+                } else if (!button.getAttribute('href') || button.getAttribute('href') === '#') {
                     button.addEventListener('click', (event) => {
                         event.preventDefault();
                         showAvailableSoonMessage(button);
