@@ -63,7 +63,7 @@
 </head>
 <body>
 
-  <!-- ✅ টিচার লগইন ওভারলে (বাই-ডিফল্ট দৃশ্যমান) -->
+  <!-- ✅ টিচার লগইন ওভারলে -->
   <div id="masterLoginOverlay">
     <div id="masterLoginBox">
       <h2 class="red-text">Pathpukur High School</h2>
@@ -86,29 +86,27 @@
     </div>
   </div>
 
-  <!-- ✅ সম্পূর্ণ ওয়েব পেজ এবং সার্চ বার (সঠিক লগইন না হওয়া পর্যন্ত লুকানো থাকবে) -->
-  <div id="main-website-content" style="display: none;">
+  <!-- ✅ মূল ওয়েব পেজ -->
+  <div id="main-website-content">
 
     <!-- ✅ মেন হেডার -->
     <div id="top-bar-section">
       <header class="main-header">
         <div class="header-content">
-          <div class="header-buttons">
-            <button id="menu-toggle-button" class="menu-button">☰</button>
-          </div>
-          <h1 class="school-name">Pathpukur High School (H.S.)</h1>
+          <button id="menu-toggle-button" class="menu-button" aria-label="Toggle Menu">☰</button>
         </div>
+        <h1 class="school-name">Pathpukur High School (H.S.)</h1>
         <button onclick="logout()" class="logout-button">Logout</button>
       </header>
     </div>
 
-    <!-- ✅ সাইড বার মেনু (অপরিবর্তিত) -->
+    <!-- ✅ সাইড বার মেনু -->
     <div class="overlay" id="overlay"></div>
     <nav id="sidebar-menu" class="sidebar-menu">
       <ul>
         <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
         
-        <li><a href="#marks-information-section" class="nav-link menu-header"> Student Information</a></li>
+        <li><a href="#marks-information-section" class="nav-link menu-header">Student Information</a></li>
         <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
         
         <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Exam Marks</a></li>
@@ -130,18 +128,15 @@
       </ul>
     </nav>
 
-    <!-- ✅ কাস্টম স্টাইল যুক্ত আধুনিক সার্চ বার -->
-    <div class="search-section" style="margin: 20px auto; max-width: 500px; padding: 0 15px; position: relative; z-index: 1000;">
-      <div class="search-container" role="search" style="position: relative;">
-        <div class="search-input-wrapper" style="position: relative; display: flex; align-items: center;">
-          <span class="search-icon" aria-hidden="true" style="position: absolute; left: 12px; pointer-events: none;">🔍</span>
-          
-          <input type="search" id="site-search-input" placeholder="Search page links, classes, or forms..." autocomplete="off" aria-label="Search website content" onfocus="showSuggestions()" oninput="filterSuggestions()" style="width: 100%; padding: 12px 65px 12px 40px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; outline: none; box-sizing: border-box;">
-          
-          <span class="clear-icon" id="clear-search-btn" role="button" aria-label="Clear search" onclick="clearSearchInput()" style="position: absolute; right: 12px; cursor: pointer; font-size: 13px; font-weight: bold; color: #777; background: #eee; padding: 4px 8px; border-radius: 4px; display: none;">Clear</span>
+    <!-- ✅ স্টাইলিশ সার্চ বার -->
+    <div class="search-section">
+      <div class="search-container" role="search">
+        <div class="search-input-wrapper">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="site-search-input" placeholder="Search page links, classes, or forms..." autocomplete="off" aria-label="Search website content" onfocus="showSuggestions()" oninput="filterSuggestions()">
+          <span class="clear-icon" id="clear-search-btn" role="button" aria-label="Clear search" onclick="clearSearchInput()">Clear</span>
         </div>
-        
-        <div id="search-dropdown-list" class="search-dropdown" aria-live="polite" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border: 1px solid #ddd; border-radius: 0 0 8px 8px; max-height: 280px; overflow-y: auto; margin-top: 4px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 1001;"></div>
+        <div id="search-dropdown-list" class="search-dropdown" aria-live="polite"></div>
       </div>
     </div>
         
@@ -176,7 +171,7 @@
       </div>
     </div>
 
-    <!-- ✅ স্কুল রুটিন (সুবিন্যস্ত গ্রিডে আপডেট করা হলো) -->
+    <!-- ✅ স্কুল রুটিন -->
     <div class="main-section-container" id="school-routine-section">
       <div class="section-heading-wrapper">
         <h2 class="section-heading">School Routine</h2>
@@ -191,7 +186,7 @@
       </div>
     </div>
         
-    <!-- ✅ স্টুডেন্ট হেল্প জোন (সুবিন্যস্ত গ্রিডে আপডেট করা হলো) -->
+    <!-- ✅ স্টুডেন্ট হেল্প জোন -->
     <div class="main-section-container" id="student-benefit-section">
       <div class="section-heading-wrapper">
         <h2 class="section-heading">For Students' Benefit</h2>
@@ -204,7 +199,7 @@
       </div>
     </div>
         
-    <!-- ✅ ফুটার (স্টাইল ও ডার্ক থিম যুক্ত) -->     
+    <!-- ✅ ফুটার -->     
     <div id="school-address-section">
       <footer class="main-footer">
         <div class="section-heading-wrapper">
@@ -219,9 +214,9 @@
       </footer>
     </div>
 
-  </div> <!-- ✅ main-website-content বন্ধ করা হলো -->
+  </div>
         
-  <!-- ✅ সার্চ লজিক এবং লগইন ভিজিবিলিটি স্ক্রিপ্ট -->
+  <!-- ✅ সার্চ লজিক স্ক্রিপ্ট -->
   <script>
     let searchData = [];
 
@@ -267,17 +262,16 @@
       if (filtered.length > 0) {
         filtered.forEach(item => {
           const itemDiv = document.createElement('div');
-          itemDiv.style.cssText = "padding: 10px 15px; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); color: #333; font-weight: 500; transition: background 0.2s;";
-          itemDiv.innerText = item.name;
+          itemDiv.className = 'search-dropdown-item';
+          itemDiv.innerHTML = `<span class="item-title">${item.name}</span><a href="${item.url}" target="${item.target}" class="item-btn">Open</a>`;
 
-          itemDiv.onmouseover = function() { this.style.background = 'rgba(0, 123, 255, 0.1)'; };
-          itemDiv.onmouseout = function() { this.style.background = 'transparent'; };
-
-          itemDiv.onclick = function() {
-            if (item.url.startsWith('#')) {
-              window.location.hash = item.url;
-            } else {
-              window.open(item.url, item.target);
+          itemDiv.onclick = function(e) {
+            if (e.target.tagName !== 'A') {
+              if (item.url.startsWith('#')) {
+                window.location.hash = item.url;
+              } else {
+                window.open(item.url, item.target);
+              }
             }
             list.style.display = 'none';
             input.value = item.name;
