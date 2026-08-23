@@ -254,24 +254,15 @@ h2{font-size:1.7em}
 
 
 /* ==========================================
-   🔍 সার্চ বক্স সেকশন স্টাইল (Search Box Styles - Fixed)
+   🔍 সার্চ বক্স স্টাইল (Fixed & Floating Options)
    ========================================== */
-
-/* সম্পূর্ণ সার্চ সেকশনের লেআউট */
-#search-section {
-    position: relative; /* জেন সেকশনটি অন্য এলিমেন্টের উপরে ভাসতে পারে */
-    z-index: 1005;      /* পুরো সার্চ সেকশনকে সবার উপরে রাখার জন্য */
-    width: 100%;
-    margin: 15px 0;
-    padding: 10px 15px;
-    box-sizing: border-box;
-}
 
 .search-container {
     position: relative;
-    width: 100%;
+    width: 90%;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 20px auto;
+    z-index: 9999; /* ড্রপডাউন যেন অন্য সব কিছুর উপরে ভাসে */
 }
 
 .search-input-wrapper {
@@ -311,7 +302,7 @@ h2{font-size:1.7em}
     font-family: 'Poppins', sans-serif;
     color: var(--black, #111);
     background-color: var(--light-gray, #f4f4f4);
-    border: 2px solid rgba(0, 0, 0, 0.08);
+    border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     outline: none;
     box-sizing: border-box;
@@ -321,29 +312,33 @@ h2{font-size:1.7em}
 #site-search-input:focus {
     background-color: var(--white, #fff);
     border-color: var(--dark-khaki, #6b0000);
-    box-shadow: 0 4px 15px var(--box-shadow-light, rgba(0,0,0,0.1));
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 
-/* 🌫️ অস্পষ্ট / গ্লাস ইফেক্টযুক্ত ড্রপডাউন সাজেশন লিস্ট (যেটি ভাসবে) */
+/* 🌫️ ভাসমান ড্রপডাউন সাজেশনের ব্যাকগ্রাউন্ড */
 .search-dropdown {
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
     right: 0;
-    /* আবছা বা ঝাপসা ব্যাকগ্রাউন্ড ইফেক্ট */
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(230, 57, 70, 0.2);
+    border: 1px solid rgba(107, 0, 0, 0.2);
     border-radius: 10px;
     max-height: 320px;
     overflow-y: auto;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-    z-index: 1006; /* ড্রপডাউনকে ইনপুটের চেয়েও উপরে রাখা হলো */
-    display: none;
+    z-index: 10000; /* সর্বোচ্চ লেভেলে রাখা হলো */
+    display: none;  /* ডিফল্ট অবস্থায় হাইড থাকবে */
 }
 
-/* স্ক্রোলবার স্টাইল (ড্রপডাউনের জন্য) */
+/* Active ক্লাস থাকলে ড্রপডাউন ভেসে উঠবে */
+.search-dropdown.active {
+    display: block;
+}
+
+/* স্ক্রোলবার স্টাইল */
 .search-dropdown::-webkit-scrollbar {
     width: 6px;
 }
@@ -352,13 +347,12 @@ h2{font-size:1.7em}
     border-radius: 4px;
 }
 
-/* সাজেশনের প্রতিটি আইটেম */
+/* সাজেশনের প্রতিটি আইটেম (JS-এর সাথে সমন্বিত) */
 .search-dropdown-item {
     padding: 12px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    cursor: pointer;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     transition: all 0.2s ease;
     color: var(--black, #222);
@@ -372,17 +366,27 @@ h2{font-size:1.7em}
 
 .search-dropdown-item:hover {
     background-color: var(--light-accent-color, #f9f0f0);
-    color: var(--dark-khaki, #6b0000);
-    padding-left: 24px; /* হালকা স্লাইড ইফেক্ট */
 }
 
-/* ক্যাটালগ / সেকশন ট্যাগ (ডানপাশের ছোট ব্যাজ) */
-.search-dropdown-item .item-category {
-    font-size: 0.78rem;
+.search-dropdown-item .item-title {
+    flex-grow: 1;
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-dropdown-item .item-btn {
+    text-decoration: none;
+    font-size: 0.85rem;
     font-weight: 600;
-    background-color: rgba(107, 0, 0, 0.08);
-    color: var(--dark-khaki, #6b0000);
-    padding: 3px 10px;
-    border-radius: 20px;
-    border: 1px solid rgba(107, 0, 0, 0.15);
+    background-color: var(--dark-khaki, #6b0000);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.search-dropdown-item .item-btn:hover {
+    background-color: #e63946;
 }
