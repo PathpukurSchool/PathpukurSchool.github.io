@@ -252,16 +252,19 @@ h2{font-size:1.7em}
 .main-header{padding-left:60px;padding-right:60px}
 }
 
+
 /* ==========================================
-   🔍 সার্চ বক্স সেকশন স্টাইল (Search Box Styles)
+   🔍 সার্চ বক্স সেকশন স্টাইল (Search Box Styles - Fixed)
    ========================================== */
 
 /* সম্পূর্ণ সার্চ সেকশনের লেআউট */
 #search-section {
-    grid-column: 1 / -1; /* গ্রিড লেআউটে ফুল-উইডথ জুড়ে থাকবে */
-    margin-bottom: 10px;
-    background: var(--card-bg);
-    border-top: 8px solid var(--primary-red); /* মূল ওয়েবসাইটের প্রাইমারি কালার */
+    position: relative; /* জেন সেকশনটি অন্য এলিমেন্টের উপরে ভাসতে পারে */
+    z-index: 1005;      /* পুরো সার্চ সেকশনকে সবার উপরে রাখার জন্য */
+    width: 100%;
+    margin: 15px 0;
+    padding: 10px 15px;
+    box-sizing: border-box;
 }
 
 .search-container {
@@ -280,7 +283,7 @@ h2{font-size:1.7em}
 .search-input-wrapper .search-icon {
     position: absolute;
     left: 18px;
-    color: var(--dark-khaki);
+    color: var(--dark-khaki, #6b0000);
     font-size: 1.2rem;
     pointer-events: none;
 }
@@ -288,7 +291,7 @@ h2{font-size:1.7em}
 .search-input-wrapper .clear-icon {
     position: absolute;
     right: 18px;
-    color: var(--medium-gray);
+    color: var(--medium-gray, #888);
     cursor: pointer;
     font-size: 1.1rem;
     display: none;
@@ -296,7 +299,7 @@ h2{font-size:1.7em}
 }
 
 .search-input-wrapper .clear-icon:hover {
-    color: var(--primary-red);
+    color: var(--primary-red, #e63946);
     transform: scale(1.1);
 }
 
@@ -306,8 +309,8 @@ h2{font-size:1.7em}
     padding: 14px 45px 14px 48px;
     font-size: 1.05rem;
     font-family: 'Poppins', sans-serif;
-    color: var(--black);
-    background-color: var(--light-gray);
+    color: var(--black, #111);
+    background-color: var(--light-gray, #f4f4f4);
     border: 2px solid rgba(0, 0, 0, 0.08);
     border-radius: 10px;
     outline: none;
@@ -316,27 +319,27 @@ h2{font-size:1.7em}
 }
 
 #site-search-input:focus {
-    background-color: var(--white);
-    border-color: var(--dark-khaki);
-    box-shadow: 0 4px 15px var(--box-shadow-light);
+    background-color: var(--white, #fff);
+    border-color: var(--dark-khaki, #6b0000);
+    box-shadow: 0 4px 15px var(--box-shadow-light, rgba(0,0,0,0.1));
 }
 
-/* 🌫️ অস্পষ্ট / গ্লাস ইফেক্টযুক্ত ড্রপডাউন সাজেশন লিস্ট */
+/* 🌫️ অস্পষ্ট / গ্লাস ইফেক্টযুক্ত ড্রপডাউন সাজেশন লিস্ট (যেটি ভাসবে) */
 .search-dropdown {
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
     right: 0;
     /* আবছা বা ঝাপসা ব্যাকগ্রাউন্ড ইফেক্ট */
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(230, 57, 70, 0.2);
     border-radius: 10px;
-    max-height: 280px;
+    max-height: 320px;
     overflow-y: auto;
-    box-shadow: 0 10px 25px var(--box-shadow-dark);
-    z-index: 1005;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    z-index: 1006; /* ড্রপডাউনকে ইনপুটের চেয়েও উপরে রাখা হলো */
     display: none;
 }
 
@@ -345,7 +348,7 @@ h2{font-size:1.7em}
     width: 6px;
 }
 .search-dropdown::-webkit-scrollbar-thumb {
-    background: var(--dark-khaki);
+    background: var(--dark-khaki, #6b0000);
     border-radius: 4px;
 }
 
@@ -358,7 +361,7 @@ h2{font-size:1.7em}
     cursor: pointer;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     transition: all 0.2s ease;
-    color: var(--black);
+    color: var(--black, #222);
     font-size: 1rem;
     font-weight: 500;
 }
@@ -368,8 +371,8 @@ h2{font-size:1.7em}
 }
 
 .search-dropdown-item:hover {
-    background-color: var(--light-accent-color);
-    color: var(--dark-khaki);
+    background-color: var(--light-accent-color, #f9f0f0);
+    color: var(--dark-khaki, #6b0000);
     padding-left: 24px; /* হালকা স্লাইড ইফেক্ট */
 }
 
@@ -378,7 +381,7 @@ h2{font-size:1.7em}
     font-size: 0.78rem;
     font-weight: 600;
     background-color: rgba(107, 0, 0, 0.08);
-    color: var(--dark-khaki);
+    color: var(--dark-khaki, #6b0000);
     padding: 3px 10px;
     border-radius: 20px;
     border: 1px solid rgba(107, 0, 0, 0.15);
