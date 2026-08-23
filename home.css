@@ -1,36 +1,37 @@
-/* ================================================= */
-/* 🎨 GLOBAL VARIABLES & FONTS                       */
-/* ================================================= */
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #386641;
-    --primary-dark: #00382e;
-    --secondary-color: #ff9800;
-    --secondary-hover: #e65100;
-
-    --background-color: #f3f6f4;
+    --primary-color: #386641;     /* ডিপ ফরেস্ট গ্রিন (Upload Student Exam Marks-এর জন্য) */
+    --primary-dark: #27472e;      /* ডার্ক গ্রিন হোভার */
+    --secondary-color: #ff9800;   /* Amber */
+    --secondary-hover: #e65100;   /* Dark Amber */
+    --background-color: #f0f2f5;  /* হালকা ধূসর बैकগ্রাউন্ড */
     --card-background: #ffffff;
-
     --text-color-dark: #212121;
     --text-color-light: #555555;
-
-    --border-color: #dfe5e1;
+    --border-color: #e0e0e0;
     --success-color: #4caf50;
     --error-color: #f44336;
     --link-color: #1a73e8;
-    --hover-bg: #f6faf7;
+    --hover-bg: #f8f9fa;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
 
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.07);
-    --shadow-md: 0 5px 18px rgba(0, 0, 0, 0.11);
-
-    /* Standard button sizing */
-    --button-min-height: 58px;
-    --button-radius: 10px;
-    --button-gap: 14px;
-
-    --content-width: 1200px;
+    /* 🌟 নতুন আধুনিক সাইডবার কালার প্যালেট (Dark Slate/Navy - চোখের জন্য আরামদায়ক) */
+    --sidebar-bg-start: #1e293b;
+    --sidebar-bg-end: #0f172a;
+    --sidebar-header-bg: #0f172a;
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+    --sidebar-active-accent: #38bdf8;
+    --sidebar-text: #e2e8f0;
+    
+    /* 🎨 অন্যান্য সেকশনের বোতামের জন্য হালকা ও প্রিমিয়াম কালার টোন */
+    --btn-alt-bg: #4f46e5;         /* সফট ইন্ডিগো */
+    --btn-alt-hover: #4338ca;
+    --btn-soft-bg: #0d9488;        /* সফট টিল/সবুজ টাইপ */
+    --btn-soft-hover: #0f766e;
+    --btn-accent-bg: #0284c7;      /* সফট স্কাই ব্লু */
+    --btn-accent-hover: #0369a1;
 }
 
 /* ================================================= */
@@ -46,7 +47,6 @@
 
 html {
     scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -57,31 +57,18 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    overflow-x: hidden;
 }
 
 body.no-scroll {
     overflow: hidden;
 }
 
-button,
-input,
-select,
-textarea {
-    font-family: inherit;
-}
-
-button,
-a {
-    -webkit-tap-highlight-color: transparent;
-}
-
 .main-section-container {
-    width: 100%;
-    max-width: var(--content-width);
-    margin: 0 auto;
     padding: 2rem 1.5rem;
-    scroll-margin-top: 6rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    scroll-margin-top: 6rem; 
 }
 
 /* ================================================= */
@@ -97,16 +84,13 @@ a {
 }
 
 .main-header {
-    width: 100%;
-    max-width: var(--content-width);
-    margin: 0 auto;
-
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-
+    justify-content: space-between; 
+    align-items: center;            
     padding: 0.8rem 1.5rem;
-    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative; 
     color: #ffffff;
 }
 
@@ -119,54 +103,34 @@ a {
 .logo {
     height: 42px;
     width: 42px;
-    flex: 0 0 42px;
-
     background: #ffffff;
     border-radius: 50%;
     object-fit: cover;
-
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .school-name {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-
-    margin: 0;
+    position: absolute;      
+    left: 50%;               
+    transform: translateX(-50%); 
+    margin: 0;               
     text-align: center;
-
     font-weight: 600;
     letter-spacing: 0.5px;
     white-space: nowrap;
-
-    max-width: 55%;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .logout-button {
     background-color: var(--secondary-color);
     color: #ffffff;
-
     border: none;
-    padding: 0.55rem 1.2rem;
-
-    min-height: 42px;
-    min-width: 100px;
-
-    border-radius: 7px;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
     cursor: pointer;
-
     font-weight: 600;
     font-size: 0.9rem;
-
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .logout-button:hover {
@@ -174,136 +138,88 @@ a {
     transform: translateY(-1px);
 }
 
-.logout-button:active {
-    transform: translateY(0);
-}
-
 .menu-button {
     background: transparent;
     border: none;
     color: #ffffff;
-
     font-size: 1.6rem;
     cursor: pointer;
-
-    width: 42px;
-    height: 42px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 4px;
-    border-radius: 8px;
-}
-
-.menu-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* ================================================= */
-/* 🔍 SEARCH CONTAINER                               */
+/* 🔍 SEARCH CONTAINER                              */
 /* ================================================= */
 
 .search-container {
-    width: 100%;
     max-width: 500px;
-
-    margin: 1rem auto 1.5rem;
+    margin: 1rem auto 1.5rem auto;
     padding: 0 10px;
 }
 
 .search-container input {
     width: 100%;
-
-    padding: 0.85rem 1.2rem;
-
+    padding: 0.8rem 1.2rem;
     border: 2px solid var(--border-color);
     border-radius: 25px;
-
     font-size: 0.95rem;
     font-family: inherit;
-
     outline: none;
     background-color: #ffffff;
-
     box-shadow: var(--shadow-sm);
-
-    transition:
-        border-color 0.3s ease,
-        box-shadow 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .search-container input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 8px rgba(56, 102, 65, 0.18);
+    box-shadow: 0 0 8px rgba(56, 102, 65, 0.2);
 }
 
 /* ================================================= */
 /* 🔐 MASTER LOGIN OVERLAY                           */
-/* ⚠️ Teacher/Master Login styling kept unchanged   */
 /* ================================================= */
 
 #masterLoginOverlay {
     position: fixed;
     top: 0;
     left: 0;
-
     width: 100%;
     height: 100%;
-
-    background-color: var(--primary-color);
-
+    background-color: var(--primary-color); 
     display: flex;
     justify-content: center;
     align-items: center;
-
     z-index: 2000;
-
-    background-image:
-        linear-gradient(
-            rgba(0, 56, 46, 0.85),
-            rgba(0, 56, 46, 0.85)
-        ),
-        url('photo/master_login_image.jpg');
-
+    background-image: linear-gradient(rgba(0, 56, 46, 0.85), rgba(0, 56, 46, 0.85)), url('photo/master_login_image.jpg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover;
-
+    background-size: cover; 
     backdrop-filter: blur(4px);
 }
 
 #masterLoginBox {
     background-color: var(--card-background);
-
     padding: 2.2rem;
     border-radius: 12px;
-
     box-shadow: var(--shadow-md);
-
     text-align: center;
-
     width: 90%;
     max-width: 380px;
-
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #masterLoginBox input {
     width: 100%;
-
     padding: 0.8rem;
     margin-bottom: 1.2rem;
-
     border: 1px solid var(--border-color);
     border-radius: 6px;
-
     font-size: 0.95rem;
     font-family: inherit;
-
     outline: none;
-
     transition: border-color 0.2s ease;
 }
 
@@ -314,21 +230,14 @@ a {
 #masterLoginBox button {
     background-color: var(--primary-color);
     color: #ffffff;
-
     width: 100%;
     padding: 0.8rem;
-
     border: none;
     border-radius: 6px;
-
     font-size: 1rem;
     font-weight: 600;
-
     cursor: pointer;
-
-    transition:
-        background-color 0.3s ease,
-        transform 0.1s ease;
+    transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 #masterLoginBox button:hover {
@@ -343,7 +252,6 @@ a {
     color: var(--error-color);
     margin-top: -0.5rem;
     margin-bottom: 1rem;
-
     font-weight: 600;
     font-size: 0.88rem;
 }
@@ -352,35 +260,26 @@ a {
     color: var(--success-color);
     margin-top: -0.5rem;
     margin-bottom: 1rem;
-
     font-weight: 600;
     font-size: 0.88rem;
 }
 
 /* ================================================= */
-/* 🧭 SIDEBAR MENU                                  */
+/* 🧭 SIDEBAR MENU (আরামদায়ক আধুনিক ডিজাইন)          */
 /* ================================================= */
 
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
-
     width: 100%;
     height: 100%;
-
-    background-color: rgba(0, 0, 0, 0.5);
-
+    background-color: rgba(15, 23, 42, 0.6);
     z-index: 999;
-
     visibility: hidden;
     opacity: 0;
-
-    transition:
-        opacity 0.3s ease,
-        visibility 0.3s ease;
-
-    backdrop-filter: blur(2px);
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(4px);
 }
 
 .overlay.active {
@@ -390,27 +289,17 @@ a {
 
 .sidebar-menu {
     position: fixed;
-
     top: 0;
-    left: -280px;
-
-    width: 280px;
+    left: -290px;
+    width: 290px;
     height: 100%;
-
-    background-color: var(--primary-color);
-    color: #ffffff;
-
-    padding-top: 20px;
-
-    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
-
-    transition:
-        left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
+    background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
+    color: var(--sidebar-text);
+    padding-top: 0;
+    box-shadow: 8px 0 25px rgba(0, 0, 0, 0.3);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
-
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    overflow-y: auto; 
 }
 
 .sidebar-menu.active {
@@ -419,233 +308,155 @@ a {
 
 .sidebar-menu ul {
     list-style-type: none;
+    padding: 10px 0;
 }
 
 .sidebar-menu li {
-    margin-bottom: 2px;
+    margin: 4px 12px;
 }
 
 .sidebar-menu .nav-link {
-    display: block;
-
-    padding: 14px 20px;
-
-    color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: var(--sidebar-text);
     text-decoration: none;
-
-    font-size: 0.95rem;
-
-    transition:
-        background-color 0.2s ease,
-        border-left-color 0.2s ease;
-
-    border-left: 5px solid transparent;
+    font-size: 0.92rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    border-left: 4px solid transparent;
 }
 
-.sidebar-menu .nav-link:hover,
+.sidebar-menu .nav-link:hover {
+    background-color: var(--sidebar-hover-bg);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
 .sidebar-menu .nav-link.active-link {
-    background-color: var(--primary-dark);
-    border-left-color: var(--secondary-color);
+    background-color: rgba(56, 189, 248, 0.12);
+    color: var(--sidebar-active-accent);
+    border-left-color: var(--sidebar-active-accent);
+    font-weight: 600;
 }
 
 .sidebar-menu .menu-header {
-    background-color: var(--primary-dark);
-
-    font-weight: 700;
+    background-color: var(--sidebar-header-bg);
+    font-weight: 600;
     font-size: 1.05rem;
-
-    padding: 18px 20px;
-
-    color: var(--secondary-color);
-
+    padding: 22px 20px;
+    color: #ffffff;
     cursor: default;
     pointer-events: none;
-
     letter-spacing: 0.5px;
-
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* ================================================= */
 /* 📚 CLASS / EXAM BUTTONS & GRID                   */
 /* ================================================= */
 
-/*
-   IMPORTANT:
-   সব Class/Exam button একই visual size এবং
-   যথেষ্ট gap সহ আলাদা থাকবে।
-*/
-
 .class-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
     width: 100%;
     max-width: 900px;
-
     margin: 1.5rem auto;
-
-    padding: 6px;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(155px, 1fr));
-
-    gap: var(--button-gap);
-
-    align-items: stretch;
+    padding: 10px;
 }
 
-/* Common button style */
-
-.class-link-btn.box-button,
+/* 🟢 Standard Primary Button: Upload Student Exam Marks-এর মেইন সাইজ ও স্টাইল */
+.class-link-btn.box-button, 
 .exam-link {
-    width: 100%;
-    min-width: 0;
-
-    min-height: var(--button-min-height);
-
-    padding: 10px 14px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    text-align: center;
-
-    font-size: 0.94rem;
-    line-height: 1.35;
+    min-height: 60px;
+    padding: 10px 15px;
+    font-size: 0.95rem;
     font-weight: 600;
-
-    letter-spacing: 0.25px;
-
-    border-radius: var(--button-radius);
-
+    letter-spacing: 0.5px;
+    border-radius: 8px;
     box-shadow: var(--shadow-sm);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background-color 0.2s ease;
-
+    transition: all 0.25s ease;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
     cursor: pointer;
     text-decoration: none;
-
-    /* Prevent button overlap */
-    overflow-wrap: anywhere;
-    word-break: normal;
-
-    /* Keep buttons visually independent */
-    margin: 0;
+    text-align: center;
 }
 
-/*
-   Existing default Class/Exam button color.
-   Upload Student Exam Marks-এর আলাদা existing
-   color rules থাকলে এই rule সেগুলো override করবে না।
-*/
-
-.class-link-btn.box-button {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    border: none;
-}
-
-.exam-link {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    border: none;
-}
-
-.class-link-btn.box-button:hover,
+.class-link-btn.box-button:hover, 
 .exam-link:hover {
     background-color: var(--primary-dark);
-
-    transform: translateY(-2px);
-
+    transform: translateY(-3px);
     box-shadow: var(--shadow-md);
 }
 
-.class-link-btn.box-button:active,
+.class-link-btn.box-button:active, 
 .exam-link:active {
     transform: translateY(0);
 }
 
-/* Keyboard accessibility */
-
-.class-link-btn.box-button:focus-visible,
-.exam-link:focus-visible,
-.logout-button:focus-visible,
-.menu-button:focus-visible,
-.pagination-btn:focus-visible,
-.popup-link-btn:focus-visible {
-    outline: 3px solid rgba(255, 152, 0, 0.45);
-    outline-offset: 2px;
+/* 🔵 অন্যান্য সেকশনের জন্য অল্টারনেটিভ প্রিমিয়াম হালকা কালার অপশনসমূহ (HTML-এ ক্লাস যুক্ত করে ব্যবহার করতে পারবেন) */
+.box-button.btn-alt {
+    background-color: var(--btn-alt-bg);
+}
+.box-button.btn-alt:hover {
+    background-color: var(--btn-alt-hover);
 }
 
-/* Disabled Exam */
+.box-button.btn-soft {
+    background-color: var(--btn-soft-bg);
+}
+.box-button.btn-soft:hover {
+    background-color: var(--btn-soft-hover);
+}
+
+.box-button.btn-accent {
+    background-color: var(--btn-accent-bg);
+}
+.box-button.btn-accent:hover {
+    background-color: var(--btn-accent-hover);
+}
 
 .disabled-exam-link {
     background-color: #cccccc !important;
     color: #666666 !important;
-
     cursor: not-allowed !important;
-
     opacity: 0.7;
-
     transform: none !important;
-
     box-shadow: none !important;
 }
 
-/* ================================================= */
-/* 📢 AVAILABILITY MESSAGE                           */
-/* ================================================= */
-
 .avail-msg {
-    width: fit-content;
-    max-width: calc(100% - 20px);
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    gap: 10px;
-
+    gap: 10px; 
     font-family: inherit;
     font-size: 1rem;
     font-weight: bold;
-
     color: #ffffff;
-
-    text-align: center;
-
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-
-    background: linear-gradient(
-        45deg,
-        #ff4e50,
-        #fc913a
-    );
-
+    background: linear-gradient(45deg, #ff4e50, #fc913a); 
     border-radius: 8px;
-
     padding: 10px 20px;
-
     box-shadow: var(--shadow-sm);
-
     margin: 15px auto;
-
-    animation: pulse 1.5s infinite ease-in-out;
+    max-width: fit-content;
+    animation: pulse 1.5s infinite ease-in-out; 
 }
 
 @keyframes pulse {
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.03);
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
 }
 
 /* ================================================= */
@@ -655,17 +466,11 @@ a {
 .info-box {
     font-size: 16px;
     font-weight: 600;
-
     padding: 12px 16px;
-
     border-radius: 8px;
-
     text-align: center;
-
     max-width: 320px;
-
     margin: 0 auto;
-
     border: 2px solid;
 }
 
@@ -683,62 +488,39 @@ a {
 
 .notice-item {
     cursor: pointer;
-
     margin: 10px 0;
-
     padding: 12px 15px;
-
     background-color: #ffffff;
-
     border-left: 5px solid var(--primary-color);
-
-    border-radius: 8px;
-
+    border-radius: 6px;
     box-shadow: var(--shadow-sm);
-
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .notice-item:hover {
     background-color: #f4f8f5;
-
     transform: translateX(3px);
-
-    box-shadow: var(--shadow-md);
 }
 
 .new-badge {
     background-color: #e74c3c;
     color: white;
-
     padding: 2px 6px;
-
     border-radius: 3px;
-
     font-size: 0.7em;
     font-weight: 700;
-
     margin-left: 8px;
-
     display: inline-block;
-
     animation: blinker 1s linear infinite;
 }
 
 @keyframes blinker {
-    50% {
-        opacity: 0.5;
-        transform: scale(1.05);
-    }
+    50% { opacity: 0.5; transform: scale(1.05); }
 }
 
 .new-notice-highlight {
     border: 1px solid #e74c3c !important;
     border-left: 5px solid #e74c3c !important;
-
     background-color: #fff8f8 !important;
 }
 
@@ -746,20 +528,13 @@ a {
     background-color: #ffefef !important;
 }
 
-/* ================================================= */
-/* 📄 PAGINATION CONTROLS                            */
-/* ================================================= */
-
+/* Pagination Controls */
 #pagination-controls {
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 12px;
-
     margin-top: 18px;
-
-    flex-wrap: wrap;
 }
 
 .page-info {
@@ -768,204 +543,112 @@ a {
 }
 
 .pagination-btn {
-    min-width: 100px;
-    min-height: 42px;
-
     color: #ffffff;
-
     border: none;
-
     padding: 0.5rem 1.2rem;
-
-    border-radius: 7px;
-
+    border-radius: 5px;
     cursor: pointer;
-
     font-weight: 600;
     font-size: 0.85rem;
-
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
-.pagination-btn:hover {
-    transform: translateY(-1px);
-}
+.btn-back, .btn-next { background-color: var(--secondary-color); }
+.btn-back:hover, .btn-next:hover { background-color: var(--secondary-hover); }
 
-.btn-back,
-.btn-next {
-    background-color: var(--secondary-color);
-}
+.btn-download { background-color: #28a745; }
+.btn-download:hover { background-color: #218838; }
 
-.btn-back:hover,
-.btn-next:hover {
-    background-color: var(--secondary-hover);
-}
+.btn-back.btn-back { background-color: #dc3545; }
+.btn-back.btn-back:hover { background-color: #c82333; }
 
-.btn-download {
-    background-color: #28a745;
-}
-
-.btn-download:hover {
-    background-color: #218838;
-}
-
-.btn-back.btn-back {
-    background-color: #dc3545;
-}
-
-.btn-back.btn-back:hover {
-    background-color: #c82333;
-}
-
-/* ================================================= */
-/* 🪟 NOTICE POPUP MODAL                            */
-/* ================================================= */
-
+/* Notice Popup Modal */
 .popup-overlay {
     position: fixed;
-
     top: 0;
     left: 0;
-
     width: 100%;
     height: 100%;
-
     background: rgba(0, 0, 0, 0.6);
-
     z-index: 9998;
-
     backdrop-filter: blur(3px);
 }
 
 .popup-content {
     position: fixed;
-
     top: 50%;
     left: 50%;
-
     transform: translate(-50%, -50%);
-
-    width: calc(100% - 30px);
-
+    width: 90%;
     max-width: 340px;
-
     max-height: 85vh;
-
     overflow-y: auto;
-
     background: #ffffff;
-
     padding: 20px;
-
     border-radius: 12px;
-
     box-shadow: var(--shadow-md);
-
     z-index: 9999;
-
     text-align: center;
-
-    overscroll-behavior: contain;
 }
 
 .school-header {
     color: var(--primary-dark);
-
     background-color: #eaf4ed;
-
     font-size: 16px;
     font-weight: bold;
-
     padding: 8px;
-
     border-radius: 6px;
-
     margin-bottom: 12px;
-
     font-family: 'Poppins', sans-serif;
 }
 
 .notice-title {
     background-color: var(--primary-color);
-
     color: white;
-
     font-weight: 600;
     font-size: 14px;
-
     padding: 10px;
-
     border-radius: 6px;
-
     margin-bottom: 12px;
 }
 
 .notice-date {
     margin-bottom: 10px;
-
     font-size: 0.9rem;
-
     color: var(--text-color-light);
 }
 
 .notice-subject {
     color: var(--primary-dark);
-
     background-color: #f0f7f2;
-
     font-weight: 600;
     font-size: 13.5px;
-
     padding: 8px;
-
     border-radius: 6px;
-
     margin-bottom: 15px;
 }
 
 .popup-button-container {
     margin-top: 15px;
-
     display: flex;
-
     flex-wrap: wrap;
-
     justify-content: center;
-
-    gap: 10px;
+    gap: 8px;
 }
 
 .popup-link-btn {
-    min-height: 40px;
-
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
     background-color: var(--link-color);
-
     color: white;
-
     padding: 6px 12px;
-
     border-radius: 5px;
-
     font-weight: 600;
     font-size: 0.85rem;
-
     text-decoration: none;
-
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
 .popup-link-btn:hover {
     background-color: #1557b0;
-    transform: translateY(-1px);
 }
 
 /* ================================================= */
@@ -974,27 +657,18 @@ a {
 
 .marquee-container {
     background-color: #ffffff;
-
     border: 1px solid var(--border-color);
-
     padding: 0.6rem;
-
     border-radius: 8px;
-
     margin-top: 1rem;
-
     overflow: hidden;
-
     box-shadow: var(--shadow-sm);
 }
 
 .marquee-content {
     display: inline-block;
-
     white-space: nowrap;
-
     animation: marquee 20s linear infinite;
-
     padding-left: 100%;
 }
 
@@ -1003,20 +677,13 @@ a {
 }
 
 @keyframes marquee {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(-100%);
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
 }
 
 .marquee-item {
     padding: 0 15px;
-
     white-space: nowrap;
-
     font-weight: 500;
 }
 
@@ -1025,13 +692,8 @@ a {
 }
 
 @keyframes highlight-fade {
-    0% {
-        background-color: rgba(255, 235, 59, 0.4);
-    }
-
-    100% {
-        background-color: var(--background-color);
-    }
+    0% { background-color: rgba(255, 235, 59, 0.4); }
+    100% { background-color: var(--background-color); }
 }
 
 /* ================================================= */
@@ -1040,373 +702,78 @@ a {
 
 footer {
     background-color: var(--primary-color);
-
     color: #ffffff;
-
     text-align: center;
-
     padding: 1.5rem 1rem;
-
     margin-top: auto;
 }
 
 footer p {
     margin: 0.3rem 0;
-
     color: #e0e0e0;
-
     font-size: 0.88rem;
 }
 
 /* ================================================= */
-/* 📱 TABLET                                         */
+/* 📱 RESPONSIVE DESIGN                              */
 /* ================================================= */
 
-@media (max-width: 900px) {
-
-    .main-section-container {
-        padding-left: 1.2rem;
-        padding-right: 1.2rem;
+@media (min-width: 601px) {
+    .popup-content {
+        max-width: 480px;
+        padding: 25px;
     }
-
-    .class-buttons-grid {
-        max-width: 760px;
-
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-
-        gap: 13px;
+    .school-header {
+        font-size: 18px;
     }
-
-    .class-link-btn.box-button,
-    .exam-link {
-        min-height: 58px;
+    .notice-title {
+        font-size: 15px;
     }
 }
 
-/* ================================================= */
-/* 📱 MOBILE                                         */
-/* ================================================= */
+@media (min-width: 1024px) {
+    .popup-content {
+        max-width: 600px;
+    }
+    .school-header {
+        font-size: 20px;
+    }
+}
 
 @media (max-width: 768px) {
-
-    .main-section-container {
-        padding: 1.2rem 0.9rem;
-    }
-
-    /* Header */
-
     .main-header {
         flex-direction: column;
-
-        align-items: stretch;
-
-        padding: 0.7rem 0.9rem;
-
-        gap: 8px;
+        align-items: flex-start;
+        padding: 0.8rem 1rem; 
     }
 
     .header-content {
         width: 100%;
-
         justify-content: space-between;
+    }
 
-        min-height: 42px;
+    .logout-button {
+        margin-top: 0.8rem;
+        width: 100%;
     }
 
     .school-name {
         position: static;
-
         transform: none;
-
+        font-size: 1rem; 
         width: 100%;
-        max-width: 100%;
-
-        margin-top: 2px;
-
-        font-size: 1rem;
-
+        margin-top: 0.4rem;
         text-align: center;
     }
-
-    .logout-button {
-        width: 100%;
-
-        min-height: 42px;
-
-        margin-top: 2px;
-    }
-
-    /* Search */
-
-    .search-container {
-        margin-top: 0.8rem;
-        margin-bottom: 1.1rem;
-
-        padding: 0 4px;
-    }
-
-    /* Buttons */
-
-    .class-buttons-grid {
-        width: 100%;
-
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 12px;
-
-        padding: 4px;
-
-        margin: 1rem auto;
-    }
-
-    .class-link-btn.box-button,
-    .exam-link {
-        width: 100%;
-
-        min-height: 58px;
-
-        padding: 9px 10px;
-
-        font-size: 0.88rem;
-
-        border-radius: 9px;
-    }
-
-    /* Availability */
-
-    .avail-msg {
-        width: 100%;
-
-        max-width: 100%;
-
-        padding: 10px 14px;
-
-        font-size: 0.9rem;
-    }
-
-    /* Sidebar */
-
-    .sidebar-menu {
-        width: min(290px, 86vw);
-        left: calc(-1 * min(290px, 86vw));
-    }
-
-    /* Notices */
-
-    .notice-item {
-        padding: 11px 12px;
-    }
-
-    /* Pagination */
-
-    #pagination-controls {
-        gap: 8px;
-    }
-
-    .pagination-btn {
-        min-width: 92px;
-    }
-
-    /* Popup */
-
-    .popup-content {
-        width: calc(100% - 24px);
-
-        max-height: 88vh;
-
-        padding: 17px;
-
-        border-radius: 11px;
-    }
 }
-
-/* ================================================= */
-/* 📱 SMALL MOBILE                                  */
-/* ================================================= */
-
-@media (max-width: 480px) {
-
-    .main-section-container {
-        padding: 1rem 0.7rem;
-    }
-
-    .logo {
-        width: 40px;
-        height: 40px;
-        flex-basis: 40px;
-    }
-
-    .school-name {
-        font-size: 0.92rem;
-    }
-
-    .class-buttons-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 10px;
-
-        padding: 2px;
-    }
-
-    .class-link-btn.box-button,
-    .exam-link {
-        min-height: 56px;
-
-        padding: 8px 7px;
-
-        font-size: 0.82rem;
-
-        line-height: 1.3;
-    }
-
-    .pagination-btn {
-        flex: 1 1 90px;
-    }
-
-    .popup-button-container {
-        gap: 8px;
-    }
-
-    .popup-link-btn {
-        flex: 1 1 auto;
-    }
-}
-
-/* ================================================= */
-/* 📱 VERY SMALL MOBILE                             */
-/* ================================================= */
 
 @media (max-width: 360px) {
-
-    .main-section-container {
-        padding-left: 0.55rem;
-        padding-right: 0.55rem;
-    }
-
-    .main-header {
-        padding-left: 0.65rem;
-        padding-right: 0.65rem;
-    }
-
     .class-buttons-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 10px;
     }
-
-    .class-link-btn.box-button,
-    .exam-link {
-        min-height: 54px;
-
-        padding: 7px 5px;
-
-        font-size: 0.76rem;
-
-        border-radius: 8px;
+    .class-link-btn.box-button {
+        font-size: 0.85rem;
+        min-height: 52px;
     }
-
-    .search-container input {
-        font-size: 0.88rem;
-
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-
-    .popup-content {
-        width: calc(100% - 16px);
-
-        padding: 14px;
-    }
-}
-
-/* ================================================= */
-/* 🖥️ LARGE SCREENS                                */
-/* ================================================= */
-
-@media (min-width: 1024px) {
-
-    .popup-content {
-        max-width: 600px;
-    }
-
-    .school-header {
-        font-size: 20px;
-    }
-
-    .notice-title {
-        font-size: 15px;
-    }
-
-    .class-buttons-grid {
-        grid-template-columns:
-            repeat(4, minmax(0, 1fr));
-
-        gap: 15px;
-    }
-}
-
-/* ================================================= */
-/* 🖥️ DESKTOP POPUP                                */
-/* ================================================= */
-
-@media (min-width: 601px) {
-
-    .popup-content {
-        max-width: 480px;
-
-        padding: 25px;
-    }
-
-    .school-header {
-        font-size: 18px;
-    }
-
-    .notice-title {
-        font-size: 15px;
-    }
-}
-
-/* ================================================= */
-/* ♿ ACCESSIBILITY / EYE COMFORT                   */
-/* ================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    html {
-        scroll-behavior: auto;
-    }
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-}
-
-/* ================================================= */
-/* 🛡️ PREVENT HORIZONTAL OVERFLOW                   */
-/* ================================================= */
-
-img,
-video,
-iframe {
-    max-width: 100%;
-}
-
-table {
-    max-width: 100%;
-}
-
-.notice-item,
-.info-box,
-.popup-content,
-.marquee-container {
-    overflow-wrap: anywhere;
 }
