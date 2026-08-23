@@ -1,11 +1,12 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #386641;     /* ডিপ ফরেস্ট গ্রিন (Upload Student Exam Marks-এর জন্য) */
-    --primary-dark: #27472e;      /* ডার্ক গ্রিন হোভার */
-    --secondary-color: #ff9800;   /* Amber */
-    --secondary-hover: #e65100;   /* Dark Amber */
-    --background-color: #f0f2f5;  /* হালকা ধূসর बैकগ্রাউন্ড */
+    --primary-color: #386641;      /* ডিপ ফরেস্ট গ্রিন */
+    --primary-dark: #27472e;       /* ডার্ক গ্রিন হোভার */
+    --secondary-color: #ff9800;    /* Amber */
+    --secondary-hover: #e65100;    /* Dark Amber */
+    --background-color: #f0f2f5;   /* হালকা ধূসর ব্যাকগ্রাউন্ড */
     --card-background: #ffffff;
     --text-color-dark: #212121;
     --text-color-light: #555555;
@@ -17,7 +18,7 @@
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
 
-    /* 🌟 নতুন আধুনিক সাইডবার কালার প্যালেট (Dark Slate/Navy - চোখের জন্য আরামদায়ক) */
+    /* 🌟 সাইডবার কালার প্যালেট */
     --sidebar-bg-start: #1e293b;
     --sidebar-bg-end: #0f172a;
     --sidebar-header-bg: #0f172a;
@@ -25,12 +26,12 @@
     --sidebar-active-accent: #38bdf8;
     --sidebar-text: #e2e8f0;
     
-    /* 🎨 অন্যান্য সেকশনের বোতামের জন্য হালকা ও প্রিমিয়াম কালার টোন */
-    --btn-alt-bg: #4f46e5;         /* সফট ইন্ডিগো */
+    /* 🎨 অন্যান্য বোতামের কালার */
+    --btn-alt-bg: #4f46e5;         
     --btn-alt-hover: #4338ca;
-    --btn-soft-bg: #0d9488;        /* সফট টিল/সবুজ টাইপ */
+    --btn-soft-bg: #0d9488;        
     --btn-soft-hover: #0f766e;
-    --btn-accent-bg: #0284c7;      /* সফট স্কাই ব্লু */
+    --btn-accent-bg: #0284c7;      
     --btn-accent-hover: #0369a1;
 }
 
@@ -63,8 +64,14 @@ body.no-scroll {
     overflow: hidden;
 }
 
+/* 🔒 লগইন না হওয়া পর্যন্ত মূল ওয়েবসাইট কনটেন্ট এবং টপ বার সম্পূর্ণ হাইড থাকবে */
+#main-website-content,
+#top-bar-section {
+    display: none;
+}
+
 .main-section-container {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1rem;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
@@ -72,7 +79,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔝 HEADER & TOP BAR                              */
+/* 🔝 HEADER & TOP BAR                               */
 /* ================================================= */
 
 #top-bar-section {
@@ -101,8 +108,8 @@ body.no-scroll {
 }
 
 .logo {
-    height: 42px;
-    width: 42px;
+    height: 40px;
+    width: 40px;
     background: #ffffff;
     border-radius: 50%;
     object-fit: cover;
@@ -111,9 +118,9 @@ body.no-scroll {
 
 .school-name {
     position: absolute;      
-    left: 50%;               
+    left: 50%;                
     transform: translateX(-50%); 
-    margin: 0;               
+    margin: 0;                
     text-align: center;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -124,11 +131,11 @@ body.no-scroll {
     background-color: var(--secondary-color);
     color: #ffffff;
     border: none;
-    padding: 0.5rem 1.2rem;
+    padding: 0.4rem 1rem;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     transition: all 0.2s ease-in-out;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -142,7 +149,7 @@ body.no-scroll {
     background: transparent;
     border: none;
     color: #ffffff;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -151,21 +158,21 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔍 SEARCH CONTAINER                              */
+/* 🔍 SEARCH CONTAINER                               */
 /* ================================================= */
 
 .search-container {
     max-width: 500px;
-    margin: 1rem auto 1.5rem auto;
+    margin: 1rem auto 1.2rem auto;
     padding: 0 10px;
 }
 
 .search-container input {
     width: 100%;
-    padding: 0.8rem 1.2rem;
+    padding: 0.6rem 1.2rem;
     border: 2px solid var(--border-color);
     border-radius: 25px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-family: inherit;
     outline: none;
     background-color: #ffffff;
@@ -179,7 +186,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔐 MASTER LOGIN OVERLAY                           */
+/* 🔐 MASTER LOGIN OVERLAY                            */
 /* ================================================= */
 
 #masterLoginOverlay {
@@ -202,22 +209,22 @@ body.no-scroll {
 
 #masterLoginBox {
     background-color: var(--card-background);
-    padding: 2.2rem;
+    padding: 2rem;
     border-radius: 12px;
     box-shadow: var(--shadow-md);
     text-align: center;
     width: 90%;
-    max-width: 380px;
+    max-width: 360px;
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #masterLoginBox input {
     width: 100%;
-    padding: 0.8rem;
-    margin-bottom: 1.2rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-family: inherit;
     outline: none;
     transition: border-color 0.2s ease;
@@ -231,10 +238,10 @@ body.no-scroll {
     background-color: var(--primary-color);
     color: #ffffff;
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.75rem;
     border: none;
     border-radius: 6px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.1s ease;
@@ -248,24 +255,17 @@ body.no-scroll {
     transform: scale(0.98);
 }
 
-.error {
-    color: var(--error-color);
+.error, .success {
     margin-top: -0.5rem;
     margin-bottom: 1rem;
     font-weight: 600;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
 }
-
-.success {
-    color: var(--success-color);
-    margin-top: -0.5rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-    font-size: 0.88rem;
-}
+.error { color: var(--error-color); }
+.success { color: var(--success-color); }
 
 /* ================================================= */
-/* 🧭 SIDEBAR MENU (আরামদায়ক আধুনিক ডিজাইন)          */
+/* 🧭 SIDEBAR MENU                                  */
 /* ================================================= */
 
 .overlay {
@@ -290,8 +290,8 @@ body.no-scroll {
 .sidebar-menu {
     position: fixed;
     top: 0;
-    left: -290px;
-    width: 290px;
+    left: -280px;
+    width: 280px;
     height: 100%;
     background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
     color: var(--sidebar-text);
@@ -312,18 +312,18 @@ body.no-scroll {
 }
 
 .sidebar-menu li {
-    margin: 4px 12px;
+    margin: 4px 10px;
 }
 
 .sidebar-menu .nav-link {
     display: flex;
     align-items: center;
-    padding: 12px 16px;
+    padding: 10px 14px;
     color: var(--sidebar-text);
     text-decoration: none;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     font-weight: 500;
-    border-radius: 8px;
+    border-radius: 6px;
     transition: all 0.25s ease;
     border-left: 4px solid transparent;
 }
@@ -344,43 +344,41 @@ body.no-scroll {
 .sidebar-menu .menu-header {
     background-color: var(--sidebar-header-bg);
     font-weight: 600;
-    font-size: 1.05rem;
-    padding: 22px 20px;
+    font-size: 1rem;
+    padding: 18px 16px;
     color: #ffffff;
     cursor: default;
     pointer-events: none;
     letter-spacing: 0.5px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }
 
 /* ================================================= */
-/* 📚 CLASS / EXAM BUTTONS & GRID                   */
+/* 📚 CLASS / EXAM BUTTONS & GRID (সমান ও ছোট সাইজ)  */
 /* ================================================= */
 
 .class-buttons-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
     width: 100%;
     max-width: 900px;
-    margin: 1.5rem auto;
-    padding: 10px;
+    margin: 1.2rem auto;
+    padding: 0 10px;
 }
 
-/* 🟢 Standard Primary Button: Upload Student Exam Marks-এর মেইন সাইজ ও স্টাইল */
+/* 🟢 সমস্ত ক্লাস ও এক্সাম বোতামকে নির্দিষ্ট সমান মাপের করা হলো */
 .class-link-btn.box-button, 
 .exam-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 60px;
-    padding: 10px 15px;
-    font-size: 0.95rem;
+    height: 52px;             /* একই নির্দিষ্ট উচ্চতা */
+    padding: 8px 10px;        /* সমান প্যাডিং */
+    font-size: 0.85rem;       /* সুন্দর ও সামঞ্জস্যপূর্ণ সাইজ */
     font-weight: 600;
-    letter-spacing: 0.5px;
+    line-height: 1.2;
+    letter-spacing: 0.3px;
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
     transition: all 0.25s ease;
@@ -390,12 +388,14 @@ body.no-scroll {
     cursor: pointer;
     text-decoration: none;
     text-align: center;
+    word-break: break-word;
+    overflow: hidden;
 }
 
 .class-link-btn.box-button:hover, 
 .exam-link:hover {
     background-color: var(--primary-dark);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
@@ -404,27 +404,15 @@ body.no-scroll {
     transform: translateY(0);
 }
 
-/* 🔵 অন্যান্য সেকশনের জন্য অল্টারনেটিভ প্রিমিয়াম হালকা কালার অপশনসমূহ (HTML-এ ক্লাস যুক্ত করে ব্যবহার করতে পারবেন) */
-.box-button.btn-alt {
-    background-color: var(--btn-alt-bg);
-}
-.box-button.btn-alt:hover {
-    background-color: var(--btn-alt-hover);
-}
+/* 🔵 অন্যান্য কালার ভ্যারিয়েন্ট */
+.box-button.btn-alt { background-color: var(--btn-alt-bg); }
+.box-button.btn-alt:hover { background-color: var(--btn-alt-hover); }
 
-.box-button.btn-soft {
-    background-color: var(--btn-soft-bg);
-}
-.box-button.btn-soft:hover {
-    background-color: var(--btn-soft-hover);
-}
+.box-button.btn-soft { background-color: var(--btn-soft-bg); }
+.box-button.btn-soft:hover { background-color: var(--btn-soft-hover); }
 
-.box-button.btn-accent {
-    background-color: var(--btn-accent-bg);
-}
-.box-button.btn-accent:hover {
-    background-color: var(--btn-accent-hover);
-}
+.box-button.btn-accent { background-color: var(--btn-accent-bg); }
+.box-button.btn-accent:hover { background-color: var(--btn-accent-hover); }
 
 .disabled-exam-link {
     background-color: #cccccc !important;
@@ -439,17 +427,15 @@ body.no-scroll {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; 
-    font-family: inherit;
-    font-size: 1rem;
+    gap: 8px; 
+    font-size: 0.85rem;
     font-weight: bold;
     color: #ffffff;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     background: linear-gradient(45deg, #ff4e50, #fc913a); 
-    border-radius: 8px;
-    padding: 10px 20px;
+    border-radius: 6px;
+    padding: 8px 14px;
     box-shadow: var(--shadow-sm);
-    margin: 15px auto;
+    margin: 10px auto;
     max-width: fit-content;
     animation: pulse 1.5s infinite ease-in-out; 
 }
@@ -464,12 +450,12 @@ body.no-scroll {
 /* ================================================= */
 
 .info-box {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
-    padding: 12px 16px;
+    padding: 10px 14px;
     border-radius: 8px;
     text-align: center;
-    max-width: 320px;
+    max-width: 300px;
     margin: 0 auto;
     border: 2px solid;
 }
@@ -488,12 +474,13 @@ body.no-scroll {
 
 .notice-item {
     cursor: pointer;
-    margin: 10px 0;
-    padding: 12px 15px;
+    margin: 8px 0;
+    padding: 10px 12px;
     background-color: #ffffff;
-    border-left: 5px solid var(--primary-color);
+    border-left: 4px solid var(--primary-color);
     border-radius: 6px;
     box-shadow: var(--shadow-sm);
+    font-size: 0.9rem;
     transition: all 0.2s ease;
 }
 
@@ -505,64 +492,15 @@ body.no-scroll {
 .new-badge {
     background-color: #e74c3c;
     color: white;
-    padding: 2px 6px;
+    padding: 2px 5px;
     border-radius: 3px;
     font-size: 0.7em;
     font-weight: 700;
-    margin-left: 8px;
+    margin-left: 6px;
     display: inline-block;
-    animation: blinker 1s linear infinite;
 }
 
-@keyframes blinker {
-    50% { opacity: 0.5; transform: scale(1.05); }
-}
-
-.new-notice-highlight {
-    border: 1px solid #e74c3c !important;
-    border-left: 5px solid #e74c3c !important;
-    background-color: #fff8f8 !important;
-}
-
-.new-notice-highlight:hover {
-    background-color: #ffefef !important;
-}
-
-/* Pagination Controls */
-#pagination-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin-top: 18px;
-}
-
-.page-info {
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.pagination-btn {
-    color: #ffffff;
-    border: none;
-    padding: 0.5rem 1.2rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.85rem;
-    transition: background-color 0.2s ease;
-}
-
-.btn-back, .btn-next { background-color: var(--secondary-color); }
-.btn-back:hover, .btn-next:hover { background-color: var(--secondary-hover); }
-
-.btn-download { background-color: #28a745; }
-.btn-download:hover { background-color: #218838; }
-
-.btn-back.btn-back { background-color: #dc3545; }
-.btn-back.btn-back:hover { background-color: #c82333; }
-
-/* Notice Popup Modal */
+/* Notice Popup */
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -584,81 +522,21 @@ body.no-scroll {
     max-height: 85vh;
     overflow-y: auto;
     background: #ffffff;
-    padding: 20px;
+    padding: 18px;
     border-radius: 12px;
     box-shadow: var(--shadow-md);
     z-index: 9999;
     text-align: center;
 }
 
-.school-header {
-    color: var(--primary-dark);
-    background-color: #eaf4ed;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 8px;
-    border-radius: 6px;
-    margin-bottom: 12px;
-    font-family: 'Poppins', sans-serif;
-}
-
-.notice-title {
-    background-color: var(--primary-color);
-    color: white;
-    font-weight: 600;
-    font-size: 14px;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 12px;
-}
-
-.notice-date {
-    margin-bottom: 10px;
-    font-size: 0.9rem;
-    color: var(--text-color-light);
-}
-
-.notice-subject {
-    color: var(--primary-dark);
-    background-color: #f0f7f2;
-    font-weight: 600;
-    font-size: 13.5px;
-    padding: 8px;
-    border-radius: 6px;
-    margin-bottom: 15px;
-}
-
-.popup-button-container {
-    margin-top: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-}
-
-.popup-link-btn {
-    background-color: var(--link-color);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-}
-
-.popup-link-btn:hover {
-    background-color: #1557b0;
-}
-
 /* ================================================= */
-/* 📅 MARQUEE & UTILITIES                            */
+/* 📅 MARQUEE & FOOTER                               */
 /* ================================================= */
 
 .marquee-container {
     background-color: #ffffff;
     border: 1px solid var(--border-color);
-    padding: 0.6rem;
+    padding: 0.5rem;
     border-radius: 8px;
     margin-top: 1rem;
     overflow: hidden;
@@ -672,108 +550,73 @@ body.no-scroll {
     padding-left: 100%;
 }
 
-.marquee-content:hover {
-    animation-play-state: paused;
-}
-
 @keyframes marquee {
     0% { transform: translateX(0); }
     100% { transform: translateX(-100%); }
 }
 
 .marquee-item {
-    padding: 0 15px;
-    white-space: nowrap;
+    padding: 0 12px;
     font-weight: 500;
+    font-size: 0.88rem;
 }
-
-.highlight-section {
-    animation: highlight-fade 3s ease-in-out;
-}
-
-@keyframes highlight-fade {
-    0% { background-color: rgba(255, 235, 59, 0.4); }
-    100% { background-color: var(--background-color); }
-}
-
-/* ================================================= */
-/* 🦶 FOOTER                                         */
-/* ================================================= */
 
 footer {
     background-color: var(--primary-color);
     color: #ffffff;
     text-align: center;
-    padding: 1.5rem 1rem;
+    padding: 1.2rem 1rem;
     margin-top: auto;
 }
 
 footer p {
-    margin: 0.3rem 0;
+    margin: 0.2rem 0;
     color: #e0e0e0;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
 }
 
 /* ================================================= */
-/* 📱 RESPONSIVE DESIGN                              */
+/* 📱 RESPONSIVE DESIGN (মোবাইল বান্ধব)                */
 /* ================================================= */
-
-@media (min-width: 601px) {
-    .popup-content {
-        max-width: 480px;
-        padding: 25px;
-    }
-    .school-header {
-        font-size: 18px;
-    }
-    .notice-title {
-        font-size: 15px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .popup-content {
-        max-width: 600px;
-    }
-    .school-header {
-        font-size: 20px;
-    }
-}
 
 @media (max-width: 768px) {
     .main-header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 0.8rem 1rem; 
-    }
-
-    .header-content {
-        width: 100%;
+        flex-direction: row;
         justify-content: space-between;
-    }
-
-    .logout-button {
-        margin-top: 0.8rem;
-        width: 100%;
+        align-items: center;
+        padding: 0.6rem 1rem; 
     }
 
     .school-name {
         position: static;
         transform: none;
-        font-size: 1rem; 
-        width: 100%;
-        margin-top: 0.4rem;
+        font-size: 0.95rem; 
         text-align: center;
+    }
+
+    .logout-button {
+        margin-top: 0;
+        padding: 0.35rem 0.8rem;
+        font-size: 0.8rem;
+        width: auto;
+    }
+
+    .search-container {
+        margin: 0.8rem auto;
+        padding: 0 15px;
     }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 480px) {
     .class-buttons-grid {
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        grid-template-columns: repeat(2, 1fr); /* মোবাইলে সুন্দর ২ কলামের লেআউট */
         gap: 10px;
     }
-    .class-link-btn.box-button {
-        font-size: 0.85rem;
-        min-height: 52px;
+
+    .class-link-btn.box-button, 
+    .exam-link {
+        font-size: 0.8rem;
+        height: 48px; /* ছোট স্ক্রিনে পারফেক্ট সাইজ */
+        padding: 6px 8px;
     }
 }
