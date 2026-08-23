@@ -1,7 +1,3 @@
-// =================================
-// ⚙️ ইউটিলিটি ফাংশন
-// =================================
-
 // SHA-256 hash function
 async function sha256(message) {
     const msgBuffer = new TextEncoder().encode(message);
@@ -36,6 +32,29 @@ function createButton(text, bgColor, onClick, disabled = false) {
     btn.classList.add('pagination-btn');
     btn.classList.add(`btn-${text.toLowerCase()}`);
     return btn;
+}
+
+// =================================
+// 🔍 সার্চ ফিল্টারিং ফাংশনালিটি
+// =================================
+
+function setupLiveSearch() {
+    const searchInput = document.getElementById('search-input');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', function () {
+        const query = this.value.toLowerCase().trim();
+        const allButtons = document.querySelectorAll('.exam-link, .class-link-btn');
+
+        allButtons.forEach(button => {
+            const text = button.textContent.toLowerCase();
+            if (text.includes(query)) {
+                button.style.display = 'flex';
+            } else {
+                button.style.display = 'none';
+            }
+        });
+    });
 }
 
 // =================================
@@ -115,7 +134,7 @@ async function submitMasterLogin() {
 }
 
 // =================================
-// 🎓 স্টুডেন্ট/ক্লাস এক্সাম লিংক লোডিং (সংশোধিত)
+// 🎓 স্টুডেন্ট/ক্লাস এক্সাম লিংক লোডিং
 // =================================
 
 function loadStudentExamLinks() {
@@ -125,7 +144,6 @@ function loadStudentExamLinks() {
             return response.json();
         })
         .then(data => {
-            // শুধুমাত্র যেসব এলিমেন্টে ID দেওয়া আছে সেগুলোর জন্য জেসন চেক হবে
             document.querySelectorAll(".exam-link[id]").forEach(button => {
                 const id = button.id;
                 if (data[id] && data[id].trim() !== '') {
@@ -431,7 +449,7 @@ function logout() {
 }
 
 // =================================
-// 🚀 ইনিশিয়ালাইজেশন
+// 🚀 ইনিশিয়ালাইজেশন
 // =================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -439,6 +457,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeSidebar();
     loadStudentExamLinks();
     loadExamDates();
+    setupLiveSearch(); // 🔍 সার্চ ফাংশন সক্রিয় করা হলো
 
     if (examDatesMarquee) {
         examDatesMarquee.addEventListener("mouseover", () => examDatesMarquee.style.animationPlayState = 'paused');
