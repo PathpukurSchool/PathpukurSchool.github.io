@@ -28,7 +28,7 @@ function getSavedNewStatus() {
 
 function collectDetailsFromHTML() {
     ALL_ITEMS_DETAILS = [];
-    NEW_STATUS_CONTROL = getSavedNewStatus(); // LocalStorage থেকে আগের ডাটা লোড
+    NEW_STATUS_CONTROL = getSavedNewStatus();
 
     const links = document.querySelectorAll('.site-link, .notice-item-link, .link-item');
 
@@ -36,7 +36,6 @@ function collectDetailsFromHTML() {
         const title = link.getAttribute('data-title') || link.innerText.trim();
         const url = link.getAttribute('href') || '#';
         
-        // HTML attribute অথবা LocalStorage যেকোনো একটি সত্য হলেই NEW দেখাবে
         const attrIsNew = link.getAttribute('data-isnew')?.toLowerCase() === "true";
         const isNew = (NEW_STATUS_CONTROL[title] !== undefined) ? NEW_STATUS_CONTROL[title] : attrIsNew;
 
@@ -46,7 +45,6 @@ function collectDetailsFromHTML() {
         }
     });
 
-    // LocalStorage আপডেট করা
     try {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(NEW_STATUS_CONTROL));
     } catch (e) {
@@ -560,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function () {
     renderMarquee();
     fetchNotices();
 
-    // ৭. খালি/লিঙ্ক ছাড়া বোতামে ক্লিক করলে 'Available Soon' মেসেজ দেখানোর লজিক
+    // ৭. খালি/লিঙ্ক ছাড়া বোতামে ক্লিক করলে 'Available Soon' মেসেজ দেখানোর লজিক
     const allLinks = document.querySelectorAll('.site-link, .notice-item-link, .link-item, a');
     
     allLinks.forEach(link => {
@@ -573,128 +571,50 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-});
 
+    /* =========================================================
+     * ৮. নতুন যোগ করা সার্চ লজিক (গ্লোবাল সার্চ ফিচার)
+     * ========================================================= */
+    const searchInput = document.getElementById('global-search-input');
+    const searchResultsDropdown = document.getElementById('search-results-dropdown');
 
+    if (searchInput && searchResultsDropdown) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase();
+            searchResultsDropdown.innerHTML = '';
 
+            if (query.length < 2) {
+                searchResultsDropdown.classList.remove('active');
+                return;
+            }
 
+            // HTML লিঙ্ক এবং Supabase নোটিশ উভয় জায়গায় খোঁজা
+            let matchedItems = ALL_ITEMS_DETAILS.filter(item => 
+                item.title && item.title.toLowerCase().includes(query)
+            );
 
-document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById("site-search-input");
-    const suggestionsBox = document.getElementById("search-suggestions");
-    const clearBtn = document.getElementById("clear-search-btn");
-
-    let searchableItems = [];
-
-    // পেজ থেকে স্বয়ংক্রিয়ভাবে সমস্ত লিংক ও তথ্য সংগ্রহ
-    function collectSearchData() {
-        searchableItems = [];
-        
-        // Schedule, Results, Student, Form সেকশন থেকে লিংক সংগ্রহ
-        const sectionLinks = document.querySelectorAll("main section .site-link");
-        sectionLinks.forEach(link => {
-            const title = link.getAttribute("data-title") || link.innerText.trim();
-            const url = link.getAttribute("href");
-            const category = link.closest("section")?.querySelector("h2")?.innerText.trim() || "Link";
-            
-            if (title && url) {
-                searchableItems.push({ title, url, category, isExternal: true });
+            if (matchedItems.length > 0) {
+                matchedItems.forEach(item => {
+                    const resDiv = document.createElement('div');
+                    resDiv.className = 'search-result-item';
+                    resDiv.innerHTML = `
+                        <span class="item-title">${item.title}</span>
+                        <a href="${item.url}" class="item-btn">দেখা যান ➔</a>
+                    `;
+                    searchResultsDropdown.appendChild(resDiv);
+                });
+                searchResultsDropdown.classList.add('active');
+            } else {
+                searchResultsDropdown.innerHTML = `<div style="padding:15px; text-align:center; color:#777;">কোনো তথ্য পাওয়া যায়নি!</div>`;
+                searchResultsDropdown.classList.add('active');
             }
         });
 
-        // Sidebar Menu থেকে নেভিগেশন লিংক সংগ্রহ
-        const menuLinks = document.querySelectorAll("#sidebar-menu a");
-        menuLinks.forEach(link => {
-            const title = link.innerText.trim();
-            const url = link.getAttribute("href");
-            if (title && url && url !== "#") {
-                searchableItems.push({ title: title + " (Section)", url, category: "Section", isExternal: false });
+        // সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন হাইড হওয়া
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResultsDropdown.contains(e.target)) {
+                searchResultsDropdown.classList.remove('active');
             }
         });
     }
-
-    collectSearchData();
-
-    // সাজেশন তালিকা দেখানোর ফাংশন
-    function renderSuggestions(filteredItems) {
-        suggestionsBox.innerHTML = "";
-        
-        if (filteredItems.length === 0) {
-            suggestionsBox.innerHTML = `<div class="search-dropdown-item" style="cursor:default; color:#888;">কোনো তথ্য পাওয়া যায়নি</div>`;
-            suggestionsBox.style.display = "block";
-            return;
-        }
-
-        filteredItems.forEach(item => {
-            const div = document.createElement("div");
-            div.className = "search-dropdown-item";
-            div.innerHTML = `
-                <span>${item.title}</span>
-                <span class="item-category">${item.category}</span>
-            `;
-            
-            div.addEventListener("mousedown", function (e) {
-                e.preventDefault(); // ইনপুট ব্লার হওয়া থেকে আটকায়
-                if (item.isExternal && item.url.startsWith("http")) {
-                    window.open(item.url, "_blank");
-                } else {
-                    window.location.href = item.url;
-                }
-                suggestionsBox.style.display = "none";
-            });
-
-            suggestionsBox.appendChild(div);
-        });
-
-        suggestionsBox.style.display = "block";
-    }
-
-    // ইনপুট বক্সে ক্লিক/ফোকাস করলে সম্পূর্ণ লিস্ট ভেসে উঠবে
-    searchInput.addEventListener("focus", function () {
-        const query = this.value.trim().toLowerCase();
-        filterAndShow(query);
-    });
-
-    // লেখার সঙ্গে সঙ্গে ফিল্টার হবে
-    searchInput.addEventListener("input", function () {
-        const query = this.value.trim().toLowerCase();
-        
-        if (query.length > 0) {
-            clearBtn.style.display = "block";
-        } else {
-            clearBtn.style.display = "none";
-        }
-
-        filterAndShow(query);
-    });
-
-    // ফিল্টার লজিক
-    function filterAndShow(query) {
-        if (!query) {
-            renderSuggestions(searchableItems);
-            return;
-        }
-
-        const filtered = searchableItems.filter(item => 
-            item.title.toLowerCase().includes(query) || 
-            item.category.toLowerCase().includes(query)
-        );
-
-        renderSuggestions(filtered);
-    }
-
-    // ক্লিয়ার বোতামের কাজ
-    clearBtn.addEventListener("click", function () {
-        searchInput.value = "";
-        clearBtn.style.display = "none";
-        renderSuggestions(searchableItems);
-        searchInput.focus();
-    });
-
-    // বাইরে ক্লিক করলে সাজেশন বক্স বন্ধ হয়ে যাবে
-    document.addEventListener("click", function (e) {
-        if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
-            suggestionsBox.style.display = "none";
-        }
-    });
 });
