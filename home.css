@@ -1,15 +1,15 @@
-/* ================================================= */
-/* 🎨 GLOBAL VARIABLES & FONTS                       */
-/* ================================================= */
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
-
 :root {
-    --primary-color: #386641;     /* ডিপ ফরেস্ট গ্রিন */
-    --primary-dark: #00382e;      /* ডার্ক ফরেস্ট গ্রিন */
-    --secondary-color: #ff9800;   /* Amber */
-    --secondary-hover: #e65100;   /* Dark Amber */
-    --background-color: #f0f2f5;  /* হালকা ধূসর बैकগ্রাউন্ড */
+    --primary-color: #386641;         /* মূল বোতাম (Upload Marks): ডিপ ফরেস্ট গ্রিন */
+    --primary-dark: #00382e;          /* ডিপ ফরেস্ট গ্রিন হোভার */
+    
+    /* অন্যান্য সেকশনের জন্য হালকা রঙ */
+    --secondary-btn-bg: #52796f;      /* হালকা সবুজ/মিউটেড গ্রিন */
+    --secondary-btn-hover: #354f52;   /* হালকা সবুজের ডার্ক হোভার */
+
+    --secondary-color: #ff9800;       /* Amber */
+    --secondary-hover: #e65100;       /* Dark Amber */
+    --background-color: #f0f2f5;      /* ব্যাকগ্রাউন্ড */
     --card-background: #ffffff;
     --text-color-dark: #212121;
     --text-color-light: #555555;
@@ -139,7 +139,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔍 SEARCH CONTAINER (LIVE SEARCH STYLING)         */
+/* 🔍 SEARCH CONTAINER                               */
 /* ================================================= */
 
 .search-container {
@@ -331,7 +331,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 📚 CLASS / EXAM BUTTONS & GRID                   */
+/* 📚 CLASS / EXAM BUTTONS & GRID (COMMON BASE)     */
 /* ================================================= */
 
 .class-buttons-grid {
@@ -344,6 +344,7 @@ body.no-scroll {
     padding: 10px;
 }
 
+/* সমস্ত বোতামের মূল ডিজাইন - Upload Marks-এর মতই স্ট্যান্ডার্ড */
 .class-link-btn.box-button, 
 .exam-link {
     display: flex;
@@ -357,17 +358,19 @@ body.no-scroll {
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
     transition: all 0.25s ease;
-    background-color: var(--primary-color);
     color: #ffffff;
     border: none;
     cursor: pointer;
     text-decoration: none;
     text-align: center;
+    
+    /* ডিফল্ট (অন্যান্য সেকশনের জন্য হালকা রঙ) */
+    background-color: var(--secondary-btn-bg);
 }
 
 .class-link-btn.box-button:hover, 
 .exam-link:hover {
-    background-color: var(--primary-dark);
+    background-color: var(--secondary-btn-hover);
     transform: translateY(-3px);
     box-shadow: var(--shadow-md);
 }
@@ -375,6 +378,19 @@ body.no-scroll {
 .class-link-btn.box-button:active, 
 .exam-link:active {
     transform: translateY(0);
+}
+
+/* 🟢 UPLOAD MARKS SECTION (মূল সেকশনের গাড় রঙ) */
+#upload-marks .exam-link,
+#upload-marks .class-link-btn.box-button,
+.upload-marks-btn {
+    background-color: var(--primary-color) !important;
+}
+
+#upload-marks .exam-link:hover,
+#upload-marks .class-link-btn.box-button:hover,
+.upload-marks-btn:hover {
+    background-color: var(--primary-dark) !important;
 }
 
 .disabled-exam-link {
