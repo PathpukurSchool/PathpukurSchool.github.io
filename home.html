@@ -105,10 +105,8 @@
     <ul>
       <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
       
-      <li><a href="#marks-information-section" class="nav-link menu-header">Marks & Information</a></li>
-      <li><a href="#marks-uploading-section" class="nav-link">Marks Uploading Status</a></li>
+      <li><a href="#marks-information-section" class="nav-link menu-header"> Student Information</a></li>
       <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
-      <li><a href="#student-score-sheet-section" class="nav-link">Student Score Sheet</a></li>
       
       <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Exam Marks</a></li>
       
@@ -119,16 +117,8 @@
       <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
       <li><a href="#exam-routine-section" class="nav-link">Exam Routine</a></li>
 
-      <li><a href="#student-benefit-section" class="nav-link menu-header">For Students' Benefit</a></li>
-      <li><a href="#school-certificate-section" class="nav-link">School Certificate (Regular)</a></li>
-      <li><a href="#school-certificate-ex-section" class="nav-link">School Certificate (Ex.)</a></li>
+      <li><a href="#student-benefit-section" class="nav-link menu-header">Students' Benefit</a></li>
       <li><a href="#school-tc-section" class="nav-link">Manual T.C.</a></li>
-      <li><a href="#student-code-section" class="nav-link">Student Code / ID</a></li>
-      <li><a href="#xi-tab-form-section" class="nav-link">Bank Mandate Form for XI TAB</a></li>
-      <li><a href="#data-check-section" class="nav-link">Student Data Verification Form</a></li>
-      
-      <li><a href="#upload-notice-date-section" class="nav-link menu-header">Upload Notices & Dates</a></li>
-      <li><a href="#upload-student-notice-section" class="nav-link">Upload Student Notice</a></li>
       <li><a href="#summative-sheet-excel-section" class="nav-link">Download Exam Marks (Excel)</a></li>
       <li><a href="#summative-sheet-pdf-section" class="nav-link">Download Exam Marks (PDF)</a></li>
       
@@ -153,7 +143,7 @@
   <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য -->
   <div class="main-section-container" id="marks-information-section">
     <div class="section-heading-wrapper">
-      <h2 class="section-heading">Marks Upload & Student Information</h2>
+      <h2 class="section-heading">Student Information</h2>
     </div>
 
       <div class="shaded-info-box" id="student-list-section">
@@ -267,22 +257,84 @@
     </footer>
   </div>
       
-  <!-- ক্লায়েন্ট-সাইড সার্চ ফিচার JS -->
+  <!-- ✅ ক্লায়েন্ট-সাইড ডায়নামিক সার্চ এবং সাজেশন স্ক্রিপ্ট -->
   <script>
-    function filterWebsiteContent() {
-      var input = document.getElementById('siteSearchInput');
-      var filter = input.value.toLowerCase();
-      var boxes = document.getElementsByClassName('shaded-info-box');
+    let searchData = [];
 
-      for (var i = 0; i < boxes.length; i++) {
-        var text = boxes[i].textContent || boxes[i].innerText;
-        if (text.toLowerCase().indexOf(filter) > -1) {
-          boxes[i].style.display = "";
-        } else {
-          boxes[i].style.display = "none";
+    // পেজ লোড হওয়ার পর সমস্ত লিংক বা বোতামের ডেটা সংগ্রহ
+    document.addEventListener("DOMContentLoaded", function() {
+      const links = document.querySelectorAll('.sidebar-menu a, .exam-link');
+      const seen = new Set();
+
+      links.forEach(link => {
+        const text = link.innerText.trim();
+        const href = link.getAttribute('href');
+        
+        // হেডার বা ফাঁকা লিংক বাদ দেওয়া
+        if (text && href && href !== '#' && !seen.has(text)) {
+          seen.add(text);
+          searchData.push({
+            name: text,
+            url: href,
+            target: link.getAttribute('target') || '_self'
+          });
         }
+      });
+    });
+
+    // ইনপুট বক্সে ফোকাস করলে সব সাজেস্টেড বোতাম অস্পষ্টভাবে দেখাবে
+    function showSuggestions() {
+      filterSuggestions();
+    }
+
+    // টাইপ করা অনুযায়ী সাজেস্টেড বোতাম ফিল্টার করা
+    function filterSuggestions() {
+      const input = document.getElementById('search-input');
+      const filter = input.value.toLowerCase().trim();
+      const list = document.getElementById('search-results-list');
+      
+      list.innerHTML = '';
+
+      const filtered = searchData.filter(item => item.name.toLowerCase().includes(filter));
+
+      if (filtered.length > 0) {
+        filtered.forEach(item => {
+          const li = document.createElement('li');
+          li.style.cssText = "padding: 10px 15px; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); color: #333; font-weight: 500; transition: background 0.2s;";
+          
+          li.innerText = item.name;
+
+          // মাউস হোভার ইফেক্ট
+          li.onmouseover = function() { this.style.background = 'rgba(0, 123, 255, 0.1)'; };
+          li.onmouseout = function() { this.style.background = 'transparent'; };
+
+          // ক্লিকে নির্দিষ্ট পেজে বা সেকশনে নিয়ে যাওয়া
+          li.onclick = function() {
+            if (item.url.startsWith('#')) {
+              window.location.hash = item.url;
+            } else {
+              window.open(item.url, item.target);
+            }
+            list.style.display = 'none';
+            input.value = item.name;
+          };
+
+          list.appendChild(li);
+        });
+        list.style.display = 'block';
+      } else {
+        list.style.display = 'none';
       }
     }
+
+    // সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হওয়া
+    document.addEventListener('click', function(e) {
+      const container = document.querySelector('.search-container');
+      const list = document.getElementById('search-results-list');
+      if (container && !container.contains(e.target)) {
+        list.style.display = 'none';
+      }
+    });
   </script>
 
   <script src="home.js"></script>
