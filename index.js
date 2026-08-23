@@ -572,49 +572,65 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    /* =========================================================
-     * ৮. নতুন যোগ করা সার্চ লজিক (গ্লোবাল সার্চ ফিচার)
-     * ========================================================= */
-    const searchInput = document.getElementById('global-search-input');
-    const searchResultsDropdown = document.getElementById('search-results-dropdown');
+/* =========================================================
+ * ৮. নতুন যোগ করা সার্চ লজিক (সংশোধিত)
+ * ========================================================= */
+const searchInput = document.getElementById('site-search-input');
+const searchResultsDropdown = document.getElementById('search-dropdown-list');
+const clearSearchBtn = document.getElementById('clear-search-btn');
 
-    if (searchInput && searchResultsDropdown) {
-        searchInput.addEventListener('input', function() {
-            const query = this.value.trim().toLowerCase();
+if (searchInput && searchResultsDropdown) {
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        searchResultsDropdown.innerHTML = '';
+
+        // ক্লিয়ার বাটন দেখানো বা লুকানোর লজিক
+        if (clearSearchBtn) {
+            clearSearchBtn.style.display = query.length > 0 ? 'block' : 'none';
+        }
+
+        if (query.length < 2) {
+            searchResultsDropdown.classList.remove('active');
+            return;
+        }
+
+        // HTML লিঙ্ক এবং Supabase নোটিশ থেকে ডাটা ফিল্টার করা
+        let matchedItems = ALL_ITEMS_DETAILS.filter(item => 
+            item.title && item.title.toLowerCase().includes(query)
+        );
+
+        if (matchedItems.length > 0) {
+            matchedItems.forEach(item => {
+                const resDiv = document.createElement('div');
+                resDiv.className = 'search-dropdown-item';
+                resDiv.innerHTML = `
+                    <span class="item-title">${item.title}</span>
+                    <a href="${item.url}" class="item-btn" target="_blank">দেখা যান ➔</a>
+                `;
+                searchResultsDropdown.appendChild(resDiv);
+            });
+            searchResultsDropdown.classList.add('active');
+        } else {
+            searchResultsDropdown.innerHTML = `<div style="padding:15px; text-align:center; color:#777;">কোনো তথ্য পাওয়া যায়নি!</div>`;
+            searchResultsDropdown.classList.add('active');
+        }
+    });
+
+    // ✖ ক্লিয়ার বাটনে ক্লিক করলে সার্চ ইনপুট ফাকা হওয়া
+    if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', function() {
+            searchInput.value = '';
             searchResultsDropdown.innerHTML = '';
-
-            if (query.length < 2) {
-                searchResultsDropdown.classList.remove('active');
-                return;
-            }
-
-            // HTML লিঙ্ক এবং Supabase নোটিশ উভয় জায়গায় খোঁজা
-            let matchedItems = ALL_ITEMS_DETAILS.filter(item => 
-                item.title && item.title.toLowerCase().includes(query)
-            );
-
-            if (matchedItems.length > 0) {
-                matchedItems.forEach(item => {
-                    const resDiv = document.createElement('div');
-                    resDiv.className = 'search-result-item';
-                    resDiv.innerHTML = `
-                        <span class="item-title">${item.title}</span>
-                        <a href="${item.url}" class="item-btn">দেখা যান ➔</a>
-                    `;
-                    searchResultsDropdown.appendChild(resDiv);
-                });
-                searchResultsDropdown.classList.add('active');
-            } else {
-                searchResultsDropdown.innerHTML = `<div style="padding:15px; text-align:center; color:#777;">কোনো তথ্য পাওয়া যায়নি!</div>`;
-                searchResultsDropdown.classList.add('active');
-            }
-        });
-
-        // সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন হাইড হওয়া
-        document.addEventListener('click', function(e) {
-            if (!searchInput.contains(e.target) && !searchResultsDropdown.contains(e.target)) {
-                searchResultsDropdown.classList.remove('active');
-            }
+            searchResultsDropdown.classList.remove('active');
+            this.style.display = 'none';
+            searchInput.focus();
         });
     }
-});
+
+    // সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হয়ে যাওয়া
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchResultsDropdown.contains(e.target)) {
+            searchResultsDropdown.classList.remove('active');
+        }
+    });
+}
