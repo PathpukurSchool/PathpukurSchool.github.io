@@ -2,7 +2,7 @@
 
 :root {
     --primary-color: #386641;      
-    --primary-dark: #27472e;       
+    --primary-dark: #27472e;        
     --secondary-color: #ff9800;    
     --secondary-hover: #e65100;    
     --background-color: #f0f2f5;   
@@ -24,7 +24,7 @@
 }
 
 /* ================================================= */
-/* 📐 BASIC RESET & LAYOUT                           */
+/* 📐 BASIC RESET & LAYOUT                            */
 /* ================================================= */
 
 * {
@@ -52,9 +52,8 @@ body.no-scroll {
     overflow: hidden;
 }
 
-/* 🔒 লগইন না হওয়া পর্যন্ত মূল কনটেন্ট এবং সার্চ বক্স হাইড থাকবে */
-#main-website-content,
-.search-container {
+/* 🔒 লগইন না হওয়া পর্যন্ত মূল কনটেন্ট হাইড থাকবে */
+#main-website-content {
     display: none;
 }
 
@@ -67,7 +66,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔝 HEADER & TOP BAR (সর্বদা স্পষ্ট দৃশ্যমান)        */
+/* 🔝 HEADER & TOP BAR                              */
 /* ================================================= */
 
 #top-bar-section {
@@ -76,33 +75,24 @@ body.no-scroll {
     position: sticky;
     top: 0;
     z-index: 1000;
-    display: block !important; 
+    width: 100%;
 }
 
 .main-header {
     display: flex;
     justify-content: space-between; 
     align-items: center;            
-    padding: 0.8rem 1.5rem;
+    padding: 0.8rem 1.2rem;
     max-width: 1200px;
     margin: 0 auto;
-    position: relative; 
     color: #ffffff;
+    position: relative;
 }
 
 .header-content {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-}
-
-.logo {
-    height: 40px;
-    width: 40px;
-    background: #ffffff;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 2;
 }
 
 .school-name {
@@ -111,10 +101,13 @@ body.no-scroll {
     transform: translateX(-50%); 
     margin: 0;                
     text-align: center;
+    font-size: 1.15rem; /* ✅ ফন্ট সাইজ নিয়ন্ত্রণ করা হলো */
     font-weight: 600;
     letter-spacing: 0.5px;
     white-space: nowrap;
     color: #ffffff;
+    pointer-events: none; /* ✅ মেনু এবং লগআউটে ক্লিকের বাধা দূর করা হলো */
+    z-index: 1;
 }
 
 .logout-button {
@@ -128,6 +121,7 @@ body.no-scroll {
     font-size: 0.85rem;
     transition: all 0.2s ease-in-out;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 2;
 }
 
 .logout-button:hover {
@@ -145,17 +139,24 @@ body.no-scroll {
     align-items: center;
     justify-content: center;
     padding: 4px;
+    z-index: 2;
 }
 
 /* ================================================= */
-/* 🔍 DROPDOWN LIVE SEARCH CONTAINER                 */
+/* 🔍 SEARCH CONTAINER                              */
 /* ================================================= */
+
+.search-section {
+    width: 100%;
+    margin: 1.2rem 0;
+}
 
 .search-container {
     position: relative;
     max-width: 500px;
-    margin: 1.2rem auto;
+    margin: 0 auto;
     padding: 0 15px;
+    display: block !important; /* ✅ সার্চবার দৃশ্যমান করা হলো */
 }
 
 .search-input-wrapper {
@@ -164,9 +165,17 @@ body.no-scroll {
     align-items: center;
 }
 
+.search-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 0.9rem;
+    color: #888;
+    pointer-events: none;
+}
+
 .search-container input {
     width: 100%;
-    padding: 0.75rem 2.5rem 0.75rem 1.2rem;
+    padding: 0.75rem 3rem 0.75rem 2.4rem;
     border: 2px solid var(--border-color);
     border-radius: 25px;
     font-size: 0.92rem;
@@ -184,19 +193,22 @@ body.no-scroll {
 
 #clear-search-btn {
     position: absolute;
-    right: 15px;
-    background: none;
+    right: 12px;
+    background: #eee;
     border: none;
-    font-size: 1.1rem;
-    color: #888;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #666;
     cursor: pointer;
     display: none;
-    padding: 2px 6px;
-    transition: color 0.2s;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
 }
 
 #clear-search-btn:hover {
-    color: var(--error-color);
+    background: var(--error-color);
+    color: #fff;
 }
 
 #search-dropdown-list {
@@ -207,16 +219,12 @@ body.no-scroll {
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    max-height: 320px;
+    max-height: 300px;
     overflow-y: auto;
     z-index: 1500;
     margin-top: 6px;
     display: none;
     border: 1px solid var(--border-color);
-}
-
-#search-dropdown-list.active {
-    display: block;
 }
 
 .search-dropdown-item {
@@ -226,6 +234,7 @@ body.no-scroll {
     padding: 10px 16px;
     border-bottom: 1px solid #f0f0f0;
     transition: background-color 0.2s ease;
+    cursor: pointer;
 }
 
 .search-dropdown-item:last-child {
@@ -233,11 +242,11 @@ body.no-scroll {
 }
 
 .search-dropdown-item:hover {
-    background-color: #f8f9fa;
+    background-color: rgba(56, 102, 65, 0.08);
 }
 
 .search-dropdown-item .item-title {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 500;
     color: var(--text-color-dark);
 }
@@ -248,13 +257,8 @@ body.no-scroll {
     text-decoration: none;
     padding: 4px 10px;
     border-radius: 6px;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 600;
-    transition: background-color 0.2s ease;
-}
-
-.search-dropdown-item .item-btn:hover {
-    background-color: var(--primary-dark);
 }
 
 /* ================================================= */
@@ -323,7 +327,7 @@ body.no-scroll {
 .success { color: var(--success-color); }
 
 /* ================================================= */
-/* 🧭 SIDEBAR MENU                                  */
+/* 🧭 SIDEBAR MENU                                   */
 /* ================================================= */
 
 .overlay {
@@ -333,7 +337,7 @@ body.no-scroll {
     width: 100%;
     height: 100%;
     background-color: rgba(15, 23, 42, 0.6);
-    z-index: 999;
+    z-index: 1001;
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -356,7 +360,7 @@ body.no-scroll {
     padding-top: 0;
     box-shadow: 8px 0 25px rgba(0, 0, 0, 0.3);
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
+    z-index: 1002;
     overflow-y: auto; 
 }
 
@@ -402,8 +406,8 @@ body.no-scroll {
 .sidebar-menu .menu-header {
     background-color: var(--sidebar-header-bg);
     font-weight: 600;
-    font-size: 1rem;
-    padding: 18px 16px;
+    font-size: 0.95rem;
+    padding: 14px 16px;
     color: #ffffff;
     cursor: default;
     letter-spacing: 0.5px;
@@ -411,7 +415,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔘 ALL BUTTONS GRID (সব সেকশনের জন্য গ্রিড লেআউট) */
+/* 🔘 ALL BUTTONS GRID                               */
 /* ================================================= */
 
 .class-buttons-grid {
@@ -451,7 +455,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🦶 FOOTER STYLING (ফুটার ব্যাকগ্রাউন্ড ও কালার)    */
+/* 🦶 FOOTER STYLING                                 */
 /* ================================================= */
 
 .main-footer, footer {
@@ -483,6 +487,10 @@ body.no-scroll {
 /* ================================================= */
 
 @media (max-width: 600px) {
+    .school-name {
+        font-size: 0.92rem; /* ছোট স্ক্রিনে লেখার সাইজ মানানসই করা হলো */
+    }
+
     .class-buttons-grid {
         grid-template-columns: repeat(2, 1fr) !important; 
         gap: 10px !important;
