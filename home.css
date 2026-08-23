@@ -1,15 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
-:root {
-    --primary-color: #386641;         /* মূল বোতাম (Upload Marks): ডিপ ফরেস্ট গ্রিন */
-    --primary-dark: #00382e;          /* ডিপ ফরেস্ট গ্রিন হোভার */
-    
-    /* অন্যান্য সেকশনের জন্য হালকা রঙ */
-    --secondary-btn-bg: #52796f;      /* হালকা সবুজ/মিউটেড গ্রিন */
-    --secondary-btn-hover: #354f52;   /* হালকা সবুজের ডার্ক হোভার */
 
-    --secondary-color: #ff9800;       /* Amber */
-    --secondary-hover: #e65100;       /* Dark Amber */
-    --background-color: #f0f2f5;      /* ব্যাকগ্রাউন্ড */
+:root {
+    --primary-color: #386641;     /* ডিপ ফরেস্ট গ্রিন (Upload Student Exam Marks-এর জন্য) */
+    --primary-dark: #27472e;      /* ডার্ক গ্রিন হোভার */
+    --secondary-color: #ff9800;   /* Amber */
+    --secondary-hover: #e65100;   /* Dark Amber */
+    --background-color: #f0f2f5;  /* হালকা ধূসর बैकগ্রাউন্ড */
     --card-background: #ffffff;
     --text-color-dark: #212121;
     --text-color-light: #555555;
@@ -20,6 +16,22 @@
     --hover-bg: #f8f9fa;
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+    /* 🌟 নতুন আধুনিক সাইডবার কালার প্যালেট (Dark Slate/Navy - চোখের জন্য আরামদায়ক) */
+    --sidebar-bg-start: #1e293b;
+    --sidebar-bg-end: #0f172a;
+    --sidebar-header-bg: #0f172a;
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+    --sidebar-active-accent: #38bdf8;
+    --sidebar-text: #e2e8f0;
+    
+    /* 🎨 অন্যান্য সেকশনের বোতামের জন্য হালকা ও প্রিমিয়াম কালার টোন */
+    --btn-alt-bg: #4f46e5;         /* সফট ইন্ডিগো */
+    --btn-alt-hover: #4338ca;
+    --btn-soft-bg: #0d9488;        /* সফট টিল/সবুজ টাইপ */
+    --btn-soft-hover: #0f766e;
+    --btn-accent-bg: #0284c7;      /* সফট স্কাই ব্লু */
+    --btn-accent-hover: #0369a1;
 }
 
 /* ================================================= */
@@ -139,7 +151,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔍 SEARCH CONTAINER                               */
+/* 🔍 SEARCH CONTAINER                              */
 /* ================================================= */
 
 .search-container {
@@ -253,7 +265,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🧭 SIDEBAR MENU                                   */
+/* 🧭 SIDEBAR MENU (আরামদায়ক আধুনিক ডিজাইন)          */
 /* ================================================= */
 
 .overlay {
@@ -262,12 +274,12 @@ body.no-scroll {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(15, 23, 42, 0.6);
     z-index: 999;
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(4px);
 }
 
 .overlay.active {
@@ -278,13 +290,13 @@ body.no-scroll {
 .sidebar-menu {
     position: fixed;
     top: 0;
-    left: -280px;
-    width: 280px;
+    left: -290px;
+    width: 290px;
     height: 100%;
-    background-color: var(--primary-color);
-    color: #ffffff;
-    padding-top: 20px;
-    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
+    color: var(--sidebar-text);
+    padding-top: 0;
+    box-shadow: 8px 0 25px rgba(0, 0, 0, 0.3);
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
     overflow-y: auto; 
@@ -296,42 +308,56 @@ body.no-scroll {
 
 .sidebar-menu ul {
     list-style-type: none;
+    padding: 10px 0;
 }
 
 .sidebar-menu li {
-    margin-bottom: 2px;
+    margin: 4px 12px;
 }
 
 .sidebar-menu .nav-link {
-    display: block;
-    padding: 14px 20px;
-    color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: var(--sidebar-text);
     text-decoration: none;
-    font-size: 0.95rem;
-    transition: background-color 0.2s ease, border-left-color 0.2s ease;
-    border-left: 5px solid transparent;
+    font-size: 0.92rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    border-left: 4px solid transparent;
 }
 
-.sidebar-menu .nav-link:hover,
+.sidebar-menu .nav-link:hover {
+    background-color: var(--sidebar-hover-bg);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
 .sidebar-menu .nav-link.active-link {
-    background-color: var(--primary-dark);
-    border-left-color: var(--secondary-color);
+    background-color: rgba(56, 189, 248, 0.12);
+    color: var(--sidebar-active-accent);
+    border-left-color: var(--sidebar-active-accent);
+    font-weight: 600;
 }
 
 .sidebar-menu .menu-header {
-    background-color: var(--primary-dark);
-    font-weight: 700;
+    background-color: var(--sidebar-header-bg);
+    font-weight: 600;
     font-size: 1.05rem;
-    padding: 18px 20px;
-    color: var(--secondary-color);
+    padding: 22px 20px;
+    color: #ffffff;
     cursor: default;
     pointer-events: none;
     letter-spacing: 0.5px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* ================================================= */
-/* 📚 CLASS / EXAM BUTTONS & GRID (COMMON BASE)     */
+/* 📚 CLASS / EXAM BUTTONS & GRID                   */
 /* ================================================= */
 
 .class-buttons-grid {
@@ -344,7 +370,7 @@ body.no-scroll {
     padding: 10px;
 }
 
-/* সমস্ত বোতামের মূল ডিজাইন - Upload Marks-এর মতই স্ট্যান্ডার্ড */
+/* 🟢 Standard Primary Button: Upload Student Exam Marks-এর মেইন সাইজ ও স্টাইল */
 .class-link-btn.box-button, 
 .exam-link {
     display: flex;
@@ -358,19 +384,17 @@ body.no-scroll {
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
     transition: all 0.25s ease;
+    background-color: var(--primary-color);
     color: #ffffff;
     border: none;
     cursor: pointer;
     text-decoration: none;
     text-align: center;
-    
-    /* ডিফল্ট (অন্যান্য সেকশনের জন্য হালকা রঙ) */
-    background-color: var(--secondary-btn-bg);
 }
 
 .class-link-btn.box-button:hover, 
 .exam-link:hover {
-    background-color: var(--secondary-btn-hover);
+    background-color: var(--primary-dark);
     transform: translateY(-3px);
     box-shadow: var(--shadow-md);
 }
@@ -380,17 +404,26 @@ body.no-scroll {
     transform: translateY(0);
 }
 
-/* 🟢 UPLOAD MARKS SECTION (মূল সেকশনের গাড় রঙ) */
-#upload-marks .exam-link,
-#upload-marks .class-link-btn.box-button,
-.upload-marks-btn {
-    background-color: var(--primary-color) !important;
+/* 🔵 অন্যান্য সেকশনের জন্য অল্টারনেটিভ প্রিমিয়াম হালকা কালার অপশনসমূহ (HTML-এ ক্লাস যুক্ত করে ব্যবহার করতে পারবেন) */
+.box-button.btn-alt {
+    background-color: var(--btn-alt-bg);
+}
+.box-button.btn-alt:hover {
+    background-color: var(--btn-alt-hover);
 }
 
-#upload-marks .exam-link:hover,
-#upload-marks .class-link-btn.box-button:hover,
-.upload-marks-btn:hover {
-    background-color: var(--primary-dark) !important;
+.box-button.btn-soft {
+    background-color: var(--btn-soft-bg);
+}
+.box-button.btn-soft:hover {
+    background-color: var(--btn-soft-hover);
+}
+
+.box-button.btn-accent {
+    background-color: var(--btn-accent-bg);
+}
+.box-button.btn-accent:hover {
+    background-color: var(--btn-accent-hover);
 }
 
 .disabled-exam-link {
