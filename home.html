@@ -63,7 +63,7 @@
 </head>
 <body>
 
-  <!-- ✅ টিচার লগইন ওভারলে -->
+  <!-- ✅ টিচার লগইন ওভারলে (বাই-ডিফল্ট দৃশ্যমান) -->
   <div id="masterLoginOverlay">
     <div id="masterLoginBox">
       <h2 class="red-text">Pathpukur High School</h2>
@@ -86,182 +86,188 @@
     </div>
   </div>
 
-  <!-- ✅ মেন হেডার -->
-  <div id="top-bar-section">
-    <header class="main-header">
-      <div class="header-content">
-        <div class="header-buttons">
-          <button id="menu-toggle-button" class="menu-button">☰</button>
+
+  <!-- ✅ সম্পূর্ণ ওয়েব পেজ এবং সার্চ বার (সঠিক লগইন না হওয়া পর্যন্ত লুকানো থাকবে) -->
+  <div id="main-website-content" style="display: none;">
+
+    <!-- ✅ মেন হেডার -->
+    <div id="top-bar-section">
+      <header class="main-header">
+        <div class="header-content">
+          <div class="header-buttons">
+            <button id="menu-toggle-button" class="menu-button">☰</button>
+          </div>
+          <h1 class="school-name">Pathpukur High School (H.S.)</h1>
         </div>
-        <h1 class="school-name">Pathpukur High School (H.S.)</h1>
-      </div>
-      <button onclick="logout()" class="logout-button">Logout</button>
-    </header>
-  </div>
+        <button onclick="logout()" class="logout-button">Logout</button>
+      </header>
+    </div>
 
-  <!-- ✅ সাইড বার মেনু -->
-  <div class="overlay" id="overlay"></div>
-  <nav id="sidebar-menu" class="sidebar-menu">
-    <ul>
-      <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
-      
-      <li><a href="#marks-information-section" class="nav-link menu-header"> Student Information</a></li>
-      <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
-      
-      <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Exam Marks</a></li>
-      
-      <li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
-      <li><a href="#staff-routine-section" class="nav-link">Staff Routine</a></li>
-      <li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
-      <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
-      <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
-      <li><a href="#exam-routine-section" class="nav-link">Exam Routine</a></li>
+    <!-- ✅ সাইড বার মেনু -->
+    <div class="overlay" id="overlay"></div>
+    <nav id="sidebar-menu" class="sidebar-menu">
+      <ul>
+        <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
+        
+        <li><a href="#marks-information-section" class="nav-link menu-header"> Student Information</a></li>
+        <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
+        
+        <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Exam Marks</a></li>
+        
+        <li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
+        <li><a href="#staff-routine-section" class="nav-link">Staff Routine</a></li>
+        <li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
+        <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
+        <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
+        <li><a href="#exam-routine-section" class="nav-link">Exam Routine</a></li>
 
-      <li><a href="#student-benefit-section" class="nav-link menu-header">Students' Benefit</a></li>
-      <li><a href="#school-tc-section" class="nav-link">Manual T.C.</a></li>
-      <li><a href="#summative-sheet-excel-section" class="nav-link">Download Exam Marks (Excel)</a></li>
-      <li><a href="#summative-sheet-pdf-section" class="nav-link">Download Exam Marks (PDF)</a></li>
-      
-      <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
-      <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
-    </ul>
-  </nav>
-
-<!-- ✅ লাইভ ড্রপডাউন অটোসাজেস্ট সহ সার্চ বার -->
-  <div class="search-section" style="position: relative; z-index: 9999; margin: 20px auto; max-width: 500px; padding: 0 15px;">
-    <div class="search-container" style="position: relative;">
-      <span class="search-icon" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">🔍</span>
-      <input type="text" id="search-input" class="search-input" placeholder="Search page links, classes, or forms..." onfocus="showSuggestions()" oninput="filterSuggestions()" style="width: 100%; padding: 12px 12px 12px 40px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px;">
-      
-      <!-- অস্পষ্ট (Semi-transparent) ড্রপডাউন মোট সাজেশন বক্স -->
-      <ul id="search-results-list" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(8px); border: 1px solid #ddd; border-radius: 0 0 8px 8px; max-height: 280px; overflow-y: auto; list-style: none; margin: 4px 0 0 0; padding: 0; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 10000;">
+        <li><a href="#student-benefit-section" class="nav-link menu-header">Students' Benefit</a></li>
+        <li><a href="#school-tc-section" class="nav-link">Manual T.C.</a></li>
+        <li><a href="#summative-sheet-excel-section" class="nav-link">Download Exam Marks (Excel)</a></li>
+        <li><a href="#summative-sheet-pdf-section" class="nav-link">Download Exam Marks (PDF)</a></li>
+        
+        <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
+        <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
       </ul>
-    </div>
-  </div>
+    </nav>
 
-      
-  <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য -->
-  <div class="main-section-container" id="marks-information-section">
-    <div class="section-heading-wrapper">
-      <h2 class="section-heading">Student Information</h2>
+    <!-- ✅ কাস্টম স্টাইল যুক্ত আধুনিক সার্চ বার -->
+    <div class="search-section" style="margin: 20px auto; max-width: 500px; padding: 0 15px; position: relative; z-index: 1000;">
+      <div class="search-container" role="search" style="position: relative;">
+        <div class="search-input-wrapper" style="position: relative; display: flex; align-items: center;">
+          <span class="search-icon" aria-hidden="true" style="position: absolute; left: 12px; pointer-events: none;">🔍</span>
+          
+          <input type="search" id="site-search-input" placeholder="Search page links, classes, or forms..." autocomplete="off" aria-label="Search website content" onfocus="showSuggestions()" oninput="filterSuggestions()" style="width: 100%; padding: 12px 65px 12px 40px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; outline: none; box-sizing: border-box;">
+          
+          <span class="clear-icon" id="clear-search-btn" role="button" aria-label="Clear search" onclick="clearSearchInput()" style="position: absolute; right: 12px; cursor: pointer; font-size: 13px; font-weight: bold; color: #777; background: #eee; padding: 4px 8px; border-radius: 4px; display: none;">Clear</span>
+        </div>
+        
+        <!-- অস্পষ্ট (Semi-transparent) ড্রপডাউন অটো-সাজেস্ট বক্স -->
+        <div id="search-dropdown-list" class="search-dropdown" aria-live="polite" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border: 1px solid #ddd; border-radius: 0 0 8px 8px; max-height: 280px; overflow-y: auto; margin-top: 4px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 1001;"></div>
+      </div>
     </div>
+        
+    <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য -->
+    <div class="main-section-container" id="marks-information-section">
+      <div class="section-heading-wrapper">
+        <h2 class="section-heading">Student Information</h2>
+      </div>
 
       <div class="shaded-info-box" id="student-list-section">
         <div class="sub-section-content">
           <a id="student-list-link" href="https://pathpukurschool.github.io/web_vs/current_student.html" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
         </div>
       </div>
-    
-    </div>
-  </div>
-
-<!-- ✅ নম্বর আপলোড (সরাসরি সমস্ত ক্লাস লিংক ও রেজাল্ট বোতাম সহ) -->  
-<div class="main-section-container" id="upload-your-marks-section">
-  <div class="section-heading-wrapper">
-    <h2 class="section-heading">Upload Student Exam Marks</h2>
-  </div>
-  
-  <div class="class-buttons-grid">
-    <!-- স্কোয়ার শিট ও স্ট্যাটাস বোতাম -->
-    <a href="https://pathpukurschool.github.io/web_vs/marks_foil.html" target="_blank" class="exam-link">Score Sheet / Marks Foil</a>
-    <a href="https://script.google.com/macros/s/AKfycbwL5-qfoH-qV_WQXGw5YdtlzM1mzjuD51DpZ7E8f_EhhWKostFtYy7-yRLrmW3rPj6kvw/exec" target="_blank" class="exam-link">Marks Uploading Report</a>
-
-    <!-- ক্লাস ভিত্তিক নম্বর আপলোড লিংক -->
-    <a href="https://script.google.com/macros/s/AKfycbyc0PWCuiDwmeD0cMudrZIU-WQ0__ODeiI5nBykC5k0b69sfgAeYyUSzc0bXdciAar20Q/exec" target="_blank" class="exam-link">Class V</a>
-    <a href="https://script.google.com/macros/s/AKfycbzE-oAzeaS2u4fgnFW5KEdTLn2hKQdWaMT0dX_ZgQhooNTRKbRptSDz9UG8eOB9J2hL/exec" target="_blank" class="exam-link">Class VI</a>
-    <a href="https://script.google.com/macros/s/AKfycbwEmE4o2CuvAtT1wUuKBP7kb3x3mcYI_zs8OboQizGdanKacWSQy9VYpfeQ7Ycvg6bQ/exec" target="_blank" class="exam-link">Class VII</a>
-    <a href="https://script.google.com/macros/s/AKfycbxVSeYX564Gpqf6vETSCFQ1dr5kJ013XW7Jzv0G3pt5rxvWBL_aN6lOycCvqPkiagYtQQ/exec" target="_blank" class="exam-link">Class VIII</a>
-    <a href="https://script.google.com/macros/s/AKfycbw_h0rAmAZQkbexHm-qpdzmEEdZzyuCo7ZrIhs5gEdB4RGrfSGTdefdS81YWro7xIgX/exec" target="_blank" class="exam-link">Class IX</a>
-    <a href="https://script.google.com/macros/s/AKfycbxGKwBRj5MKS5DwlElJqrhs_tL4ES0eYr-IovdzX4y6Qq7nWDGeqrb-Hj2nCrKYv9CwFA/exec" target="_blank" class="exam-link">Class X</a>
-    <a href="https://script.google.com/macros/s/AKfycbwy3eLrkWmUdrkwUeXRI-u8xumNc5Rv-kjH1IJijDcuj75frsDTSa2oheXIK48WQD9hcA/exec" target="_blank" class="exam-link">Class XI</a>
-  </div>
-</div>
-
-  <!-- ✅ স্কুল রুটিন -->
-  <div class="main-section-container" id="school-routine-section">
-    <div class="section-heading-wrapper">
-      <h2 class="section-heading">School Routine</h2>
     </div>
 
-    <div class="sub-sections-wrapper">
-      <div id="staff-routine-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="staff-routine-link" href="https://script.google.com/macros/s/AKfycbyDLZxS1q5Q-PYeNuTMs1JjNS7IbEuTEalTtMF2EyBFuyEIzTeVU9kiyzF-hYPJzMOT/exec" target="_blank" class="exam-link">Staff Routine</a>
-        </div>
-      </div>
-      
-      <div id="teacher-routine-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="teacher-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">Teacher Routine</a>
-        </div>
-      </div>
-
-      <div id="class-routine-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="class-routine-link" href="https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student" target="_blank" class="exam-link">Student Routine</a>
-        </div>
-      </div>
-
-      <div id="subject-routine-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="subject-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">Subject Routine</a>
-        </div>
-      </div>
-
-      <div id="exam-routine-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="exam-routine-link" href="https://script.google.com/macros/s/AKfycbzUdoNit0-ifZvVgswLJoQEixG7kpxv6MBUeE5dg6zIFjEIiyPkIMw68QDbOnfvvAMqtA/exec" target="_blank" class="exam-link">School Exam Routine</a>
-        </div>
-      </div>
-    </div>
-  </div>
-      
-  <!-- ✅ স্টুডেন্ট হেল্প জোন -->
-  <div class="main-section-container" id="student-benefit-section">
-    <div class="section-heading-wrapper">
-      <h2 class="section-heading">For Students' Benefit</h2>
-    </div>
-
-      <div id="school-tc-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="school-tc-link" href="https://script.google.com/macros/s/AKfycbze5iUVn_CdCluUxUoKdapw_vExsTYq-ZsXW0ShBQ_2bbrbLrUCYqnCyDVaKExFzXKtkw/exec" target="_blank" class="exam-link">School Leaving Certificate (Manual T.C.)</a>
-        </div>
-      </div>
-
-      <div id="summative-sheet-excel-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="summative-sheet-excel-link" href="https://script.google.com/macros/s/AKfycbzHv2UmXNSpJDBwca4Fwy_ABLVdmQHs8fsBNU8UXoX2nLYzs3oYAihLvI_XwQy1fuX-/exec" target="_blank" class="exam-link">Download Exam Marks (Excel)</a>
-        </div>
-      </div>
-
-      <div id="summative-sheet-pdf-section" class="shaded-info-box">
-        <div class="sub-section-content">
-          <a id="summative-sheet-pdf-link" href="https://script.google.com/macros/s/AKfycbyQYMtZd3n0Wg1_op-6q2i4zgsGAz2iqHnCawxsGkl9jQUerPEv5nQMPY4H8ft_iHKY/exec" target="_blank" class="exam-link">Download Exam Marks (PDF)</a>
-        </div>
-      </div>
-    </div>
-  </div>
-      
-  <!-- ✅ ফুটার -->     
-  <div id="school-address-section">
-    <footer>
+    <!-- ✅ নম্বর আপলোড (সরাসরি সমস্ত ক্লাস লিংক ও রেজাল্ট বোতাম সহ) -->  
+    <div class="main-section-container" id="upload-your-marks-section">
       <div class="section-heading-wrapper">
-        <h2 class="section-heading">Contact Details</h2>
+        <h2 class="section-heading">Upload Student Exam Marks</h2>
       </div>
-      <p><strong>School Name:</strong> Pathpukur High School (H.S.)</p>
-      <p><strong>Address:</strong> Vill: Pathpukur, P.O.: Bokultala Hat, P.S.: Bokultala, Block: Joynagar II, Circle: Joynagar, Dist.: South 24 Parganas, State: West Bengal, Pin Code: 743338, India</p>
-      <p><strong>High School Memo No: </strong> 11775/G, Dt. - 11.11.1970 w.e.f. 01.01.1969; &nbsp; <strong>HS Memo No: </strong> DS(A)148/Recos/10, Dt. - 22.06.2010 w.e.f. 2010-11</p>
-      <p>UDISE Code: 19181600802, Index No: C1 194, HS Code: 102376</p>
-      <p><strong>Phone No:</strong> +91 3218248083</p>
-      <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
-    </footer>
-  </div>
       
-  <!-- ✅ ক্লায়েন্ট-সাইড ডায়নামিক সার্চ এবং সাজেশন স্ক্রিপ্ট -->
+      <div class="class-buttons-grid">
+        <a href="https://pathpukurschool.github.io/web_vs/marks_foil.html" target="_blank" class="exam-link">Score Sheet / Marks Foil</a>
+        <a href="https://script.google.com/macros/s/AKfycbwL5-qfoH-qV_WQXGw5YdtlzM1mzjuD51DpZ7E8f_EhhWKostFtYy7-yRLrmW3rPj6kvw/exec" target="_blank" class="exam-link">Marks Uploading Report</a>
+
+        <a href="https://script.google.com/macros/s/AKfycbyc0PWCuiDwmeD0cMudrZIU-WQ0__ODeiI5nBykC5k0b69sfgAeYyUSzc0bXdciAar20Q/exec" target="_blank" class="exam-link">Class V</a>
+        <a href="https://script.google.com/macros/s/AKfycbzE-oAzeaS2u4fgnFW5KEdTLn2hKQdWaMT0dX_ZgQhooNTRKbRptSDz9UG8eOB9J2hL/exec" target="_blank" class="exam-link">Class VI</a>
+        <a href="https://script.google.com/macros/s/AKfycbwEmE4o2CuvAtT1wUuKBP7kb3x3mcYI_zs8OboQizGdanKacWSQy9VYpfeQ7Ycvg6bQ/exec" target="_blank" class="exam-link">Class VII</a>
+        <a href="https://script.google.com/macros/s/AKfycbxVSeYX564Gpqf6vETSCFQ1dr5kJ013XW7Jzv0G3pt5rxvWBL_aN6lOycCvqPkiagYtQQ/exec" target="_blank" class="exam-link">Class VIII</a>
+        <a href="https://script.google.com/macros/s/AKfycbw_h0rAmAZQkbexHm-qpdzmEEdZzyuCo7ZrIhs5gEdB4RGrfSGTdefdS81YWro7xIgX/exec" target="_blank" class="exam-link">Class IX</a>
+        <a href="https://script.google.com/macros/s/AKfycbxGKwBRj5MKS5DwlElJqrhs_tL4ES0eYr-IovdzX4y6Qq7nWDGeqrb-Hj2nCrKYv9CwFA/exec" target="_blank" class="exam-link">Class X</a>
+        <a href="https://script.google.com/macros/s/AKfycbwy3eLrkWmUdrkwUeXRI-u8xumNc5Rv-kjH1IJijDcuj75frsDTSa2oheXIK48WQD9hcA/exec" target="_blank" class="exam-link">Class XI</a>
+      </div>
+    </div>
+
+    <!-- ✅ স্কুল রুটিন -->
+    <div class="main-section-container" id="school-routine-section">
+      <div class="section-heading-wrapper">
+        <h2 class="section-heading">School Routine</h2>
+      </div>
+
+      <div class="sub-sections-wrapper">
+        <div id="staff-routine-section" class="shaded-info-box">
+          <div class="sub-section-content">
+            <a id="staff-routine-link" href="https://script.google.com/macros/s/AKfycbyDLZxS1q5Q-PYeNuTMs1JjNS7IbEuTEalTtMF2EyBFuyEIzTeVU9kiyzF-hYPJzMOT/exec" target="_blank" class="exam-link">Staff Routine</a>
+          </div>
+        </div>
+        
+        <div id="teacher-routine-section" class="shaded-info-box">
+          <div class="sub-section-content">
+            <a id="teacher-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">Teacher Routine</a>
+          </div>
+        </div>
+
+        <div id="class-routine-section" class="shaded-info-box">
+          <div class="sub-section-content">
+            <a id="class-routine-link" href="https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student" target="_blank" class="exam-link">Student Routine</a>
+          </div>
+        </div>
+
+        <div id="subject-routine-section" class="shaded-info-box">
+          <div class="sub-section-content">
+            <a id="subject-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">Subject Routine</a>
+          </div>
+        </div>
+
+        <div id="exam-routine-section" class="shaded-info-box">
+          <div class="sub-section-content">
+            <a id="exam-routine-link" href="https://script.google.com/macros/s/AKfycbzUdoNit0-ifZvVgswLJoQEixG7kpxv6MBUeE5dg6zIFjEIiyPkIMw68QDbOnfvvAMqtA/exec" target="_blank" class="exam-link">School Exam Routine</a>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+    <!-- ✅ স্টুডেন্ট হেল্প জোন -->
+    <div class="main-section-container" id="student-benefit-section">
+      <div class="section-heading-wrapper">
+        <h2 class="section-heading">For Students' Benefit</h2>
+      </div>
+
+      <div class="sub-sections-wrapper">
+        <div id="school-tc-section" class="shaded-info-box">
+          <div class="sub-section-content">
+            <a id="school-tc-link" href="https://script.google.com/macros/s/AKfycbze5iUVn_CdCluUxUoKdapw_vExsTYq-ZsXW0ShBQ_2bbrbLrUCYqnCyDVaKExFzXKtkw/exec" target="_blank" class="exam-link">School Leaving Certificate (Manual T.C.)</a>
+          </div>
+        </div>
+
+        <div id="summative-sheet-excel-section" class="shaded-info-box">
+          <div class="sub-section-content">
+            <a id="summative-sheet-excel-link" href="https://script.google.com/macros/s/AKfycbzHv2UmXNSpJDBwca4Fwy_ABLVdmQHs8fsBNU8UXoX2nLYzs3oYAihLvI_XwQy1fuX-/exec" target="_blank" class="exam-link">Download Exam Marks (Excel)</a>
+          </div>
+        </div>
+
+        <div id="summative-sheet-pdf-section" class="shaded-info-box">
+          <div class="sub-section-content">
+            <a id="summative-sheet-pdf-link" href="https://script.google.com/macros/s/AKfycbyQYMtZd3n0Wg1_op-6q2i4zgsGAz2iqHnCawxsGkl9jQUerPEv5nQMPY4H8ft_iHKY/exec" target="_blank" class="exam-link">Download Exam Marks (PDF)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+    <!-- ✅ ফুটার -->     
+    <div id="school-address-section">
+      <footer>
+        <div class="section-heading-wrapper">
+          <h2 class="section-heading">Contact Details</h2>
+        </div>
+        <p><strong>School Name:</strong> Pathpukur High School (H.S.)</p>
+        <p><strong>Address:</strong> Vill: Pathpukur, P.O.: Bokultala Hat, P.S.: Bokultala, Block: Joynagar II, Circle: Joynagar, Dist.: South 24 Parganas, State: West Bengal, Pin Code: 743338, India</p>
+        <p><strong>High School Memo No: </strong> 11775/G, Dt. - 11.11.1970 w.e.f. 01.01.1969; &nbsp; <strong>HS Memo No: </strong> DS(A)148/Recos/10, Dt. - 22.06.2010 w.e.f. 2010-11</p>
+        <p>UDISE Code: 19181600802, Index No: C1 194, HS Code: 102376</p>
+        <p><strong>Phone No:</strong> +91 3218248083</p>
+        <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
+      </footer>
+    </div>
+
+  </div> <!-- ✅ main-website-content বন্ধ করা হলো -->
+        
+  <!-- ✅ সার্চ লজিক এবং লগইন ভিজিবিলিটি স্ক্রিপ্ট -->
   <script>
     let searchData = [];
 
-    // পেজ লোড হওয়ার পর সমস্ত লিংক বা বোতামের ডেটা সংগ্রহ
+    // ১. পেজ লোড হলে সমস্ত লিংক বা বোতামের ডেটা সংগ্রহ করা
     document.addEventListener("DOMContentLoaded", function() {
       const links = document.querySelectorAll('.sidebar-menu a, .exam-link');
       const seen = new Set();
@@ -270,7 +276,6 @@
         const text = link.innerText.trim();
         const href = link.getAttribute('href');
         
-        // হেডার বা ফাঁকা লিংক বাদ দেওয়া
         if (text && href && href !== '#' && !seen.has(text)) {
           seen.add(text);
           searchData.push({
@@ -282,34 +287,38 @@
       });
     });
 
-    // ইনপুট বক্সে ফোকাস করলে সব সাজেস্টেড বোতাম অস্পষ্টভাবে দেখাবে
+    // ২. সার্চ বক্সে ফোকাস করলে সাজেশন দেখানো
     function showSuggestions() {
       filterSuggestions();
     }
 
-    // টাইপ করা অনুযায়ী সাজেস্টেড বোতাম ফিল্টার করা
+    // ৩. টাইপ অনুযায়ী লিংক ফিল্টার করা
     function filterSuggestions() {
-      const input = document.getElementById('search-input');
+      const input = document.getElementById('site-search-input');
+      const clearBtn = document.getElementById('clear-search-btn');
       const filter = input.value.toLowerCase().trim();
-      const list = document.getElementById('search-results-list');
+      const list = document.getElementById('search-dropdown-list');
       
+      if (filter.length > 0) {
+        clearBtn.style.display = 'block';
+      } else {
+        clearBtn.style.display = 'none';
+      }
+
       list.innerHTML = '';
 
       const filtered = searchData.filter(item => item.name.toLowerCase().includes(filter));
 
       if (filtered.length > 0) {
         filtered.forEach(item => {
-          const li = document.createElement('li');
-          li.style.cssText = "padding: 10px 15px; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); color: #333; font-weight: 500; transition: background 0.2s;";
-          
-          li.innerText = item.name;
+          const itemDiv = document.createElement('div');
+          itemDiv.style.cssText = "padding: 10px 15px; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); color: #333; font-weight: 500; transition: background 0.2s;";
+          itemDiv.innerText = item.name;
 
-          // মাউস হোভার ইফেক্ট
-          li.onmouseover = function() { this.style.background = 'rgba(0, 123, 255, 0.1)'; };
-          li.onmouseout = function() { this.style.background = 'transparent'; };
+          itemDiv.onmouseover = function() { this.style.background = 'rgba(0, 123, 255, 0.1)'; };
+          itemDiv.onmouseout = function() { this.style.background = 'transparent'; };
 
-          // ক্লিকে নির্দিষ্ট পেজে বা সেকশনে নিয়ে যাওয়া
-          li.onclick = function() {
+          itemDiv.onclick = function() {
             if (item.url.startsWith('#')) {
               window.location.hash = item.url;
             } else {
@@ -319,7 +328,7 @@
             input.value = item.name;
           };
 
-          list.appendChild(li);
+          list.appendChild(itemDiv);
         });
         list.style.display = 'block';
       } else {
@@ -327,10 +336,22 @@
       }
     }
 
-    // সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হওয়া
+    // ৪. Clear বোতামে চাপ দিলে ইনপুট মোছা
+    function clearSearchInput() {
+      const input = document.getElementById('site-search-input');
+      const clearBtn = document.getElementById('clear-search-btn');
+      const list = document.getElementById('search-dropdown-list');
+      
+      input.value = '';
+      clearBtn.style.display = 'none';
+      list.style.display = 'none';
+      input.focus();
+    }
+
+    // ৫. সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হওয়া
     document.addEventListener('click', function(e) {
       const container = document.querySelector('.search-container');
-      const list = document.getElementById('search-results-list');
+      const list = document.getElementById('search-dropdown-list');
       if (container && !container.contains(e.target)) {
         list.style.display = 'none';
       }
