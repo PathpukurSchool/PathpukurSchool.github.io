@@ -35,26 +35,84 @@ function createButton(text, bgColor, onClick, disabled = false) {
 }
 
 // =================================
-// 🔍 সার্চ ফিল্টারিং ফাংশনালিটি
+// 🔍 নতুন ড্রপডাউন সার্চ ফিল্টারিং ফাংশনালিটি
 // =================================
 
+let ALL_ITEMS_DETAILS = [];
+
 function setupLiveSearch() {
-    const searchInput = document.getElementById('search-input') || document.getElementById('site-search-input');
-    if (!searchInput) return;
+    const searchInput = document.getElementById('site-search-input');
+    const searchResultsDropdown = document.getElementById('search-dropdown-list');
+    const clearSearchBtn = document.getElementById('clear-search-btn');
 
-    searchInput.addEventListener('input', function () {
-        const query = this.value.toLowerCase().trim();
-        const allButtons = document.querySelectorAll('.exam-link, .class-link-btn');
+    if (searchInput && searchResultsDropdown) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase();
+            searchResultsDropdown.innerHTML = '';
 
-        allButtons.forEach(button => {
-            const text = button.textContent.toLowerCase();
-            if (text.includes(query)) {
-                button.style.display = 'flex';
+            // ক্লিয়ার বাটন দেখানো বা লুকানোর লজিক
+            if (clearSearchBtn) {
+                clearSearchBtn.style.display = query.length > 0 ? 'block' : 'none';
+            }
+
+            if (query.length < 2) {
+                searchResultsDropdown.classList.remove('active');
+                return;
+            }
+
+            // পেজের লিঙ্ক থেকে স্বয়ংক্রিয় ডাটা সংগ্রহ (ALL_ITEMS_DETAILS খালি থাকলে)
+            if (ALL_ITEMS_DETAILS.length === 0) {
+                const buttons = document.querySelectorAll('.exam-link, .class-link-btn');
+                buttons.forEach(btn => {
+                    if (btn.textContent.trim() && (btn.href || btn.onclick)) {
+                        ALL_ITEMS_DETAILS.push({
+                            title: btn.textContent.trim(),
+                            url: btn.href || '#'
+                        });
+                    }
+                });
+            }
+
+            // ফিল্টার করার লজিক
+            let matchedItems = ALL_ITEMS_DETAILS.filter(item => 
+                item.title && item.title.toLowerCase().includes(query)
+            );
+
+            if (matchedItems.length > 0) {
+                matchedItems.forEach(item => {
+                    const resDiv = document.createElement('div');
+                    resDiv.className = 'search-dropdown-item';
+                    resDiv.innerHTML = `
+                        <span class="item-title">${item.title}</span>
+                        <a href="${item.url}" class="item-btn" target="_blank">🚀 Go ➔</a>
+                    `;
+                    searchResultsDropdown.appendChild(resDiv);
+                });
+                searchResultsDropdown.classList.add('active');
             } else {
-                button.style.display = 'none';
+                searchResultsDropdown.innerHTML = `<div style="padding:15px; text-align:center; color:#777;">🕵️‍♂️ No Data Found!</div>`;
+                searchResultsDropdown.classList.add('active');
             }
         });
-    });
+
+        // ✖ ক্লিয়ার বাটনে ক্লিক করলে সার্চ ইনপুট ফাকা হওয়া
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                searchResultsDropdown.innerHTML = '';
+                searchResultsDropdown.classList.remove('active');
+                this.style.display = 'none';
+                searchInput.focus();
+            });
+        }
+
+        // সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হয়ে যাওয়া
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResultsDropdown.contains(e.target)) {
+                searchResultsDropdown.classList.remove('active');
+            }
+        });
+    }
 }
 
 // =================================
@@ -112,14 +170,15 @@ async function submitMasterLogin() {
             successDiv.innerText = "✔️ Login Successful.";
             successDiv.style.display = "block";
 
-            // ✅ এখানে পরিবর্তন আনা হয়েছে
             setTimeout(() => {
                 const overlay = document.getElementById('masterLoginOverlay');
                 if (overlay) overlay.style.display = "none";
 
-                // ওয়েবসাইট ও সার্চ বার ডিসপ্লে করা
+                // ✅ সফল লগইনে কনটেন্ট ও সার্চ বার ডিসপ্লে করা
                 const mainContent = document.getElementById('main-website-content');
+                const searchContainer = document.querySelector('.search-container');
                 if (mainContent) mainContent.style.display = "block";
+                if (searchContainer) searchContainer.style.display = "block";
 
                 document.body.classList.remove('no-scroll');
             }, 1000);
@@ -453,12 +512,13 @@ function logout() {
     sessionStorage.removeItem("studentLoggedIn");
     sessionStorage.removeItem("teacherLoggedIn");
     
-    // ✅ এখানেও পরিবর্তন করা হয়েছে
     const mainContent = document.getElementById('main-website-content');
+    const searchContainer = document.querySelector('.search-container');
     const overlay = document.getElementById('masterLoginOverlay');
     
     if (mainContent) mainContent.style.display = "none";
-    if (overlay) overlay.style.display = "block";
+    if (searchContainer) searchContainer.style.display = "none";
+    if (overlay) overlay.style.display = "flex";
 }
 
 // =================================
@@ -466,13 +526,15 @@ function logout() {
 // =================================
 
 document.addEventListener("DOMContentLoaded", () => {
-    // ✅ সেশন লগইন চ্যাকিং যুক্ত করা হলো
+    // সেশন লগইন চেকিং
     if (sessionStorage.getItem("teacherLoggedIn") === "true") {
         const overlay = document.getElementById('masterLoginOverlay');
         const mainContent = document.getElementById('main-website-content');
+        const searchContainer = document.querySelector('.search-container');
         
         if (overlay) overlay.style.display = "none";
         if (mainContent) mainContent.style.display = "block";
+        if (searchContainer) searchContainer.style.display = "block";
     }
 
     fetchNotices();
