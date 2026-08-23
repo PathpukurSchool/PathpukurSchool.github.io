@@ -23,13 +23,6 @@
     --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
     --sidebar-active-accent: #38bdf8;
     --sidebar-text: #e2e8f0;
-    
-    --btn-alt-bg: #4f46e5;         
-    --btn-alt-hover: #4338ca;
-    --btn-soft-bg: #0d9488;        
-    --btn-soft-hover: #0f766e;
-    --btn-accent-bg: #0284c7;      
-    --btn-accent-hover: #0369a1;
 }
 
 /* ================================================= */
@@ -61,7 +54,7 @@ body.no-scroll {
     overflow: hidden;
 }
 
-/* 🔒 লগইন না হওয়া পর্যন্ত মূল কনটেন্ট এবং সার্চ বক্স হাইড থাকবে (হেডার দৃশ্যমান থাকবে) */
+/* 🔒 লগইন না হওয়া পর্যন্ত মূল কনটেন্ট এবং সার্চ বক্স হাইড থাকবে */
 #main-website-content,
 .search-container {
     display: none;
@@ -76,7 +69,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔝 HEADER & TOP BAR (সর্বদা স্পষ্ট দৃশ্যমান)        */
+/* 🔝 HEADER & TOP BAR                               */
 /* ================================================= */
 
 #top-bar-section {
@@ -85,7 +78,7 @@ body.no-scroll {
     position: sticky;
     top: 0;
     z-index: 1000;
-    display: block !important; /* যেকোনো অবস্থায় দৃশ্যমান */
+    display: block !important;
 }
 
 .main-header {
@@ -191,7 +184,6 @@ body.no-scroll {
     box-shadow: 0 0 10px rgba(56, 102, 65, 0.25);
 }
 
-/* ✖ ক্লিয়ার সার্চ বাটন স্টাইল */
 #clear-search-btn {
     position: absolute;
     right: 15px;
@@ -209,7 +201,6 @@ body.no-scroll {
     color: var(--error-color);
 }
 
-/* 📜 সার্চ ড্রপডাউন ফলাফল তালিকা */
 #search-dropdown-list {
     position: absolute;
     top: 100%;
@@ -269,201 +260,98 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔐 MASTER LOGIN OVERLAY                            */
+/* 📚 ALL BUTTONS GRID (সমস্ত সেকশনের বোতামের চমৎকার লেআউট) */
 /* ================================================= */
 
-#masterLoginOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--primary-color); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    background-image: linear-gradient(rgba(0, 56, 46, 0.85), rgba(0, 56, 46, 0.85)), url('photo/master_login_image.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover; 
-    backdrop-filter: blur(4px);
+/* এটি সমস্ত বোতামের পাত্রে (Container) প্রয়োগ করা হলো */
+.class-buttons-grid, 
+.section-buttons-container, 
+.button-group, 
+.links-container, 
+.exam-links-container {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 900px !important;
+    margin: 1.2rem auto !important;
+    padding: 0 10px !important;
+    align-items: center !important;
 }
 
-#masterLoginBox {
-    background-color: var(--card-background);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: var(--shadow-md);
-    text-align: center;
-    width: 90%;
-    max-width: 360px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+/* সমস্ত বোতামের সাইজ সমান ও সুবিন্যস্ত করা হলো */
+.class-link-btn, 
+.exam-link, 
+.section-btn, 
+.action-btn, 
+.link-btn, 
+.box-button,
+.main-section-container button:not(.logout-button):not(#clear-search-btn):not(.pagination-btn) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 52px !important;             
+    padding: 8px 10px !important;        
+    font-size: 0.85rem !important;       
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.3px !important;
+    border-radius: 8px !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all 0.25s ease !important;
+    background-color: var(--primary-color) !important;
+    color: #ffffff !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    word-break: break-word !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    margin: 0 !important;
 }
 
-#masterLoginBox input {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-family: inherit;
-    outline: none;
-}
-
-#masterLoginBox button {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    width: 100%;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.error, .success {
-    margin-top: -0.5rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-    font-size: 0.85rem;
-}
-.error { color: var(--error-color); }
-.success { color: var(--success-color); }
-
-/* ================================================= */
-/* 🧭 SIDEBAR MENU                                  */
-/* ================================================= */
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(15, 23, 42, 0.6);
-    z-index: 999;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    backdrop-filter: blur(4px);
-}
-
-.overlay.active {
-    visibility: visible;
-    opacity: 1;
-}
-
-.sidebar-menu {
-    position: fixed;
-    top: 0;
-    left: -280px;
-    width: 280px;
-    height: 100%;
-    background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
-    color: var(--sidebar-text);
-    padding-top: 0;
-    box-shadow: 8px 0 25px rgba(0, 0, 0, 0.3);
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
-    overflow-y: auto; 
-}
-
-.sidebar-menu.active {
-    left: 0;
-}
-
-.sidebar-menu ul {
-    list-style-type: none;
-    padding: 10px 0;
-}
-
-.sidebar-menu li {
-    margin: 4px 10px;
-}
-
-.sidebar-menu .nav-link {
-    display: flex;
-    align-items: center;
-    padding: 10px 14px;
-    color: var(--sidebar-text);
-    text-decoration: none;
-    font-size: 0.88rem;
-    font-weight: 500;
-    border-radius: 6px;
-    transition: all 0.25s ease;
-    border-left: 4px solid transparent;
-}
-
-.sidebar-menu .nav-link:hover {
-    background-color: var(--sidebar-hover-bg);
-    color: #ffffff;
-    transform: translateX(4px);
-}
-
-.sidebar-menu .nav-link.active-link {
-    background-color: rgba(56, 189, 248, 0.12);
-    color: var(--sidebar-active-accent);
-    border-left-color: var(--sidebar-active-accent);
-    font-weight: 600;
-}
-
-.sidebar-menu .menu-header {
-    background-color: var(--sidebar-header-bg);
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 18px 16px;
-    color: #ffffff;
-    cursor: default;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+/* বোতামে হভার ইফেক্ট */
+.class-link-btn:hover, 
+.exam-link:hover, 
+.section-btn:hover, 
+.action-btn:hover, 
+.link-btn:hover, 
+.box-button:hover,
+.main-section-container button:not(.logout-button):not(#clear-search-btn):not(.pagination-btn):hover {
+    background-color: var(--primary-dark) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-md) !important;
 }
 
 /* ================================================= */
-/* 📚 CLASS / EXAM BUTTONS & GRID (সমান মাপের ছোট বোতাম) */
+/* 🦶 FOOTER SECTION (আগের সুন্দর গাঢ় সবুজ স্টাইল ফেরত আনা হলো) */
 /* ================================================= */
 
-.class-buttons-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 12px;
-    width: 100%;
-    max-width: 900px;
-    margin: 1.2rem auto;
-    padding: 0 10px;
+footer, .site-footer {
+    background-color: var(--primary-color) !important;
+    color: #ffffff !important;
+    text-align: center !important;
+    padding: 1.5rem 1rem !important;
+    margin-top: auto !important;
+    border-top: 3px solid var(--secondary-color) !important;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
-.class-link-btn.box-button, 
-.exam-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 52px;             
-    padding: 8px 10px;        
-    font-size: 0.85rem;       
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: 0.3px;
-    border-radius: 8px;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.25s ease;
-    background-color: var(--primary-color);
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    word-break: break-word;
-    overflow: hidden;
+footer p, .site-footer p {
+    margin: 0.3rem 0 !important;
+    font-size: 0.88rem !important;
+    color: #f0f0f0 !important;
 }
 
-.class-link-btn.box-button:hover, 
-.exam-link:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+footer a, .site-footer a {
+    color: var(--secondary-color) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+
+footer a:hover, .site-footer a:hover {
+    text-decoration: underline !important;
 }
 
 /* ================================================= */
@@ -494,15 +382,25 @@ body.no-scroll {
 }
 
 @media (max-width: 480px) {
-    .class-buttons-grid {
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 10px;
+    /* ছোট মোবাইল স্ক্রিনে ২ কলামের গ্রিড */
+    .class-buttons-grid, 
+    .section-buttons-container, 
+    .button-group, 
+    .links-container, 
+    .exam-links-container {
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px !important;
     }
 
-    .class-link-btn.box-button, 
-    .exam-link {
-        font-size: 0.8rem;
-        height: 48px; 
-        padding: 6px 8px;
+    .class-link-btn, 
+    .exam-link, 
+    .section-btn, 
+    .action-btn, 
+    .link-btn, 
+    .box-button,
+    .main-section-container button:not(.logout-button):not(#clear-search-btn):not(.pagination-btn) {
+        font-size: 0.8rem !important;
+        height: 48px !important; 
+        padding: 6px 8px !important;
     }
 }
