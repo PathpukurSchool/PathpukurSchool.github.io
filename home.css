@@ -1,26 +1,83 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #386641;      
-    --primary-dark: #27472e;        
-    --secondary-color: #ff9800;    
-    --secondary-hover: #e65100;    
-    --background-color: #f0f2f5;   
-    --card-background: #ffffff;
-    --text-color-dark: #212121;
-    --text-color-light: #555555;
-    --border-color: #e0e0e0;
-    --success-color: #4caf50;
-    --error-color: #f44336;
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+    /* ================================
+       Brand Colors
+       ================================ */
+    --primary-color: #2563eb;          /* Modern Royal Blue */
+    --primary-dark: #1d4ed8;           /* Deep Blue */
+    --primary-light: #eff6ff;          /* Soft Blue */
 
-    --sidebar-bg-start: #1e293b;
-    --sidebar-bg-end: #0f172a;
-    --sidebar-header-bg: #0f172a;
-    --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-    --sidebar-active-accent: #38bdf8;
-    --sidebar-text: #e2e8f0;
+    --secondary-color: #f59e0b;        /* Warm Amber */
+    --secondary-hover: #d97706;        /* Deep Amber */
+
+    /* ================================
+       Backgrounds
+       ================================ */
+    --background-color: #f8fafc;       /* Very Light Slate */
+    --card-background: #ffffff;        /* Pure White */
+
+    /* ================================
+       Typography
+       ================================ */
+    --text-color-dark: #0f172a;        /* Slate 900 */
+    --text-color-light: #64748b;       /* Slate 500 */
+    --text-color-muted: #94a3b8;       /* Slate 400 */
+
+    /* ================================
+       Borders
+       ================================ */
+    --border-color: #e2e8f0;           /* Slate 200 */
+    --border-color-light: #f1f5f9;     /* Slate 100 */
+
+    /* ================================
+       Status Colors
+       ================================ */
+    --success-color: #16a34a;          /* Green */
+    --success-light: #f0fdf4;
+
+    --error-color: #dc2626;            /* Red */
+    --error-light: #fef2f2;
+
+    --warning-color: #f59e0b;          /* Amber */
+    --warning-light: #fffbeb;
+
+    --info-color: #0ea5e9;             /* Sky Blue */
+    --info-light: #f0f9ff;
+
+    /* ================================
+       Shadows
+       ================================ */
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08),
+                 0 1px 2px rgba(15, 23, 42, 0.04);
+
+    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.10),
+                 0 2px 4px rgba(15, 23, 42, 0.05);
+
+    --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
+
+    /* ================================
+       Sidebar
+       ================================ */
+    --sidebar-bg-start: #0f172a;       /* Slate 900 */
+    --sidebar-bg-end: #020617;         /* Slate 950 */
+
+    --sidebar-header-bg: #020617;
+
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.07);
+
+    --sidebar-active-accent: #38bdf8;  /* Sky Blue */
+
+    --sidebar-text: #e2e8f0;           /* Slate 200 */
+    --sidebar-text-muted: #94a3b8;     /* Slate 400 */
+
+    /* ================================
+       Radius
+       ================================ */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
 }
 
 /* ================================================= */
