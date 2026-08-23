@@ -1,37 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #386641;     /* ডিপ ফরেস্ট গ্রিন (Upload Student Exam Marks-এর জন্য) */
-    --primary-dark: #27472e;      /* ডার্ক গ্রিন হোভার */
+    --primary-color: #386641;     /* ডিপ ফরেস্ট গ্রিন */
+    --primary-dark: #00382e;      /* ডার্ক ফরেস্ট গ্রিন */
     --secondary-color: #ff9800;   /* Amber */
     --secondary-hover: #e65100;   /* Dark Amber */
-    --background-color: #f0f2f5;  /* হালকা ধূসর बैकগ্রাউন্ড */
+    --background-color: #f4f6f8;  /* আরামদায়ক ও সফট ব্যাকগ্রাউন্ড */
     --card-background: #ffffff;
     --text-color-dark: #212121;
     --text-color-light: #555555;
-    --border-color: #e0e0e0;
-    --success-color: #4caf50;
-    --error-color: #f44336;
+    --border-color: #e2e8f0;
+    --success-color: #2e7d32;
+    --error-color: #d32f2f;
     --link-color: #1a73e8;
     --hover-bg: #f8f9fa;
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-
-    /* 🌟 নতুন আধুনিক সাইডবার কালার প্যালেট (Dark Slate/Navy - চোখের জন্য আরামদায়ক) */
-    --sidebar-bg-start: #1e293b;
-    --sidebar-bg-end: #0f172a;
-    --sidebar-header-bg: #0f172a;
-    --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-    --sidebar-active-accent: #38bdf8;
-    --sidebar-text: #e2e8f0;
-    
-    /* 🎨 অন্যান্য সেকশনের বোতামের জন্য হালকা ও প্রিমিয়াম কালার টোন */
-    --btn-alt-bg: #4f46e5;         /* সফট ইন্ডিগো */
-    --btn-alt-hover: #4338ca;
-    --btn-soft-bg: #0d9488;        /* সফট টিল/সবুজ টাইপ */
-    --btn-soft-hover: #0f766e;
-    --btn-accent-bg: #0284c7;      /* সফট স্কাই ব্লু */
-    --btn-accent-hover: #0369a1;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.10);
+    --radius: 10px;
 }
 
 /* ================================================= */
@@ -64,7 +49,7 @@ body.no-scroll {
 }
 
 .main-section-container {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1rem;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
@@ -162,7 +147,7 @@ body.no-scroll {
 
 .search-container input {
     width: 100%;
-    padding: 0.8rem 1.2rem;
+    padding: 0.85rem 1.2rem;
     border: 2px solid var(--border-color);
     border-radius: 25px;
     font-size: 0.95rem;
@@ -175,11 +160,11 @@ body.no-scroll {
 
 .search-container input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 8px rgba(56, 102, 65, 0.2);
+    box-shadow: 0 0 10px rgba(56, 102, 65, 0.25);
 }
 
 /* ================================================= */
-/* 🔐 MASTER LOGIN OVERLAY                           */
+/* 🔐 MASTER LOGIN OVERLAY (সম্পূর্ণ অপরিবর্তিত)      */
 /* ================================================= */
 
 #masterLoginOverlay {
@@ -265,7 +250,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🧭 SIDEBAR MENU (আরামদায়ক আধুনিক ডিজাইন)          */
+/* 🧭 SIDEBAR MENU                                   */
 /* ================================================= */
 
 .overlay {
@@ -274,12 +259,12 @@ body.no-scroll {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(15, 23, 42, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(2px);
 }
 
 .overlay.active {
@@ -290,13 +275,13 @@ body.no-scroll {
 .sidebar-menu {
     position: fixed;
     top: 0;
-    left: -290px;
-    width: 290px;
+    left: -280px;
+    width: 280px;
     height: 100%;
-    background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
-    color: var(--sidebar-text);
-    padding-top: 0;
-    box-shadow: 8px 0 25px rgba(0, 0, 0, 0.3);
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding-top: 20px;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
     overflow-y: auto; 
@@ -308,71 +293,66 @@ body.no-scroll {
 
 .sidebar-menu ul {
     list-style-type: none;
-    padding: 10px 0;
 }
 
 .sidebar-menu li {
-    margin: 4px 12px;
+    margin-bottom: 2px;
 }
 
 .sidebar-menu .nav-link {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    color: var(--sidebar-text);
-    text-decoration: none;
-    font-size: 0.92rem;
-    font-weight: 500;
-    border-radius: 8px;
-    transition: all 0.25s ease;
-    border-left: 4px solid transparent;
-}
-
-.sidebar-menu .nav-link:hover {
-    background-color: var(--sidebar-hover-bg);
+    display: block;
+    padding: 14px 20px;
     color: #ffffff;
-    transform: translateX(4px);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, border-left-color 0.2s ease;
+    border-left: 5px solid transparent;
 }
 
+.sidebar-menu .nav-link:hover,
 .sidebar-menu .nav-link.active-link {
-    background-color: rgba(56, 189, 248, 0.12);
-    color: var(--sidebar-active-accent);
-    border-left-color: var(--sidebar-active-accent);
-    font-weight: 600;
+    background-color: var(--primary-dark);
+    border-left-color: var(--secondary-color);
 }
 
 .sidebar-menu .menu-header {
-    background-color: var(--sidebar-header-bg);
-    font-weight: 600;
+    background-color: var(--primary-dark);
+    font-weight: 700;
     font-size: 1.05rem;
-    padding: 22px 20px;
-    color: #ffffff;
+    padding: 18px 20px;
+    color: var(--secondary-color);
     cursor: default;
     pointer-events: none;
     letter-spacing: 0.5px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* ================================================= */
-/* 📚 CLASS / EXAM BUTTONS & GRID                   */
+/* 📚 UNIFIED BUTTON SYSTEM (সমস্ত সেকশনের বোতাম)     */
 /* ================================================= */
 
-.class-buttons-grid {
+/* গ্রিড কন্টেইনার */
+.class-buttons-grid,
+.buttons-container,
+.section-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 15px;
+    gap: 14px;
     width: 100%;
     max-width: 900px;
     margin: 1.5rem auto;
     padding: 10px;
 }
 
-/* 🟢 Standard Primary Button: Upload Student Exam Marks-এর মেইন সাইজ ও স্টাইল */
+/* 
+   সমস্ত বোতামের সাইজ "Upload Student Exam Marks" 
+   (.class-link-btn.box-button)-এর মত একজাতীয় করা হয়েছে। 
+*/
 .class-link-btn.box-button, 
-.exam-link {
+.exam-link,
+.action-button,
+.section-btn,
+.custom-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -381,54 +361,40 @@ body.no-scroll {
     font-size: 0.95rem;
     font-weight: 600;
     letter-spacing: 0.5px;
-    border-radius: 8px;
+    border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
-    transition: all 0.25s ease;
-    background-color: var(--primary-color);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: var(--primary-color); /* Upload Student Exam Marks-এর আসল কালার বজায় রাখা হয়েছে */
     color: #ffffff;
     border: none;
     cursor: pointer;
     text-decoration: none;
     text-align: center;
+    user-select: none;
 }
 
 .class-link-btn.box-button:hover, 
-.exam-link:hover {
+.exam-link:hover,
+.action-button:hover,
+.section-btn:hover,
+.custom-btn:hover {
     background-color: var(--primary-dark);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
 .class-link-btn.box-button:active, 
-.exam-link:active {
+.exam-link:active,
+.action-button:active,
+.section-btn:active,
+.custom-btn:active {
     transform: translateY(0);
-}
-
-/* 🔵 অন্যান্য সেকশনের জন্য অল্টারনেটিভ প্রিমিয়াম হালকা কালার অপশনসমূহ (HTML-এ ক্লাস যুক্ত করে ব্যবহার করতে পারবেন) */
-.box-button.btn-alt {
-    background-color: var(--btn-alt-bg);
-}
-.box-button.btn-alt:hover {
-    background-color: var(--btn-alt-hover);
-}
-
-.box-button.btn-soft {
-    background-color: var(--btn-soft-bg);
-}
-.box-button.btn-soft:hover {
-    background-color: var(--btn-soft-hover);
-}
-
-.box-button.btn-accent {
-    background-color: var(--btn-accent-bg);
-}
-.box-button.btn-accent:hover {
-    background-color: var(--btn-accent-hover);
+    box-shadow: var(--shadow-sm);
 }
 
 .disabled-exam-link {
-    background-color: #cccccc !important;
-    color: #666666 !important;
+    background-color: #d1d5db !important;
+    color: #6b7280 !important;
     cursor: not-allowed !important;
     opacity: 0.7;
     transform: none !important;
@@ -441,22 +407,22 @@ body.no-scroll {
     justify-content: center;
     gap: 10px; 
     font-family: inherit;
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: #ffffff;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(45deg, #ff4e50, #fc913a); 
-    border-radius: 8px;
-    padding: 10px 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #ff4e50, #fc913a); 
+    border-radius: var(--radius);
+    padding: 12px 20px;
     box-shadow: var(--shadow-sm);
     margin: 15px auto;
     max-width: fit-content;
-    animation: pulse 1.5s infinite ease-in-out; 
+    animation: pulse 2s infinite ease-in-out; 
 }
 
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
+    50% { transform: scale(1.02); }
 }
 
 /* ================================================= */
@@ -464,35 +430,35 @@ body.no-scroll {
 /* ================================================= */
 
 .info-box {
-    font-size: 16px;
+    font-size: 0.95rem;
     font-weight: 600;
     padding: 12px 16px;
-    border-radius: 8px;
+    border-radius: var(--radius);
     text-align: center;
     max-width: 320px;
     margin: 0 auto;
-    border: 2px solid;
+    border: 1px solid;
 }
 
 .error-message {
-    border-color: #ff9999;
-    background-color: #ffe6e6;
-    color: #cc0000;
+    border-color: #ffcdd2;
+    background-color: #ffebee;
+    color: var(--error-color);
 }
 
 .loading-message {
-    border-color: #6495ED;
-    background-color: #E6F0FF;
-    color: #4169E1;
+    border-color: #bbdefb;
+    background-color: #e3f2fd;
+    color: #1976d2;
 }
 
 .notice-item {
     cursor: pointer;
-    margin: 10px 0;
-    padding: 12px 15px;
+    margin: 12px 0;
+    padding: 14px 16px;
     background-color: #ffffff;
     border-left: 5px solid var(--primary-color);
-    border-radius: 6px;
+    border-radius: 8px;
     box-shadow: var(--shadow-sm);
     transition: all 0.2s ease;
 }
@@ -506,35 +472,35 @@ body.no-scroll {
     background-color: #e74c3c;
     color: white;
     padding: 2px 6px;
-    border-radius: 3px;
+    border-radius: 4px;
     font-size: 0.7em;
     font-weight: 700;
     margin-left: 8px;
     display: inline-block;
-    animation: blinker 1s linear infinite;
+    animation: blinker 1.5s linear infinite;
 }
 
 @keyframes blinker {
-    50% { opacity: 0.5; transform: scale(1.05); }
+    50% { opacity: 0.4; }
 }
 
 .new-notice-highlight {
-    border: 1px solid #e74c3c !important;
+    border: 1px solid #ffcdd2 !important;
     border-left: 5px solid #e74c3c !important;
     background-color: #fff8f8 !important;
 }
 
 .new-notice-highlight:hover {
-    background-color: #ffefef !important;
+    background-color: #ffebee !important;
 }
 
-/* Pagination Controls */
+/* Pagination Controls & Buttons */
 #pagination-controls {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 12px;
-    margin-top: 18px;
+    margin-top: 20px;
 }
 
 .page-info {
@@ -543,24 +509,30 @@ body.no-scroll {
 }
 
 .pagination-btn {
-    color: #ffffff;
+    min-height: 48px;
+    min-width: 100px;
+    padding: 8px 16px;
+    border-radius: 6px;
     border: none;
-    padding: 0.5rem 1.2rem;
-    border-radius: 5px;
+    color: #ffffff;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.85rem;
-    transition: background-color 0.2s ease;
+    font-size: 0.88rem;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-back, .btn-next { background-color: var(--secondary-color); }
 .btn-back:hover, .btn-next:hover { background-color: var(--secondary-hover); }
 
-.btn-download { background-color: #28a745; }
-.btn-download:hover { background-color: #218838; }
+.btn-download { background-color: #2e7d32; }
+.btn-download:hover { background-color: #1b5e20; }
 
-.btn-back.btn-back { background-color: #dc3545; }
-.btn-back.btn-back:hover { background-color: #c82333; }
+.btn-back.btn-back { background-color: #d32f2f; }
+.btn-back.btn-back:hover { background-color: #9a0007; }
 
 /* Notice Popup Modal */
 .popup-overlay {
@@ -580,11 +552,11 @@ body.no-scroll {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;
-    max-width: 340px;
+    max-width: 400px;
     max-height: 85vh;
     overflow-y: auto;
     background: #ffffff;
-    padding: 20px;
+    padding: 22px;
     border-radius: 12px;
     box-shadow: var(--shadow-md);
     z-index: 9999;
@@ -596,7 +568,7 @@ body.no-scroll {
     background-color: #eaf4ed;
     font-size: 16px;
     font-weight: bold;
-    padding: 8px;
+    padding: 10px;
     border-radius: 6px;
     margin-bottom: 12px;
     font-family: 'Poppins', sans-serif;
@@ -614,7 +586,7 @@ body.no-scroll {
 
 .notice-date {
     margin-bottom: 10px;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--text-color-light);
 }
 
@@ -623,7 +595,7 @@ body.no-scroll {
     background-color: #f0f7f2;
     font-weight: 600;
     font-size: 13.5px;
-    padding: 8px;
+    padding: 10px;
     border-radius: 6px;
     margin-bottom: 15px;
 }
@@ -633,18 +605,23 @@ body.no-scroll {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .popup-link-btn {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background-color: var(--link-color);
     color: white;
-    padding: 6px 12px;
-    border-radius: 5px;
+    padding: 8px 16px;
+    border-radius: 6px;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     text-decoration: none;
     transition: background-color 0.2s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .popup-link-btn:hover {
@@ -733,7 +710,7 @@ footer p {
 
 @media (min-width: 1024px) {
     .popup-content {
-        max-width: 600px;
+        max-width: 550px;
     }
     .school-header {
         font-size: 20px;
@@ -765,15 +742,30 @@ footer p {
         margin-top: 0.4rem;
         text-align: center;
     }
+
+    .class-buttons-grid,
+    .buttons-container,
+    .section-buttons {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 12px;
+    }
 }
 
-@media (max-width: 360px) {
-    .class-buttons-grid {
+@media (max-width: 380px) {
+    .class-buttons-grid,
+    .buttons-container,
+    .section-buttons {
         grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
         gap: 10px;
     }
-    .class-link-btn.box-button {
+
+    .class-link-btn.box-button, 
+    .exam-link,
+    .action-button,
+    .section-btn,
+    .custom-btn {
         font-size: 0.85rem;
-        min-height: 52px;
+        min-height: 54px;
+        padding: 8px 10px;
     }
 }
