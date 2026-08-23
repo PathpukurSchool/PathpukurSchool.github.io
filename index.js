@@ -605,13 +605,13 @@ if (searchInput && searchResultsDropdown) {
                 resDiv.className = 'search-dropdown-item';
                 resDiv.innerHTML = `
                     <span class="item-title">${item.title}</span>
-                    <a href="${item.url}" class="item-btn" target="_blank">দেখা যান ➔</a>
+                    <a href="${item.url}" class="item-btn" target="_blank">🚀 Go ➔</a>
                 `;
                 searchResultsDropdown.appendChild(resDiv);
             });
             searchResultsDropdown.classList.add('active');
         } else {
-            searchResultsDropdown.innerHTML = `<div style="padding:15px; text-align:center; color:#777;">কোনো তথ্য পাওয়া যায়নি!</div>`;
+            searchResultsDropdown.innerHTML = `<div style="padding:15px; text-align:center; color:#777;">🕵️‍♂️ No Data Found!</div>`;
             searchResultsDropdown.classList.add('active');
         }
     });
