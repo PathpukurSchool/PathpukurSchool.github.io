@@ -12,8 +12,6 @@
     --border-color: #e0e0e0;
     --success-color: #4caf50;
     --error-color: #f44336;
-    --link-color: #1a73e8;
-    --hover-bg: #f8f9fa;
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
 
@@ -69,7 +67,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔝 HEADER & TOP BAR                               */
+/* 🔝 HEADER & TOP BAR (সর্বদা স্পষ্ট দৃশ্যমান)        */
 /* ================================================= */
 
 #top-bar-section {
@@ -78,7 +76,7 @@ body.no-scroll {
     position: sticky;
     top: 0;
     z-index: 1000;
-    display: block !important;
+    display: block !important; 
 }
 
 .main-header {
@@ -260,38 +258,207 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 📚 ALL BUTTONS GRID (সমস্ত সেকশনের বোতামের চমৎকার লেআউট) */
+/* 🔐 MASTER LOGIN OVERLAY                            */
 /* ================================================= */
 
-/* এটি সমস্ত বোতামের পাত্রে (Container) প্রয়োগ করা হলো */
-.class-buttons-grid, 
-.section-buttons-container, 
-.button-group, 
-.links-container, 
-.exam-links-container {
+#masterLoginOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-color); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    background-image: linear-gradient(rgba(0, 56, 46, 0.85), rgba(0, 56, 46, 0.85)), url('photo/master_login_image.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; 
+    backdrop-filter: blur(4px);
+}
+
+#masterLoginBox {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    width: 90%;
+    max-width: 360px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#masterLoginBox input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+}
+
+#masterLoginBox button {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.error, .success {
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+.error { color: var(--error-color); }
+.success { color: var(--success-color); }
+
+/* ================================================= */
+/* 🧭 SIDEBAR MENU                                  */
+/* ================================================= */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.6);
+    z-index: 999;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.sidebar-menu {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
+    color: var(--sidebar-text);
+    padding-top: 0;
+    box-shadow: 8px 0 25px rgba(0, 0, 0, 0.3);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow-y: auto; 
+}
+
+.sidebar-menu.active {
+    left: 0;
+}
+
+.sidebar-menu ul {
+    list-style-type: none;
+    padding: 10px 0;
+}
+
+.sidebar-menu li {
+    margin: 4px 10px;
+}
+
+.sidebar-menu .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+    border-left: 4px solid transparent;
+}
+
+.sidebar-menu .nav-link:hover {
+    background-color: var(--sidebar-hover-bg);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+.sidebar-menu .nav-link.active-link {
+    background-color: rgba(56, 189, 248, 0.12);
+    color: var(--sidebar-active-accent);
+    border-left-color: var(--sidebar-active-accent);
+    font-weight: 600;
+}
+
+.sidebar-menu .menu-header {
+    background-color: var(--sidebar-header-bg);
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 18px 16px;
+    color: #ffffff;
+    cursor: default;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ================================================= */
+/* 🔘 ALL BUTTONS & SECTIONS GRID (সমস্যা ২ এর সমাধান)*/
+/* ================================================= */
+
+/* সেকশন কার্ড ডিজাইন */
+.section-card {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.4rem;
+}
+
+/* সমস্ত সেকশনের বোতামগুলির জন্য ইউনিভার্সাল গ্রিড লেআউট */
+.class-buttons-grid,
+.exam-links-container,
+.links-grid,
+.button-group {
     display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
     gap: 12px !important;
     width: 100% !important;
-    max-width: 900px !important;
-    margin: 1.2rem auto !important;
-    padding: 0 10px !important;
-    align-items: center !important;
+    margin: 1rem 0 !important;
+    padding: 0 !important;
 }
 
-/* সমস্ত বোতামের সাইজ সমান ও সুবিন্যস্ত করা হলো */
+/* সমস্ত বোতামের একক সুবিন্যস্ত রেসপন্সিভ স্টাইল */
 .class-link-btn, 
-.exam-link, 
-.section-btn, 
-.action-btn, 
-.link-btn, 
+.exam-link,
 .box-button,
-.main-section-container button:not(.logout-button):not(#clear-search-btn):not(.pagination-btn) {
+.section-btn,
+.action-btn {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    height: 52px !important;             
-    padding: 8px 10px !important;        
+    min-height: 48px !important;
+    height: 100% !important;
+    width: 100% !important;
+    padding: 8px 12px !important;        
     font-size: 0.85rem !important;       
     font-weight: 600 !important;
     line-height: 1.2 !important;
@@ -306,56 +473,53 @@ body.no-scroll {
     text-decoration: none !important;
     text-align: center !important;
     word-break: break-word !important;
-    overflow: hidden !important;
-    width: 100% !important;
-    margin: 0 !important;
+    box-sizing: border-box !important;
 }
 
-/* বোতামে হভার ইফেক্ট */
+/* হোভার এবং একটিভ ইফেক্ট */
 .class-link-btn:hover, 
-.exam-link:hover, 
-.section-btn:hover, 
-.action-btn:hover, 
-.link-btn:hover, 
+.exam-link:hover,
 .box-button:hover,
-.main-section-container button:not(.logout-button):not(#clear-search-btn):not(.pagination-btn):hover {
+.section-btn:hover,
+.action-btn:hover {
     background-color: var(--primary-dark) !important;
     transform: translateY(-2px) !important;
     box-shadow: var(--shadow-md) !important;
 }
 
 /* ================================================= */
-/* 🦶 FOOTER SECTION (আগের সুন্দর গাঢ় সবুজ স্টাইল ফেরত আনা হলো) */
+/* 🦶 FOOTER SECTION (সমস্যা ১ এর সমাধান)            */
 /* ================================================= */
 
-footer, .site-footer {
+.main-footer, footer {
     background-color: var(--primary-color) !important;
     color: #ffffff !important;
     text-align: center !important;
     padding: 1.5rem 1rem !important;
     margin-top: auto !important;
-    border-top: 3px solid var(--secondary-color) !important;
+    width: 100% !important;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
-footer p, .site-footer p {
-    margin: 0.3rem 0 !important;
+.main-footer p, footer p {
+    margin: 0 !important;
     font-size: 0.88rem !important;
-    color: #f0f0f0 !important;
+    color: #ffffff !important;
+    font-weight: 400 !important;
 }
 
-footer a, .site-footer a {
+.main-footer a, footer a {
     color: var(--secondary-color) !important;
     text-decoration: none !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
 }
 
-footer a:hover, .site-footer a:hover {
+.main-footer a:hover, footer a:hover {
     text-decoration: underline !important;
 }
 
 /* ================================================= */
-/* 📱 RESPONSIVE DESIGN                              */
+/* 📱 RESPONSIVE ADJUSTMENTS                         */
 /* ================================================= */
 
 @media (max-width: 768px) {
@@ -382,25 +546,21 @@ footer a:hover, .site-footer a:hover {
 }
 
 @media (max-width: 480px) {
-    /* ছোট মোবাইল স্ক্রিনে ২ কলামের গ্রিড */
-    .class-buttons-grid, 
-    .section-buttons-container, 
-    .button-group, 
-    .links-container, 
-    .exam-links-container {
+    .class-buttons-grid,
+    .exam-links-container,
+    .links-grid,
+    .button-group {
         grid-template-columns: repeat(2, 1fr) !important; 
         gap: 10px !important;
     }
 
     .class-link-btn, 
-    .exam-link, 
-    .section-btn, 
-    .action-btn, 
-    .link-btn, 
+    .exam-link,
     .box-button,
-    .main-section-container button:not(.logout-button):not(#clear-search-btn):not(.pagination-btn) {
+    .section-btn,
+    .action-btn {
         font-size: 0.8rem !important;
-        height: 48px !important; 
+        min-height: 44px !important; 
         padding: 6px 8px !important;
     }
 }
