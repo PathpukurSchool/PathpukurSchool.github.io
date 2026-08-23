@@ -131,14 +131,13 @@
 </div>
     
 <!-- 🔍 Live Search Box (সরাসরি পেজে ভাসমান) -->
-<div class="search-container">
+<div class="search-container" role="search">
     <div class="search-input-wrapper">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="site-search-input" placeholder="নোটিশ বা তথ্য অনুসন্ধান করুন..." autocomplete="off">
-        <span class="clear-icon" id="clear-search-btn">✖</span>
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input type="search" id="site-search-input" placeholder="Search..." autocomplete="off" aria-label="Search website content">
+        <span class="clear-icon" id="clear-search-btn" role="button" aria-label="Clear search">✖</span>
     </div>
-    <!-- ভাসমান ড্রপডাউন লিস্ট -->
-    <div id="search-dropdown-list" class="search-dropdown"></div>
+    <div id="search-dropdown-list" class="search-dropdown" aria-live="polite"></div>
 </div>
     
 <main class="container">
