@@ -86,8 +86,7 @@
     </div>
   </div>
 
-
-  <!-- ✅ সম্পূর্ণ ওয়েব পেজ এবং সার্চ বার (সঠিক লগইন না হওয়া পর্যন্ত লুকানো থাকবে) -->
+  <!-- ✅ সম্পূর্ণ ওয়েব পেজ এবং সার্চ বার (সঠিক লগইন না হওয়া পর্যন্ত লুকানো থাকবে) -->
   <div id="main-website-content" style="display: none;">
 
     <!-- ✅ মেন হেডার -->
@@ -103,7 +102,7 @@
       </header>
     </div>
 
-    <!-- ✅ সাইড বার মেনু -->
+    <!-- ✅ সাইড বার মেনু (অপরিবর্তিত) -->
     <div class="overlay" id="overlay"></div>
     <nav id="sidebar-menu" class="sidebar-menu">
       <ul>
@@ -142,7 +141,6 @@
           <span class="clear-icon" id="clear-search-btn" role="button" aria-label="Clear search" onclick="clearSearchInput()" style="position: absolute; right: 12px; cursor: pointer; font-size: 13px; font-weight: bold; color: #777; background: #eee; padding: 4px 8px; border-radius: 4px; display: none;">Clear</span>
         </div>
         
-        <!-- অস্পষ্ট (Semi-transparent) ড্রপডাউন অটো-সাজেস্ট বক্স -->
         <div id="search-dropdown-list" class="search-dropdown" aria-live="polite" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border: 1px solid #ddd; border-radius: 0 0 8px 8px; max-height: 280px; overflow-y: auto; margin-top: 4px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 1001;"></div>
       </div>
     </div>
@@ -153,14 +151,12 @@
         <h2 class="section-heading">Student Information</h2>
       </div>
 
-      <div class="shaded-info-box" id="student-list-section">
-        <div class="sub-section-content">
-          <a id="student-list-link" href="https://pathpukurschool.github.io/web_vs/current_student.html" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
-        </div>
+      <div class="class-buttons-grid" id="student-list-section">
+        <a id="student-list-link" href="https://pathpukurschool.github.io/web_vs/current_student.html" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
       </div>
     </div>
 
-    <!-- ✅ নম্বর আপলোড (সরাসরি সমস্ত ক্লাস লিংক ও রেজাল্ট বোতাম সহ) -->  
+    <!-- ✅ নম্বর আপলোড -->  
     <div class="main-section-container" id="upload-your-marks-section">
       <div class="section-heading-wrapper">
         <h2 class="section-heading">Upload Student Exam Marks</h2>
@@ -180,75 +176,37 @@
       </div>
     </div>
 
-    <!-- ✅ স্কুল রুটিন -->
+    <!-- ✅ স্কুল রুটিন (সুবিন্যস্ত গ্রিডে আপডেট করা হলো) -->
     <div class="main-section-container" id="school-routine-section">
       <div class="section-heading-wrapper">
         <h2 class="section-heading">School Routine</h2>
       </div>
 
-      <div class="sub-sections-wrapper">
-        <div id="staff-routine-section" class="shaded-info-box">
-          <div class="sub-section-content">
-            <a id="staff-routine-link" href="https://script.google.com/macros/s/AKfycbyDLZxS1q5Q-PYeNuTMs1JjNS7IbEuTEalTtMF2EyBFuyEIzTeVU9kiyzF-hYPJzMOT/exec" target="_blank" class="exam-link">Staff Routine</a>
-          </div>
-        </div>
-        
-        <div id="teacher-routine-section" class="shaded-info-box">
-          <div class="sub-section-content">
-            <a id="teacher-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">Teacher Routine</a>
-          </div>
-        </div>
-
-        <div id="class-routine-section" class="shaded-info-box">
-          <div class="sub-section-content">
-            <a id="class-routine-link" href="https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student" target="_blank" class="exam-link">Student Routine</a>
-          </div>
-        </div>
-
-        <div id="subject-routine-section" class="shaded-info-box">
-          <div class="sub-section-content">
-            <a id="subject-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">Subject Routine</a>
-          </div>
-        </div>
-
-        <div id="exam-routine-section" class="shaded-info-box">
-          <div class="sub-section-content">
-            <a id="exam-routine-link" href="https://script.google.com/macros/s/AKfycbzUdoNit0-ifZvVgswLJoQEixG7kpxv6MBUeE5dg6zIFjEIiyPkIMw68QDbOnfvvAMqtA/exec" target="_blank" class="exam-link">School Exam Routine</a>
-          </div>
-        </div>
+      <div class="class-buttons-grid">
+        <a id="staff-routine-link" href="https://script.google.com/macros/s/AKfycbyDLZxS1q5Q-PYeNuTMs1JjNS7IbEuTEalTtMF2EyBFuyEIzTeVU9kiyzF-hYPJzMOT/exec" target="_blank" class="exam-link">Staff Routine</a>
+        <a id="teacher-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">Teacher Routine</a>
+        <a id="class-routine-link" href="https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student" target="_blank" class="exam-link">Student Routine</a>
+        <a id="subject-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">Subject Routine</a>
+        <a id="exam-routine-link" href="https://script.google.com/macros/s/AKfycbzUdoNit0-ifZvVgswLJoQEixG7kpxv6MBUeE5dg6zIFjEIiyPkIMw68QDbOnfvvAMqtA/exec" target="_blank" class="exam-link">School Exam Routine</a>
       </div>
     </div>
         
-    <!-- ✅ স্টুডেন্ট হেল্প জোন -->
+    <!-- ✅ স্টুডেন্ট হেল্প জোন (সুবিন্যস্ত গ্রিডে আপডেট করা হলো) -->
     <div class="main-section-container" id="student-benefit-section">
       <div class="section-heading-wrapper">
         <h2 class="section-heading">For Students' Benefit</h2>
       </div>
 
-      <div class="sub-sections-wrapper">
-        <div id="school-tc-section" class="shaded-info-box">
-          <div class="sub-section-content">
-            <a id="school-tc-link" href="https://script.google.com/macros/s/AKfycbze5iUVn_CdCluUxUoKdapw_vExsTYq-ZsXW0ShBQ_2bbrbLrUCYqnCyDVaKExFzXKtkw/exec" target="_blank" class="exam-link">School Leaving Certificate (Manual T.C.)</a>
-          </div>
-        </div>
-
-        <div id="summative-sheet-excel-section" class="shaded-info-box">
-          <div class="sub-section-content">
-            <a id="summative-sheet-excel-link" href="https://script.google.com/macros/s/AKfycbzHv2UmXNSpJDBwca4Fwy_ABLVdmQHs8fsBNU8UXoX2nLYzs3oYAihLvI_XwQy1fuX-/exec" target="_blank" class="exam-link">Download Exam Marks (Excel)</a>
-          </div>
-        </div>
-
-        <div id="summative-sheet-pdf-section" class="shaded-info-box">
-          <div class="sub-section-content">
-            <a id="summative-sheet-pdf-link" href="https://script.google.com/macros/s/AKfycbyQYMtZd3n0Wg1_op-6q2i4zgsGAz2iqHnCawxsGkl9jQUerPEv5nQMPY4H8ft_iHKY/exec" target="_blank" class="exam-link">Download Exam Marks (PDF)</a>
-          </div>
-        </div>
+      <div class="class-buttons-grid">
+        <a id="school-tc-link" href="https://script.google.com/macros/s/AKfycbze5iUVn_CdCluUxUoKdapw_vExsTYq-ZsXW0ShBQ_2bbrbLrUCYqnCyDVaKExFzXKtkw/exec" target="_blank" class="exam-link">School Leaving Certificate (Manual T.C.)</a>
+        <a id="summative-sheet-excel-link" href="https://script.google.com/macros/s/AKfycbzHv2UmXNSpJDBwca4Fwy_ABLVdmQHs8fsBNU8UXoX2nLYzs3oYAihLvI_XwQy1fuX-/exec" target="_blank" class="exam-link">Download Exam Marks (Excel)</a>
+        <a id="summative-sheet-pdf-link" href="https://script.google.com/macros/s/AKfycbyQYMtZd3n0Wg1_op-6q2i4zgsGAz2iqHnCawxsGkl9jQUerPEv5nQMPY4H8ft_iHKY/exec" target="_blank" class="exam-link">Download Exam Marks (PDF)</a>
       </div>
     </div>
         
-    <!-- ✅ ফুটার -->     
+    <!-- ✅ ফুটার (স্টাইল ও ডার্ক থিম যুক্ত) -->     
     <div id="school-address-section">
-      <footer>
+      <footer class="main-footer">
         <div class="section-heading-wrapper">
           <h2 class="section-heading">Contact Details</h2>
         </div>
@@ -267,7 +225,6 @@
   <script>
     let searchData = [];
 
-    // ১. পেজ লোড হলে সমস্ত লিংক বা বোতামের ডেটা সংগ্রহ করা
     document.addEventListener("DOMContentLoaded", function() {
       const links = document.querySelectorAll('.sidebar-menu a, .exam-link');
       const seen = new Set();
@@ -287,12 +244,10 @@
       });
     });
 
-    // ২. সার্চ বক্সে ফোকাস করলে সাজেশন দেখানো
     function showSuggestions() {
       filterSuggestions();
     }
 
-    // ৩. টাইপ অনুযায়ী লিংক ফিল্টার করা
     function filterSuggestions() {
       const input = document.getElementById('site-search-input');
       const clearBtn = document.getElementById('clear-search-btn');
@@ -336,7 +291,6 @@
       }
     }
 
-    // ৪. Clear বোতামে চাপ দিলে ইনপুট মোছা
     function clearSearchInput() {
       const input = document.getElementById('site-search-input');
       const clearBtn = document.getElementById('clear-search-btn');
@@ -348,7 +302,6 @@
       input.focus();
     }
 
-    // ৫. সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হওয়া
     document.addEventListener('click', function(e) {
       const container = document.querySelector('.search-container');
       const list = document.getElementById('search-dropdown-list');
