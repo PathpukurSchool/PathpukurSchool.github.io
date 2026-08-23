@@ -634,3 +634,4 @@ if (searchInput && searchResultsDropdown) {
         }
     });
 }
+});
