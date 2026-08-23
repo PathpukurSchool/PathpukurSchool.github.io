@@ -1,83 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    /* ================================
-       Brand Colors
-       ================================ */
-    --primary-color: #2563eb;          /* Modern Royal Blue */
-    --primary-dark: #1d4ed8;           /* Deep Blue */
-    --primary-light: #eff6ff;          /* Soft Blue */
+    --primary-color: #15803d;
+    --primary-dark: #166534;
+    --primary-light: #f0fdf4;
 
-    --secondary-color: #f59e0b;        /* Warm Amber */
-    --secondary-hover: #d97706;        /* Deep Amber */
+    --secondary-color: #f59e0b;
+    --secondary-hover: #d97706;
 
-    /* ================================
-       Backgrounds
-       ================================ */
-    --background-color: #f8fafc;       /* Very Light Slate */
-    --card-background: #ffffff;        /* Pure White */
+    --background-color: #f8fafc;
+    --card-background: #ffffff;
 
-    /* ================================
-       Typography
-       ================================ */
-    --text-color-dark: #0f172a;        /* Slate 900 */
-    --text-color-light: #64748b;       /* Slate 500 */
-    --text-color-muted: #94a3b8;       /* Slate 400 */
+    --text-color-dark: #0f172a;
+    --text-color-light: #64748b;
+    --text-color-muted: #94a3b8;
 
-    /* ================================
-       Borders
-       ================================ */
-    --border-color: #e2e8f0;           /* Slate 200 */
-    --border-color-light: #f1f5f9;     /* Slate 100 */
+    --border-color: #e2e8f0;
+    --border-color-light: #f1f5f9;
 
-    /* ================================
-       Status Colors
-       ================================ */
-    --success-color: #16a34a;          /* Green */
-    --success-light: #f0fdf4;
+    --success-color: #16a34a;
+    --error-color: #dc2626;
+    --warning-color: #f59e0b;
+    --info-color: #0ea5e9;
 
-    --error-color: #dc2626;            /* Red */
-    --error-light: #fef2f2;
-
-    --warning-color: #f59e0b;          /* Amber */
-    --warning-light: #fffbeb;
-
-    --info-color: #0ea5e9;             /* Sky Blue */
-    --info-light: #f0f9ff;
-
-    /* ================================
-       Shadows
-       ================================ */
-    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08),
-                 0 1px 2px rgba(15, 23, 42, 0.04);
-
-    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.10),
-                 0 2px 4px rgba(15, 23, 42, 0.05);
-
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.10);
     --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
 
-    /* ================================
-       Sidebar
-       ================================ */
-    --sidebar-bg-start: #0f172a;       /* Slate 900 */
-    --sidebar-bg-end: #020617;         /* Slate 950 */
-
-    --sidebar-header-bg: #020617;
-
-    --sidebar-hover-bg: rgba(255, 255, 255, 0.07);
-
-    --sidebar-active-accent: #38bdf8;  /* Sky Blue */
-
-    --sidebar-text: #e2e8f0;           /* Slate 200 */
-    --sidebar-text-muted: #94a3b8;     /* Slate 400 */
-
-    /* ================================
-       Radius
-       ================================ */
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 18px;
+    --sidebar-bg-start: #14532d;
+    --sidebar-bg-end: #052e16;
+    --sidebar-header-bg: #052e16;
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+    --sidebar-active-accent: #86efac;
+    --sidebar-text: #f0fdf4;
+    --sidebar-text-muted: #bbf7d0;
 }
 
 /* ================================================= */
@@ -158,7 +114,7 @@ body.no-scroll {
     transform: translateX(-50%); 
     margin: 0;                
     text-align: center;
-    font-size: 1.15rem; /* ✅ ফন্ট সাইজ নিয়ন্ত্রণ করা হলো */
+    font-size: 1.0rem; /* ✅ ফন্ট সাইজ নিয়ন্ত্রণ করা হলো */
     font-weight: 600;
     letter-spacing: 0.5px;
     white-space: nowrap;
@@ -520,14 +476,14 @@ body.no-scroll {
     color: #ffffff !important;
     text-align: center !important;
     padding: 2rem 1rem !important;
-    margin-top: 2rem !important;
+    margin-top: 1rem !important;
     width: 100% !important;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
 .main-footer p, footer p {
     margin: 6px 0 !important;
-    font-size: 0.88rem !important;
+    font-size: 0.78rem !important;
     color: #ffffff !important;
     font-weight: 400 !important;
 }
