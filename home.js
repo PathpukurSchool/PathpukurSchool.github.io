@@ -35,11 +35,11 @@ function createButton(text, bgColor, onClick, disabled = false) {
 }
 
 // =================================
-// 🔍 সার্চ ফিল্টারিং ফাংশনালিটি (নতুন যুক্ত করা হয়েছে)
+// 🔍 সার্চ ফিল্টারিং ফাংশনালিটি
 // =================================
 
 function setupLiveSearch() {
-    const searchInput = document.getElementById('search-input');
+    const searchInput = document.getElementById('search-input') || document.getElementById('site-search-input');
     if (!searchInput) return;
 
     searchInput.addEventListener('input', function () {
@@ -58,7 +58,7 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔐 মাস্টার লগইন ফাংশন (সম্পূর্ণ অপরিবর্তিত)
+// 🔐 মাস্টার লগইন ফাংশন
 // =================================
 
 function toggleMasterPasswordVisibility() {
@@ -112,11 +112,18 @@ async function submitMasterLogin() {
             successDiv.innerText = "✔️ Login Successful.";
             successDiv.style.display = "block";
 
+            // ✅ এখানে পরিবর্তন আনা হয়েছে
             setTimeout(() => {
                 const overlay = document.getElementById('masterLoginOverlay');
                 if (overlay) overlay.style.display = "none";
+
+                // ওয়েবসাইট ও সার্চ বার ডিসপ্লে করা
+                const mainContent = document.getElementById('main-website-content');
+                if (mainContent) mainContent.style.display = "block";
+
                 document.body.classList.remove('no-scroll');
             }, 1000);
+
         } else {
             errorDiv.innerText = "Incorrect ID or Password!";
             errorDiv.style.color = "red";
@@ -134,7 +141,7 @@ async function submitMasterLogin() {
 }
 
 // =================================
-// 🎓 স্টুডেন্ট/ক্লাস এক্সাম লিংক লোডিং (অপরিবর্তিত)
+// 🎓 স্টুডেন্ট/ক্লাস এক্সাম লিংক লোডিং
 // =================================
 
 function loadStudentExamLinks() {
@@ -144,7 +151,6 @@ function loadStudentExamLinks() {
             return response.json();
         })
         .then(data => {
-            // শুধুমাত্র যেসব এলিমেন্টে ID দেওয়া আছে সেগুলোর জন্য জেসন চেক হবে
             document.querySelectorAll(".exam-link[id]").forEach(button => {
                 const id = button.id;
                 if (data[id] && data[id].trim() !== '') {
@@ -178,7 +184,7 @@ function showAvailableSoonMessage(button) {
 }
 
 // =================================
-// 📣 ডিজিটাল নোটিশ বোর্ড ফাংশন (অপরিবর্তিত)
+// 📣 ডিজিটাল নোটিশ বোর্ড ফাংশন
 // =================================
 
 const APPS_SCRIPT_NOTICE_URL = "https://script.google.com/macros/s/AKfycbzxx7IEJEvQ3TRut_z0f51aI83r7JJ_H125d2eIK5G95IdzX-qs3H3PGVNFYBgc1OaV/exec?action=read";
@@ -361,7 +367,7 @@ function showPopup(titleText, date, link, subjText) {
 }
 
 // =================================
-// 🧭 সাইড বার মেনু ও স্ক্রল ফাংশন (অপরিবর্তিত)
+// 🧭 সাইড বার মেনু ও স্ক্রল ফাংশন
 // =================================
 
 function initializeSidebar() {
@@ -414,7 +420,7 @@ function initializeSidebar() {
 }
 
 // =================================
-// 📅 পরীক্ষার তারিখ মারকিউ (অপরিবর্তিত)
+// 📅 পরীক্ষার তারিখ মারকিউ
 // =================================
 
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfcYA8sdD__TgIe-mHKE9n1fabVv_pDFam1K59O9FdD13r5rVcg5_Mf005mcAWsa6xjA/exec';
@@ -446,7 +452,13 @@ async function loadExamDates() {
 function logout() {
     sessionStorage.removeItem("studentLoggedIn");
     sessionStorage.removeItem("teacherLoggedIn");
-    window.location.replace("index.html");
+    
+    // ✅ এখানেও পরিবর্তন করা হয়েছে
+    const mainContent = document.getElementById('main-website-content');
+    const overlay = document.getElementById('masterLoginOverlay');
+    
+    if (mainContent) mainContent.style.display = "none";
+    if (overlay) overlay.style.display = "block";
 }
 
 // =================================
@@ -454,11 +466,20 @@ function logout() {
 // =================================
 
 document.addEventListener("DOMContentLoaded", () => {
+    // ✅ সেশন লগইন চ্যাকিং যুক্ত করা হলো
+    if (sessionStorage.getItem("teacherLoggedIn") === "true") {
+        const overlay = document.getElementById('masterLoginOverlay');
+        const mainContent = document.getElementById('main-website-content');
+        
+        if (overlay) overlay.style.display = "none";
+        if (mainContent) mainContent.style.display = "block";
+    }
+
     fetchNotices();
     initializeSidebar();
     loadStudentExamLinks();
     loadExamDates();
-    setupLiveSearch(); // 🔍 লাইভ সার্চ চালু করা হলো
+    setupLiveSearch();
 
     if (examDatesMarquee) {
         examDatesMarquee.addEventListener("mouseover", () => examDatesMarquee.style.animationPlayState = 'paused');
