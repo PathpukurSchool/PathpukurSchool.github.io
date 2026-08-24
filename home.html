@@ -14,7 +14,7 @@
     })();
   </script>
   
-  <title>PATHPUKUR HIGH SCHOOL (HS)</title>
+  <title>Teacher Login - Pathpukur High School (HS)</title>
 
   <!-- SEO & Meta Tags -->
   <meta name="description" content="Pathpukur High School - Official Website. Access teacher and student panels, exam dates, and forms.">
@@ -67,13 +67,13 @@
   <div id="masterLoginOverlay">
     <div id="masterLoginBox">
       <h2 class="red-text">Pathpukur High School</h2>
-      <h2 class="shaded-info-box-heading">Teacher Login</h2>
+      <h2 class="shaded-info-box-heading">🪑 Teacher Login</h2>
 
       <input type="hidden" id="loginType" value="teacher">
-      <input type="text" id="masterId" placeholder="Enter ID"><br>
+      <input type="text" id="masterId" placeholder="🔒 Enter ID"><br>
       
       <div style="position: relative;">
-        <input type="password" id="masterPass" placeholder="Enter Password">
+        <input type="password" id="masterPass" placeholder="🔑 Enter Password">
         <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
           <i id="masterPassToggle" class="fa-solid fa-eye"></i>
         </span>
@@ -82,7 +82,7 @@
       <div id="masterLoginError" class="error"></div>
       <div id="masterLoginSuccess" class="success" style="display:none;"></div>
 
-      <button onclick="submitMasterLogin()">LOGIN</button>
+      <button onclick="submitMasterLogin()">🔓 Login</button>
     </div>
   </div>
 
@@ -90,33 +90,28 @@
   <div id="main-website-content">
 
     <!-- ✅ মেন হেডার -->
-    <div id="top-bar-section">
       <header class="main-header">
         <div class="header-content">
           <button id="menu-toggle-button" class="menu-button" aria-label="Toggle Menu">☰</button>
         </div>
-        <h1 class="school-name">Pathpukur High School (H.S.)</h1>
-        <button onclick="logout()" class="logout-button">Logout</button>
+        <h1 class="school-name">Pathpukur High School</h1>
+        <button onclick="logout()" class="logout-button">🔏 Logout</button>
       </header>
-    </div>
 
     <!-- ✅ সাইড বার মেনু -->
     <div class="overlay" id="overlay"></div>
     <nav id="sidebar-menu" class="sidebar-menu">
       <ul>
-        <li><a href="#top-bar-section" class="nav-link">HOME</a></li>
-        
         <li><a href="#marks-information-section" class="nav-link menu-header">Student Information</a></li>
         <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
         
-        <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Exam Marks</a></li>
+        <li><a href="#upload-your-marks-section" class="nav-link menu-header">Student Exam Marks</a></li>
         
         <li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
         <li><a href="#staff-routine-section" class="nav-link">Staff Routine</a></li>
         <li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
         <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
         <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
-        <li><a href="#exam-routine-section" class="nav-link">Exam Routine</a></li>
 
         <li><a href="#student-benefit-section" class="nav-link menu-header">Students' Benefit</a></li>
         <li><a href="#school-tc-section" class="nav-link">Manual T.C.</a></li>
@@ -124,7 +119,6 @@
         <li><a href="#summative-sheet-pdf-section" class="nav-link">Download Exam Marks (PDF)</a></li>
         
         <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
-        <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
       </ul>
     </nav>
 
@@ -147,14 +141,14 @@
       </div>
 
       <div class="class-buttons-grid" id="student-list-section">
-        <a id="student-list-link" href="https://pathpukurschool.github.io/web_vs/current_student.html" target="_blank" class="exam-link">VIEW STUDENT DATABASE</a>
+        <a id="student-list-link" href="https://pathpukurschool.github.io/web_vs/current_student.html" target="_blank" class="exam-link">Student Details</a>
       </div>
     </div>
 
     <!-- ✅ নম্বর আপলোড -->  
     <div class="main-section-container" id="upload-your-marks-section">
       <div class="section-heading-wrapper">
-        <h2 class="section-heading">Upload Student Exam Marks</h2>
+        <h2 class="section-heading">Student Exam Marks</h2>
       </div>
       
       <div class="class-buttons-grid">
@@ -182,14 +176,13 @@
         <a id="teacher-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=teacher" target="_blank" class="exam-link">Teacher Routine</a>
         <a id="class-routine-link" href="https://script.google.com/macros/s/AKfycbxWXKSck3odWKXi4JA8nzcaYxWUmmaW1QJAE9EmbM6SpJOBUjtq25VrVWZ9qbmIzotU8Q/exec?page=student" target="_blank" class="exam-link">Student Routine</a>
         <a id="subject-routine-link" href="https://script.google.com/macros/s/AKfycbxAPcHNUgxmXlgnLjxqiO_QYr5VfVbXEfUjHEIHqih8q2lA7IkgZUtPwrAxGkTf-IxVtQ/exec?page=subject" target="_blank" class="exam-link">Subject Routine</a>
-        <a id="exam-routine-link" href="https://script.google.com/macros/s/AKfycbzUdoNit0-ifZvVgswLJoQEixG7kpxv6MBUeE5dg6zIFjEIiyPkIMw68QDbOnfvvAMqtA/exec" target="_blank" class="exam-link">School Exam Routine</a>
       </div>
     </div>
         
     <!-- ✅ স্টুডেন্ট হেল্প জোন -->
     <div class="main-section-container" id="student-benefit-section">
       <div class="section-heading-wrapper">
-        <h2 class="section-heading">For Students' Benefit</h2>
+        <h2 class="section-heading">Students' Benefit</h2>
       </div>
 
       <div class="class-buttons-grid">
@@ -205,11 +198,10 @@
         <div class="section-heading-wrapper">
           <h2 class="section-heading">Contact Details</h2>
         </div>
-        <p><strong>School Name:</strong> Pathpukur High School (H.S.)</p>
-        <p><strong>Address:</strong> Vill: Pathpukur, P.O.: Bokultala Hat, P.S.: Bokultala, Block: Joynagar II, Circle: Joynagar, Dist.: South 24 Parganas, State: West Bengal, Pin Code: 743338, India</p>
+        <p><strong>Address:</strong> Vill: Pathpukur, P.O.: Bokultala Hat, P.S.: Bokultala, Block: Joynagar II, Circle: Joynagar, Dist.: South 24 Parganas, State: West Bengal, Pin Code: 743338</p>
         <p><strong>High School Memo No: </strong> 11775/G, Dt. - 11.11.1970 w.e.f. 01.01.1969; &nbsp; <strong>HS Memo No: </strong> DS(A)148/Recos/10, Dt. - 22.06.2010 w.e.f. 2010-11</p>
-        <p>UDISE Code: 19181600802, Index No: C1 194, HS Code: 102376</p>
-        <p><strong>Phone No:</strong> +91 3218248083</p>
+        <p>UDISE Code: 19181600802, Index No: C1-194, HS Code: 102376</p>
+        <p><strong>Lane Line:</strong> +91 3218248083</p>
         <p><strong>Email:</strong> pathpukur1954@gmail.com</p>
       </footer>
     </div>
