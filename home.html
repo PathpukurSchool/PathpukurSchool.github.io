@@ -63,28 +63,39 @@
 </head>
 <body>
 
-  <!-- ✅ টিচার লগইন ওভারলে -->
-  <div id="masterLoginOverlay">
-    <div id="masterLoginBox">
-      <h2 class="red-text">Pathpukur High School</h2>
-      <h2 class="shaded-info-box-heading">🪑 Teacher Login</h2>
+ <!-- ✅ টিচার লগইন ওভারলে -->
+<div id="masterLoginOverlay">
+  <div id="masterLoginBox">
+    <h2 class="red-text">Pathpukur High School (H.S.)</h2>
+    <h2 class="shaded-info-box-heading">🪑 Teacher Login</h2>
 
-      <input type="hidden" id="loginType" value="teacher">
-      <input type="text" id="masterId" placeholder="🔒 Enter ID"><br>
-      
-      <div style="position: relative;">
-        <input type="password" id="masterPass" placeholder="🔑 Enter Password">
-        <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
-          <i id="masterPassToggle" class="fa-solid fa-eye"></i>
-        </span>
-      </div>
-
-      <div id="masterLoginError" class="error"></div>
-      <div id="masterLoginSuccess" class="success" style="display:none;"></div>
-
-      <button onclick="submitMasterLogin()">🔓 Login</button>
+    <input type="hidden" id="loginType" value="teacher">
+    <input type="text" id="masterId" placeholder="🔒 Enter ID"><br>
+    
+    <div style="position: relative;">
+      <input type="password" id="masterPass" placeholder="🔑 Enter Password">
+      <span style="position: absolute; right: 10px; top: 35%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
+        <i id="masterPassToggle" class="fa-solid fa-eye"></i>
+      </span>
     </div>
+
+    <!-- 🔢 ক্যাপচা সেকশন -->
+    <div class="captcha-container">
+      <div class="captcha-box">
+        <span id="captchaCode">------</span>
+        <button type="button" class="captcha-refresh-btn" onclick="generateCaptcha()" title="Refresh">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
+      <input type="text" id="userCaptcha" placeholder="🤖 Enter CAPTCHA" autocomplete="off">
+    </div>
+
+    <div id="masterLoginError" class="error"></div>
+    <div id="masterLoginSuccess" class="success" style="display:none;"></div>
+
+    <button onclick="submitMasterLogin()">🔓 Login</button>
   </div>
+</div>
 
   <!-- ✅ মূল ওয়েব পেজ -->
   <div id="main-website-content">
