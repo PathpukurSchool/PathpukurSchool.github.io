@@ -90,24 +90,26 @@
   <div id="main-website-content">
 
     <!-- ✅ মেন হেডার -->
+    <div id="top-bar-section">
       <header class="main-header">
         <div class="header-content">
           <button id="menu-toggle-button" class="menu-button" aria-label="Toggle Menu">☰</button>
         </div>
         <h1 class="school-name">Pathpukur High School</h1>
-        <button onclick="logout()" class="logout-button">🔏 Logout</button>
+        <button onclick="logout()" class="logout-button">Logout</button>
       </header>
+    </div>
 
     <!-- ✅ সাইড বার মেনু -->
     <div class="overlay" id="overlay"></div>
     <nav id="sidebar-menu" class="sidebar-menu">
       <ul>
         <li><a href="#marks-information-section" class="nav-link menu-header">Student Information</a></li>
-        <li><a href="#student-list-section" class="nav-link">Student Information</a></li>
+        <li><a href="#student-list-section" class="nav-link">Student Details</a></li>
         
         <li><a href="#upload-your-marks-section" class="nav-link menu-header">Student Exam Marks</a></li>
         
-        <li><a href="#school-routine-section" class="nav-link menu-header">Routine</a></li>
+        <li><a href="#school-routine-section" class="nav-link menu-header">School Routine</a></li>
         <li><a href="#staff-routine-section" class="nav-link">Staff Routine</a></li>
         <li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
         <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
@@ -118,7 +120,7 @@
         <li><a href="#summative-sheet-excel-section" class="nav-link">Download Exam Marks (Excel)</a></li>
         <li><a href="#summative-sheet-pdf-section" class="nav-link">Download Exam Marks (PDF)</a></li>
         
-        <li><a href="#school-address-section" class="nav-link">Contact Details</a></li>
+        <li><a href="#school-address-section" class="nav-link menu-header">School Details</a></li>
       </ul>
     </nav>
 
@@ -127,7 +129,7 @@
       <div class="search-container" role="search">
         <div class="search-input-wrapper">
           <span class="search-icon" aria-hidden="true">🔍</span>
-          <input type="search" id="site-search-input" placeholder="Search page links, classes, or forms..." autocomplete="off" aria-label="Search website content" onfocus="showSuggestions()" oninput="filterSuggestions()">
+          <input type="search" id="site-search-input" placeholder="Search page links, classes, or forms..." autocomplete="off" aria-label=" Search..." onfocus="showSuggestions()" oninput="filterSuggestions()">
           <span class="clear-icon" id="clear-search-btn" role="button" aria-label="Clear search" onclick="clearSearchInput()">Clear</span>
         </div>
         <div id="search-dropdown-list" class="search-dropdown" aria-live="polite"></div>
@@ -196,7 +198,7 @@
     <div id="school-address-section">
       <footer class="main-footer">
         <div class="section-heading-wrapper">
-          <h2 class="section-heading">Contact Details</h2>
+          <h2 class="section-heading">School Details</h2>
         </div>
         <p><strong>Address:</strong> Vill: Pathpukur, P.O.: Bokultala Hat, P.S.: Bokultala, Block: Joynagar II, Circle: Joynagar, Dist.: South 24 Parganas, State: West Bengal, Pin Code: 743338</p>
         <p><strong>High School Memo No: </strong> 11775/G, Dt. - 11.11.1970 w.e.f. 01.01.1969; &nbsp; <strong>HS Memo No: </strong> DS(A)148/Recos/10, Dt. - 22.06.2010 w.e.f. 2010-11</p>
