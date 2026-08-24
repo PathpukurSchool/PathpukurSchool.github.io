@@ -101,30 +101,69 @@
     </div>
 
     <!-- ✅ সাইড বার মেনু -->
-    <div class="overlay" id="overlay"></div>
-    <nav id="sidebar-menu" class="sidebar-menu">
-      <ul>
-        <li><a href="#marks-information-section" class="nav-link menu-header">Student Information</a></li>
+<div class="overlay" id="overlay"></div>
+<nav id="sidebar-menu" class="sidebar-menu">
+  <ul class="menu-list">
+
+    <!-- ক্যাটাগরি ১ -->
+    <li class="menu-item dropdown">
+      <div class="menu-header-wrapper">
+        <a href="#marks-information-section" class="nav-link menu-header">Student Information</a>
+        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+      </div>
+      <ul class="submenu">
         <li><a href="#student-list-section" class="nav-link">Student Details</a></li>
-        
-        <li><a href="#upload-your-marks-section" class="nav-link menu-header">Upload Student Marks</a></li>
+      </ul>
+    </li>
+
+    <!-- ক্যাটাগরি ২ -->
+    <li class="menu-item dropdown">
+      <div class="menu-header-wrapper">
+        <a href="#upload-your-marks-section" class="nav-link menu-header">Upload Student Marks</a>
+        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+      </div>
+      <ul class="submenu">
         <li><a href="#score_sheet_section" class="nav-link">Score Sheet / Marks Foil</a></li>
         <li><a href="#marks_uploading_report_section" class="nav-link">Marks Uploading Report</a></li>
-        
-        <li><a href="#school-routine-section" class="nav-link menu-header">School Routine</a></li>
+      </ul>
+    </li>
+
+    <!-- ক্যাটাগরি ৩ -->
+    <li class="menu-item dropdown">
+      <div class="menu-header-wrapper">
+        <a href="#school-routine-section" class="nav-link menu-header">School Routine</a>
+        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+      </div>
+      <ul class="submenu">
         <li><a href="#staff-routine-section" class="nav-link">Staff Routine</a></li>
         <li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
         <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
         <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
+      </ul>
+    </li>
 
-        <li><a href="#student-benefit-section" class="nav-link menu-header">Students' Benefit</a></li>
+    <!-- ক্যাটাগরি ৪ -->
+    <li class="menu-item dropdown">
+      <div class="menu-header-wrapper">
+        <a href="#student-benefit-section" class="nav-link menu-header">Students' Benefit</a>
+        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+      </div>
+      <ul class="submenu">
         <li><a href="#school-tc-section" class="nav-link">Manual T.C.</a></li>
         <li><a href="#summative-sheet-excel-section" class="nav-link">Download Exam Marks (Excel)</a></li>
         <li><a href="#summative-sheet-pdf-section" class="nav-link">Download Exam Marks (PDF)</a></li>
-        
-        <li><a href="#school-address-section" class="nav-link menu-header">School Details</a></li>
       </ul>
-    </nav>
+    </li>
+
+    <!-- ক্যাটাগরি ৫ (যার কোনো সাবমেনু নেই) -->
+    <li class="menu-item">
+      <div class="menu-header-wrapper">
+        <a href="#school-address-section" class="nav-link menu-header">School Details</a>
+      </div>
+    </li>
+
+  </ul>
+</nav>
 
     <!-- ✅ স্টাইলিশ সার্চ বার -->
     <div class="search-section">
