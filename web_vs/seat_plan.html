@@ -328,7 +328,7 @@
 
     <!-- Notice Box -->
     <div class="notice-box">
-      <i class="fa-solid fa-bullhorn"></i> ক্লাস ও রোল লিখে <b>Search</b> করলে পরীক্ষার রুম নম্বর জানা যাবে! 🎯
+      <i class="fa-solid fa-bullhorn"></i>  ছাত্র-ছাত্রীরা কোন রুমে বসে পরীক্ষা দেবে তার তালিকা। ক্লাস ও রোল লিখে <b>Search</b> করলে পরীক্ষার রুম নম্বর জানা যাবে! 🎯
     </div>
 
     <!-- Search Section -->
@@ -402,14 +402,16 @@
     <!-- Class Table Overview -->
     <div class="table-responsive">
       <table>
-        <thead>
-          <tr>
-            <th>Class</th>
-            <th>Gender</th>
-            <th>Roll Range</th>
-            <th>Room No</th>
-          </tr>
-        </thead>
+        <!-- Table Header Section -->
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>Section</th>
+              <th>Gender</th>
+              <th>Roll Range</th>
+              <th>Room No</th>
+            </tr>
+          </thead>
         <tbody id="seatTableBody">
           <tr>
             <td colspan="4" style="text-align:center; padding: 20px;">শ্রেণী নির্বাচন করুন...</td>
@@ -462,45 +464,52 @@
       }
     }
 
-    // Load Overview Table for Class
-    async function loadClassSeatPlan(cls) {
-      const tbody = document.getElementById('seatTableBody');
-      const statusBadge = document.getElementById('statusBadge');
-      
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>';
+    // Load Overview Table and Dynamic Exam Name for Selected Class
+async function loadClassSeatPlan(cls) {
+  const tbody = document.getElementById('seatTableBody');
+  const statusBadge = document.getElementById('statusBadge');
+  const examBadge = document.getElementById('examBadge');
+  
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>';
 
-      try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/seat_plan?class_name=eq.${encodeURIComponent(cls)}&order=id.asc`, {
-          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-        });
-        const plans = await response.json();
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/seat_plan?class_name=eq.${encodeURIComponent(cls)}&order=id.asc`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    const plans = await response.json();
 
-        if (!plans || plans.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
-          statusBadge.innerText = `Class: ${cls} | কোনো রেকর্ড নেই`;
-          return;
-        }
-
-        statusBadge.innerHTML = `Class: <b>${cls}</b> - এর সিট প্ল্যান দেখাচ্ছে`;
-        
-        let html = '';
-        plans.forEach(p => {
-          html += `
-            <tr>
-              <td><b>${p.class_name}</b></td>
-              <td>${p.gender || 'BOYS & GIRLS'}</td>
-              <td>${p.start_roll} - ${p.end_roll}</td>
-              <td><b style="color: #0284c7;">${p.room_no}</b></td>
-            </tr>
-          `;
-        });
-        tbody.innerHTML = html;
-
-      } catch (err) {
-        console.error(err);
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: red;">ডাটা লোড করতে সমস্যা হচ্ছে! ইন্টারনেট কানেকশন দেখুন!</td></tr>';
-      }
+    if (!plans || plans.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
+      statusBadge.innerText = `Class: ${cls} | কোনো রেকর্ড নেই`;
+      examBadge.innerText = "Exam Name: তথ্য পাওয়া যায়নি 📝";
+      return;
     }
+
+    // ১. সিলেক্ট করা ক্লাসের প্রথম রেকর্ড থেকে Exam Name ডাইনামিকালি সেট করা
+    examBadge.innerText = "Exam: " + (plans[0].exam_name || 'N/A');
+
+    statusBadge.innerHTML = `Class: <b>${cls}</b> - এর সিট প্ল্যান দেখাচ্ছে`;
+    
+    // ২. টেবিলে Section সহ ডাটা রেন্ডার করা
+    let html = '';
+    plans.forEach(p => {
+      html += `
+        <tr>
+          <td><b>${p.class_name}</b></td>
+          <td>${p.section || 'All'}</td>
+          <td>${p.gender || 'BOYS & GIRLS'}</td>
+          <td>${p.start_roll} - ${p.end_roll}</td>
+          <td><b style="color: #0284c7;">${p.room_no}</b></td>
+        </tr>
+      `;
+    });
+    tbody.innerHTML = html;
+
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: red;">ডাটা লোড করতে সমস্যা হচ্ছে! ইন্টারনেট কানেকশন দেখুন!</td></tr>';
+  }
+}
 
     // Individual Student Search Function
     async function searchSeat() {
