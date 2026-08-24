@@ -321,14 +321,15 @@
   <div class="container">
     <!-- Header -->
     <div class="header">
-      <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ) 🏫</h1>
-      <h2 class="page-title">পরীক্ষার সিট প্ল্যান 📌 : <span id="sessionYear">....</span></h2>
-      <div class="exam-badge" id="examBadge">Exam: Loading... 📝</div>
+      <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
+      <h2 class="page-title">📌 পরীক্ষার সিট প্ল্যান : <span id="sessionYear">....</span></h2>
+      <div class="exam-badge" id="examBadge">📝 Exam: Loading... </div>
     </div>
 
     <!-- Notice Box -->
     <div class="notice-box">
-      <i class="fa-solid fa-bullhorn"></i>  ছাত্র-ছাত্রীরা কোন রুমে বসে পরীক্ষা দেবে তার তালিকা। ক্লাস ও রোল লিখে <b>Search</b> করলে পরীক্ষার রুম নম্বর জানা যাবে! 🎯
+      <i class="fa-solid fa-bullhorn"></i>  ছাত্র-ছাত্রীরা কোন রুমে বসে পরীক্ষা দেবে তার তালিকা।
+      <li>🎯 ক্লাস ও রোল দিয়ে <b>Search</b> করলে পরীক্ষার রুম নম্বর জানা যাবে!</li>
     </div>
 
     <!-- Search Section -->
@@ -336,7 +337,7 @@
       <div class="input-group">
         <label for="selectClass"><i class="fa-solid fa-graduation-cap"></i> শ্রেণী (Class):</label>
         <select id="selectClass">
-          <option value="">-- শ্রেণী বেছে নিন --</option>
+          <option value="">-- ক্লাস বেছে নিন --</option>
           <option value="V">Class V</option>
           <option value="VI">Class VI</option>
           <option value="VII">Class VII</option>
@@ -409,7 +410,7 @@
               <th>Section</th>
               <th>Gender</th>
               <th>Roll Range</th>
-              <th>Room No</th>
+              <th>Exam Room</th>
             </tr>
           </thead>
         <tbody id="seatTableBody">
@@ -490,13 +491,21 @@ async function loadClassSeatPlan(cls) {
 
     statusBadge.innerHTML = `Class: <b>${cls}</b> - এর সিট প্ল্যান দেখাচ্ছে`;
     
-    // ২. টেবিলে Section সহ ডাটা রেন্ডার করা
+    // ২. টেবিলে Section চেক করে ডাইনামিকালি ডাটা রেন্ডার করা
     let html = '';
     plans.forEach(p => {
+      // Start Roll ও End Roll এর সেকশন মিলিয়ে দেখা
+      let displaySection = 'All';
+      if (p.start_section && p.end_section && p.start_section === p.end_section) {
+        displaySection = p.start_section;
+      } else if (p.section) {
+        displaySection = p.section;
+      }
+
       html += `
         <tr>
           <td><b>${p.class_name}</b></td>
-          <td>${p.section || 'All'}</td>
+          <td>${displaySection}</td>
           <td>${p.gender || 'BOYS & GIRLS'}</td>
           <td>${p.start_roll} - ${p.end_roll}</td>
           <td><b style="color: #0284c7;">${p.room_no}</b></td>
