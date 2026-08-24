@@ -112,6 +112,36 @@ function setupLiveSearch() {
 }
 
 // =================================
+// 🔢 ক্যাপচা ফাংশনালিটি (NEW & SECURE)
+// =================================
+let currentCaptchaCode = "";
+
+// নিরাপদ র্যান্ডম ক্যাপচা জেনারেটর (Cryptographically Secure)
+function generateCaptcha() {
+    const captchaElement = document.getElementById('captchaCode');
+    const userInput = document.getElementById('userCaptcha');
+    
+    if (!captchaElement) return;
+
+    // অস্পষ্ট অক্ষর (যেমন: 0, O, I, 1, l) বাদ দেওয়া হয়েছে
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+    const length = 6;
+    let captcha = "";
+    
+    const randomValues = new Uint32Array(length);
+    window.crypto.getRandomValues(randomValues);
+
+    for (let i = 0; i < length; i++) {
+        captcha += chars.charAt(randomValues[i] % chars.length);
+    }
+
+    currentCaptchaCode = captcha;
+    captchaElement.innerText = captcha;
+    
+    if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
+}
+
+// =================================
 // 🔐 মাস্টার লগইন ও সিকিউরিটি ফাংশন
 // =================================
 
@@ -134,14 +164,16 @@ function toggleMasterPasswordVisibility() {
 async function submitMasterLogin() {
     const idInput = document.getElementById('masterId');
     const passInput = document.getElementById('masterPass');
+    const captchaInput = document.getElementById('userCaptcha');
     const errorDiv = document.getElementById('masterLoginError');
     const successDiv = document.getElementById('masterLoginSuccess');
     const loginBtn = document.querySelector('#masterLoginBox button');
 
-    if (!idInput || !passInput) return;
+    if (!idInput || !passInput || !captchaInput) return;
 
     const id = idInput.value.trim();
     const pass = passInput.value.trim();
+    const userCaptcha = captchaInput.value.trim();
 
     if (errorDiv) errorDiv.innerText = "";
     if (successDiv) {
@@ -149,11 +181,22 @@ async function submitMasterLogin() {
         successDiv.style.display = "none";
     }
 
-    if (!id || !pass) {
+    // ১. খালি ইনপুট ভ্যালিডেশন
+    if (!id || !pass || !userCaptcha) {
         if (errorDiv) {
-            errorDiv.innerText = "Please fill ID & Password.";
+            errorDiv.innerText = "Please fill ID, Password & CAPTCHA.";
             errorDiv.style.color = "red";
         }
+        return;
+    }
+
+    // ২. ক্যাপচা ভ্যালিডেশন (Case-insensitive)
+    if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
+        if (errorDiv) {
+            errorDiv.innerText = "❌ Invalid CAPTCHA code! Try again.";
+            errorDiv.style.color = "red";
+        }
+        generateCaptcha(); // সিকিউরিটির জন্য ক্যাপচা রিসেট
         return;
     }
 
@@ -190,7 +233,7 @@ async function submitMasterLogin() {
                 if (searchContainer) searchContainer.style.display = "block";
 
                 document.body.classList.remove('no-scroll');
-                startAutoLogoutTimer(); // অটো লগআউট সিস্টেম সক্রিয়করণ
+                startAutoLogoutTimer();
             }, 800);
 
         } else {
@@ -198,6 +241,7 @@ async function submitMasterLogin() {
                 errorDiv.innerText = "Incorrect ID or Password!";
                 errorDiv.style.color = "red";
             }
+            generateCaptcha(); // ভুল পাসওয়ার্ডের ক্ষেত্রে ক্যাপচা পরিবর্তন
             if (loginBtn) {
                 loginBtn.innerText = "LOGIN";
                 loginBtn.disabled = false;
@@ -210,6 +254,7 @@ async function submitMasterLogin() {
             errorDiv.innerText = "Error loading configuration.";
             errorDiv.style.color = "red";
         }
+        generateCaptcha();
         if (loginBtn) {
             loginBtn.innerText = "LOGIN";
             loginBtn.disabled = false;
@@ -408,10 +453,13 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         const overlay = document.getElementById('masterLoginOverlay');
         if (overlay) overlay.style.display = "flex";
+        
+        // লগইন বক্স দৃশ্যমান হলে নতুন ক্যাপচা তৈরি করা
+        generateCaptcha();
     }
 
     // ফাংশনসমূহ নিরাপদভাবে কল করা
     initializeSidebar();
     setupLiveSearch();
-    setupUniversalLinkHandler(); // লিংকহীন বাটনের জন্য মেসেজ হ্যান্ডলার সক্রিয় করা
+    setupUniversalLinkHandler();
 });
