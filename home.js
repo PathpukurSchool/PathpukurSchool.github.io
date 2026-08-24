@@ -172,10 +172,8 @@ async function submitMasterLogin() {
         const passHashed = await sha256(pass + config.Logpassword);
 
         if (idHashed === config.idHash && passHashed === config.passHash) {
-            // সিকিউরিটি বৃদ্ধি: সেশন ডাটা প্লাস টাইমস্ট্যাম্প সংরক্ষণ
             sessionStorage.setItem("userType", "teacher");
             sessionStorage.setItem("teacherLoggedIn", "true");
-            sessionStorage.setItem("loginTimestamp", Date.now().toString());
 
             if (successDiv) {
                 successDiv.innerText = "✔️ Login Successful.";
@@ -192,7 +190,7 @@ async function submitMasterLogin() {
                 if (searchContainer) searchContainer.style.display = "block";
 
                 document.body.classList.remove('no-scroll');
-                startAutoLogoutTimer(); // অটো লগআউট টাইমার চালু
+                startAutoLogoutTimer(); // অটো লগআউট সিস্টেম সক্রিয়করণ
             }, 800);
 
         } else {
@@ -223,62 +221,65 @@ async function submitMasterLogin() {
 function logout() {
     sessionStorage.clear();
     localStorage.clear();
-    
-    // পেজ রিফ্রেশ করে লগইন ওভারলে সক্রিয় করা
     window.location.reload();
 }
 
-// ⏳ অটোমেটিক ইনঅ্যাক্টিভিটি লগআউট (১৫ মিনিট নিষ্ক্রিয় থাকলে লগআউট হবে)
+// =================================================================
+// ⏳ উন্নত অটোমেটিক ইনঅ্যাক্টিভিটি লগআউট (মোবাইল, ট্যাব ও পিসির জন্য)
+// =================================================================
 let inactivityTimer;
-function startAutoLogoutTimer() {
-    const timeoutDuration = 15 * 60 * 1000; // ১৫ মিনিট
+const TIMEOUT_DURATION = 15 * 60 * 1000; // ১৫ মিনিট (মিলি সেকেন্ডে)
 
+function startAutoLogoutTimer() {
+    if (sessionStorage.getItem("teacherLoggedIn") !== "true") return;
+
+    // ১. ব্যবহারকারী অ্যাক্টিভ থাকলে টাইমস্ট্যাম্প আপডেট ও টাইমার রিসেট করার ফাংশন
     function resetTimer() {
+        localStorage.setItem('lastActivityTime', Date.now().toString());
+
         clearTimeout(inactivityTimer);
-        if (sessionStorage.getItem("teacherLoggedIn") === "true") {
-            inactivityTimer = setTimeout(() => {
-                alert("Session expired due to inactivity. Please login again.");
-                logout();
-            }, timeoutDuration);
+        inactivityTimer = setTimeout(() => {
+            checkAndPerformAutoLogout();
+        }, TIMEOUT_DURATION);
+    }
+
+    // ২. অ্যাক্টিভিটি টাইমস্ট্যাম্প ও অটো-লগআউট চেক করার ফাংশন
+    function checkAndPerformAutoLogout() {
+        if (sessionStorage.getItem("teacherLoggedIn") !== "true") return;
+
+        const lastActivity = localStorage.getItem('lastActivityTime');
+        const currentTime = Date.now();
+
+        if (lastActivity && (currentTime - parseInt(lastActivity, 10)) >= TIMEOUT_DURATION) {
+            alert("নিরাপত্তার স্বার্থে এবং ১৫ মিনিট নিষ্ক্রিয় (Inactivity) থাকার কারণে আপনাকে অটো-লগআউট করা হলো।");
+            logout();
         }
     }
 
-    window.onload = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress = resetTimer;
-    document.onclick = resetTimer;
-    document.onscroll = resetTimer;
+    // ৩. পিসি ও মোবাইলে ইউজার ইন্টারেকশন ইভেন্ট ট্র্যাকিং
+    const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+    activityEvents.forEach(evt => {
+        document.addEventListener(evt, resetTimer, { passive: true });
+    });
+
+    // 📱 ৪. মোবাইলের জন্য স্ক্রীন লক/আনলক ও ট্যাব ভিজিবিলিটি চেক
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            checkAndPerformAutoLogout(); // স্ক্রীন আনলক করার সাথে সাথে হিসাব চেক হবে
+        }
+    });
+
+    window.addEventListener('focus', checkAndPerformAutoLogout);
+
+    // প্রথমবার কল করা
+    resetTimer();
 }
 
 // =================================
-// 🎓 স্টুডেন্ট/ক্লাস এক্সাম লিংক লোডিং
+// 🔔 AVAILABLE SOON MESSAGE & CLICK HANDLER
 // =================================
 
-function loadStudentExamLinks() {
-    fetch("home_url.json")
-        .then(response => {
-            if (!response.ok) throw new Error("home_url.json fetch failed");
-            return response.json();
-        })
-        .then(data => {
-            document.querySelectorAll(".exam-link[id]").forEach(button => {
-                const id = button.id;
-                if (data[id] && data[id].trim() !== '') {
-                    button.onclick = (e) => {
-                        e.preventDefault();
-                        window.open(data[id], '_blank');
-                    };
-                } else if (!button.getAttribute('href') || button.getAttribute('href') === '#') {
-                    button.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        showAvailableSoonMessage(button);
-                    });
-                }
-            });
-        })
-        .catch(error => console.error("Error loading student URLs:", error));
-}
-
+// নির্দিষ্ট বোতামের নিচে 'Available Soon' নোটিশ দেখানোর ফাংশন (পূর্বের ন্যায় অক্ষুণ্ণ)
 function showAvailableSoonMessage(button) {
     if (button.nextElementSibling && button.nextElementSibling.classList.contains('avail-msg')) return;
 
@@ -291,6 +292,23 @@ function showAvailableSoonMessage(button) {
     setTimeout(() => {
         if (msg.parentNode) msg.remove();
     }, 3000);
+}
+
+// সার্বজনীন ক্লিক হ্যান্ডলার: যেসব বোতামে লিংক (href) খালি বা '#' আছে সেগুলোতে অটোমেটিক মেসেজ দেখাবে
+function setupUniversalLinkHandler() {
+    document.addEventListener('click', (event) => {
+        const targetBtn = event.target.closest('.exam-link, .nav-link, .class-link-btn');
+
+        if (targetBtn) {
+            const href = targetBtn.getAttribute('href');
+
+            // যদি লিংক ফাঁকা থাকে, '#' থাকে অথবা লিংক না থাকে
+            if (!href || href.trim() === '' || href.trim() === '#' || href.startsWith('javascript:')) {
+                event.preventDefault();
+                showAvailableSoonMessage(targetBtn);
+            }
+        }
+    });
 }
 
 // =================================
@@ -325,7 +343,7 @@ function initializeSidebar() {
         arrow.addEventListener('click', function(e) {
             e.stopPropagation();
             const menuItem = this.closest('.menu-item');
-            // অন্য সাবমেনু বন্ধ করে শুধু বর্তমানটি খুলতে চাইলে নিচের লাইনটি আনকমেন্ট করুন:
+            
             sidebar.querySelectorAll('.menu-item').forEach(item => {
                 if(item !== menuItem) item.classList.remove('active');
             });
@@ -394,6 +412,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ফাংশনসমূহ নিরাপদভাবে কল করা
     initializeSidebar();
-    loadStudentExamLinks();
     setupLiveSearch();
+    setupUniversalLinkHandler(); // লিংকহীন বাটনের জন্য মেসেজ হ্যান্ডলার সক্রিয় করা
 });
