@@ -243,200 +243,17 @@ function showAvailableSoonMessage(button) {
 }
 
 // =================================
-// 📣 ডিজিটাল নোটিশ বোর্ড ফাংশন
-// =================================
-
-const APPS_SCRIPT_NOTICE_URL = "https://script.google.com/macros/s/AKfycbzxx7IEJEvQ3TRut_z0f51aI83r7JJ_H125d2eIK5G95IdzX-qs3H3PGVNFYBgc1OaV/exec?action=read";
-const NOTICES_PER_PAGE = 10;
-let currentPage = 1;
-let totalPages = 0;
-let Helping = [];
-
-async function fetchNotices() {
-    const container = document.getElementById('help-list');
-    if (container) container.innerHTML = errorBox("Loading...", "Please wait...");
-    
-    try {
-        const response = await fetch(APPS_SCRIPT_NOTICE_URL);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        Helping = Array.isArray(data.notices) ? data.notices : [];
-        renderHelpList();
-    } catch (error) {
-        console.error("Failed to fetch notices:", error);
-        if (container) container.innerHTML = errorBox("Error!", "Failed to load notices.");
-    }
-}
-
-function renderHelpList() {
-    const container = document.getElementById('help-list');
-    if (!container) return;
-    container.innerHTML = "";
-
-    if (!Array.isArray(Helping) || Helping.length === 0) {
-        container.innerHTML = errorBox("Available Soon!", "Please check back later for updates.");
-        return;
-    }
-
-    totalPages = Math.ceil(Helping.length / NOTICES_PER_PAGE);
-    const startIndex = (currentPage - 1) * NOTICES_PER_PAGE;
-    const noticesToRender = Helping.slice(startIndex, startIndex + NOTICES_PER_PAGE);
-
-    noticesToRender.forEach(item => {
-        const itemDiv = document.createElement('div');
-        const titleText = item.text || "No Title";
-        const dateText = item.date ? ` [Date: ${item.date}]` : '';
-        const isItemNew = item.isNew === true || item.isNew === 'Yes' || item.isNew === 'NEW';
-        
-        let itemContent = titleText + dateText;
-        if (isItemNew) {
-            itemContent += ` <span class="new-badge">✨ NEW</span>`;
-            itemDiv.classList.add('new-notice-highlight');
-        }
-        
-        itemDiv.innerHTML = itemContent;
-        itemDiv.classList.add('notice-item'); 
-        itemDiv.onclick = () => showPopup(item.text, item.date, item.link, item.subj);
-        container.appendChild(itemDiv);
-    });
-
-    renderPaginationControls();
-}
-
-function renderPaginationControls() {
-    const paginationContainer = document.getElementById('pagination-controls');
-    if (!paginationContainer) return;
-    paginationContainer.innerHTML = '';
-    if (totalPages <= 1) return;
-
-    const backBtn = createButton('BACK', '#ff9800', () => {
-        if (currentPage > 1) { currentPage--; renderHelpList(); }
-    }, currentPage === 1);
-
-    const pageInfo = document.createElement('span');
-    pageInfo.innerText = `Page ${currentPage}/${totalPages}`;
-    pageInfo.classList.add('page-info');
-
-    const nextBtn = createButton('NEXT', '#ff9800', () => {
-        if (currentPage < totalPages) { currentPage++; renderHelpList(); }
-    }, currentPage === totalPages);
-
-    paginationContainer.append(backBtn, pageInfo, nextBtn);
-}
-
-function showPopup(titleText, date, link, subjText) {
-    const existing = document.getElementById('notice-popup');
-    if (existing) existing.remove();
-
-    const overlay = document.createElement('div');
-    overlay.id = 'notice-popup-overlay';
-    overlay.classList.add('popup-overlay'); 
-    overlay.onclick = () => {
-        popup.remove();
-        overlay.remove();
-    };
-
-    const popup = document.createElement('div');
-    popup.id = 'notice-popup';
-    popup.classList.add('popup-content'); 
-    popup.onclick = (e) => e.stopPropagation();
-
-    const schoolHeader = document.createElement('div');
-    schoolHeader.innerHTML = '<strong>Pathpukur High School (HS)</strong><br>Notice Board';
-    schoolHeader.classList.add('school-header'); 
-    popup.appendChild(schoolHeader);
-
-    const titleElem = document.createElement('div');
-    titleElem.innerText = titleText || "No Title";
-    titleElem.classList.add('notice-title'); 
-    popup.appendChild(titleElem);
-
-    if (date) {
-        const dateElem = document.createElement('div');
-        dateElem.innerHTML = `<strong>তারিখ:</strong> ${date}`;
-        dateElem.classList.add('notice-date'); 
-        popup.appendChild(dateElem);
-    }
-
-    if (subjText && subjText.trim() !== '') {
-        const subjElem = document.createElement('div');
-        subjElem.innerText = subjText;
-        subjElem.classList.add('notice-subject'); 
-        popup.appendChild(subjElem);
-    }
-
-    const buttonContainer = document.createElement('div');
-    buttonContainer.id = 'popup-button-container';
-    buttonContainer.classList.add('popup-button-container'); 
-
-    if (link && link.trim() !== '') {
-        const linkBtn = document.createElement('a');
-        linkBtn.href = link;
-        linkBtn.innerText = 'Open Link';
-        linkBtn.target = '_blank';
-        linkBtn.classList.add('popup-link-btn'); 
-        buttonContainer.appendChild(linkBtn);
-    }
-
-    const downloadBtn = createButton('Download', '#28a745', () => {
-        buttonContainer.style.visibility = 'hidden';
-        const originalMaxHeight = popup.style.maxHeight;
-        const originalOverflowY = popup.style.overflowY;
-
-        popup.style.maxHeight = 'none';
-        popup.style.overflowY = 'visible';
-
-        setTimeout(() => {
-            if (typeof html2canvas !== 'undefined') {
-                 html2canvas(popup).then(canvas => {
-                    let safeTitle = (titleText || "notice")
-                        .replace(/[\\/:*?"<>|]+/g, "")
-                        .trim()
-                        .replace(/\s+/g, "_");
-                    
-                    let fileName = safeTitle + ".png";
-                    const a = document.createElement('a');
-                    a.download = fileName;
-                    a.href = canvas.toDataURL();
-                    a.click();
-
-                    popup.style.maxHeight = originalMaxHeight;
-                    popup.style.overflowY = originalOverflowY;
-                    buttonContainer.style.visibility = 'visible';
-                });
-            } else {
-                alert("Error: html2canvas library is not loaded.");
-                popup.style.maxHeight = originalMaxHeight;
-                popup.style.overflowY = originalOverflowY;
-                buttonContainer.style.visibility = 'visible';
-            }
-        }, 50);
-    });
-
-    const closeBtn = createButton('Back', '#dc3545', () => {
-        popup.remove();
-        overlay.remove();
-    });
-
-    buttonContainer.append(downloadBtn, closeBtn);
-    popup.appendChild(buttonContainer);
-    
-    document.body.appendChild(overlay);
-    document.body.appendChild(popup);
-}
-
-// =================================
-// 🧭 সাইড বার মেনু ও স্ক্রল ফাংশন
+// 🧭 সাইড বার মেনু, ড্রপডাউন ও স্ক্রল ফাংশন (Updated)
 // =================================
 
 function initializeSidebar() {
     const menuButton = document.getElementById('menu-toggle-button');
     const sidebar = document.getElementById('sidebar-menu');
     const overlay = document.getElementById('overlay');
-    const navLinks = sidebar?.querySelectorAll("a");
 
     if (!menuButton || !sidebar || !overlay) return;
 
+    // ১. সাইডবার টগল (খোলা/বন্ধ)
     menuButton.addEventListener('click', () => {
         sidebar.classList.toggle('active');
         overlay.classList.toggle('active');
@@ -447,21 +264,48 @@ function initializeSidebar() {
         overlay.classList.remove('active');
     });
 
-    navLinks?.forEach(link => {
+    // ২. অ্যাকর্ডিয়ন / ড্রপডাউন টগল লজিক (অ্যারো বোতামের জন্য)
+    const arrowIcons = sidebar.querySelectorAll('.arrow-icon');
+    arrowIcons.forEach(arrow => {
+        arrow.addEventListener('click', function(e) {
+            e.stopPropagation(); // প্যারেন্ট লিংকের ক্লিক আটকানোর জন্য
+            const menuItem = this.closest('.menu-item');
+            
+            // অন্য সাবমেনু বন্ধ করে শুধু বর্তমানটি খুলতে চাইলে নিচের লাইনটি আনকমেন্ট করুন:
+            /*
+            sidebar.querySelectorAll('.menu-item').forEach(item => {
+                if(item !== menuItem) item.classList.remove('active');
+            });
+            */
+
+            if (menuItem) {
+                menuItem.classList.toggle('active');
+            }
+        });
+    });
+
+    // ৩. নেভিগেশন লিংক এবং সাবমেনু লিংকে ক্লিক করলে স্মুথ স্ক্রল
+    const navLinks = sidebar.querySelectorAll('a[href^="#"]');
+    navLinks.forEach(link => {
         link.addEventListener("click", function(event) {
+            const targetId = this.getAttribute("href");
+            
+            // যদি লিংকটি ফাঁকা বা শুধু '#' হয় তবে স্ক্রল করবে না
+            if (!targetId || targetId === '#') return;
+
             event.preventDefault();
 
-            navLinks.forEach(item => item.classList.remove("active-link"));
+            // অ্যাক্টিভ ক্লাস সেট করা
+            sidebar.querySelectorAll('.nav-link').forEach(item => item.classList.remove("active-link"));
             this.classList.add("active-link");
 
+            // মোবাইল ভিউতে লিঙ্ক ক্লিক করলে সাইডবার বন্ধ হবে
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
 
-            const targetSectionId = this.getAttribute("href").substring(1);
-            const targetSection = document.getElementById(targetSectionId);
-
+            // টার্গেট সেকশনে স্মুথ স্ক্রল
+            const targetSection = document.getElementById(targetId.substring(1));
             if (targetSection) {
-                targetSection.classList.add("highlight-section");
                 const headerHeight = document.querySelector('.main-header')?.offsetHeight || 0;
                 const targetPosition = targetSection.offsetTop - headerHeight - 20;
 
@@ -470,41 +314,13 @@ function initializeSidebar() {
                     behavior: 'smooth'
                 });
 
+                targetSection.classList.add("highlight-section");
                 setTimeout(() => {
                     targetSection.classList.remove("highlight-section");
                 }, 3000);
             }
         });
     });
-}
-
-// =================================
-// 📅 পরীক্ষার তারিখ মারকিউ
-// =================================
-
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfcYA8sdD__TgIe-mHKE9n1fabVv_pDFam1K59O9FdD13r5rVcg5_Mf005mcAWsa6xjA/exec';
-const examDatesMarquee = document.getElementById("exam-dates-marquee-content");
-
-async function loadExamDates() {
-    if (!examDatesMarquee) return;
-    try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=get_github_data`);
-        const data = await response.json();
-        
-        if (data && data.data) {
-            examDatesMarquee.innerHTML = '';
-            const formattedData = data.data.map(item => {
-                return `<span class="marquee-item" style="color: ${item.color};">${item.text}</span>`;
-            }).join(', ');
-            
-            const fullSpan = document.createElement("span");
-            fullSpan.innerHTML = formattedData;
-            examDatesMarquee.appendChild(fullSpan);
-        }
-    } catch (error) {
-        console.error('Error loading exam dates:', error);
-        examDatesMarquee.textContent = 'No exam dates available.';
-    }
 }
 
 // Log out Function
