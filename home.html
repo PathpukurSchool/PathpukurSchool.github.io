@@ -14,7 +14,7 @@
     })();
   </script>
   
-  <title>Teacher Login - Pathpukur High School (HS)</title>
+  <title>Teacher Login - Pathpukur High School</title>
 
   <!-- SEO & Meta Tags -->
   <meta name="description" content="Pathpukur High School - Official Website. Access teacher and student panels, exam dates, and forms.">
@@ -52,14 +52,6 @@
   }
   </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-70Q6QCPED4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-70Q6QCPED4');
-  </script>
 </head>
 <body>
 
@@ -106,7 +98,7 @@
         <div class="header-content">
           <button id="menu-toggle-button" class="menu-button" aria-label="Toggle Menu">☰</button>
         </div>
-        <h1 class="school-name">Pathpukur High School</h1>
+        <h1 class="school-name">Pathpukur High School (H.S.)</h1>
         <button onclick="logout()" class="logout-button">Logout</button>
       </header>
     </div>
@@ -123,7 +115,8 @@
         <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
       </div>
       <ul class="submenu">
-        <li><a href="#student-list-section" class="nav-link">Student Details</a></li>
+        <li><a href="#student-list-link" class="nav-link">Student Details</a></li>
+        <li><a href="#upload-student-notice-link" class="nav-link">Upload Student Notice</a></li>
       </ul>
     </li>
 
@@ -136,6 +129,14 @@
       <ul class="submenu">
         <li><a href="#score_sheet_section" class="nav-link">Score Sheet / Marks Foil</a></li>
         <li><a href="#marks_uploading_report_section" class="nav-link">Marks Uploading Report</a></li>
+
+        <li><a href="#upload_marks_v" class="nav-link">Class V</a></li>
+        <li><a href="#upload_marks_vi" class="nav-link">Class VI</a></li>
+        <li><a href="#upload_marks_vii" class="nav-link">Class VII</a></li>
+        <li><a href="#upload_marks_viii" class="nav-link">Class VIII</a></li>
+        <li><a href="#upload_marks_ix" class="nav-link">Class IX</a></li>
+        <li><a href="#upload_marks_x" class="nav-link">Class X</a></li>
+        <li><a href="#upload_marks_xi" class="nav-link">Class XI</a></li>
       </ul>
     </li>
 
@@ -146,10 +147,10 @@
         <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
       </div>
       <ul class="submenu">
-        <li><a href="#staff-routine-section" class="nav-link">Staff Routine</a></li>
-        <li><a href="#teacher-routine-section" class="nav-link">Teacher Routine</a></li>
-        <li><a href="#class-routine-section" class="nav-link">Student Routine</a></li>
-        <li><a href="#subject-routine-section" class="nav-link">Subject Routine</a></li>
+        <li><a href="#staff-routine-link" class="nav-link">Staff Routine</a></li>
+        <li><a href="#teacher-routine-link" class="nav-link">Teacher Routine</a></li>
+        <li><a href="#class-routine-link" class="nav-link">Student Routine</a></li>
+        <li><a href="#subject-routine-link" class="nav-link">Subject Routine</a></li>
       </ul>
     </li>
 
@@ -160,9 +161,9 @@
         <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
       </div>
       <ul class="submenu">
-        <li><a href="#school-tc-section" class="nav-link">Manual T.C.</a></li>
-        <li><a href="#summative-sheet-excel-section" class="nav-link">Download Exam Marks (Excel)</a></li>
-        <li><a href="#summative-sheet-pdf-section" class="nav-link">Download Exam Marks (PDF)</a></li>
+        <li><a href="#school-tc-link" class="nav-link">Manual T.C.</a></li>
+        <li><a href="#summative-sheet-excel-link" class="nav-link">Download Exam Marks (Excel)</a></li>
+        <li><a href="#summative-sheet-pdf-link" class="nav-link">Download Exam Marks (PDF)</a></li>
       </ul>
     </li>
 
@@ -188,7 +189,7 @@
       </div>
     </div>
         
-    <!-- ✅ নম্বর আপলোড ও স্টুডেন্ট তথ্য -->
+    <!-- ✅ স্টুডেন্ট তথ্য -->
     <div class="main-section-container" id="marks-information-section">
       <div class="section-heading-wrapper">
         <h2 class="section-heading">Student Information</h2>
@@ -196,6 +197,7 @@
 
       <div class="class-buttons-grid" id="student-list-section">
         <a id="student-list-link" href="https://pathpukurschool.github.io/web_vs/current_student.html" target="_blank" class="exam-link">Student Details</a>
+         <a id="upload-student-notice-link" href="#" target="_blank" class="exam-link">Upload Student Notice</a>
       </div>
     </div>
 
@@ -209,13 +211,13 @@
         <a id="score_sheet_section" href="https://pathpukurschool.github.io/web_vs/marks_foil.html" target="_blank" class="exam-link">Score Sheet / Marks Foil</a>
         <a id="marks_uploading_report_section" href="https://script.google.com/macros/s/AKfycbwL5-qfoH-qV_WQXGw5YdtlzM1mzjuD51DpZ7E8f_EhhWKostFtYy7-yRLrmW3rPj6kvw/exec" target="_blank" class="exam-link">Marks Uploading Report</a>
 
-        <a href="https://script.google.com/macros/s/AKfycbyc0PWCuiDwmeD0cMudrZIU-WQ0__ODeiI5nBykC5k0b69sfgAeYyUSzc0bXdciAar20Q/exec" target="_blank" class="exam-link">Class V</a>
-        <a href="https://script.google.com/macros/s/AKfycbzE-oAzeaS2u4fgnFW5KEdTLn2hKQdWaMT0dX_ZgQhooNTRKbRptSDz9UG8eOB9J2hL/exec" target="_blank" class="exam-link">Class VI</a>
-        <a href="https://script.google.com/macros/s/AKfycbwEmE4o2CuvAtT1wUuKBP7kb3x3mcYI_zs8OboQizGdanKacWSQy9VYpfeQ7Ycvg6bQ/exec" target="_blank" class="exam-link">Class VII</a>
-        <a href="https://script.google.com/macros/s/AKfycbxVSeYX564Gpqf6vETSCFQ1dr5kJ013XW7Jzv0G3pt5rxvWBL_aN6lOycCvqPkiagYtQQ/exec" target="_blank" class="exam-link">Class VIII</a>
-        <a href="https://script.google.com/macros/s/AKfycbw_h0rAmAZQkbexHm-qpdzmEEdZzyuCo7ZrIhs5gEdB4RGrfSGTdefdS81YWro7xIgX/exec" target="_blank" class="exam-link">Class IX</a>
-        <a href="https://script.google.com/macros/s/AKfycbxGKwBRj5MKS5DwlElJqrhs_tL4ES0eYr-IovdzX4y6Qq7nWDGeqrb-Hj2nCrKYv9CwFA/exec" target="_blank" class="exam-link">Class X</a>
-        <a href="https://script.google.com/macros/s/AKfycbwy3eLrkWmUdrkwUeXRI-u8xumNc5Rv-kjH1IJijDcuj75frsDTSa2oheXIK48WQD9hcA/exec" target="_blank" class="exam-link">Class XI</a>
+        <a id="upload_marks_v" href="https://script.google.com/macros/s/AKfycbyc0PWCuiDwmeD0cMudrZIU-WQ0__ODeiI5nBykC5k0b69sfgAeYyUSzc0bXdciAar20Q/exec" target="_blank" class="exam-link">Class V</a>
+        <a id="upload_marks_vi" href="https://script.google.com/macros/s/AKfycbzE-oAzeaS2u4fgnFW5KEdTLn2hKQdWaMT0dX_ZgQhooNTRKbRptSDz9UG8eOB9J2hL/exec" target="_blank" class="exam-link">Class VI</a>
+        <a id="upload_marks_vii" href="https://script.google.com/macros/s/AKfycbwEmE4o2CuvAtT1wUuKBP7kb3x3mcYI_zs8OboQizGdanKacWSQy9VYpfeQ7Ycvg6bQ/exec" target="_blank" class="exam-link">Class VII</a>
+        <a id="upload_marks_viii" href="https://script.google.com/macros/s/AKfycbxVSeYX564Gpqf6vETSCFQ1dr5kJ013XW7Jzv0G3pt5rxvWBL_aN6lOycCvqPkiagYtQQ/exec" target="_blank" class="exam-link">Class VIII</a>
+        <a id="upload_marks_ix" href="https://script.google.com/macros/s/AKfycbw_h0rAmAZQkbexHm-qpdzmEEdZzyuCo7ZrIhs5gEdB4RGrfSGTdefdS81YWro7xIgX/exec" target="_blank" class="exam-link">Class IX</a>
+        <a id="upload_marks_x" href="https://script.google.com/macros/s/AKfycbxGKwBRj5MKS5DwlElJqrhs_tL4ES0eYr-IovdzX4y6Qq7nWDGeqrb-Hj2nCrKYv9CwFA/exec" target="_blank" class="exam-link">Class X</a>
+        <a id="upload_marks_xi" href="https://script.google.com/macros/s/AKfycbwy3eLrkWmUdrkwUeXRI-u8xumNc5Rv-kjH1IJijDcuj75frsDTSa2oheXIK48WQD9hcA/exec" target="_blank" class="exam-link">Class XI</a>
       </div>
     </div>
 
