@@ -380,51 +380,105 @@ body.no-scroll {
 .sidebar-menu.active {
     left: 0;
 }
-
+/* ✅ নতুন ড্রপডাউন সাইডবার স্টাইল */
 .sidebar-menu ul {
     list-style-type: none;
-    padding: 10px 0;
+    padding: 0;
+    margin: 0;
 }
 
-.sidebar-menu li {
-    margin: 4px 10px;
+.sidebar-menu .menu-item {
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.sidebar-menu .nav-link {
+/* মেইন ক্যাটাগরি ও অ্যারো বক্স */
+.menu-header-wrapper {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 10px 14px;
-    color: var(--sidebar-text);
-    text-decoration: none;
-    font-size: 0.88rem;
-    font-weight: 500;
-    border-radius: 6px;
-    transition: all 0.25s ease;
-    border-left: 4px solid transparent;
+    background-color: var(--sidebar-header-bg);
+    transition: background-color 0.2s ease;
 }
 
-.sidebar-menu .nav-link:hover {
+.menu-header-wrapper:hover {
     background-color: var(--sidebar-hover-bg);
-    color: #ffffff;
-    transform: translateX(4px);
-}
-
-.sidebar-menu .nav-link.active-link {
-    background-color: rgba(56, 189, 248, 0.12);
-    color: var(--sidebar-active-accent);
-    border-left-color: var(--sidebar-active-accent);
-    font-weight: 600;
 }
 
 .sidebar-menu .menu-header {
-    background-color: var(--sidebar-header-bg);
     font-weight: 600;
-    font-size: 0.95rem;
-    padding: 14px 16px;
+    font-size: 0.92rem;
+    padding: 12px 14px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    flex-grow: 1;
+    letter-spacing: 0.3px;
+}
+
+/* অ্যারো বোতামের স্টাইল */
+.arrow-icon {
+    cursor: pointer;
+    padding: 12px 16px;
+    color: var(--sidebar-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.arrow-icon i {
+    font-size: 0.85rem;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.arrow-icon:hover {
+    color: var(--sidebar-active-accent);
+}
+
+/* 🔒 সাবমেনু ডিফল্ট অবস্থায় বন্ধ থাকবে */
+.submenu {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.25);
+    padding: 4px 0 !important;
+}
+
+.submenu li {
+    margin: 2px 0;
+}
+
+.submenu .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px 8px 24px;
+    color: var(--sidebar-text-muted);
+    text-decoration: none;
+    font-size: 0.84rem;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.submenu .nav-link:hover {
+    background-color: var(--sidebar-hover-bg);
     color: #ffffff;
-    cursor: default;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-left: 28px;
+}
+
+.submenu .nav-link.active-link {
+    color: var(--sidebar-active-accent);
+    border-left-color: var(--sidebar-active-accent);
+    background-color: rgba(134, 239, 172, 0.08);
+    font-weight: 500;
+}
+
+/* 🔓 অ্যাক্টিভ হলে ড্রপডাউন খুলবে এবং অ্যারো ঘুরে যাবে */
+.menu-item.active .submenu {
+    display: block;
+}
+
+.menu-item.active .arrow-icon i {
+    transform: rotate(180deg);
+    color: var(--sidebar-active-accent);
 }
 
 /* ================================================= */
