@@ -37,7 +37,7 @@
 }
 
 /* ================================================= */
-/* 📐 BASIC RESET & LAYOUT                            */
+/* 📐 BASIC RESET & LAYOUT                           */
 /* ================================================= */
 
 * {
@@ -114,12 +114,12 @@ body.no-scroll {
     transform: translateX(-50%); 
     margin: 0;                
     text-align: center;
-    font-size: 1.0rem; /* ✅ ফন্ট সাইজ নিয়ন্ত্রণ করা হলো */
+    font-size: 1.0rem;
     font-weight: 600;
     letter-spacing: 0.5px;
     white-space: nowrap;
     color: #ffffff;
-    pointer-events: none; /* ✅ মেনু এবং লগআউটে ক্লিকের বাধা দূর করা হলো */
+    pointer-events: none;
     z-index: 1;
 }
 
@@ -169,7 +169,7 @@ body.no-scroll {
     max-width: 500px;
     margin: 0 auto;
     padding: 0 15px;
-    display: block !important; /* ✅ সার্চবার দৃশ্যমান করা হলো */
+    display: block !important;
 }
 
 .search-input-wrapper {
@@ -380,7 +380,7 @@ body.no-scroll {
 .sidebar-menu.active {
     left: 0;
 }
-/* ✅ নতুন ড্রপডাউন সাইডবার স্টাইল */
+
 .sidebar-menu ul {
     list-style-type: none;
     padding: 0;
@@ -392,7 +392,6 @@ body.no-scroll {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* মেইন ক্যাটাগরি ও অ্যারো বক্স */
 .menu-header-wrapper {
     display: flex;
     justify-content: space-between;
@@ -415,7 +414,6 @@ body.no-scroll {
     letter-spacing: 0.3px;
 }
 
-/* অ্যারো বোতামের স্টাইল */
 .arrow-icon {
     cursor: pointer;
     padding: 12px 16px;
@@ -435,7 +433,6 @@ body.no-scroll {
     color: var(--sidebar-active-accent);
 }
 
-/* 🔒 সাবমেনু ডিফল্ট অবস্থায় বন্ধ থাকবে */
 .submenu {
     display: none;
     background-color: rgba(0, 0, 0, 0.25);
@@ -471,7 +468,6 @@ body.no-scroll {
     font-weight: 500;
 }
 
-/* 🔓 অ্যাক্টিভ হলে ড্রপডাউন খুলবে এবং অ্যারো ঘুরে যাবে */
 .menu-item.active .submenu {
     display: block;
 }
@@ -500,7 +496,7 @@ body.no-scroll {
     justify-content: center !important;
     min-height: 48px !important;
     padding: 10px 14px !important;        
-    font-size: 0.88rem !important;       
+    font-size: 0.88rem !important;        
     font-weight: 600 !important;
     line-height: 1.3 !important;
     border-radius: 8px !important;
@@ -555,7 +551,7 @@ body.no-scroll {
 
 @media (max-width: 600px) {
     .school-name {
-        font-size: 0.92rem; /* ছোট স্ক্রিনে লেখার সাইজ মানানসই করা হলো */
+        font-size: 0.92rem;
     }
 
     .class-buttons-grid {
