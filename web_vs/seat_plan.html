@@ -491,29 +491,55 @@ async function loadClassSeatPlan(cls) {
 
     statusBadge.innerHTML = `Class: <b>${cls}</b> - এর সিট প্ল্যান দেখাচ্ছে`;
     
-    // ২. টেবিলে Section চেক করে ডাইনামিকালি ডাটা রেন্ডার করা
+    // ২. টেবিলে Section (Start & End Roll মিলিয়ে) সহ ডাটা রেন্ডার করা
     let html = '';
-    plans.forEach(p => {
-      // Start Roll ও End Roll এর সেকশন মিলিয়ে দেখা
-      let displaySection = 'All';
-      if (p.start_section && p.end_section && p.start_section === p.end_section) {
-        displaySection = p.start_section;
-      } else if (p.section) {
-        displaySection = p.section;
+    for (const p of plans) {
+      // Start Roll এবং End Roll-এর সেকশন বের করা
+      const secUrl = `${SUPABASE_URL}/rest/v1/current_students?class_name=eq.${encodeURIComponent(cls)}&roll_no=in.(${p.start_roll},${p.end_roll})&select=roll_no,section`;
+      let calculatedSection = 'All';
+
+      try {
+        const secResp = await fetch(secUrl, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        const secData = await secResp.json();
+
+        if (secData && secData.length > 0) {
+          const startStudent = secData.find(s => s.roll_no == p.start_roll);
+          const endStudent = secData.find(s => s.roll_no == p.end_roll);
+
+          const startSec = startStudent ? startStudent.section : null;
+          const endSec = endStudent ? endStudent.section : null;
+
+          // দুটি সেকশন এক হলে সেটি দেখাবে, ভিন্ন বা না পাওয়া গেলে 'All' দেখাবে
+          if (startSec && endSec && startSec === endSec) {
+            calculatedSection = startSec;
+          } else if (startSec && !endSec) {
+            calculatedSection = startSec;
+          } else if (!startSec && endSec) {
+            calculatedSection = endSec;
+          } else {
+            calculatedSection = p.section || 'All';
+          }
+        } else {
+          calculatedSection = p.section || 'All';
+        }
+      } catch (e) {
+        calculatedSection = p.section || 'All';
       }
 
       html += `
         <tr>
           <td><b>${p.class_name}</b></td>
-          <td>${displaySection}</td>
+          <td><b>${calculatedSection}</b></td>
           <td>${p.gender || 'BOYS & GIRLS'}</td>
           <td>${p.start_roll} - ${p.end_roll}</td>
           <td><b style="color: #0284c7;">${p.room_no}</b></td>
         </tr>
       `;
-    });
+    }
     tbody.innerHTML = html;
-
+    
   } catch (err) {
     console.error(err);
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: red;">ডাটা লোড করতে সমস্যা হচ্ছে! ইন্টারনেট কানেকশন দেখুন!</td></tr>';
