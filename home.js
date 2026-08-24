@@ -167,7 +167,9 @@ async function submitMasterLogin() {
     const captchaInput = document.getElementById('userCaptcha');
     const errorDiv = document.getElementById('masterLoginError');
     const successDiv = document.getElementById('masterLoginSuccess');
-    const loginBtn = document.querySelector('#masterLoginBox button');
+    
+    // 🎯 সুনির্দিষ্ট আইডি (masterLoginBtn) দিয়ে শুধু লগইন বাটনটিকে ধরা হচ্ছে
+    const loginBtn = document.getElementById('masterLoginBtn');
 
     if (!idInput || !passInput || !captchaInput) return;
 
@@ -175,7 +177,6 @@ async function submitMasterLogin() {
     const pass = passInput.value.trim();
     const userCaptcha = captchaInput.value.trim();
 
-    // পূর্বের মেসেজসমূহ মুছে ফেলা
     if (errorDiv) errorDiv.innerText = "";
     if (successDiv) {
         successDiv.innerText = "";
@@ -186,7 +187,7 @@ async function submitMasterLogin() {
     if (!id || !pass) {
         if (errorDiv) {
             errorDiv.innerText = "⚠️ Please fill both ID & Password.";
-            errorDiv.style.color = "var(--error-color)";
+            errorDiv.style.color = "red";
         }
         return;
     }
@@ -195,7 +196,7 @@ async function submitMasterLogin() {
     if (!userCaptcha) {
         if (errorDiv) {
             errorDiv.innerText = "⚠️ Please enter the CAPTCHA code.";
-            errorDiv.style.color = "var(--error-color)";
+            errorDiv.style.color = "red";
         }
         return;
     }
@@ -204,13 +205,13 @@ async function submitMasterLogin() {
     if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
         if (errorDiv) {
             errorDiv.innerText = "❌ Invalid CAPTCHA code! Please try again.";
-            errorDiv.style.color = "var(--error-color)";
+            errorDiv.style.color = "red";
         }
         generateCaptcha(); // ক্যাপচা ভুল হলে নতুন ক্যাপচা জেনারেট করা
         return;
     }
 
-    // বাটন স্টেট আপডেট
+    // মূল লগইন বাটনের অবস্থা পরিবর্তন
     if (loginBtn) {
         loginBtn.innerText = "Validating...";
         loginBtn.disabled = true;
@@ -252,9 +253,9 @@ async function submitMasterLogin() {
             // ❌ ৪. ভুল ID বা Password-এর জন্য স্পষ্ট সতর্কবার্তা
             if (errorDiv) {
                 errorDiv.innerText = "❌ Incorrect Teacher ID or Password!";
-                errorDiv.style.color = "var(--error-color)";
+                errorDiv.style.color = "red";
             }
-            generateCaptcha(); // নিরাপত্তার জন্য ভুল আইডি/পাসওয়ার্ডের ক্ষেত্রে ক্যাপচা পরিবর্তন
+            generateCaptcha(); // সিকিউরিটির জন্য ক্যাপচা রিসেট
             if (loginBtn) {
                 loginBtn.innerText = "🔓 Login";
                 loginBtn.disabled = false;
@@ -265,7 +266,7 @@ async function submitMasterLogin() {
         console.error("Error loading teacher login", error);
         if (errorDiv) {
             errorDiv.innerText = "⚠️ Configuration file error. Contact Administrator.";
-            errorDiv.style.color = "var(--error-color)";
+            errorDiv.style.color = "red";
         }
         generateCaptcha();
         if (loginBtn) {
