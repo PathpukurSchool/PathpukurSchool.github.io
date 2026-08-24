@@ -175,42 +175,54 @@ async function submitMasterLogin() {
     const pass = passInput.value.trim();
     const userCaptcha = captchaInput.value.trim();
 
+    // পূর্বের মেসেজসমূহ মুছে ফেলা
     if (errorDiv) errorDiv.innerText = "";
     if (successDiv) {
         successDiv.innerText = "";
         successDiv.style.display = "none";
     }
 
-    // ১. খালি ইনপুট ভ্যালিডেশন
-    if (!id || !pass || !userCaptcha) {
+    // 🔹 ১. ID বা Password ফাঁকা থাকলে মেসেজ
+    if (!id || !pass) {
         if (errorDiv) {
-            errorDiv.innerText = "Please fill ID, Password & CAPTCHA.";
-            errorDiv.style.color = "red";
+            errorDiv.innerText = "⚠️ Please fill both ID & Password.";
+            errorDiv.style.color = "var(--error-color)";
         }
         return;
     }
 
-    // ২. ক্যাপচা ভ্যালিডেশন (Case-insensitive)
+    // 🔹 ২. ক্যাপচা ফাঁকা থাকলে মেসেজ
+    if (!userCaptcha) {
+        if (errorDiv) {
+            errorDiv.innerText = "⚠️ Please enter the CAPTCHA code.";
+            errorDiv.style.color = "var(--error-color)";
+        }
+        return;
+    }
+
+    // 🔹 ৩. ক্যাপচা ভুল হলে মেসেজ
     if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
         if (errorDiv) {
-            errorDiv.innerText = "❌ Invalid CAPTCHA code! Try again.";
-            errorDiv.style.color = "red";
+            errorDiv.innerText = "❌ Invalid CAPTCHA code! Please try again.";
+            errorDiv.style.color = "var(--error-color)";
         }
-        generateCaptcha(); // সিকিউরিটির জন্য ক্যাপচা রিসেট
+        generateCaptcha(); // ক্যাপচা ভুল হলে নতুন ক্যাপচা জেনারেট করা
         return;
     }
 
+    // বাটন স্টেট আপডেট
     if (loginBtn) {
-        loginBtn.innerText = "Loading...";
+        loginBtn.innerText = "Validating...";
         loginBtn.disabled = true;
     }
 
     try {
-        const config = await fetch("masterConfig.json").then(r => {
-            if (!r.ok) throw new Error('Teacher Login load failed');
-            return r.json();
-        });
+        const response = await fetch("masterConfig.json");
+        if (!response.ok) throw new Error('Teacher Login load failed');
+        
+        const config = await response.json();
 
+        // হ্যাশ চেক
         const idHashed = await sha256(id + config.Logid);
         const passHashed = await sha256(pass + config.Logpassword);
 
@@ -237,13 +249,14 @@ async function submitMasterLogin() {
             }, 800);
 
         } else {
+            // ❌ ৪. ভুল ID বা Password-এর জন্য স্পষ্ট সতর্কবার্তা
             if (errorDiv) {
-                errorDiv.innerText = "Incorrect ID or Password!";
-                errorDiv.style.color = "red";
+                errorDiv.innerText = "❌ Incorrect Teacher ID or Password!";
+                errorDiv.style.color = "var(--error-color)";
             }
-            generateCaptcha(); // ভুল পাসওয়ার্ডের ক্ষেত্রে ক্যাপচা পরিবর্তন
+            generateCaptcha(); // নিরাপত্তার জন্য ভুল আইডি/পাসওয়ার্ডের ক্ষেত্রে ক্যাপচা পরিবর্তন
             if (loginBtn) {
-                loginBtn.innerText = "LOGIN";
+                loginBtn.innerText = "🔓 Login";
                 loginBtn.disabled = false;
             }
         }
@@ -251,12 +264,12 @@ async function submitMasterLogin() {
     } catch (error) {
         console.error("Error loading teacher login", error);
         if (errorDiv) {
-            errorDiv.innerText = "Error loading configuration.";
-            errorDiv.style.color = "red";
+            errorDiv.innerText = "⚠️ Configuration file error. Contact Administrator.";
+            errorDiv.style.color = "var(--error-color)";
         }
         generateCaptcha();
         if (loginBtn) {
-            loginBtn.innerText = "LOGIN";
+            loginBtn.innerText = "🔓 Login";
             loginBtn.disabled = false;
         }
     }
@@ -296,7 +309,6 @@ function startAutoLogoutTimer() {
         const currentTime = Date.now();
 
         if (lastActivity && (currentTime - parseInt(lastActivity, 10)) >= TIMEOUT_DURATION) {
-            alert("নিরাপত্তার স্বার্থে এবং ১৫ মিনিট নিষ্ক্রিয় (Inactivity) থাকার কারণে আপনাকে অটো-লগআউট করা হলো।");
             logout();
         }
     }
