@@ -325,6 +325,11 @@ function initializeSidebar() {
         arrow.addEventListener('click', function(e) {
             e.stopPropagation();
             const menuItem = this.closest('.menu-item');
+            // অন্য সাবমেনু বন্ধ করে শুধু বর্তমানটি খুলতে চাইলে নিচের লাইনটি আনকমেন্ট করুন:
+            sidebar.querySelectorAll('.menu-item').forEach(item => {
+                if(item !== menuItem) item.classList.remove('active');
+            });
+            
             if (menuItem) {
                 menuItem.classList.toggle('active');
             }
