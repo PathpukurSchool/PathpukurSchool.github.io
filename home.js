@@ -1,4 +1,6 @@
-// SHA-256 hash function
+// =================================
+// 🔐 SHA-256 HASH FUNCTION
+// =================================
 async function sha256(message) {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
@@ -35,9 +37,8 @@ function createButton(text, bgColor, onClick, disabled = false) {
 }
 
 // =================================
-// 🔍 নতুন ড্রপডাউন সার্চ ফিল্টারিং ফাংশনালিটি
+// 🔍 ড্রপডাউন সার্চ ফিল্টারিং ফাংশনালিটি
 // =================================
-
 let ALL_ITEMS_DETAILS = [];
 
 function setupLiveSearch() {
@@ -50,7 +51,6 @@ function setupLiveSearch() {
             const query = this.value.trim().toLowerCase();
             searchResultsDropdown.innerHTML = '';
 
-            // ক্লিয়ার বাটন দেখানো বা লুকানোর লজিক
             if (clearSearchBtn) {
                 clearSearchBtn.style.display = query.length > 0 ? 'block' : 'none';
             }
@@ -60,7 +60,6 @@ function setupLiveSearch() {
                 return;
             }
 
-            // পেজের লিঙ্ক থেকে স্বয়ংক্রিয় ডাটা সংগ্রহ (ALL_ITEMS_DETAILS খালি থাকলে)
             if (ALL_ITEMS_DETAILS.length === 0) {
                 const buttons = document.querySelectorAll('.exam-link, .class-link-btn');
                 buttons.forEach(btn => {
@@ -73,7 +72,6 @@ function setupLiveSearch() {
                 });
             }
 
-            // ফিল্টার করার লজিক
             let matchedItems = ALL_ITEMS_DETAILS.filter(item => 
                 item.title && item.title.toLowerCase().includes(query)
             );
@@ -95,7 +93,6 @@ function setupLiveSearch() {
             }
         });
 
-        // ✖ ক্লিয়ার বাটনে ক্লিক করলে সার্চ ইনপুট ফাকা হওয়া
         if (clearSearchBtn) {
             clearSearchBtn.addEventListener('click', function() {
                 searchInput.value = '';
@@ -106,7 +103,6 @@ function setupLiveSearch() {
             });
         }
 
-        // সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হয়ে যাওয়া
         document.addEventListener('click', function(e) {
             if (!searchInput.contains(e.target) && !searchResultsDropdown.contains(e.target)) {
                 searchResultsDropdown.classList.remove('active');
@@ -116,12 +112,14 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔐 মাস্টার লগইন ফাংশন
+// 🔐 মাস্টার লগইন ও সিকিউরিটি ফাংশন
 // =================================
 
 function toggleMasterPasswordVisibility() {
     const passInput = document.getElementById('masterPass');
     const toggleIcon = document.getElementById('masterPassToggle');
+    if (!passInput || !toggleIcon) return;
+
     if (passInput.type === "password") {
         passInput.type = "text";
         toggleIcon.classList.remove('fa-eye');
@@ -134,25 +132,35 @@ function toggleMasterPasswordVisibility() {
 }
 
 async function submitMasterLogin() {
-    const id = document.getElementById('masterId').value.trim();
-    const pass = document.getElementById('masterPass').value.trim();
-
+    const idInput = document.getElementById('masterId');
+    const passInput = document.getElementById('masterPass');
     const errorDiv = document.getElementById('masterLoginError');
     const successDiv = document.getElementById('masterLoginSuccess');
     const loginBtn = document.querySelector('#masterLoginBox button');
 
-    errorDiv.innerText = "";
-    successDiv.innerText = "";
-    successDiv.style.display = "none";
+    if (!idInput || !passInput) return;
+
+    const id = idInput.value.trim();
+    const pass = passInput.value.trim();
+
+    if (errorDiv) errorDiv.innerText = "";
+    if (successDiv) {
+        successDiv.innerText = "";
+        successDiv.style.display = "none";
+    }
 
     if (!id || !pass) {
-        errorDiv.innerText = "Please fill ID & Password.";
-        errorDiv.style.color = "red";
+        if (errorDiv) {
+            errorDiv.innerText = "Please fill ID & Password.";
+            errorDiv.style.color = "red";
+        }
         return;
     }
 
-    loginBtn.innerText = "Loading...";
-    loginBtn.disabled = true;
+    if (loginBtn) {
+        loginBtn.innerText = "Loading...";
+        loginBtn.disabled = true;
+    }
 
     try {
         const config = await fetch("masterConfig.json").then(r => {
@@ -164,39 +172,82 @@ async function submitMasterLogin() {
         const passHashed = await sha256(pass + config.Logpassword);
 
         if (idHashed === config.idHash && passHashed === config.passHash) {
+            // সিকিউরিটি বৃদ্ধি: সেশন ডাটা প্লাস টাইমস্ট্যাম্প সংরক্ষণ
             sessionStorage.setItem("userType", "teacher");
             sessionStorage.setItem("teacherLoggedIn", "true");
+            sessionStorage.setItem("loginTimestamp", Date.now().toString());
 
-            successDiv.innerText = "✔️ Login Successful.";
-            successDiv.style.display = "block";
+            if (successDiv) {
+                successDiv.innerText = "✔️ Login Successful.";
+                successDiv.style.display = "block";
+            }
 
             setTimeout(() => {
                 const overlay = document.getElementById('masterLoginOverlay');
                 if (overlay) overlay.style.display = "none";
 
-                // ✅ সফল লগইনে কনটেন্ট ও সার্চ বার ডিসপ্লে করা
                 const mainContent = document.getElementById('main-website-content');
                 const searchContainer = document.querySelector('.search-container');
                 if (mainContent) mainContent.style.display = "block";
                 if (searchContainer) searchContainer.style.display = "block";
 
                 document.body.classList.remove('no-scroll');
-            }, 1000);
+                startAutoLogoutTimer(); // অটো লগআউট টাইমার চালু
+            }, 800);
 
         } else {
-            errorDiv.innerText = "Incorrect ID or Password!";
-            errorDiv.style.color = "red";
-            loginBtn.innerText = "LOGIN";
-            loginBtn.disabled = false;
+            if (errorDiv) {
+                errorDiv.innerText = "Incorrect ID or Password!";
+                errorDiv.style.color = "red";
+            }
+            if (loginBtn) {
+                loginBtn.innerText = "LOGIN";
+                loginBtn.disabled = false;
+            }
         }
 
     } catch (error) {
         console.error("Error loading teacher login", error);
-        errorDiv.innerText = "Error loading configuration.";
-        errorDiv.style.color = "red";
-        loginBtn.innerText = "LOGIN";
-        loginBtn.disabled = false;
+        if (errorDiv) {
+            errorDiv.innerText = "Error loading configuration.";
+            errorDiv.style.color = "red";
+        }
+        if (loginBtn) {
+            loginBtn.innerText = "LOGIN";
+            loginBtn.disabled = false;
+        }
     }
+}
+
+// 🔒 স্ট্রং লগআউট সিস্টেম
+function logout() {
+    sessionStorage.clear();
+    localStorage.clear();
+    
+    // পেজ রিফ্রেশ করে লগইন ওভারলে সক্রিয় করা
+    window.location.reload();
+}
+
+// ⏳ অটোমেটিক ইনঅ্যাক্টিভিটি লগআউট (১৫ মিনিট নিষ্ক্রিয় থাকলে লগআউট হবে)
+let inactivityTimer;
+function startAutoLogoutTimer() {
+    const timeoutDuration = 15 * 60 * 1000; // ১৫ মিনিট
+
+    function resetTimer() {
+        clearTimeout(inactivityTimer);
+        if (sessionStorage.getItem("teacherLoggedIn") === "true") {
+            inactivityTimer = setTimeout(() => {
+                alert("Session expired due to inactivity. Please login again.");
+                logout();
+            }, timeoutDuration);
+        }
+    }
+
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress = resetTimer;
+    document.onclick = resetTimer;
+    document.onscroll = resetTimer;
 }
 
 // =================================
@@ -243,7 +294,7 @@ function showAvailableSoonMessage(button) {
 }
 
 // =================================
-// 🧭 সাইড বার মেনু, ড্রপডাউন ও স্ক্রল ফাংশন (Updated)
+// 🧭 সাইড বার মেনু ও ড্রপডাউন ফাংশন
 // =================================
 
 function initializeSidebar() {
@@ -251,10 +302,14 @@ function initializeSidebar() {
     const sidebar = document.getElementById('sidebar-menu');
     const overlay = document.getElementById('overlay');
 
-    if (!menuButton || !sidebar || !overlay) return;
+    if (!menuButton || !sidebar || !overlay) {
+        console.warn("Sidebar elements not found in DOM.");
+        return;
+    }
 
-    // ১. সাইডবার টগল (খোলা/বন্ধ)
-    menuButton.addEventListener('click', () => {
+    // ১. সাইডবার টগল
+    menuButton.addEventListener('click', (e) => {
+        e.stopPropagation();
         sidebar.classList.toggle('active');
         overlay.classList.toggle('active');
     });
@@ -264,46 +319,34 @@ function initializeSidebar() {
         overlay.classList.remove('active');
     });
 
-    // ২. অ্যাকর্ডিয়ন / ড্রপডাউন টগল লজিক (অ্যারো বোতামের জন্য)
+    // ২. ড্রপডাউন সাবমেনু (অ্যারো আইকন)
     const arrowIcons = sidebar.querySelectorAll('.arrow-icon');
     arrowIcons.forEach(arrow => {
         arrow.addEventListener('click', function(e) {
-            e.stopPropagation(); // প্যারেন্ট লিংকের ক্লিক আটকানোর জন্য
+            e.stopPropagation();
             const menuItem = this.closest('.menu-item');
-            
-            // অন্য সাবমেনু বন্ধ করে শুধু বর্তমানটি খুলতে চাইলে নিচের লাইনটি আনকমেন্ট করুন:
-            /*
-            sidebar.querySelectorAll('.menu-item').forEach(item => {
-                if(item !== menuItem) item.classList.remove('active');
-            });
-            */
-
             if (menuItem) {
                 menuItem.classList.toggle('active');
             }
         });
     });
 
-    // ৩. নেভিগেশন লিংক এবং সাবমেনু লিংকে ক্লিক করলে স্মুথ স্ক্রল
+    // ৩. স্মুথ স্ক্রল
     const navLinks = sidebar.querySelectorAll('a[href^="#"]');
     navLinks.forEach(link => {
         link.addEventListener("click", function(event) {
             const targetId = this.getAttribute("href");
             
-            // যদি লিংকটি ফাঁকা বা শুধু '#' হয় তবে স্ক্রল করবে না
             if (!targetId || targetId === '#') return;
 
             event.preventDefault();
 
-            // অ্যাক্টিভ ক্লাস সেট করা
             sidebar.querySelectorAll('.nav-link').forEach(item => item.classList.remove("active-link"));
             this.classList.add("active-link");
 
-            // মোবাইল ভিউতে লিঙ্ক ক্লিক করলে সাইডবার বন্ধ হবে
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
 
-            // টার্গেট সেকশনে স্মুথ স্ক্রল
             const targetSection = document.getElementById(targetId.substring(1));
             if (targetSection) {
                 const headerHeight = document.querySelector('.main-header')?.offsetHeight || 0;
@@ -323,26 +366,12 @@ function initializeSidebar() {
     });
 }
 
-// Log out Function
-function logout() {
-    sessionStorage.removeItem("studentLoggedIn");
-    sessionStorage.removeItem("teacherLoggedIn");
-    
-    const mainContent = document.getElementById('main-website-content');
-    const searchContainer = document.querySelector('.search-container');
-    const overlay = document.getElementById('masterLoginOverlay');
-    
-    if (mainContent) mainContent.style.display = "none";
-    if (searchContainer) searchContainer.style.display = "none";
-    if (overlay) overlay.style.display = "flex";
-}
-
 // =================================
-// 🚀 ইনিশিয়ালাইজেশন
+// 🚀 ইনিশিয়ালাইজেশন (Page Load)
 // =================================
 
 document.addEventListener("DOMContentLoaded", () => {
-    // সেশন লগইন চেকিং
+    // সেশন যাচাই
     if (sessionStorage.getItem("teacherLoggedIn") === "true") {
         const overlay = document.getElementById('masterLoginOverlay');
         const mainContent = document.getElementById('main-website-content');
@@ -351,18 +380,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (overlay) overlay.style.display = "none";
         if (mainContent) mainContent.style.display = "block";
         if (searchContainer) searchContainer.style.display = "block";
+
+        startAutoLogoutTimer();
+    } else {
+        const overlay = document.getElementById('masterLoginOverlay');
+        if (overlay) overlay.style.display = "flex";
     }
 
-    fetchNotices();
+    // ফাংশনসমূহ নিরাপদভাবে কল করা
     initializeSidebar();
     loadStudentExamLinks();
-    loadExamDates();
     setupLiveSearch();
-
-    if (examDatesMarquee) {
-        examDatesMarquee.addEventListener("mouseover", () => examDatesMarquee.style.animationPlayState = 'paused');
-        examDatesMarquee.addEventListener("mouseout", () => examDatesMarquee.style.animationPlayState = 'running');
-        examDatesMarquee.addEventListener("touchstart", () => examDatesMarquee.style.animationPlayState = 'paused');
-        examDatesMarquee.addEventListener("touchend", () => examDatesMarquee.style.animationPlayState = 'running');
-    }
 });
