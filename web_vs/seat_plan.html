@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>
+    (function() {
+      // ইউজার কোন পেজ থেকে এসেছে তার ইউআরএল (Referrer)
+      var referrer = document.referrer;
+      
+      // মূল ডোমেইন এর নাম
+      var allowedDomain = "pathpukurschool.github.io";
+
+      // যদি ইউজার মূল সাইটের কোন লিংক থেকে না আসে (সরাসরি URL Paste করে)
+      if (!referrer || referrer.indexOf(allowedDomain) === -1) {
+        // সরাসরি মূল সাইটে রিডাইরেক্ট করা হচ্ছে
+        window.location.replace("https://pathpukurschool.github.io/");
+      }
+    })();
+  </script>
+  <title>পরীক্ষার সিট প্ল্যান -পাতপুকুর হাই স্কুল (উঃ মাঃ) 🏫</title>
+
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * { 
+      box-sizing: border-box; 
+      font-family: 'Tiro Bangla', 'Poppins', serif, Arial, sans-serif; 
+      -webkit-tap-highlight-color: transparent; 
+    }
+    
+    body { 
+      background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%); 
+      margin: 0; 
+      padding: 10px; 
+      color: #1e293b; 
+      min-height: 100vh;
+    }
+    
+    .container { 
+      max-width: 900px; 
+      margin: 0 auto; 
+      background: rgba(255, 255, 255, 0.95); 
+      padding: 16px; 
+      border-radius: 18px; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+      border: 2px solid #ffffff;
+    }
+    
+    /* Vibrant Header */
+    .header { 
+      text-align: center; 
+      border-bottom: 3px dashed #0284c7; 
+      padding-bottom: 12px; 
+      margin-bottom: 14px; 
+    }
+    
+    .school-name { 
+      font-size: 24px; 
+      color: #0369a1; 
+      margin: 0; 
+      font-weight: bold; 
+      line-height: 1.3;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    }
+    
+    .page-title { 
+      font-size: 18px; 
+      color: #7e22ce; 
+      margin: 6px 0 0 0; 
+      font-weight: bold;
+    }
+
+    .exam-badge {
+      display: inline-block;
+      background: linear-gradient(45deg, #ff5722, #ff9800);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-top: 6px;
+      box-shadow: 0 3px 8px rgba(255, 87, 34, 0.3);
+    }
+    
+    /* Blinking Notice Box */
+    .notice-box {
+      background: #fef3c7; 
+      color: #92400e; 
+      padding: 10px; 
+      border: 1.5px solid #fde68a;
+      border-left: 5px solid #f59e0b; 
+      border-radius: 10px; 
+      font-size: 14px; 
+      margin-bottom: 14px; 
+      text-align: center;
+      animation: blink 2.5s infinite;
+    }
+    
+    @keyframes blink { 
+      0% { opacity: 1; } 
+      50% { opacity: 0.6; } 
+      100% { opacity: 1; } 
+    }
+
+    /* Filters - Vertical Stack on Mobile */
+    .filter-section { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      margin-bottom: 14px; 
+      background: #f1f5f9;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-group label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #334155;
+    }
+
+    .filter-section input, .filter-section select {
+      width: 100%; 
+      padding: 12px; 
+      font-size: 16px; 
+      border: 2px solid #cbd5e1;
+      border-radius: 10px; 
+      outline: none; 
+      background: #fff; 
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .filter-section input:focus, .filter-section select:focus { 
+      border-color: #0284c7; 
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .btn-search {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      transition: transform 0.1s;
+    }
+
+    .btn-search:active {
+      transform: scale(0.97);
+    }
+
+    /* Result Card (For Single Search) */
+    .result-card {
+      display: none;
+      background: linear-gradient(135deg, #ffffff, #f0fdf4);
+      border: 2px solid #22c55e;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.15);
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-card h3 {
+      margin: 0 0 10px 0;
+      color: #15803d;
+      font-size: 18px;
+      border-bottom: 1px solid #bbf7d0;
+      padding-bottom: 6px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 12px;
+      font-size: 14.5px;
+    }
+
+    .info-item span {
+      color: #64748b;
+      font-size: 13px;
+      display: block;
+    }
+
+    .info-item strong {
+      color: #0f172a;
+      font-size: 15px;
+    }
+
+    .room-highlight {
+      grid-column: span 2;
+      background: #dcfce7;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1.5px dashed #16a34a;
+      margin-top: 6px;
+    }
+
+    .room-highlight strong {
+      font-size: 22px;
+      color: #15803d;
+    }
+
+    /* Action Bar */
+    .action-bar { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 12px; 
+      gap: 8px; 
+    }
+
+    .total-badge { 
+      background: #e0f2fe; 
+      color: #0369a1; 
+      padding: 8px 12px; 
+      font-weight: bold; 
+      border-radius: 8px; 
+      font-size: 14px; 
+      border: 1px solid #bae6fd; 
+      flex: 1; 
+      text-align: center; 
+    }
+
+    .btn-download {
+      background-color: #16a34a; 
+      color: white; 
+      border: none; 
+      padding: 9px 14px; 
+      font-size: 14px;
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-weight: bold; 
+      min-width: 110px;
+    }
+
+    /* Clear Border Table Structure */
+    .table-responsive { 
+      overflow-x: auto; 
+      -webkit-overflow-scrolling: touch; 
+      border-radius: 10px;
+      border: 2px solid #0284c7;
+    }
+
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      min-width: 500px; 
+      background: #fff;
+    }
+
+    th, td { 
+      padding: 10px 8px; 
+      text-align: center; 
+      border: 1px solid #cbd5e1; 
+      font-size: 14px; 
+    }
+
+    th { 
+      background-color: #0284c7; 
+      color: white; 
+      font-size: 15px; 
+    }
+
+    tbody tr:nth-child(even) { background-color: #f8fafc; }
+    tbody tr:active { background-color: #e0f2fe; }
+
+    /* Responsive Tweaks */
+    @media (min-width: 600px) {
+      body { padding: 20px; }
+      .container { padding: 22px; }
+      .school-name { font-size: 28px; }
+      .page-title { font-size: 21px; }
+      .filter-section { flex-direction: row; align-items: flex-end; }
+      .input-group { flex: 1; }
+      .btn-search { min-width: 140px; }
+      .info-grid { grid-template-columns: repeat(3, 1fr); }
+      .room-highlight { grid-column: span 3; }
+    }
+
+    /* Print View */
+    @media print {
+      @page { size: A4 portrait; margin: 10mm; }
+      body { background: white; padding: 0; color: #000; }
+      .container { box-shadow: none; padding: 0; width: 100%; border: none; }
+      .filter-section, .btn-download, .notice-box, .btn-search { display: none !important; }
+      .result-card { display: none !important; }
+      table { border: 2px solid #000; width: 100%; }
+      th, td { border: 1px solid #000 !important; color: #000 !important; }
+      th { background-color: #eee !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ) 🏫</h1>
+      <h2 class="page-title">পরীক্ষার সিট প্ল্যান 📌 : <span id="sessionYear">....</span></h2>
+      <div class="exam-badge" id="examBadge">Exam: Loading... 📝</div>
+    </div>
+
+    <!-- Notice Box -->
+    <div class="notice-box">
+      <i class="fa-solid fa-bullhorn"></i> ক্লাস ও রোল লিখে <b>Search</b> করলে পরীক্ষার রুম নম্বর জানা যাবে! 🎯
+    </div>
+
+    <!-- Search Section -->
+    <div class="filter-section">
+      <div class="input-group">
+        <label for="selectClass"><i class="fa-solid fa-graduation-cap"></i> শ্রেণী (Class):</label>
+        <select id="selectClass">
+          <option value="">-- শ্রেণী বেছে নিন --</option>
+          <option value="V">Class V</option>
+          <option value="VI">Class VI</option>
+          <option value="VII">Class VII</option>
+          <option value="VIII">Class VIII</option>
+          <option value="IX">Class IX</option>
+          <option value="X">Class X</option>
+          <option value="XI">Class XI</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="inputRoll"><i class="fa-solid fa-id-card"></i> রোল নম্বর:</label>
+        <!-- inputmode="numeric" triggers numeric keypad on mobiles -->
+        <input type="number" id="inputRoll" min="1" max="700" inputmode="numeric" placeholder="রোল নম্বর লিখুন...">
+      </div>
+
+      <button class="btn-search" onclick="searchSeat()">
+        <i class="fa-solid fa-magnifying-glass"></i> Search
+      </button>
+    </div>
+
+    <!-- Single Student Search Result Box -->
+    <div id="resultCard" class="result-card">
+      <h3><i class="fa-solid fa-user-graduate"></i> পরীক্ষার্থীর তথ্য 🎉</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span>Student Name:</span>
+          <strong id="resName">-</strong>
+        </div>
+        <div class="info-item">
+          <span>Class:</span>
+          <strong id="resClass">-</strong>
+        </div>
+        <div class="info-item">
+          <span>Section:</span>
+          <strong id="resSection">-</strong>
+        </div>
+        <div class="info-item">
+          <span>Roll No:</span>
+          <strong id="resRoll">-</strong>
+        </div>
+        <div class="info-item">
+          <span>Gender:</span>
+          <strong id="resGender">-</strong>
+        </div>
+        <div class="room-highlight">
+          <span>পরীক্ষার রুম নম্বর 🚪</span>
+          <strong id="resRoom">ROOM NO: --</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <div class="total-badge" id="statusBadge">
+        শ্রেণী নির্বাচন করে তথ্য দেখুন 📋
+      </div>
+      <button class="btn-download" onclick="window.print()">
+        <i class="fa-solid fa-print"></i> প্রিন্ট
+      </button>
+    </div>
+
+    <!-- Class Table Overview -->
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Gender</th>
+            <th>Roll Range</th>
+            <th>Room No</th>
+          </tr>
+        </thead>
+        <tbody id="seatTableBody">
+          <tr>
+            <td colspan="4" style="text-align:center; padding: 20px;">শ্রেণী নির্বাচন করুন...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Supabase Settings
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+
+    // Auto load Exam and Session details on page load
+    window.onload = async function() {
+      fetchGeneralDetails();
+    };
+
+    // Class selection event
+    document.getElementById('selectClass').addEventListener('change', function() {
+      const cls = this.value;
+      document.getElementById('resultCard').style.display = 'none';
+      if(cls) loadClassSeatPlan(cls);
+    });
+
+    // Fetch Session and Exam Info
+    async function fetchGeneralDetails() {
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/seat_plan?limit=1`, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        const data = await response.json();
+        if (data && data.length > 0) {
+          document.getElementById('examBadge').innerText = "Exam: " + data[0].exam_name;
+        }
+
+        // Fetch Session from current_students
+        const stuResponse = await fetch(`${SUPABASE_URL}/rest/v1/current_students?limit=1`, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        const stuData = await stuResponse.json();
+        if (stuData && stuData.length > 0 && stuData[0].session) {
+          document.getElementById('sessionYear').innerText = stuData[0].session;
+        } else {
+          document.getElementById('sessionYear').innerText = new Date().getFullYear();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Load Overview Table for Class
+    async function loadClassSeatPlan(cls) {
+      const tbody = document.getElementById('seatTableBody');
+      const statusBadge = document.getElementById('statusBadge');
+      
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>';
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/seat_plan?class_name=eq.${encodeURIComponent(cls)}&order=id.asc`, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        const plans = await response.json();
+
+        if (!plans || plans.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
+          statusBadge.innerText = `Class: ${cls} | কোনো রেকর্ড নেই`;
+          return;
+        }
+
+        statusBadge.innerHTML = `Class: <b>${cls}</b> - এর সিট প্ল্যান দেখাচ্ছে`;
+        
+        let html = '';
+        plans.forEach(p => {
+          html += `
+            <tr>
+              <td><b>${p.class_name}</b></td>
+              <td>${p.gender || 'BOYS & GIRLS'}</td>
+              <td>${p.start_roll} - ${p.end_roll}</td>
+              <td><b style="color: #0284c7;">${p.room_no}</b></td>
+            </tr>
+          `;
+        });
+        tbody.innerHTML = html;
+
+      } catch (err) {
+        console.error(err);
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: red;">ডাটা লোড করতে সমস্যা হচ্ছে! ইন্টারনেট কানেকশন দেখুন!</td></tr>';
+      }
+    }
+
+    // Individual Student Search Function
+    async function searchSeat() {
+      const cls = document.getElementById('selectClass').value;
+      const rollInput = document.getElementById('inputRoll').value;
+      const resultCard = document.getElementById('resultCard');
+
+      if (!cls) {
+        alert("অনুগ্রহ করে ক্লাস নির্বাচন করুন!");
+        return;
+      }
+      if (!rollInput || rollInput < 1 || rollInput > 700) {
+        alert("অনুগ্রহ করে সঠিক রোল নম্বর দিন!");
+        return;
+      }
+
+      const roll = parseInt(rollInput);
+
+      // 1. Fetch Student Details from current_students
+      try {
+        const studentUrl = `${SUPABASE_URL}/rest/v1/current_students?class_name=eq.${encodeURIComponent(cls)}&roll_no=eq.${roll}`;
+        const stuResp = await fetch(studentUrl, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        const stuData = await stuResp.json();
+
+        if (!stuData || stuData.length === 0) {
+          alert(`Class: ${cls}, Roll: ${roll} - এর কোনো ছাত্র-ছাত্রীর তথ্য পাওয়া যায়নি!`);
+          resultCard.style.display = 'none';
+          return;
+        }
+
+        const student = stuData[0];
+
+        // 2. Find Seat Allocation from seat_plan
+        const planUrl = `${SUPABASE_URL}/rest/v1/seat_plan?class_name=eq.${encodeURIComponent(cls)}&start_roll=lte.${roll}&end_roll=gte.${roll}`;
+        const planResp = await fetch(planUrl, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        const planData = await planResp.json();
+
+        let assignedRoom = "Not Allocated";
+        if (planData && planData.length > 0) {
+          // Check Gender Filter if applicable
+          const matchingPlan = planData.find(p => !p.gender || p.gender === 'ALL' || p.gender.toUpperCase() === (student.gender || '').toUpperCase()) || planData[0];
+          assignedRoom = matchingPlan.room_no;
+        }
+
+        // Render Card Data
+        document.getElementById('resName').innerText = student.student_name || 'N/A';
+        document.getElementById('resClass').innerText = student.class_name || cls;
+        document.getElementById('resSection').innerText = student.section || 'N/A';
+        document.getElementById('resRoll').innerText = student.roll_no;
+        document.getElementById('resGender').innerText = student.gender || 'N/A';
+        document.getElementById('resRoom').innerText = assignedRoom;
+
+        resultCard.style.display = 'block';
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+
+      } catch (err) {
+        console.error(err);
+        alert("ডাটা লোড করতে সমস্যা হচ্ছে! ইন্টারনেট কানেকশন দেখুন।");
+      }
+    }
+  </script>
+</body>
+</html>
