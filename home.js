@@ -126,23 +126,28 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔢 গাণিতিক ক্যাপচা ফাংশনালিটি
+// 🔢 1. গাণিতিক ক্যাপচা ফাংশনালিটি (ENHANCED)
 // =================================
 let captchaResult = null;
 
 function generateCaptcha() {
     const captchaElement = document.getElementById('captchaCode');
     const userInput = document.getElementById('userCaptcha');
+    const errorDiv = document.getElementById('masterLoginError');
     
     if (!captchaElement) return;
 
+    // ১. এক অঙ্কের দুটি সংখ্যা জেনারেট করা (১ থেকে ৯)
     const num1 = Math.floor(Math.random() * 9) + 1;
     const num2 = Math.floor(Math.random() * 9) + 1;
+
+    // ২. গাণিতিক অপারেটর নির্বাচন (+ , - , ×)
     const operators = ['+', '-', '×'];
     const operator = operators[Math.floor(Math.random() * operators.length)];
 
     let expressionText = "";
 
+    // ৩. ফলাফল ও এক্সপ্রেশন নির্ধারণ
     if (operator === '+') {
         captchaResult = num1 + num2;
         expressionText = `${num1} + ${num2} = ?`;
@@ -156,6 +161,7 @@ function generateCaptcha() {
         expressionText = `${num1} × ${num2} = ?`;
     }
 
+    // Font-family এবং Style ইনলাইন সেট
     captchaElement.style.fontFamily = "Arial, sans-serif";
     captchaElement.style.letterSpacing = "2px";
     captchaElement.style.fontWeight = "bold";
@@ -165,7 +171,7 @@ function generateCaptcha() {
 }
 
 // =================================
-// 🔐 SECURE SUPABASE LOGIN & RATE LIMITING
+// 🔐 2. SECURE SUPABASE LOGIN & AUTHENTICATION
 // =================================
 function toggleMasterPasswordVisibility() {
     const passInput = document.getElementById('masterPass');
@@ -193,12 +199,9 @@ async function submitMasterLogin() {
 
     if (!idInput || !passInput || !captchaInput) return;
 
-    let inputUser = idInput.value.trim();
+    const email = idInput.value.trim();
     const pass = passInput.value.trim();
     const userCaptcha = captchaInput.value.trim();
-
-    // ইমেইল ফরম্যাট হ্যান্ডলিং (Supabase Auth Email চায়)
-    const email = inputUser.includes('@') ? inputUser : `${inputUser}@pathpukurschool.com`;
 
     if (errorDiv) errorDiv.innerText = "";
     if (successDiv) {
@@ -206,7 +209,7 @@ async function submitMasterLogin() {
         successDiv.style.display = "none";
     }
 
-    // 🔴 1. BRUTE-FORCE RATE LIMITING CHECK
+    // ১. BRUTE-FORCE RATE LIMITING CHECK
     let lockUntil = parseInt(localStorage.getItem('lockUntil') || '0', 10);
     if (Date.now() < lockUntil) {
         let remainingMins = Math.ceil((lockUntil - Date.now()) / 60000);
@@ -217,9 +220,10 @@ async function submitMasterLogin() {
         return;
     }
 
-    if (!inputUser || !pass) {
+    // ২. Validation Check
+    if (!email || !pass) {
         if (errorDiv) {
-            errorDiv.innerText = "⚠️ Please enter ID & Password.";
+            errorDiv.innerText = "⚠️ Please enter Email ID & Password.";
             errorDiv.style.color = "red";
         }
         return;
@@ -233,6 +237,7 @@ async function submitMasterLogin() {
         return;
     }
 
+    // ৩. CAPTCHA Validation
     if (parseInt(userCaptcha, 10) !== captchaResult) {
         if (errorDiv) {
             errorDiv.innerText = "❌ Incorrect CAPTCHA answer! Please try again.";
@@ -248,7 +253,7 @@ async function submitMasterLogin() {
     }
 
     try {
-        // 🔒 2. SUPABASE SERVER-SIDE AUTHENTICATION
+        // 🔒 SUPABASE AUTHENTICATION
         const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
             password: pass,
@@ -281,7 +286,7 @@ async function submitMasterLogin() {
             return;
         }
 
-        // 🟢 3. SUCCESSFUL LOGIN
+        // 🟢 SUCCESSFUL LOGIN
         localStorage.removeItem('loginAttempts');
         localStorage.removeItem('lockUntil');
         
@@ -321,7 +326,7 @@ async function submitMasterLogin() {
     }
 }
 
-// 🔒 LOGOUT SYSTEM
+// 🔒 3. LOGOUT & INACTIVITY SYSTEM
 async function logout() {
     try {
         await supabase.auth.signOut();
@@ -332,9 +337,6 @@ async function logout() {
     window.location.reload();
 }
 
-// =================================
-// ⏳ AUTOMATIC INACTIVITY LOGOUT (15 Mins)
-// =================================
 let inactivityTimer;
 const TIMEOUT_DURATION = 15 * 60 * 1000; 
 
@@ -376,7 +378,7 @@ function startAutoLogoutTimer() {
     resetTimer();
 }
 
-// Available Soon & Sidebar Handlers
+// UI Handlers
 function showAvailableSoonMessage(button) {
     if (button.nextElementSibling && button.nextElementSibling.classList.contains('avail-msg')) return;
 
@@ -476,9 +478,9 @@ function initializeSidebar() {
 // 🚀 INITIALIZATION
 // =================================
 document.addEventListener("DOMContentLoaded", async () => {
-    generateCaptcha();
-    
-    // 🔍 Supabase Session Verification
+    generateCaptcha(); // 🔢 গাণিতিক ক্যাপচা ইনিশিয়ালাইজেশন
+
+    // 🔍 3. Supabase Session Security Verification
     const { data: { session } } = await supabase.auth.getSession();
 
     if (session && sessionStorage.getItem("teacherLoggedIn") === "true") {
