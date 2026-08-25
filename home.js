@@ -112,33 +112,45 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔢 ক্যাপচা ফাংশনালিটি (NEW & SECURE)
+// 🔢 গাণিতিক ক্যাপচা ফাংশনালিটি (MATH CAPTCHA)
 // =================================
-let currentCaptchaCode = "";
+let captchaResult = null; // গাণিতিক ফলাফলের সঠিক মান সংরক্ষণের জন্য
 
-// নিরাপদ র্যান্ডম ক্যাপচা জেনারেটর (Cryptographically Secure)
 function generateCaptcha() {
     const captchaElement = document.getElementById('captchaCode');
     const userInput = document.getElementById('userCaptcha');
     
     if (!captchaElement) return;
 
-    // অস্পষ্ট অক্ষর (যেমন: 0, O, I, 1, l) বাদ দেওয়া হয়েছে
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
-    const length = 6;
-    let captcha = "";
-    
-    const randomValues = new Uint32Array(length);
-    window.crypto.getRandomValues(randomValues);
+    // ১. এক অঙ্কের দুটি সংখ্যা জেনারেট করা (০ থেকে ৯)
+    const num1 = Math.floor(Math.random() * 10);
+    const num2 = Math.floor(Math.random() * 10);
 
-    for (let i = 0; i < length; i++) {
-        captcha += chars.charAt(randomValues[i] % chars.length);
+    // ২. গাণিতিক অপারেটর নির্বাচন (+ , - , ×)
+    const operators = ['+', '-', '×'];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+
+    let expressionText = "";
+
+    // ৩. ফলাফল ও এক্সপ্রেশন নির্ধারণ
+    if (operator === '+') {
+        captchaResult = num1 + num2;
+        expressionText = `${num1} + ${num2} = ?`;
+    } else if (operator === '-') {
+        // ফলাফল যাতে ঋণাত্মক (Negative) না আসে, তাই বড় সংখ্যাটি আগে রাখা হলো
+        const max = Math.max(num1, num2);
+        const min = Math.min(num1, num2);
+        captchaResult = max - min;
+        expressionText = `${max} - ${min} = ?`;
+    } else if (operator === '×') {
+        captchaResult = num1 * num2;
+        expressionText = `${num1} × ${num2} = ?`;
     }
 
-    currentCaptchaCode = captcha;
-    captchaElement.innerText = captcha;
+    // ৪. স্ক্রিনে প্রদর্শন ও ইনপুট রিসেট
+    captchaElement.innerText = expressionText;
     
-    if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
+    if (userInput) userInput.value = ""; 
 }
 
 // =================================
@@ -168,7 +180,7 @@ async function submitMasterLogin() {
     const errorDiv = document.getElementById('masterLoginError');
     const successDiv = document.getElementById('masterLoginSuccess');
     
-    // 🎯 সুনির্দিষ্ট আইডি (masterLoginBtn) দিয়ে শুধু লগইন বাটনটিকে ধরা হচ্ছে
+    // 🎯 সুনির্দিষ্ট আইডি (masterLoginBtn) দিয়ে লগইন বাটন ধরা হচ্ছে
     const loginBtn = document.getElementById('masterLoginBtn');
 
     if (!idInput || !passInput || !captchaInput) return;
@@ -195,19 +207,19 @@ async function submitMasterLogin() {
     // 🔹 ২. ক্যাপচা ফাঁকা থাকলে মেসেজ
     if (!userCaptcha) {
         if (errorDiv) {
-            errorDiv.innerText = "⚠️ Please enter the CAPTCHA code.";
+            errorDiv.innerText = "⚠️ Please enter the CAPTCHA answer.";
             errorDiv.style.color = "red";
         }
         return;
     }
 
-    // 🔹 ৩. ক্যাপচা ভুল হলে মেসেজ
-    if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
+    // 🔹 ৩. গাণিতিক ফলাফল যাচাই (Math Captcha Validation)
+    if (parseInt(userCaptcha, 10) !== captchaResult) {
         if (errorDiv) {
-            errorDiv.innerText = "❌ Invalid CAPTCHA code! Please try again.";
+            errorDiv.innerText = "❌ Incorrect CAPTCHA answer! Please try again.";
             errorDiv.style.color = "red";
         }
-        generateCaptcha(); // ক্যাপচা ভুল হলে নতুন ক্যাপচা জেনারেট করা
+        generateCaptcha(); // ক্যাপচা ভুল হলে নতুন অঙ্ক তৈরি হবে
         return;
     }
 
@@ -337,7 +349,7 @@ function startAutoLogoutTimer() {
 // 🔔 AVAILABLE SOON MESSAGE & CLICK HANDLER
 // =================================
 
-// নির্দিষ্ট বোতামের নিচে 'Available Soon' নোটিশ দেখানোর ফাংশন (পূর্বের ন্যায় অক্ষুণ্ণ)
+// নির্দিষ্ট বোতামের নিচে 'Available Soon' নোটিশ দেখানোর ফাংশন (পূর্বের ন্যায় অক্ষুণ্ণ)
 function showAvailableSoonMessage(button) {
     if (button.nextElementSibling && button.nextElementSibling.classList.contains('avail-msg')) return;
 
@@ -467,7 +479,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const overlay = document.getElementById('masterLoginOverlay');
         if (overlay) overlay.style.display = "flex";
         
-        // লগইন বক্স দৃশ্যমান হলে নতুন ক্যাপচা তৈরি করা
+        // লগইন বক্স দৃশ্যমান হলে নতুন গাণিতিক ক্যাপচা তৈরি করা
         generateCaptcha();
     }
 
