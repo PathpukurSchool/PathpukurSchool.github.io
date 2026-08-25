@@ -169,6 +169,8 @@ function generateCaptcha() {
     
     if (userInput) userInput.value = ""; 
 }
+// পেজ লোড হওয়ার সাথে সাথেই গাণিতিক ক্যাপচা তৈরি হবে
+document.addEventListener("DOMContentLoaded", generateCaptcha);
 
 // =================================
 // 🔐 SECURE SUPABASE LOGIN & RATE LIMITING
