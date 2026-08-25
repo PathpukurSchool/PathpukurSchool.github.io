@@ -117,47 +117,79 @@ let captchaTimer = null; // 👈 ১. নতুন টাইমার ভ্য�
 const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // 👈 ২. ২ মিনিট (মেগাসেকেন্ডে)
 
 function generateCaptcha() {
-    const captchaElement = document.getElementById('captchaCode');
+    const canvas = document.getElementById('captchaCanvas');
     const userInput = document.getElementById('userCaptcha');
     const errorDiv = document.getElementById('masterLoginError');
     
-    if (!captchaElement) return;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
 
     // ১. আগের টাইমার বন্ধ করা
     if (captchaTimer) clearTimeout(captchaTimer);
 
-    // ২. ক্যাপচা রিফ্রেশ হলে পুরানো এরর মেসেজ মুছে ফেলা ও কালার রিসেট
-    if (errorDiv) {
-        errorDiv.innerText = "";
-    }
-    captchaElement.style.color = ""; // ক্যাপচার সাধারণ রঙে ফিরিয়ে নেওয়া
+    // ২. আগের মেসেজ মুছে ফেলা
+    if (errorDiv) errorDiv.innerText = "";
 
-    // অস্পষ্ট অক্ষর (যেমন: 0, O, I, 1, l) বাদ দেওয়া হয়েছে
+    // ক্যানভাস রিসেট ও ব্যাকগ্রাউন্ড প্রস্তুত করা
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#f2f2f2";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // ক্যাপচা কোড তৈরি
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     const length = 5;
     let captcha = "";
-    
     const randomValues = new Uint32Array(length);
     window.crypto.getRandomValues(randomValues);
 
     for (let i = 0; i < length; i++) {
         captcha += chars.charAt(randomValues[i] % chars.length);
     }
-
     currentCaptchaCode = captcha;
-    captchaElement.innerText = captcha;
-    
+
+    // 🎨 ৩. ব্যাকগ্রাউন্ডে এলোমেলো লাল/নীল/সবুজ দাগ (Noise Lines) আঁকা
+    for (let i = 0; i < 6; i++) {
+        ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`; // বিভিন্ন রঙ
+        ctx.beginPath();
+        ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+        ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+        ctx.lineWidth = 1 + Math.random();
+        ctx.stroke();
+    }
+
+    // 🎨 ৪. ক্যাপচার প্রতিটি অক্ষর কিছুটা বাঁকা ও রঙ বেরঙের করে আঁকা
+    ctx.font = "bold 22px Arial";
+    for (let i = 0; i < length; i++) {
+        ctx.fillStyle = `rgb(${Math.random() * 150}, ${Math.random() * 150}, ${Math.random() * 150})`;
+        ctx.save();
+        ctx.translate(20 + i * 22, 28);
+        ctx.rotate((Math.random() - 0.5) * 0.4); // অক্ষর সামান্য বাঁকানো
+        ctx.fillText(captcha[i], 0, 0);
+        ctx.restore();
+    }
+
+    // 🎨 ৫. অক্ষরের ওপর দিয়ে অতিরিক্ত ১-২টি নয়েজ রেখা
+    ctx.strokeStyle = "rgba(255, 0, 0, 0.6)"; // লালচে আবছা দাগ
+    ctx.beginPath();
+    ctx.moveTo(10, Math.random() * canvas.height);
+    ctx.lineTo(canvas.width - 10, Math.random() * canvas.height);
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
     if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
 
-    // ৩. নির্দিষ্ট সময় পর ক্যাপচা Expired করার টাইমার চালু
+    // ৬. নির্দিষ্ট সময় পর Expired হওয়ার টাইমার
     captchaTimer = setTimeout(() => {
-        currentCaptchaCode = ""; // ক্যাপচা কোড ইনভ্যালিড করা
+        currentCaptchaCode = ""; // ক্যাপচা বাতিল করা
         
-        // EXPIRED লেখাটি লাল রঙে দেখানো
-        captchaElement.innerText = "EXPIRED";
-        captchaElement.style.color = "red"; 
+        // ক্যানভাস মুছে EXPIRED লাল রঙে বড় করে আঁকা
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#ffe6e6";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "bold 18px Arial";
+        ctx.fillStyle = "red";
+        ctx.fillText("EXPIRED", 28, 26);
 
-        // এরর মেসেজটি লাল রঙে দেখানো
         if (errorDiv) {
             errorDiv.innerText = "⏳ CAPTCHA expired! Please refresh CAPTCHA.";
             errorDiv.style.color = "red";
