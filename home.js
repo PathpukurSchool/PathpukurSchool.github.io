@@ -121,8 +121,8 @@ function generateCaptcha() {
     if (!captchaElement) return;
 
     // অস্পষ্ট অক্ষর (যেমন: 0, O, I, 1, l) বাদ দেওয়া হয়েছে
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
-    const length = 6;
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const length = 5;
     let captcha = "";
     
     const randomValues = new Uint32Array(length);
