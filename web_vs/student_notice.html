@@ -5,20 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
     (function() {
-      // ইউজার কোন পেজ থেকে এসেছে তার ইউআরএল (Referrer)
       var referrer = document.referrer;
-      
-      // মূল ডোমেইন এর নাম
       var allowedDomain = "pathpukurschool.github.io";
-
-      // যদি ইউজার মূল সাইটের কোন লিংক থেকে না আসে (সরাসরি URL Paste করে)
       if (!referrer || referrer.indexOf(allowedDomain) === -1) {
-        // সরাসরি মূল সাইটে রিডাইরেক্ট করা হচ্ছে
         window.location.replace("https://pathpukurschool.github.io/");
       }
     })();
   </script>
-  <title>পাতপুকুর হাই স্কুল (উঃ মাঃ) - নোটিশ আপলোড প্যানেল</title>
+  <title>পাতপুকুর হাই স্কুল (উ: মা:) - নোটিশ প্যানেল</title>
 
   <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,12 +24,13 @@
     * {
       box-sizing: border-box;
       font-family: 'Tiro Bangla', 'Poppins', serif, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       margin: 0;
-      padding: 15px;
+      padding: 12px;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -46,38 +41,40 @@
     .card {
       background: #ffffff;
       width: 100%;
-      max-width: 650px;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4);
       border: 1px solid #e2e8f0;
+    }
+
+    .school-title {
+      text-align: center;
+      color: #1e3a8a;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
     }
 
     .header {
       text-align: center;
       border-bottom: 2px dashed #3b82f6;
       padding-bottom: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .header h2 {
-      margin: 0;
-      color: #1e3a8a;
-      font-size: 24px;
+      margin: 4px 0 0;
+      color: #2563eb;
+      font-size: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-    }
-
-    .header p {
-      margin: 5px 0 0;
-      color: #64748b;
-      font-size: 14px;
+      gap: 8px;
     }
 
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .form-group label {
@@ -85,7 +82,7 @@
       font-weight: 600;
       margin-bottom: 6px;
       color: #1e293b;
-      font-size: 15px;
+      font-size: 14px;
     }
 
     .form-group label span.req {
@@ -109,6 +106,42 @@
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     }
 
+    .form-control[readonly] {
+      background-color: #e2e8f0;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+
+    .date-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .date-wrapper input[type="text"] {
+      padding-right: 45px;
+    }
+
+    .date-picker-btn {
+      position: absolute;
+      right: 8px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .native-date-picker {
+      position: absolute;
+      right: 8px;
+      opacity: 0;
+      width: 35px;
+      height: 35px;
+      cursor: pointer;
+    }
+
     .row {
       display: flex;
       gap: 12px;
@@ -120,30 +153,33 @@
 
     textarea.form-control {
       resize: vertical;
-      min-height: 110px;
+      min-height: 100px;
     }
 
-    /* Auto Sl No Badge */
-    .sl-badge {
-      background: #eff6ff;
-      color: #1d4ed8;
-      border: 1.5px solid #bfdbfe;
-      font-weight: 700;
+    .passkey-group {
+      background: #fef2f2;
+      border: 1.5px solid #fca5a5;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
     }
 
-    /* Action Buttons */
+    .passkey-group label {
+      color: #991b1b;
+    }
+
     .btn-group {
       display: flex;
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 18px;
     }
 
     .btn {
       flex: 1;
-      padding: 12px;
+      padding: 13px;
       border: none;
       border-radius: 10px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
       display: flex;
@@ -159,23 +195,24 @@
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
 
-    .btn-submit:hover {
-      background: #1e40af;
+    .btn-submit:active {
+      transform: scale(0.98);
     }
 
     .btn-clear {
       background: #f1f5f9;
       color: #64748b;
       border: 1px solid #cbd5e1;
-      max-width: 120px;
+      max-width: 100px;
     }
 
-    .btn-clear:hover {
-      background: #e2e8f0;
-      color: #0f172a;
+    .btn-delete {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+      display: none;
     }
 
-    /* Alert Banner */
     .draft-banner {
       background: #fef3c7;
       color: #92400e;
@@ -183,7 +220,7 @@
       padding: 8px 12px;
       border-radius: 8px;
       font-size: 13px;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       display: none;
       align-items: center;
       justify-content: space-between;
@@ -194,18 +231,21 @@
         flex-direction: column;
         gap: 0;
       }
+      .card {
+        padding: 16px;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="card">
+    <h1 class="school-title">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
     <div class="header">
-      <h2><i class="fa-solid fa-bullhorn" style="color: #2563eb;"></i> নোটিশ আপলোড প্যানেল</h2>
-      <p>স্কুলের মূল ওয়েবসাইটে নতুন নোটিশ যুক্ত করুন</p>
+      <h2><i class="fa-solid fa-bullhorn"></i> নোটিশ আপলোড ও ম্যানেজমেন্ট প্যানেল</h2>
     </div>
 
-    <!-- Local Draft Status -->
+    <!-- Local Draft Alert -->
     <div class="draft-banner" id="draftBanner">
       <span><i class="fa-solid fa-floppy-disk"></i> পূর্বে লেখা ড্রাফট লোড করা হয়েছে!</span>
       <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="hideDraftBanner()"></i>
@@ -213,35 +253,29 @@
 
     <form id="noticeForm">
       
-      <!-- Auto Sl No & Date -->
+      <!-- Sl Dropdown & Date -->
       <div class="row">
         <div class="form-group">
-          <label>ক্রমিক নং (Sl No):</label>
-          <input type="text" id="sl_no" class="form-control sl-badge" readonly value="লোডিং...">
+          <label for="sl_no">ক্রমিক নং (Sl No) <span class="req">*</span></label>
+          <select id="sl_no" class="form-control" style="font-weight: bold; color: #1d4ed8;" onchange="onSlChange()">
+            <option value="">লোডিং...</option>
+          </select>
         </div>
 
         <div class="form-group">
-          <label for="date_val">তারিখ (Date) <span class="req">*</span></label>
-          <input type="text" id="date_val" class="form-control" placeholder="dd-mm-yyyy" required>
-        </div>
-      </div>
-
-      <!-- Security Login Fields -->
-      <div class="row">
-        <div class="form-group">
-          <label for="admin_id"><i class="fa-solid fa-user-shield" style="color: #2563eb;"></i> সিকিউরিটি আইডি (ID) <span class="req">*</span></label>
-          <input type="text" id="admin_id" class="form-control" placeholder="User ID দিন" required autocomplete="off">
-        </div>
-        <div class="form-group">
-          <label for="admin_pin"><i class="fa-solid fa-lock" style="color: #dc2626;"></i> পাসওয়ার্ড (Password) <span class="req">*</span></label>
-          <input type="password" id="admin_pin" class="form-control" placeholder="পাসওয়ার্ড দিন" required>
+          <label for="date_val">তারিখ (dd-mm-yyyy) <span class="req">*</span></label>
+          <div class="date-wrapper">
+            <input type="text" id="date_val" class="form-control" placeholder="dd-mm-yyyy" required>
+            <button type="button" class="date-picker-btn"><i class="fa-solid fa-calendar-days"></i></button>
+            <input type="date" id="native_date" class="native-date-picker" onchange="syncDateFromPicker(this.value)">
+          </div>
         </div>
       </div>
 
       <!-- Heading -->
       <div class="form-group">
         <label for="heading">নোটিশের বিষয়/শিরোনাম (Heading) <span class="req">*</span></label>
-        <input type="text" id="heading" class="form-control" placeholder="এখানে শিরোনাম লিখুন (বাংলা/English)..." required autocomplete="off">
+        <input type="text" id="heading" class="form-control" placeholder="এখানে শিরোনাম লিখুন..." required autocomplete="off">
       </div>
 
       <!-- Notice Body -->
@@ -266,10 +300,19 @@
         </div>
       </div>
 
+      <!-- Passkey Field (Placed at the end before Submit) -->
+      <div class="form-group passkey-group">
+        <label for="passkey"><i class="fa-solid fa-key"></i> সিকিউরিটি পাসকি (Passkey) <span class="req">*</span></label>
+        <input type="password" id="passkey" class="form-control" placeholder="Passkey প্রবেশ করান..." required autocomplete="new-password">
+      </div>
+
       <!-- Action Buttons -->
       <div class="btn-group">
         <button type="button" class="btn btn-clear" onclick="clearForm(true)">
-          <i class="fa-solid fa-rotate-left"></i> রিসেট
+          <i class="fa-solid fa-rotate-left"></i> রিফ্রেশ
+        </button>
+        <button type="button" class="btn btn-delete" id="deleteBtn" onclick="deleteNotice()">
+          <i class="fa-solid fa-trash-can"></i> ডিলিট
         </button>
         <button type="submit" class="btn btn-submit" id="submitBtn">
           <i class="fa-solid fa-paper-plane"></i> আপলোড করুন
@@ -281,22 +324,22 @@
 
   <script>
     // ----------------------------------------------------
-    // 1. Supabase Configuration
+    // Supabase Credentials
     // ----------------------------------------------------
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-  
-    // ----------------------------------------------------
-    // 2. Window Load Initialization
-    // ----------------------------------------------------
+
+    let fetchedNotices = [];
+    let maxSlNo = 0;
+
+    // Initialization
     window.onload = function() {
       setDefaultDate();
-      loadDraft();
-      fetchNextSlNo();
+      loadNoticeDropdown();
       attachAutoSaveEvents();
     };
 
-    // আজকের তারিখ dd-mm-yyyy ফরম্যাটে সেট করা
+    // Set Default Today Date (dd-mm-yyyy)
     function setDefaultDate() {
       const today = new Date();
       const dd = String(today.getDate()).padStart(2, '0');
@@ -305,34 +348,92 @@
       document.getElementById('date_val').value = `${dd}-${mm}-${yyyy}`;
     }
 
-    // ----------------------------------------------------
-    // 3. Auto Fetch Next Sl No from Supabase
-    // ----------------------------------------------------
-    async function fetchNextSlNo() {
-      const slInput = document.getElementById('sl_no');
+    // Convert Date Picker (yyyy-mm-dd) to (dd-mm-yyyy)
+    function syncDateFromPicker(val) {
+      if(!val) return;
+      const parts = val.split('-');
+      document.getElementById('date_val').value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+      saveDraft();
+    }
+
+    // Load Dropdown list from Supabase
+    async function loadNoticeDropdown() {
+      const slSelect = document.getElementById('sl_no');
       try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/Notice?select=sl_no&order=sl_no.desc&limit=1`, {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/Notice?select=*&order=sl_no.asc`, {
           headers: {
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
           }
         });
-        const data = await response.json();
+        fetchedNotices = await response.json();
 
-        if (data && data.length > 0 && data[0].sl_no !== undefined) {
-          slInput.value = parseInt(data[0].sl_no) + 1;
-        } else {
-          slInput.value = 1; // টেবিল খালি থাকলে ১ থেকে শুরু হবে
+        slSelect.innerHTML = '';
+        maxSlNo = fetchedNotices.length;
+        
+        // 1 to N Dropdown
+        for (let i = 1; i <= maxSlNo; i++) {
+          const opt = document.createElement('option');
+          opt.value = i;
+          opt.textContent = `ক্রমিক নং: ${i} (পুরাতন)`;
+          slSelect.appendChild(opt);
         }
+
+        // Add N+1 option for new notice
+        const newOpt = document.createElement('option');
+        newOpt.value = maxSlNo + 1;
+        newOpt.textContent = `ক্রমিক নং: ${maxSlNo + 1} (নতুন নোটিশ)`;
+        slSelect.appendChild(newOpt);
+
+        // Default to New Notice Selection
+        slSelect.value = maxSlNo + 1;
+        onSlChange();
+
       } catch (err) {
-        console.error("Sl No fetching error:", err);
-        slInput.value = "1";
+        console.error("Dropdown loading error:", err);
+        slSelect.innerHTML = '<option value="1">ক্রমিক নং: 1 (নতুন)</option>';
       }
     }
 
-    // ----------------------------------------------------
-    // 4. LocalStorage Draft Management
-    // ----------------------------------------------------
+    // On SL Number Dropdown Selection Change
+    function onSlChange() {
+      const selectedSl = parseInt(document.getElementById('sl_no').value);
+      const deleteBtn = document.getElementById('deleteBtn');
+      const submitBtn = document.getElementById('submitBtn');
+      const dateInput = document.getElementById('date_val');
+      const datePickerBtn = document.querySelector('.date-picker-btn');
+
+      const existingNotice = fetchedNotices.find(n => n.sl_no === selectedSl);
+
+      if (existingNotice) {
+        // Old Notice Selected: Load Data into fields
+        document.getElementById('heading').value = existingNotice.heading || '';
+        document.getElementById('notice_body').value = existingNotice.notice_body || '';
+        document.getElementById('link').value = existingNotice.Link || '';
+        document.getElementById('is_new').value = existingNotice.is_new ? 'true' : 'false';
+        dateInput.value = existingNotice.date_val || '';
+        
+        // Prevent Date editing for old notices
+        dateInput.readOnly = true;
+        datePickerBtn.style.display = 'none';
+
+        // UI Controls for Old Notice
+        deleteBtn.style.display = 'flex';
+        submitBtn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> আপডেট করুন`;
+
+      } else {
+        // New Notice Selected
+        dateInput.readOnly = false;
+        datePickerBtn.style.display = 'block';
+        deleteBtn.style.display = 'none';
+        submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> আপলোড করুন`;
+
+        // Load Draft or reset to default
+        loadDraft();
+      }
+    }
+
+    // Auto Save Events for LocalStorage
     function attachAutoSaveEvents() {
       const fields = ['heading', 'notice_body', 'link', 'is_new', 'date_val'];
       fields.forEach(id => {
@@ -340,7 +441,11 @@
       });
     }
 
+    // Save Draft (Excluding Passkey)
     function saveDraft() {
+      const selectedSl = parseInt(document.getElementById('sl_no').value);
+      if (selectedSl <= maxSlNo) return; // Don't overwrite draft if editing old notice
+
       const draftData = {
         heading: document.getElementById('heading').value,
         notice_body: document.getElementById('notice_body').value,
@@ -351,6 +456,7 @@
       localStorage.setItem('notice_draft', JSON.stringify(draftData));
     }
 
+    // Load Draft from LocalStorage
     function loadDraft() {
       const saved = localStorage.getItem('notice_draft');
       if (saved) {
@@ -361,11 +467,17 @@
             document.getElementById('notice_body').value = draft.notice_body || '';
             document.getElementById('link').value = draft.link || '';
             document.getElementById('is_new').value = draft.is_new || 'true';
-            if(draft.date_val) document.getElementById('date_val').value = draft.date_val;
-            
+            if (draft.date_val) document.getElementById('date_val').value = draft.date_val;
+
             document.getElementById('draftBanner').style.display = 'flex';
           }
         } catch(e) {}
+      } else {
+        setDefaultDate();
+        document.getElementById('heading').value = '';
+        document.getElementById('notice_body').value = '';
+        document.getElementById('link').value = '';
+        document.getElementById('is_new').value = 'true';
       }
     }
 
@@ -373,90 +485,66 @@
       document.getElementById('draftBanner').style.display = 'none';
     }
 
+    // Reset Form & Clear LocalStorage
     function clearForm(confirmUser = false) {
-      if (confirmUser && !confirm("আপনি কি নতুন করে ফর্মটি ফাঁকা করতে চান?")) return;
+      if (confirmUser && !confirm("আপনি কি নতুন করে ফর্মটি রিফ্রেশ করতে চান?")) return;
       
       document.getElementById('heading').value = '';
       document.getElementById('notice_body').value = '';
       document.getElementById('link').value = '';
       document.getElementById('is_new').value = 'true';
-      document.getElementById('admin_id').value = '';
-      document.getElementById('admin_pin').value = '';
+      document.getElementById('passkey').value = '';
       
       localStorage.removeItem('notice_draft');
       hideDraftBanner();
-      setDefaultDate();
+      loadNoticeDropdown();
     }
 
     // ----------------------------------------------------
-    // 5. Secure Submit Form to Supabase
+    // Submit / Update Form
     // ----------------------------------------------------
     document.getElementById('noticeForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      const userId = document.getElementById('admin_id').value.trim();
-      const userPassword = document.getElementById('admin_pin').value.trim();
+      const passkey = document.getElementById('passkey').value.trim();
       const submitBtn = document.getElementById('submitBtn');
 
+      if (!passkey) {
+        alert("⚠️ অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!");
+        return;
+      }
+
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> যাচাই করা হচ্ছে...`;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...`;
 
       try {
-        // ১. Supabase RPC Function ডেকে আইডি এবং পাসওয়ার্ড ডাটাবেস লেভেলে চেক করা
-        const secResponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_page_access`, {
+        const payload = {
+          p_passkey: passkey,
+          p_sl_no: parseInt(document.getElementById('sl_no').value),
+          p_date_val: document.getElementById('date_val').value.trim(),
+          p_heading: document.getElementById('heading').value.trim(),
+          p_notice_body: document.getElementById('notice_body').value.trim(),
+          p_link: document.getElementById('link').value.trim() || null,
+          p_is_new: document.getElementById('is_new').value === 'true'
+        };
+
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_save_notice`, {
           method: 'POST',
           headers: {
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            p_page_name: 'notice_security',
-            p_user_id: userId,
-            p_password: userPassword
-          })
-        });
-
-        const isMatch = await secResponse.json();
-
-        // আইডি বা পাসওয়ার্ড না মিললে (False আসলে) আপলোড আটকাবে
-        if (!isMatch) {
-          alert("❌ ভুল সিকিউরিটি আইডি অথবা পাসওয়ার্ড! সঠিকভাবে পুনরায় চেষ্টা করুন।");
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> আপলোড করুন`;
-          return;
-        }
-
-        // ২. সিকিউরিটি চেক সফল হলে নোটিশ ডাটা প্রস্তুত ও আপলোড
-        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> আপলোড হচ্ছে...`;
-
-        const payload = {
-          sl_no: parseInt(document.getElementById('sl_no').value),
-          date_val: document.getElementById('date_val').value.trim(),
-          heading: document.getElementById('heading').value.trim(),
-          notice_body: document.getElementById('notice_body').value.trim(),
-          Link: document.getElementById('link').value.trim() || null,
-          is_new: document.getElementById('is_new').value === 'true'
-        };
-
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/Notice`, {
-          method: 'POST',
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
-          },
           body: JSON.stringify(payload)
         });
 
-        if (response.ok) {
-          alert("🎉 নোটিশটি সফলভাবে Supabase-এ আপলোড হয়েছে!");
+        const result = await response.json();
+
+        if (result && result.success) {
+          alert("🎉 " + result.message);
           clearForm(false);
-          fetchNextSlNo();
         } else {
-          const errData = await response.json();
-          alert("❌ আপলোড ব্যর্থ হয়েছে: " + (errData.message || "Unknown Error"));
+          alert("❌ ব্যর্থ হয়েছে: " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
         }
 
       } catch (err) {
@@ -464,9 +552,63 @@
         alert("❌ সার্ভারের সাথে যোগাযোগ করা যাচ্ছে না!");
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> আপলোড করুন`;
+        document.getElementById('passkey').value = ''; // Clear passkey field immediately
       }
     });
+
+    // ----------------------------------------------------
+    // Delete Notice Functionality
+    // ----------------------------------------------------
+    async function deleteNotice() {
+      const selectedSl = parseInt(document.getElementById('sl_no').value);
+      const heading = document.getElementById('heading').value;
+      const passkey = document.getElementById('passkey').value.trim();
+
+      if (!passkey) {
+        alert("⚠️ ডিলিট করার আগে অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!");
+        document.getElementById('passkey').focus();
+        return;
+      }
+
+      const isConfirmed = confirm(`আপনি কি নিশ্চিত যে নিচের নোটিশটি ডিলিট করতে চান?\n\nশিরোনাম: "${heading}"`);
+      if (!isConfirmed) return;
+
+      const deleteBtn = document.getElementById('deleteBtn');
+      deleteBtn.disabled = true;
+      deleteBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ডিলিট হচ্ছে...`;
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_delete_notice`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            p_passkey: passkey,
+            p_sl_no: selectedSl
+          })
+        });
+
+        const result = await response.json();
+
+        if (result && result.success) {
+          alert("🗑️ " + result.message);
+          clearForm(false);
+        } else {
+          alert("❌ ডিলিট ব্যর্থ হয়েছে: " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("❌ সার্ভারের সাথে যোগাযোগ ব্যর্থ হয়েছে!");
+      } finally {
+        deleteBtn.disabled = false;
+        deleteBtn.innerHTML = `<i class="fa-solid fa-trash-can"></i> ডিলিট`;
+        document.getElementById('passkey').value = '';
+      }
+    }
   </script>
 </body>
 </html>
