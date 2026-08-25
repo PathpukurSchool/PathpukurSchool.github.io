@@ -19,13 +19,12 @@ document.addEventListener('keydown', function(event) {
 // =================================
 // ⚡ SUPABASE INITIALIZATION
 // =================================
-// ⚠️ আপনার Supabase Project URL এবং anon key নিচে বসান
 const SUPABASE_URL = 'https://bjjwzgzjjcpnndbuelkh.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// UI Utility Function
+// UI Utility Functions
 function errorBox(title, message) {
     let typeClass = '';
     if (title === "Loading...") {
@@ -127,7 +126,7 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔢 গাণিতিক ক্যাপচা ফাংশনালিটি (FIXED)
+// 🔢 গাণিতিক ক্যাপচা ফাংশনালিটি
 // =================================
 let captchaResult = null;
 
@@ -137,17 +136,13 @@ function generateCaptcha() {
     
     if (!captchaElement) return;
 
-    // ১. এক অঙ্কের দুটি সংখ্যা জেনারেট করা (১ থেকে ৯)
     const num1 = Math.floor(Math.random() * 9) + 1;
     const num2 = Math.floor(Math.random() * 9) + 1;
-
-    // ২. গাণিতিক অপারেটর নির্বাচন (+ , - , ×)
     const operators = ['+', '-', '×'];
     const operator = operators[Math.floor(Math.random() * operators.length)];
 
     let expressionText = "";
 
-    // ৩. ফলাফল ও এক্সপ্রেশন নির্ধারণ
     if (operator === '+') {
         captchaResult = num1 + num2;
         expressionText = `${num1} + ${num2} = ?`;
@@ -161,7 +156,6 @@ function generateCaptcha() {
         expressionText = `${num1} × ${num2} = ?`;
     }
 
-    // 🛠️ FIX: Font-family এবং Style সরাসরি ইনলাইন রি-সেট করা হচ্ছে যাতে FontAwesome এর প্রভাব না থাকে
     captchaElement.style.fontFamily = "Arial, sans-serif";
     captchaElement.style.letterSpacing = "2px";
     captchaElement.style.fontWeight = "bold";
@@ -169,8 +163,6 @@ function generateCaptcha() {
     
     if (userInput) userInput.value = ""; 
 }
-// পেজ লোড হওয়ার সাথে সাথেই গাণিতিক ক্যাপচা তৈরি হবে
-document.addEventListener("DOMContentLoaded", generateCaptcha);
 
 // =================================
 // 🔐 SECURE SUPABASE LOGIN & RATE LIMITING
@@ -201,9 +193,12 @@ async function submitMasterLogin() {
 
     if (!idInput || !passInput || !captchaInput) return;
 
-    const email = idInput.value.trim(); // Supabase Auth ইমেইল ফরম্যাট গ্রহণ করে
+    let inputUser = idInput.value.trim();
     const pass = passInput.value.trim();
     const userCaptcha = captchaInput.value.trim();
+
+    // ইমেইল ফরম্যাট হ্যান্ডলিং (Supabase Auth Email চায়)
+    const email = inputUser.includes('@') ? inputUser : `${inputUser}@pathpukurschool.com`;
 
     if (errorDiv) errorDiv.innerText = "";
     if (successDiv) {
@@ -222,10 +217,9 @@ async function submitMasterLogin() {
         return;
     }
 
-    // Validation Check
-    if (!email || !pass) {
+    if (!inputUser || !pass) {
         if (errorDiv) {
-            errorDiv.innerText = "⚠️ Please enter Email ID & Password.";
+            errorDiv.innerText = "⚠️ Please enter ID & Password.";
             errorDiv.style.color = "red";
         }
         return;
@@ -261,11 +255,9 @@ async function submitMasterLogin() {
         });
 
         if (error) {
-            // ভুল লগইনের জন্য Rate Limit ট্র্যাকিং
             let attempts = parseInt(localStorage.getItem('loginAttempts') || '0', 10) + 1;
             
             if (attempts >= 4) {
-                // ৪ বার ভুল করলে ১০ মিনিটের জন্য সম্পূর্ণ ব্লক
                 const lockTime = Date.now() + (10 * 60 * 1000); 
                 localStorage.setItem('lockUntil', lockTime.toString());
                 localStorage.setItem('loginAttempts', '0');
@@ -484,6 +476,8 @@ function initializeSidebar() {
 // 🚀 INITIALIZATION
 // =================================
 document.addEventListener("DOMContentLoaded", async () => {
+    generateCaptcha();
+    
     // 🔍 Supabase Session Verification
     const { data: { session } } = await supabase.auth.getSession();
 
@@ -496,11 +490,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (mainContent) mainContent.style.display = "block";
         if (searchContainer) searchContainer.style.display = "block";
 
+        document.body.classList.remove('no-scroll');
         startAutoLogoutTimer();
     } else {
         const overlay = document.getElementById('masterLoginOverlay');
         if (overlay) overlay.style.display = "flex";
-        generateCaptcha();
     }
 
     initializeSidebar();
