@@ -41,13 +41,13 @@
   style="
     position: fixed;
     inset: 0;
-    width: 100vw;   /* 100% এর বদলে ১০০vw দিলে স্ক্রিনের বাইরে যাওয়ার ভয় থাকে না */
-    height: 100vh;  /* 100% এর বদলে ১০০vh ব্যবহার করা ভালো */
+    width: 100vw;
+    height: 100vh;
     border: none;
     z-index: 999999;
     background: transparent;
-    display: none;  /* জাভাস্ক্রিপ্ট ইভেন্ট পেলেই কেবল ব্লক হবে */
-    color-scheme: light;/* এটি গুরুত্বপূর্ণ: প্রথমে অদৃশ্য থাকবে */
+    display: none;
+    color-scheme: light;
   ">
 </iframe>
     
@@ -119,8 +119,8 @@
        function goBack() {
             window.history.back();
             setTimeout(function() {
-            if (window.history.length <= 1) { // যদি ইতিহাসে আর কোনো পেজ না থাকে
-            window.location.href = "https://www.google.com"; // গুগল-এ নিয়ে যাবে
+            if (window.history.length <= 1) {
+            window.location.href = "https://www.google.com";
             }
             }, 500); 
         }
@@ -131,7 +131,7 @@
     <div class="scrolling-wrapper" id="new-marquee-wrapper"></div>
 </div>
     
-<!-- 🔍 Live Search Box (সরাসরি পেজে ভাসমান) -->
+<!-- 🔍 Live Search Box -->
 <div class="search-container" role="search">
     <div class="search-input-wrapper">
         <span class="search-icon" aria-hidden="true">🔍</span>
@@ -157,12 +157,6 @@
     <h2><i class="fas fa-calendar-alt icon"></i> Schedule</h2>
     <div class="section-content-wrapper">
         <div id="routine-list">
-            <a href="https://pathpukurschool.github.io/web_vs/academic_calendar.html" class="site-link notice-item" data-title="Academic Calendar" data-isnew="false" target="_blank">
-                Academic Calendar
-            </a>
-            <a href="https://pathpukurschool.github.io/web_vs/holiday.html" class="site-link notice-item" data-title="School Holiday List" data-isnew="false" target="_blank">
-                School Holiday List
-            </a>
             <a href="https://script.google.com/macros/s/AKfycbxt0BkY0rGGdyhxhga3izLp1DqNea6SjIe2b1gS9qMQMSmZZhljZqRFAjlWZt5Zv9CuNQ/exec?page=student" class="site-link notice-item" data-title="Class Routine" data-isnew="false" target="_blank">
                 Class Routine
             </a>
@@ -171,6 +165,12 @@
             </a>
             <a href="https://pathpukurschool.github.io/web_vs/seat_plan.html" class="site-link notice-item" data-title="Exam Seat Plan" data-isnew="true" target="_blank">
                 Exam Seat Plan
+            </a>
+            <a href="https://pathpukurschool.github.io/web_vs/academic_calendar.html" class="site-link notice-item" data-title="Academic Calendar" data-isnew="false" target="_blank">
+                Academic Calendar
+            </a>
+            <a href="https://pathpukurschool.github.io/web_vs/holiday.html" class="site-link notice-item" data-title="School Holiday List" data-isnew="false" target="_blank">
+                School Holiday List
             </a>
         </div> 
         <div id="routine-pagination" style="text-align: center; margin-top: 20px;"></div> 
