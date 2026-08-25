@@ -110,15 +110,21 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔢 ক্যাপচা ফাংশনালিটি (Cryptographically Secure)
+// 🔢 ক্যাপচা ফাংশনালিটি (Cryptographically Secure & Timeout)
 // =================================
 let currentCaptchaCode = "";
+let captchaTimer = null; // 👈 ১. নতুন টাইমার ভ্যারিয়েবল
+const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // 👈 ২. ২ মিনিট (মেগাসেকেন্ডে)
 
 function generateCaptcha() {
     const captchaElement = document.getElementById('captchaCode');
     const userInput = document.getElementById('userCaptcha');
+    const errorDiv = document.getElementById('masterLoginError');
     
     if (!captchaElement) return;
+
+    // 👈 ৩. আগের টাইমার চালু থাকলে বন্ধ করা
+    if (captchaTimer) clearTimeout(captchaTimer);
 
     // অস্পষ্ট অক্ষর (যেমন: 0, O, I, 1, l) বাদ দেওয়া হয়েছে
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -136,6 +142,16 @@ function generateCaptcha() {
     captchaElement.innerText = captcha;
     
     if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
+
+    // 👈 ৪. নির্দিষ্ট সময় পর ক্যাপচা ইনভ্যালিড করার টাইমার চালু
+    captchaTimer = setTimeout(() => {
+        currentCaptchaCode = ""; // ক্যাপচা কোড মুছে ইনভ্যালিড করা
+        captchaElement.innerText = "EXPIRED"; // স্ক্রিনে Expired দেখানো (ঐচ্ছিক)
+        if (errorDiv) {
+            errorDiv.innerText = "⏳ CAPTCHA expired! Please refresh CAPTCHA.";
+            errorDiv.style.color = "orange";
+        }
+    }, CAPTCHA_EXPIRE_TIME);
 }
 
 // =================================
@@ -211,6 +227,16 @@ async function submitMasterLogin() {
         return;
     }
 
+    // 👈 ৫. ক্যাপচার মেয়াদ শেষ (Expired) হয়েছে কিনা তা পরীক্ষা
+    if (currentCaptchaCode === "") {
+        if (errorDiv) {
+            errorDiv.innerText = "⏳ CAPTCHA expired! Click refresh to get a new code.";
+            errorDiv.style.color = "red";
+        }
+        generateCaptcha(); // স্বয়ংক্রিয়ভাবে নতুন ক্যাপচা তৈরি করবে
+        return;
+    }
+
     // 🔹 ক্যাপচা ভুল হলে মেসেজ
     if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
         if (errorDiv) {
@@ -237,6 +263,7 @@ async function submitMasterLogin() {
         if (error) throw error;
 
         if (isValidUser) {
+            if (captchaTimer) clearTimeout(captchaTimer);
             // সঠিক লগইন: আগের সমস্ত লিমিট ক্লিয়ার করা
             localStorage.removeItem('loginAttempts');
             localStorage.removeItem('lockUntil');
