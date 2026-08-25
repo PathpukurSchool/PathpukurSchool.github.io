@@ -1,15 +1,31 @@
 // =================================
-// 🔐 SHA-256 HASH FUNCTION
+// 🛡️ SECURITY & CLIENT HARDENING
 // =================================
-async function sha256(message) {
-    const msgBuffer = new TextEncoder().encode(message);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
-    return Array.from(new Uint8Array(hashBuffer))
-        .map(b => b.toString(16).padStart(2, '0'))
-        .join('');
-}
+// ১. রাইট-ক্লিক এবং Developer Tools (F12, Inspect Element) ব্লক করা
+document.addEventListener('contextmenu', event => event.preventDefault());
 
-// ত্রুটি বা লোডিং বার্তা তৈরির জন্য HTML
+document.addEventListener('keydown', function(event) {
+    if (
+        event.key === 'F12' || 
+        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) || 
+        (event.ctrlKey && event.key === 'U')
+    ) {
+        event.preventDefault();
+        alert("🔒 Security Alert: Inspecting source code is disabled for data privacy!");
+        return false;
+    }
+});
+
+// =================================
+// ⚡ SUPABASE INITIALIZATION
+// =================================
+// ⚠️ আপনার Supabase Project URL এবং anon key নিচে বসান
+const SUPABASE_URL = 'https://bjjwzgzjjcpnndbuelkh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs';
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// UI Utility Function
 function errorBox(title, message) {
     let typeClass = '';
     if (title === "Loading...") {
@@ -25,7 +41,6 @@ function errorBox(title, message) {
     `;
 }
 
-// পেজিনেশন ও সাধারণ বোতাম তৈরির ইউটিলিটি
 function createButton(text, bgColor, onClick, disabled = false) {
     const btn = document.createElement('button');
     btn.innerText = text;
@@ -37,7 +52,7 @@ function createButton(text, bgColor, onClick, disabled = false) {
 }
 
 // =================================
-// 🔍 ড্রপডাউন সার্চ ফিল্টারিং ফাংশনালিটি
+// 🔍 Live Search Functionality
 // =================================
 let ALL_ITEMS_DETAILS = [];
 
@@ -112,9 +127,9 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔢 গাণিতিক ক্যাপচা ফাংশনালিটি (MATH CAPTCHA)
+// 🔢 MATH CAPTCHA
 // =================================
-let captchaResult = null; // গাণিতিক ফলাফলের সঠিক মান সংরক্ষণের জন্য
+let captchaResult = null;
 
 function generateCaptcha() {
     const captchaElement = document.getElementById('captchaCode');
@@ -122,22 +137,17 @@ function generateCaptcha() {
     
     if (!captchaElement) return;
 
-    // ১. এক অঙ্কের দুটি সংখ্যা জেনারেট করা (০ থেকে ৯)
     const num1 = Math.floor(Math.random() * 10);
     const num2 = Math.floor(Math.random() * 10);
-
-    // ২. গাণিতিক অপারেটর নির্বাচন (+ , - , ×)
     const operators = ['+', '-', '×'];
     const operator = operators[Math.floor(Math.random() * operators.length)];
 
     let expressionText = "";
 
-    // ৩. ফলাফল ও এক্সপ্রেশন নির্ধারণ
     if (operator === '+') {
         captchaResult = num1 + num2;
         expressionText = `${num1} + ${num2} = ?`;
     } else if (operator === '-') {
-        // ফলাফল যাতে ঋণাত্মক (Negative) না আসে, তাই বড় সংখ্যাটি আগে রাখা হলো
         const max = Math.max(num1, num2);
         const min = Math.min(num1, num2);
         captchaResult = max - min;
@@ -147,16 +157,13 @@ function generateCaptcha() {
         expressionText = `${num1} × ${num2} = ?`;
     }
 
-    // ৪. স্ক্রিনে প্রদর্শন ও ইনপুট রিসেট
     captchaElement.innerText = expressionText;
-    
     if (userInput) userInput.value = ""; 
 }
 
 // =================================
-// 🔐 মাস্টার লগইন ও সিকিউরিটি ফাংশন
+// 🔐 SECURE SUPABASE LOGIN & RATE LIMITING
 // =================================
-
 function toggleMasterPasswordVisibility() {
     const passInput = document.getElementById('masterPass');
     const toggleIcon = document.getElementById('masterPassToggle');
@@ -179,13 +186,11 @@ async function submitMasterLogin() {
     const captchaInput = document.getElementById('userCaptcha');
     const errorDiv = document.getElementById('masterLoginError');
     const successDiv = document.getElementById('masterLoginSuccess');
-    
-    // 🎯 সুনির্দিষ্ট আইডি (masterLoginBtn) দিয়ে লগইন বাটন ধরা হচ্ছে
     const loginBtn = document.getElementById('masterLoginBtn');
 
     if (!idInput || !passInput || !captchaInput) return;
 
-    const id = idInput.value.trim();
+    const email = idInput.value.trim(); // Supabase Auth ইমেইল ফরম্যাট গ্রহণ করে
     const pass = passInput.value.trim();
     const userCaptcha = captchaInput.value.trim();
 
@@ -195,16 +200,26 @@ async function submitMasterLogin() {
         successDiv.style.display = "none";
     }
 
-    // 🔹 ১. ID বা Password ফাঁকা থাকলে মেসেজ
-    if (!id || !pass) {
+    // 🔴 1. BRUTE-FORCE RATE LIMITING CHECK
+    let lockUntil = parseInt(localStorage.getItem('lockUntil') || '0', 10);
+    if (Date.now() < lockUntil) {
+        let remainingMins = Math.ceil((lockUntil - Date.now()) / 60000);
         if (errorDiv) {
-            errorDiv.innerText = "⚠️ Please fill both ID & Password.";
+            errorDiv.innerText = `⛔ Maximum failed attempts reached! System locked for ${remainingMins} minutes.`;
             errorDiv.style.color = "red";
         }
         return;
     }
 
-    // 🔹 ২. ক্যাপচা ফাঁকা থাকলে মেসেজ
+    // Validation Check
+    if (!email || !pass) {
+        if (errorDiv) {
+            errorDiv.innerText = "⚠️ Please enter Email ID & Password.";
+            errorDiv.style.color = "red";
+        }
+        return;
+    }
+
     if (!userCaptcha) {
         if (errorDiv) {
             errorDiv.innerText = "⚠️ Please enter the CAPTCHA answer.";
@@ -213,71 +228,86 @@ async function submitMasterLogin() {
         return;
     }
 
-    // 🔹 ৩. গাণিতিক ফলাফল যাচাই (Math Captcha Validation)
     if (parseInt(userCaptcha, 10) !== captchaResult) {
         if (errorDiv) {
             errorDiv.innerText = "❌ Incorrect CAPTCHA answer! Please try again.";
             errorDiv.style.color = "red";
         }
-        generateCaptcha(); // ক্যাপচা ভুল হলে নতুন অঙ্ক তৈরি হবে
+        generateCaptcha();
         return;
     }
 
-    // মূল লগইন বাটনের অবস্থা পরিবর্তন
     if (loginBtn) {
-        loginBtn.innerText = "Validating...";
+        loginBtn.innerText = "Authenticating with Server...";
         loginBtn.disabled = true;
     }
 
     try {
-        const response = await fetch("masterConfig.json");
-        if (!response.ok) throw new Error('Teacher Login load failed');
-        
-        const config = await response.json();
+        // 🔒 2. SUPABASE SERVER-SIDE AUTHENTICATION
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: pass,
+        });
 
-        // হ্যাশ চেক
-        const idHashed = await sha256(id + config.Logid);
-        const passHashed = await sha256(pass + config.Logpassword);
-
-        if (idHashed === config.idHash && passHashed === config.passHash) {
-            sessionStorage.setItem("userType", "teacher");
-            sessionStorage.setItem("teacherLoggedIn", "true");
-
-            if (successDiv) {
-                successDiv.innerText = "✔️ Login Successful.";
-                successDiv.style.display = "block";
+        if (error) {
+            // ভুল লগইনের জন্য Rate Limit ট্র্যাকিং
+            let attempts = parseInt(localStorage.getItem('loginAttempts') || '0', 10) + 1;
+            
+            if (attempts >= 4) {
+                // ৪ বার ভুল করলে ১০ মিনিটের জন্য সম্পূর্ণ ব্লক
+                const lockTime = Date.now() + (10 * 60 * 1000); 
+                localStorage.setItem('lockUntil', lockTime.toString());
+                localStorage.setItem('loginAttempts', '0');
+                if (errorDiv) {
+                    errorDiv.innerText = "⛔ System Locked due to 4 consecutive failed login attempts! Try after 10 minutes.";
+                    errorDiv.style.color = "red";
+                }
+            } else {
+                localStorage.setItem('loginAttempts', attempts.toString());
+                if (errorDiv) {
+                    errorDiv.innerText = `❌ Invalid ID or Password! Attempt ${attempts} of 4.`;
+                    errorDiv.style.color = "red";
+                }
             }
-
-            setTimeout(() => {
-                const overlay = document.getElementById('masterLoginOverlay');
-                if (overlay) overlay.style.display = "none";
-
-                const mainContent = document.getElementById('main-website-content');
-                const searchContainer = document.querySelector('.search-container');
-                if (mainContent) mainContent.style.display = "block";
-                if (searchContainer) searchContainer.style.display = "block";
-
-                document.body.classList.remove('no-scroll');
-                startAutoLogoutTimer();
-            }, 800);
-
-        } else {
-            // ❌ ৪. ভুল ID বা Password-এর জন্য স্পষ্ট সতর্কবার্তা
-            if (errorDiv) {
-                errorDiv.innerText = "❌ Incorrect Teacher ID or Password!";
-                errorDiv.style.color = "red";
-            }
-            generateCaptcha(); // সিকিউরিটির জন্য ক্যাপচা রিসেট
+            
+            generateCaptcha();
             if (loginBtn) {
                 loginBtn.innerText = "🔓 Login";
                 loginBtn.disabled = false;
             }
+            return;
         }
 
-    } catch (error) {
-        console.error("Error loading teacher login", error);
+        // 🟢 3. SUCCESSFUL LOGIN
+        localStorage.removeItem('loginAttempts');
+        localStorage.removeItem('lockUntil');
+        
+        sessionStorage.setItem("userType", "teacher");
+        sessionStorage.setItem("teacherLoggedIn", "true");
+        sessionStorage.setItem("accessToken", data.session.access_token);
+
+        if (successDiv) {
+            successDiv.innerText = "✔️ Server Authentication Successful!";
+            successDiv.style.display = "block";
+        }
+
+        setTimeout(() => {
+            const overlay = document.getElementById('masterLoginOverlay');
+            if (overlay) overlay.style.display = "none";
+
+            const mainContent = document.getElementById('main-website-content');
+            const searchContainer = document.querySelector('.search-container');
+            if (mainContent) mainContent.style.display = "block";
+            if (searchContainer) searchContainer.style.display = "block";
+
+            document.body.classList.remove('no-scroll');
+            startAutoLogoutTimer();
+        }, 800);
+
+    } catch (err) {
+        console.error("Supabase Login Error:", err);
         if (errorDiv) {
-            errorDiv.innerText = "⚠️ Configuration file error. Contact Administrator.";
+            errorDiv.innerText = "⚠️ Server connectivity issue. Check network connection.";
             errorDiv.style.color = "red";
         }
         generateCaptcha();
@@ -288,23 +318,26 @@ async function submitMasterLogin() {
     }
 }
 
-// 🔒 স্ট্রং লগআউট সিস্টেম
-function logout() {
+// 🔒 LOGOUT SYSTEM
+async function logout() {
+    try {
+        await supabase.auth.signOut();
+    } catch(e) { console.log(e); }
+    
     sessionStorage.clear();
     localStorage.clear();
     window.location.reload();
 }
 
-// =================================================================
-// ⏳ উন্নত অটোমেটিক ইনঅ্যাক্টিভিটি লগআউট (মোবাইল, ট্যাব ও পিসির জন্য)
-// =================================================================
+// =================================
+// ⏳ AUTOMATIC INACTIVITY LOGOUT (15 Mins)
+// =================================
 let inactivityTimer;
-const TIMEOUT_DURATION = 15 * 60 * 1000; // ১৫ মিনিট (মিলি সেকেন্ডে)
+const TIMEOUT_DURATION = 15 * 60 * 1000; 
 
 function startAutoLogoutTimer() {
     if (sessionStorage.getItem("teacherLoggedIn") !== "true") return;
 
-    // ১. ব্যবহারকারী অ্যাক্টিভ থাকলে টাইমস্ট্যাম্প আপডেট ও টাইমার রিসেট করার ফাংশন
     function resetTimer() {
         localStorage.setItem('lastActivityTime', Date.now().toString());
 
@@ -314,7 +347,6 @@ function startAutoLogoutTimer() {
         }, TIMEOUT_DURATION);
     }
 
-    // ২. অ্যাক্টিভিটি টাইমস্ট্যাম্প ও অটো-লগআউট চেক করার ফাংশন
     function checkAndPerformAutoLogout() {
         if (sessionStorage.getItem("teacherLoggedIn") !== "true") return;
 
@@ -326,30 +358,22 @@ function startAutoLogoutTimer() {
         }
     }
 
-    // ৩. পিসি ও মোবাইলে ইউজার ইন্টারেকশন ইভেন্ট ট্র্যাকিং
     const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
     activityEvents.forEach(evt => {
         document.addEventListener(evt, resetTimer, { passive: true });
     });
 
-    // 📱 ৪. মোবাইলের জন্য স্ক্রীন লক/আনলক ও ট্যাব ভিজিবিলিটি চেক
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') {
-            checkAndPerformAutoLogout(); // স্ক্রীন আনলক করার সাথে সাথে হিসাব চেক হবে
+            checkAndPerformAutoLogout();
         }
     });
 
     window.addEventListener('focus', checkAndPerformAutoLogout);
-
-    // প্রথমবার কল করা
     resetTimer();
 }
 
-// =================================
-// 🔔 AVAILABLE SOON MESSAGE & CLICK HANDLER
-// =================================
-
-// নির্দিষ্ট বোতামের নিচে 'Available Soon' নোটিশ দেখানোর ফাংশন (পূর্বের ন্যায় অক্ষুণ্ণ)
+// Available Soon & Sidebar Handlers
 function showAvailableSoonMessage(button) {
     if (button.nextElementSibling && button.nextElementSibling.classList.contains('avail-msg')) return;
 
@@ -364,15 +388,12 @@ function showAvailableSoonMessage(button) {
     }, 3000);
 }
 
-// সার্বজনীন ক্লিক হ্যান্ডলার: যেসব বোতামে লিংক (href) খালি বা '#' আছে সেগুলোতে অটোমেটিক মেসেজ দেখাবে
 function setupUniversalLinkHandler() {
     document.addEventListener('click', (event) => {
         const targetBtn = event.target.closest('.exam-link, .nav-link, .class-link-btn');
 
         if (targetBtn) {
             const href = targetBtn.getAttribute('href');
-
-            // যদি লিংক ফাঁকা থাকে, '#' থাকে অথবা লিংক না থাকে
             if (!href || href.trim() === '' || href.trim() === '#' || href.startsWith('javascript:')) {
                 event.preventDefault();
                 showAvailableSoonMessage(targetBtn);
@@ -381,21 +402,13 @@ function setupUniversalLinkHandler() {
     });
 }
 
-// =================================
-// 🧭 সাইড বার মেনু ও ড্রপডাউন ফাংশন
-// =================================
-
 function initializeSidebar() {
     const menuButton = document.getElementById('menu-toggle-button');
     const sidebar = document.getElementById('sidebar-menu');
     const overlay = document.getElementById('overlay');
 
-    if (!menuButton || !sidebar || !overlay) {
-        console.warn("Sidebar elements not found in DOM.");
-        return;
-    }
+    if (!menuButton || !sidebar || !overlay) return;
 
-    // ১. সাইডবার টগল
     menuButton.addEventListener('click', (e) => {
         e.stopPropagation();
         sidebar.classList.toggle('active');
@@ -407,7 +420,6 @@ function initializeSidebar() {
         overlay.classList.remove('active');
     });
 
-    // ২. ড্রপডাউন সাবমেনু (অ্যারো আইকন)
     const arrowIcons = sidebar.querySelectorAll('.arrow-icon');
     arrowIcons.forEach(arrow => {
         arrow.addEventListener('click', function(e) {
@@ -424,12 +436,10 @@ function initializeSidebar() {
         });
     });
 
-    // ৩. স্মুথ স্ক্রল
     const navLinks = sidebar.querySelectorAll('a[href^="#"]');
     navLinks.forEach(link => {
         link.addEventListener("click", function(event) {
             const targetId = this.getAttribute("href");
-            
             if (!targetId || targetId === '#') return;
 
             event.preventDefault();
@@ -460,12 +470,13 @@ function initializeSidebar() {
 }
 
 // =================================
-// 🚀 ইনিশিয়ালাইজেশন (Page Load)
+// 🚀 INITIALIZATION
 // =================================
+document.addEventListener("DOMContentLoaded", async () => {
+    // 🔍 Supabase Session Verification
+    const { data: { session } } = await supabase.auth.getSession();
 
-document.addEventListener("DOMContentLoaded", () => {
-    // সেশন যাচাই
-    if (sessionStorage.getItem("teacherLoggedIn") === "true") {
+    if (session && sessionStorage.getItem("teacherLoggedIn") === "true") {
         const overlay = document.getElementById('masterLoginOverlay');
         const mainContent = document.getElementById('main-website-content');
         const searchContainer = document.querySelector('.search-container');
@@ -478,12 +489,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         const overlay = document.getElementById('masterLoginOverlay');
         if (overlay) overlay.style.display = "flex";
-        
-        // লগইন বক্স দৃশ্যমান হলে নতুন গাণিতিক ক্যাপচা তৈরি করা
         generateCaptcha();
     }
 
-    // ফাংশনসমূহ নিরাপদভাবে কল করা
     initializeSidebar();
     setupLiveSearch();
     setupUniversalLinkHandler();
