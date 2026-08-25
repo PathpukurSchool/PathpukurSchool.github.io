@@ -369,8 +369,7 @@ body.no-scroll {
     user-select: none;
     -webkit-user-select: none;
     padding: 4px 8px;
-    /* background: rgba(21, 128, 61, 0.1); */
-    background-color: #f9f9f9;
+    background: rgba(21, 128, 61, 0.1);
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 100%;
