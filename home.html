@@ -9,7 +9,8 @@
     (function() {
       var referrer = document.referrer;
       var allowedDomain = "pathpukurschool.github.io";
-      if (!referrer || referrer.indexOf(allowedDomain) === -1) {
+      // শুধুমাত্র যদি অন্য কোনো অজানা এক্সটার্নাল ডোমেন থেকে আসে
+      if (referrer && referrer.indexOf(allowedDomain) === -1) {
         window.location.replace("https://pathpukurschool.github.io/");
       }
     })();
@@ -70,11 +71,12 @@
       <h2 class="shaded-info-box-heading">Teacher Login</h2>
 
       <input type="hidden" id="loginType" value="teacher">
-      <input type="text" id="masterId" placeholder="📧 Enter ID" autocomplete="off"><br>
+      <!-- 🟢 পরিবর্তন: type="email" এবং placeholder আপডেট করা হয়েছে -->
+      <input type="email" id="masterId" placeholder="📧 Enter User ID or Email" autocomplete="username" required><br>
       
       <div style="position: relative;">
-        <input type="password" id="masterPass" placeholder="🔑 Enter Password">
-        <span style="position: absolute; right: 10px; top: 35%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
+        <input type="password" id="masterPass" placeholder="🔑 Enter Password" autocomplete="current-password" required>
+        <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
           <i id="masterPassToggle" class="fa-solid fa-eye"></i>
         </span>
       </div>
@@ -298,7 +300,6 @@
         const header = dropdown.querySelector(".menu-header-wrapper");
         if (header) {
           header.addEventListener("click", function (e) {
-            // লিঙ্ক বাদে অ্যারো/হেডার ক্লিক হলে ড্রপডাউন খুলবে
             dropdowns.forEach((item) => {
               if (item !== dropdown) item.classList.remove("active");
             });
