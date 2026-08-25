@@ -123,8 +123,14 @@ function generateCaptcha() {
     
     if (!captchaElement) return;
 
-    // 👈 ৩. আগের টাইমার চালু থাকলে বন্ধ করা
+    // ১. আগের টাইমার বন্ধ করা
     if (captchaTimer) clearTimeout(captchaTimer);
+
+    // ২. ক্যাপচা রিফ্রেশ হলে পুরানো এরর মেসেজ মুছে ফেলা ও কালার রিসেট
+    if (errorDiv) {
+        errorDiv.innerText = "";
+    }
+    captchaElement.style.color = ""; // ক্যাপচার সাধারণ রঙে ফিরিয়ে নেওয়া
 
     // অস্পষ্ট অক্ষর (যেমন: 0, O, I, 1, l) বাদ দেওয়া হয়েছে
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -143,13 +149,18 @@ function generateCaptcha() {
     
     if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
 
-    // 👈 ৪. নির্দিষ্ট সময় পর ক্যাপচা ইনভ্যালিড করার টাইমার চালু
+    // ৩. নির্দিষ্ট সময় পর ক্যাপচা Expired করার টাইমার চালু
     captchaTimer = setTimeout(() => {
-        currentCaptchaCode = ""; // ক্যাপচা কোড মুছে ইনভ্যালিড করা
-        captchaElement.innerText = "EXPIRED"; // স্ক্রিনে Expired দেখানো (ঐচ্ছিক)
+        currentCaptchaCode = ""; // ক্যাপচা কোড ইনভ্যালিড করা
+        
+        // EXPIRED লেখাটি লাল রঙে দেখানো
+        captchaElement.innerText = "EXPIRED";
+        captchaElement.style.color = "red"; 
+
+        // এরর মেসেজটি লাল রঙে দেখানো
         if (errorDiv) {
             errorDiv.innerText = "⏳ CAPTCHA expired! Please refresh CAPTCHA.";
-            errorDiv.style.color = "orange";
+            errorDiv.style.color = "red";
         }
     }, CAPTCHA_EXPIRE_TIME);
 }
