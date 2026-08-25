@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-browser@2"></script>
-
+  
+  <!-- 🔒 Referrer Domain Verification Guard -->
   <script>
     (function() {
       var referrer = document.referrer;
@@ -24,17 +24,23 @@
   <meta name="robots" content="index, follow">
   <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
 
-  <!-- Icons & Stylesheets -->
+  <!-- Icons & Fonts Preconnect -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="PHS-LOGO.png">
-  <link rel="stylesheet" href="home.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="home.css">
 
-  <!-- External JS Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- 🚀 Fast Performance External Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  
+  <!-- Main Logic JavaScript File -->
+  <script src="home.js" defer></script>
 
   <!-- Schema.org JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -55,45 +61,45 @@
     "url": "https://pathpukurschool.github.io/"
   }
   </script>
-
 </head>
-<body>
+<body class="no-scroll">
 
- <!-- ✅ টিচার লগইন ওভারলে -->
-<div id="masterLoginOverlay">
-  <div id="masterLoginBox">
-    <h2 class="shaded-info-box-heading">Teacher Login</h2>
+  <!-- ✅ টিচার লগইন ওভারলে -->
+  <div id="masterLoginOverlay" style="display: flex;">
+    <div id="masterLoginBox">
+      <h2 class="shaded-info-box-heading">Teacher Login</h2>
 
-    <input type="hidden" id="loginType" value="teacher">
-    <input type="text" id="masterId" placeholder="🔒 Enter ID"><br>
-    
-    <div style="position: relative;">
-      <input type="password" id="masterPass" placeholder="🔑 Enter Password">
-      <span style="position: absolute; right: 10px; top: 35%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
-        <i id="masterPassToggle" class="fa-solid fa-eye"></i>
-      </span>
-    </div>
-
-    <!-- 🔢 ক্যাপচা সেকশন -->
-    <div class="captcha-container">
-      <div class="captcha-box">
-        <span id="captchaCode">------</span>
-        <button type="button" class="captcha-refresh-btn" onclick="generateCaptcha()" title="Refresh">
-          <i class="fa-solid fa-rotate-right"></i>
-        </button>
+      <input type="hidden" id="loginType" value="teacher">
+      <input type="text" id="masterId" placeholder="📧 Enter Email ID" autocomplete="off"><br>
+      
+      <div style="position: relative;">
+        <input type="password" id="masterPass" placeholder="🔑 Enter Password">
+        <span style="position: absolute; right: 10px; top: 35%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="toggleMasterPasswordVisibility()">
+          <i id="masterPassToggle" class="fa-solid fa-eye"></i>
+        </span>
       </div>
-      <input type="text" id="userCaptcha" placeholder="🤖 Enter CAPTCHA" autocomplete="off">
+
+      <!-- 🔢 গাণিতিক ক্যাপচা সেকশন -->
+      <div class="captcha-container">
+        <div class="captcha-box">
+          <span id="captchaCode">? + ?</span>
+          <button type="button" class="captcha-refresh-btn" onclick="generateCaptcha()" title="Refresh Captcha">
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+        <input type="number" id="userCaptcha" placeholder="🧮 Answer the math question" autocomplete="off">
+      </div>
+
+      <div id="masterLoginError" class="error"></div>
+      <div id="masterLoginSuccess" class="success" style="display:none;"></div>
+
+      <!-- 🛠️ FIX: ID পরিবর্তন করে masterLoginBtn করা হয়েছে JS এর সাথে মেলাতে -->
+      <button id="masterLoginBtn" onclick="submitMasterLogin()">🔓 Login</button>
     </div>
-
-    <div id="masterLoginError" class="error"></div>
-    <div id="masterLoginSuccess" class="success" style="display:none;"></div>
-
-    <button onclick="submitMasterLogin()">🔓 Login</button>
   </div>
-</div>
 
-  <!-- ✅ মূল ওয়েব পেজ -->
-  <div id="main-website-content">
+  <!-- ✅ মূল ওয়েব পেজ (লগইনের আগে হিডেন থাকবে) -->
+  <div id="main-website-content" style="display: none;">
 
     <!-- ✅ মেন হেডার -->
     <div id="top-bar-section">
@@ -107,86 +113,83 @@
     </div>
 
     <!-- ✅ সাইড বার মেনু -->
-<div class="overlay" id="overlay"></div>
-<nav id="sidebar-menu" class="sidebar-menu">
-  <ul class="menu-list">
+    <div class="overlay" id="overlay"></div>
+    <nav id="sidebar-menu" class="sidebar-menu">
+      <ul class="menu-list">
+        <!-- ক্যাটাগরি ১ -->
+        <li class="menu-item dropdown">
+          <div class="menu-header-wrapper">
+            <a href="#marks-information-section" class="nav-link menu-header">Student Information</a>
+            <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </div>
+          <ul class="submenu">
+            <li><a href="#student-list-link" class="nav-link">Student Details</a></li>
+            <li><a href="#upload-student-notice-link" class="nav-link">Upload Student Notice</a></li>
+          </ul>
+        </li>
 
-    <!-- ক্যাটাগরি ১ -->
-    <li class="menu-item dropdown">
-      <div class="menu-header-wrapper">
-        <a href="#marks-information-section" class="nav-link menu-header">Student Information</a>
-        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
-      </div>
-      <ul class="submenu">
-        <li><a href="#student-list-link" class="nav-link">Student Details</a></li>
-        <li><a href="#upload-student-notice-link" class="nav-link">Upload Student Notice</a></li>
+        <!-- ক্যাটাগরি ২ -->
+        <li class="menu-item dropdown">
+          <div class="menu-header-wrapper">
+            <a href="#upload-your-marks-section" class="nav-link menu-header">Upload Student Marks</a>
+            <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </div>
+          <ul class="submenu">
+            <li><a href="#score_sheet_section" class="nav-link">Score Sheet / Marks Foil</a></li>
+            <li><a href="#marks_uploading_report_section" class="nav-link">Marks Uploading Report</a></li>
+            <li><a href="#upload_marks_v" class="nav-link">Class V</a></li>
+            <li><a href="#upload_marks_vi" class="nav-link">Class VI</a></li>
+            <li><a href="#upload_marks_vii" class="nav-link">Class VII</a></li>
+            <li><a href="#upload_marks_viii" class="nav-link">Class VIII</a></li>
+            <li><a href="#upload_marks_ix" class="nav-link">Class IX</a></li>
+            <li><a href="#upload_marks_x" class="nav-link">Class X</a></li>
+            <li><a href="#upload_marks_xi" class="nav-link">Class XI</a></li>
+          </ul>
+        </li>
+
+        <!-- ক্যাটাগরি ৩ -->
+        <li class="menu-item dropdown">
+          <div class="menu-header-wrapper">
+            <a href="#school-routine-section" class="nav-link menu-header">School Routine</a>
+            <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </div>
+          <ul class="submenu">
+            <li><a href="#staff-routine-link" class="nav-link">Staff Routine</a></li>
+            <li><a href="#teacher-routine-link" class="nav-link">Teacher Routine</a></li>
+            <li><a href="#class-routine-link" class="nav-link">Student Routine</a></li>
+            <li><a href="#subject-routine-link" class="nav-link">Subject Routine</a></li>
+          </ul>
+        </li>
+
+        <!-- ক্যাটাগরি ৪ -->
+        <li class="menu-item dropdown">
+          <div class="menu-header-wrapper">
+            <a href="#student-benefit-section" class="nav-link menu-header">Students' Benefit</a>
+            <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </div>
+          <ul class="submenu">
+            <li><a href="#school-tc-link" class="nav-link">Manual T.C.</a></li>
+            <li><a href="#summative-sheet-excel-link" class="nav-link">Download Exam Marks (Excel)</a></li>
+            <li><a href="#summative-sheet-pdf-link" class="nav-link">Download Exam Marks (PDF)</a></li>
+          </ul>
+        </li>
+
+        <!-- ক্যাটাগরি ৫ -->
+        <li class="menu-item">
+          <div class="menu-header-wrapper">
+            <a href="#school-address-section" class="nav-link menu-header">School Details</a>
+          </div>
+        </li>
       </ul>
-    </li>
-
-    <!-- ক্যাটাগরি ২ -->
-    <li class="menu-item dropdown">
-      <div class="menu-header-wrapper">
-        <a href="#upload-your-marks-section" class="nav-link menu-header">Upload Student Marks</a>
-        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
-      </div>
-      <ul class="submenu">
-        <li><a href="#score_sheet_section" class="nav-link">Score Sheet / Marks Foil</a></li>
-        <li><a href="#marks_uploading_report_section" class="nav-link">Marks Uploading Report</a></li>
-
-        <li><a href="#upload_marks_v" class="nav-link">Class V</a></li>
-        <li><a href="#upload_marks_vi" class="nav-link">Class VI</a></li>
-        <li><a href="#upload_marks_vii" class="nav-link">Class VII</a></li>
-        <li><a href="#upload_marks_viii" class="nav-link">Class VIII</a></li>
-        <li><a href="#upload_marks_ix" class="nav-link">Class IX</a></li>
-        <li><a href="#upload_marks_x" class="nav-link">Class X</a></li>
-        <li><a href="#upload_marks_xi" class="nav-link">Class XI</a></li>
-      </ul>
-    </li>
-
-    <!-- ক্যাটাগরি ৩ -->
-    <li class="menu-item dropdown">
-      <div class="menu-header-wrapper">
-        <a href="#school-routine-section" class="nav-link menu-header">School Routine</a>
-        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
-      </div>
-      <ul class="submenu">
-        <li><a href="#staff-routine-link" class="nav-link">Staff Routine</a></li>
-        <li><a href="#teacher-routine-link" class="nav-link">Teacher Routine</a></li>
-        <li><a href="#class-routine-link" class="nav-link">Student Routine</a></li>
-        <li><a href="#subject-routine-link" class="nav-link">Subject Routine</a></li>
-      </ul>
-    </li>
-
-    <!-- ক্যাটাগরি ৪ -->
-    <li class="menu-item dropdown">
-      <div class="menu-header-wrapper">
-        <a href="#student-benefit-section" class="nav-link menu-header">Students' Benefit</a>
-        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
-      </div>
-      <ul class="submenu">
-        <li><a href="#school-tc-link" class="nav-link">Manual T.C.</a></li>
-        <li><a href="#summative-sheet-excel-link" class="nav-link">Download Exam Marks (Excel)</a></li>
-        <li><a href="#summative-sheet-pdf-link" class="nav-link">Download Exam Marks (PDF)</a></li>
-      </ul>
-    </li>
-
-    <!-- ক্যাটাগরি ৫ (যার কোনো সাবমেনু নেই) -->
-    <li class="menu-item">
-      <div class="menu-header-wrapper">
-        <a href="#school-address-section" class="nav-link menu-header">School Details</a>
-      </div>
-    </li>
-
-  </ul>
-</nav>
+    </nav>
 
     <!-- ✅ স্টাইলিশ সার্চ বার -->
     <div class="search-section">
-      <div class="search-container" role="search">
+      <div class="search-container" role="search" style="display:none;">
         <div class="search-input-wrapper">
           <span class="search-icon" aria-hidden="true">🔍</span>
-          <input type="search" id="site-search-input" placeholder="Search..." autocomplete="off" aria-label="Search website content" onfocus="showSuggestions()" oninput="filterSuggestions()">
-          <span class="clear-icon" id="clear-search-btn" role="button" aria-label="Clear search" onclick="clearSearchInput()">Clear</span>
+          <input type="search" id="site-search-input" placeholder="Search..." autocomplete="off" aria-label="Search website content">
+          <span class="clear-icon" id="clear-search-btn" role="button" aria-label="Clear search">Clear</span>
         </div>
         <div id="search-dropdown-list" class="search-dropdown" aria-live="polite"></div>
       </div>
@@ -200,7 +203,7 @@
 
       <div class="class-buttons-grid" id="student-list-section">
         <a id="student-list-link" href="https://pathpukurschool.github.io/web_vs/current_student.html" target="_blank" class="exam-link">Student Details</a>
-         <a id="upload-student-notice-link" href="#" target="_blank" class="exam-link">Upload Student Notice</a>
+        <a id="upload-student-notice-link" href="#" target="_blank" class="exam-link">Upload Student Notice</a>
       </div>
     </div>
 
@@ -213,7 +216,6 @@
       <div class="class-buttons-grid">
         <a id="score_sheet_section" href="https://pathpukurschool.github.io/web_vs/marks_foil.html" target="_blank" class="exam-link">Score Sheet / Marks Foil</a>
         <a id="marks_uploading_report_section" href="https://script.google.com/macros/s/AKfycbwL5-qfoH-qV_WQXGw5YdtlzM1mzjuD51DpZ7E8f_EhhWKostFtYy7-yRLrmW3rPj6kvw/exec" target="_blank" class="exam-link">Marks Uploading Report</a>
-
         <a id="upload_marks_v" href="https://script.google.com/macros/s/AKfycbyc0PWCuiDwmeD0cMudrZIU-WQ0__ODeiI5nBykC5k0b69sfgAeYyUSzc0bXdciAar20Q/exec" target="_blank" class="exam-link">Class V</a>
         <a id="upload_marks_vi" href="https://script.google.com/macros/s/AKfycbzE-oAzeaS2u4fgnFW5KEdTLn2hKQdWaMT0dX_ZgQhooNTRKbRptSDz9UG8eOB9J2hL/exec" target="_blank" class="exam-link">Class VI</a>
         <a id="upload_marks_vii" href="https://script.google.com/macros/s/AKfycbwEmE4o2CuvAtT1wUuKBP7kb3x3mcYI_zs8OboQizGdanKacWSQy9VYpfeQ7Ycvg6bQ/exec" target="_blank" class="exam-link">Class VII</a>
@@ -266,96 +268,6 @@
     </div>
 
   </div>
-        
-  <!-- ✅ সার্চ লজিক স্ক্রিপ্ট -->
-  <script>
-    let searchData = [];
 
-    document.addEventListener("DOMContentLoaded", function() {
-      const links = document.querySelectorAll('.sidebar-menu a, .exam-link');
-      const seen = new Set();
-
-      links.forEach(link => {
-        const text = link.innerText.trim();
-        const href = link.getAttribute('href');
-        
-        if (text && href && href !== '#' && !seen.has(text)) {
-          seen.add(text);
-          searchData.push({
-            name: text,
-            url: href,
-            target: link.getAttribute('target') || '_self'
-          });
-        }
-      });
-    });
-
-    function showSuggestions() {
-      filterSuggestions();
-    }
-
-    function filterSuggestions() {
-      const input = document.getElementById('site-search-input');
-      const clearBtn = document.getElementById('clear-search-btn');
-      const filter = input.value.toLowerCase().trim();
-      const list = document.getElementById('search-dropdown-list');
-      
-      if (filter.length > 0) {
-        clearBtn.style.display = 'block';
-      } else {
-        clearBtn.style.display = 'none';
-      }
-
-      list.innerHTML = '';
-
-      const filtered = searchData.filter(item => item.name.toLowerCase().includes(filter));
-
-      if (filtered.length > 0) {
-        filtered.forEach(item => {
-          const itemDiv = document.createElement('div');
-          itemDiv.className = 'search-dropdown-item';
-          itemDiv.innerHTML = `<span class="item-title">${item.name}</span><a href="${item.url}" target="${item.target}" class="item-btn">Open</a>`;
-
-          itemDiv.onclick = function(e) {
-            if (e.target.tagName !== 'A') {
-              if (item.url.startsWith('#')) {
-                window.location.hash = item.url;
-              } else {
-                window.open(item.url, item.target);
-              }
-            }
-            list.style.display = 'none';
-            input.value = item.name;
-          };
-
-          list.appendChild(itemDiv);
-        });
-        list.style.display = 'block';
-      } else {
-        list.style.display = 'none';
-      }
-    }
-
-    function clearSearchInput() {
-      const input = document.getElementById('site-search-input');
-      const clearBtn = document.getElementById('clear-search-btn');
-      const list = document.getElementById('search-dropdown-list');
-      
-      input.value = '';
-      clearBtn.style.display = 'none';
-      list.style.display = 'none';
-      input.focus();
-    }
-
-    document.addEventListener('click', function(e) {
-      const container = document.querySelector('.search-container');
-      const list = document.getElementById('search-dropdown-list');
-      if (container && !container.contains(e.target)) {
-        list.style.display = 'none';
-      }
-    });
-  </script>
-
-  <script src="home.js"></script>
 </body>
 </html>
