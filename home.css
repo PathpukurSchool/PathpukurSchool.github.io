@@ -360,7 +360,7 @@ body.no-scroll {
     border: 1px dashed var(--primary-color);
 }
 
-#captchaCode {
+#captchaCanvas {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.25rem;
     font-weight: 700;
@@ -370,9 +370,11 @@ body.no-scroll {
     -webkit-user-select: none;
     padding: 4px 8px;
     background: rgba(21, 128, 61, 0.1);
+    border: 1px solid #ccc;
     border-radius: 4px;
     width: 100%;
     text-align: center;
+    cursor: pointer;
 }
 
 .captcha-refresh-btn {
