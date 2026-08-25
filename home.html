@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="home.css">
 
-  <!-- 🚀 Fast Performance External Scripts -->
+  <!-- External Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
   
@@ -93,7 +93,6 @@
       <div id="masterLoginError" class="error"></div>
       <div id="masterLoginSuccess" class="success" style="display:none;"></div>
 
-      <!-- 🛠️ FIX: ID পরিবর্তন করে masterLoginBtn করা হয়েছে JS এর সাথে মেলাতে -->
       <button id="masterLoginBtn" onclick="submitMasterLogin()">🔓 Login</button>
     </div>
   </div>
@@ -183,9 +182,9 @@
       </ul>
     </nav>
 
-    <!-- ✅ স্টাইলিশ সার্চ বার -->
+    <!-- ✅ সার্চ বার -->
     <div class="search-section">
-      <div class="search-container" role="search" style="display:none;">
+      <div class="search-container" role="search">
         <div class="search-input-wrapper">
           <span class="search-icon" aria-hidden="true">🔍</span>
           <input type="search" id="site-search-input" placeholder="Search..." autocomplete="off" aria-label="Search website content">
@@ -269,5 +268,53 @@
 
   </div>
 
+  <!-- 🎯 সাইডবার মেনু টগল ও ড্রপডাউন হ্যান্ডলিং স্ক্রিপ্ট -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const menuBtn = document.getElementById("menu-toggle-button");
+      const sidebar = document.getElementById("sidebar-menu");
+      const overlay = document.getElementById("overlay");
+
+      function toggleMenu() {
+        if (sidebar && overlay) {
+          sidebar.classList.toggle("active");
+          overlay.classList.toggle("active");
+        }
+      }
+
+      function closeMenu() {
+        if (sidebar && overlay) {
+          sidebar.classList.remove("active");
+          overlay.classList.remove("active");
+        }
+      }
+
+      if (menuBtn) menuBtn.addEventListener("click", toggleMenu);
+      if (overlay) overlay.addEventListener("click", closeMenu);
+
+      // Submenu Toggle (Accordion UI)
+      const dropdowns = document.querySelectorAll(".menu-item.dropdown");
+      dropdowns.forEach((dropdown) => {
+        const header = dropdown.querySelector(".menu-header-wrapper");
+        if (header) {
+          header.addEventListener("click", function (e) {
+            // লিঙ্ক বাদে অ্যারো/হেডার ক্লিক হলে ড্রপডাউন খুলবে
+            dropdowns.forEach((item) => {
+              if (item !== dropdown) item.classList.remove("active");
+            });
+            dropdown.classList.toggle("active");
+          });
+        }
+      });
+
+      // লিঙ্ক ক্লিকে মেনু বন্ধ করা
+      const navLinks = document.querySelectorAll(".nav-link");
+      navLinks.forEach((link) => {
+        link.addEventListener("click", function () {
+          closeMenu();
+        });
+      });
+    });
+  </script>
 </body>
 </html>
