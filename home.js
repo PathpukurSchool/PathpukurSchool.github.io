@@ -127,7 +127,7 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔢 MATH CAPTCHA
+// 🔢 গাণিতিক ক্যাপচা ফাংশনালিটি (FIXED)
 // =================================
 let captchaResult = null;
 
@@ -137,13 +137,17 @@ function generateCaptcha() {
     
     if (!captchaElement) return;
 
-    const num1 = Math.floor(Math.random() * 10);
-    const num2 = Math.floor(Math.random() * 10);
+    // ১. এক অঙ্কের দুটি সংখ্যা জেনারেট করা (১ থেকে ৯)
+    const num1 = Math.floor(Math.random() * 9) + 1;
+    const num2 = Math.floor(Math.random() * 9) + 1;
+
+    // ২. গাণিতিক অপারেটর নির্বাচন (+ , - , ×)
     const operators = ['+', '-', '×'];
     const operator = operators[Math.floor(Math.random() * operators.length)];
 
     let expressionText = "";
 
+    // ৩. ফলাফল ও এক্সপ্রেশন নির্ধারণ
     if (operator === '+') {
         captchaResult = num1 + num2;
         expressionText = `${num1} + ${num2} = ?`;
@@ -157,7 +161,12 @@ function generateCaptcha() {
         expressionText = `${num1} × ${num2} = ?`;
     }
 
+    // 🛠️ FIX: Font-family এবং Style সরাসরি ইনলাইন রি-সেট করা হচ্ছে যাতে FontAwesome এর প্রভাব না থাকে
+    captchaElement.style.fontFamily = "Arial, sans-serif";
+    captchaElement.style.letterSpacing = "2px";
+    captchaElement.style.fontWeight = "bold";
     captchaElement.innerText = expressionText;
+    
     if (userInput) userInput.value = ""; 
 }
 
