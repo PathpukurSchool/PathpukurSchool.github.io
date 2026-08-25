@@ -1,6 +1,4 @@
-/* ================================================= */
-/* 🎨 VARIABLES & THEME SETUP                        */
-/* ================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
     --primary-color: #15803d;
@@ -54,7 +52,7 @@ html {
 }
 
 body {
-    font-family: 'Poppins', 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: var(--background-color);
     color: var(--text-color-dark);
     line-height: 1.6;
@@ -81,7 +79,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔝 HEADER & TOP BAR (Flexbox Layout Fix)          */
+/* 🔝 HEADER & TOP BAR                              */
 /* ================================================= */
 
 #top-bar-section {
@@ -101,25 +99,28 @@ body.no-scroll {
     max-width: 1200px;
     margin: 0 auto;
     color: #ffffff;
-    gap: 10px; /* উপাদানগুলোর মাঝে গ্যাপ রাখার জন্য */
+    position: relative;
 }
 
 .header-content {
     display: flex;
     align-items: center;
+    z-index: 2;
 }
 
 .school-name {
+    position: absolute;      
+    left: 50%;                
+    transform: translateX(-50%); 
     margin: 0;                
     text-align: center;
     font-size: 1.0rem;
     font-weight: 600;
     letter-spacing: 0.5px;
-    color: #ffffff;
-    flex-grow: 1; /* ওভারল্যাপ বন্ধ করতে Flexbox Alignment */
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* নাম অনেক বড় হলে ট্রাঙ্কেটেড হবে */
+    color: #ffffff;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .logout-button {
@@ -133,7 +134,7 @@ body.no-scroll {
     font-size: 0.85rem;
     transition: all 0.2s ease-in-out;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    white-space: nowrap;
+    z-index: 2;
 }
 
 .logout-button:hover {
@@ -151,10 +152,11 @@ body.no-scroll {
     align-items: center;
     justify-content: center;
     padding: 4px;
+    z-index: 2;
 }
 
 /* ================================================= */
-/* 🔍 SEARCH CONTAINER                               */
+/* 🔍 SEARCH CONTAINER                              */
 /* ================================================= */
 
 .search-section {
@@ -167,7 +169,7 @@ body.no-scroll {
     max-width: 500px;
     margin: 0 auto;
     padding: 0 15px;
-    display: block;
+    display: block !important;
 }
 
 .search-input-wrapper {
@@ -199,7 +201,7 @@ body.no-scroll {
 
 .search-container input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 10px rgba(21, 128, 99, 0.25);
+    box-shadow: 0 0 10px rgba(56, 102, 65, 0.25);
 }
 
 #clear-search-btn {
@@ -253,7 +255,7 @@ body.no-scroll {
 }
 
 .search-dropdown-item:hover {
-    background-color: rgba(21, 128, 99, 0.08);
+    background-color: rgba(56, 102, 65, 0.08);
 }
 
 .search-dropdown-item .item-title {
@@ -273,7 +275,7 @@ body.no-scroll {
 }
 
 /* ================================================= */
-/* 🔐 MASTER LOGIN OVERLAY                           */
+/* 🔐 MASTER LOGIN OVERLAY                            */
 /* ================================================= */
 
 #masterLoginOverlay {
@@ -338,7 +340,7 @@ body.no-scroll {
 .success { color: var(--success-color); }
 
 /* ================================================= */
-/* 🔢 CAPTCHA STYLING                                */
+/* 🔢 CAPTCHA STYLING (NEW ADDITION)                 */
 /* ================================================= */
 
 .captcha-container {
@@ -506,7 +508,7 @@ body.no-scroll {
 .submenu {
     display: none;
     background-color: rgba(0, 0, 0, 0.25);
-    padding: 4px 0;
+    padding: 4px 0 !important;
 }
 
 .submenu li {
@@ -552,39 +554,39 @@ body.no-scroll {
 /* ================================================= */
 
 .class-buttons-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
-    width: 100%;
-    margin: 1rem 0;
-    padding: 0;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 1rem 0 !important;
+    padding: 0 !important;
 }
 
 .exam-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 48px;
-    padding: 10px 14px;        
-    font-size: 0.88rem;        
-    font-weight: 600;
-    line-height: 1.3;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: all 0.25s ease;
-    background-color: var(--primary-color);
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    box-sizing: border-box;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 48px !important;
+    padding: 10px 14px !important;        
+    font-size: 0.88rem !important;        
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+    transition: all 0.25s ease !important;
+    background-color: #386641 !important;
+    color: #ffffff !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
 }
 
 .exam-link:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background-color: #27472e !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
 }
 
 /* ================================================= */
@@ -592,27 +594,27 @@ body.no-scroll {
 /* ================================================= */
 
 .main-footer, footer {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    text-align: center;
-    padding: 2rem 1rem;
-    margin-top: auto; /* ফুটারকে পেজের নিচে ধরে রাখবে */
-    width: 100%;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #386641 !important;
+    color: #ffffff !important;
+    text-align: center !important;
+    padding: 2rem 1rem !important;
+    margin-top: 1rem !important;
+    width: 100% !important;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
 .main-footer p, footer p {
-    margin: 6px 0;
-    font-size: 0.78rem;
-    color: #ffffff;
-    font-weight: 400;
+    margin: 6px 0 !important;
+    font-size: 0.78rem !important;
+    color: #ffffff !important;
+    font-weight: 400 !important;
 }
 
 .main-footer .section-heading, footer .section-heading {
-    color: #ffffff;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-    padding-bottom: 8px;
-    margin-bottom: 12px;
+    color: #ffffff !important;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 12px !important;
 }
 
 /* ================================================= */
@@ -621,17 +623,17 @@ body.no-scroll {
 
 @media (max-width: 600px) {
     .school-name {
-        font-size: 0.85rem;
+        font-size: 0.92rem;
     }
 
     .class-buttons-grid {
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 10px;
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 10px !important;
     }
 
     .exam-link {
-        font-size: 0.82rem;
-        min-height: 44px; 
-        padding: 8px 10px;
+        font-size: 0.82rem !important;
+        min-height: 44px !important; 
+        padding: 8px 10px !important;
     }
 }
