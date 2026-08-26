@@ -3,15 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--মেন ওয়েব পেজে রি ডাইরেক্ট করার কোড -->
+<meta name="robots" content="noindex, nofollow, noarchive">
   <script>
-    (function() {
-      var referrer = document.referrer;
-      var allowedDomain = "pathpukurschool.github.io";
-      if (!referrer || referrer.indexOf(allowedDomain) === -1) {
+  (function() {
+    try {
+      var ref = document.referrer;
+      if (!ref) {
+        window.location.replace("https://pathpukurschool.github.io/");
+        return;
+      }
+      var refUrl = new URL(ref);
+      // হুবহু ডোমেইন মেলাচ্ছে (সাব-ডোমেইন বাইপাস আটকাতে)
+      if (refUrl.hostname !== "pathpukurschool.github.io") {
         window.location.replace("https://pathpukurschool.github.io/");
       }
-    })();
-  </script>
+    } catch (e) {
+      window.location.replace("https://pathpukurschool.github.io/");
+    }
+  })();
+</script>
+  
   <title>পাতপুকুর হাই স্কুল (উ: মা:) - নোটিশ প্যানেল</title>
 
   <!-- Google Fonts & Font Awesome -->
