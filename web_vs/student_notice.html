@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!--মেন ওয়েব পেজে রি ডাইরেক্ট করার কোড -->
-<meta name="robots" content="noindex, nofollow, noarchive">
+  
+  <meta name="robots" content="noindex, nofollow, noarchive">
   <script>
   (function() {
     try {
@@ -22,11 +22,10 @@
       window.location.replace("https://pathpukurschool.github.io/");
     }
   })();
-</script>
+  </script>
   
   <title>পাতপুকুর হাই স্কুল (উ: মা:) - নোটিশ প্যানেল</title>
 
-  <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -42,7 +41,7 @@
     body {
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       margin: 0;
-      padding: 12px;
+      padding: 20px 12px;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -53,9 +52,9 @@
     .card {
       background: #ffffff;
       width: 100%;
-      max-width: 600px;
+      max-width: 800px;
       border-radius: 16px;
-      padding: 20px;
+      padding: 24px;
       box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4);
       border: 1px solid #e2e8f0;
     }
@@ -63,22 +62,22 @@
     .school-title {
       text-align: center;
       color: #1e3a8a;
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 700;
-      margin: 0 0 4px 0;
+      margin: 0 0 6px 0;
     }
 
     .header {
       text-align: center;
       border-bottom: 2px dashed #3b82f6;
       padding-bottom: 12px;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .header h2 {
       margin: 4px 0 0;
       color: #2563eb;
-      font-size: 18px;
+      font-size: 19px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -86,15 +85,17 @@
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .form-group label {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-weight: 600;
       margin-bottom: 6px;
       color: #1e293b;
-      font-size: 14px;
+      font-size: 15px;
     }
 
     .form-group label span.req {
@@ -154,24 +155,22 @@
       cursor: pointer;
     }
 
+    /* রেসপনসিভ গ্রিড (কম্পিউটার ও বড় স্ক্রিনের জন্য) */
     .row {
-      display: flex;
-      gap: 12px;
-    }
-
-    .row .form-group {
-      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
     }
 
     textarea.form-control {
       resize: vertical;
-      min-height: 100px;
+      min-height: 120px;
     }
 
     .passkey-group {
       background: #fef2f2;
       border: 1.5px solid #fca5a5;
-      padding: 12px;
+      padding: 14px;
       border-radius: 10px;
       margin-top: 10px;
     }
@@ -182,8 +181,8 @@
 
     .btn-group {
       display: flex;
-      gap: 10px;
-      margin-top: 18px;
+      gap: 12px;
+      margin-top: 20px;
     }
 
     .btn {
@@ -215,7 +214,7 @@
       background: #f1f5f9;
       color: #64748b;
       border: 1px solid #cbd5e1;
-      max-width: 100px;
+      max-width: 120px;
     }
 
     .btn-delete {
@@ -229,22 +228,26 @@
       background: #fef3c7;
       color: #92400e;
       border: 1px solid #fcd34d;
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-radius: 8px;
-      font-size: 13px;
-      margin-bottom: 12px;
+      font-size: 14px;
+      margin-bottom: 14px;
       display: none;
       align-items: center;
       justify-content: space-between;
     }
 
-    @media (max-width: 500px) {
+    /* মোবাইলের জন্য সিঙ্গেল কলাম */
+    @media (max-width: 640px) {
       .row {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         gap: 0;
       }
       .card {
         padding: 16px;
+      }
+      .school-title {
+        font-size: 20px;
       }
     }
   </style>
@@ -254,10 +257,9 @@
   <div class="card">
     <h1 class="school-title">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
     <div class="header">
-      <h2><i class="fa-solid fa-bullhorn"></i> নোটিশ আপলোড ও ম্যানেজমেন্ট প্যানেল</h2>
+      <h2><i class="fa-solid fa-bullhorn"></i> নোটিশ আপলোড ও ম্যানেজমেন্ট</h2>
     </div>
 
-    <!-- Local Draft Alert -->
     <div class="draft-banner" id="draftBanner">
       <span><i class="fa-solid fa-floppy-disk"></i> পূর্বে লেখা ড্রাফট লোড করা হয়েছে!</span>
       <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="hideDraftBanner()"></i>
@@ -265,17 +267,16 @@
 
     <form id="noticeForm">
       
-      <!-- Sl Dropdown & Date -->
       <div class="row">
         <div class="form-group">
-          <label for="sl_no">ক্রমিক নং (Sl No) <span class="req">*</span></label>
+          <label for="sl_no">🔢 <span>ক্রমিক নং (Sl No)</span> <span class="req">*</span></label>
           <select id="sl_no" class="form-control" style="font-weight: bold; color: #1d4ed8;" onchange="onSlChange()">
             <option value="">লোডিং...</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="date_val">তারিখ (dd-mm-yyyy) <span class="req">*</span></label>
+          <label for="date_val">📅 <span>তারিখ (dd-mm-yyyy)</span> <span class="req">*</span></label>
           <div class="date-wrapper">
             <input type="text" id="date_val" class="form-control" placeholder="dd-mm-yyyy" required>
             <button type="button" class="date-picker-btn"><i class="fa-solid fa-calendar-days"></i></button>
@@ -284,27 +285,24 @@
         </div>
       </div>
 
-      <!-- Heading -->
       <div class="form-group">
-        <label for="heading">নোটিশের বিষয়/শিরোনাম (Heading) <span class="req">*</span></label>
+        <label for="heading">🏷️ <span>নোটিশের শিরোনাম (Heading)</span> <span class="req">*</span></label>
         <input type="text" id="heading" class="form-control" placeholder="এখানে শিরোনাম লিখুন..." required autocomplete="off">
       </div>
 
-      <!-- Notice Body -->
       <div class="form-group">
-        <label for="notice_body">বিস্তারিত নোটিশ (Notice Body) <span class="req">*</span></label>
+        <label for="notice_body">📝 <span>বিস্তারিত নোটিশ (Notice Body)</span> <span class="req">*</span></label>
         <textarea id="notice_body" class="form-control" placeholder="এখানে বিস্তারিত বিবরণ লিখুন..." required></textarea>
       </div>
 
-      <!-- Link & Is New -->
       <div class="row">
         <div class="form-group">
-          <label for="link">লিঙ্ক (Link - ঐচ্ছিক):</label>
+          <label for="link">🔗 <span>লিঙ্ক (Link - ঐচ্ছিক):</span></label>
           <input type="url" id="link" class="form-control" placeholder="https://example.com/file.pdf">
         </div>
 
         <div class="form-group">
-          <label for="is_new">নতুন ব্যাজ (Is New):</label>
+          <label for="is_new">🆕 <span>নতুন ব্যাজ (Is New):</span></label>
           <select id="is_new" class="form-control">
             <option value="true">True (নতুন)</option>
             <option value="false">False (পুরাতন)</option>
@@ -312,13 +310,11 @@
         </div>
       </div>
 
-      <!-- Passkey Field (Placed at the end before Submit) -->
       <div class="form-group passkey-group">
-        <label for="passkey"><i class="fa-solid fa-key"></i> সিকিউরিটি পাসকি (Passkey) <span class="req">*</span></label>
+        <label for="passkey"><i class="fa-solid fa-key"></i> <span>সিকিউরিটি পাসকি (Passkey)</span> <span class="req">*</span></label>
         <input type="password" id="passkey" class="form-control" placeholder="Passkey প্রবেশ করান..." required autocomplete="new-password">
       </div>
 
-      <!-- Action Buttons -->
       <div class="btn-group">
         <button type="button" class="btn btn-clear" onclick="clearForm(true)">
           <i class="fa-solid fa-rotate-left"></i> রিফ্রেশ
@@ -515,144 +511,138 @@
     // ----------------------------------------------------
     // Submit / Update Form
     // ----------------------------------------------------
- document.getElementById('noticeForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
+    document.getElementById('noticeForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
 
-  const selectedSl = parseInt(document.getElementById('sl_no').value);
-  const isEditing = selectedSl <= maxSlNo;
+      const selectedSl = parseInt(document.getElementById('sl_no').value);
+      const isEditing = selectedSl <= maxSlNo;
 
-  // পুরানো নোটিশ আপডেট করার জন্য কনফার্মেশন (সমস্যা ২ সমাধান)
-  if (isEditing) {
-    const headingVal = document.getElementById('heading').value;
-    const confirmUpdate = confirm(`আপনি কি নিশ্চিত যে ক্রমিক নং ${selectedSl}-এর নোটিশটি আপডেট করতে চান?\n\nশিরোনাম: "${headingVal}"`);
-    if (!confirmUpdate) return;
-  }
+      if (isEditing) {
+        const headingVal = document.getElementById('heading').value;
+        const confirmUpdate = confirm(`আপনি কি নিশ্চিত যে ক্রমিক নং ${selectedSl}-এর নোটিশটি আপডেট করতে চান?\n\nশিরোনাম: "${headingVal}"`);
+        if (!confirmUpdate) return;
+      }
 
-  const passkey = document.getElementById('passkey').value.trim();
-  const submitBtn = document.getElementById('submitBtn');
-  const originalBtnContent = submitBtn.innerHTML;
+      const passkey = document.getElementById('passkey').value.trim();
+      const submitBtn = document.getElementById('submitBtn');
+      const originalBtnContent = submitBtn.innerHTML;
 
-  if (!passkey) {
-    showBtnError(submitBtn, "⚠️ অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!", originalBtnContent);
-    return;
-  }
+      if (!passkey) {
+        showBtnError(submitBtn, "⚠️ অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!", originalBtnContent);
+        return;
+      }
 
-  // বোতাম প্রসেসিং অবস্থায় নিয়ে যাওয়া
-  submitBtn.disabled = true;
-  submitBtn.style.background = "linear-gradient(135deg, #2563eb, #1d4ed8)";
-  submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...`;
+      submitBtn.disabled = true;
+      submitBtn.style.background = "linear-gradient(135deg, #2563eb, #1d4ed8)";
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...`;
 
-  try {
-    const payload = {
-      p_passkey: passkey,
-      p_sl_no: selectedSl,
-      p_date_val: document.getElementById('date_val').value.trim(),
-      p_heading: document.getElementById('heading').value.trim(),
-      p_notice_body: document.getElementById('notice_body').value.trim(),
-      p_link: document.getElementById('link').value.trim() || null,
-      p_is_new: document.getElementById('is_new').value === 'true'
-    };
+      try {
+        const payload = {
+          p_passkey: passkey,
+          p_sl_no: selectedSl,
+          p_date_val: document.getElementById('date_val').value.trim(),
+          p_heading: document.getElementById('heading').value.trim(),
+          p_notice_body: document.getElementById('notice_body').value.trim(),
+          p_link: document.getElementById('link').value.trim() || null,
+          p_is_new: document.getElementById('is_new').value === 'true'
+        };
 
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_save_notice`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_save_notice`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result && result.success) {
+          alert("🎉 " + result.message);
+          clearForm(false);
+        } else {
+          showBtnError(submitBtn, "ব্যর্থ হয়েছে!", originalBtnContent);
+          alert("❌ " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
+        }
+
+      } catch (err) {
+        console.error(err);
+        showBtnError(submitBtn, "ত্রুটি ঘটেছে!", originalBtnContent);
+        alert("❌ সার্ভারের সাথে যোগাযোগ করা যাচ্ছে না!");
+      } finally {
+        document.getElementById('passkey').value = ''; 
+      }
     });
 
-    const result = await response.json();
-
-    if (result && result.success) {
-      alert("🎉 " + result.message);
-      clearForm(false);
-    } else {
-      // ভুল পাসকি বা অন্য কোনো ব্যর্থতায় বোতামে লাল অ্যালার্ট দেখাবে
-      showBtnError(submitBtn, "ব্যর্থ হয়েছে!", originalBtnContent);
-      alert("❌ " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
+    // বোতামে লাল অ্যালার্ট দেখানোর হেলপার ফাংশন
+    function showBtnError(btn, msg, defaultContent) {
+      btn.disabled = true;
+      btn.style.background = "linear-gradient(135deg, #dc2626, #991b1b)";
+      btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${msg}`;
+      
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.style.background = "";
+        btn.innerHTML = defaultContent;
+      }, 2000);
     }
-
-  } catch (err) {
-    console.error(err);
-    showBtnError(submitBtn, "ত্রুটি ঘটেছে!", originalBtnContent);
-    alert("❌ সার্ভারের সাথে যোগাযোগ করা যাচ্ছে না!");
-  } finally {
-    document.getElementById('passkey').value = ''; 
-  }
-});
-
-// বোতামে লাল অ্যালার্ট দেখানোর হেলপার ফাংশন
-function showBtnError(btn, msg, defaultContent) {
-  btn.disabled = true;
-  btn.style.background = "linear-gradient(135deg, #dc2626, #991b1b)"; // লাল রঙ
-  btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${msg}`;
-  
-  setTimeout(() => {
-    btn.disabled = false;
-    btn.style.background = ""; // আগের কালারে ফেরা
-    btn.innerHTML = defaultContent;
-  }, 2000);
-}
 
     // ----------------------------------------------------
     // Delete Notice Functionality
     // ----------------------------------------------------
     async function deleteNotice() {
-  const selectedSl = parseInt(document.getElementById('sl_no').value);
-  const heading = document.getElementById('heading').value;
-  const passkey = document.getElementById('passkey').value.trim();
-  const deleteBtn = document.getElementById('deleteBtn');
-  const originalBtnContent = deleteBtn.innerHTML;
+      const selectedSl = parseInt(document.getElementById('sl_no').value);
+      const heading = document.getElementById('heading').value;
+      const passkey = document.getElementById('passkey').value.trim();
+      const deleteBtn = document.getElementById('deleteBtn');
+      const originalBtnContent = deleteBtn.innerHTML;
 
-  if (!passkey) {
-    showBtnError(deleteBtn, "⚠️ অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!", originalBtnContent);
-    document.getElementById('passkey').focus();
-    return;
-  }
+      if (!passkey) {
+        showBtnError(deleteBtn, "⚠️ অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!", originalBtnContent);
+        document.getElementById('passkey').focus();
+        return;
+      }
 
-  // ডিলিট করার পূর্বে কনফার্মেশন
-  const isConfirmed = confirm(`⚠️ সতর্কবার্তা!\n\nআপনি কি নিশ্চিত যে ক্রমিক নং ${selectedSl}-এর নোটিশটি চিরতরে ডিলিট করতে চান?\n\nশিরোনাম: "${heading}"`);
-  if (!isConfirmed) return;
+      const isConfirmed = confirm(`⚠️ সতর্কবার্তা!\n\nআপনি কি নিশ্চিত যে ক্রমিক নং ${selectedSl}-এর নোটিশটি চিরতরে ডিলিট করতে চান?\n\nশিরোনাম: "${heading}"`);
+      if (!isConfirmed) return;
 
-  deleteBtn.disabled = true;
-  deleteBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ডিলিট হচ্ছে...`;
+      deleteBtn.disabled = true;
+      deleteBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ডিলিট হচ্ছে...`;
 
-  try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_delete_notice`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        p_passkey: passkey,
-        p_sl_no: selectedSl
-      })
-    });
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_delete_notice`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            p_passkey: passkey,
+            p_sl_no: selectedSl
+          })
+        });
 
-    const result = await response.json();
+        const result = await response.json();
 
-    if (result && result.success) {
-      alert("🗑️ " + result.message);
-      clearForm(false);
-    } else {
-      showBtnError(deleteBtn, "ভুল পাসকি!", originalBtnContent);
-      alert("❌ ডিলিট ব্যর্থ হয়েছে: " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
+        if (result && result.success) {
+          alert("🗑️ " + result.message);
+          clearForm(false);
+        } else {
+          showBtnError(deleteBtn, "ভুল পাসকি!", originalBtnContent);
+          alert("❌ ডিলিট ব্যর্থ হয়েছে: " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
+        }
+
+      } catch (err) {
+        console.error(err);
+        showBtnError(deleteBtn, "ত্রুটি ঘটেছে!", originalBtnContent);
+        alert("❌ সার্ভারের সাথে যোগাযোগ ব্যর্থ হয়েছে!");
+      } finally {
+        document.getElementById('passkey').value = '';
+      }
     }
-
-  } catch (err) {
-    console.error(err);
-    showBtnError(deleteBtn, "ত্রুটি ঘটেছে!", originalBtnContent);
-    alert("❌ সার্ভারের সাথে যোগাযোগ ব্যর্থ হয়েছে!");
-  } finally {
-    document.getElementById('passkey').value = '';
-  }
-}
-        
   </script>
-  
 </body>
 </html>
