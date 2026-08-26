@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <!-- মেন ওয়েব পেজে রিডাইরেক্ট করার কোড -->
   <meta name="robots" content="noindex, nofollow, noarchive">
   <script>
   (function() {
@@ -26,6 +26,7 @@
   
   <title>পাতপুকুর হাই স্কুল (উ: মা:) - নোটিশ প্যানেল</title>
 
+  <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -41,7 +42,7 @@
     body {
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       margin: 0;
-      padding: 20px 12px;
+      padding: 24px 12px;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -52,9 +53,9 @@
     .card {
       background: #ffffff;
       width: 100%;
-      max-width: 800px;
+      max-width: 850px; /* বড় স্ক্রিনের সুবিধার জন্য প্রশস্ত বাড়ানো হয়েছে */
       border-radius: 16px;
-      padding: 24px;
+      padding: 28px;
       box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4);
       border: 1px solid #e2e8f0;
     }
@@ -64,14 +65,14 @@
       color: #1e3a8a;
       font-size: 24px;
       font-weight: 700;
-      margin: 0 0 6px 0;
+      margin: 0 0 4px 0;
     }
 
     .header {
       text-align: center;
       border-bottom: 2px dashed #3b82f6;
-      padding-bottom: 12px;
-      margin-bottom: 20px;
+      padding-bottom: 14px;
+      margin-bottom: 22px;
     }
 
     .header h2 {
@@ -85,21 +86,26 @@
     }
 
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .form-group label {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       font-weight: 600;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       color: #1e293b;
       font-size: 15px;
     }
 
+    .form-group label i {
+      color: #3b82f6;
+    }
+
     .form-group label span.req {
       color: #ef4444;
+      margin-left: -4px;
     }
 
     .form-control {
@@ -155,11 +161,11 @@
       cursor: pointer;
     }
 
-    /* রেসপনসিভ গ্রিড (কম্পিউটার ও বড় স্ক্রিনের জন্য) */
+    /* বড় এবং মাঝারি স্ক্রিনে পাশাপাশি দেখাবে */
     .row {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
     }
 
     textarea.form-control {
@@ -170,19 +176,23 @@
     .passkey-group {
       background: #fef2f2;
       border: 1.5px solid #fca5a5;
-      padding: 14px;
+      padding: 16px;
       border-radius: 10px;
-      margin-top: 10px;
+      margin-top: 14px;
     }
 
     .passkey-group label {
       color: #991b1b;
     }
 
+    .passkey-group label i {
+      color: #dc2626;
+    }
+
     .btn-group {
       display: flex;
       gap: 12px;
-      margin-top: 20px;
+      margin-top: 22px;
     }
 
     .btn {
@@ -190,7 +200,7 @@
       padding: 13px;
       border: none;
       border-radius: 10px;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
       display: flex;
@@ -214,7 +224,7 @@
       background: #f1f5f9;
       color: #64748b;
       border: 1px solid #cbd5e1;
-      max-width: 120px;
+      max-width: 140px;
     }
 
     .btn-delete {
@@ -231,23 +241,26 @@
       padding: 10px 14px;
       border-radius: 8px;
       font-size: 14px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       display: none;
       align-items: center;
       justify-content: space-between;
     }
 
-    /* মোবাইলের জন্য সিঙ্গেল কলাম */
+    /* মোবাইলের জন্য রেসপনসিভ মিডিয়া কোয়েরি */
     @media (max-width: 640px) {
       .row {
         grid-template-columns: 1fr;
         gap: 0;
       }
       .card {
-        padding: 16px;
+        padding: 18px;
       }
-      .school-title {
-        font-size: 20px;
+      .btn-group {
+        flex-direction: column-reverse;
+      }
+      .btn-clear {
+        max-width: 100%;
       }
     }
   </style>
@@ -260,6 +273,7 @@
       <h2><i class="fa-solid fa-bullhorn"></i> নোটিশ আপলোড ও ম্যানেজমেন্ট</h2>
     </div>
 
+    <!-- Local Draft Alert -->
     <div class="draft-banner" id="draftBanner">
       <span><i class="fa-solid fa-floppy-disk"></i> পূর্বে লেখা ড্রাফট লোড করা হয়েছে!</span>
       <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="hideDraftBanner()"></i>
@@ -267,16 +281,17 @@
 
     <form id="noticeForm">
       
+      <!-- Sl Dropdown & Date -->
       <div class="row">
         <div class="form-group">
-          <label for="sl_no">🔢 <span>ক্রমিক নং (Sl No)</span> <span class="req">*</span></label>
+          <label for="sl_no"><i class="fa-solid fa-list-ol"></i> ক্রমিক নং (Sl No) <span class="req">*</span></label>
           <select id="sl_no" class="form-control" style="font-weight: bold; color: #1d4ed8;" onchange="onSlChange()">
             <option value="">লোডিং...</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="date_val">📅 <span>তারিখ (dd-mm-yyyy)</span> <span class="req">*</span></label>
+          <label for="date_val"><i class="fa-solid fa-calendar-day"></i> তারিখ (dd-mm-yyyy) <span class="req">*</span></label>
           <div class="date-wrapper">
             <input type="text" id="date_val" class="form-control" placeholder="dd-mm-yyyy" required>
             <button type="button" class="date-picker-btn"><i class="fa-solid fa-calendar-days"></i></button>
@@ -285,24 +300,27 @@
         </div>
       </div>
 
+      <!-- Heading -->
       <div class="form-group">
-        <label for="heading">🏷️ <span>নোটিশের শিরোনাম (Heading)</span> <span class="req">*</span></label>
+        <label for="heading"><i class="fa-solid fa-heading"></i> নোটিশের বিষয়/শিরোনাম (Heading) <span class="req">*</span></label>
         <input type="text" id="heading" class="form-control" placeholder="এখানে শিরোনাম লিখুন..." required autocomplete="off">
       </div>
 
+      <!-- Notice Body -->
       <div class="form-group">
-        <label for="notice_body">📝 <span>বিস্তারিত নোটিশ (Notice Body)</span> <span class="req">*</span></label>
+        <label for="notice_body"><i class="fa-solid fa-align-left"></i> বিস্তারিত নোটিশ (Notice Body) <span class="req">*</span></label>
         <textarea id="notice_body" class="form-control" placeholder="এখানে বিস্তারিত বিবরণ লিখুন..." required></textarea>
       </div>
 
+      <!-- Link & Is New -->
       <div class="row">
         <div class="form-group">
-          <label for="link">🔗 <span>লিঙ্ক (Link - ঐচ্ছিক):</span></label>
+          <label for="link"><i class="fa-solid fa-link"></i> লিঙ্ক (Link - ঐচ্ছিক):</label>
           <input type="url" id="link" class="form-control" placeholder="https://example.com/file.pdf">
         </div>
 
         <div class="form-group">
-          <label for="is_new">🆕 <span>নতুন ব্যাজ (Is New):</span></label>
+          <label for="is_new"><i class="fa-solid fa-certificate"></i> নতুন ব্যাজ (Is New):</label>
           <select id="is_new" class="form-control">
             <option value="true">True (নতুন)</option>
             <option value="false">False (পুরাতন)</option>
@@ -310,11 +328,13 @@
         </div>
       </div>
 
+      <!-- Passkey Field -->
       <div class="form-group passkey-group">
-        <label for="passkey"><i class="fa-solid fa-key"></i> <span>সিকিউরিটি পাসকি (Passkey)</span> <span class="req">*</span></label>
+        <label for="passkey"><i class="fa-solid fa-key"></i> সিকিউরিটি পাসকি (Passkey) <span class="req">*</span></label>
         <input type="password" id="passkey" class="form-control" placeholder="Passkey প্রবেশ করান..." required autocomplete="new-password">
       </div>
 
+      <!-- Action Buttons -->
       <div class="btn-group">
         <button type="button" class="btn btn-clear" onclick="clearForm(true)">
           <i class="fa-solid fa-rotate-left"></i> রিফ্রেশ
