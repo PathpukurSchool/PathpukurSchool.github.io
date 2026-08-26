@@ -503,112 +503,144 @@
     // ----------------------------------------------------
     // Submit / Update Form
     // ----------------------------------------------------
-    document.getElementById('noticeForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
+ document.getElementById('noticeForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-      const passkey = document.getElementById('passkey').value.trim();
-      const submitBtn = document.getElementById('submitBtn');
+  const selectedSl = parseInt(document.getElementById('sl_no').value);
+  const isEditing = selectedSl <= maxSlNo;
 
-      if (!passkey) {
-        alert("⚠️ অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!");
-        return;
-      }
+  // পুরানো নোটিশ আপডেট করার জন্য কনফার্মেশন (সমস্যা ২ সমাধান)
+  if (isEditing) {
+    const headingVal = document.getElementById('heading').value;
+    const confirmUpdate = confirm(`আপনি কি নিশ্চিত যে ক্রমিক নং ${selectedSl}-এর নোটিশটি আপডেট করতে চান?\n\nশিরোনাম: "${headingVal}"`);
+    if (!confirmUpdate) return;
+  }
 
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...`;
+  const passkey = document.getElementById('passkey').value.trim();
+  const submitBtn = document.getElementById('submitBtn');
+  const originalBtnContent = submitBtn.innerHTML;
 
-      try {
-        const payload = {
-          p_passkey: passkey,
-          p_sl_no: parseInt(document.getElementById('sl_no').value),
-          p_date_val: document.getElementById('date_val').value.trim(),
-          p_heading: document.getElementById('heading').value.trim(),
-          p_notice_body: document.getElementById('notice_body').value.trim(),
-          p_link: document.getElementById('link').value.trim() || null,
-          p_is_new: document.getElementById('is_new').value === 'true'
-        };
+  if (!passkey) {
+    showBtnError(submitBtn, "⚠️ অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!", originalBtnContent);
+    return;
+  }
 
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_save_notice`, {
-          method: 'POST',
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
+  // বোতাম প্রসেসিং অবস্থায় নিয়ে যাওয়া
+  submitBtn.disabled = true;
+  submitBtn.style.background = "linear-gradient(135deg, #2563eb, #1d4ed8)";
+  submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...`;
 
-        const result = await response.json();
+  try {
+    const payload = {
+      p_passkey: passkey,
+      p_sl_no: selectedSl,
+      p_date_val: document.getElementById('date_val').value.trim(),
+      p_heading: document.getElementById('heading').value.trim(),
+      p_notice_body: document.getElementById('notice_body').value.trim(),
+      p_link: document.getElementById('link').value.trim() || null,
+      p_is_new: document.getElementById('is_new').value === 'true'
+    };
 
-        if (result && result.success) {
-          alert("🎉 " + result.message);
-          clearForm(false);
-        } else {
-          alert("❌ ব্যর্থ হয়েছে: " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
-        }
-
-      } catch (err) {
-        console.error(err);
-        alert("❌ সার্ভারের সাথে যোগাযোগ করা যাচ্ছে না!");
-      } finally {
-        submitBtn.disabled = false;
-        document.getElementById('passkey').value = ''; // Clear passkey field immediately
-      }
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_save_notice`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
     });
+
+    const result = await response.json();
+
+    if (result && result.success) {
+      alert("🎉 " + result.message);
+      clearForm(false);
+    } else {
+      // ভুল পাসকি বা অন্য কোনো ব্যর্থতায় বোতামে লাল অ্যালার্ট দেখাবে
+      showBtnError(submitBtn, "ব্যর্থ হয়েছে!", originalBtnContent);
+      alert("❌ " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
+    }
+
+  } catch (err) {
+    console.error(err);
+    showBtnError(submitBtn, "ত্রুটি ঘটেছে!", originalBtnContent);
+    alert("❌ সার্ভারের সাথে যোগাযোগ করা যাচ্ছে না!");
+  } finally {
+    document.getElementById('passkey').value = ''; 
+  }
+});
+
+// বোতামে লাল অ্যালার্ট দেখানোর হেলপার ফাংশন
+function showBtnError(btn, msg, defaultContent) {
+  btn.disabled = true;
+  btn.style.background = "linear-gradient(135deg, #dc2626, #991b1b)"; // লাল রঙ
+  btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${msg}`;
+  
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.style.background = ""; // আগের কালারে ফেরা
+    btn.innerHTML = defaultContent;
+  }, 2000);
+}
 
     // ----------------------------------------------------
     // Delete Notice Functionality
     // ----------------------------------------------------
     async function deleteNotice() {
-      const selectedSl = parseInt(document.getElementById('sl_no').value);
-      const heading = document.getElementById('heading').value;
-      const passkey = document.getElementById('passkey').value.trim();
+  const selectedSl = parseInt(document.getElementById('sl_no').value);
+  const heading = document.getElementById('heading').value;
+  const passkey = document.getElementById('passkey').value.trim();
+  const deleteBtn = document.getElementById('deleteBtn');
+  const originalBtnContent = deleteBtn.innerHTML;
 
-      if (!passkey) {
-        alert("⚠️ ডিলিট করার আগে অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!");
-        document.getElementById('passkey').focus();
-        return;
-      }
+  if (!passkey) {
+    showBtnError(deleteBtn, "⚠️ অনুগ্রহ করে পাসকি (Passkey) প্রদান করুন!", originalBtnContent);
+    document.getElementById('passkey').focus();
+    return;
+  }
 
-      const isConfirmed = confirm(`আপনি কি নিশ্চিত যে নিচের নোটিশটি ডিলিট করতে চান?\n\nশিরোনাম: "${heading}"`);
-      if (!isConfirmed) return;
+  // ডিলিট করার পূর্বে কনফার্মেশন
+  const isConfirmed = confirm(`⚠️ সতর্কবার্তা!\n\nআপনি কি নিশ্চিত যে ক্রমিক নং ${selectedSl}-এর নোটিশটি চিরতরে ডিলিট করতে চান?\n\nশিরোনাম: "${heading}"`);
+  if (!isConfirmed) return;
 
-      const deleteBtn = document.getElementById('deleteBtn');
-      deleteBtn.disabled = true;
-      deleteBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ডিলিট হচ্ছে...`;
+  deleteBtn.disabled = true;
+  deleteBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ডিলিট হচ্ছে...`;
 
-      try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_delete_notice`, {
-          method: 'POST',
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            p_passkey: passkey,
-            p_sl_no: selectedSl
-          })
-        });
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_delete_notice`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        p_passkey: passkey,
+        p_sl_no: selectedSl
+      })
+    });
 
-        const result = await response.json();
+    const result = await response.json();
 
-        if (result && result.success) {
-          alert("🗑️ " + result.message);
-          clearForm(false);
-        } else {
-          alert("❌ ডিলিট ব্যর্থ হয়েছে: " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
-        }
-
-      } catch (err) {
-        console.error(err);
-        alert("❌ সার্ভারের সাথে যোগাযোগ ব্যর্থ হয়েছে!");
-      } finally {
-        deleteBtn.disabled = false;
-        deleteBtn.innerHTML = `<i class="fa-solid fa-trash-can"></i> ডিলিট`;
-        document.getElementById('passkey').value = '';
-      }
+    if (result && result.success) {
+      alert("🗑️ " + result.message);
+      clearForm(false);
+    } else {
+      showBtnError(deleteBtn, "ভুল পাসকি!", originalBtnContent);
+      alert("❌ ডিলিট ব্যর্থ হয়েছে: " + (result.message || "পাসকি ভুল দেওয়া হয়েছে।"));
     }
+
+  } catch (err) {
+    console.error(err);
+    showBtnError(deleteBtn, "ত্রুটি ঘটেছে!", originalBtnContent);
+    alert("❌ সার্ভারের সাথে যোগাযোগ ব্যর্থ হয়েছে!");
+  } finally {
+    document.getElementById('passkey').value = '';
+  }
+}
+        
   </script>
+  
 </body>
 </html>
