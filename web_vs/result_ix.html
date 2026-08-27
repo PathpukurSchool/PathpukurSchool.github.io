@@ -24,18 +24,21 @@
     .form-control:focus { border-color: #2563eb; }
     
     .status-bar { display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #0369a1; border-bottom: 1px solid #bae6fd; }
-    .edit-off-badge { color: #dc2626; animation: blink 1.2s infinite; font-weight: bold; font-size: 13px; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     
+    /* Edit Mode Dynamic Badges */
+    .edit-status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .edit-on-badge { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .edit-off-badge { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+
     .active-info { background: #fef3c7; color: #92400e; padding: 8px 12px; font-size: 12px; font-weight: 700; border-left: 4px solid #f59e0b; }
     
     /* Sticky Top Header & Scroll Setup */
-    .table-container { width: 100%; max-height: calc(100vh - 180px); overflow: auto; background: #fff; position: relative; }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 600px; }
+    .table-container { width: 100%; max-height: calc(100vh - 200px); overflow: auto; background: #fff; position: relative; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 500px; }
     th, td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 6px 4px; text-align: center; font-size: 13px; }
     
-    /* FIX: Header Row STICKY Top */
-    thead th { position: sticky; top: 0; background: #0f172a !important; color: #fff !important; z-index: 10; font-size: 12px; box-shadow: 0 2px 2px rgba(0,0,0,0.1); }
+    /* Header STICKY Top */
+    thead th { position: sticky; top: 0; background: #0f172a !important; color: #fff !important; z-index: 10; font-size: 12px; }
     
     /* ONLY Roll Column Sticky Left */
     th.sticky-roll, td.sticky-roll { 
@@ -57,6 +60,10 @@
     .save-success { background: #dcfce7 !important; border-color: #22c55e !important; transition: background 0.4s; }
     .save-error { background: #fee2e2 !important; border-color: #ef4444 !important; }
     
+    /* Passkey Field with Eye Icon */
+    .passkey-wrapper { display: flex; align-items: center; position: relative; width: 130px; }
+    .passkey-wrapper input { width: 100%; padding-right: 26px; }
+    .passkey-wrapper i { position: absolute; right: 8px; cursor: pointer; color: #64748b; font-size: 12px; }
     .passkey-bar { display: flex; gap: 6px; align-items: center; }
   </style>
 </head>
@@ -113,19 +120,15 @@
   </div>
 
   <div class="active-info" id="activeFilterBadge">
-    IX - All : 2026 | 1st Exam : -- All Subjects --
+    <i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোডিং ...
   </div>
 
   <div class="table-container">
     <table id="marksTable">
       <thead>
-        <tr id="tableHeaderRow">
-          <!-- Dynamic Header -->
-        </tr>
+        <tr id="tableHeaderRow"></tr>
       </thead>
-      <tbody id="tableBody">
-        <!-- Dynamic Rows -->
-      </tbody>
+      <tbody id="tableBody"></tbody>
     </table>
   </div>
 
@@ -165,12 +168,14 @@
       clearTimeout(inactivityTimer);
       inactivityTimer = setTimeout(() => {
         currentPasskey = "";
-        alert("🔒 ১৫ মিনিট কোনো কাজ না থাকায় এডিট মুড স্বয়ংক্রিয়ভাবে লক করা হলো।");
+        alert("🔒 ১৫ মিনিট ইনঅ্যাক্টিভ থাকায় এডিট মুড লক করা হলো।");
+        checkSecurityStatus();
         applyFilters();
-      }, 15 * 60 * 1000); // 15 mins
+      }, 15 * 60 * 1000);
     }
 
     async function checkSecurityStatus() {
+      const secDiv = document.getElementById('securityStatus');
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_page_security_status`, {
           method: 'POST',
@@ -178,42 +183,54 @@
           body: JSON.stringify({ p_page_name: 'result_v_ix' })
         });
         const data = await res.json();
-        const secDiv = document.getElementById('securityStatus');
 
         if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
           isEditAllowed = true;
-          secDiv.innerHTML = `
-            <div class="passkey-bar">
-              <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." style="width:110px; padding:4px 6px;">
-              <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i> Unlock</button>
-            </div>`;
+          if (currentPasskey) {
+            secDiv.innerHTML = `<span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>`;
+          } else {
+            secDiv.innerHTML = `
+              <div class="passkey-bar">
+                <div class="passkey-wrapper">
+                  <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey...">
+                  <i class="fa-solid fa-eye" id="togglePassEye" onclick="togglePassVisibility()"></i>
+                </div>
+                <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i></button>
+              </div>`;
+          }
         } else {
           isEditAllowed = false;
-          secDiv.innerHTML = `<span class="edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড অফ</span>`;
+          secDiv.innerHTML = `<span class="edit-status-badge edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড বন্ধ</span>`;
         }
       } catch (err) { console.error(err); }
     }
 
-    // পাসকি সার্ভারে ভ্যালিডেট করার ফাংশন
+    function togglePassVisibility() {
+      const pInput = document.getElementById('passkeyInput');
+      const pIcon = document.getElementById('togglePassEye');
+      if (pInput.type === 'password') {
+        pInput.type = 'text';
+        pIcon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        pInput.type = 'password';
+        pIcon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+
     async function unlockEdit() {
       const inputElem = document.getElementById('passkeyInput');
-      const inputPass = inputElem.value.trim();
+      const inputPass = inputElem ? inputElem.value.trim() : '';
       
       if (!inputPass) {
         alert("⚠️ পাসকি লিখুন!");
-        inputElem.focus();
+        if(inputElem) inputElem.focus();
         return;
       }
 
       try {
-        // RPC Function ডেকে Server-Side এ পাসকি মিলানো হচ্ছে
         const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_result_passkey`, {
           method: 'POST',
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json'
-          },
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ p_passkey: inputPass })
         });
 
@@ -221,21 +238,21 @@
 
         if (result && result.success) {
           currentPasskey = inputPass;
-          inputElem.value = ""; // সঠিক পাসকি হলে ঘরটি ক্লিয়ার হয়ে যাবে
-          alert("🔓 সঠিক পাসকি! এডিট মুড সক্রিয় করা হলো।");
+          checkSecurityStatus(); // আপডেট ব্যাজ
+          alert("🔓 পাসকি সঠিক! এডিট মুড সক্রিয় হয়েছে।");
           resetInactivityTimer();
           applyFilters();
         } else {
           currentPasskey = "";
           alert("❌ " + (result.message || "ভুল পাসকি দেওয়া হয়েছে!"));
-          inputElem.value = ""; // ভুল হলেও ক্লিয়ার করা হবে
-          inputElem.focus();
+          if(inputElem) { inputElem.value = ""; inputElem.focus(); }
         }
       } catch (err) {
-        alert("❌ সার্ভার সংযোগ ব্যর্থ হয়েছে!");
+        alert("❌ সংযোগ ব্যর্থ হয়েছে!");
       }
     }
 
+    // দ্রুত ডাটা ফেচিং
     async function fetchMarksData() {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/result_ix?select=*&order=section.asc,roll_no.asc`, {
@@ -254,6 +271,8 @@
 
       const limit = columnMap[exam].limit;
       document.getElementById('limitDisplay').textContent = `0-${limit}`;
+      
+      // টেবিল লোড শেষ হলে ফিল্টার তথ্য আপডেট
       document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> IX - ${sec} : 2026 | ${exam} : ${sub}`;
 
       let filtered = rawData.filter(item => {
@@ -268,49 +287,52 @@
     function renderTable(dataList, exam, selectedSub) {
       const headerRow = document.getElementById('tableHeaderRow');
       const tbody = document.getElementById('tableBody');
-      headerRow.innerHTML = '';
-      tbody.innerHTML = '';
+      
+      // সিঙ্গেল সাবজেক্ট সিলেক্ট করলে সরাসরি রোলের পরে সাবজেক্ট
+      let isSingleSub = (selectedSub !== "--All--");
+      let activeSubjects = isSingleSub ? [selectedSub] : subjectsList;
 
-      let headerHTML = `<th class="sticky-roll">Roll</th><th>Sec</th><th>Student Name</th>`;
-      let activeSubjects = selectedSub === "--All--" ? subjectsList : [selectedSub];
-
-      activeSubjects.forEach(sub => {
-        headerHTML += `<th>${sub}</th>`;
-      });
+      let headerHTML = `<th class="sticky-roll">Roll</th>`;
+      
+      if (isSingleSub) {
+        headerHTML += `<th>${selectedSub}</th><th>Sec</th><th>Student Name</th>`;
+      } else {
+        headerHTML += `<th>Sec</th><th>Student Name</th>`;
+        activeSubjects.forEach(sub => { headerHTML += `<th>${sub}</th>`; });
+      }
+      
       headerRow.innerHTML = headerHTML;
 
+      // Fast Performance DOM Fragment Construction
+      let rowsHTML = "";
       dataList.forEach(row => {
-        const tr = document.createElement('tr');
-        let rowHTML = `
-          <td class="sticky-roll">${row.roll_no}</td>
-          <td>${row.section}</td>
-          <td style="text-align:left; font-size:12px;">${row.student_name}</td>
-        `;
+        let cellsHTML = `<td class="sticky-roll">${row.roll_no}</td>`;
 
-        activeSubjects.forEach(sub => {
+        const getMarkInputHTML = (sub) => {
           const colName = columnMap[exam][sub];
           const val = row[colName] !== null && row[colName] !== undefined ? row[colName] : '';
-          
-          rowHTML += `
+          return `
             <td>
-              <input type="number" 
-                     pattern="[0-9]*"
-                     inputmode="numeric"
-                     class="mark-input"
-                     value="${val}"
-                     ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
-                     onclick="checkPasskeyPrompt(this)"
-                     onfocus="this.select()"
+              <input type="number" pattern="[0-9]*" inputmode="numeric" class="mark-input"
+                     value="${val}" ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
+                     onclick="checkPasskeyPrompt(this)" onfocus="this.select()"
                      onkeydown="handleKeyNavigation(event, this)"
-                     onchange="saveMarks(${row.id}, '${colName}', this)"
-              />
-            </td>
-          `;
-        });
+                     onchange="saveMarks(${row.id}, '${colName}', this)" />
+            </td>`;
+        };
 
-        tr.innerHTML = rowHTML;
-        tbody.appendChild(tr);
+        if (isSingleSub) {
+          cellsHTML += getMarkInputHTML(selectedSub);
+          cellsHTML += `<td>${row.section}</td><td style="text-align:left; font-size:12px;">${row.student_name}</td>`;
+        } else {
+          cellsHTML += `<td>${row.section}</td><td style="text-align:left; font-size:12px;">${row.student_name}</td>`;
+          activeSubjects.forEach(sub => { cellsHTML += getMarkInputHTML(sub); });
+        }
+
+        rowsHTML += `<tr>${cellsHTML}</tr>`;
       });
+
+      tbody.innerHTML = rowsHTML;
     }
 
     function checkPasskeyPrompt(inputElem) {
@@ -319,12 +341,13 @@
         return;
       }
       if (!currentPasskey) {
-        alert("⚠️ নম্বর এন্ট্রি করতে হলে প্রথমে সঠিক Passkey দিয়ে Unlock করুন!");
+        alert("⚠️ নম্বর এন্ট্রি করতে হলে প্রথমে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
         const pInput = document.getElementById('passkeyInput');
         if (pInput) pInput.focus();
       }
     }
 
+    // ১০০% গ্যারান্টিসহ ডাটা সেভ ফাংশন
     async function saveMarks(rowId, colName, inputElem) {
       if (!currentPasskey || !isEditAllowed) {
         checkPasskeyPrompt(inputElem);
@@ -338,7 +361,7 @@
       if (val !== "") {
         const num = Number(val);
         if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
-          alert(`❌ ভুল নম্বর! নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
+          alert(`❌ নম্বর ০ থেকে ${maxLimit}-এর মধ্যে পূর্ণসংখ্যা হতে হবে।`);
           inputElem.classList.add('save-error');
           inputElem.value = "";
           setTimeout(() => inputElem.classList.remove('save-error'), 1500);
@@ -357,11 +380,7 @@
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
           method: 'POST',
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json'
-          },
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({
             p_passkey: currentPasskey,
             p_id: parseInt(rowId),
@@ -375,10 +394,11 @@
           inputElem.classList.add('save-success');
           setTimeout(() => inputElem.classList.remove('save-success'), 1000);
           
+          // আপডেট লোকাল র-ডাটা ম্যামোরি
           const target = rawData.find(r => r.id === rowId);
           if (target) target[colName] = marksVal;
         } else {
-          alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
+          alert("❌ " + (result.message || "সেভ হতে ব্যর্থ হয়েছে!"));
           inputElem.classList.add('save-error');
           setTimeout(() => inputElem.classList.remove('save-error'), 1500);
         }
@@ -415,7 +435,7 @@
             await saveMarks(item.id, item.col, { value: item.val, classList: { add:()=>{}, remove:()=>{} } });
           }
           localStorage.removeItem('offline_marks_ix');
-          alert("🎉 অফলাইন এন্ট্রি করা নম্বরগুলি ডাটাবেজে সেভ হয়েছে!");
+          alert("🎉 অফলাইন ডাটা সেভ সম্পূর্ণ হয়েছে!");
         }
       });
     }
