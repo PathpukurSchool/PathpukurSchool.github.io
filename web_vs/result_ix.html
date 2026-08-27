@@ -11,53 +11,55 @@
     * { box-sizing: border-box; font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
     body { margin: 0; background: #f1f5f9; color: #1e293b; }
     
-    .header-container { background: #1e3a8a; color: #fff; padding: 12px; text-align: center; }
-    .header-container h1 { margin: 0; font-size: 18px; }
-    .header-container h2 { margin: 4px 0 0; font-size: 14px; font-weight: 400; color: #93c5fd; }
+    .header-container { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff; padding: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    .header-container h1 { margin: 0; font-size: 19px; letter-spacing: 0.5px; }
+    .header-container h2 { margin: 4px 0 0; font-size: 13px; font-weight: 400; color: #93c5fd; }
     
-    .controls-panel { background: #fff; padding: 10px; border-bottom: 2px solid #e2e8f0; }
+    .controls-panel { background: #fff; padding: 10px; border-bottom: 2px solid #cbd5e1; }
     .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
-    .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 2px; }
-    .form-control { width: 100%; padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; }
-    
-    .status-bar { display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; font-size: 13px; font-weight: 600; color: #0369a1; }
-    .edit-off-badge { color: #dc2626; animation: blink 1.2s infinite; font-weight: bold; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 3px; color: #334155; }
+    .form-group label i { color: #2563eb; margin-right: 3px; }
+    .form-control { width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; outline: none; background: #f8fafc; }
+    .form-control:focus { border-color: #2563eb; background: #fff; }
+
+    .status-bar { display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #0369a1; }
+    .edit-off-badge { color: #dc2626; animation: blink 1.2s infinite; font-weight: bold; background: #fee2e2; padding: 3px 8px; border-radius: 4px; border: 1px solid #fca5a5; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     
-    .active-info { background: #fef3c7; color: #92400e; padding: 8px 12px; font-size: 13px; font-weight: bold; border-left: 4px solid #f59e0b; }
+    .active-info { background: #fef3c7; color: #92400e; padding: 6px 12px; font-size: 12px; font-weight: bold; border-left: 4px solid #f59e0b; }
     
-    /* Responsive Sticky Table Container */
-    .table-container { max-height: calc(100vh - 230px); overflow: auto; background: #fff; }
+    /* Responsive Table Styles */
+    .table-container { max-height: calc(100vh - 240px); overflow: auto; background: #fff; }
     table { width: 100%; border-collapse: separate; border-spacing: 0; }
-    th, td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 6px; text-align: center; font-size: 13px; }
+    th, td { border-bottom: 1px solid #cbd5e1; border-right: 1px solid #cbd5e1; padding: 6px 4px; text-align: center; font-size: 12px; white-space: nowrap; }
     
-    /* Sticky Top Header */
-    thead th { position: sticky; top: 0; background: #1e293b; color: #fff; z-index: 10; }
-    /* Sticky Left Roll Column */
-    th.sticky-col, td.sticky-col { position: sticky; left: 0; z-index: 5; background: #334155; color: #fff; font-weight: bold; width: 50px; }
+    /* Fixed Top Row & Fixed Left Roll Column */
+    thead th { position: sticky; top: 0; background: #1e293b; color: #fff; z-index: 10; font-size: 11px; }
+    th.sticky-col, td.sticky-col { position: sticky; left: 0; z-index: 5; background: #334155; color: #fff; font-weight: bold; min-width: 45px; }
     thead th.sticky-col { z-index: 15; background: #0f172a; }
 
-    .mark-input { width: 60px; text-align: center; padding: 5px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; font-weight: bold; outline: none; }
-    .mark-input:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
+    .mark-input { width: 50px; text-align: center; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; font-weight: bold; outline: none; }
+    .mark-input:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.25); background: #eff6ff; }
     .mark-input[readonly] { background: #f8fafc; color: #64748b; border-color: transparent; }
     
-    .save-success { background: #dcfce7 !important; transition: background 0.5s; }
+    .save-success { background: #dcfce7 !important; border-color: #22c55e !important; transition: background 0.5s; }
     .save-error { background: #fee2e2 !important; border-color: #ef4444 !important; }
     
-    .passkey-bar { display: flex; gap: 8px; align-items: center; background: #fff; padding: 8px; border-top: 1px solid #cbd5e1; }
+    .passkey-bar { display: flex; gap: 6px; align-items: center; }
   </style>
 </head>
 <body>
 
   <div class="header-container">
-    <h1>Pathpukur High School (HS)</h1>
+    <h1><i class="fa-solid fa-school"></i> Pathpukur High School (HS)</h1>
     <h2>Marks Upload Portal | Session: <span id="sessionDisplay">2026</span> | Class: IX</h2>
   </div>
 
   <div class="controls-panel">
     <div class="filter-grid">
+      <!-- Exam Dropdown -->
       <div class="form-group">
-        <label>Exam</label>
+        <label><i class="fa-solid fa-file-pen"></i> Exam</label>
         <select id="examSelect" class="form-control" onchange="applyFilters()">
           <option value="1st Exam">1st Exam</option>
           <option value="2nd Exam">2nd Exam</option>
@@ -65,8 +67,10 @@
           <option value="Project">Project</option>
         </select>
       </div>
+
+      <!-- Section Dropdown -->
       <div class="form-group">
-        <label>Section</label>
+        <label><i class="fa-solid fa-users-rectangle"></i> Section</label>
         <select id="sectionSelect" class="form-control" onchange="applyFilters()">
           <option value="--All--">--All--</option>
           <option value="A">A</option>
@@ -74,9 +78,12 @@
           <option value="C">C</option>
         </select>
       </div>
+
+      <!-- Subject Dropdown -->
       <div class="form-group">
-        <label>Subject</label>
+        <label><i class="fa-solid fa-book-open"></i> Subject</label>
         <select id="subjectSelect" class="form-control" onchange="applyFilters()">
+          <option value="--All Subject--">--All Subject--</option>
           <option value="Bengali">Bengali</option>
           <option value="English">English</option>
           <option value="Math">Math</option>
@@ -86,36 +93,33 @@
           <option value="Geography">Geography</option>
         </select>
       </div>
+
+      <!-- Search Box -->
       <div class="form-group">
-        <label>Search</label>
+        <label><i class="fa-solid fa-magnifying-glass"></i> Search</label>
         <input type="text" id="searchInput" class="form-control" placeholder="Name or Roll..." oninput="applyFilters()">
       </div>
     </div>
   </div>
 
   <div class="status-bar">
-    <div>Marks Limit: <span id="limitDisplay" style="color:#d97706;">0-40</span></div>
+    <div><i class="fa-solid fa-gauge-high"></i> Limit: <span id="limitDisplay" style="color:#d97706;">0-40</span></div>
     <div id="securityStatus">
-      <!-- Passkey control or Edit Off Badge -->
+      <!-- Passkey/Status Badge -->
     </div>
   </div>
 
   <div class="active-info" id="activeFilterBadge">
-    IX - All : 2026 | 1st Exam : Bengali
+    <i class="fa-solid fa-circle-info"></i> IX - All : 2026 | 1st Exam : All Subjects
   </div>
 
   <div class="table-container">
     <table id="marksTable">
-      <thead>
-        <tr>
-          <th class="sticky-col">Roll</th>
-          <th>Sec</th>
-          <th>Student Name</th>
-          <th id="dynamicSubjectHeader">Bengali</th>
-        </tr>
+      <thead id="tableHead">
+        <!-- Dynamic Header -->
       </thead>
       <tbody id="tableBody">
-        <!-- Dynamic Rows -->
+        <!-- Dynamic Data -->
       </tbody>
     </table>
   </div>
@@ -129,6 +133,8 @@
     let isEditAllowed = false;
     let inactivityTimer = null;
 
+    const subjectsList = ["Bengali", "English", "Math", "Physical Science", "Life Science", "History", "Geography"];
+
     const columnMap = {
       "1st Exam": { "Bengali":"e1_bengali", "English":"e1_english", "Math":"e1_math", "Physical Science":"e1_physical_science", "Life Science":"e1_life_science", "History":"e1_history", "Geography":"e1_geography", limit: 40 },
       "2nd Exam": { "Bengali":"e2_bengali", "English":"e2_english", "Math":"e2_math", "Physical Science":"e2_physical_science", "Life Science":"e2_life_science", "History":"e2_history", "Geography":"e2_geography", limit: 40 },
@@ -140,27 +146,19 @@
       await checkSecurityStatus();
       await fetchMarksData();
       resetInactivityTimer();
-      setupOfflineSync();
     };
 
-    // Activity tracker for 15 mins timeout
-    ['mousemove', 'keydown', 'touchstart'].forEach(evt => {
-      window.addEventListener(evt, resetInactivityTimer);
-    });
+    ['mousemove', 'keydown', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimer));
 
     function resetInactivityTimer() {
       clearTimeout(inactivityTimer);
       if (currentPasskey) {
         inactivityTimer = setTimeout(() => {
-          logoutEditMode("15 মিনিট ইনঅ্যাক্টিভ থাকার কারণে এডিট মুড বন্ধ করা হলো।");
-        }, 15 * 60 * 1000); // 15 Minutes
+          currentPasskey = "";
+          alert("১৫ মিনিট ইনঅ্যাক্টিভ থাকার কারণে পাসকি সেশন শেষ হয়েছে।");
+          renderTable();
+        }, 15 * 60 * 1000);
       }
-    }
-
-    function logoutEditMode(msg) {
-      currentPasskey = "";
-      alert(msg);
-      renderTable();
     }
 
     async function checkSecurityStatus() {
@@ -171,16 +169,16 @@
         const data = await res.json();
         const secDiv = document.getElementById('securityStatus');
 
-        if (data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
+        if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
           isEditAllowed = true;
           secDiv.innerHTML = `
             <div class="passkey-bar">
-              <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." style="width:100px;">
-              <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer;">Unlock</button>
+              <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." style="width:90px;">
+              <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto;"><i class="fa-solid fa-key"></i></button>
             </div>`;
         } else {
           isEditAllowed = false;
-          secDiv.innerHTML = `<span class="edit-off-badge">এডিট মুড অফ</span>`;
+          secDiv.innerHTML = `<span class="edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড অফ</span>`;
         }
       } catch (err) { console.error(err); }
     }
@@ -189,7 +187,7 @@
       const input = document.getElementById('passkeyInput').value.trim();
       if (!input) return alert("পাসকি লিখুন!");
       currentPasskey = input;
-      alert("এডিট মুড সক্রিয় হয়েছে (১৫ মিনিটের জন্য)");
+      alert("এডিট মুড সক্রিয় হয়েছে!");
       renderTable();
     }
 
@@ -209,10 +207,8 @@
       const sub = document.getElementById('subjectSelect').value;
       const search = document.getElementById('searchInput').value.toLowerCase();
 
-      const limit = columnMap[exam].limit;
-      document.getElementById('limitDisplay').textContent = `0-${limit}`;
-      document.getElementById('dynamicSubjectHeader').textContent = sub;
-      document.getElementById('activeFilterBadge').textContent = `IX - ${sec} : 2026 | ${exam} : ${sub}`;
+      document.getElementById('limitDisplay').textContent = `0-${columnMap[exam].limit}`;
+      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-circle-info"></i> IX - ${sec} : 2026 | ${exam} : ${sub}`;
 
       let filtered = rawData.filter(item => {
         const matchesSec = (sec === "--All--" || item.section === sec);
@@ -225,31 +221,42 @@
 
     function renderTable(dataList = rawData) {
       const exam = document.getElementById('examSelect').value;
-      const sub = document.getElementById('subjectSelect').value;
-      const colName = columnMap[exam][sub];
+      const subSelect = document.getElementById('subjectSelect').value;
+      const thead = document.getElementById('tableHead');
       const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = '';
+      
+      let activeSubjects = subSelect === "--All Subject--" ? subjectsList : [subSelect];
 
+      // Build Table Header
+      let headerHTML = `<tr><th class="sticky-col">Roll</th><th>Sec</th><th>Student Name</th>`;
+      activeSubjects.forEach(s => headerHTML += `<th>${s}</th>`);
+      headerHTML += `</tr>`;
+      thead.innerHTML = headerHTML;
+
+      // Build Table Body
+      tbody.innerHTML = '';
       dataList.forEach(row => {
-        const val = row[colName] !== null ? row[colName] : '';
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="sticky-col">${row.roll_no}</td>
-          <td>${row.section}</td>
-          <td style="text-align:left;">${row.student_name}</td>
-          <td>
-            <input type="number" 
-                   pattern="[0-9]*"
-                   inputmode="numeric"
-                   class="mark-input"
-                   value="${val}"
-                   ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
-                   onfocus="this.select()"
-                   onkeydown="handleKeyNavigation(event, this)"
-                   onchange="saveMarks(${row.id}, '${colName}', this)"
-            />
-          </td>
-        `;
+        let rowHTML = `<td class="sticky-col">${row.roll_no}</td><td>${row.section}</td><td style="text-align:left;">${row.student_name}</td>`;
+        
+        activeSubjects.forEach(s => {
+          const colName = columnMap[exam][s];
+          const val = row[colName] !== null && row[colName] !== undefined ? row[colName] : '';
+          rowHTML += `
+            <td>
+              <input type="number" 
+                     pattern="[0-9]*"
+                     inputmode="numeric"
+                     class="mark-input"
+                     value="${val}"
+                     ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
+                     onfocus="this.select()"
+                     onkeydown="handleKeyNavigation(event, this)"
+                     onchange="saveMarks(${row.id}, '${colName}', this)"
+              />
+            </td>`;
+        });
+        tr.innerHTML = rowHTML;
         tbody.appendChild(tr);
       });
     }
@@ -262,7 +269,7 @@
       if (val !== "") {
         const num = Number(val);
         if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
-          alert(`ভুল নম্বর! নম্বর ০ থেকে ${maxLimit}-এর মধ্যে পূর্ণসংখ্যা হতে হবে।`);
+          alert(`ভুল নম্বর! নম্বর ০ থেকে ${maxLimit}-এর মধ্যে হতে হবে।`);
           inputElem.classList.add('save-error');
           inputElem.value = "";
           setTimeout(() => inputElem.classList.remove('save-error'), 1500);
@@ -271,12 +278,6 @@
       }
 
       const marksVal = val === "" ? null : parseInt(val);
-
-      if (!navigator.onLine) {
-        saveToLocalStorage(rowId, colName, marksVal);
-        inputElem.classList.add('save-success');
-        return;
-      }
 
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
@@ -303,12 +304,11 @@
           inputElem.classList.add('save-error');
         }
       } catch (err) {
-        saveToLocalStorage(rowId, colName, marksVal);
-        inputElem.classList.add('save-success');
+        alert("নেটওয়ার্ক সমস্যা! নম্বর সেভ হয়নি।");
+        inputElem.classList.add('save-error');
       }
     }
 
-    // Keyboard Arrow/Enter navigation
     function handleKeyNavigation(e, elem) {
       const inputs = Array.from(document.querySelectorAll('.mark-input:not([readonly])'));
       const index = inputs.indexOf(elem);
@@ -320,25 +320,6 @@
         e.preventDefault();
         if (index - 1 >= 0) inputs[index - 1].focus();
       }
-    }
-
-    function saveToLocalStorage(id, col, val) {
-      let draft = JSON.parse(localStorage.getItem('offline_marks_ix') || '[]');
-      draft.push({ id, col, val });
-      localStorage.setItem('offline_marks_ix', JSON.stringify(draft));
-    }
-
-    function setupOfflineSync() {
-      window.addEventListener('online', async () => {
-        let draft = JSON.parse(localStorage.getItem('offline_marks_ix') || '[]');
-        if (draft.length > 0 && currentPasskey) {
-          for (let item of draft) {
-            await saveMarks(item.id, item.col, { value: item.val, classList: { add:()=>{}, remove:()=>{} } });
-          }
-          localStorage.removeItem('offline_marks_ix');
-          alert("অফলাইন ডাটা সফলভাবে অটো-সিঙ্ক হয়েছে!");
-        }
-      });
     }
   </script>
 </body>
