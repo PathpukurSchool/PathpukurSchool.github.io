@@ -29,15 +29,15 @@
     
     .active-info { background: #fef3c7; color: #92400e; padding: 8px 12px; font-size: 12px; font-weight: 700; border-left: 4px solid #f59e0b; }
     
-    /* Table Responsive Setup */
-    .table-container { width: 100%; overflow-x: auto; background: #fff; }
+    /* Sticky Top Header & Scroll Setup */
+    .table-container { width: 100%; max-height: calc(100vh - 180px); overflow: auto; background: #fff; position: relative; }
     table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 600px; }
     th, td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 6px 4px; text-align: center; font-size: 13px; }
     
-    /* Sticky Top Header */
-    thead th { position: sticky; top: 0; background: #1e293b; color: #fff; z-index: 10; font-size: 12px; }
+    /* FIX: Header Row STICKY Top */
+    thead th { position: sticky; top: 0; background: #0f172a !important; color: #fff !important; z-index: 10; font-size: 12px; box-shadow: 0 2px 2px rgba(0,0,0,0.1); }
     
-    /* ONLY Roll Column Sticky */
+    /* ONLY Roll Column Sticky Left */
     th.sticky-roll, td.sticky-roll { 
       position: sticky; 
       left: 0; 
@@ -48,7 +48,7 @@
       width: 55px; 
       min-width: 55px;
     }
-    thead th.sticky-roll { z-index: 15; background: #0f172a; }
+    thead th.sticky-roll { z-index: 20; background: #020617 !important; }
 
     .mark-input { width: 55px; text-align: center; padding: 6px 2px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; font-weight: bold; outline: none; }
     .mark-input:focus { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
@@ -165,7 +165,7 @@
       clearTimeout(inactivityTimer);
       inactivityTimer = setTimeout(() => {
         currentPasskey = "";
-        alert("🔒 ১৫ মিনিট কোনো কাজ না হওয়ায় এডিট মুড অটোমেটিক লক করা হলো।");
+        alert("🔒 ১৫ মিনিট কোনো কাজ না থাকায় এডিট মুড স্বয়ংক্রিয়ভাবে লক করা হলো।");
         applyFilters();
       }, 15 * 60 * 1000); // 15 mins
     }
@@ -185,7 +185,7 @@
           secDiv.innerHTML = `
             <div class="passkey-bar">
               <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." style="width:110px; padding:4px 6px;">
-              <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i></button>
+              <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i> Unlock</button>
             </div>`;
         } else {
           isEditAllowed = false;
@@ -194,18 +194,46 @@
       } catch (err) { console.error(err); }
     }
 
-    function unlockEdit() {
+    // পাসকি সার্ভারে ভ্যালিডেট করার ফাংশন
+    async function unlockEdit() {
       const inputElem = document.getElementById('passkeyInput');
-      const input = inputElem.value.trim();
-      if (!input) {
-        alert("পাসকি লিখুন!");
+      const inputPass = inputElem.value.trim();
+      
+      if (!inputPass) {
+        alert("⚠️ পাসকি লিখুন!");
         inputElem.focus();
         return;
       }
-      currentPasskey = input;
-      alert("🔓 এডিট মুড সক্রিয় হয়েছে!");
-      resetInactivityTimer();
-      applyFilters();
+
+      try {
+        // RPC Function ডেকে Server-Side এ পাসকি মিলানো হচ্ছে
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_result_passkey`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ p_passkey: inputPass })
+        });
+
+        const result = await res.json();
+
+        if (result && result.success) {
+          currentPasskey = inputPass;
+          inputElem.value = ""; // সঠিক পাসকি হলে ঘরটি ক্লিয়ার হয়ে যাবে
+          alert("🔓 সঠিক পাসকি! এডিট মুড সক্রিয় করা হলো।");
+          resetInactivityTimer();
+          applyFilters();
+        } else {
+          currentPasskey = "";
+          alert("❌ " + (result.message || "ভুল পাসকি দেওয়া হয়েছে!"));
+          inputElem.value = ""; // ভুল হলেও ক্লিয়ার করা হবে
+          inputElem.focus();
+        }
+      } catch (err) {
+        alert("❌ সার্ভার সংযোগ ব্যর্থ হয়েছে!");
+      }
     }
 
     async function fetchMarksData() {
@@ -243,7 +271,6 @@
       headerRow.innerHTML = '';
       tbody.innerHTML = '';
 
-      // Header Construction (ONLY Roll sticky)
       let headerHTML = `<th class="sticky-roll">Roll</th><th>Sec</th><th>Student Name</th>`;
       let activeSubjects = selectedSub === "--All--" ? subjectsList : [selectedSub];
 
@@ -252,7 +279,6 @@
       });
       headerRow.innerHTML = headerHTML;
 
-      // Rows Construction
       dataList.forEach(row => {
         const tr = document.createElement('tr');
         let rowHTML = `
@@ -293,7 +319,7 @@
         return;
       }
       if (!currentPasskey) {
-        alert("⚠️ নম্বর এন্ট্রি করতে হলে প্রথমে সঠিক Passkey দিন!");
+        alert("⚠️ নম্বর এন্ট্রি করতে হলে প্রথমে সঠিক Passkey দিয়ে Unlock করুন!");
         const pInput = document.getElementById('passkeyInput');
         if (pInput) pInput.focus();
       }
@@ -322,7 +348,6 @@
 
       const marksVal = val === "" ? null : parseInt(val);
 
-      // Offline handling
       if (!navigator.onLine) {
         saveToLocalStorage(rowId, colName, marksVal);
         inputElem.classList.add('save-success');
@@ -350,7 +375,6 @@
           inputElem.classList.add('save-success');
           setTimeout(() => inputElem.classList.remove('save-success'), 1000);
           
-          // Update local memory rawData
           const target = rawData.find(r => r.id === rowId);
           if (target) target[colName] = marksVal;
         } else {
@@ -359,13 +383,11 @@
           setTimeout(() => inputElem.classList.remove('save-error'), 1500);
         }
       } catch (err) {
-        console.error(err);
         saveToLocalStorage(rowId, colName, marksVal);
         inputElem.classList.add('save-success');
       }
     }
 
-    // Keyboard Arrow/Enter navigation
     function handleKeyNavigation(e, elem) {
       const inputs = Array.from(document.querySelectorAll('.mark-input:not([readonly])'));
       const index = inputs.indexOf(elem);
@@ -393,7 +415,7 @@
             await saveMarks(item.id, item.col, { value: item.val, classList: { add:()=>{}, remove:()=>{} } });
           }
           localStorage.removeItem('offline_marks_ix');
-          alert("🎉 অফলাইন এন্ট্রি করা নম্বরগুলি স্বয়ংক্রিয়ভাবে ডাটাবেজে সেভ হয়েছে!");
+          alert("🎉 অফলাইন এন্ট্রি করা নম্বরগুলি ডাটাবেজে সেভ হয়েছে!");
         }
       });
     }
