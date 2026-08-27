@@ -3,67 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pathpukur High School (HS) - Marks Portal</title>
+  <title>Pathpukur High School (HS) - Class IX Marks Portal</title>
+  
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     * { box-sizing: border-box; font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
-    body { margin: 0; background: #f8fafc; color: #0f172a; }
+    body { margin: 0; background: #f8fafc; color: #1e293b; }
     
-    .header-container { background: linear-gradient(135deg, #1e3a8a, #1e40af); color: #fff; padding: 12px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .header-container h1 { margin: 0; font-size: 19px; }
-    .header-container h2 { margin: 4px 0 0; font-size: 13px; font-weight: 400; color: #bfdbfe; }
+    .header-container { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff; padding: 14px 10px; text-align: center; }
+    .header-container h1 { margin: 0; font-size: 19px; letter-spacing: 0.5px; }
+    .header-container h2 { margin: 4px 0 0; font-size: 13px; font-weight: 400; color: #93c5fd; }
     
-    .controls-panel { background: #fff; padding: 10px; border-bottom: 2px solid #e2e8f0; }
-    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 3px; color: #475569; }
-    .form-control { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; outline: none; background: #f8fafc; }
-    .form-control:focus { border-color: #2563eb; background: #fff; }
-
-    .status-bar { display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #0369a1; }
-    .edit-off-badge { color: #dc2626; animation: blink 1.2s infinite; font-weight: bold; background: #fee2e2; padding: 4px 8px; border-radius: 4px; border: 1px solid #fca5a5; }
+    .controls-panel { background: #fff; padding: 10px; border-bottom: 2px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px; }
+    .form-group label i { margin-right: 4px; color: #2563eb; }
+    .form-control { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #fff; }
+    .form-control:focus { border-color: #2563eb; }
+    
+    .status-bar { display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #0369a1; border-bottom: 1px solid #bae6fd; }
+    .edit-off-badge { color: #dc2626; animation: blink 1.2s infinite; font-weight: bold; font-size: 13px; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     
-    .active-info { background: #fffbebf5; color: #b45309; padding: 8px 12px; font-size: 13px; font-weight: bold; border-left: 4px solid #f59e0b; border-bottom: 1px solid #fef3c7; }
+    .active-info { background: #fef3c7; color: #92400e; padding: 8px 12px; font-size: 12px; font-weight: 700; border-left: 4px solid #f59e0b; }
     
-    /* Responsive Sticky Table Container */
-    .table-container { max-height: calc(100vh - 240px); overflow: auto; background: #fff; }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; }
-    th, td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 5px; text-align: center; font-size: 12px; white-space: nowrap; }
+    /* Table Responsive Setup */
+    .table-container { width: 100%; overflow-x: auto; background: #fff; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 600px; }
+    th, td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 6px 4px; text-align: center; font-size: 13px; }
     
     /* Sticky Top Header */
-    thead th { position: sticky; top: 0; background: #1e293b; color: #fff; z-index: 10; font-weight: 600; }
-    /* Sticky Left Roll & Name Column */
-    th.sticky-col, td.sticky-col { position: sticky; left: 0; z-index: 5; background: #334155; color: #fff; font-weight: bold; }
-    thead th.sticky-col { z-index: 15; background: #0f172a; }
-    td.sticky-col-name { position: sticky; left: 45px; z-index: 5; background: #f1f5f9; color: #0f172a; text-align: left; font-weight: 600; }
-    thead th.sticky-col-name { position: sticky; left: 45px; z-index: 15; background: #1e293b; }
+    thead th { position: sticky; top: 0; background: #1e293b; color: #fff; z-index: 10; font-size: 12px; }
+    
+    /* ONLY Roll Column Sticky */
+    th.sticky-roll, td.sticky-roll { 
+      position: sticky; 
+      left: 0; 
+      z-index: 5; 
+      background: #334155; 
+      color: #fff; 
+      font-weight: bold; 
+      width: 55px; 
+      min-width: 55px;
+    }
+    thead th.sticky-roll { z-index: 15; background: #0f172a; }
 
-    .mark-input { width: 55px; text-align: center; padding: 5px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; font-weight: bold; outline: none; }
+    .mark-input { width: 55px; text-align: center; padding: 6px 2px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; font-weight: bold; outline: none; }
     .mark-input:focus { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
-    .mark-input[readonly] { background: #f8fafc; color: #64748b; border-color: transparent; }
+    .mark-input[readonly] { background: #f8fafc; color: #64748b; border-color: #e2e8f0; cursor: pointer; }
     
     .save-success { background: #dcfce7 !important; border-color: #22c55e !important; transition: background 0.4s; }
-    .save-error { background: #fee2e2 !important; border-color: #ef4444 !important; animation: shake 0.2s; }
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+    .save-error { background: #fee2e2 !important; border-color: #ef4444 !important; }
     
     .passkey-bar { display: flex; gap: 6px; align-items: center; }
-    .btn-unlock { background: #2563eb; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-    .btn-unlock:hover { background: #1d4ed8; }
   </style>
 </head>
 <body>
 
   <div class="header-container">
     <h1><i class="fa-solid fa-school"></i> Pathpukur High School (HS)</h1>
-    <h2><i class="fa-solid fa-pen-to-square"></i> Class IX Marks Portal | Session: <span id="sessionDisplay">2026</span></h2>
+    <h2><i class="fa-solid fa-graduation-cap"></i> Marks Portal | Session: <span id="sessionDisplay">2026</span> | Class: IX</h2>
   </div>
 
   <div class="controls-panel">
     <div class="filter-grid">
       <div class="form-group">
-        <label><i class="fa-solid fa-file-signature"></i> Exam</label>
+        <label><i class="fa-solid fa-file-pen"></i> Exam</label>
         <select id="examSelect" class="form-control" onchange="applyFilters()">
           <option value="1st Exam">1st Exam</option>
           <option value="2nd Exam">2nd Exam</option>
@@ -72,7 +79,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label><i class="fa-solid fa-users-rectangle"></i> Section</label>
+        <label><i class="fa-solid fa-users"></i> Section</label>
         <select id="sectionSelect" class="form-control" onchange="applyFilters()">
           <option value="--All--">--All--</option>
           <option value="A">A</option>
@@ -81,9 +88,9 @@
         </select>
       </div>
       <div class="form-group">
-        <label><i class="fa-solid fa-book"></i> Subject</label>
+        <label><i class="fa-solid fa-book-open"></i> Subject</label>
         <select id="subjectSelect" class="form-control" onchange="applyFilters()">
-          <option value="-- All Subject --">-- All Subject --</option>
+          <option value="--All--">-- All Subjects --</option>
           <option value="Bengali">Bengali</option>
           <option value="English">English</option>
           <option value="Math">Math</option>
@@ -95,26 +102,26 @@
       </div>
       <div class="form-group">
         <label><i class="fa-solid fa-magnifying-glass"></i> Search</label>
-        <input type="text" id="searchInput" class="form-control" placeholder="Name or Roll..." oninput="applyFilters()">
+        <input type="text" id="searchInput" class="form-control" placeholder="Name/Roll..." oninput="applyFilters()">
       </div>
     </div>
   </div>
 
   <div class="status-bar">
-    <div><i class="fa-solid fa-gauge-high"></i> Limit: <span id="limitDisplay" style="color:#d97706;">0-40</span></div>
-    <div id="securityStatus">
-      <i class="fa-solid fa-spinner fa-spin"></i> লোড হচ্ছে...
-    </div>
+    <div><i class="fa-solid fa-circle-info"></i> Limit: <span id="limitDisplay" style="color:#d97706; font-weight: bold;">0-40</span></div>
+    <div id="securityStatus"></div>
   </div>
 
   <div class="active-info" id="activeFilterBadge">
-    <i class="fa-solid fa-circle-info"></i> IX - All : 2026 | 1st Exam : All Subjects
+    IX - All : 2026 | 1st Exam : -- All Subjects --
   </div>
 
   <div class="table-container">
     <table id="marksTable">
-      <thead id="tableHead">
-        <!-- Dynamic Header -->
+      <thead>
+        <tr id="tableHeaderRow">
+          <!-- Dynamic Header -->
+        </tr>
       </thead>
       <tbody id="tableBody">
         <!-- Dynamic Rows -->
@@ -143,39 +150,42 @@
     window.onload = async () => {
       await checkSecurityStatus();
       await fetchMarksData();
-      resetInactivityTimer();
+      setupInactivityTracker();
       setupOfflineSync();
     };
 
-    ['mousemove', 'keydown', 'touchstart'].forEach(evt => {
-      window.addEventListener(evt, resetInactivityTimer);
-    });
+    function setupInactivityTracker() {
+      ['mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(evt => {
+        window.addEventListener(evt, resetInactivityTimer);
+      });
+    }
 
     function resetInactivityTimer() {
+      if (!currentPasskey) return;
       clearTimeout(inactivityTimer);
-      if (currentPasskey) {
-        inactivityTimer = setTimeout(() => {
-          currentPasskey = "";
-          alert("🔒 ১৫ মিনিট নিষ্ক্রিয় থাকার কারণে এডিট মুড স্বয়ংক্রিয়ভাবে বন্ধ করা হলো।");
-          applyFilters();
-        }, 15 * 60 * 1000);
-      }
+      inactivityTimer = setTimeout(() => {
+        currentPasskey = "";
+        alert("🔒 ১৫ মিনিট কোনো কাজ না হওয়ায় এডিট মুড অটোমেটিক লক করা হলো।");
+        applyFilters();
+      }, 15 * 60 * 1000); // 15 mins
     }
 
     async function checkSecurityStatus() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/page_security?page_name=eq.result_v_ix&select=*`, {
-          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_page_security_status`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_page_name: 'result_v_ix' })
         });
         const data = await res.json();
         const secDiv = document.getElementById('securityStatus');
 
-        if (data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
+        if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
           isEditAllowed = true;
           secDiv.innerHTML = `
             <div class="passkey-bar">
-              <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." style="width:90px; padding:4px;">
-              <button onclick="unlockEdit()" class="btn-unlock"><i class="fa-solid fa-key"></i></button>
+              <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." style="width:110px; padding:4px 6px;">
+              <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i></button>
             </div>`;
         } else {
           isEditAllowed = false;
@@ -185,10 +195,16 @@
     }
 
     function unlockEdit() {
-      const input = document.getElementById('passkeyInput').value.trim();
-      if (!input) return alert("পাসকি প্রদান করুন!");
+      const inputElem = document.getElementById('passkeyInput');
+      const input = inputElem.value.trim();
+      if (!input) {
+        alert("পাসকি লিখুন!");
+        inputElem.focus();
+        return;
+      }
       currentPasskey = input;
-      alert("🔓 এডিট মুড আনলক হয়েছে (১৫ মিনিটের জন্য)");
+      alert("🔓 এডিট মুড সক্রিয় হয়েছে!");
+      resetInactivityTimer();
       applyFilters();
     }
 
@@ -210,7 +226,7 @@
 
       const limit = columnMap[exam].limit;
       document.getElementById('limitDisplay').textContent = `0-${limit}`;
-      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-circle-info"></i> IX - ${sec} : 2026 | ${exam} : ${sub}`;
+      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> IX - ${sec} : 2026 | ${exam} : ${sub}`;
 
       let filtered = rawData.filter(item => {
         const matchesSec = (sec === "--All--" || item.section === sec);
@@ -221,32 +237,35 @@
       renderTable(filtered, exam, sub);
     }
 
-    function renderTable(dataList, exam, sub) {
-      const thead = document.getElementById('tableHead');
+    function renderTable(dataList, exam, selectedSub) {
+      const headerRow = document.getElementById('tableHeaderRow');
       const tbody = document.getElementById('tableBody');
-      thead.innerHTML = '';
+      headerRow.innerHTML = '';
       tbody.innerHTML = '';
 
-      let activeSubjects = sub === "-- All Subject --" ? subjectsList : [sub];
+      // Header Construction (ONLY Roll sticky)
+      let headerHTML = `<th class="sticky-roll">Roll</th><th>Sec</th><th>Student Name</th>`;
+      let activeSubjects = selectedSub === "--All--" ? subjectsList : [selectedSub];
 
-      // Table Header Build
-      let trHead = document.createElement('tr');
-      trHead.innerHTML = `<th class="sticky-col">Roll</th><th class="sticky-col-name">Name</th><th>Sec</th>`;
-      activeSubjects.forEach(s => {
-        trHead.innerHTML += `<th>${s}</th>`;
+      activeSubjects.forEach(sub => {
+        headerHTML += `<th>${sub}</th>`;
       });
-      thead.appendChild(trHead);
+      headerRow.innerHTML = headerHTML;
 
-      // Table Rows Build
+      // Rows Construction
       dataList.forEach(row => {
-        let tr = document.createElement('tr');
-        tr.innerHTML = `<td class="sticky-col">${row.roll_no}</td><td class="sticky-col-name">${row.student_name}</td><td>${row.section}</td>`;
+        const tr = document.createElement('tr');
+        let rowHTML = `
+          <td class="sticky-roll">${row.roll_no}</td>
+          <td>${row.section}</td>
+          <td style="text-align:left; font-size:12px;">${row.student_name}</td>
+        `;
 
-        activeSubjects.forEach(s => {
-          const colName = columnMap[exam][s];
+        activeSubjects.forEach(sub => {
+          const colName = columnMap[exam][sub];
           const val = row[colName] !== null && row[colName] !== undefined ? row[colName] : '';
           
-          tr.innerHTML += `
+          rowHTML += `
             <td>
               <input type="number" 
                      pattern="[0-9]*"
@@ -254,6 +273,7 @@
                      class="mark-input"
                      value="${val}"
                      ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
+                     onclick="checkPasskeyPrompt(this)"
                      onfocus="this.select()"
                      onkeydown="handleKeyNavigation(event, this)"
                      onchange="saveMarks(${row.id}, '${colName}', this)"
@@ -261,11 +281,30 @@
             </td>
           `;
         });
+
+        tr.innerHTML = rowHTML;
         tbody.appendChild(tr);
       });
     }
 
+    function checkPasskeyPrompt(inputElem) {
+      if (!isEditAllowed) {
+        alert("⚠️ এডিট মুড বর্তমানে বন্ধ রয়েছে।");
+        return;
+      }
+      if (!currentPasskey) {
+        alert("⚠️ নম্বর এন্ট্রি করতে হলে প্রথমে সঠিক Passkey দিন!");
+        const pInput = document.getElementById('passkeyInput');
+        if (pInput) pInput.focus();
+      }
+    }
+
     async function saveMarks(rowId, colName, inputElem) {
+      if (!currentPasskey || !isEditAllowed) {
+        checkPasskeyPrompt(inputElem);
+        return;
+      }
+
       const exam = document.getElementById('examSelect').value;
       const maxLimit = columnMap[exam].limit;
       const val = inputElem.value.trim();
@@ -273,7 +312,7 @@
       if (val !== "") {
         const num = Number(val);
         if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
-          alert(`❌ ভুল নম্বর! নম্বর ০ থেকে ${maxLimit}-এর মধ্যে হতে হবে।`);
+          alert(`❌ ভুল নম্বর! নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
           inputElem.classList.add('save-error');
           inputElem.value = "";
           setTimeout(() => inputElem.classList.remove('save-error'), 1500);
@@ -283,6 +322,7 @@
 
       const marksVal = val === "" ? null : parseInt(val);
 
+      // Offline handling
       if (!navigator.onLine) {
         saveToLocalStorage(rowId, colName, marksVal);
         inputElem.classList.add('save-success');
@@ -299,26 +339,33 @@
           },
           body: JSON.stringify({
             p_passkey: currentPasskey,
-            p_id: rowId,
+            p_id: parseInt(rowId),
             p_column_name: colName,
             p_marks: marksVal
           })
         });
 
         const result = await res.json();
-        if (result.success) {
+        if (result && result.success) {
           inputElem.classList.add('save-success');
           setTimeout(() => inputElem.classList.remove('save-success'), 1000);
+          
+          // Update local memory rawData
+          const target = rawData.find(r => r.id === rowId);
+          if (target) target[colName] = marksVal;
         } else {
-          alert("❌ " + result.message);
+          alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
           inputElem.classList.add('save-error');
+          setTimeout(() => inputElem.classList.remove('save-error'), 1500);
         }
       } catch (err) {
+        console.error(err);
         saveToLocalStorage(rowId, colName, marksVal);
         inputElem.classList.add('save-success');
       }
     }
 
+    // Keyboard Arrow/Enter navigation
     function handleKeyNavigation(e, elem) {
       const inputs = Array.from(document.querySelectorAll('.mark-input:not([readonly])'));
       const index = inputs.indexOf(elem);
@@ -346,7 +393,7 @@
             await saveMarks(item.id, item.col, { value: item.val, classList: { add:()=>{}, remove:()=>{} } });
           }
           localStorage.removeItem('offline_marks_ix');
-          alert("🎉 অফলাইন ডাটা সফলভাবে অটো-সিঙ্ক হয়েছে!");
+          alert("🎉 অফলাইন এন্ট্রি করা নম্বরগুলি স্বয়ংক্রিয়ভাবে ডাটাবেজে সেভ হয়েছে!");
         }
       });
     }
