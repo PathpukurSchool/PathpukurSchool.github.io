@@ -70,8 +70,8 @@
 <body>
 
   <div class="header-container">
-    <h1><i class="fa-solid fa-school"></i> Pathpukur High School (HS)</h1>
-    <h2><i class="fa-solid fa-graduation-cap"></i> Marks Portal | Session: <span id="sessionDisplay">2026</span> | Class: IX</h2>
+    <h1>Pathpukur High School (HS)</h1>
+    <h2><i class="fa-solid fa-graduation-cap"></i> Marks Upload | Session: <span id="sessionDisplay">2026</span> | Class: IX</h2>
   </div>
 
   <div class="controls-panel">
@@ -109,13 +109,13 @@
       </div>
       <div class="form-group">
         <label><i class="fa-solid fa-magnifying-glass"></i> Search</label>
-        <input type="text" id="searchInput" class="form-control" placeholder="Name/Roll..." oninput="applyFilters()">
+        <input type="text" id="searchInput" class="form-control" placeholder="Name / Roll..." oninput="applyFilters()">
       </div>
     </div>
   </div>
 
   <div class="status-bar">
-    <div><i class="fa-solid fa-circle-info"></i> Limit: <span id="limitDisplay" style="color:#d97706; font-weight: bold;">0-40</span></div>
+    <div><i class="fa-solid fa-circle-info"></i> Marks Limit: <span id="limitDisplay" style="color:#d97706; font-weight: bold;">0-40</span></div>
     <div id="securityStatus"></div>
   </div>
 
@@ -168,7 +168,6 @@
       clearTimeout(inactivityTimer);
       inactivityTimer = setTimeout(() => {
         currentPasskey = "";
-        alert("🔒 ১৫ মিনিট ইনঅ্যাক্টিভ থাকায় এডিট মুড লক করা হলো।");
         checkSecurityStatus();
         applyFilters();
       }, 15 * 60 * 1000);
@@ -195,12 +194,12 @@
                   <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey...">
                   <i class="fa-solid fa-eye" id="togglePassEye" onclick="togglePassVisibility()"></i>
                 </div>
-                <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i></button>
+                <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key" Verify></i></button>
               </div>`;
           }
         } else {
           isEditAllowed = false;
-          secDiv.innerHTML = `<span class="edit-status-badge edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড বন্ধ</span>`;
+          secDiv.innerHTML = `<span class="edit-status-badge edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড অফ</span>`;
         }
       } catch (err) { console.error(err); }
     }
@@ -222,7 +221,7 @@
       const inputPass = inputElem ? inputElem.value.trim() : '';
       
       if (!inputPass) {
-        alert("⚠️ পাসকি লিখুন!");
+        alert("⚠️ সঠিক পাসকি লিখুন!");
         if(inputElem) inputElem.focus();
         return;
       }
@@ -273,7 +272,7 @@
       document.getElementById('limitDisplay').textContent = `0-${limit}`;
       
       // টেবিল লোড শেষ হলে ফিল্টার তথ্য আপডেট
-      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> IX - ${sec} : 2026 | ${exam} : ${sub}`;
+      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> IX ${sec} : 2026 | ${exam} : ${sub}`;
 
       let filtered = rawData.filter(item => {
         const matchesSec = (sec === "--All--" || item.section === sec);
@@ -341,7 +340,7 @@
         return;
       }
       if (!currentPasskey) {
-        alert("⚠️ নম্বর এন্ট্রি করতে হলে প্রথমে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
+        alert("⚠️ নম্বর এন্ট্রি করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
         const pInput = document.getElementById('passkeyInput');
         if (pInput) pInput.focus();
       }
@@ -361,7 +360,7 @@
       if (val !== "") {
         const num = Number(val);
         if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
-          alert(`❌ নম্বর ০ থেকে ${maxLimit}-এর মধ্যে পূর্ণসংখ্যা হতে হবে।`);
+          alert(`❌ নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
           inputElem.classList.add('save-error');
           inputElem.value = "";
           setTimeout(() => inputElem.classList.remove('save-error'), 1500);
@@ -398,7 +397,7 @@
           const target = rawData.find(r => r.id === rowId);
           if (target) target[colName] = marksVal;
         } else {
-          alert("❌ " + (result.message || "সেভ হতে ব্যর্থ হয়েছে!"));
+          alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
           inputElem.classList.add('save-error');
           setTimeout(() => inputElem.classList.remove('save-error'), 1500);
         }
@@ -435,7 +434,7 @@
             await saveMarks(item.id, item.col, { value: item.val, classList: { add:()=>{}, remove:()=>{} } });
           }
           localStorage.removeItem('offline_marks_ix');
-          alert("🎉 অফলাইন ডাটা সেভ সম্পূর্ণ হয়েছে!");
+          alert("🎉 অফলাইন ডাটা সেভ সম্পন্ন হয়েছে!");
         }
       });
     }
