@@ -3,63 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pathpukur High School (HS) - Class IX Marks Portal</title>
+  <title>Pathpukur High School (HS) - Marks Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     * { box-sizing: border-box; font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
-    body { margin: 0; background: #f1f5f9; color: #1e293b; }
+    body { margin: 0; background: #f8fafc; color: #0f172a; }
     
-    .header-container { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff; padding: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-    .header-container h1 { margin: 0; font-size: 19px; letter-spacing: 0.5px; }
-    .header-container h2 { margin: 4px 0 0; font-size: 13px; font-weight: 400; color: #93c5fd; }
+    .header-container { background: linear-gradient(135deg, #1e3a8a, #1e40af); color: #fff; padding: 12px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .header-container h1 { margin: 0; font-size: 19px; }
+    .header-container h2 { margin: 4px 0 0; font-size: 13px; font-weight: 400; color: #bfdbfe; }
     
-    .controls-panel { background: #fff; padding: 10px; border-bottom: 2px solid #cbd5e1; }
+    .controls-panel { background: #fff; padding: 10px; border-bottom: 2px solid #e2e8f0; }
     .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 3px; color: #334155; }
-    .form-group label i { color: #2563eb; margin-right: 3px; }
-    .form-control { width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; outline: none; background: #f8fafc; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 3px; color: #475569; }
+    .form-control { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; outline: none; background: #f8fafc; }
     .form-control:focus { border-color: #2563eb; background: #fff; }
 
     .status-bar { display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #0369a1; }
-    .edit-off-badge { color: #dc2626; animation: blink 1.2s infinite; font-weight: bold; background: #fee2e2; padding: 3px 8px; border-radius: 4px; border: 1px solid #fca5a5; }
+    .edit-off-badge { color: #dc2626; animation: blink 1.2s infinite; font-weight: bold; background: #fee2e2; padding: 4px 8px; border-radius: 4px; border: 1px solid #fca5a5; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     
-    .active-info { background: #fef3c7; color: #92400e; padding: 6px 12px; font-size: 12px; font-weight: bold; border-left: 4px solid #f59e0b; }
+    .active-info { background: #fffbebf5; color: #b45309; padding: 8px 12px; font-size: 13px; font-weight: bold; border-left: 4px solid #f59e0b; border-bottom: 1px solid #fef3c7; }
     
-    /* Responsive Table Styles */
+    /* Responsive Sticky Table Container */
     .table-container { max-height: calc(100vh - 240px); overflow: auto; background: #fff; }
     table { width: 100%; border-collapse: separate; border-spacing: 0; }
-    th, td { border-bottom: 1px solid #cbd5e1; border-right: 1px solid #cbd5e1; padding: 6px 4px; text-align: center; font-size: 12px; white-space: nowrap; }
+    th, td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 5px; text-align: center; font-size: 12px; white-space: nowrap; }
     
-    /* Fixed Top Row & Fixed Left Roll Column */
-    thead th { position: sticky; top: 0; background: #1e293b; color: #fff; z-index: 10; font-size: 11px; }
-    th.sticky-col, td.sticky-col { position: sticky; left: 0; z-index: 5; background: #334155; color: #fff; font-weight: bold; min-width: 45px; }
+    /* Sticky Top Header */
+    thead th { position: sticky; top: 0; background: #1e293b; color: #fff; z-index: 10; font-weight: 600; }
+    /* Sticky Left Roll & Name Column */
+    th.sticky-col, td.sticky-col { position: sticky; left: 0; z-index: 5; background: #334155; color: #fff; font-weight: bold; }
     thead th.sticky-col { z-index: 15; background: #0f172a; }
+    td.sticky-col-name { position: sticky; left: 45px; z-index: 5; background: #f1f5f9; color: #0f172a; text-align: left; font-weight: 600; }
+    thead th.sticky-col-name { position: sticky; left: 45px; z-index: 15; background: #1e293b; }
 
-    .mark-input { width: 50px; text-align: center; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; font-weight: bold; outline: none; }
-    .mark-input:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.25); background: #eff6ff; }
+    .mark-input { width: 55px; text-align: center; padding: 5px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; font-weight: bold; outline: none; }
+    .mark-input:focus { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
     .mark-input[readonly] { background: #f8fafc; color: #64748b; border-color: transparent; }
     
-    .save-success { background: #dcfce7 !important; border-color: #22c55e !important; transition: background 0.5s; }
-    .save-error { background: #fee2e2 !important; border-color: #ef4444 !important; }
+    .save-success { background: #dcfce7 !important; border-color: #22c55e !important; transition: background 0.4s; }
+    .save-error { background: #fee2e2 !important; border-color: #ef4444 !important; animation: shake 0.2s; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
     
     .passkey-bar { display: flex; gap: 6px; align-items: center; }
+    .btn-unlock { background: #2563eb; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+    .btn-unlock:hover { background: #1d4ed8; }
   </style>
 </head>
 <body>
 
   <div class="header-container">
     <h1><i class="fa-solid fa-school"></i> Pathpukur High School (HS)</h1>
-    <h2>Marks Upload Portal | Session: <span id="sessionDisplay">2026</span> | Class: IX</h2>
+    <h2><i class="fa-solid fa-pen-to-square"></i> Class IX Marks Portal | Session: <span id="sessionDisplay">2026</span></h2>
   </div>
 
   <div class="controls-panel">
     <div class="filter-grid">
-      <!-- Exam Dropdown -->
       <div class="form-group">
-        <label><i class="fa-solid fa-file-pen"></i> Exam</label>
+        <label><i class="fa-solid fa-file-signature"></i> Exam</label>
         <select id="examSelect" class="form-control" onchange="applyFilters()">
           <option value="1st Exam">1st Exam</option>
           <option value="2nd Exam">2nd Exam</option>
@@ -67,8 +71,6 @@
           <option value="Project">Project</option>
         </select>
       </div>
-
-      <!-- Section Dropdown -->
       <div class="form-group">
         <label><i class="fa-solid fa-users-rectangle"></i> Section</label>
         <select id="sectionSelect" class="form-control" onchange="applyFilters()">
@@ -78,12 +80,10 @@
           <option value="C">C</option>
         </select>
       </div>
-
-      <!-- Subject Dropdown -->
       <div class="form-group">
-        <label><i class="fa-solid fa-book-open"></i> Subject</label>
+        <label><i class="fa-solid fa-book"></i> Subject</label>
         <select id="subjectSelect" class="form-control" onchange="applyFilters()">
-          <option value="--All Subject--">--All Subject--</option>
+          <option value="-- All Subject --">-- All Subject --</option>
           <option value="Bengali">Bengali</option>
           <option value="English">English</option>
           <option value="Math">Math</option>
@@ -93,8 +93,6 @@
           <option value="Geography">Geography</option>
         </select>
       </div>
-
-      <!-- Search Box -->
       <div class="form-group">
         <label><i class="fa-solid fa-magnifying-glass"></i> Search</label>
         <input type="text" id="searchInput" class="form-control" placeholder="Name or Roll..." oninput="applyFilters()">
@@ -105,7 +103,7 @@
   <div class="status-bar">
     <div><i class="fa-solid fa-gauge-high"></i> Limit: <span id="limitDisplay" style="color:#d97706;">0-40</span></div>
     <div id="securityStatus">
-      <!-- Passkey/Status Badge -->
+      <i class="fa-solid fa-spinner fa-spin"></i> লোড হচ্ছে...
     </div>
   </div>
 
@@ -119,7 +117,7 @@
         <!-- Dynamic Header -->
       </thead>
       <tbody id="tableBody">
-        <!-- Dynamic Data -->
+        <!-- Dynamic Rows -->
       </tbody>
     </table>
   </div>
@@ -146,17 +144,20 @@
       await checkSecurityStatus();
       await fetchMarksData();
       resetInactivityTimer();
+      setupOfflineSync();
     };
 
-    ['mousemove', 'keydown', 'touchstart'].forEach(evt => window.addEventListener(evt, resetInactivityTimer));
+    ['mousemove', 'keydown', 'touchstart'].forEach(evt => {
+      window.addEventListener(evt, resetInactivityTimer);
+    });
 
     function resetInactivityTimer() {
       clearTimeout(inactivityTimer);
       if (currentPasskey) {
         inactivityTimer = setTimeout(() => {
           currentPasskey = "";
-          alert("১৫ মিনিট ইনঅ্যাক্টিভ থাকার কারণে পাসকি সেশন শেষ হয়েছে।");
-          renderTable();
+          alert("🔒 ১৫ মিনিট নিষ্ক্রিয় থাকার কারণে এডিট মুড স্বয়ংক্রিয়ভাবে বন্ধ করা হলো।");
+          applyFilters();
         }, 15 * 60 * 1000);
       }
     }
@@ -169,12 +170,12 @@
         const data = await res.json();
         const secDiv = document.getElementById('securityStatus');
 
-        if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
+        if (data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
           isEditAllowed = true;
           secDiv.innerHTML = `
             <div class="passkey-bar">
-              <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." style="width:90px;">
-              <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto;"><i class="fa-solid fa-key"></i></button>
+              <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." style="width:90px; padding:4px;">
+              <button onclick="unlockEdit()" class="btn-unlock"><i class="fa-solid fa-key"></i></button>
             </div>`;
         } else {
           isEditAllowed = false;
@@ -185,10 +186,10 @@
 
     function unlockEdit() {
       const input = document.getElementById('passkeyInput').value.trim();
-      if (!input) return alert("পাসকি লিখুন!");
+      if (!input) return alert("পাসকি প্রদান করুন!");
       currentPasskey = input;
-      alert("এডিট মুড সক্রিয় হয়েছে!");
-      renderTable();
+      alert("🔓 এডিট মুড আনলক হয়েছে (১৫ মিনিটের জন্য)");
+      applyFilters();
     }
 
     async function fetchMarksData() {
@@ -207,7 +208,8 @@
       const sub = document.getElementById('subjectSelect').value;
       const search = document.getElementById('searchInput').value.toLowerCase();
 
-      document.getElementById('limitDisplay').textContent = `0-${columnMap[exam].limit}`;
+      const limit = columnMap[exam].limit;
+      document.getElementById('limitDisplay').textContent = `0-${limit}`;
       document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-circle-info"></i> IX - ${sec} : 2026 | ${exam} : ${sub}`;
 
       let filtered = rawData.filter(item => {
@@ -216,33 +218,35 @@
         return matchesSec && matchesSearch;
       });
 
-      renderTable(filtered);
+      renderTable(filtered, exam, sub);
     }
 
-    function renderTable(dataList = rawData) {
-      const exam = document.getElementById('examSelect').value;
-      const subSelect = document.getElementById('subjectSelect').value;
+    function renderTable(dataList, exam, sub) {
       const thead = document.getElementById('tableHead');
       const tbody = document.getElementById('tableBody');
-      
-      let activeSubjects = subSelect === "--All Subject--" ? subjectsList : [subSelect];
-
-      // Build Table Header
-      let headerHTML = `<tr><th class="sticky-col">Roll</th><th>Sec</th><th>Student Name</th>`;
-      activeSubjects.forEach(s => headerHTML += `<th>${s}</th>`);
-      headerHTML += `</tr>`;
-      thead.innerHTML = headerHTML;
-
-      // Build Table Body
+      thead.innerHTML = '';
       tbody.innerHTML = '';
+
+      let activeSubjects = sub === "-- All Subject --" ? subjectsList : [sub];
+
+      // Table Header Build
+      let trHead = document.createElement('tr');
+      trHead.innerHTML = `<th class="sticky-col">Roll</th><th class="sticky-col-name">Name</th><th>Sec</th>`;
+      activeSubjects.forEach(s => {
+        trHead.innerHTML += `<th>${s}</th>`;
+      });
+      thead.appendChild(trHead);
+
+      // Table Rows Build
       dataList.forEach(row => {
-        const tr = document.createElement('tr');
-        let rowHTML = `<td class="sticky-col">${row.roll_no}</td><td>${row.section}</td><td style="text-align:left;">${row.student_name}</td>`;
-        
+        let tr = document.createElement('tr');
+        tr.innerHTML = `<td class="sticky-col">${row.roll_no}</td><td class="sticky-col-name">${row.student_name}</td><td>${row.section}</td>`;
+
         activeSubjects.forEach(s => {
           const colName = columnMap[exam][s];
           const val = row[colName] !== null && row[colName] !== undefined ? row[colName] : '';
-          rowHTML += `
+          
+          tr.innerHTML += `
             <td>
               <input type="number" 
                      pattern="[0-9]*"
@@ -254,9 +258,9 @@
                      onkeydown="handleKeyNavigation(event, this)"
                      onchange="saveMarks(${row.id}, '${colName}', this)"
               />
-            </td>`;
+            </td>
+          `;
         });
-        tr.innerHTML = rowHTML;
         tbody.appendChild(tr);
       });
     }
@@ -269,7 +273,7 @@
       if (val !== "") {
         const num = Number(val);
         if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
-          alert(`ভুল নম্বর! নম্বর ০ থেকে ${maxLimit}-এর মধ্যে হতে হবে।`);
+          alert(`❌ ভুল নম্বর! নম্বর ০ থেকে ${maxLimit}-এর মধ্যে হতে হবে।`);
           inputElem.classList.add('save-error');
           inputElem.value = "";
           setTimeout(() => inputElem.classList.remove('save-error'), 1500);
@@ -278,6 +282,12 @@
       }
 
       const marksVal = val === "" ? null : parseInt(val);
+
+      if (!navigator.onLine) {
+        saveToLocalStorage(rowId, colName, marksVal);
+        inputElem.classList.add('save-success');
+        return;
+      }
 
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
@@ -300,12 +310,12 @@
           inputElem.classList.add('save-success');
           setTimeout(() => inputElem.classList.remove('save-success'), 1000);
         } else {
-          alert(result.message);
+          alert("❌ " + result.message);
           inputElem.classList.add('save-error');
         }
       } catch (err) {
-        alert("নেটওয়ার্ক সমস্যা! নম্বর সেভ হয়নি।");
-        inputElem.classList.add('save-error');
+        saveToLocalStorage(rowId, colName, marksVal);
+        inputElem.classList.add('save-success');
       }
     }
 
@@ -320,6 +330,25 @@
         e.preventDefault();
         if (index - 1 >= 0) inputs[index - 1].focus();
       }
+    }
+
+    function saveToLocalStorage(id, col, val) {
+      let draft = JSON.parse(localStorage.getItem('offline_marks_ix') || '[]');
+      draft.push({ id, col, val });
+      localStorage.setItem('offline_marks_ix', JSON.stringify(draft));
+    }
+
+    function setupOfflineSync() {
+      window.addEventListener('online', async () => {
+        let draft = JSON.parse(localStorage.getItem('offline_marks_ix') || '[]');
+        if (draft.length > 0 && currentPasskey) {
+          for (let item of draft) {
+            await saveMarks(item.id, item.col, { value: item.val, classList: { add:()=>{}, remove:()=>{} } });
+          }
+          localStorage.removeItem('offline_marks_ix');
+          alert("🎉 অফলাইন ডাটা সফলভাবে অটো-সিঙ্ক হয়েছে!");
+        }
+      });
     }
   </script>
 </body>
