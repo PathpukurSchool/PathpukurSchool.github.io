@@ -216,7 +216,7 @@
 
     <!-- বিবরণ -->
     <div class="description-box">
-      <p><i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> এক্সেল ফাইল ডাউনলোডের জন্য কোনো পাসকীর প্রয়োজন নেই। তবে ডাটাবেজে ফাইল আপলোড বা আপডেট করার জন্য সঠিক <strong>পাসকী (Passkey)</strong> দেওয়া বাধ্যতামূলক এবং সিস্টেমে <strong>এডিট মোড অন (Edit Mode True)</strong> থাকতে হবে।</p>
+      <p><i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> এক্সেল ফাইল ডাউনলোডের জন্য কোনো পাসকীর প্রয়োজন নেই। তবে ডাটাবেজে ফাইল আপলোড বা আপডেট করার জন্য সঠিক <strong>পাসকী (Passkey)</strong> দেওয়া বাধ্যতামূলক এবং সিস্টেমে <strong>এডিট মোড অন (Edit Mode True)</strong> থাকতে হবে।</p>
     </div>
 
     <!-- ফরম বডি -->
@@ -305,7 +305,7 @@
       }
     }
 
-    // --- ১. কোনো পাসকী ছাড়াই এক্সেল ডাউনলোড ---
+    // --- ১. কোনো পাসকী ছাড়াই এক্সেল ডাউনলোড ---
     async function downloadExcel() {
       const selectedClass = document.getElementById('classSelect').value;
       if (!selectedClass) {
@@ -325,7 +325,7 @@
           }
         });
 
-        if (!response.ok) throw new Error("ডাটা ফেচ করতে সমস্যা হয়েছে!");
+        if (!response.ok) throw new Error("ডাটা ফেচ করতে সমস্যা হয়েছে!");
         const data = await response.json();
 
         if (!data || data.length === 0) {
@@ -340,10 +340,10 @@
         const fileName = `Result_Class_${selectedClass.toUpperCase()}_2026.xlsx`;
         XLSX.writeFile(workbook, fileName);
 
-        showStatus(`সফলভাবে ${fileName} ফাইলটি ডাউনলোড হয়েছে!`, "success");
+        showStatus(`সফলভাবে ${fileName} ফাইলটি ডাউনলোড হয়েছে!`, "success");
 
       } catch (error) {
-        showStatus("ডাটা ডাউনলোডে সমস্যা হয়েছে। ইন্টারনেট কানেকশন বা টেবিল নাম যাচাই করুন।", "error");
+        showStatus("ডাটা ডাউনলোডে সমস্যা হয়েছে। ইন্টারনেট কানেকশন বা টেবিল নাম যাচাই করুন।", "error");
       }
     }
 
@@ -379,7 +379,7 @@
           }
         });
 
-        if (!settingsResponse.ok) throw new Error("সিকিউরিটি সেটিংস চেক করতে সমস্যা হয়েছে!");
+        if (!settingsResponse.ok) throw new Error("সিকিউরিটি সেটিংস চেক করতে সমস্যা হয়েছে!");
 
         const settingsData = await settingsResponse.json();
 
@@ -390,14 +390,14 @@
 
         const pageConfig = settingsData[0];
 
-        // ক) Edit Mode জ্যাচাই
+        // ক) Edit Mode যাচাই
         if (pageConfig.edit_mode !== true) {
           showStatus("বর্তমানে ফাইল আপলোড বা এডিট করার সুবিধাটি বন্ধ রয়েছে (Edit Mode Disabled)!", "error");
           return;
         }
 
-        // খ) Passkey যাচাই
-        if (pageConfig.passkey !== userPasskey) {
+        // খ) Passkey সঠিকতা নিশ্চিত করা (String Conversion + Trim)
+        if (String(pageConfig.passkey).trim() !== userPasskey) {
           showStatus("আপনার দেওয়া পাসকীটি ভুল! সঠিক পাসকী দিয়ে চেষ্টা করুন।", "error");
           return;
         }
