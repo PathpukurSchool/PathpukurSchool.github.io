@@ -17,12 +17,20 @@
     .header-container h2 { margin: 4px 0 0; font-size: 13px; font-weight: 400; color: #93c5fd; }
     
     .controls-panel { background: #fff; padding: 10px; border-bottom: 2px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; align-items: end; }
     .form-group label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px; }
     .form-group label i { margin-right: 4px; color: #2563eb; }
     .form-control { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #fff; }
     .form-control:focus { border-color: #2563eb; }
     
+    /* Micro Summary Table CSS */
+    .summary-card { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 6px; }
+    .summary-header { display: flex; justify-content: space-between; align-items: center; font-size: 10px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
+    .summary-table { width: 100%; border-collapse: collapse; font-family: 'Poppins', sans-serif; }
+    .summary-table th, .summary-table td { border: 1px solid #94a3b8; padding: 1px 2px; text-align: center; font-size: 10px; line-height: 1.1; }
+    .summary-table th { background: #334155; color: #fff; font-weight: 600; }
+    .summary-table td { background: #fff; font-weight: 700; color: #2563eb; }
+
     .status-bar { display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #0369a1; border-bottom: 1px solid #bae6fd; }
     
     /* Edit Mode Dynamic Badges */
@@ -33,7 +41,7 @@
     .active-info { background: #fef3c7; color: #92400e; padding: 8px 12px; font-size: 12px; font-weight: 700; border-left: 4px solid #f59e0b; }
     
     /* Sticky Top Header & Scroll Setup */
-    .table-container { width: 100%; max-height: calc(100vh - 200px); overflow: auto; background: #fff; position: relative; }
+    .table-container { width: 100%; max-height: calc(100vh - 240px); overflow: auto; background: #fff; position: relative; }
     table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 500px; }
     th, td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 6px 4px; text-align: center; font-size: 13px; }
     
@@ -107,10 +115,44 @@
           <option value="Geography">Geography</option>
         </select>
       </div>
+
       <div class="form-group">
         <label><i class="fa-solid fa-magnifying-glass"></i> Search</label>
         <input type="text" id="searchInput" class="form-control" placeholder="Name / Roll..." oninput="applyFilters()">
       </div>
+
+      <!-- Third Input Box-এর ঠিক পরেই অতি সংক্ষিপ্ত মার্কস স্ট্যাটাস টেবিল -->
+      <div class="summary-card">
+        <div class="summary-header">
+          <span><i class="fa-solid fa-chart-simple"></i> Marks Status</span>
+          <span>Total Student: <strong id="totalStudentCount" style="color:#2563eb;">0</strong></span>
+        </div>
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>BEN</th>
+              <th>ENG</th>
+              <th>MTH</th>
+              <th>PSC</th>
+              <th>LSC</th>
+              <th>HIS</th>
+              <th>GEO</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="stat-BEN">0</td>
+              <td id="stat-ENG">0</td>
+              <td id="stat-MTH">0</td>
+              <td id="stat-PSC">0</td>
+              <td id="stat-LSC">0</td>
+              <td id="stat-HIS">0</td>
+              <td id="stat-GEO">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 
@@ -150,6 +192,16 @@
       "Project":  { "Bengali":"proj_bengali", "English":"proj_english", "Math":"proj_math", "Physical Science":"proj_physical_science", "Life Science":"proj_life_science", "History":"proj_history", "Geography":"proj_geography", limit: 30 }
     };
 
+    const shortSubCodes = {
+      "Bengali": "BEN",
+      "English": "ENG",
+      "Math": "MTH",
+      "Physical Science": "PSC",
+      "Life Science": "LSC",
+      "History": "HIS",
+      "Geography": "GEO"
+    };
+
     window.onload = async () => {
       await checkSecurityStatus();
       await fetchMarksData();
@@ -186,7 +238,7 @@
         if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
           isEditAllowed = true;
           if (currentPasskey) {
-            secDiv.innerHTML = `<span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>`;
+            secDiv.innerHTML = `<span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>`;
           } else {
             secDiv.innerHTML = `
               <div class="passkey-bar">
@@ -237,13 +289,13 @@
 
         if (result && result.success) {
           currentPasskey = inputPass;
-          checkSecurityStatus(); // আপডেট ব্যাজ
-          alert("🔓 পাসকি সঠিক! এডিট মুড সক্রিয় হয়েছে।");
+          checkSecurityStatus();
+          alert("🔓 পাসকি সঠিক! এডিট মুড সক্রিয় হয়েছে।");
           resetInactivityTimer();
           applyFilters();
         } else {
           currentPasskey = "";
-          alert("❌ " + (result.message || "ভুল পাসকি দেওয়া হয়েছে!"));
+          alert("❌ " + (result.message || "ভুল পাসকি দেওয়া হয়েছে!"));
           if(inputElem) { inputElem.value = ""; inputElem.focus(); }
         }
       } catch (err) {
@@ -251,7 +303,6 @@
       }
     }
 
-    // দ্রুত ডাটা ফেচিং
     async function fetchMarksData() {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/result_ix?select=*&order=section.asc,roll_no.asc`, {
@@ -271,23 +322,38 @@
       const limit = columnMap[exam].limit;
       document.getElementById('limitDisplay').textContent = `0-${limit}`;
       
-      // টেবিল লোড শেষ হলে ফিল্টার তথ্য আপডেট
       document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> IX ${sec} : 2026 | ${exam} : ${sub}`;
 
-      let filtered = rawData.filter(item => {
-        const matchesSec = (sec === "--All--" || item.section === sec);
-        const matchesSearch = item.student_name.toLowerCase().includes(search) || String(item.roll_no).includes(search);
-        return matchesSec && matchesSearch;
+      // সেকশন অনুযায়ী ফিল্টার করা ডাটা (স্ট্যাটাস গণনার জন্য)
+      let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
+
+      // মার্কস আপলোড স্ট্যাটাস হিসেব করা
+      updateSummaryTable(sectionFiltered, exam);
+
+      let filtered = sectionFiltered.filter(item => {
+        return item.student_name.toLowerCase().includes(search) || String(item.roll_no).includes(search);
       });
 
       renderTable(filtered, exam, sub);
+    }
+
+    // স্ট্যাটাস সামারি টেবিল আপডেট ফাংশন
+    function updateSummaryTable(dataset, exam) {
+      document.getElementById('totalStudentCount').textContent = dataset.length;
+
+      subjectsList.forEach(sub => {
+        const colName = columnMap[exam][sub];
+        const count = dataset.filter(r => r[colName] !== null && r[colName] !== undefined && r[colName] !== '').length;
+        const code = shortSubCodes[sub];
+        const tdElem = document.getElementById(`stat-${code}`);
+        if (tdElem) tdElem.textContent = count;
+      });
     }
 
     function renderTable(dataList, exam, selectedSub) {
       const headerRow = document.getElementById('tableHeaderRow');
       const tbody = document.getElementById('tableBody');
       
-      // সিঙ্গেল সাবজেক্ট সিলেক্ট করলে সরাসরি রোলের পরে সাবজেক্ট
       let isSingleSub = (selectedSub !== "--All--");
       let activeSubjects = isSingleSub ? [selectedSub] : subjectsList;
 
@@ -302,7 +368,6 @@
       
       headerRow.innerHTML = headerHTML;
 
-      // Fast Performance DOM Fragment Construction
       let rowsHTML = "";
       dataList.forEach(row => {
         let cellsHTML = `<td class="sticky-roll">${row.roll_no}</td>`;
@@ -340,13 +405,12 @@
         return;
       }
       if (!currentPasskey) {
-        alert("⚠️ নম্বর এন্ট্রি করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
+        alert("⚠️ নম্বর এন্ট্রি করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
         const pInput = document.getElementById('passkeyInput');
         if (pInput) pInput.focus();
       }
     }
 
-    // ১০০% গ্যারান্টিসহ ডাটা সেভ ফাংশন
     async function saveMarks(rowId, colName, inputElem) {
       if (!currentPasskey || !isEditAllowed) {
         checkPasskeyPrompt(inputElem);
@@ -393,11 +457,13 @@
           inputElem.classList.add('save-success');
           setTimeout(() => inputElem.classList.remove('save-success'), 1000);
           
-          // আপডেট লোকাল র-ডাটা ম্যামোরি
           const target = rawData.find(r => r.id === rowId);
           if (target) target[colName] = marksVal;
+          
+          // নম্বর সেভ হলে সামারি স্ট্যাটাসও আপডেট হবে
+          applyFilters();
         } else {
-          alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
+          alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
           inputElem.classList.add('save-error');
           setTimeout(() => inputElem.classList.remove('save-error'), 1500);
         }
@@ -434,7 +500,7 @@
             await saveMarks(item.id, item.col, { value: item.val, classList: { add:()=>{}, remove:()=>{} } });
           }
           localStorage.removeItem('offline_marks_ix');
-          alert("🎉 অফলাইন ডাটা সেভ সম্পন্ন হয়েছে!");
+          alert("🎉 অফলাইন ডাটা সেভ সম্পন্ন হয়েছে!");
         }
       });
     }
