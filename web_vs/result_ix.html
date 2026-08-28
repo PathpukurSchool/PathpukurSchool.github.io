@@ -24,7 +24,7 @@
     .form-control:focus { border-color: #2563eb; }
     
     /* Micro Summary Table CSS */
-    .summary-card { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 6px; width: fit-content; max-width: 100%; overflow-x: auto; }
+    .summary-card { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; width: fit-content; max-width: 100%; overflow-x: auto; }
     .summary-header { display: flex; justify-content: space-between; align-items: center; font-size: 10px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
     .summary-table { width: auto; table-layout: fixed; border-collapse: collapse; font-family: 'Poppins', sans-serif; }
     .summary-table th, .summary-table td { border: 1px solid #94a3b8; padding: 2px 3px; text-align: center; font-size: 10px; line-height: 1.1; word-break: break-all; min-width: 22px; }
@@ -121,7 +121,6 @@
         <input type="text" id="searchInput" class="form-control" placeholder="Name / Roll..." oninput="applyFilters()">
       </div>
     </div>
-  </div>
 
       <!-- সংক্ষিপ্ত মার্কস স্ট্যাটাস টেবিল -->
       <div class="summary-card">
@@ -154,6 +153,7 @@
           </tbody>
         </table>
       </div>
+</div>
 
   <div class="status-bar">
     <div><i class="fa-solid fa-circle-info"></i> Marks Limit: <span id="limitDisplay" style="color:#d97706; font-weight: bold;">0-40</span></div>
