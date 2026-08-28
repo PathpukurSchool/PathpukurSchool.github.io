@@ -411,67 +411,70 @@
     }
 
     async function saveMarks(rowId, colName, inputElem) {
-      if (!currentPasskey || !isEditAllowed) {
-        checkPasskeyPrompt(inputElem);
+    if (!currentPasskey || !isEditAllowed) {
+      checkPasskeyPrompt(inputElem);
+      return;
+    }
+
+    const exam = document.getElementById('examSelect').value;
+    const maxLimit = columnMap[exam].limit;
+    const val = inputElem.value.trim();
+
+    if (val !== "") {
+      const num = Number(val);
+      if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
+        alert(`❌ নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
+        inputElem.classList.add('save-error');
+        inputElem.value = "";
+        setTimeout(() => inputElem.classList.remove('save-error'), 1500);
         return;
-      }
-
-      const exam = document.getElementById('examSelect').value;
-      const maxLimit = columnMap[exam].limit;
-      const val = inputElem.value.trim();
-
-      if (val !== "") {
-        const num = Number(val);
-        if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
-          alert(`❌ নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
-          inputElem.classList.add('save-error');
-          inputElem.value = "";
-          setTimeout(() => inputElem.classList.remove('save-error'), 1500);
-          return;
-        }
-      }
-
-      const marksVal = val === "" ? null : parseInt(val);
-
-      if (!navigator.onLine) {
-        saveToLocalStorage(rowId, colName, marksVal);
-        inputElem.classList.add('save-success');
-        return;
-      }
-
-      try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
-          method: 'POST',
-          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            p_passkey: currentPasskey,
-            p_id: parseInt(rowId),
-            p_column_name: colName,
-            p_marks: marksVal
-          })
-        });
-
-        const result = await res.json();
-        if (result && result.success) {
-          inputElem.classList.add('save-success');
-          setTimeout(() => inputElem.classList.remove('save-success'), 1000);
-          
-          const target = rawData.find(r => r.id === rowId);
-          if (target) target[colName] = marksVal;
-          
-          // নম্বর সেভ হলে সামারি স্ট্যাটাসও আপডেট হবে
-          applyFilters();
-        } else {
-          alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
-          inputElem.classList.add('save-error');
-          setTimeout(() => inputElem.classList.remove('save-error'), 1500);
-        }
-      } catch (err) {
-        saveToLocalStorage(rowId, colName, marksVal);
-        inputElem.classList.add('save-success');
       }
     }
 
+    const marksVal = val === "" ? null : parseInt(val);
+
+    // ১. লোকাল অবজেক্ট আপডেট
+    const target = rawData.find(r => r.id === rowId);
+    if (target) target[colName] = marksVal;
+
+    // ২. শুধু স্ট্যাটাস সামারি আপডেট করা (পুরো টেবিল না ছুয়ে)
+    const sec = document.getElementById('sectionSelect').value;
+    let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
+    updateSummaryTable(sectionFiltered, exam);
+
+    if (!navigator.onLine) {
+      saveToLocalStorage(rowId, colName, marksVal);
+      inputElem.classList.add('save-success');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          p_passkey: currentPasskey,
+          p_id: parseInt(rowId),
+          p_column_name: colName,
+          p_marks: marksVal
+        })
+      });
+
+      const result = await res.json();
+      if (result && result.success) {
+        inputElem.classList.add('save-success');
+        setTimeout(() => inputElem.classList.remove('save-success'), 1000);
+      } else {
+        alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
+        inputElem.classList.add('save-error');
+        setTimeout(() => inputElem.classList.remove('save-error'), 1500);
+      }
+      } catch (err) {
+      saveToLocalStorage(rowId, colName, marksVal);
+      inputElem.classList.add('save-success');
+    }
+  }
+      
     function handleKeyNavigation(e, elem) {
       const inputs = Array.from(document.querySelectorAll('.mark-input:not([readonly])'));
       const index = inputs.indexOf(elem);
