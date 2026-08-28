@@ -66,6 +66,7 @@
     .mark-input[readonly] { background: #f8fafc; color: #64748b; border-color: #e2e8f0; cursor: pointer; }
     
     .save-success { background: #dcfce7 !important; border-color: #22c55e !important; transition: background 0.4s; }
+    .save-offline { background: #fef08a !important; border-color: #eab308 !important; } /* অফলাইনে লোকাল সেভ বোঝা যাবে */
     .save-error { background: #fee2e2 !important; border-color: #ef4444 !important; }
     
     /* Passkey Field with Eye Icon */
@@ -153,7 +154,7 @@
           </tbody>
         </table>
       </div>
-</div>
+  </div>
 
   <div class="status-bar">
     <div><i class="fa-solid fa-circle-info"></i> Marks Limit: <span id="limitDisplay" style="color:#d97706; font-weight: bold;">0-40</span></div>
@@ -192,13 +193,9 @@
     };
 
     const shortSubCodes = {
-      "Bengali": "BEN",
-      "English": "ENG",
-      "Math": "MTH",
-      "Physical Science": "PSC",
-      "Life Science": "LSC",
-      "History": "HIS",
-      "Geography": "GEO"
+      "Bengali": "BEN", "English": "ENG", "Math": "MTH",
+      "Physical Science": "PSC", "Life Science": "LSC",
+      "History": "HIS", "Geography": "GEO"
     };
 
     window.onload = async () => {
@@ -320,13 +317,9 @@
 
       const limit = columnMap[exam].limit;
       document.getElementById('limitDisplay').textContent = `0-${limit}`;
-      
       document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> IX ${sec} : 2026 | ${exam} : ${sub}`;
 
-      // সেকশন অনুযায়ী ফিল্টার করা ডাটা (স্ট্যাটাস গণনার জন্য)
       let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
-
-      // মার্কস আপলোড স্ট্যাটাস হিসেব করা
       updateSummaryTable(sectionFiltered, exam);
 
       let filtered = sectionFiltered.filter(item => {
@@ -336,7 +329,6 @@
       renderTable(filtered, exam, sub);
     }
 
-    // স্ট্যাটাস সামারি টেবিল আপডেট ফাংশন
     function updateSummaryTable(dataset, exam) {
       document.getElementById('totalStudentCount').textContent = dataset.length;
 
@@ -410,101 +402,139 @@
       }
     }
 
+    // স্মার্ট সেভ ও স্মুথ কিবোর্ড ফোকাসিং
     async function saveMarks(rowId, colName, inputElem) {
-    if (!currentPasskey || !isEditAllowed) {
-      checkPasskeyPrompt(inputElem);
-      return;
-    }
-
-    const exam = document.getElementById('examSelect').value;
-    const maxLimit = columnMap[exam].limit;
-    const val = inputElem.value.trim();
-
-    if (val !== "") {
-      const num = Number(val);
-      if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
-        alert(`❌ নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
-        inputElem.classList.add('save-error');
-        inputElem.value = "";
-        setTimeout(() => inputElem.classList.remove('save-error'), 1500);
+      if (!currentPasskey || !isEditAllowed) {
+        checkPasskeyPrompt(inputElem);
         return;
       }
-    }
 
-    const marksVal = val === "" ? null : parseInt(val);
+      const exam = document.getElementById('examSelect').value;
+      const maxLimit = columnMap[exam].limit;
+      const val = inputElem.value.trim();
 
-    // ১. লোকাল অবজেক্ট আপডেট
-    const target = rawData.find(r => r.id === rowId);
-    if (target) target[colName] = marksVal;
-
-    // ২. শুধু স্ট্যাটাস সামারি আপডেট করা (পুরো টেবিল না ছুয়ে)
-    const sec = document.getElementById('sectionSelect').value;
-    let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
-    updateSummaryTable(sectionFiltered, exam);
-
-    if (!navigator.onLine) {
-      saveToLocalStorage(rowId, colName, marksVal);
-      inputElem.classList.add('save-success');
-      return;
-    }
-
-    try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
-        method: 'POST',
-        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          p_passkey: currentPasskey,
-          p_id: parseInt(rowId),
-          p_column_name: colName,
-          p_marks: marksVal
-        })
-      });
-
-      const result = await res.json();
-      if (result && result.success) {
-        inputElem.classList.add('save-success');
-        setTimeout(() => inputElem.classList.remove('save-success'), 1000);
-      } else {
-        alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
-        inputElem.classList.add('save-error');
-        setTimeout(() => inputElem.classList.remove('save-error'), 1500);
+      if (val !== "") {
+        const num = Number(val);
+        if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
+          alert(`❌ নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
+          inputElem.classList.add('save-error');
+          inputElem.value = "";
+          setTimeout(() => inputElem.classList.remove('save-error'), 1500);
+          return;
+        }
       }
+
+      const marksVal = val === "" ? null : parseInt(val);
+
+      // লোকাল মেমোরি ইনস্ট্যান্ট আপডেট (যাতে টেবিল রিরেন্ডার না করা লাগে)
+      const target = rawData.find(r => r.id === rowId);
+      if (target) target[colName] = marksVal;
+
+      // সরাসরি সামারি স্ট্যাটাস আপডেট (পুরো টেবিল রিরেন্ডার না করে)
+      const sec = document.getElementById('sectionSelect').value;
+      let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
+      updateSummaryTable(sectionFiltered, exam);
+
+      // ইন্টারনেট সংযোগ না থাকলে লোকাল স্টোরেজে সেভ
+      if (!navigator.onLine) {
+        saveToLocalStorage(rowId, colName, marksVal);
+        inputElem.classList.add('save-offline');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            p_passkey: currentPasskey,
+            p_id: parseInt(rowId),
+            p_column_name: colName,
+            p_marks: marksVal
+          })
+        });
+
+        const result = await res.json();
+        if (result && result.success) {
+          inputElem.classList.remove('save-offline');
+          inputElem.classList.add('save-success');
+          setTimeout(() => inputElem.classList.remove('save-success'), 1000);
+        } else {
+          alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
+          inputElem.classList.add('save-error');
+          setTimeout(() => inputElem.classList.remove('save-error'), 1500);
+        }
       } catch (err) {
-      saveToLocalStorage(rowId, colName, marksVal);
-      inputElem.classList.add('save-success');
+        saveToLocalStorage(rowId, colName, marksVal);
+        inputElem.classList.add('save-offline');
+      }
     }
-  }
-      
+
+    // স্মুথ কিবোর্ড নেভিগেশন (কিবোর্ড হাইড হবে না)
     function handleKeyNavigation(e, elem) {
       const inputs = Array.from(document.querySelectorAll('.mark-input:not([readonly])'));
       const index = inputs.indexOf(elem);
 
       if (e.key === 'Enter' || e.key === 'ArrowDown') {
         e.preventDefault();
-        if (index + 1 < inputs.length) inputs[index + 1].focus();
+        if (index + 1 < inputs.length) {
+          inputs[index + 1].focus();
+          inputs[index + 1].select();
+        }
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        if (index - 1 >= 0) inputs[index - 1].focus();
+        if (index - 1 >= 0) {
+          inputs[index - 1].focus();
+          inputs[index - 1].select();
+        }
       }
     }
 
+    // লোকাল স্টোরেজে সুরক্ষিত সেভ
     function saveToLocalStorage(id, col, val) {
       let draft = JSON.parse(localStorage.getItem('offline_marks_ix') || '[]');
-      draft.push({ id, col, val });
+      // আগের কোনো পেন্ডিং এন্ট্রি থাকলে তা রিপ্লেস করবে
+      const existingIndex = draft.findIndex(item => item.id === id && item.col === col);
+      if (existingIndex > -1) {
+        draft[existingIndex].val = val;
+      } else {
+        draft.push({ id, col, val });
+      }
       localStorage.setItem('offline_marks_ix', JSON.stringify(draft));
     }
 
+    // ইন্টারনেট ফিরে এলে ব্যাকগ্রাউন্ডে অটোমেটিক সুপাবেসে পুশ
     function setupOfflineSync() {
-      window.addEventListener('online', async () => {
-        let draft = JSON.parse(localStorage.getItem('offline_marks_ix') || '[]');
-        if (draft.length > 0 && currentPasskey) {
-          for (let item of draft) {
-            await saveMarks(item.id, item.col, { value: item.val, classList: { add:()=>{}, remove:()=>{} } });
-          }
-          localStorage.removeItem('offline_marks_ix');
-          alert("🎉 অফলাইন ডাটা সেভ সম্পন্ন হয়েছে!");
+      window.addEventListener('online', syncOfflineData);
+    }
+
+    async function syncOfflineData() {
+      let draft = JSON.parse(localStorage.getItem('offline_marks_ix') || '[]');
+      if (draft.length > 0 && currentPasskey) {
+        let successCount = 0;
+        for (let item of draft) {
+          try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
+              method: 'POST',
+              headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                p_passkey: currentPasskey,
+                p_id: parseInt(item.id),
+                p_column_name: item.col,
+                p_marks: item.val
+              })
+            });
+            const result = await res.json();
+            if (result && result.success) successCount++;
+          } catch(e) {}
         }
-      });
+
+        if (successCount > 0) {
+          localStorage.removeItem('offline_marks_ix');
+          alert(`🎉 অফলাইনে থাকা ${successCount} টি নম্বর ডাটাবেজে সফলভাবে সেভ হয়েছে!`);
+          applyFilters(); // সম্পূর্ণ সিঙ্ক শেষে টেবিল ভিউ রিফ্রেশ
+        }
+      }
     }
   </script>
 </body>
