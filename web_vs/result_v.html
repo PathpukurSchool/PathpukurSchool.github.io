@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pathpukur High School (HS) - Class V Marks Portal</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * { box-sizing: border-box; font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
+    body { margin: 0; background: #f8fafc; color: #1e293b; }
+    
+    .header-container { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff; padding: 14px 10px; text-align: center; }
+    .header-container h1 { margin: 0; font-size: 19px; letter-spacing: 0.5px; }
+    .header-container h2 { margin: 4px 0 0; font-size: 13px; font-weight: 400; color: #93c5fd; }
+    
+    .controls-panel { background: #fff; padding: 10px; border-bottom: 2px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; align-items: end; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px; }
+    .form-group label i { margin-right: 4px; color: #2563eb; }
+    .form-control { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #fff; }
+    .form-control:focus { border-color: #2563eb; }
+    
+    /* Micro Summary Table CSS */
+    .summary-card { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px; width: fit-content; max-width: 100%; overflow-x: auto; margin-top: 10px; }
+    .summary-header { display: flex; justify-content: space-between; align-items: center; font-size: 10px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
+    .summary-table { width: auto; table-layout: fixed; border-collapse: collapse; font-family: 'Poppins', sans-serif; }
+    .summary-table th, .summary-table td { border: 1px solid #94a3b8; padding: 2px 3px; text-align: center; font-size: 10px; line-height: 1.1; word-break: break-all; min-width: 22px; }
+    .summary-table th { background: #334155; color: #fff; font-weight: 600; }
+    .summary-table td { background: #fff; font-weight: 700; color: #2563eb; }
+
+    .status-bar { display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #0369a1; border-bottom: 1px solid #bae6fd; }
+    
+    /* Edit Mode Dynamic Badges */
+    .edit-status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .edit-on-badge { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .edit-off-badge { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+
+    .active-info { background: #fef3c7; color: #92400e; padding: 8px 12px; font-size: 12px; font-weight: 700; border-left: 4px solid #f59e0b; }
+    
+    /* Sticky Top Header & Scroll Setup */
+    .table-container { width: 100%; max-height: calc(100vh - 240px); overflow: auto; background: #fff; position: relative; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 500px; }
+    th, td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 6px 4px; text-align: center; font-size: 13px; }
+    
+    /* Header STICKY Top */
+    thead th { position: sticky; top: 0; background: #0f172a !important; color: #fff !important; z-index: 10; font-size: 12px; }
+    
+    /* ONLY Roll Column Sticky Left */
+    th.sticky-roll, td.sticky-roll { 
+      position: sticky; 
+      left: 0; 
+      z-index: 5; 
+      background: #334155; 
+      color: #fff; 
+      font-weight: bold; 
+      width: 55px; 
+      min-width: 55px;
+    }
+    thead th.sticky-roll { z-index: 20; background: #020617 !important; }
+
+    .mark-input { width: 55px; text-align: center; padding: 6px 2px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; font-weight: bold; outline: none; }
+    .mark-input:focus { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
+    .mark-input[readonly] { background: #f8fafc; color: #64748b; border-color: #e2e8f0; cursor: pointer; }
+    
+    .save-success { background: #dcfce7 !important; border-color: #22c55e !important; transition: background 0.4s; }
+    .save-offline { background: #fef08a !important; border-color: #eab308 !important; }
+    .save-error { background: #fee2e2 !important; border-color: #ef4444 !important; }
+    
+    /* Passkey Field with Eye Icon */
+    .passkey-wrapper { display: flex; align-items: center; position: relative; width: 130px; }
+    .passkey-wrapper input { width: 100%; padding-right: 26px; }
+    .passkey-wrapper i { position: absolute; right: 8px; cursor: pointer; color: #64748b; font-size: 12px; }
+    .passkey-bar { display: flex; gap: 6px; align-items: center; }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <h1>Pathpukur High School (HS)</h1>
+    <h2><i class="fa-solid fa-graduation-cap"></i> Marks Upload | Session: <span id="sessionDisplay">2026</span> | Class: V</h2>
+  </div>
+
+  <div class="controls-panel">
+    <div class="filter-grid">
+      <div class="form-group">
+        <label><i class="fa-solid fa-file-pen"></i> Exam</label>
+        <select id="examSelect" class="form-control" onchange="applyFilters()">
+          <option value="1st Exam">1st Exam</option>
+          <option value="2nd Exam">2nd Exam</option>
+          <option value="3rd Exam">3rd Exam</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-users"></i> Section</label>
+        <select id="sectionSelect" class="form-control" onchange="applyFilters()">
+          <option value="--All--">--All--</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-book-open"></i> Subject</label>
+        <select id="subjectSelect" class="form-control" onchange="applyFilters()">
+          <option value="--All--">-- All Subjects --</option>
+          <option value="Bengali">Bengali</option>
+          <option value="English">English</option>
+          <option value="Math">Math</option>
+          <option value="Science">Science</option>
+          <option value="Work Education">Work Education</option>
+          <option value="Physical Education">Physical Education</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fa-solid fa-magnifying-glass"></i> Search</label>
+        <input type="text" id="searchInput" class="form-control" placeholder="Name / Roll..." oninput="applyFilters()">
+      </div>
+    </div>
+
+    <!-- সংক্ষিপ্ত মার্কস স্ট্যাটাস টেবিল -->
+    <div class="summary-card">
+      <div class="summary-header">
+        <span><i class="fa-solid fa-chart-simple"></i> <b>Marks Uploading Status</b></span>
+        <span><i class="fa-solid fa-users-rectangle"></i> Total Student: <strong id="totalStudentCount" style="color:#2563eb;">0</strong></span>
+      </div>
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>BEN</th>
+            <th>ENG</th>
+            <th>MTH</th>
+            <th>SCI</th>
+            <th>WE</th>
+            <th>PE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="stat-BEN">0</td>
+            <td id="stat-ENG">0</td>
+            <td id="stat-MTH">0</td>
+            <td id="stat-SCI">0</td>
+            <td id="stat-WE">0</td>
+            <td id="stat-PE">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div><i class="fa-solid fa-circle-info"></i> Marks Limit: <span id="limitDisplay" style="color:#d97706; font-weight: bold;">0-20</span></div>
+    <div id="securityStatus"></div>
+  </div>
+
+  <div class="active-info" id="activeFilterBadge">
+    <i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোডিং ...
+  </div>
+
+  <div class="table-container">
+    <table id="marksTable">
+      <thead>
+        <tr id="tableHeaderRow"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+    
+    let rawData = [];
+    let currentPasskey = "";
+    let isEditAllowed = false;
+    let inactivityTimer = null;
+
+    const subjectsList = ["Bengali", "English", "Math", "Science", "Work Education", "Physical Education"];
+
+    // Class V-এর বিষয়ভিত্তিক পরীক্ষার লিমিট ম্যাপিং
+    const columnMap = {
+      "1st Exam": { 
+        "Bengali":"e1_bengali", "English":"e1_english", "Math":"e1_math", "Science":"e1_science", "Work Education":"e1_work_education", "Physical Education":"e1_physical_education",
+        limits: { "Bengali": 20, "English": 20, "Math": 20, "Science": 20, "Work Education": 10, "Physical Education": 10 }
+      },
+      "2nd Exam": { 
+        "Bengali":"e2_bengali", "English":"e2_english", "Math":"e2_math", "Science":"e2_science", "Work Education":"e2_work_education", "Physical Education":"e2_physical_education",
+        limits: { "Bengali": 30, "English": 30, "Math": 30, "Science": 30, "Work Education": 15, "Physical Education": 15 }
+      },
+      "3rd Exam": { 
+        "Bengali":"e3_bengali", "English":"e3_english", "Math":"e3_math", "Science":"e3_science", "Work Education":"e3_work_education", "Physical Education":"e3_physical_education",
+        limits: { "Bengali": 50, "English": 50, "Math": 50, "Science": 50, "Work Education": 25, "Physical Education": 25 }
+      }
+    };
+
+    const shortSubCodes = {
+      "Bengali": "BEN", "English": "ENG", "Math": "MTH",
+      "Science": "SCI", "Work Education": "WE", "Physical Education": "PE"
+    };
+
+    window.onload = async () => {
+      await checkSecurityStatus();
+      await fetchMarksData();
+      setupInactivityTracker();
+      setupOfflineSync();
+    };
+
+    function setupInactivityTracker() {
+      ['mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(evt => {
+        window.addEventListener(evt, resetInactivityTimer);
+      });
+    }
+
+    function resetInactivityTimer() {
+      if (!currentPasskey) return;
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        currentPasskey = "";
+        checkSecurityStatus();
+        applyFilters();
+      }, 15 * 60 * 1000);
+    }
+
+    async function checkSecurityStatus() {
+      const secDiv = document.getElementById('securityStatus');
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_page_security_status`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_page_name: 'result_v_ix' })
+        });
+        const data = await res.json();
+
+        if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
+          isEditAllowed = true;
+          if (currentPasskey) {
+            secDiv.innerHTML = `<span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>`;
+          } else {
+            secDiv.innerHTML = `
+              <div class="passkey-bar">
+                <div class="passkey-wrapper">
+                  <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey...">
+                  <i class="fa-solid fa-eye" id="togglePassEye" onclick="togglePassVisibility()"></i>
+                </div>
+                <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i> Verify</button>
+              </div>`;
+          }
+        } else {
+          isEditAllowed = false;
+          secDiv.innerHTML = `<span class="edit-status-badge edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড অফ</span>`;
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    function togglePassVisibility() {
+      const pInput = document.getElementById('passkeyInput');
+      const pIcon = document.getElementById('togglePassEye');
+      if (pInput.type === 'password') {
+        pInput.type = 'text';
+        pIcon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        pInput.type = 'password';
+        pIcon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+
+    async function unlockEdit() {
+      const inputElem = document.getElementById('passkeyInput');
+      const inputPass = inputElem ? inputElem.value.trim() : '';
+      
+      if (!inputPass) {
+        alert("⚠️ সঠিক পাসকি লিখুন!");
+        if(inputElem) inputElem.focus();
+        return;
+      }
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_result_passkey_v`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_passkey: inputPass })
+        });
+
+        const result = await res.json();
+
+        if (result && result.success) {
+          currentPasskey = inputPass;
+          checkSecurityStatus();
+          alert("🔓 পাসকি সঠিক! এডিট মুড সক্রিয় হয়েছে।");
+          resetInactivityTimer();
+          applyFilters();
+        } else {
+          currentPasskey = "";
+          alert("❌ " + (result.message || "ভুল পাসকি দেওয়া হয়েছে!"));
+          if(inputElem) { inputElem.value = ""; inputElem.focus(); }
+        }
+      } catch (err) {
+        alert("❌ সংযোগ ব্যর্থ হয়েছে!");
+      }
+    }
+
+    async function fetchMarksData() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/result_v?select=*&order=section.asc,roll_no.asc`, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        rawData = await res.json();
+        applyFilters();
+      } catch (err) { console.error(err); }
+    }
+
+    function applyFilters() {
+      const exam = document.getElementById('examSelect').value;
+      const sec = document.getElementById('sectionSelect').value;
+      const sub = document.getElementById('subjectSelect').value;
+      const search = document.getElementById('searchInput').value.toLowerCase();
+
+      // স্ট্যাটাস বারে মার্কস লিমিট প্রদর্শন (একক বিষয় নির্বাচন করা থাকলে সেই বিষয়ের লিমিট, না হলে সাধারণ ও বিশেষ সীমার বিবরণ)
+      const limitsObj = columnMap[exam].limits;
+      if (sub !== "--All--") {
+        document.getElementById('limitDisplay').textContent = `0-${limitsObj[sub]}`;
+      } else {
+        const genLimit = limitsObj["Bengali"];
+        const workLimit = limitsObj["Work Education"];
+        document.getElementById('limitDisplay').textContent = `0-${genLimit} (WE/PE: 0-${workLimit})`;
+      }
+
+      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> Class V (${sec}) : 2026 | ${exam} : ${sub}`;
+
+      let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
+      updateSummaryTable(sectionFiltered, exam);
+
+      let filtered = sectionFiltered.filter(item => {
+        return item.student_name.toLowerCase().includes(search) || String(item.roll_no).includes(search);
+      });
+
+      renderTable(filtered, exam, sub);
+    }
+
+    function updateSummaryTable(dataset, exam) {
+      document.getElementById('totalStudentCount').textContent = dataset.length;
+
+      subjectsList.forEach(sub => {
+        const colName = columnMap[exam][sub];
+        const count = dataset.filter(r => r[colName] !== null && r[colName] !== undefined && r[colName] !== '').length;
+        const code = shortSubCodes[sub];
+        const tdElem = document.getElementById(`stat-${code}`);
+        if (tdElem) tdElem.textContent = count;
+      });
+    }
+
+    function renderTable(dataList, exam, selectedSub) {
+      const headerRow = document.getElementById('tableHeaderRow');
+      const tbody = document.getElementById('tableBody');
+      
+      let isSingleSub = (selectedSub !== "--All--");
+      let activeSubjects = isSingleSub ? [selectedSub] : subjectsList;
+
+      let headerHTML = `<th class="sticky-roll">Roll</th>`;
+      
+      if (isSingleSub) {
+        headerHTML += `<th>${selectedSub}</th><th>Sec</th><th>Student Name</th>`;
+      } else {
+        headerHTML += `<th>Sec</th><th>Student Name</th>`;
+        activeSubjects.forEach(sub => { headerHTML += `<th>${sub}</th>`; });
+      }
+      
+      headerRow.innerHTML = headerHTML;
+
+      let rowsHTML = "";
+      dataList.forEach(row => {
+        let cellsHTML = `<td class="sticky-roll">${row.roll_no}</td>`;
+
+        const getMarkInputHTML = (sub) => {
+          const colName = columnMap[exam][sub];
+          const val = row[colName] !== null && row[colName] !== undefined ? row[colName] : '';
+          return `
+            <td>
+              <input type="number" pattern="[0-9]*" inputmode="numeric" class="mark-input"
+                     value="${val}" ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
+                     onclick="checkPasskeyPrompt(this)" onfocus="this.select()"
+                     onkeydown="handleKeyNavigation(event, this)"
+                     onchange="saveMarks(${row.id}, '${colName}', '${sub}', this)" />
+            </td>`;
+        };
+
+        if (isSingleSub) {
+          cellsHTML += getMarkInputHTML(selectedSub);
+          cellsHTML += `<td>${row.section}</td><td style="text-align:left; font-size:12px;">${row.student_name}</td>`;
+        } else {
+          cellsHTML += `<td>${row.section}</td><td style="text-align:left; font-size:12px;">${row.student_name}</td>`;
+          activeSubjects.forEach(sub => { cellsHTML += getMarkInputHTML(sub); });
+        }
+
+        rowsHTML += `<tr>${cellsHTML}</tr>`;
+      });
+
+      tbody.innerHTML = rowsHTML;
+    }
+
+    function checkPasskeyPrompt(inputElem) {
+      if (!isEditAllowed) {
+        alert("⚠️ এডিট মুড বর্তমানে বন্ধ রয়েছে।");
+        return;
+      }
+      if (!currentPasskey) {
+        alert("⚠️ নম্বর এন্ট্রি করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
+        const pInput = document.getElementById('passkeyInput');
+        if (pInput) pInput.focus();
+      }
+    }
+
+    // স্মার্ট সেভ ও বিষয়ভিত্তিক নম্বর সীমা চেক
+    async function saveMarks(rowId, colName, subName, inputElem) {
+      if (!currentPasskey || !isEditAllowed) {
+        checkPasskeyPrompt(inputElem);
+        return;
+      }
+
+      const exam = document.getElementById('examSelect').value;
+      const maxLimit = columnMap[exam].limits[subName];
+      const val = inputElem.value.trim();
+
+      if (val !== "") {
+        const num = Number(val);
+        if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
+          alert(`❌ ${subName} বিষয়ে নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
+          inputElem.classList.add('save-error');
+          inputElem.value = "";
+          setTimeout(() => inputElem.classList.remove('save-error'), 1500);
+          return;
+        }
+      }
+
+      const marksVal = val === "" ? null : parseInt(val);
+
+      // লোকাল মেমোরি ইন্সট্যান্ট আপডেট
+      const target = rawData.find(r => r.id === rowId);
+      if (target) target[colName] = marksVal;
+
+      // সামারি স্ট্যাটাস আপডেট
+      const sec = document.getElementById('sectionSelect').value;
+      let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
+      updateSummaryTable(sectionFiltered, exam);
+
+      // অফলাইন মোড হ্যান্ডলিং
+      if (!navigator.onLine) {
+        saveToLocalStorage(rowId, colName, marksVal);
+        inputElem.classList.add('save-offline');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_v`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            p_passkey: currentPasskey,
+            p_id: parseInt(rowId),
+            p_column_name: colName,
+            p_marks: marksVal
+          })
+        });
+
+        const result = await res.json();
+        if (result && result.success) {
+          inputElem.classList.remove('save-offline');
+          inputElem.classList.add('save-success');
+          setTimeout(() => inputElem.classList.remove('save-success'), 1000);
+        } else {
+          alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
+          inputElem.classList.add('save-error');
+          setTimeout(() => inputElem.classList.remove('save-error'), 1500);
+        }
+      } catch (err) {
+        saveToLocalStorage(rowId, colName, marksVal);
+        inputElem.classList.add('save-offline');
+      }
+    }
+
+    // স্মুথ কিবোর্ড নেভিগেশন
+    function handleKeyNavigation(e, elem) {
+      const inputs = Array.from(document.querySelectorAll('.mark-input:not([readonly])'));
+      const index = inputs.indexOf(elem);
+
+      if (e.key === 'Enter' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (index + 1 < inputs.length) {
+          inputs[index + 1].focus();
+          inputs[index + 1].select();
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (index - 1 >= 0) {
+          inputs[index - 1].focus();
+          inputs[index - 1].select();
+        }
+      }
+    }
+
+    // অফলাইন লোকাল স্টোরেজ সেভ
+    function saveToLocalStorage(id, col, val) {
+      let draft = JSON.parse(localStorage.getItem('offline_marks_v') || '[]');
+      const existingIndex = draft.findIndex(item => item.id === id && item.col === col);
+      if (existingIndex > -1) {
+        draft[existingIndex].val = val;
+      } else {
+        draft.push({ id, col, val });
+      }
+      localStorage.setItem('offline_marks_v', JSON.stringify(draft));
+    }
+
+    // অনলাইন হলে ব্যাকগ্রাউন্ড সিঙ্ক
+    function setupOfflineSync() {
+      window.addEventListener('online', syncOfflineData);
+    }
+
+    async function syncOfflineData() {
+      let draft = JSON.parse(localStorage.getItem('offline_marks_v') || '[]');
+      if (draft.length > 0 && currentPasskey) {
+        let successCount = 0;
+        for (let item of draft) {
+          try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_v`, {
+              method: 'POST',
+              headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                p_passkey: currentPasskey,
+                p_id: parseInt(item.id),
+                p_column_name: item.col,
+                p_marks: item.val
+              })
+            });
+            const result = await res.json();
+            if (result && result.success) successCount++;
+          } catch(e) {}
+        }
+
+        if (successCount > 0) {
+          localStorage.removeItem('offline_marks_v');
+          alert(`🎉 অফলাইনে থাকা ${successCount} টি নম্বর ডাটাবেজে সফলভাবে সেভ হয়েছে!`);
+          applyFilters();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
