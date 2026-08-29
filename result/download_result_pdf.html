@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>রেজাল্ট শীট PDF ডাউনলোড</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- jsPDF & AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tiro+Bangla&display=swap');
+    body {
+      font-family: 'Tiro Bangla', serif, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+  <!-- Header Section -->
+  <header class="bg-indigo-700 text-white shadow-md">
+    <div class="max-w-4xl mx-auto px-4 py-6 text-center">
+      <h1 class="text-2xl md:text-3xl font-bold flex items-center justify-center gap-2">
+        <i data-lucide="school" class="w-8 h-8"></i>
+        বিদ্যালয়ের পরীক্ষার ফলাফল পোর্টাল
+      </h1>
+      <p class="text-indigo-200 mt-1 text-sm md:text-base">Supabase ডাটাবেজ থেকে A4 ফরম্যাটে PDF মার্কশীট ও রেজাল্ট ডাউনলোড</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow">
+    
+    <!-- Input Card -->
+    <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-6 md:p-8">
+      
+      <div class="border-b pb-4 mb-6">
+        <h2 class="text-xl font-semibold text-slate-700 flex items-center gap-2">
+          <i data-lucide="file-text" class="w-5 h-5 text-indigo-600"></i>
+          ফিল্টার এবং অপশন নির্বাচন করুন
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">প্রয়োজনীয় বিবরণ নির্বাচন করে ডাউনলোড বোতামে ক্লিক করুন।</p>
+      </div>
+
+      <!-- Controls Form -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Session Input -->
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-2">শিক্ষাবর্ষ / সেসন</label>
+          <div class="relative">
+            <i data-lucide="calendar" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
+            <input type="text" id="sessionInput" value="2026" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="যেমন: 2026">
+          </div>
+        </div>
+
+        <!-- Class Select -->
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-2">শ্রেণি (Class)</label>
+          <div class="relative">
+            <i data-lucide="book-open" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
+            <select id="classSelect" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+              <option value="v">পঞ্চম শ্রেণি (Class V)</option>
+              <option value="vi">ষষ্ঠ শ্রেণি (Class VI)</option>
+              <option value="vii">সপ্তম শ্রেণি (Class VII)</option>
+              <option value="viii">অষ্টম শ্রেণি (Class VIII)</option>
+              <option value="ix">নবম শ্রেণি (Class IX)</option>
+              <option value="x">দশম শ্রেণি (Class X)</option>
+              <option value="xi">একাদশ শ্রেণি (Class XI)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section Select -->
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-2">সেকশন (Section)</label>
+          <div class="relative">
+            <i data-lucide="users" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
+            <select id="sectionSelect" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+              <option value="A">Section A</option>
+              <option value="B">Section B</option>
+              <option value="C">Section C</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Exam Select -->
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-2">পরীক্ষার নাম (Exam)</label>
+          <div class="relative">
+            <i data-lucide="clipboard-list" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
+            <select id="examSelect" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+              <option value="e1">1st Evaluation / Exam</option>
+              <option value="e2">2nd Evaluation / Exam</option>
+              <option value="e3">3rd Evaluation / Test Exam</option>
+              <option value="proj">Project Marks (যদি থাকে)</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Button -->
+      <div class="mt-8 flex justify-end">
+        <button id="downloadBtn" onclick="fetchAndGeneratePDF()" class="w-full md:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow flex items-center justify-center gap-2 transition duration-200">
+          <i data-lucide="download" class="w-5 h-5"></i>
+          PDF ফাইল ডাউনলোড করুন
+        </button>
+      </div>
+
+      <!-- Inline Status Messages Container (No Popups) -->
+      <div id="statusContainer" class="mt-6 hidden">
+        <!-- Loading State -->
+        <div id="loadingStatus" class="hidden bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg flex items-center gap-3">
+          <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="text-sm font-medium">Supabase থেকে ডাটা প্রসেস এবং PDF তৈরি করা হচ্ছে...</span>
+        </div>
+
+        <!-- Success State -->
+        <div id="successStatus" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg flex items-center gap-3">
+          <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>
+          <span id="successText" class="text-sm font-medium">PDF সফলভাবে ডাউনলোড হয়েছে!</span>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorStatus" class="hidden bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-lg flex items-center gap-3">
+          <i data-lucide="alert-circle" class="w-5 h-5 text-rose-600"></i>
+          <span id="errorText" class="text-sm font-medium">কোথাও একটি ভুল হয়েছে।</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-800 text-slate-400 py-4 text-center text-sm">
+    <p>© 2026 Academic Evaluation & Tabulation System</p>
+  </footer>
+
+  <script>
+    // Lucide Icons initialize
+    lucide.createIcons();
+
+    // 1. Supabase credentials (আপনার সঠিক URL এবং Key দিয়ে পরিবর্তন করুন)
+    const SUPABASE_URL = 'https://YOUR_SUPABASE_PROJECT_URL.supabase.co';
+    const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Subject Dictionary (English Column Name -> Readable Label)
+    const subjectMap = {
+      bengali: "Bengali",
+      english: "English",
+      math: "Mathematics",
+      science: "Science",
+      life_science: "Life Science",
+      physical_science: "Physical Science",
+      history: "History",
+      geography: "Geography",
+      arabic: "Arabic",
+      sanskrit: "Sanskrit",
+      philosophy: "Philosophy",
+      education: "Education",
+      political_science: "Pol. Science",
+      work_education: "Work Ed.",
+      physical_education: "Phy. Ed."
+    };
+
+    function showStatus(type, message = '') {
+      const container = document.getElementById('statusContainer');
+      const loading = document.getElementById('loadingStatus');
+      const success = document.getElementById('successStatus');
+      const error = document.getElementById('errorStatus');
+
+      container.classList.remove('hidden');
+      loading.classList.add('hidden');
+      success.classList.add('hidden');
+      error.classList.add('hidden');
+
+      if (type === 'loading') {
+        loading.classList.remove('hidden');
+      } else if (type === 'success') {
+        document.getElementById('successText').innerText = message;
+        success.classList.remove('hidden');
+      } else if (type === 'error') {
+        document.getElementById('errorText').innerText = message;
+        error.classList.remove('hidden');
+      }
+    }
+
+    async function fetchAndGeneratePDF() {
+      const session = document.getElementById('sessionInput').value.trim();
+      const className = document.getElementById('classSelect').value;
+      const section = document.getElementById('sectionSelect').value;
+      const exam = document.getElementById('examSelect').value;
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      if (!session) {
+        showStatus('error', 'অনুগ্রহ করে সঠিক শিক্ষাবর্ষ (Session) প্রদান করুন।');
+        return;
+      }
+
+      downloadBtn.disabled = true;
+      showStatus('loading');
+
+      try {
+        const tableName = `result_${className}`;
+        
+        // Supabase DB query
+        const { data, error } = await supabase
+          .from(tableName)
+          .select('*')
+          .eq('session', session)
+          .eq('section', section)
+          .order('roll_no', { ascending: true });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          showStatus('error', 'নির্দিষ্ট সেশন ও সেকশনের জন্য কোনো রেকর্ড পাওয়া যায়নি।');
+          downloadBtn.disabled = false;
+          return;
+        }
+
+        // Generate PDF
+        generatePDF(data, className, section, exam, session);
+        showStatus('success', `Class ${className.toUpperCase()} (${section}) এর PDF সফলভাবে ডাউনলোড হয়েছে!`);
+
+      } catch (err) {
+        console.error(err);
+        showStatus('error', 'ডাটাবেজ থেকে তথ্য আনার সময় সমস্যা হয়েছে: ' + err.message);
+      } finally {
+        downloadBtn.disabled = false;
+      }
+    }
+
+    function generatePDF(data, className, section, exam, session) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+      // Detect available subject columns for selected exam
+      const sampleRow = data[0];
+      const prefix = `${exam}_`;
+      const subjectKeys = Object.keys(sampleRow).filter(key => key.startsWith(prefix));
+
+      // 1. PDF Header Details
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text("HIGH SCHOOL ACADEMIC EVALUATION TABULATION", 148, 15, { align: "center" });
+
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Class: ${className.toUpperCase()}  |  Section: ${section}  |  Exam: ${exam.toUpperCase()}  |  Session: ${session}`, 148, 22, { align: "center" });
+      doc.setLineWidth(0.5);
+      doc.line(14, 25, 283, 25);
+
+      // 2. Dynamic Table Headers
+      const headers = [["Roll", "Student Name"]];
+      subjectKeys.forEach(key => {
+        const cleanKey = key.replace(prefix, '');
+        headers[0].push(subjectMap[cleanKey] || cleanKey.toUpperCase());
+      });
+      headers[0].push("Total");
+
+      // 3. Dynamic Table Rows Data
+      const rows = data.map(row => {
+        let total = 0;
+        const rowData = [row.roll_no, row.student_name];
+
+        subjectKeys.forEach(key => {
+          const val = row[key];
+          if (val !== null && val !== undefined) {
+            rowData.push(val);
+            total += Number(val);
+          } else {
+            rowData.push("-");
+          }
+        });
+
+        rowData.push(total);
+        return rowData;
+      });
+
+      // 4. Generate AutoTable (A4 Page Fit)
+      doc.autoTable({
+        startY: 28,
+        head: headers,
+        body: rows,
+        theme: 'grid',
+        styles: { fontSize: 9, cellPadding: 2, halign: 'center' },
+        headStyles: { fillColor: [49, 46, 129], textColor: [255, 255, 255], fontStyle: 'bold' },
+        columnStyles: {
+          1: { halign: 'left', cellWidth: 40 } // Student Name align Left
+        },
+        margin: { left: 14, right: 14 }
+      });
+
+      // Save PDF
+      doc.save(`Result_Class_${className.toUpperCase()}_Sec_${section}_${session}.pdf`);
+    }
+  </script>
+</body>
+</html>
