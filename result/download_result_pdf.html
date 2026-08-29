@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>রেজাল্ট শীট PDF ডাউনলোড</title>
+  <title>বিদ্যালয়ের রেজাল্ট শীট PDF ডাউনলোড</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -22,160 +22,165 @@
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between">
 
-  <!-- Header Section -->
+  <!-- Header Section with School Name & Session -->
   <header class="bg-indigo-700 text-white shadow-md">
-    <div class="max-w-4xl mx-auto px-4 py-6 text-center">
-      <h1 class="text-2xl md:text-3xl font-bold flex items-center justify-center gap-2">
-        <i data-lucide="school" class="w-8 h-8"></i>
-        বিদ্যালয়ের পরীক্ষার ফলাফল পোর্টাল
+    <div class="max-w-4xl mx-auto px-4 py-5 text-center">
+      <!-- School Name -->
+      <h1 class="text-2xl md:text-4xl font-extrabold tracking-wide uppercase flex items-center justify-center gap-2">
+        <i data-lucide="graduation-cap" class="w-8 h-8 md:w-10 md:h-10 text-amber-300"></i>
+        আমতলা মডেল হাই স্কুল (উঃ মাঃ)
       </h1>
-      <p class="text-indigo-200 mt-1 text-sm md:text-base">Supabase ডাটাবেজ থেকে A4 ফরম্যাটে PDF মার্কশীট ও রেজাল্ট ডাউনলোড</p>
+      <!-- Portal Subtitle with Dynamic Session -->
+      <div class="mt-2 text-indigo-100 text-sm md:text-base font-medium flex items-center justify-center gap-2 flex-wrap">
+        <span class="flex items-center gap-1">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4 text-amber-300"></i>
+          পরীক্ষার ফলাফল পোর্টাল
+        </span>
+        <span class="inline-block w-1.5 h-1.5 bg-indigo-300 rounded-full"></span>
+        <span class="bg-indigo-800 text-amber-300 px-3 py-0.5 rounded-full text-xs md:text-sm font-semibold border border-indigo-500 flex items-center gap-1">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+          শিক্ষাবর্ষ: <span id="currentSessionDisplay">২০২৬</span>
+        </span>
+      </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow">
+  <!-- Main Content Area -->
+  <main class="max-w-3xl mx-auto px-4 py-8 w-full flex-grow">
     
-    <!-- Input Card -->
+    <!-- Input Options Card -->
     <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-6 md:p-8">
       
       <div class="border-b pb-4 mb-6">
-        <h2 class="text-xl font-semibold text-slate-700 flex items-center gap-2">
-          <i data-lucide="file-text" class="w-5 h-5 text-indigo-600"></i>
-          ফিল্টার এবং অপশন নির্বাচন করুন
+        <h2 class="text-xl font-bold text-slate-700 flex items-center gap-2">
+          <i data-lucide="sliders" class="w-5 h-5 text-indigo-600"></i>
+          শ্রেণি ও পরীক্ষা নির্বাচন করুন
         </h2>
-        <p class="text-sm text-slate-500 mt-1">প্রয়োজনীয় বিবরণ নির্বাচন করে ডাউনলোড বোতামে ক্লিক করুন।</p>
+        <p class="text-xs md:text-sm text-slate-500 mt-1">শ্রেণি, সেকশন ও পরীক্ষা বেছে নিয়ে এক ক্লিকে কম্প্যাক্ট PDF ডাউনলোড করুন।</p>
       </div>
 
-      <!-- Controls Form -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Controls Form (Session Box Removed) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         
-        <!-- Session Input -->
-        <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">শিক্ষাবর্ষ / সেসন</label>
-          <div class="relative">
-            <i data-lucide="calendar" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
-            <input type="text" id="sessionInput" value="2026" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="যেমন: 2026">
-          </div>
-        </div>
-
         <!-- Class Select -->
         <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">শ্রেণি (Class)</label>
-          <div class="relative">
-            <i data-lucide="book-open" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
-            <select id="classSelect" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
-              <option value="v">পঞ্চম শ্রেণি (Class V)</option>
-              <option value="vi">ষষ্ঠ শ্রেণি (Class VI)</option>
-              <option value="vii">সপ্তম শ্রেণি (Class VII)</option>
-              <option value="viii">অষ্টম শ্রেণি (Class VIII)</option>
-              <option value="ix">নবম শ্রেণি (Class IX)</option>
-              <option value="x">দশম শ্রেণি (Class X)</option>
-              <option value="xi">একাদশ শ্রেণি (Class XI)</option>
-            </select>
-          </div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1">
+            <i data-lucide="book-open" class="w-4 h-4 text-indigo-600"></i> শ্রেণি (Class)
+          </label>
+          <select id="classSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white text-sm">
+            <option value="v">পঞ্চম (Class V)</option>
+            <option value="vi">ষষ্ঠ (Class VI)</option>
+            <option value="vii">সপ্তম (Class VII)</option>
+            <option value="viii">অষ্টম (Class VIII)</option>
+            <option value="ix">নবম (Class IX)</option>
+            <option value="x">দশম (Class X)</option>
+            <option value="xi">একাদশ (Class XI)</option>
+            <option value="xii">দ্বাদশ (Class XII)</option>
+          </select>
         </div>
 
         <!-- Section Select -->
         <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">সেকশন (Section)</label>
-          <div class="relative">
-            <i data-lucide="users" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
-            <select id="sectionSelect" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
-              <option value="A">Section A</option>
-              <option value="B">Section B</option>
-              <option value="C">Section C</option>
-            </select>
-          </div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1">
+            <i data-lucide="users" class="w-4 h-4 text-indigo-600"></i> সেকশন (Section)
+          </label>
+          <select id="sectionSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white text-sm">
+            <option value="A">Section A</option>
+            <option value="B">Section B</option>
+            <option value="C">Section C</option>
+          </select>
         </div>
 
         <!-- Exam Select -->
         <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">পরীক্ষার নাম (Exam)</label>
-          <div class="relative">
-            <i data-lucide="clipboard-list" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
-            <select id="examSelect" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
-              <option value="e1">1st Evaluation / Exam</option>
-              <option value="e2">2nd Evaluation / Exam</option>
-              <option value="e3">3rd Evaluation / Test Exam</option>
-              <option value="proj">Project Marks (যদি থাকে)</option>
-            </select>
-          </div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1">
+            <i data-lucide="award" class="w-4 h-4 text-indigo-600"></i> পরীক্ষার নাম (Exam)
+          </label>
+          <select id="examSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white text-sm">
+            <option value="e1">1st Evaluation / Exam</option>
+            <option value="e2">2nd Evaluation / Exam</option>
+            <option value="e3">3rd Evaluation / Test Exam</option>
+          </select>
         </div>
 
       </div>
 
       <!-- Action Button -->
-      <div class="mt-8 flex justify-end">
-        <button id="downloadBtn" onclick="fetchAndGeneratePDF()" class="w-full md:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow flex items-center justify-center gap-2 transition duration-200">
+      <div class="mt-6">
+        <button id="downloadBtn" onclick="fetchAndGeneratePDF()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold rounded-lg shadow-md flex items-center justify-center gap-2 transition duration-200 text-base">
           <i data-lucide="download" class="w-5 h-5"></i>
-          PDF ফাইল ডাউনলোড করুন
+          PDF ট্যাবুল্যাশন শীট ডাউনলোড করুন
         </button>
       </div>
 
-      <!-- Inline Status Messages Container (No Popups) -->
-      <div id="statusContainer" class="mt-6 hidden">
+      <!-- Status Alerts Container -->
+      <div id="statusContainer" class="mt-5 hidden">
         <!-- Loading State -->
-        <div id="loadingStatus" class="hidden bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg flex items-center gap-3">
-          <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <div id="loadingStatus" class="hidden bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg flex items-center gap-3">
+          <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span class="text-sm font-medium">Supabase থেকে ডাটা প্রসেস এবং PDF তৈরি করা হচ্ছে...</span>
+          <span class="text-sm font-medium">Supabase থেকে ডাটা সংগ্রহ করা হচ্ছে এবং PDF প্রসেস হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</span>
         </div>
 
         <!-- Success State -->
-        <div id="successStatus" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg flex items-center gap-3">
-          <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>
-          <span id="successText" class="text-sm font-medium">PDF সফলভাবে ডাউনলোড হয়েছে!</span>
+        <div id="successStatus" class="hidden bg-emerald-50 border border-emerald-300 text-emerald-800 px-4 py-3 rounded-lg flex items-center gap-3">
+          <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 flex-shrink-0"></i>
+          <span id="successText" class="text-sm font-semibold">ফাইলটি সফলভাবে ডাউনলোড হয়েছে!</span>
         </div>
 
         <!-- Error State -->
-        <div id="errorStatus" class="hidden bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-lg flex items-center gap-3">
-          <i data-lucide="alert-circle" class="w-5 h-5 text-rose-600"></i>
-          <span id="errorText" class="text-sm font-medium">কোথাও একটি ভুল হয়েছে।</span>
+        <div id="errorStatus" class="hidden bg-rose-50 border border-rose-300 text-rose-800 px-4 py-3 rounded-lg flex items-center gap-3">
+          <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-600 flex-shrink-0"></i>
+          <span id="errorText" class="text-sm font-medium">ডাটাবেজে কোনো সমস্যা হয়েছে।</span>
         </div>
       </div>
 
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-slate-800 text-slate-400 py-4 text-center text-sm">
-    <p>© 2026 Academic Evaluation & Tabulation System</p>
+  <!-- Footer Section -->
+  <footer class="bg-slate-800 text-slate-400 py-4 text-center text-xs md:text-sm flex items-center justify-center gap-1">
+    <i data-lucide="shield-check" class="w-4 h-4 text-indigo-400"></i>
+    <span>© 2026 Academic Result Management System</span>
   </footer>
 
   <script>
     // Lucide Icons initialize
     lucide.createIcons();
 
-    // 1. Supabase credentials (আপনার সঠিক URL এবং Key দিয়ে পরিবর্তন করুন)
-    const SUPABASE_URL = 'https://YOUR_SUPABASE_PROJECT_URL.supabase.co';
-    const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // 1. Supabase Credentials
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Subject Dictionary (English Column Name -> Readable Label)
+    // Default Fixed Session
+    const CURRENT_SESSION = "2026";
+
+    // Subject Mapping Dictionary
     const subjectMap = {
-      bengali: "Bengali",
-      english: "English",
-      math: "Mathematics",
-      science: "Science",
-      life_science: "Life Science",
-      physical_science: "Physical Science",
-      history: "History",
-      geography: "Geography",
-      arabic: "Arabic",
-      sanskrit: "Sanskrit",
-      philosophy: "Philosophy",
-      education: "Education",
-      political_science: "Pol. Science",
-      work_education: "Work Ed.",
-      physical_education: "Phy. Ed."
+      bengali: "BENG",
+      english: "ENG",
+      math: "MATH",
+      science: "SCI",
+      life_science: "L.SCI",
+      physical_science: "P.SCI",
+      history: "HIST",
+      geography: "GEOG",
+      arabic: "ARABIC",
+      sanskrit: "SANS",
+      philosophy: "PHIL",
+      education: "EDUC",
+      political_science: "POL.S",
+      work_education: "WE",
+      physical_education: "PE"
     };
 
-    function showStatus(type, message = '') {
+    // UI Status Helper
+    function setStatus(type, message = '') {
       const container = document.getElementById('statusContainer');
       const loading = document.getElementById('loadingStatus');
       const success = document.getElementById('successStatus');
@@ -197,73 +202,75 @@
       }
     }
 
+    // Main Fetch & Generate Function
     async function fetchAndGeneratePDF() {
-      const session = document.getElementById('sessionInput').value.trim();
       const className = document.getElementById('classSelect').value;
       const section = document.getElementById('sectionSelect').value;
       const exam = document.getElementById('examSelect').value;
       const downloadBtn = document.getElementById('downloadBtn');
 
-      if (!session) {
-        showStatus('error', 'অনুগ্রহ করে সঠিক শিক্ষাবর্ষ (Session) প্রদান করুন।');
-        return;
-      }
-
+      // Button Disable & Loading State Start
       downloadBtn.disabled = true;
-      showStatus('loading');
+      downloadBtn.classList.add('opacity-75', 'cursor-not-allowed');
+      setStatus('loading');
 
       try {
         const tableName = `result_${className}`;
         
-        // Supabase DB query
-        const { data, error } = await supabase
+        // Supabase Query
+        const { data, error } = await supabaseClient
           .from(tableName)
           .select('*')
-          .eq('session', session)
+          .eq('session', CURRENT_SESSION)
           .eq('section', section)
           .order('roll_no', { ascending: true });
 
         if (error) throw error;
 
         if (!data || data.length === 0) {
-          showStatus('error', 'নির্দিষ্ট সেশন ও সেকশনের জন্য কোনো রেকর্ড পাওয়া যায়নি।');
-          downloadBtn.disabled = false;
+          setStatus('error', `শ্রেণি: ${className.toUpperCase()}, সেকশন: ${section}-এর জন্য কোনো ডাটা পাওয়া যায়নি।`);
           return;
         }
 
-        // Generate PDF
-        generatePDF(data, className, section, exam, session);
-        showStatus('success', `Class ${className.toUpperCase()} (${section}) এর PDF সফলভাবে ডাউনলোড হয়েছে!`);
+        // Generate Compact PDF
+        generatePDF(data, className, section, exam, CURRENT_SESSION);
+        setStatus('success', `শ্রেণি: ${className.toUpperCase()} (${section}) এর রেজাল্ট PDF সফলভাবে ডাউনলোড হয়েছে!`);
 
       } catch (err) {
         console.error(err);
-        showStatus('error', 'ডাটাবেজ থেকে তথ্য আনার সময় সমস্যা হয়েছে: ' + err.message);
+        setStatus('error', 'ডাটাবেজ কানেকশন বা কোয়েরিতে ত্রুটি: ' + (err.message || err));
       } finally {
         downloadBtn.disabled = false;
+        downloadBtn.classList.remove('opacity-75', 'cursor-not-allowed');
       }
     }
 
+    // High-Density Paper Saving PDF Generator
     function generatePDF(data, className, section, exam, session) {
       const { jsPDF } = window.jspdf;
+      
+      // A4 Landscape orientation for wide subject lists
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
-      // Detect available subject columns for selected exam
+      // Dynamic column keys detection
       const sampleRow = data[0];
       const prefix = `${exam}_`;
       const subjectKeys = Object.keys(sampleRow).filter(key => key.startsWith(prefix));
 
-      // 1. PDF Header Details
-      doc.setFontSize(16);
+      // Header Text (Minimal Spacing)
+      doc.setFontSize(14);
       doc.setFont('helvetica', 'bold');
-      doc.text("HIGH SCHOOL ACADEMIC EVALUATION TABULATION", 148, 15, { align: "center" });
+      doc.text("AMTLAMODEL HIGH SCHOOL (H.S.)", 148, 9, { align: "center" });
 
-      doc.setFontSize(11);
+      doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
-      doc.text(`Class: ${className.toUpperCase()}  |  Section: ${section}  |  Exam: ${exam.toUpperCase()}  |  Session: ${session}`, 148, 22, { align: "center" });
-      doc.setLineWidth(0.5);
-      doc.line(14, 25, 283, 25);
+      doc.text(`TABULATION SHEET | CLASS: ${className.toUpperCase()} | SEC: ${section} | EXAM: ${exam.toUpperCase()} | SESSION: ${session}`, 148, 14, { align: "center" });
+      
+      doc.setDrawColor(180, 180, 180);
+      doc.setLineWidth(0.3);
+      doc.line(5, 16, 292, 16);
 
-      // 2. Dynamic Table Headers
+      // Table Headers
       const headers = [["Roll", "Student Name"]];
       subjectKeys.forEach(key => {
         const cleanKey = key.replace(prefix, '');
@@ -271,14 +278,14 @@
       });
       headers[0].push("Total");
 
-      // 3. Dynamic Table Rows Data
+      // Table Rows
       const rows = data.map(row => {
         let total = 0;
         const rowData = [row.roll_no, row.student_name];
 
         subjectKeys.forEach(key => {
           const val = row[key];
-          if (val !== null && val !== undefined) {
+          if (val !== null && val !== undefined && val !== "") {
             rowData.push(val);
             total += Number(val);
           } else {
@@ -290,22 +297,39 @@
         return rowData;
       });
 
-      // 4. Generate AutoTable (A4 Page Fit)
+      // Paper-Saving AutoTable Configuration
       doc.autoTable({
-        startY: 28,
+        startY: 18,
         head: headers,
         body: rows,
         theme: 'grid',
-        styles: { fontSize: 9, cellPadding: 2, halign: 'center' },
-        headStyles: { fillColor: [49, 46, 129], textColor: [255, 255, 255], fontStyle: 'bold' },
-        columnStyles: {
-          1: { halign: 'left', cellWidth: 40 } // Student Name align Left
+        margin: { top: 5, right: 5, bottom: 5, left: 5 }, // Ultra-thin margins (5mm)
+        styles: {
+          fontSize: 8,          // Compact font size
+          cellPadding: 1.2,      // Low cell padding to fit maximum rows per page
+          halign: 'center',
+          valign: 'middle',
+          lineWidth: 0.1,        // Light thin border
+          lineColor: [200, 200, 200]
         },
-        margin: { left: 14, right: 14 }
+        headStyles: {
+          fillColor: [30, 41, 59], // Dark Slate Header background
+          textColor: [255, 255, 255],
+          fontStyle: 'bold',
+          fontSize: 8.5,
+          cellPadding: 1.5
+        },
+        columnStyles: {
+          0: { cellWidth: 12 },   // Roll Column
+          1: { halign: 'left', cellWidth: 45 } // Name Column
+        },
+        alternateRowStyles: {
+          fillColor: [248, 250, 252] // Very light gray alternate row
+        }
       });
 
       // Save PDF
-      doc.save(`Result_Class_${className.toUpperCase()}_Sec_${section}_${session}.pdf`);
+      doc.save(`Result_${className.toUpperCase()}_Sec${section}_${session}.pdf`);
     }
   </script>
 </body>
