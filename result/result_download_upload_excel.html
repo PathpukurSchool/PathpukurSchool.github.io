@@ -1,503 +1,1975 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pathpukur High School (HS) - Result Export & Secured Import</title>
-  
-  <!-- FontAwesome Icons & Bangla Font -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- SheetJS & PapaParse for File Processing -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Tiro Bangla', 'Poppins', sans-serif;
-    }
+    <title>School Result Excel Manager</title>
 
-    body {
-      background-color: #f1f5f9;
-      color: #0f172a;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 15px;
-    }
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    .card-container {
-      width: 100%;
-      max-width: 680px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      margin-top: 10px;
-      border: 1px solid #e2e8f0;
-    }
+    <!-- SheetJS -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
-    .header {
-      background: linear-gradient(135deg, #1e3a8a, #0f172a);
-      color: #ffffff;
-      padding: 20px 15px;
-      text-align: center;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    .header h1 {
-      font-size: 22px;
-      margin-bottom: 5px;
-      letter-spacing: 0.5px;
-    }
+        body {
+            margin: 0;
+            font-family:
+                "Noto Sans Bengali",
+                "Nirmala UI",
+                Arial,
+                sans-serif;
+            background: #f1f5f9;
+            color: #172033;
+        }
 
-    .header h2 {
-      font-size: 14px;
-      font-weight: 400;
-      color: #93c5fd;
-    }
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
 
-    .description-box {
-      background: #f8fafc;
-      border-left: 4px solid #2563eb;
-      padding: 12px 15px;
-      margin: 15px;
-      border-radius: 4px;
-      font-size: 13px;
-      color: #334155;
-      line-height: 1.6;
-    }
+        .header {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, .18);
+        }
 
-    .description-box i {
-      color: #2563eb;
-      margin-right: 5px;
-    }
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
 
-    .form-body {
-      padding: 10px 20px 25px 20px;
-    }
+        .header p {
+            margin: 0;
+            opacity: .92;
+        }
 
-    .form-group {
-      margin-bottom: 18px;
-    }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, .07);
+        }
 
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: #475569;
-      margin-bottom: 6px;
-    }
+        .card h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
 
-    .form-control {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 14px;
-      outline: none;
-      background: #fff;
-      transition: all 0.2s ease-in-out;
-    }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
 
-    .form-control:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
 
-    /* Security Section Styling */
-    .security-box {
-      background: #fffbeeb0;
-      border: 1px solid #fde68a;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 18px;
-    }
+        select,
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: white;
+            font-size: 15px;
+        }
 
-    .security-box label {
-      color: #92400e;
-    }
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 5px 5px 5px 0;
+            transition: .2s;
+        }
 
-    /* Button Grid Layout */
-    .button-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 10px;
-    }
+        button:hover {
+            transform: translateY(-1px);
+        }
 
-    .btn {
-      width: 100%;
-      color: #ffffff;
-      border: none;
-      padding: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.2s ease-in-out, transform 0.1s;
-    }
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
 
-    .btn-download { background: #16a34a; }
-    .btn-download:hover { background: #15803d; }
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
 
-    .btn-upload { background: #2563eb; }
-    .btn-upload:hover { background: #1d4ed8; }
+        .btn-warning {
+            background: #d97706;
+            color: white;
+        }
 
-    .btn:active { transform: scale(0.99); }
-    .btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
 
-    /* Upload Box Styling */
-    .file-drop-zone {
-      border: 2px dashed #cbd5e1;
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
-      background: #fafafa;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
+        .btn-secondary {
+            background: #475569;
+            color: white;
+        }
 
-    .file-drop-zone:hover {
-      border-color: #2563eb;
-      background: #eff6ff;
-    }
+        .status {
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+            white-space: pre-wrap;
+        }
 
-    .file-drop-zone i {
-      font-size: 24px;
-      color: #64748b;
-      margin-bottom: 5px;
-    }
+        .status.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
 
-    .file-drop-zone p {
-      font-size: 12px;
-      color: #64748b;
-    }
+        .status.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
 
-    /* Status Notifications */
-    .status-msg {
-      margin-top: 15px;
-      padding: 10px 14px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      display: none;
-      align-items: center;
-      gap: 8px;
-    }
+        .status.info {
+            display: block;
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
 
-    .status-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; display: flex; }
-    .status-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; display: flex; }
-    .status-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; display: flex; }
+        .info-box {
+            background: #f8fafc;
+            border-left: 5px solid #2563eb;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
 
-    @media (max-width: 520px) {
-      .button-grid { grid-template-columns: 1fr; }
-      .header h1 { font-size: 18px; }
-      body { padding: 8px; }
-    }
-  </style>
+        .danger-box {
+            background: #fff7ed;
+            border-left: 5px solid #f97316;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+
+        .preview {
+            overflow-x: auto;
+            margin-top: 15px;
+            max-height: 450px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 1000px;
+        }
+
+        th,
+        td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 10px;
+            white-space: nowrap;
+            text-align: left;
+        }
+
+        th {
+            background: #eff6ff;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .stat {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 25px;
+            color: #2563eb;
+        }
+
+        .footer {
+            text-align: center;
+            color: #64748b;
+            padding: 20px;
+            font-size: 13px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <div class="card-container">
-    <!-- হেডার -->
+<div class="container">
+
     <div class="header">
-      <h1><i class="fa-solid fa-school"></i> Pathpukur High School (HS)</h1>
-      <h2><i class="fa-solid fa-shield-halved"></i> Secured Result Management Portal</h2>
+        <h1>📊 School Result Excel Manager</h1>
+        <p>Supabase ↔ Excel Result Data Management</p>
     </div>
 
-    <!-- বিবরণ -->
-    <div class="description-box">
-      <p><i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> প্রথমে এক্সেল ফাইল ডাউনলোড করে তাতে প্রয়োজনীয় সংশোধন করুন। ডাউনলোডের সময় কলামের হেডার পরিবর্তন করবেন না। আপলোড করার সময় পাসকী প্রদান করা বাধ্যতামূলক।</p>
-    </div>
 
-    <!-- ফরম বডি -->
-    <div class="form-body">
-      <!-- শ্রেণী নির্বাচন -->
-      <div class="form-group">
-        <label for="classSelect"><i class="fa-solid fa-layer-group"></i> শ্রেণী নির্বাচন করুন (Select Class):</label>
-        <select id="classSelect" class="form-control">
-          <option value="">-- শ্রেণী নির্বাচন করুন --</option>
-          <option value="v">Class V</option>
-          <option value="vi">Class VI</option>
-          <option value="vii">Class VII</option>
-          <option value="viii">Class VIII</option>
-          <option value="ix">Class IX</option>
-          <option value="x">Class X</option>
-          <option value="xi">Class XI</option>
-        </select>
-      </div>
+    <!-- CLASS SELECTION -->
+    <div class="card">
 
-      <!-- আপলোড সিকিউরিটি বক্স (Passkey Input) -->
-      <div class="security-box">
-        <div class="form-group" style="margin-bottom: 0;">
-          <label for="passkeyInput"><i class="fa-solid fa-lock"></i> আপলোড পাসকী প্রদান করুন (Upload Passkey):</label>
-          <input type="password" id="passkeyInput" class="form-control" placeholder="এখানে সিকিউরিটি পাসকী লিখুন...">
+        <h2>1. শ্রেণী নির্বাচন</h2>
+
+        <div class="form-grid">
+
+            <div>
+                <label for="classSelect">Class</label>
+
+                <select id="classSelect">
+                    <option value="result_v">পঞ্চম শ্রেণী (V)</option>
+                    <option value="result_vi">ষষ্ঠ শ্রেণী (VI)</option>
+                    <option value="result_vii">সপ্তম শ্রেণী (VII)</option>
+                    <option value="result_viii">অষ্টম শ্রেণী (VIII)</option>
+                    <option value="result_ix">নবম শ্রেণী (IX)</option>
+                    <option value="result_x">দশম শ্রেণী (X)</option>
+                    <option value="result_xi">একাদশ শ্রেণী (XI)</option>
+                </select>
+            </div>
+
         </div>
-      </div>
 
-      <!-- ফাইল ড্রপ জোন -->
-      <div class="form-group">
-        <label><i class="fa-solid fa-file-csv"></i> সংশোধন করা ফাইল নির্বাচন করুন (.xlsx / .csv):</label>
-        <div class="file-drop-zone" onclick="document.getElementById('fileInput').click()">
-          <i class="fa-solid fa-cloud-arrow-up"></i>
-          <p id="fileNameDisplay">ফাইল নির্বাচন করতে এখানে ক্লিক করুন</p>
-          <input type="file" id="fileInput" accept=".csv, .xlsx, .xls" style="display: none;" onchange="handleFileSelect(event)">
-        </div>
-      </div>
+        <br>
 
-      <!-- অ্যাকশন বাটন -->
-      <div class="button-grid">
-        <button id="downloadBtn" class="btn btn-download" onclick="downloadExcel()">
-          <i class="fa-solid fa-file-excel"></i> এক্সেল ডাউনলোড
+        <button class="btn-primary" onclick="downloadExcel()">
+            📥 Supabase → Excel Download
         </button>
-        <button id="uploadBtn" class="btn btn-upload" onclick="validateAndUpload()">
-          <i class="fa-solid fa-cloud-arrow-up"></i> ডাটা আপলোড করুন
-        </button>
-      </div>
 
-      <!-- নোটিফিকেশন মেসেজ বক্স -->
-      <div id="statusBox" class="status-msg"></div>
+        <button class="btn-secondary" onclick="loadPreview()">
+            👁️ Supabase Data Preview
+        </button>
+
     </div>
-  </div>
 
-  <script>
-    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
-    const tableMapping = {
-      "v": "result_v",
-      "vi": "result_vi",
-      "vii": "result_vii",
-      "viii": "result_viii",
-      "ix": "result_ix",
-      "x": "result_x",
-      "xi": "result_xi"
+    <!-- UPLOAD -->
+    <div class="card">
+
+        <h2>2. Excel Edit করে Upload</h2>
+
+        <div class="info-box">
+
+            <b>গুরুত্বপূর্ণ:</b><br>
+
+            Excel-এর প্রথম row-এর heading পরিবর্তন করবেন না।<br>
+
+            Student name, section, roll এবং marks পরিবর্তন করা যাবে।<br>
+
+            <b>id</b> এবং <b>updated_at</b> Excel-এ থাকবে না।<br>
+
+            একই
+            <b>session + section + roll_no</b>
+            পাওয়া গেলে পুরনো record update হবে।
+            না থাকলে নতুন record তৈরি হবে।
+
+        </div>
+
+        <br>
+
+        <label for="excelFile">
+            Excel File নির্বাচন করুন
+        </label>
+
+        <input
+            type="file"
+            id="excelFile"
+            accept=".xlsx,.xls"
+        >
+
+        <br><br>
+
+        <button
+            class="btn-warning"
+            onclick="previewExcel()"
+        >
+            📄 Excel Preview
+        </button>
+
+        <button
+            class="btn-success"
+            onclick="uploadExcel()"
+        >
+            ☁️ Supabase-এ Upload করুন
+        </button>
+
+    </div>
+
+
+    <!-- STATUS -->
+    <div id="status" class="status"></div>
+
+
+    <!-- STATS -->
+    <div id="statsCard" class="card hidden">
+
+        <h2>Data Summary</h2>
+
+        <div class="stats">
+
+            <div class="stat">
+                <strong id="rowCount">0</strong>
+                Rows
+            </div>
+
+            <div class="stat">
+                <strong id="columnCount">0</strong>
+                Columns
+            </div>
+
+            <div class="stat">
+                <strong id="insertCount">-</strong>
+                Insert
+            </div>
+
+            <div class="stat">
+                <strong id="updateCount">-</strong>
+                Update
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PREVIEW -->
+    <div id="previewCard" class="card hidden">
+
+        <h2>Data Preview</h2>
+
+        <div id="preview" class="preview"></div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>⚠️ Security Note</h2>
+
+        <div class="danger-box">
+
+            এই HTML file-এ Supabase-এর <b>anon/public key</b> ব্যবহার করবেন।
+            কখনোই <b>service_role key</b> এখানে রাখবেন না।
+
+            <br><br>
+
+            Production website হলে Supabase Authentication + RLS ব্যবহার করা অত্যন্ত গুরুত্বপূর্ণ।
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        School Result Management System
+    </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   1. SUPABASE CONFIGURATION
+   ============================================================
+
+   এখানে আপনার Supabase Project URL এবং ANON/PUBLISHABLE KEY দিন।
+
+   উদাহরণ:
+
+   https://abcdefgh.supabase.co
+
+   Service Role Key এখানে কখনো ব্যবহার করবেন না।
+   ============================================================ */
+
+const SUPABASE_URL =
+    "https://YOUR_PROJECT_ID.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "YOUR_SUPABASE_ANON_KEY";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+/* ============================================================
+   2. CLASS CONFIGURATION
+   ============================================================ */
+
+const CLASS_CONFIG = {
+
+    result_v: {
+        className: "V",
+
+        columns: [
+            "student_name",
+            "class_name",
+            "section",
+            "roll_no",
+            "session",
+
+            "e1_bengali",
+            "e1_english",
+            "e1_math",
+            "e1_science",
+            "e1_work_education",
+            "e1_physical_education",
+
+            "e2_bengali",
+            "e2_english",
+            "e2_math",
+            "e2_science",
+            "e2_work_education",
+            "e2_physical_education",
+
+            "e3_bengali",
+            "e3_english",
+            "e3_math",
+            "e3_science",
+            "e3_work_education",
+            "e3_physical_education"
+        ]
+    },
+
+
+    result_vi: {
+        className: "VI",
+
+        columns: [
+            "student_name",
+            "class_name",
+            "section",
+            "roll_no",
+            "session",
+
+            "e1_bengali",
+            "e1_english",
+            "e1_math",
+            "e1_science",
+            "e1_history",
+            "e1_geography",
+            "e1_work_education",
+            "e1_physical_education",
+
+            "e2_bengali",
+            "e2_english",
+            "e2_math",
+            "e2_science",
+            "e2_history",
+            "e2_geography",
+            "e2_work_education",
+            "e2_physical_education",
+
+            "e3_bengali",
+            "e3_english",
+            "e3_math",
+            "e3_science",
+            "e3_history",
+            "e3_geography",
+            "e3_work_education",
+            "e3_physical_education"
+        ]
+    },
+
+
+    result_vii: {
+        className: "VII",
+
+        columns: [
+            "student_name",
+            "class_name",
+            "section",
+            "roll_no",
+            "session",
+
+            "e1_bengali",
+            "e1_english",
+            "e1_arabic",
+            "e1_sanskrit",
+            "e1_math",
+            "e1_life_science",
+            "e1_physical_science",
+            "e1_history",
+            "e1_geography",
+            "e1_work_education",
+            "e1_physical_education",
+
+            "e2_bengali",
+            "e2_english",
+            "e2_arabic",
+            "e2_sanskrit",
+            "e2_math",
+            "e2_life_science",
+            "e2_physical_science",
+            "e2_history",
+            "e2_geography",
+            "e2_work_education",
+            "e2_physical_education",
+
+            "e3_bengali",
+            "e3_english",
+            "e3_arabic",
+            "e3_sanskrit",
+            "e3_math",
+            "e3_life_science",
+            "e3_physical_science",
+            "e3_history",
+            "e3_geography",
+            "e3_work_education",
+            "e3_physical_education"
+        ]
+    },
+
+
+    result_viii: {
+        className: "VIII",
+
+        columns: [
+            "student_name",
+            "class_name",
+            "section",
+            "roll_no",
+            "session",
+
+            "e1_bengali",
+            "e1_english",
+            "e1_arabic",
+            "e1_sanskrit",
+            "e1_math",
+            "e1_life_science",
+            "e1_physical_science",
+            "e1_history",
+            "e1_geography",
+            "e1_work_education",
+            "e1_physical_education",
+
+            "e2_bengali",
+            "e2_english",
+            "e2_arabic",
+            "e2_sanskrit",
+            "e2_math",
+            "e2_life_science",
+            "e2_physical_science",
+            "e2_history",
+            "e2_geography",
+            "e2_work_education",
+            "e2_physical_education",
+
+            "e3_bengali",
+            "e3_english",
+            "e3_arabic",
+            "e3_sanskrit",
+            "e3_math",
+            "e3_life_science",
+            "e3_physical_science",
+            "e3_history",
+            "e3_geography",
+            "e3_work_education",
+            "e3_physical_education"
+        ]
+    },
+
+
+    result_ix: {
+        className: "IX",
+
+        columns: [
+            "student_name",
+            "class_name",
+            "section",
+            "roll_no",
+            "session",
+
+            "e1_bengali",
+            "e1_english",
+            "e1_math",
+            "e1_physical_science",
+            "e1_life_science",
+            "e1_history",
+            "e1_geography",
+
+            "e2_bengali",
+            "e2_english",
+            "e2_math",
+            "e2_physical_science",
+            "e2_life_science",
+            "e2_history",
+            "e2_geography",
+
+            "e3_bengali",
+            "e3_english",
+            "e3_math",
+            "e3_physical_science",
+            "e3_life_science",
+            "e3_history",
+            "e3_geography",
+
+            "proj_bengali",
+            "proj_english",
+            "proj_math",
+            "proj_physical_science",
+            "proj_life_science",
+            "proj_history",
+            "proj_geography"
+        ]
+    },
+
+
+    result_x: {
+        className: "X",
+
+        columns: [
+            "student_name",
+            "class_name",
+            "section",
+            "roll_no",
+            "session",
+
+            "e1_bengali",
+            "e1_english",
+            "e1_math",
+            "e1_physical_science",
+            "e1_life_science",
+            "e1_history",
+            "e1_geography",
+
+            "e2_bengali",
+            "e2_english",
+            "e2_math",
+            "e2_physical_science",
+            "e2_life_science",
+            "e2_history",
+            "e2_geography",
+
+            "test_bengali",
+            "test_english",
+            "test_math",
+            "test_physical_science",
+            "test_life_science",
+            "test_history",
+            "test_geography"
+        ]
+    },
+
+
+    result_xi: {
+        className: "XI",
+
+        columns: [
+            "student_name",
+            "class_name",
+            "section",
+            "roll_no",
+            "session",
+
+            "sem1_bengali",
+            "sem1_english",
+            "sem1_history",
+            "sem1_philosophy",
+            "sem1_education",
+            "sem1_geography",
+            "sem1_political_science",
+            "sem1_arabic",
+            "sem1_sanskrit",
+
+            "sem2_bengali",
+            "sem2_english",
+            "sem2_history",
+            "sem2_philosophy",
+            "sem2_education",
+            "sem2_geography",
+            "sem2_political_science",
+            "sem2_arabic",
+            "sem2_sanskrit",
+
+            "proj_bengali",
+            "proj_english",
+            "proj_history",
+            "proj_philosophy",
+            "proj_education",
+            "proj_geography",
+            "proj_political_science",
+            "proj_arabic",
+            "proj_sanskrit"
+        ]
+    }
+
+};
+
+
+/* ============================================================
+   3. HELPER FUNCTIONS
+   ============================================================ */
+
+function getConfig() {
+
+    const table =
+        document.getElementById("classSelect").value;
+
+    return {
+        table: table,
+        config: CLASS_CONFIG[table]
     };
+}
 
-    let selectedFile = null;
 
-    function showStatus(message, type) {
-      const statusBox = document.getElementById('statusBox');
-      statusBox.className = 'status-msg status-' + type;
-      
-      let icon = '';
-      if (type === 'info') icon = '<i class="fa-solid fa-spinner fa-spin"></i> ';
-      else if (type === 'success') icon = '<i class="fa-solid fa-circle-check"></i> ';
-      else if (type === 'error') icon = '<i class="fa-solid fa-circle-exclamation"></i> ';
+function showStatus(message, type = "info") {
 
-      statusBox.innerHTML = icon + message;
+    const box =
+        document.getElementById("status");
+
+    box.className =
+        "status " + type;
+
+    box.textContent =
+        message;
+}
+
+
+function clearStatus() {
+
+    const box =
+        document.getElementById("status");
+
+    box.className =
+        "status";
+
+    box.textContent = "";
+}
+
+
+function escapeHtml(value) {
+
+    if (value === null || value === undefined) {
+        return "";
     }
 
-    function handleFileSelect(event) {
-      const file = event.target.files[0];
-      if (file) {
-        selectedFile = file;
-        document.getElementById('fileNameDisplay').innerHTML = `<strong>নির্বাচিত ফাইল:</strong> ${file.name}`;
-      }
-    }
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
 
-    // --- ১. এক্সেল ডাউনলোড (সমস্ত কলামের সাথে) ---
-    async function downloadExcel() {
-      const selectedClass = document.getElementById('classSelect').value;
-      if (!selectedClass) {
-        showStatus("অনুগ্রহ করে একটি শ্রেণী নির্বাচন করুন!", "error");
-        return;
-      }
 
-      const tableName = tableMapping[selectedClass];
-      showStatus(`Supabase থেকে Class ${selectedClass.toUpperCase()} এর ডাটা ডাউনলোড করা হচ্ছে...`, "info");
+/* ============================================================
+   4. FETCH ALL DATA FROM SUPABASE
+   ============================================================ */
 
-      try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/${tableName}?select=*&order=roll_no.asc`, {
-          method: 'GET',
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-          }
-        });
+async function fetchAllRows(table) {
 
-        if (!response.ok) throw new Error("ডাটা ফেচ করতে সমস্যা হয়েছে!");
-        const data = await response.json();
+    const pageSize = 1000;
+
+    let allRows = [];
+
+    let from = 0;
+
+    while (true) {
+
+        const to =
+            from + pageSize - 1;
+
+        const { data, error } =
+            await supabaseClient
+                .from(table)
+                .select("*")
+                .range(from, to)
+                .order("roll_no", {
+                    ascending: true
+                });
+
+        if (error) {
+            throw error;
+        }
 
         if (!data || data.length === 0) {
-          showStatus(`Class ${selectedClass.toUpperCase()} এর টেবিলে কোনো ডাটা পাওয়া যায়নি!`, "error");
-          return;
+            break;
         }
 
-        const worksheet = XLSX.utils.json_to_sheet(data);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, `Class_${selectedClass.toUpperCase()}`);
+        allRows =
+            allRows.concat(data);
 
-        const fileName = `Result_Class_${selectedClass.toUpperCase()}_2026.xlsx`;
-        XLSX.writeFile(workbook, fileName);
+        if (data.length < pageSize) {
+            break;
+        }
 
-        showStatus(`সফলভাবে ${fileName} ডাউনলোড সম্পন্ন হয়েছে!`, "success");
+        from += pageSize;
+    }
 
-      } catch (error) {
+    return allRows;
+}
+
+
+/* ============================================================
+   5. DOWNLOAD SUPABASE DATA AS EXCEL
+   ============================================================ */
+
+async function downloadExcel() {
+
+    clearStatus();
+
+    try {
+
+        const { table, config } =
+            getConfig();
+
+        showStatus(
+            `Supabase থেকে Class ${config.className}-এর data নেওয়া হচ্ছে...`,
+            "info"
+        );
+
+        const rows =
+            await fetchAllRows(table);
+
+        if (!rows.length) {
+
+            showStatus(
+                "এই table-এ কোনো data পাওয়া যায়নি।",
+                "error"
+            );
+
+            return;
+        }
+
+
+        /*
+           id এবং updated_at Excel-এ দেওয়া হচ্ছে না।
+
+           কারণ:
+
+           id = database generated BIGSERIAL
+
+           updated_at = database generated timestamp
+        */
+
+        const excelRows =
+            rows.map(row => {
+
+                const obj = {};
+
+                config.columns.forEach(column => {
+
+                    let value =
+                        row[column];
+
+                    /*
+                       NULL values Excel-এ blank হবে
+                    */
+
+                    if (value === null ||
+                        value === undefined) {
+
+                        value = "";
+                    }
+
+                    obj[column] =
+                        value;
+                });
+
+                return obj;
+            });
+
+
+        /*
+           JSON objects -> worksheet
+        */
+
+        const worksheet =
+            XLSX.utils.json_to_sheet(
+                excelRows,
+                {
+                    header: config.columns
+                }
+            );
+
+
+        /*
+           Column width
+        */
+
+        worksheet["!cols"] =
+            config.columns.map(column => {
+
+                if (column === "student_name") {
+                    return { wch: 28 };
+                }
+
+                if (column === "section") {
+                    return { wch: 10 };
+                }
+
+                if (column === "session") {
+                    return { wch: 14 };
+                }
+
+                return { wch: 16 };
+            });
+
+
+        const workbook =
+            XLSX.utils.book_new();
+
+
+        XLSX.utils.book_append_sheet(
+            workbook,
+            worksheet,
+            "Result"
+        );
+
+
+        const fileName =
+            `result_${config.className}_${new Date()
+                .toISOString()
+                .slice(0,10)}.xlsx`;
+
+
+        XLSX.writeFile(
+            workbook,
+            fileName
+        );
+
+
+        showStatus(
+            `Excel download successful!\n\nClass: ${config.className}\nRows: ${rows.length}`,
+            "success"
+        );
+
+
+        updateStats(
+            rows.length,
+            config.columns.length,
+            "-",
+            "-"
+        );
+
+    }
+    catch (error) {
+
         console.error(error);
-        showStatus("ডাটা ডাউনলোডে সমস্যা হয়েছে। ইন্টারনেট বা টেবিল নাম যাচাই করুন।", "error");
-      }
+
+        showStatus(
+            "Excel download failed:\n" +
+            error.message,
+            "error"
+        );
     }
+}
 
-    // --- ২. পাসকী ও এডিট মোড সিকিউরিটি যাচাই ---
-    async function validateAndUpload() {
-      const selectedClass = document.getElementById('classSelect').value;
-      const userPasskey = document.getElementById('passkeyInput').value.trim();
 
-      if (!selectedClass) {
-        showStatus("অনুগ্রহ করে একটি শ্রেণী নির্বাচন করুন!", "error");
-        return;
-      }
+/* ============================================================
+   6. SUPABASE DATA PREVIEW
+   ============================================================ */
 
-      if (!userPasskey) {
-        showStatus("ফাইল আপলোড করতে সিকিউরিটি পাসকী প্রদান করুন!", "error");
-        return;
-      }
+async function loadPreview() {
 
-      if (!selectedFile) {
-        showStatus("আপলোড করার জন্য একটি Excel বা CSV ফাইল নির্বাচন করুন!", "error");
-        return;
-      }
+    clearStatus();
 
-      showStatus("সিকিউরিটি পারমিশন ও পাসকী যাচাই করা হচ্ছে...", "info");
+    try {
 
-      try {
-        const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/page_settings?page_name=eq.upload_result_file&select=*`, {
-          method: 'GET',
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-          }
-        });
+        const { table, config } =
+            getConfig();
 
-        if (!settingsResponse.ok) throw new Error("সিকিউরিটি সেটিংস চেক করতে সমস্যা হয়েছে!");
+        showStatus(
+            `Class ${config.className}-এর data load হচ্ছে...`,
+            "info"
+        );
 
-        const settingsData = await settingsResponse.json();
+        const rows =
+            await fetchAllRows(table);
 
-        if (!settingsData || settingsData.length === 0) {
-          showStatus("সিস্টেম সিকিউরিটি সেটিংস ডাটাবেজে পাওয়া যায়নি!", "error");
-          return;
+        if (!rows.length) {
+
+            showStatus(
+                "কোনো data পাওয়া যায়নি।",
+                "error"
+            );
+
+            return;
         }
 
-        const pageConfig = settingsData[0];
 
-        if (pageConfig.edit_mode !== true) {
-          showStatus("বর্তমানে সিস্টেমে ডাটা আপলোড বা এডিট করার সুবিধা বন্ধ রয়েছে (Edit Mode Disabled)!", "error");
-          return;
-        }
+        renderPreview(
+            rows.map(row => {
 
-        if (String(pageConfig.passkey).trim() !== userPasskey) {
-          showStatus("আপনার দেওয়া পাসকীটি সঠিক নয়!", "error");
-          return;
-        }
+                const obj = {};
 
-        // পারমিশন পাওয়ার পর ফাইল প্রসেস শুরু
-        processFileAndUpload(tableMapping[selectedClass]);
+                config.columns.forEach(c => {
+                    obj[c] =
+                        row[c] ?? "";
+                });
 
-      } catch (error) {
+                return obj;
+
+            }),
+            config.columns
+        );
+
+
+        updateStats(
+            rows.length,
+            config.columns.length,
+            "-",
+            "-"
+        );
+
+
+        showStatus(
+            `${rows.length}টি record পাওয়া গেছে।`,
+            "success"
+        );
+
+    }
+    catch (error) {
+
         console.error(error);
-        showStatus("যাচাইকরণের সময় সমস্যা দেখা দিয়েছে!", "error");
-      }
+
+        showStatus(
+            "Data load failed:\n" +
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   7. RENDER PREVIEW TABLE
+   ============================================================ */
+
+function renderPreview(rows, columns) {
+
+    const card =
+        document.getElementById("previewCard");
+
+    const container =
+        document.getElementById("preview");
+
+    card.classList.remove("hidden");
+
+
+    let html =
+        "<table><thead><tr>";
+
+
+    columns.forEach(column => {
+
+        html +=
+            `<th>${escapeHtml(column)}</th>`;
+    });
+
+
+    html +=
+        "</tr></thead><tbody>";
+
+
+    const maxPreviewRows =
+        Math.min(rows.length, 100);
+
+
+    for (
+        let i = 0;
+        i < maxPreviewRows;
+        i++
+    ) {
+
+        html += "<tr>";
+
+        columns.forEach(column => {
+
+            html +=
+                `<td>${escapeHtml(
+                    rows[i][column]
+                )}</td>`;
+        });
+
+        html += "</tr>";
     }
 
-    // --- ৩. এক্সেল বা সিএসভি ফাইল প্রসেস করা ---
-    function processFileAndUpload(tableName) {
-      showStatus("ফাইল প্রসেস করা হচ্ছে...", "info");
-      const fileExt = selectedFile.name.split('.').pop().toLowerCase();
 
-      if (fileExt === 'csv') {
-        Papa.parse(selectedFile, {
-          header: true,
-          dynamicTyping: true,
-          skipEmptyLines: true,
-          complete: function (results) {
-            uploadDataToSupabase(tableName, results.data);
-          }
-        });
-      } else if (fileExt === 'xlsx' || fileExt === 'xls') {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[firstSheetName];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: null });
-          uploadDataToSupabase(tableName, jsonData);
-        };
-        reader.readAsArrayBuffer(selectedFile);
-      } else {
-        showStatus("কেবলমাত্র .xlsx, .xls অথবা .csv ফাইল সাপোর্ট করে!", "error");
-      }
+    html +=
+        "</tbody></table>";
+
+
+    if (rows.length > maxPreviewRows) {
+
+        html +=
+            `<p style="padding:10px">
+                প্রথম ${maxPreviewRows}টি row দেখানো হয়েছে।
+                মোট row: ${rows.length}
+            </p>`;
     }
 
-    // --- ৪. ক্লিন ডাটা তৈরি ও Supabase-এ Bulk Upsert করা ---
-    async function uploadDataToSupabase(tableName, rawData) {
-      if (!rawData || rawData.length === 0) {
-        showStatus("ফাইলে কোনো ডাটা খুঁজে পাওয়া যায়নি!", "error");
-        return;
-      }
 
-      // ১. খালি বা ইনভ্যালিড সারিগুলো ফিল্টার করা
-      const cleanedData = rawData.map(row => {
-        let cleanRow = {};
-        Object.keys(row).forEach(key => {
-          let trimmedKey = key.trim();
-          let value = row[key];
+    container.innerHTML =
+        html;
+}
 
-          // খালি স্ট্রিংকে null এ রূপান্তর
-          if (value === "" || value === undefined) {
-            value = null;
-          }
 
-          cleanRow[trimmedKey] = value;
-        });
-        return cleanRow;
-      }).filter(row => {
-        // রোল বা নেম খালি থাকলে তা বাদ দেওয়া হবে
-        return row.roll_no !== null && row.roll_no !== undefined;
-      });
+/* ============================================================
+   8. READ EXCEL FILE
+   ============================================================ */
 
-      if (cleanedData.length === 0) {
-        showStatus("ফাইলে কোনো সঠিক রোল নম্বর বিশিষ্ট ডাটা পাওয়া যায়নি!", "error");
-        return;
-      }
+async function readExcelFile() {
 
-      showStatus(`ডাটাবেজে ${cleanedData.length} টি রেকর্ড আপডেট/আপলোড হচ্ছে...`, "info");
+    const fileInput =
+        document.getElementById("excelFile");
 
-      try {
-        // Supabase Upsert API Request (Merge / Overwrite Duplicates)
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/${tableName}`, {
-          method: 'POST',
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'resolution=merge-duplicates,return=minimal'
-          },
-          body: JSON.stringify(cleanedData)
-        });
+    if (!fileInput.files.length) {
 
-        if (response.ok) {
-          showStatus(`🎉 সফলভাবে ${cleanedData.length} টি রেকর্ড ${tableName} টেবিলে সিঙ্ক ও আপডেট করা হয়েছে!`, "success");
-          document.getElementById('passkeyInput').value = '';
+        throw new Error(
+            "প্রথমে Excel file নির্বাচন করুন।"
+        );
+    }
+
+
+    const file =
+        fileInput.files[0];
+
+
+    const buffer =
+        await file.arrayBuffer();
+
+
+    /*
+       Browser-এ XLSX.read ব্যবহার করছি।
+       XLSX.readFile নয়।
+    */
+
+    const workbook =
+        XLSX.read(
+            buffer,
+            {
+                type: "array",
+                cellDates: false
+            }
+        );
+
+
+    if (!workbook.SheetNames.length) {
+
+        throw new Error(
+            "Excel file-এ কোনো worksheet পাওয়া যায়নি।"
+        );
+    }
+
+
+    const sheetName =
+        workbook.SheetNames[0];
+
+
+    const worksheet =
+        workbook.Sheets[sheetName];
+
+
+    const rows =
+        XLSX.utils.sheet_to_json(
+            worksheet,
+            {
+                defval: "",
+                raw: false
+            }
+        );
+
+
+    return {
+        workbook,
+        worksheet,
+        rows,
+        sheetName
+    };
+}
+
+
+/* ============================================================
+   9. VALIDATE EXCEL HEADERS
+   ============================================================ */
+
+function validateHeaders(rows, expectedColumns) {
+
+    if (!rows.length) {
+
+        throw new Error(
+            "Excel-এ কোনো data row নেই।"
+        );
+    }
+
+
+    /*
+       sheet_to_json object-এর keys প্রথম row
+       থেকে পাওয়া যায়।
+    */
+
+    const actualHeaders =
+        Object.keys(rows[0]);
+
+
+    const missing =
+        expectedColumns.filter(
+            c => !actualHeaders.includes(c)
+        );
+
+
+    const extra =
+        actualHeaders.filter(
+            c => !expectedColumns.includes(c)
+        );
+
+
+    if (missing.length) {
+
+        throw new Error(
+            "Excel header ভুল বা অসম্পূর্ণ।\n\n" +
+            "Missing columns:\n" +
+            missing.join(", ")
+        );
+    }
+
+
+    if (extra.length) {
+
+        throw new Error(
+            "Excel-এ অজানা column পাওয়া গেছে:\n\n" +
+            extra.join(", ") +
+            "\n\nপ্রথম row-এর heading পরিবর্তন করবেন না।"
+        );
+    }
+
+
+    /*
+       Column order-ও validate করা হচ্ছে।
+
+       এতে ভুল class-এর Excel upload হওয়ার
+       সম্ভাবনা অনেক কমে যাবে।
+    */
+
+    for (
+        let i = 0;
+        i < expectedColumns.length;
+        i++
+    ) {
+
+        if (actualHeaders[i] !== expectedColumns[i]) {
+
+            throw new Error(
+                "Excel column order ভুল।\n\n" +
+                "Expected:\n" +
+                expectedColumns.join(", ") +
+                "\n\nActual:\n" +
+                actualHeaders.join(", ")
+            );
+        }
+    }
+}
+
+
+/* ============================================================
+   10. NUMBER / TEXT NORMALIZATION
+   ============================================================ */
+
+function normalizeValue(
+    column,
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        String(value).trim() === ""
+    ) {
+        return null;
+    }
+
+
+    const numericPrefixes = [
+        "e1_",
+        "e2_",
+        "e3_",
+        "sem1_",
+        "sem2_",
+        "proj_",
+        "test_"
+    ];
+
+
+    const isNumeric =
+        numericPrefixes.some(
+            prefix =>
+                column.startsWith(prefix)
+        );
+
+
+    if (column === "roll_no") {
+
+        const number =
+            Number(value);
+
+        if (
+            !Number.isInteger(number) ||
+            number <= 0
+        ) {
+
+            throw new Error(
+                `Invalid roll_no: ${value}`
+            );
+        }
+
+        return number;
+    }
+
+
+    if (isNumeric) {
+
+        const number =
+            Number(value);
+
+        if (!Number.isInteger(number)) {
+
+            throw new Error(
+                `${column}-এ পূর্ণসংখ্যা দিতে হবে। Value: ${value}`
+            );
+        }
+
+        return number;
+    }
+
+
+    return String(value).trim();
+}
+
+
+/* ============================================================
+   11. PREPARE EXCEL DATA FOR SUPABASE
+   ============================================================ */
+
+function prepareRows(
+    rows,
+    config
+) {
+
+    const output = [];
+
+
+    const duplicateKeys =
+        new Set();
+
+
+    rows.forEach(
+        (excelRow, index) => {
+
+            const rowNumber =
+                index + 2;
+
+
+            const row = {};
+
+
+            config.columns.forEach(
+                column => {
+
+                    row[column] =
+                        normalizeValue(
+                            column,
+                            excelRow[column]
+                        );
+                }
+            );
+
+
+            /*
+               Required fields
+            */
+
+            if (
+                !row.student_name ||
+                !row.class_name ||
+                !row.section ||
+                !row.session ||
+                !row.roll_no
+            ) {
+
+                throw new Error(
+                    `Excel row ${rowNumber}-এ student_name, class_name, section, roll_no অথবা session missing।`
+                );
+            }
+
+
+            /*
+               Class name automatically selected
+               class_name Excel থেকে বদলে অন্য class
+               করা যাবে না।
+            */
+
+            if (
+                row.class_name !== config.className
+            ) {
+
+                throw new Error(
+                    `Excel row ${rowNumber}: class_name অবশ্যই ${config.className} হতে হবে।`
+                );
+            }
+
+
+            /*
+               Unique key
+            */
+
+            const key =
+                [
+                    row.session,
+                    row.section,
+                    row.roll_no
+                ].join("|");
+
+
+            if (duplicateKeys.has(key)) {
+
+                throw new Error(
+                    `Excel-এর মধ্যে duplicate student পাওয়া গেছে:\n` +
+                    `Session=${row.session}, ` +
+                    `Section=${row.section}, ` +
+                    `Roll=${row.roll_no}`
+                );
+            }
+
+
+            duplicateKeys.add(key);
+
+
+            /*
+               Arabic + Sanskrit validation
+               VII এবং VIII-এর ক্ষেত্রে।
+
+               Database constraint-এর সাথে
+               একই logic এখানে আগেই check করছি।
+            */
+
+            if (
+                (config.className === "VII" ||
+                 config.className === "VIII")
+            ) {
+
+                for (
+                    const exam of [
+                        "e1",
+                        "e2",
+                        "e3"
+                    ]
+                ) {
+
+                    const arabic =
+                        row[
+                            `${exam}_arabic`
+                        ];
+
+                    const sanskrit =
+                        row[
+                            `${exam}_sanskrit`
+                        ];
+
+
+                    if (
+                        arabic !== null &&
+                        sanskrit !== null
+                    ) {
+
+                        throw new Error(
+                            `Excel row ${rowNumber}: ` +
+                            `${exam}-এ Arabic এবং Sanskrit দুটো একসাথে দেওয়া যাবে না।`
+                        );
+                    }
+                }
+            }
+
+
+            output.push(row);
+        }
+    );
+
+
+    return output;
+}
+
+
+/* ============================================================
+   12. PREVIEW EXCEL
+   ============================================================ */
+
+async function previewExcel() {
+
+    clearStatus();
+
+    try {
+
+        const { config } =
+            getConfig();
+
+
+        const result =
+            await readExcelFile();
+
+
+        validateHeaders(
+            result.rows,
+            config.columns
+        );
+
+
+        const rows =
+            prepareRows(
+                result.rows,
+                config
+            );
+
+
+        renderPreview(
+            rows,
+            config.columns
+        );
+
+
+        updateStats(
+            rows.length,
+            config.columns.length,
+            "-",
+            "-"
+        );
+
+
+        showStatus(
+            `Excel validation successful.\n\n` +
+            `Class: ${config.className}\n` +
+            `Rows: ${rows.length}\n` +
+            `Columns: ${config.columns.length}`,
+            "success"
+        );
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        showStatus(
+            "Excel validation failed:\n\n" +
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   13. CHECK EXISTING RECORDS
+   ============================================================ */
+
+async function getExistingKeys(
+    table,
+    rows
+) {
+
+    /*
+       Excel থেকে unique session/section/roll
+       সংগ্রহ করছি।
+    */
+
+    const keySet =
+        new Set();
+
+
+    rows.forEach(row => {
+
+        keySet.add(
+            [
+                row.session,
+                row.section,
+                row.roll_no
+            ].join("|")
+        );
+    });
+
+
+    /*
+       সব existing rows একবারে নেওয়া
+       সবচেয়ে সহজ এবং নির্ভরযোগ্য পদ্ধতি।
+
+       সাধারণ school result data-এর জন্য
+       এটি যথেষ্ট।
+    */
+
+    const existing =
+        await fetchAllRows(table);
+
+
+    const existingSet =
+        new Set();
+
+
+    existing.forEach(row => {
+
+        existingSet.add(
+            [
+                row.session,
+                row.section,
+                row.roll_no
+            ].join("|")
+        );
+    });
+
+
+    let inserts = 0;
+    let updates = 0;
+
+
+    rows.forEach(row => {
+
+        const key =
+            [
+                row.session,
+                row.section,
+                row.roll_no
+            ].join("|");
+
+
+        if (existingSet.has(key)) {
+            updates++;
         } else {
-          const errRes = await response.json();
-          showStatus(`আপলোড ব্যর্থ হয়েছে: ${errRes.message || errRes.hint || 'কলাম নেম বা প্রাইমারি কি ফরম্যাট চেক করুন'}`, "error");
+            inserts++;
         }
-      } catch (err) {
-        console.error(err);
-        showStatus("Supabase সার্ভারে ডাটা পাঠাতে ব্যর্থ হয়েছে!", "error");
-      }
+    });
+
+
+    return {
+        inserts,
+        updates
+    };
+}
+
+
+/* ============================================================
+   14. UPLOAD EXCEL TO SUPABASE
+   ============================================================ */
+
+async function uploadExcel() {
+
+    clearStatus();
+
+    try {
+
+        const { table, config } =
+            getConfig();
+
+
+        /*
+           Confirmation
+        */
+
+        const confirmed =
+            confirm(
+                `Class ${config.className}-এর Excel data Supabase-এ upload করবেন?\n\n` +
+                `Existing student হলে তার marks UPDATE হবে।\n` +
+                `নতুন student হলে INSERT হবে।`
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        showStatus(
+            "Excel পড়া হচ্ছে...",
+            "info"
+        );
+
+
+        const result =
+            await readExcelFile();
+
+
+        validateHeaders(
+            result.rows,
+            config.columns
+        );
+
+
+        const rows =
+            prepareRows(
+                result.rows,
+                config
+            );
+
+
+        if (!rows.length) {
+
+            throw new Error(
+                "Upload করার মতো কোনো data নেই।"
+            );
+        }
+
+
+        /*
+           Existing vs New count
+        */
+
+        showStatus(
+            "Existing records check করা হচ্ছে...",
+            "info"
+        );
+
+
+        const counts =
+            await getExistingKeys(
+                table,
+                rows
+            );
+
+
+        /*
+           User confirmation
+        */
+
+        const finalConfirm =
+            confirm(
+                `Upload Summary\n\n` +
+                `Class: ${config.className}\n` +
+                `Total: ${rows.length}\n` +
+                `New Insert: ${counts.inserts}\n` +
+                `Existing Update: ${counts.updates}\n\n` +
+                `Continue?`
+            );
+
+
+        if (!finalConfirm) {
+            return;
+        }
+
+
+        /*
+           Supabase bulk upsert
+
+           onConflict:
+           session,section,roll_no
+        */
+
+        const batchSize =
+            500;
+
+
+        let completed =
+            0;
+
+
+        for (
+            let start = 0;
+            start < rows.length;
+            start += batchSize
+        ) {
+
+            const batch =
+                rows.slice(
+                    start,
+                    start + batchSize
+                );
+
+
+            showStatus(
+                `Supabase upload চলছে...\n\n` +
+                `Processed: ${completed}/${rows.length}`,
+                "info"
+            );
+
+
+            const { error } =
+                await supabaseClient
+                    .from(table)
+                    .upsert(
+                        batch,
+                        {
+                            onConflict:
+                                "session,section,roll_no",
+                            ignoreDuplicates:
+                                false
+                        }
+                    );
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            completed +=
+                batch.length;
+        }
+
+
+        updateStats(
+            rows.length,
+            config.columns.length,
+            counts.inserts,
+            counts.updates
+        );
+
+
+        showStatus(
+            `✅ Upload successful!\n\n` +
+            `Class: ${config.className}\n` +
+            `Total processed: ${rows.length}\n` +
+            `New Insert: ${counts.inserts}\n` +
+            `Updated: ${counts.updates}`,
+            "success"
+        );
+
+
+        /*
+           Upload শেষে নতুন data preview
+        */
+
+        await loadPreview();
+
     }
-  </script>
+    catch (error) {
+
+        console.error(error);
+
+        showStatus(
+            "❌ Upload failed:\n\n" +
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   15. UPDATE STATISTICS
+   ============================================================ */
+
+function updateStats(
+    rows,
+    columns,
+    inserts,
+    updates
+) {
+
+    document
+        .getElementById("statsCard")
+        .classList
+        .remove("hidden");
+
+
+    document
+        .getElementById("rowCount")
+        .textContent =
+        rows;
+
+
+    document
+        .getElementById("columnCount")
+        .textContent =
+        columns;
+
+
+    document
+        .getElementById("insertCount")
+        .textContent =
+        inserts;
+
+
+    document
+        .getElementById("updateCount")
+        .textContent =
+        updates;
+}
+
+
+/* ============================================================
+   16. CLASS CHANGE
+   ============================================================ */
+
+document
+    .getElementById("classSelect")
+    .addEventListener(
+        "change",
+        function() {
+
+            document
+                .getElementById("previewCard")
+                .classList
+                .add("hidden");
+
+            clearStatus();
+        }
+    );
+
+
+/* ============================================================
+   17. INITIAL MESSAGE
+   ============================================================ */
+
+showStatus(
+    "প্রথমে Class নির্বাচন করুন। তারপর Supabase → Excel Download করতে পারবেন।",
+    "info"
+);
+
+</script>
+
 </body>
 </html>
+
