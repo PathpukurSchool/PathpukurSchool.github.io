@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>নম্বর আপলোড স্ট্যাটাস - পাতপুকুর হাই স্কুল (উ: মা:)</title>
+  
+  <!-- FontAwesome & Tailwind CSS CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+    body { font-family: 'Hind Siliguri', sans-serif; }
+    .zero-count { background-color: #fee2e2; color: #dc2626; font-weight: bold; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-10">
+
+  <!-- হেডার সেকশন -->
+  <header class="bg-indigo-900 text-white shadow-lg py-6 px-4 mb-6">
+    <div class="max-w-7xl mx-auto text-center">
+      <h1 class="text-2xl sm:text-3xl font-bold mb-1">
+        <i class="fa-solid fa-school mr-2"></i>পাতপুকুর হাই স্কুল (উ: মা:)
+      </h1>
+      <p class="text-indigo-200 text-base sm:text-lg font-medium">
+        নম্বর আপলোড স্ট্যাটাস ড্যাশবোর্ড | শিক্ষাবর্ষ: <span id="current-session">2026</span>
+      </p>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4">
+    
+    <!-- বিবরণ ও ড্রপডাউন কন্ট্রোল -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mb-6">
+      <p class="text-slate-600 text-sm sm:text-base mb-4">
+        <i class="fa-solid fa-circle-info text-indigo-600 mr-2"></i>
+        নিচের ড্রপডাউন থেকে শ্রেণী নির্বাচন করে প্রতিটি পরীক্ষার বিষয়ভিত্তিক নম্বর আপলোডের হালনাগাদ সংখ্যা দেখুন।
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+        <label for="class-select" class="font-semibold text-slate-700 whitespace-nowrap">
+          <i class="fa-solid fa-layer-group text-slate-500 mr-1"></i> শ্রেণী নির্বাচন করুন:
+        </label>
+        <select id="class-select" onchange="fetchClassStatus()" class="w-full sm:w-64 bg-slate-50 border border-slate-300 rounded-lg px-4 py-2.5 font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          <option value="">-- শ্রেণী বেছে নিন --</option>
+          <option value="V">পঞ্চম শ্রেণী (V)</option>
+          <option value="VI">ষষ্ঠ শ্রেণী (VI)</option>
+          <option value="VII">সপ্তম শ্রেণী (VII)</option>
+          <option value="VIII">অষ্টম শ্রেণী (VIII)</option>
+          <option value="IX">নবম শ্রেণী (IX)</option>
+          <option value="X">দশম শ্রেণী (X)</option>
+          <option value="XI">একাদশ শ্রেণী (XI)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ইনলাইন স্টেটাস/নোটিফিকেশন মেসেজ (পপ-আপ ছাড়া) -->
+    <div id="status-message" class="hidden rounded-lg p-4 mb-6 transition-all duration-300"></div>
+
+    <!-- মোট ও সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি -->
+    <div id="summary-section" class="hidden mb-6">
+      <h2 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
+        <i class="fa-solid fa-users text-indigo-600 mr-2"></i>শিক্ষার্থী সংখ্যা সামারি
+      </h2>
+      <div id="summary-cards" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3"></div>
+    </div>
+
+    <!-- রেন্ডার করা টেবিল কন্টেইনার -->
+    <div id="tables-container" class="space-y-8"></div>
+
+  </main>
+
+  <script>
+    // ------------------------------------------------------------------
+    // ১. Supabase কনফিগারেশন (আপনার প্রজেক্টের URL এবং Anon Key বসান)
+    // ------------------------------------------------------------------
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const CURRENT_SESSION = '2026';
+
+    // ------------------------------------------------------------------
+    // ২. প্রতিটি শ্রেণীর টেবিল নাম, পরীক্ষা ও বিষয়ের কনফিগারেশন ম্যাপ
+    // ------------------------------------------------------------------
+    const classConfigs = {
+      'V': {
+        tableName: 'result_v',
+        exams: {
+          '1st Exam': [
+            { field: 'e1_bengali', label: 'বাংলা' },
+            { field: 'e1_english', label: 'ইংরেজি' },
+            { field: 'e1_math', label: 'গণিত' },
+            { field: 'e1_science', label: 'আমাদের পরিবেশ' },
+            { field: 'e1_work_education', label: 'কর্মশিক্ষা' },
+            { field: 'e1_physical_education', label: 'শারীরশিক্ষা' }
+          ],
+          '2nd Exam': [
+            { field: 'e2_bengali', label: 'বাংলা' },
+            { field: 'e2_english', label: 'ইংরেজি' },
+            { field: 'e2_math', label: 'গণিত' },
+            { field: 'e2_science', label: 'আমাদের পরিবেশ' },
+            { field: 'e2_work_education', label: 'কর্মশিক্ষা' },
+            { field: 'e2_physical_education', label: 'শারীরশিক্ষা' }
+          ],
+          '3rd Exam': [
+            { field: 'e3_bengali', label: 'বাংলা' },
+            { field: 'e3_english', label: 'ইংরেজি' },
+            { field: 'e3_math', label: 'গণিত' },
+            { field: 'e3_science', label: 'আমাদের পরিবেশ' },
+            { field: 'e3_work_education', label: 'কর্মশিক্ষা' },
+            { field: 'e3_physical_education', label: 'শারীরশিক্ষা' }
+          ]
+        }
+      },
+      'VI': {
+        tableName: 'result_vi',
+        exams: {
+          '1st Exam': [
+            { field: 'e1_bengali', label: 'বাংলা' }, { field: 'e1_english', label: 'ইংরেজি' },
+            { field: 'e1_math', label: 'গণিত' }, { field: 'e1_science', label: 'বিজ্ঞান' },
+            { field: 'e1_history', label: 'ইতিহাস' }, { field: 'e1_geography', label: 'ভূগোল' },
+            { field: 'e1_work_education', label: 'কর্মশিক্ষা' }, { field: 'e1_physical_education', label: 'শারীরশিক্ষা' }
+          ],
+          '2nd Exam': [
+            { field: 'e2_bengali', label: 'বাংলা' }, { field: 'e2_english', label: 'ইংরেজি' },
+            { field: 'e2_math', label: 'গণিত' }, { field: 'e2_science', label: 'বিজ্ঞান' },
+            { field: 'e2_history', label: 'ইতিহাস' }, { field: 'e2_geography', label: 'ভূগোল' },
+            { field: 'e2_work_education', label: 'কর্মশিক্ষা' }, { field: 'e2_physical_education', label: 'শারীরশিক্ষা' }
+          ],
+          '3rd Exam': [
+            { field: 'e3_bengali', label: 'বাংলা' }, { field: 'e3_english', label: 'ইংরেজি' },
+            { field: 'e3_math', label: 'গণিত' }, { field: 'e3_science', label: 'বিজ্ঞান' },
+            { field: 'e3_history', label: 'ইতিহাস' }, { field: 'e3_geography', label: 'ভূগোল' },
+            { field: 'e3_work_education', label: 'কর্মশিক্ষা' }, { field: 'e3_physical_education', label: 'শারীরশিক্ষা' }
+          ]
+        }
+      },
+      'VII': {
+        tableName: 'result_vii',
+        exams: {
+          '1st Exam': [
+            { field: 'e1_bengali', label: 'বাংলা' }, { field: 'e1_english', label: 'ইংরেজি' },
+            { field: 'e1_arabic', label: 'আরবি' }, { field: 'e1_sanskrit', label: 'সংস্কৃত' },
+            { field: 'e1_math', label: 'গণিত' }, { field: 'e1_life_science', label: 'জীবন বিজ্ঞান' },
+            { field: 'e1_physical_science', label: 'ভৌত বিজ্ঞান' }, { field: 'e1_history', label: 'ইতিহাস' },
+            { field: 'e1_geography', label: 'ভূগোল' }, { field: 'e1_work_education', label: 'কর্মশিক্ষা' },
+            { field: 'e1_physical_education', label: 'শারীরশিক্ষা' }
+          ],
+          '2nd Exam': [
+            { field: 'e2_bengali', label: 'বাংলা' }, { field: 'e2_english', label: 'ইংরেজি' },
+            { field: 'e2_arabic', label: 'আরবি' }, { field: 'e2_sanskrit', label: 'সংস্কৃত' },
+            { field: 'e2_math', label: 'গণিত' }, { field: 'e2_life_science', label: 'জীবন বিজ্ঞান' },
+            { field: 'e2_physical_science', label: 'ভৌত বিজ্ঞান' }, { field: 'e2_history', label: 'ইতিহাস' },
+            { field: 'e2_geography', label: 'ভূগোল' }, { field: 'e2_work_education', label: 'কর্মশিক্ষা' },
+            { field: 'e2_physical_education', label: 'শারীরশিক্ষা' }
+          ],
+          '3rd Exam': [
+            { field: 'e3_bengali', label: 'বাংলা' }, { field: 'e3_english', label: 'ইংরেজি' },
+            { field: 'e3_arabic', label: 'আরবি' }, { field: 'e3_sanskrit', label: 'সংস্কৃত' },
+            { field: 'e3_math', label: 'গণিত' }, { field: 'e3_life_science', label: 'জীবন বিজ্ঞান' },
+            { field: 'e3_physical_science', label: 'ভৌত বিজ্ঞান' }, { field: 'e3_history', label: 'ইতিহাস' },
+            { field: 'e3_geography', label: 'ভূগোল' }, { field: 'e3_work_education', label: 'কর্মশিক্ষা' },
+            { field: 'e3_physical_education', label: 'শারীরশিক্ষা' }
+          ]
+        }
+      },
+      'VIII': {
+        tableName: 'result_viii',
+        exams: {
+          '1st Exam': [
+            { field: 'e1_bengali', label: 'বাংলা' }, { field: 'e1_english', label: 'ইংরেজি' },
+            { field: 'e1_arabic', label: 'আরবি' }, { field: 'e1_sanskrit', label: 'সংস্কৃত' },
+            { field: 'e1_math', label: 'গণিত' }, { field: 'e1_life_science', label: 'জীবন বিজ্ঞান' },
+            { field: 'e1_physical_science', label: 'ভৌত বিজ্ঞান' }, { field: 'e1_history', label: 'ইতিহাস' },
+            { field: 'e1_geography', label: 'ভূগোল' }, { field: 'e1_work_education', label: 'কর্মশিক্ষা' },
+            { field: 'e1_physical_education', label: 'শারীরশিক্ষা' }
+          ],
+          '2nd Exam': [
+            { field: 'e2_bengali', label: 'বাংলা' }, { field: 'e2_english', label: 'ইংরেজি' },
+            { field: 'e2_arabic', label: 'আরবি' }, { field: 'e2_sanskrit', label: 'সংস্কৃত' },
+            { field: 'e2_math', label: 'গণিত' }, { field: 'e2_life_science', label: 'জীবন বিজ্ঞান' },
+            { field: 'e2_physical_science', label: 'ভৌত বিজ্ঞান' }, { field: 'e2_history', label: 'ইতিহাস' },
+            { field: 'e2_geography', label: 'ভূগোল' }, { field: 'e2_work_education', label: 'কর্মশিক্ষা' },
+            { field: 'e2_physical_education', label: 'শারীরশিক্ষা' }
+          ],
+          '3rd Exam': [
+            { field: 'e3_bengali', label: 'বাংলা' }, { field: 'e3_english', label: 'ইংরেজি' },
+            { field: 'e3_arabic', label: 'আরবি' }, { field: 'e3_sanskrit', label: 'সংস্কৃত' },
+            { field: 'e3_math', label: 'গণিত' }, { field: 'e3_life_science', label: 'জীবন বিজ্ঞান' },
+            { field: 'e3_physical_science', label: 'ভৌত বিজ্ঞান' }, { field: 'e3_history', label: 'ইতিহাস' },
+            { field: 'e3_geography', label: 'ভূগোল' }, { field: 'e3_work_education', label: 'কর্মশিক্ষা' },
+            { field: 'e3_physical_education', label: 'শারীরশিক্ষা' }
+          ]
+        }
+      },
+      'IX': {
+        tableName: 'result_ix',
+        exams: {
+          '1st Exam': [
+            { field: 'e1_bengali', label: 'বাংলা' }, { field: 'e1_english', label: 'ইংরেজি' },
+            { field: 'e1_math', label: 'গণিত' }, { field: 'e1_physical_science', label: 'ভৌত বিজ্ঞান' },
+            { field: 'e1_life_science', label: 'জীবন বিজ্ঞান' }, { field: 'e1_history', label: 'ইতিহাস' },
+            { field: 'e1_geography', label: 'ভূগোল' }
+          ],
+          '2nd Exam': [
+            { field: 'e2_bengali', label: 'বাংলা' }, { field: 'e2_english', label: 'ইংরেজি' },
+            { field: 'e2_math', label: 'গণিত' }, { field: 'e2_physical_science', label: 'ভৌত বিজ্ঞান' },
+            { field: 'e2_life_science', label: 'জীবন বিজ্ঞান' }, { field: 'e2_history', label: 'ইতিহাস' },
+            { field: 'e2_geography', label: 'ভূগোল' }
+          ],
+          '3rd Exam': [
+            { field: 'e3_bengali', label: 'বাংলা' }, { field: 'e3_english', label: 'ইংরেজি' },
+            { field: 'e3_math', label: 'গণিত' }, { field: 'e3_physical_science', label: 'ভৌত বিজ্ঞান' },
+            { field: 'e3_life_science', label: 'জীবন বিজ্ঞান' }, { field: 'e3_history', label: 'ইতিহাস' },
+            { field: 'e3_geography', label: 'ভূগোল' }
+          ],
+          'Project': [
+            { field: 'proj_bengali', label: 'বাংলা' }, { field: 'proj_english', label: 'ইংরেজি' },
+            { field: 'proj_math', label: 'গণিত' }, { field: 'proj_physical_science', label: 'ভৌত বিজ্ঞান' },
+            { field: 'proj_life_science', label: 'জীবন বিজ্ঞান' }, { field: 'proj_history', label: 'ইতিহাস' },
+            { field: 'proj_geography', label: 'ভূগোল' }
+          ]
+        }
+      },
+      'X': {
+        tableName: 'result_x',
+        exams: {
+          '1st Exam': [
+            { field: 'e1_bengali', label: 'বাংলা' }, { field: 'e1_english', label: 'ইংরেজি' },
+            { field: 'e1_math', label: 'গণিত' }, { field: 'e1_physical_science', label: 'ভৌত বিজ্ঞান' },
+            { field: 'e1_life_science', label: 'জীবন বিজ্ঞান' }, { field: 'e1_history', label: 'ইতিহাস' },
+            { field: 'e1_geography', label: 'ভূগোল' }
+          ],
+          '2nd Exam': [
+            { field: 'e2_bengali', label: 'বাংলা' }, { field: 'e2_english', label: 'ইংরেজি' },
+            { field: 'e2_math', label: 'গণিত' }, { field: 'e2_physical_science', label: 'ভৌত বিজ্ঞান' },
+            { field: 'e2_life_science', label: 'জীবন বিজ্ঞান' }, { field: 'e2_history', label: 'ইতিহাস' },
+            { field: 'e2_geography', label: 'ভূগোল' }
+          ],
+          'Test Exam': [
+            { field: 'test_bengali', label: 'বাংলা' }, { field: 'test_english', label: 'ইংরেজি' },
+            { field: 'test_math', label: 'গণিত' }, { field: 'test_physical_science', label: 'ভৌত বিজ্ঞান' },
+            { field: 'test_life_science', label: 'জীবন বিজ্ঞান' }, { field: 'test_history', label: 'ইতিহাস' },
+            { field: 'test_geography', label: 'ভূগোল' }
+          ]
+        }
+      },
+      'XI': {
+        tableName: 'result_xi',
+        exams: {
+          'Semester I': [
+            { field: 'sem1_bengali', label: 'বাংলা' }, { field: 'sem1_english', label: 'ইংরেজি' },
+            { field: 'sem1_history', label: 'ইতিহাস' }, { field: 'sem1_philosophy', label: 'দর্শন' },
+            { field: 'sem1_education', label: 'এডুকেশন' }, { field: 'sem1_geography', label: 'ভূগোল' },
+            { field: 'sem1_political_science', label: 'রাষ্ট্রবিজ্ঞান' }, { field: 'sem1_arabic', label: 'আরবি' },
+            { field: 'sem1_sanskrit', label: 'সংস্কৃত' }
+          ],
+          'Semester II': [
+            { field: 'sem2_bengali', label: 'বাংলা' }, { field: 'sem2_english', label: 'ইংরেজি' },
+            { field: 'sem2_history', label: 'ইতিহাস' }, { field: 'sem2_philosophy', label: 'দর্শন' },
+            { field: 'sem2_education', label: 'এডুকেশন' }, { field: 'sem2_geography', label: 'ভূগোল' },
+            { field: 'sem2_political_science', label: 'রাষ্ট্রবিজ্ঞান' }, { field: 'sem2_arabic', label: 'আরবি' },
+            { field: 'sem2_sanskrit', label: 'সংস্কৃত' }
+          ],
+          'Project': [
+            { field: 'proj_bengali', label: 'বাংলা' }, { field: 'proj_english', label: 'ইংরেজি' },
+            { field: 'proj_history', label: 'ইতিহাস' }, { field: 'proj_philosophy', label: 'দর্শন' },
+            { field: 'proj_education', label: 'এডুকেশন' }, { field: 'proj_geography', label: 'ভূগোল' },
+            { field: 'proj_political_science', label: 'রাষ্ট্রবিজ্ঞান' }, { field: 'proj_arabic', label: 'আরবি' },
+            { field: 'proj_sanskrit', label: 'সংস্কৃত' }
+          ]
+        }
+      }
+    };
+
+    // ------------------------------------------------------------------
+    // ৩. স্টেটাস মেসেজ প্রদর্শন ফাংশন (Processing, Error, Success)
+    // ------------------------------------------------------------------
+    function showStatus(type, message) {
+      const msgDiv = document.getElementById('status-message');
+      msgDiv.classList.remove('hidden', 'bg-blue-100', 'text-blue-800', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800', 'border-blue-300', 'border-red-300', 'border-green-300');
+      
+      let icon = '';
+      if (type === 'processing') {
+        msgDiv.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-300');
+        icon = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>';
+      } else if (type === 'error') {
+        msgDiv.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-300');
+        icon = '<i class="fa-solid fa-triangle-exclamation mr-2"></i>';
+      } else if (type === 'success') {
+        msgDiv.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-300');
+        icon = '<i class="fa-solid fa-circle-check mr-2"></i>';
+      }
+      
+      msgDiv.innerHTML = `${icon}<span>${message}</span>`;
+    }
+
+    function clearStatus() {
+      const msgDiv = document.getElementById('status-message');
+      msgDiv.classList.add('hidden');
+      msgDiv.innerHTML = '';
+    }
+
+    // ------------------------------------------------------------------
+    // ৪. মূল ডেটা ফেচিং ও রেন্ডারিং ফাংশন
+    // ------------------------------------------------------------------
+    async function fetchClassStatus() {
+      const selectedClass = document.getElementById('class-select').value;
+      const tablesContainer = document.getElementById('tables-container');
+      const summarySection = document.getElementById('summary-section');
+      const summaryCards = document.getElementById('summary-cards');
+
+      tablesContainer.innerHTML = '';
+      summaryCards.innerHTML = '';
+      summarySection.classList.add('hidden');
+
+      if (!selectedClass) {
+        clearStatus();
+        return;
+      }
+
+      showStatus('processing', `শ্রেণী ${selectedClass}-এর তথ্য লোড করা হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।`);
+
+      const config = classConfigs[selectedClass];
+
+      try {
+        // Supabase থেকে তথ্য আনা
+        const { data, error } = await supabaseClient
+          .from(config.tableName)
+          .select('*')
+          .eq('session', CURRENT_SESSION);
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          showStatus('error', `শ্রেণী ${selectedClass}-এ সেশন ${CURRENT_SESSION}-এর কোনো শিক্ষার্থীর ডেটা পাওয়া যায়নি।`);
+          return;
+        }
+
+        // সেকশন তালিকা বের করা ও সর্ট করা
+        const sections = [...new Set(data.map(item => item.section))].sort();
+
+        // সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি রেন্ডার
+        let totalStudents = data.length;
+        summaryCards.innerHTML = `
+          <div class="bg-indigo-600 text-white rounded-lg p-3 text-center shadow">
+            <div class="text-xs uppercase font-medium">মোট শিক্ষার্থী</div>
+            <div class="text-2xl font-bold">${totalStudents}</div>
+          </div>
+        `;
+
+        sections.forEach(sec => {
+          const secCount = data.filter(d => d.section === sec).length;
+          summaryCards.innerHTML += `
+            <div class="bg-white border border-slate-200 rounded-lg p-3 text-center shadow-sm">
+              <div class="text-xs text-slate-500 font-medium">সেকশন ${sec}</div>
+              <div class="text-xl font-bold text-slate-800">${secCount}</div>
+            </div>
+          `;
+        });
+        summarySection.classList.remove('hidden');
+
+        // প্রতিটি পরীক্ষার জন্য আলাদা টেবিল তৈরি
+        Object.keys(config.exams).forEach(examName => {
+          const subjects = config.exams[examName];
+          
+          let tableHtml = `
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+              <div class="bg-slate-800 text-white px-5 py-3 flex items-center justify-between">
+                <h3 class="font-bold text-lg"><i class="fa-solid fa-file-pen mr-2 text-indigo-400"></i>${examName}</h3>
+                <span class="text-xs bg-slate-700 px-2.5 py-1 rounded-full border border-slate-600">শ্রেণী: ${selectedClass}</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                  <thead>
+                    <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 font-semibold">
+                      <th class="p-3 border-r border-slate-200">সেকশন</th>
+                      ${subjects.map(s => `<th class="p-3 text-center border-r border-slate-200 min-w-[100px]">${s.label}</th>`).join('')}
+                    </tr>
+                  </thead>
+                  <tbody>
+          `;
+
+          sections.forEach(sec => {
+            const secData = data.filter(d => d.section === sec);
+            tableHtml += `
+              <tr class="border-b border-slate-200 hover:bg-slate-50">
+                <td class="p-3 font-semibold bg-slate-50 border-r border-slate-200">সেকশন ${sec}</td>
+            `;
+
+            subjects.forEach(sub => {
+              // নম্বর আপলোড হয়েছে এমন শিক্ষার্থীর সংখ্যা গণনা (NOT NULL)
+              const uploadedCount = secData.filter(d => d[sub.field] !== null && d[sub.field] !== undefined).length;
+              
+              const isZero = uploadedCount === 0;
+              const displayVal = isZero ? '-' : uploadedCount;
+              const cellClass = isZero ? 'zero-count' : 'text-slate-800 font-medium';
+
+              tableHtml += `
+                <td class="p-3 text-center border-r border-slate-200 ${cellClass}">
+                  ${displayVal}
+                </td>
+              `;
+            });
+
+            tableHtml += `</tr>`;
+          });
+
+          tableHtml += `
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+
+          tablesContainer.innerHTML += tableHtml;
+        });
+
+        showStatus('success', `শ্রেণী ${selectedClass}-এর নম্বর আপলোড স্ট্যাটাস সফলভাবে লোড করা হয়েছে।`);
+
+      } catch (err) {
+        console.error(err);
+        showStatus('error', `তথ্য লোড করতে সমস্যা হয়েছে: ${err.message || 'Supabase সংযোগ চেক করুন।'}`);
+      }
+    }
+  </script>
+</body>
+</html>
