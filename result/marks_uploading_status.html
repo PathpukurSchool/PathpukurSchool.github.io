@@ -21,32 +21,107 @@
       font-weight: 700; 
     }
 
-    /* A4 সাইজ প্রিন্ট স্টাইল */
+    /* একক A4 সাইজ প্রিন্ট কম্প্যাক্ট স্টাইল */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 12mm;
+        margin: 6mm; /* মার্জিন কমিয়ে ১ পাতায় ফিট করার জন্য */
       }
-      body {
+      html, body {
         background-color: #ffffff !important;
         color: #000000 !important;
-        padding-bottom: 0 !important;
+        font-size: 11px !important; /* প্রিন্টের সামগ্রিক ফন্ট সাইজ কমানো হয়েছে */
+        line-height: 1.2 !important;
+        padding: 0 !important;
+        margin: 0 !important;
       }
       .no-print {
         display: none !important;
       }
-      .print-shadow-none {
-        box-shadow: none !important;
+      header {
+        padding: 4px 8px !important;
+        margin-bottom: 6px !important;
+        border-bottom: 2px solid #f59e0b !important;
+        background: none !important;
+        color: #000 !important;
+      }
+      header h1 {
+        font-size: 16px !important;
+        color: #000 !important;
+      }
+      header p {
+        font-size: 11px !important;
+        color: #333 !important;
+      }
+      #current-session {
+        background: transparent !important;
+        color: #000 !important;
+        border: none !important;
+        padding: 0 !important;
+      }
+      main {
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+      #summary-section {
+        margin-bottom: 8px !important;
+      }
+      #summary-section h2 {
+        font-size: 12px !important;
+        margin-bottom: 4px !important;
+      }
+      #summary-cards {
+        gap: 4px !important;
+      }
+      #summary-cards > div {
+        padding: 2px 4px !important;
+        border-width: 1px !important;
+      }
+      #summary-cards .text-2xl, #summary-cards .text-xl {
+        font-size: 13px !important;
+      }
+      #tables-container {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important; /* টেবিলগুলির মধ্যকার গ্যাপ কমানো হয়েছে */
       }
       .page-break-inside-avoid {
-        break-inside: avoid;
+        break-inside: avoid !important;
+      }
+      .table-card {
+        border: 1px solid #475569 !important;
+        border-radius: 4px !important;
+        box-shadow: none !important;
+        margin-bottom: 4px !important;
+      }
+      .table-header {
+        padding: 2px 6px !important;
+        background-color: #e2e8f0 !important;
+        color: #000 !important;
+        border-bottom: 1px solid #475569 !important;
+      }
+      .table-header h3 {
+        font-size: 12px !important;
+        color: #000 !important;
+      }
+      .table-header span {
+        font-size: 9px !important;
+        background: transparent !important;
+        color: #000 !important;
+        border: none !important;
       }
       table {
         border-collapse: collapse !important;
         width: 100% !important;
+        font-size: 10px !important;
       }
       th, td {
-        border: 1px solid #334155 !important;
+        border: 1px solid #64748b !important;
+        padding: 2px 4px !important; /* ঘরের ভেতরের প্যাডিং কমানো হয়েছে */
+      }
+      th {
+        background-color: #f1f5f9 !important;
+        color: #000 !important;
       }
     }
   </style>
@@ -58,7 +133,7 @@
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="text-center sm:text-left">
         <h1 class="text-2xl sm:text-3xl font-bold tracking-wide flex items-center justify-center sm:justify-start gap-3">
-          <i class="fa-solid fa-school text-amber-400"></i>পাতপুকুর হাই স্কুল (উ: মা:)
+          <i class="fa-solid fa-school text-amber-400 no-print"></i>পাতপুকুর হাই স্কুল (উ: মা:)
         </h1>
         <p class="text-indigo-200 text-sm sm:text-base font-medium mt-1">
           নম্বর আপলোড স্ট্যাটাস ড্যাশবোর্ড | শিক্ষাবর্ষ: <span id="current-session" class="bg-indigo-800 text-amber-300 px-2 py-0.5 rounded font-bold border border-indigo-700">লোড হচ্ছে...</span>
@@ -66,7 +141,7 @@
       </div>
 
       <!-- প্রিন্ট বোতাম -->
-      <button onclick="window.print()" class="no-print bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-5 py-2.5 rounded-lg shadow-md transition-all duration-200 flex items-center gap-2 border border-amber-400">
+      <button onclick="handlePrint()" class="no-print bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-5 py-2.5 rounded-lg shadow-md transition-all duration-200 flex items-center gap-2 border border-amber-400">
         <i class="fa-solid fa-print text-lg"></i>
         <span>রিপোর্ট প্রিন্ট করুন (A4)</span>
       </button>
@@ -99,13 +174,13 @@
       </div>
     </div>
 
-    <!-- ইনলাইন স্টেটাস/নোটিফিকেশন 메시জ -->
+    <!-- ইনলাইন স্টেটাস/নোটিফিকেশন মেসেজ -->
     <div id="status-message" class="no-print hidden rounded-lg p-4 mb-6 transition-all duration-300"></div>
 
     <!-- মোট ও সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি -->
     <div id="summary-section" class="hidden mb-6 page-break-inside-avoid">
       <h2 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
-        <i class="fa-solid fa-users text-indigo-700 mr-2"></i>শিক্ষার্থী সংখ্যা সামারি
+        <i class="fa-solid fa-users text-indigo-700 mr-2 no-print"></i>শিক্ষার্থী সংখ্যা সামারি
       </h2>
       <div id="summary-cards" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3"></div>
     </div>
@@ -125,6 +200,18 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let CURRENT_SESSION = '2026'; // ডিফল্ট সেশন
+
+    // ------------------------------------------------------------------
+    // প্রিন্ট ভ্যালিডেশন ফাংশন
+    // ------------------------------------------------------------------
+    function handlePrint() {
+      const selectedClass = document.getElementById('class-select').value;
+      if (!selectedClass) {
+        alert("অনুগ্রহ করে প্রথমে ড্রপডাউন থেকে একটি শ্রেণী নির্বাচন করুন!");
+        return;
+      }
+      window.print();
+    }
 
     // ------------------------------------------------------------------
     // ২. প্রতিটি শ্রেণীর টেবিল নাম, পরীক্ষা ও বিষয়ের কনফিগারেশন ম্যাপ
@@ -437,10 +524,10 @@
           const subjects = config.exams[examName];
           
           let tableHtml = `
-            <div class="bg-white rounded-xl shadow-sm border-2 border-slate-400 overflow-hidden print-shadow-none page-break-inside-avoid">
-              <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between border-b-2 border-slate-500">
+            <div class="table-card bg-white rounded-xl shadow-sm border-2 border-slate-400 overflow-hidden print-shadow-none page-break-inside-avoid">
+              <div class="table-header bg-slate-900 text-white px-5 py-3 flex items-center justify-between border-b-2 border-slate-500">
                 <h3 class="font-bold text-lg flex items-center gap-2">
-                  <i class="fa-solid fa-file-pen text-amber-400"></i> ${examName}
+                  <i class="fa-solid fa-file-pen text-amber-400 no-print"></i> ${examName}
                 </h3>
                 <span class="text-xs bg-slate-800 font-bold text-slate-200 px-3 py-1 rounded-full border border-slate-600">শ্রেণী: ${selectedClass} | সেশন: ${CURRENT_SESSION}</span>
               </div>
