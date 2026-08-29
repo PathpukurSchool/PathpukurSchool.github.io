@@ -14,37 +14,79 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
     body { font-family: 'Hind Siliguri', sans-serif; }
-    .zero-count { background-color: #fee2e2; color: #dc2626; font-weight: bold; }
+    
+    .zero-count { 
+      background-color: #fee2e2 !important; 
+      color: #dc2626 !important; 
+      font-weight: 700; 
+    }
+
+    /* A4 সাইজ প্রিন্ট স্টাইল */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 12mm;
+      }
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        padding-bottom: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-shadow-none {
+        box-shadow: none !important;
+      }
+      .page-break-inside-avoid {
+        break-inside: avoid;
+      }
+      table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+      }
+      th, td {
+        border: 1px solid #334155 !important;
+      }
+    }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen pb-10">
+<body class="bg-slate-100 text-slate-800 min-h-screen pb-10">
 
   <!-- হেডার সেকশন -->
-  <header class="bg-indigo-900 text-white shadow-lg py-6 px-4 mb-6">
-    <div class="max-w-7xl mx-auto text-center">
-      <h1 class="text-2xl sm:text-3xl font-bold mb-1">
-        <i class="fa-solid fa-school mr-2"></i>পাতপুকুর হাই স্কুল (উ: মা:)
-      </h1>
-      <p class="text-indigo-200 text-base sm:text-lg font-medium">
-        নম্বর আপলোড স্ট্যাটাস ড্যাশবোর্ড | শিক্ষাবর্ষ: <span id="current-session">2026</span>
-      </p>
+  <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-md py-6 px-4 mb-6 border-b-4 border-amber-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="text-center sm:text-left">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-wide flex items-center justify-center sm:justify-start gap-3">
+          <i class="fa-solid fa-school text-amber-400"></i>পাতপুকুর হাই স্কুল (উ: মা:)
+        </h1>
+        <p class="text-indigo-200 text-sm sm:text-base font-medium mt-1">
+          নম্বর আপলোড স্ট্যাটাস ড্যাশবোর্ড | শিক্ষাবর্ষ: <span id="current-session" class="bg-indigo-800 text-amber-300 px-2 py-0.5 rounded font-bold border border-indigo-700">লোড হচ্ছে...</span>
+        </p>
+      </div>
+
+      <!-- প্রিন্ট বোতাম -->
+      <button onclick="window.print()" class="no-print bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-5 py-2.5 rounded-lg shadow-md transition-all duration-200 flex items-center gap-2 border border-amber-400">
+        <i class="fa-solid fa-print text-lg"></i>
+        <span>রিপোর্ট প্রিন্ট করুন (A4)</span>
+      </button>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-4">
     
     <!-- বিবরণ ও ড্রপডাউন কন্ট্রোল -->
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mb-6">
-      <p class="text-slate-600 text-sm sm:text-base mb-4">
-        <i class="fa-solid fa-circle-info text-indigo-600 mr-2"></i>
-        নিচের ড্রপডাউন থেকে শ্রেণী নির্বাচন করে প্রতিটি পরীক্ষার বিষয়ভিত্তিক নম্বর আপলোডের হালনাগাদ সংখ্যা দেখুন।
+    <div class="no-print bg-white rounded-xl shadow-sm border border-slate-300 p-5 mb-6">
+      <p class="text-slate-600 text-sm sm:text-base mb-4 flex items-center">
+        <i class="fa-solid fa-circle-info text-indigo-600 mr-2 text-lg"></i>
+        নিচের ড্রপডাউন থেকে শ্রেণী নির্বাচন করে প্রতিটি পরীক্ষার বিষয়ভিত্তিক নম্বর আপলোডের হালনাগাদ সংখ্যা দেখুন।
       </p>
 
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-        <label for="class-select" class="font-semibold text-slate-700 whitespace-nowrap">
-          <i class="fa-solid fa-layer-group text-slate-500 mr-1"></i> শ্রেণী নির্বাচন করুন:
+        <label for="class-select" class="font-bold text-slate-700 whitespace-nowrap flex items-center">
+          <i class="fa-solid fa-layer-group text-indigo-600 mr-2"></i> শ্রেণী নির্বাচন করুন:
         </label>
-        <select id="class-select" onchange="fetchClassStatus()" class="w-full sm:w-64 bg-slate-50 border border-slate-300 rounded-lg px-4 py-2.5 font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        <select id="class-select" onchange="fetchClassStatus()" class="w-full sm:w-64 bg-slate-50 border-2 border-slate-300 rounded-lg px-4 py-2 font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none">
           <option value="">-- শ্রেণী বেছে নিন --</option>
           <option value="V">পঞ্চম শ্রেণী (V)</option>
           <option value="VI">ষষ্ঠ শ্রেণী (VI)</option>
@@ -57,13 +99,13 @@
       </div>
     </div>
 
-    <!-- ইনলাইন স্টেটাস/নোটিফিকেশন মেসেজ (পপ-আপ ছাড়া) -->
-    <div id="status-message" class="hidden rounded-lg p-4 mb-6 transition-all duration-300"></div>
+    <!-- ইনলাইন স্টেটাস/নোটিফিকেশন 메시জ -->
+    <div id="status-message" class="no-print hidden rounded-lg p-4 mb-6 transition-all duration-300"></div>
 
-    <!-- মোট ও সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি -->
-    <div id="summary-section" class="hidden mb-6">
+    <!-- মোট ও সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি -->
+    <div id="summary-section" class="hidden mb-6 page-break-inside-avoid">
       <h2 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
-        <i class="fa-solid fa-users text-indigo-600 mr-2"></i>শিক্ষার্থী সংখ্যা সামারি
+        <i class="fa-solid fa-users text-indigo-700 mr-2"></i>শিক্ষার্থী সংখ্যা সামারি
       </h2>
       <div id="summary-cards" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3"></div>
     </div>
@@ -75,17 +117,17 @@
 
   <script>
     // ------------------------------------------------------------------
-    // ১. Supabase কনফিগারেশন (আপনার প্রজেক্টের URL এবং Anon Key বসান)
+    // ১. Supabase কনফিগারেশন
     // ------------------------------------------------------------------
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
     
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const CURRENT_SESSION = '2026';
+    let CURRENT_SESSION = '2026'; // ডিফল্ট সেশন
 
     // ------------------------------------------------------------------
-    // ২. প্রতিটি শ্রেণীর টেবিল নাম, পরীক্ষা ও বিষয়ের কনফিগারেশন ম্যাপ
+    // ২. প্রতিটি শ্রেণীর টেবিল নাম, পরীক্ষা ও বিষয়ের কনফিগারেশন ম্যাপ
     // ------------------------------------------------------------------
     const classConfigs = {
       'V': {
@@ -279,25 +321,47 @@
     };
 
     // ------------------------------------------------------------------
-    // ৩. স্টেটাস মেসেজ প্রদর্শন ফাংশন (Processing, Error, Success)
+    // ৩. ডায়নামিক সেশন লোডার
+    // ------------------------------------------------------------------
+    async function loadDynamicSession(tableName) {
+      try {
+        const { data, error } = await supabaseClient
+          .from(tableName)
+          .select('session')
+          .order('session', { ascending: false })
+          .limit(1);
+
+        if (error) throw error;
+
+        if (data && data.length > 0 && data[0].session) {
+          CURRENT_SESSION = data[0].session;
+        }
+      } catch (e) {
+        console.warn('সেশন ডায়নামিক ফেচ করতে সমস্যা হয়েছে, ডিফল্ট সেশন ব্যবহার করা হচ্ছে:', e);
+      }
+      document.getElementById('current-session').innerText = CURRENT_SESSION;
+    }
+
+    // ------------------------------------------------------------------
+    // ৪. স্টেটাস মেসেজ প্রদর্শন ফাংশন
     // ------------------------------------------------------------------
     function showStatus(type, message) {
       const msgDiv = document.getElementById('status-message');
-      msgDiv.classList.remove('hidden', 'bg-blue-100', 'text-blue-800', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800', 'border-blue-300', 'border-red-300', 'border-green-300');
+      msgDiv.classList.remove('hidden', 'bg-blue-100', 'text-blue-900', 'bg-red-100', 'text-red-900', 'bg-green-100', 'text-green-900', 'border-blue-400', 'border-red-400', 'border-green-400');
       
       let icon = '';
       if (type === 'processing') {
-        msgDiv.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-300');
-        icon = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>';
+        msgDiv.classList.add('bg-blue-100', 'text-blue-900', 'border-2', 'border-blue-400');
+        icon = '<i class="fa-solid fa-spinner fa-spin mr-2 text-indigo-600"></i>';
       } else if (type === 'error') {
-        msgDiv.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-300');
-        icon = '<i class="fa-solid fa-triangle-exclamation mr-2"></i>';
+        msgDiv.classList.add('bg-red-100', 'text-red-900', 'border-2', 'border-red-400');
+        icon = '<i class="fa-solid fa-triangle-exclamation mr-2 text-red-600"></i>';
       } else if (type === 'success') {
-        msgDiv.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-300');
-        icon = '<i class="fa-solid fa-circle-check mr-2"></i>';
+        msgDiv.classList.add('bg-green-100', 'text-green-900', 'border-2', 'border-green-400');
+        icon = '<i class="fa-solid fa-circle-check mr-2 text-green-600"></i>';
       }
       
-      msgDiv.innerHTML = `${icon}<span>${message}</span>`;
+      msgDiv.innerHTML = `${icon}<span class="font-medium">${message}</span>`;
     }
 
     function clearStatus() {
@@ -307,7 +371,7 @@
     }
 
     // ------------------------------------------------------------------
-    // ৪. মূল ডেটা ফেচিং ও রেন্ডারিং ফাংশন
+    // ৫. মূল ডেটা ফেচিং ও রেন্ডারিং ফাংশন
     // ------------------------------------------------------------------
     async function fetchClassStatus() {
       const selectedClass = document.getElementById('class-select').value;
@@ -329,7 +393,10 @@
       const config = classConfigs[selectedClass];
 
       try {
-        // Supabase থেকে তথ্য আনা
+        // ১. আগে টেবিল থেকে লেটেস্ট সেশন লোড করা
+        await loadDynamicSession(config.tableName);
+
+        // ২. Supabase থেকে নির্বাচন করা সেশনের তথ্য ফেচ করা
         const { data, error } = await supabaseClient
           .from(config.tableName)
           .select('*')
@@ -338,49 +405,51 @@
         if (error) throw error;
 
         if (!data || data.length === 0) {
-          showStatus('error', `শ্রেণী ${selectedClass}-এ সেশন ${CURRENT_SESSION}-এর কোনো শিক্ষার্থীর ডেটা পাওয়া যায়নি।`);
+          showStatus('error', `শ্রেণী ${selectedClass}-এ সেশন ${CURRENT_SESSION}-এর কোনো শিক্ষার্থীর ডেটা পাওয়া যায়নি।`);
           return;
         }
 
         // সেকশন তালিকা বের করা ও সর্ট করা
         const sections = [...new Set(data.map(item => item.section))].sort();
 
-        // সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি রেন্ডার
+        // সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি রেন্ডার
         let totalStudents = data.length;
         summaryCards.innerHTML = `
-          <div class="bg-indigo-600 text-white rounded-lg p-3 text-center shadow">
-            <div class="text-xs uppercase font-medium">মোট শিক্ষার্থী</div>
-            <div class="text-2xl font-bold">${totalStudents}</div>
+          <div class="bg-indigo-900 text-white border-2 border-indigo-950 rounded-lg p-3 text-center shadow">
+            <div class="text-xs uppercase font-semibold text-indigo-200">মোট শিক্ষার্থী</div>
+            <div class="text-2xl font-bold text-amber-300">${totalStudents}</div>
           </div>
         `;
 
         sections.forEach(sec => {
           const secCount = data.filter(d => d.section === sec).length;
           summaryCards.innerHTML += `
-            <div class="bg-white border border-slate-200 rounded-lg p-3 text-center shadow-sm">
-              <div class="text-xs text-slate-500 font-medium">সেকশন ${sec}</div>
+            <div class="bg-white border-2 border-slate-300 rounded-lg p-3 text-center shadow-sm">
+              <div class="text-xs text-slate-600 font-bold">সেকশন ${sec}</div>
               <div class="text-xl font-bold text-slate-800">${secCount}</div>
             </div>
           `;
         });
         summarySection.classList.remove('hidden');
 
-        // প্রতিটি পরীক্ষার জন্য আলাদা টেবিল তৈরি
+        // প্রতিটি পরীক্ষার জন্য আলাদা টেবিল তৈরি (স্পষ্ট বর্ডার সহ)
         Object.keys(config.exams).forEach(examName => {
           const subjects = config.exams[examName];
           
           let tableHtml = `
-            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
-              <div class="bg-slate-800 text-white px-5 py-3 flex items-center justify-between">
-                <h3 class="font-bold text-lg"><i class="fa-solid fa-file-pen mr-2 text-indigo-400"></i>${examName}</h3>
-                <span class="text-xs bg-slate-700 px-2.5 py-1 rounded-full border border-slate-600">শ্রেণী: ${selectedClass}</span>
+            <div class="bg-white rounded-xl shadow-sm border-2 border-slate-400 overflow-hidden print-shadow-none page-break-inside-avoid">
+              <div class="bg-slate-900 text-white px-5 py-3 flex items-center justify-between border-b-2 border-slate-500">
+                <h3 class="font-bold text-lg flex items-center gap-2">
+                  <i class="fa-solid fa-file-pen text-amber-400"></i> ${examName}
+                </h3>
+                <span class="text-xs bg-slate-800 font-bold text-slate-200 px-3 py-1 rounded-full border border-slate-600">শ্রেণী: ${selectedClass} | সেশন: ${CURRENT_SESSION}</span>
               </div>
               <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm border-collapse">
+                <table class="w-full text-left text-sm border-collapse border border-slate-400">
                   <thead>
-                    <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 font-semibold">
-                      <th class="p-3 border-r border-slate-200">সেকশন</th>
-                      ${subjects.map(s => `<th class="p-3 text-center border-r border-slate-200 min-w-[100px]">${s.label}</th>`).join('')}
+                    <tr class="bg-slate-200 text-slate-900 font-bold border-b-2 border-slate-400">
+                      <th class="p-3 border-2 border-slate-400 text-slate-900 bg-slate-300 w-28">সেকশন</th>
+                      ${subjects.map(s => `<th class="p-3 text-center border-2 border-slate-400 min-w-[100px]">${s.label}</th>`).join('')}
                     </tr>
                   </thead>
                   <tbody>
@@ -389,20 +458,20 @@
           sections.forEach(sec => {
             const secData = data.filter(d => d.section === sec);
             tableHtml += `
-              <tr class="border-b border-slate-200 hover:bg-slate-50">
-                <td class="p-3 font-semibold bg-slate-50 border-r border-slate-200">সেকশন ${sec}</td>
+              <tr class="border-b border-slate-300 hover:bg-slate-50">
+                <td class="p-3 font-bold bg-slate-100 border-2 border-slate-400 text-slate-900">সেকশন ${sec}</td>
             `;
 
             subjects.forEach(sub => {
-              // নম্বর আপলোড হয়েছে এমন শিক্ষার্থীর সংখ্যা গণনা (NOT NULL)
-              const uploadedCount = secData.filter(d => d[sub.field] !== null && d[sub.field] !== undefined).length;
+              // নম্বর আপলোড হয়েছে এমন শিক্ষার্থীর সংখ্যা গণনা (NOT NULL)
+              const uploadedCount = secData.filter(d => d[sub.field] !== null && d[sub.field] !== undefined && d[sub.field] !== '').length;
               
               const isZero = uploadedCount === 0;
               const displayVal = isZero ? '-' : uploadedCount;
-              const cellClass = isZero ? 'zero-count' : 'text-slate-800 font-medium';
+              const cellClass = isZero ? 'zero-count border-2 border-red-300' : 'text-slate-900 font-semibold border-2 border-slate-400';
 
               tableHtml += `
-                <td class="p-3 text-center border-r border-slate-200 ${cellClass}">
+                <td class="p-3 text-center ${cellClass}">
                   ${displayVal}
                 </td>
               `;
@@ -421,7 +490,7 @@
           tablesContainer.innerHTML += tableHtml;
         });
 
-        showStatus('success', `শ্রেণী ${selectedClass}-এর নম্বর আপলোড স্ট্যাটাস সফলভাবে লোড করা হয়েছে।`);
+        showStatus('success', `শ্রেণী ${selectedClass}-এর নম্বর আপলোড স্ট্যাটাস (সেশন ${CURRENT_SESSION}) সফলভাবে লোড করা হয়েছে।`);
 
       } catch (err) {
         console.error(err);
