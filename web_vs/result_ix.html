@@ -119,7 +119,7 @@
 
       <div class="form-group">
         <label><i class="fa-solid fa-magnifying-glass"></i> Search</label>
-        <input type="text" id="searchInput" class="form-control" placeholder="Name / Roll..." oninput="applyFilters()">
+        <input type="text" id="searchInput" class="form-control" placeholder="Name / Roll..." oninput="applyFilters()" autocomplete="off">
       </div>
     </div>
 
@@ -238,6 +238,8 @@
           } else {
             secDiv.innerHTML = `
               <div class="passkey-bar">
+              <input type="text" style="display:none;" name="fake_username" tabindex="-1">
+               <input type="password" style="display:none;" name="fake_password" tabindex="-1">
                 <div class="passkey-wrapper">
                   <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey...">
                   <i class="fa-solid fa-eye" id="togglePassEye" onclick="togglePassVisibility()"></i>
