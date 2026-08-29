@@ -216,7 +216,7 @@
 
     <!-- বিবরণ -->
     <div class="description-box">
-      <p><i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> এক্সেল ফাইল ডাউনলোডের জন্য কোনো পাসকীর প্রয়োজন নেই। তবে ডাটাবেজে ফাইল আপলোড বা আপডেট করার জন্য সঠিক <strong>পাসকী (Passkey)</strong> দেওয়া বাধ্যতামূলক এবং সিস্টেমে <strong>এডিট মোড অন (Edit Mode True)</strong> থাকতে হবে।</p>
+      <p><i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> প্রথমে এক্সেল ফাইল ডাউনলোড করে তাতে প্রয়োজনীয় সংশোধন করুন। ডাউনলোডের সময় কলামের হেডার পরিবর্তন করবেন না। আপলোড করার সময় পাসকী প্রদান করা বাধ্যতামূলক।</p>
     </div>
 
     <!-- ফরম বডি -->
@@ -236,12 +236,6 @@
         </select>
       </div>
 
-      <!-- সেশন ইনফরমেশন -->
-      <div class="form-group">
-        <label for="sessionInput"><i class="fa-solid fa-calendar-days"></i> শিক্ষাবর্ষ / Session (e.g. 2026):</label>
-        <input type="text" id="sessionInput" class="form-control" value="2026" placeholder="Session লিখুন...">
-      </div>
-
       <!-- আপলোড সিকিউরিটি বক্স (Passkey Input) -->
       <div class="security-box">
         <div class="form-group" style="margin-bottom: 0;">
@@ -252,7 +246,7 @@
 
       <!-- ফাইল ড্রপ জোন -->
       <div class="form-group">
-        <label><i class="fa-solid fa-file-csv"></i> ফাইল নির্বাচন করুন (.xlsx / .csv):</label>
+        <label><i class="fa-solid fa-file-csv"></i> সংশোধন করা ফাইল নির্বাচন করুন (.xlsx / .csv):</label>
         <div class="file-drop-zone" onclick="document.getElementById('fileInput').click()">
           <i class="fa-solid fa-cloud-arrow-up"></i>
           <p id="fileNameDisplay">ফাইল নির্বাচন করতে এখানে ক্লিক করুন</p>
@@ -266,7 +260,7 @@
           <i class="fa-solid fa-file-excel"></i> এক্সেল ডাউনলোড
         </button>
         <button id="uploadBtn" class="btn btn-upload" onclick="validateAndUpload()">
-          <i class="fa-solid fa-cloud-arrow-up"></i> ফাইল আপলোড করুন
+          <i class="fa-solid fa-cloud-arrow-up"></i> ডাটা আপলোড করুন
         </button>
       </div>
 
@@ -311,7 +305,7 @@
       }
     }
 
-    // --- ১. এক্সেল ডাউনলোড ---
+    // --- ১. এক্সেল ডাউনলোড (সমস্ত কলামের সাথে) ---
     async function downloadExcel() {
       const selectedClass = document.getElementById('classSelect').value;
       if (!selectedClass) {
@@ -320,7 +314,7 @@
       }
 
       const tableName = tableMapping[selectedClass];
-      showStatus(`Supabase থেকে ${selectedClass.toUpperCase()} ক্লাসের ডাটা ডাউনলোড করা হচ্ছে...`, "info");
+      showStatus(`Supabase থেকে Class ${selectedClass.toUpperCase()} এর ডাটা ডাউনলোড করা হচ্ছে...`, "info");
 
       try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/${tableName}?select=*&order=roll_no.asc`, {
@@ -335,7 +329,7 @@
         const data = await response.json();
 
         if (!data || data.length === 0) {
-          showStatus(`Class ${selectedClass.toUpperCase()} এর টেবিলে কোনো ডাটা নেই!`, "error");
+          showStatus(`Class ${selectedClass.toUpperCase()} এর টেবিলে কোনো ডাটা পাওয়া যায়নি!`, "error");
           return;
         }
 
@@ -346,25 +340,26 @@
         const fileName = `Result_Class_${selectedClass.toUpperCase()}_2026.xlsx`;
         XLSX.writeFile(workbook, fileName);
 
-        showStatus(`সফলভাবে ${fileName} ফাইলটি ডাউনলোড হয়েছে!`, "success");
+        showStatus(`সফলভাবে ${fileName} ডাউনলোড সম্পন্ন হয়েছে!`, "success");
 
       } catch (error) {
-        showStatus("ডাটা ডাউনলোডে সমস্যা হয়েছে। ইন্টারনেট কানেকশন বা টেবিল নাম যাচাই করুন।", "error");
+        console.error(error);
+        showStatus("ডাটা ডাউনলোডে সমস্যা হয়েছে। ইন্টারনেট বা টেবিল নাম যাচাই করুন।", "error");
       }
     }
 
-    // --- ২. সিকিউরিটি চেক ও প্রসেস সূচনা ---
+    // --- ২. পাসকী ও এডিট মোড সিকিউরিটি যাচাই ---
     async function validateAndUpload() {
       const selectedClass = document.getElementById('classSelect').value;
       const userPasskey = document.getElementById('passkeyInput').value.trim();
 
       if (!selectedClass) {
-        showStatus("অনুগ্রহ করে যে ক্লাসের ডাটা আপলোড করতে চান তা নির্বাচন করুন!", "error");
+        showStatus("অনুগ্রহ করে একটি শ্রেণী নির্বাচন করুন!", "error");
         return;
       }
 
       if (!userPasskey) {
-        showStatus("ফাইল আপলোড করতে পাসকী প্রদান করা বাধ্যতামূলক!", "error");
+        showStatus("ফাইল আপলোড করতে সিকিউরিটি পাসকী প্রদান করুন!", "error");
         return;
       }
 
@@ -373,10 +368,9 @@
         return;
       }
 
-      showStatus("পাসকী এবং সিকিউরিটি সেটিংস যাচাই করা হচ্ছে...", "info");
+      showStatus("সিকিউরিটি পারমিশন ও পাসকী যাচাই করা হচ্ছে...", "info");
 
       try {
-        // Supabase-এর page_settings থেকে চেক
         const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/page_settings?page_name=eq.upload_result_file&select=*`, {
           method: 'GET',
           headers: {
@@ -385,47 +379,48 @@
           }
         });
 
-        if (!settingsResponse.ok) throw new Error("সিকিউরিটি সেটিংস চেক করতে সমস্যা হয়েছে!");
+        if (!settingsResponse.ok) throw new Error("সিকিউরিটি সেটিংস চেক করতে সমস্যা হয়েছে!");
 
         const settingsData = await settingsResponse.json();
 
         if (!settingsData || settingsData.length === 0) {
-          showStatus("সিস্টেম সিকিউরিটি সেটিংস পাওয়া যায়নি!", "error");
+          showStatus("সিস্টেম সিকিউরিটি সেটিংস ডাটাবেজে পাওয়া যায়নি!", "error");
           return;
         }
 
         const pageConfig = settingsData[0];
 
         if (pageConfig.edit_mode !== true) {
-          showStatus("বর্তমানে ফাইল আপলোড বা এডিট করার সুবিধাটি বন্ধ রয়েছে (Edit Mode Disabled)!", "error");
+          showStatus("বর্তমানে সিস্টেমে ডাটা আপলোড বা এডিট করার সুবিধা বন্ধ রয়েছে (Edit Mode Disabled)!", "error");
           return;
         }
 
         if (String(pageConfig.passkey).trim() !== userPasskey) {
-          showStatus("আপনার দেওয়া পাসকীটি ভুল! সঠিক পাসকী দিয়ে চেষ্টা করুন।", "error");
+          showStatus("আপনার দেওয়া পাসকীটি সঠিক নয়!", "error");
           return;
         }
 
-        // সিকিউরিটি ম্যাচ করলে ফাইল রিড করে RPC এ পাঠানো হবে
-        processFileAndSync(selectedClass, userPasskey);
+        // পারমিশন পাওয়ার পর ফাইল প্রসেস শুরু
+        processFileAndUpload(tableMapping[selectedClass]);
 
       } catch (error) {
         console.error(error);
-        showStatus("যাচাইকরণের সময় সার্ভারে সমস্যা দেখা দিয়েছে!", "error");
+        showStatus("যাচাইকরণের সময় সমস্যা দেখা দিয়েছে!", "error");
       }
     }
 
-    // --- ৩. ফাইল পার্স করে VBA এর মত JSON Array তে রূপান্তর করা ---
-    function processFileAndSync(selectedClass, passkey) {
+    // --- ৩. এক্সেল বা সিএসভি ফাইল প্রসেস করা ---
+    function processFileAndUpload(tableName) {
       showStatus("ফাইল প্রসেস করা হচ্ছে...", "info");
       const fileExt = selectedFile.name.split('.').pop().toLowerCase();
 
       if (fileExt === 'csv') {
         Papa.parse(selectedFile, {
           header: true,
+          dynamicTyping: true,
           skipEmptyLines: true,
           complete: function (results) {
-            sendRpcPayload(selectedClass, passkey, results.data);
+            uploadDataToSupabase(tableName, results.data);
           }
         });
       } else if (fileExt === 'xlsx' || fileExt === 'xls') {
@@ -435,82 +430,72 @@
           const workbook = XLSX.read(data, { type: 'array' });
           const firstSheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[firstSheetName];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-          sendRpcPayload(selectedClass, passkey, jsonData);
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: null });
+          uploadDataToSupabase(tableName, jsonData);
         };
         reader.readAsArrayBuffer(selectedFile);
       } else {
-        showStatus("কেবলমাত্র .csv অথবা .xlsx ফাইল আপলোড করা যাবে!", "error");
+        showStatus("কেবলমাত্র .xlsx, .xls অথবা .csv ফাইল সাপোর্ট করে!", "error");
       }
     }
 
-    // --- ৪. VBA এর স্টাইলে RPC Payload বানিয়ে Supabase RPC কল করা ---
-    async function sendRpcPayload(selectedClass, passkey, rawRows) {
-      const targetTable = tableMapping[selectedClass];
-      const sessionVal = document.getElementById('sessionInput').value.trim() || "2026";
-      const classNameStr = "Class " + selectedClass.toUpperCase();
-
-      // ডাটা ফিল্টার ও ফরম্যাটিং (Section, Roll, Student Name)
-      const studentsList = [];
-
-      rawRows.forEach(row => {
-        // বিভিন্ন কলাম নেম বা কেস ম্যাচিং হ্যান্ডেল করার জন্য
-        const sec = String(row["Section"] || row["section"] || row["SEC"] || row["Sec"] || "").trim();
-        const roll = parseInt(row["Roll"] || row["roll_no"] || row["ROLL"] || row["Roll No"] || 0);
-        const sName = String(row["Student Name"] || row["student_name"] || row["NAME"] || row["Name"] || "").trim();
-
-        if (sec && roll > 0 && sName) {
-          studentsList.push({
-            section: sec,
-            roll_no: roll,
-            student_name: sName
-          });
-        }
-      });
-
-      if (studentsList.length === 0) {
-        showStatus("ফাইলে কোনো সঠিক শিক্ষার্থীর তথ্য পাওয়া যায়নি (Section, Roll, Student Name কলাম চেক করুন)।", "error");
+    // --- ৪. ক্লিন ডাটা তৈরি ও Supabase-এ Bulk Upsert করা ---
+    async function uploadDataToSupabase(tableName, rawData) {
+      if (!rawData || rawData.length === 0) {
+        showStatus("ফাইলে কোনো ডাটা খুঁজে পাওয়া যায়নি!", "error");
         return;
       }
 
-      showStatus(`Supabase RPC এর মাধ্যমে ${studentsList.length} টি রেকর্ড আপলোড হচ্ছে...`, "info");
+      // ১. খালি বা ইনভ্যালিড সারিগুলো ফিল্টার করা
+      const cleanedData = rawData.map(row => {
+        let cleanRow = {};
+        Object.keys(row).forEach(key => {
+          let trimmedKey = key.trim();
+          let value = row[key];
 
-      // RPC Payload তৈরি (ঠিক VBA এর মত)
-      const payload = {
-        p_passkey: passkey,
-        p_target_table: targetTable,
-        p_session: sessionVal,
-        p_class_name: classNameStr,
-        p_students: studentsList
-      };
+          // খালি স্ট্রিংকে null এ রূপান্তর
+          if (value === "" || value === undefined) {
+            value = null;
+          }
 
-      // Class X বা সাধারণ ক্লাসের রুট নির্ধারণ
-      const rpcEndpoint = (selectedClass === 'x') 
-        ? `${SUPABASE_URL}/rest/v1/rpc/sync_excel_students_to_advanced_results`
-        : `${SUPABASE_URL}/rest/v1/rpc/sync_excel_students_to_results`;
+          cleanRow[trimmedKey] = value;
+        });
+        return cleanRow;
+      }).filter(row => {
+        // রোল বা নেম খালি থাকলে তা বাদ দেওয়া হবে
+        return row.roll_no !== null && row.roll_no !== undefined;
+      });
+
+      if (cleanedData.length === 0) {
+        showStatus("ফাইলে কোনো সঠিক রোল নম্বর বিশিষ্ট ডাটা পাওয়া যায়নি!", "error");
+        return;
+      }
+
+      showStatus(`ডাটাবেজে ${cleanedData.length} টি রেকর্ড আপডেট/আপলোড হচ্ছে...`, "info");
 
       try {
-        const response = await fetch(rpcEndpoint, {
+        // Supabase Upsert API Request (Merge / Overwrite Duplicates)
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/${tableName}`, {
           method: 'POST',
           headers: {
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates,return=minimal'
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(cleanedData)
         });
 
         if (response.ok) {
-          const resData = await response.json();
-          showStatus(`🎉 সফলভাবে ${studentsList.length} টি স্টুডেন্টের তথ্য ${targetTable} টেবিলে সিঙ্ক হয়েছে!`, "success");
+          showStatus(`🎉 সফলভাবে ${cleanedData.length} টি রেকর্ড ${tableName} টেবিলে সিঙ্ক ও আপডেট করা হয়েছে!`, "success");
           document.getElementById('passkeyInput').value = '';
         } else {
           const errRes = await response.json();
-          showStatus(`আপলোড ব্যর্থ হয়েছে: ${errRes.message || errRes.hint || 'RPC এরর এসেছে'}`, "error");
+          showStatus(`আপলোড ব্যর্থ হয়েছে: ${errRes.message || errRes.hint || 'কলাম নেম বা প্রাইমারি কি ফরম্যাট চেক করুন'}`, "error");
         }
       } catch (err) {
         console.error(err);
-        showStatus("Supabase সার্ভারে ডাটা পাঠাতে ব্যর্থ হয়েছে!", "error");
+        showStatus("Supabase সার্ভারে ডাটা পাঠাতে ব্যর্থ হয়েছে!", "error");
       }
     }
   </script>
