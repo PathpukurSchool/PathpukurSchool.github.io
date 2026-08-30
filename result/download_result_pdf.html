@@ -113,7 +113,7 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span class="text-sm font-medium">Supabase থেকে ডাটা সংগ্রহ করা হচ্ছে এবং PDF তৈরি হচ্ছে...</span>
+          <span class="text-sm font-medium">ডাটা সংগ্রহ করে PDF তৈরি হচ্ছে...</span>
         </div>
 
         <!-- Success State -->
@@ -309,7 +309,7 @@
       // 1. Header Information (Compact Top Alignment)
       doc.setFontSize(13);
       doc.setFont('helvetica', 'bold');
-      doc.text("PATPUKUR HIGH SCHOOL (H.S.)", 105, 10, { align: "center" });
+      doc.text("Pathpukur High School (H.S.)", 105, 10, { align: "center" });
 
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
@@ -321,13 +321,13 @@
       doc.line(8, 17, 202, 17);
 
       // 2. Dynamic Table Headers (Bengali labels)
-      const tableHeaders = [["রোল", "শিক্ষার্থীর নাম"]];
+      const tableHeaders = [["Roll", "Student Name"]];
       examSubjectKeys.forEach(k => {
         const rawSubject = k.replace(prefix, '');
         const bnName = bengaliSubjectNames[rawSubject] || rawSubject;
         tableHeaders[0].push(bnName);
       });
-      tableHeaders[0].push("মোট");
+      tableHeaders[0].push("Total");
 
       // 3. Dynamic Rows Data
       const tableRows = data.map(row => {
