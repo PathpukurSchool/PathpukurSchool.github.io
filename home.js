@@ -59,12 +59,14 @@ function setupLiveSearch() {
             }
 
             if (ALL_ITEMS_DETAILS.length === 0) {
-                const buttons = document.querySelectorAll('.exam-link, .class-link-btn');
+                const buttons = document.querySelectorAll('.exam-link, .class-link-btn, a');
                 buttons.forEach(btn => {
-                    if (btn.textContent.trim() && (btn.href || btn.onclick)) {
+                    const text = btn.textContent.trim();
+                    const href = btn.getAttribute('href') || btn.href;
+                    if (text && href && href !== '#' && !href.startsWith('javascript:')) {
                         ALL_ITEMS_DETAILS.push({
-                            title: btn.textContent.trim(),
-                            url: btn.href || '#'
+                            title: text,
+                            url: href
                         });
                     }
                 });
@@ -113,8 +115,8 @@ function setupLiveSearch() {
 // 🔢 ক্যাপচা ফাংশনালিটি (Cryptographically Secure & Timeout)
 // =================================
 let currentCaptchaCode = "";
-let captchaTimer = null; // 👈 ১. নতুন টাইমার ভ্যারিয়েবল
-const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // 👈 ২. ২ মিনিট (মেগাসেকেন্ডে)
+let captchaTimer = null; 
+const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // ২ মিনিট
 
 function generateCaptcha() {
     const canvas = document.getElementById('captchaCanvas');
@@ -124,18 +126,13 @@ function generateCaptcha() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    // ১. আগের টাইমার বন্ধ করা
     if (captchaTimer) clearTimeout(captchaTimer);
-
-    // ২. আগের মেসেজ মুছে ফেলা
     if (errorDiv) errorDiv.innerText = "";
 
-    // ক্যানভাস রিসেট ও ব্যাকগ্রাউন্ড প্রস্তুত করা
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#f2f2f2";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // ক্যাপচা কোড তৈরি
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     const length = 5;
     let captcha = "";
@@ -147,9 +144,8 @@ function generateCaptcha() {
     }
     currentCaptchaCode = captcha;
 
-    // 🎨 ৩. ব্যাকগ্রাউন্ডে এলোমেলো লাল/নীল/সবুজ দাগ (Noise Lines) আঁকা
     for (let i = 0; i < 6; i++) {
-        ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`; // বিভিন্ন রঙ
+        ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
         ctx.beginPath();
         ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
         ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
@@ -157,32 +153,27 @@ function generateCaptcha() {
         ctx.stroke();
     }
 
-    // 🎨 ৪. ক্যাপচার প্রতিটি অক্ষর কিছুটা বাঁকা ও রঙ বেরঙের করে আঁকা
     ctx.font = "bold 22px Arial";
     for (let i = 0; i < length; i++) {
         ctx.fillStyle = `rgb(${Math.random() * 150}, ${Math.random() * 150}, ${Math.random() * 150})`;
         ctx.save();
         ctx.translate(20 + i * 22, 28);
-        ctx.rotate((Math.random() - 0.5) * 0.4); // অক্ষর সামান্য বাঁকানো
+        ctx.rotate((Math.random() - 0.5) * 0.4);
         ctx.fillText(captcha[i], 0, 0);
         ctx.restore();
     }
 
-    // 🎨 ৫. অক্ষরের ওপর দিয়ে অতিরিক্ত ১-২টি নয়েজ রেখা
-    ctx.strokeStyle = "rgba(255, 0, 0, 0.6)"; // লালচে আবছা দাগ
+    ctx.strokeStyle = "rgba(255, 0, 0, 0.6)";
     ctx.beginPath();
     ctx.moveTo(10, Math.random() * canvas.height);
     ctx.lineTo(canvas.width - 10, Math.random() * canvas.height);
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
+    if (userInput) userInput.value = "";
 
-    // ৬. নির্দিষ্ট সময় পর Expired হওয়ার টাইমার
     captchaTimer = setTimeout(() => {
-        currentCaptchaCode = ""; // ক্যাপচা বাতিল করা
-        
-        // ক্যানভাস মুছে EXPIRED লাল রঙে বড় করে আঁকা
+        currentCaptchaCode = "";
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#ffe6e6";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -224,11 +215,9 @@ async function submitMasterLogin() {
     const errorDiv = document.getElementById('masterLoginError');
     const successDiv = document.getElementById('masterLoginSuccess');
 
-    // লোকাল স্টোরেজে ভুল চেষ্টার হিসাব রাখা (Brute-Force Protection)
     let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0', 10);
     let lockUntil = parseInt(localStorage.getItem('lockUntil') || '0', 10);
 
-    // ১. যদি একাউন্ট সাময়িকভাবে লক থাকে
     if (Date.now() < lockUntil) {
         let remainingMins = Math.ceil((lockUntil - Date.now()) / 60000);
         if (errorDiv) {
@@ -239,7 +228,6 @@ async function submitMasterLogin() {
     }
     
     const loginBtn = document.getElementById('masterLoginBtn');
-
     if (!idInput || !passInput || !captchaInput) return;
 
     const id = idInput.value.trim();
@@ -252,7 +240,6 @@ async function submitMasterLogin() {
         successDiv.style.display = "none";
     }
 
-    // 🔹 ID বা Password ফাঁকা থাকলে সতর্কবার্তা
     if (!id || !pass) {
         if (errorDiv) {
             errorDiv.innerText = "⚠️ Please fill both ID & Password.";
@@ -261,7 +248,6 @@ async function submitMasterLogin() {
         return;
     }
 
-    // 🔹 ক্যাপচা ফাঁকা থাকলে সতর্কবার্তা
     if (!userCaptcha) {
         if (errorDiv) {
             errorDiv.innerText = "⚠️ Please enter the CAPTCHA code.";
@@ -270,17 +256,15 @@ async function submitMasterLogin() {
         return;
     }
 
-    // 👈 ৫. ক্যাপচার মেয়াদ শেষ (Expired) হয়েছে কিনা তা পরীক্ষা
     if (currentCaptchaCode === "") {
         if (errorDiv) {
             errorDiv.innerText = "⏳ CAPTCHA expired! Click refresh to get a new code.";
             errorDiv.style.color = "red";
         }
-        generateCaptcha(); // স্বয়ংক্রিয়ভাবে নতুন ক্যাপচা তৈরি করবে
+        generateCaptcha();
         return;
     }
 
-    // 🔹 ক্যাপচা ভুল হলে মেসেজ
     if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
         if (errorDiv) {
             errorDiv.innerText = "❌ Invalid CAPTCHA code! Please try again.";
@@ -290,14 +274,12 @@ async function submitMasterLogin() {
         return;
     }
 
-    // বাটনের অবস্থা পরিবর্তন
     if (loginBtn) {
         loginBtn.innerText = "Validating...";
         loginBtn.disabled = true;
     }
 
     try {
-        // 🔹 SUPABASE RPC কল (check_teacher_login ফাংশন দিয়ে আইডি ও পাসওয়ার্ড যাচাই)
         const { data: isValidUser, error } = await supabaseClient.rpc('check_teacher_login', {
             p_id: id,
             p_pass: pass
@@ -307,7 +289,6 @@ async function submitMasterLogin() {
 
         if (isValidUser) {
             if (captchaTimer) clearTimeout(captchaTimer);
-            // সঠিক লগইন: আগের সমস্ত লিমিট ক্লিয়ার করা
             localStorage.removeItem('loginAttempts');
             localStorage.removeItem('lockUntil');
 
@@ -333,10 +314,8 @@ async function submitMasterLogin() {
             }, 800);
 
         } else {
-            // ❌ ভুল ID বা Password হলে ভুল চেষ্টার লিমিট বাড়ানো
             loginAttempts++;
             if (loginAttempts >= 3) {
-                // ৩ বার ভুল হলে ৫ মিনিটের জন্য ব্লক
                 lockUntil = Date.now() + (5 * 60 * 1000); 
                 localStorage.setItem('lockUntil', lockUntil.toString());
                 loginAttempts = 0;
@@ -460,24 +439,36 @@ function showAvailableSoonMessage(button) {
     }, 3000);
 }
 
+// 🎯 ইউনিভার্সাল লিংক হ্যান্ডলার (একই ট্যাবে ওপেন নিশ্চিতকরণ)
 function setupUniversalLinkHandler() {
+    // ১. DOM-এর সমস্ত বিদ্যমান <a> ট্যাগের target='_self' করে দেওয়া
+    document.querySelectorAll('a').forEach(a => {
+        a.setAttribute('target', '_self');
+    });
+
+    // ২. যেকোনো ক্লিকে ইভেন্ট ধরে একই উইন্ডোতে রিডাইরেক্ট করা
     document.addEventListener('click', (event) => {
-        const targetBtn = event.target.closest('.exam-link, .nav-link, .class-link-btn');
+        const targetBtn = event.target.closest('a, .exam-link, .nav-link, .class-link-btn, .item-btn');
 
         if (targetBtn) {
-            // 🛡️ নতুন ট্যাব খোলা বন্ধ করে একই ট্যাবে খোলার ব্যবস্থা
-            targetBtn.removeAttribute('target');
-            targetBtn.setAttribute('target', '_self');
-
             const href = targetBtn.getAttribute('href');
 
+            // যদি লিংক খালি বা হাশি (#) বা ইনভ্যালিড হয়
             if (!href || href.trim() === '' || href.trim() === '#' || href.startsWith('javascript:')) {
                 event.preventDefault();
                 showAvailableSoonMessage(targetBtn);
+                return;
+            }
+
+            // যদি এটি কোনো অন-পেজ সেকশন আইডি স্ক্রোল না হয়ে থাকে (যেমন #section-id)
+            if (!href.startsWith('#')) {
+                event.preventDefault(); // ব্রাউজারের ডিফল্ট নতুন ট্যাব ওপেন আটকানো
+                window.location.href = href; // একই ট্যাবে লিংক ওপেন করানো
             }
         }
-    });
+    }, true);
 }
+
 // =================================
 // 🧭 সাইড বার মেনু ও ড্রপডাউন ফাংশন
 // =================================
