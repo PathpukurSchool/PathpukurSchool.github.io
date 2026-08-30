@@ -611,7 +611,6 @@
       }
     }
 
-    // 3 এক্সেল ফাইল ডাউনলোড ও আপলোডের জন্য পরিবর্তনের শুরু    
 // ১. নির্বাচিত Exam ও Section অনুযায়ী এক্সেল টেমপ্লেট তৈরি ও ডাউনলোড
 function downloadExcelTemplate() {
   const exam = document.getElementById('examSelect').value;
@@ -633,7 +632,7 @@ function downloadExcelTemplate() {
       "Student Name": row.student_name
     };
 
-    // সিলেক্টেড Exam অনুযায়ী বিষয়ের মার্কস দেওয়া
+    // সিলেক্টেড Exam অনুযায়ী বিষয়ের মার্কস দেওয়া
     subjectsList.forEach(sub => {
       const colName = columnMap[exam][sub];
       rowData[sub] = row[colName] !== null && row[colName] !== undefined ? row[colName] : "";
@@ -646,8 +645,8 @@ function downloadExcelTemplate() {
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, `${exam}_Section_${sec}`);
 
-  // ফাইল ডাউনলোড নাম
-  XLSX.writeFile(workbook, `Class_IX_Marks_${exam}_Sec_${sec}.xlsx`);
+  // সংশোধন: ফাইল ডাউনলোড নাম Class_IX এর বদলে Class_VI করা হয়েছে
+  XLSX.writeFile(workbook, `Class_VI_Marks_${exam}_Sec_${sec}.xlsx`);
 }
 
 // ২. এক্সেল ফাইল আপলোড এবং সুপাবেস ডাটাবেজে বাল্ক আপডেট
@@ -662,7 +661,7 @@ function downloadExcelTemplate() {
   if (!file) return;
 
   const exam = document.getElementById('examSelect').value;
-  const maxLimit = columnMap[exam].limit;
+  // এখানকার maxLimit ডিলিট করে লুপের ভেতরে দেওয়া হয়েছে কারণ প্রতি বিষয়ের লিমিট আলাদা
 
   const reader = new FileReader();
   reader.onload = async (e) => {
@@ -672,19 +671,16 @@ function downloadExcelTemplate() {
       const sheetName = workbook.SheetNames[0];
       const jsonRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-      // ১. ফাইল খালি কিনা চেক
       if (!jsonRows || jsonRows.length === 0) {
         alert("❌ আপলোড করা এক্সেল ফাইলে কোনো ডাটা পাওয়া যায়নি!");
         return;
       }
 
-      // ২. সঠিক ফাইল / ID কলাম আছে কিনা ভ্যালিডেশন চেক (সমস্যা ২ এর সমাধান)
       if (!jsonRows[0].hasOwnProperty("ID")) {
         alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে! দয়া করে পোর্টালে প্রদত্ত 'এক্সেল টেমপ্লেট ডাউনলোড' করে তাতে নম্বর লিখে আপলোড করুন।");
         return;
       }
       
-  // 🔔 ৩. কনফার্মেশন পপ-আপ মেসেজ (আপনার অনুরোধকৃত অংশ)
       const confirmUpload = window.confirm(
         `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে নম্বরগুলো ডাটাবেসে আপলোড করতে চান?\n\n` +
         `• পরীক্ষা: ${exam.toUpperCase()}\n` +
@@ -692,13 +688,11 @@ function downloadExcelTemplate() {
         `[OK] চাপলে আপলোড শুরু হবে, [Cancel] চাপলে বাতিল হবে।`
       );
 
-      // ব্যবহারকারী 'Cancel' চাপলে আপলোড বাতিল হবে
       if (!confirmUpload) {
-        event.target.value = ''; // ফাইল ইনপুট রিসেট
+        event.target.value = ''; 
         return;
       }
 
-      // ----------------- এর পর থেকে ডাটাবেস আপলোড শুরু হবে -----------------
       document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> এক্সেলে নম্বর দ্রুত ডাটাবেজে আপডেট হচ্ছে...`;
 
       let updatePromises = [];
@@ -713,14 +707,16 @@ function downloadExcelTemplate() {
           if (row.hasOwnProperty(sub)) {
             const rawVal = row[sub];
             const colName = columnMap[exam][sub];
+            
+            // সংশোধন: বিষয়ভিত্তিক নির্দিষ্ট সর্বোচ্চ মার্কস বের করা (Dynamic Limit Fix)
+            const maxLimit = columnMap[exam].limits[sub];
 
-            // শুধু ফাঁকা না হলে এবং মান থাকলে চেক করবে
             if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
               const num = Number(rawVal);
               
               if (Number.isInteger(num) && num >= 0 && num <= maxLimit) {
-                // প্যারাল্যাল রিকোয়েস্টের জন্য প্রমিজ পুশ করা
-                const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
+                // সংশোধন: secure_update_result_ix এর বদলে secure_update_result_vi করা হয়েছে
+                const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_vi`, {
                   method: 'POST',
                   headers: { 
                     'apikey': SUPABASE_ANON_KEY, 
@@ -754,30 +750,25 @@ function downloadExcelTemplate() {
       }
 
       if (updatePromises.length === 0) {
-        alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা কোনো বৈধ নম্বর নেই!");
+        alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা কোনো বৈধ নম্বর নেই!");
         return;
       }
 
-      // ৩. সব প্রমিজ একসঙ্গে দ্রুত এক্সিকিউট করা (Promise.all - প্রসেসিং স্পিড ১০০ গুণ বাড়বে)
       await Promise.all(updatePromises);
 
-      // ৪. সঠিক কাউন্টিং সহ মোট সফল আপলোডের সংকেত
-      alert(`🎉 নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর সংখ্যা: ${validNumbersUploaded}\n❌ বাতিল/স্কিপড নম্বরের সংখ্যা: ${skippedCount}`);
+      alert(`🎉 নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর সংখ্যা: ${validNumbersUploaded}\n❌ বাতিল/স্কিপড নম্বরের সংখ্যা: ${skippedCount}`);
       
-      // টেবিল ডাটা রিফ্রেশ
       await fetchMarksData();
 
     } catch (err) {
       alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে! ফাইলটি ক্ষতিগ্রস্ত বা অমিল ফরম্যাটের হতে পারে।");
     } finally {
-      event.target.value = ''; // ইনপুট রিসেট
+      event.target.value = ''; 
     }
   };
 
   reader.readAsArrayBuffer(file);
 }
-
-// 3 এক্সেল ফাইল ডাউনলোড ও আপলোড এর জন্য পরিবর্তনের শেষ 
   </script>
 </body>
 </html>
