@@ -358,7 +358,7 @@
     
     <!-- হেডার কার্ড -->
     <div class="header-card">
-      <div class="school-name"> পাতপুকুর হাই স্কুল (উ: মা:)</div>
+      <div class="school-name">পাতপুকুর হাই স্কুল (উ: মা:)</div>
       <div class="page-title"><i class="fa-solid fa-square-poll-vertical"></i> পরীক্ষার নম্বর ও ফলাফল</div>
       <div class="session-badge"><i class="fa-solid fa-calendar-days"></i> ক্লাস: XI (একাদশ শ্রেণী) | সেশন: ২০২৬</div>
     </div>
@@ -380,7 +380,7 @@
             placeholder="উদাহরণ: 25" 
             inputmode="numeric" 
             pattern="[0-9]*"
-            min="0"
+            min="1"
             max="700" 
             onkeydown="if(event.key==='Enter') searchResult()"
           >
@@ -527,7 +527,8 @@
     // সার্চ ও রেজাল্ট ফেচিং ফাংশন
     async function searchResult() {
       const rollInput = document.getElementById('rollInput');
-      const rollNo = parseInt(rollInput.value.trim(), 10);
+      const rawVal = rollInput.value.trim();
+      const rollNo = parseInt(rawVal, 10);
       const resultContainer = document.getElementById('resultContainer');
 
       // কন্টেইনার ও স্ট্যাটাস রিসেট
@@ -535,7 +536,7 @@
       hideStatus();
 
       // ইনপুট ভ্যালিডেশন
-      if (isNaN(rollNo) || rollNo < 0 || rollNo > 400) {
+      if (!rawVal || isNaN(rollNo) || rollNo <= 0 || rollNo > 400) {
         showStatus("অনুগ্রহ করে বৈধ রোল নম্বর দিন!", "warning");
         return;
       }
@@ -543,11 +544,11 @@
       showStatus("ডাটাবেজ থেকে তথ্য খোঁজা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...", "info");
 
       try {
-        // Supabase result_xi টেবিল থেকে রেজাল্ট রিড করা
+        // Supabase result_xi টেবিল থেকে রেজাল্ট রিড করা (নম্বর বা স্ট্রিং উভয় প্রকার টাইপ সাপোর্ট করবে)
         const { data, error } = await _supabase
           .from('result_xi')
           .select('*')
-          .eq('roll_no', rollNo)
+          .or(`roll_no.eq.${rollNo},roll_no.eq."${rawVal}"`)
           .maybeSingle();
 
         if (error) {
@@ -557,7 +558,7 @@
         }
 
         if (!data) {
-          showStatus(`রোল নম্বর ${rollNo} এর কোনো ফলাফল পাওয়া যায়নি!`, "warning");
+          showStatus(`রোল নম্বর ${rawVal} এর কোনো ফলাফল পাওয়া যায়নি!`, "warning");
           return;
         }
 
@@ -579,7 +580,7 @@
       document.getElementById('resClass').innerText = data.class_name || 'XI';
       document.getElementById('resSection').innerText = data.section || '-';
       document.getElementById('resRoll').innerText = data.roll_no || '-';
-      document.getElementById('resSession').innerText = data.session || '-';
+      document.getElementById('resSession').innerText = data.session || '২০২৬';
 
       // ২. বিষয়ভিত্তিক নম্বর সেট (Semester 1)
       document.getElementById('sem1_ben').innerHTML = formatMark(data.sem1_bengali);
@@ -642,14 +643,17 @@
       document.getElementById('resTotalMarks').innerText = grandTotal > 0 ? grandTotal : 0;
     }
 
-    // নম্বর যোগ করার সুবিধাজনক ফাংশন
+    // নম্বর যোগ করার ফাংশন
     function calculateSum(marksArray) {
       let sum = 0;
       let hasValue = false;
       marksArray.forEach(m => {
         if (m !== null && m !== undefined && m !== "") {
-          sum += Number(m);
-          hasValue = true;
+          const num = Number(m);
+          if (!isNaN(num)) {
+            sum += num;
+            hasValue = true;
+          }
         }
       });
       return hasValue ? sum : null;
