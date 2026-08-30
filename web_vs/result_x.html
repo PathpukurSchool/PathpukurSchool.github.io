@@ -603,173 +603,159 @@
       }
     }
 
-    // 3 এক্সেল ফাইল ডাউনলোড ও আপলোডের জন্য পরিবর্তনের শুরু    
-// ১. নির্বাচিত Exam ও Section অনুযায়ী এক্সেল টেমপ্লেট তৈরি ও ডাউনলোড
-function downloadExcelTemplate() {
-  const exam = document.getElementById('examSelect').value;
-  const sec = document.getElementById('sectionSelect').value;
+// --- ১. সংশোধিত এক্সেল ডাউনলোড ফাংশন (Class X specific filename) ---
+    function downloadExcelTemplate() {
+      const exam = document.getElementById('examSelect').value;
+      const sec = document.getElementById('sectionSelect').value;
 
-  let dataset = rawData.filter(item => sec === "--All--" || item.section === sec);
+      let dataset = rawData.filter(item => sec === "--All--" || item.section === sec);
 
-  if (dataset.length === 0) {
-    alert("⚠️ কোনো শিক্ষার্থী পাওয়া যায়নি!");
-    return;
-  }
-
-  // এক্সেল শীটের জন্য ডাটা প্রিপেয়ার করা
-  const excelData = dataset.map(row => {
-    let rowData = {
-      "ID": row.id,
-      "Roll": row.roll_no,
-      "Section": row.section,
-      "Student Name": row.student_name
-    };
-
-    // সিলেক্টেড Exam অনুযায়ী বিষয়ের মার্কস দেওয়া
-    subjectsList.forEach(sub => {
-      const colName = columnMap[exam][sub];
-      rowData[sub] = row[colName] !== null && row[colName] !== undefined ? row[colName] : "";
-    });
-
-    return rowData;
-  });
-
-  const worksheet = XLSX.utils.json_to_sheet(excelData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, `${exam}_Section_${sec}`);
-
-  // ফাইল ডাউনলোড নাম
-  XLSX.writeFile(workbook, `Class_IX_Marks_${exam}_Sec_${sec}.xlsx`);
-}
-
-// ২. এক্সেল ফাইল আপলোড এবং সুপাবেস ডাটাবেজে বাল্ক আপডেট
- async function handleExcelUpload(event) {
-  if (!currentPasskey || !isEditAllowed) {
-    alert("⚠️ এক্সেল ফাইল আপলোড করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
-    event.target.value = '';
-    return;
-  }
-
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const exam = document.getElementById('examSelect').value;
-  const maxLimit = columnMap[exam].limit;
-
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    try {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheetName = workbook.SheetNames[0];
-      const jsonRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-
-      // ১. ফাইল খালি কিনা চেক
-      if (!jsonRows || jsonRows.length === 0) {
-        alert("❌ আপলোড করা এক্সেল ফাইলে কোনো ডাটা পাওয়া যায়নি!");
+      if (dataset.length === 0) {
+        alert("⚠️ কোনো শিক্ষার্থী পাওয়া যায়নি!");
         return;
       }
 
-      // ২. সঠিক ফাইল / ID কলাম আছে কিনা ভ্যালিডেশন চেক (সমস্যা ২ এর সমাধান)
-      if (!jsonRows[0].hasOwnProperty("ID")) {
-        alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে! দয়া করে পোর্টালে প্রদত্ত 'এক্সেল টেমপ্লেট ডাউনলোড' করে তাতে নম্বর লিখে আপলোড করুন।");
+      const excelData = dataset.map(row => {
+        let rowData = {
+          "ID": row.id,
+          "Roll": row.roll_no,
+          "Section": row.section,
+          "Student Name": row.student_name
+        };
+
+        subjectsList.forEach(sub => {
+          const colName = columnMap[exam][sub];
+          rowData[sub] = row[colName] !== null && row[colName] !== undefined ? row[colName] : "";
+        });
+
+        return rowData;
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, `${exam}_Section_${sec}`);
+
+      // ফাইলের নাম Class_X করা হয়েছে
+      XLSX.writeFile(workbook, `Class_X_Marks_${exam}_Sec_${sec}.xlsx`);
+    }
+
+    // --- ২. সংশোধিত এক্সেল আপলোড ফাংশন (Class X RPC Call সহ) ---
+    async function handleExcelUpload(event) {
+      if (!currentPasskey || !isEditAllowed) {
+        alert("⚠️ এক্সেল ফাইল আপলোড করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
+        event.target.value = '';
         return;
       }
-      
-  // 🔔 ৩. কনফার্মেশন পপ-আপ মেসেজ (আপনার অনুরোধকৃত অংশ)
-      const confirmUpload = window.confirm(
-        `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে নম্বরগুলো ডাটাবেসে আপলোড করতে চান?\n\n` +
-        `• পরীক্ষা: ${exam.toUpperCase()}\n` +
-        `• মোট শিক্ষার্থী সংখ্যা: ${jsonRows.length}\n\n` +
-        `[OK] চাপলে আপলোড শুরু হবে, [Cancel] চাপলে বাতিল হবে।`
-      );
 
-      // ব্যবহারকারী 'Cancel' চাপলে আপলোড বাতিল হবে
-      if (!confirmUpload) {
-        event.target.value = ''; // ফাইল ইনপুট রিসেট
-        return;
-      }
+      const file = event.target.files[0];
+      if (!file) return;
 
-      // ----------------- এর পর থেকে ডাটাবেস আপলোড শুরু হবে -----------------
-      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> এক্সেলে নম্বর দ্রুত ডাটাবেজে আপডেট হচ্ছে...`;
+      const exam = document.getElementById('examSelect').value;
+      const maxLimit = columnMap[exam].limit;
 
-      let updatePromises = [];
-      let skippedCount = 0;
-      let validNumbersUploaded = 0;
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const jsonRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-      for (let row of jsonRows) {
-        const rowId = row["ID"];
-        if (!rowId) continue;
+          if (!jsonRows || jsonRows.length === 0) {
+            alert("❌ আপলোড করা এক্সেল ফাইলে কোনো ডাটা পাওয়া যায়নি!");
+            return;
+          }
 
-        for (let sub of subjectsList) {
-          if (row.hasOwnProperty(sub)) {
-            const rawVal = row[sub];
-            const colName = columnMap[exam][sub];
+          if (!jsonRows[0].hasOwnProperty("ID")) {
+            alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে! দয়া করে পোর্টালে প্রদত্ত 'এক্সেল টেমপ্লেট ডাউনলোড' করে তাতে নম্বর লিখে আপলোড করুন।");
+            return;
+          }
+          
+          const confirmUpload = window.confirm(
+            `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে নম্বরগুলো ডাটাবেসে আপলোড করতে চান?\n\n` +
+            `• পরীক্ষা: ${exam.toUpperCase()}\n` +
+            `• মোট শিক্ষার্থী সংখ্যা: ${jsonRows.length}\n\n` +
+            `[OK] চাপলে আপলোড শুরু হবে, [Cancel] চাপলে বাতিল হবে।`
+          );
 
-            // শুধু ফাঁকা না হলে এবং মান থাকলে চেক করবে
-            if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
-              const num = Number(rawVal);
-              
-              if (Number.isInteger(num) && num >= 0 && num <= maxLimit) {
-                // প্যারাল্যাল রিকোয়েস্টের জন্য প্রমিজ পুশ করা
-                const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_ix`, {
-                  method: 'POST',
-                  headers: { 
-                    'apikey': SUPABASE_ANON_KEY, 
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 
-                    'Content-Type': 'application/json' 
-                  },
-                  body: JSON.stringify({
-                    p_passkey: currentPasskey,
-                    p_id: parseInt(rowId),
-                    p_column_name: colName,
-                    p_marks: num
-                  })
-                })
-                .then(res => res.json())
-                .then(resData => {
-                  if (resData && resData.success) {
-                    validNumbersUploaded++;
+          if (!confirmUpload) {
+            event.target.value = '';
+            return;
+          }
+
+          document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> এক্সেলে নম্বর দ্রুত ডাটাবেজে আপডেট হচ্ছে...`;
+
+          let updatePromises = [];
+          let skippedCount = 0;
+          let validNumbersUploaded = 0;
+
+          for (let row of jsonRows) {
+            const rowId = row["ID"];
+            if (!rowId) continue;
+
+            for (let sub of subjectsList) {
+              if (row.hasOwnProperty(sub)) {
+                const rawVal = row[sub];
+                const colName = columnMap[exam][sub];
+
+                if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
+                  const num = Number(rawVal);
+                  
+                  if (Number.isInteger(num) && num >= 0 && num <= maxLimit) {
+                    // Class X-এর RPC Function 'secure_update_result_x' ব্যবহার করা হয়েছে
+                    const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_x`, {
+                      method: 'POST',
+                      headers: { 
+                        'apikey': SUPABASE_ANON_KEY, 
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 
+                        'Content-Type': 'application/json' 
+                      },
+                      body: JSON.stringify({
+                        p_passkey: currentPasskey,
+                        p_id: parseInt(rowId),
+                        p_column_name: colName,
+                        p_marks: num
+                      })
+                    })
+                    .then(res => res.json())
+                    .then(resData => {
+                      if (resData && resData.success) {
+                        validNumbersUploaded++;
+                      } else {
+                        skippedCount++;
+                      }
+                    })
+                    .catch(() => { skippedCount++; });
+
+                    updatePromises.push(promise);
                   } else {
                     skippedCount++;
                   }
-                })
-                .catch(() => { skippedCount++; });
-
-                updatePromises.push(promise);
-              } else {
-                skippedCount++; // লিমিটের বাইরে বা ভুল নম্বর হলে স্কিপ
+                }
               }
             }
           }
+
+          if (updatePromises.length === 0) {
+            alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা কোনো বৈধ নম্বর নেই!");
+            return;
+          }
+
+          await Promise.all(updatePromises);
+
+          alert(`🎉 নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর সংখ্যা: ${validNumbersUploaded}\n❌ বাতিল/স্কিপড নম্বরের সংখ্যা: ${skippedCount}`);
+          
+          await fetchMarksData();
+
+        } catch (err) {
+          alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে! ফাইলটি ক্ষতিগ্রস্ত বা অমিল ফরম্যাটের হতে পারে।");
+        } finally {
+          event.target.value = '';
         }
-      }
+      };
 
-      if (updatePromises.length === 0) {
-        alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা কোনো বৈধ নম্বর নেই!");
-        return;
-      }
-
-      // ৩. সব প্রমিজ একসঙ্গে দ্রুত এক্সিকিউট করা (Promise.all - প্রসেসিং স্পিড ১০০ গুণ বাড়বে)
-      await Promise.all(updatePromises);
-
-      // ৪. সঠিক কাউন্টিং সহ মোট সফল আপলোডের সংকেত
-      alert(`🎉 নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর সংখ্যা: ${validNumbersUploaded}\n❌ বাতিল/স্কিপড নম্বরের সংখ্যা: ${skippedCount}`);
-      
-      // টেবিল ডাটা রিফ্রেশ
-      await fetchMarksData();
-
-    } catch (err) {
-      alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে! ফাইলটি ক্ষতিগ্রস্ত বা অমিল ফরম্যাটের হতে পারে।");
-    } finally {
-      event.target.value = ''; // ইনপুট রিসেট
-    }
-  };
-
-  reader.readAsArrayBuffer(file);
-}
-
-// 3 এক্সেল ফাইল ডাউনলোড ও আপলোড এর জন্য পরিবর্তনের শেষ 
+      reader.readAsArrayBuffer(file);
+    } 
   </script>
 </body>
 </html>
