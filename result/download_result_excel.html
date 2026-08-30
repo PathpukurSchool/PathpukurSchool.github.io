@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pathpukur High School (HS) - Export Result Tables</title>
+  
+  <!-- FontAwesome Icons & Bangla Font -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- SheetJS for Excel Export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tiro Bangla', 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+    }
+
+    /* Container for layout */
+    .card-container {
+      width: 100%;
+      max-width: 650px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-top: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Header styling */
+    .header {
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      color: #ffffff;
+      padding: 20px 15px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      margin-bottom: 5px;
+      letter-spacing: 0.5px;
+    }
+
+    .header h2 {
+      font-size: 14px;
+      font-weight: 400;
+      color: #93c5fd;
+    }
+
+    /* Description section */
+    .description-box {
+      background: #f8fafc;
+      border-left: 4px solid #2563eb;
+      padding: 12px 15px;
+      margin: 15px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .description-box i {
+      color: #2563eb;
+      margin-right: 5px;
+    }
+
+    /* Main form controls */
+    .form-body {
+      padding: 10px 20px 25px 20px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .form-control:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    /* Download button styling */
+    .btn-download {
+      width: 100%;
+      background: #16a34a;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s ease-in-out, transform 0.1s;
+    }
+
+    .btn-download:hover {
+      background: #15803d;
+    }
+
+    .btn-download:active {
+      transform: scale(0.99);
+    }
+
+    .btn-download:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    /* Status Notification Messages */
+    .status-msg {
+      margin-top: 15px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; display: flex; }
+    .status-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; display: flex; }
+    .status-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; display: flex; }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .header h1 { font-size: 18px; }
+      .header h2 { font-size: 13px; }
+      .card-container { margin-top: 0; }
+      body { padding: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card-container">
+    <!-- হেডার -->
+    <div class="header">
+      <h1><i class="fa-solid fa-school"></i> Pathpukur High School (HS)</h1>
+      <h2><i class="fa-solid fa-calendar-days"></i> Academic Session: 2026 | Result Management</h2>
+    </div>
+
+    <!-- পেজের বিবরণ -->
+    <div class="description-box">
+      <p><i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> এখান থেকে নির্দিষ্ট ক্লাসের সম্পূর্ণ রেজাল্ট টেবিল এক্সেল (`.xlsx`) ফাইল হিসেবে ডাউনলোড করতে পারবেন। ডাউনলোড করা ফাইলে প্রয়োজনীয় নম্বর সংশোধন বা এন্ট্রি করার পর অতি সহজে এটিকে <strong>CSV (Comma Delimited)</strong> ফরম্যাটে সেভ করে পুনরায় Supabase ডাটাবেজে আপলোড করতে পারবেন।</p>
+    </div>
+
+    <!-- ফরম বডি -->
+    <div class="form-body">
+      <div class="form-group">
+        <label for="classSelect"><i class="fa-solid fa-layer-group"></i> শ্রেণী নির্বাচন করুন (Select Class):</label>
+        <select id="classSelect" class="form-control">
+          <option value="">-- শ্রেণী নির্বাচন করুন --</option>
+          <option value="v">Class V</option>
+          <option value="vi">Class VI</option>
+          <option value="vii">Class VII</option>
+          <option value="viii">Class VIII</option>
+          <option value="ix">Class IX</option>
+          <option value="x">Class X</option>
+          <option value="xi">Class XI</option>
+        </select>
+      </div>
+
+      <button id="downloadBtn" class="btn-download" onclick="downloadExcel()">
+        <i class="fa-solid fa-file-excel"></i> Excel ফাইল ডাউনলোড করুন
+      </button>
+
+      <!-- স্ট্যাটাস মেসেজ বক্স -->
+      <div id="statusBox" class="status-msg"></div>
+    </div>
+  </div>
+
+  <script>
+    // Supabase কনফিগারেশন
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+
+    // ক্লাস সিলেক্ট অনুযায়ী সুপাবেসের টেবিল নাম নির্ধারণ
+    const tableMapping = {
+      "v": "result_v",
+      "vi": "result_vi",
+      "vii": "result_vii",
+      "viii": "result_viii",
+      "ix": "result_ix",
+      "x": "result_x",
+      "xi": "result_xi"
+    };
+
+    function showStatus(message, type) {
+      const statusBox = document.getElementById('statusBox');
+      statusBox.className = 'status-msg status-' + type;
+      
+      let icon = '';
+      if (type === 'info') icon = '<i class="fa-solid fa-spinner fa-spin"></i> ';
+      else if (type === 'success') icon = '<i class="fa-solid fa-circle-check"></i> ';
+      else if (type === 'error') icon = '<i class="fa-solid fa-circle-exclamation"></i> ';
+
+      statusBox.innerHTML = icon + message;
+    }
+
+    function clearStatus() {
+      const statusBox = document.getElementById('statusBox');
+      statusBox.style.display = 'none';
+      statusBox.className = 'status-msg';
+    }
+
+    async function downloadExcel() {
+      const selectedClass = document.getElementById('classSelect').value;
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      if (!selectedClass) {
+        showStatus("অনুগ্রহ করে একটি শ্রেণী নির্বাচন করুন!", "error");
+        return;
+      }
+
+      const tableName = tableMapping[selectedClass];
+      showStatus(`Supabase থেকে ${selectedClass.toUpperCase()} ক্লাসের ডাটা প্রসেস করা হচ্ছে...`, "info");
+      downloadBtn.disabled = true;
+
+      try {
+        // Supabase REST API 호출
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/${tableName}?select=*&order=roll_no.asc`, {
+          method: 'GET',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`ডাটা ফেচ করতে ব্যর্থ হয়েছে! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data || data.length === 0) {
+          showStatus(`Class ${selectedClass.toUpperCase()} এর টেবিলে কোনো ডাটা পাওয়া যায়নি!`, "error");
+          downloadBtn.disabled = false;
+          return;
+        }
+
+        // SheetJS লাইব্রেরি দিয়ে JSON ডাটাকে Excel এ রূপান্তর
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, `Class_${selectedClass.toUpperCase()}`);
+
+        // ফাইল তৈরি ও ডাউনলোড
+        const fileName = `Result_Class_${selectedClass.toUpperCase()}_2026.xlsx`;
+        XLSX.writeFile(workbook, fileName);
+
+        showStatus(`সফলভাবে ${fileName} ফাইলটি ডাউনলোড হয়েছে!`, "success");
+
+      } catch (error) {
+        console.error("Download Error:", error);
+        showStatus("ডাটা ডাউনলোড করার সময় সমস্যা দেখা দিয়েছে। ইন্টারনেট কানেকশন বা টেবিল নাম যাচাই করুন।", "error");
+      } finally {
+        downloadBtn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
