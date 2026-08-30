@@ -365,7 +365,7 @@
 
     <!-- বিবরণ কার্ড -->
     <div class="description-card">
-      <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীদের রোল নম্বর লিখে নিচের 'ফলাফল দেখুন' বাটনে ক্লিক করে প্রথম, দ্বিতীয় ও তৃতীয় পর্যায়ক্রমিক মূল্যায়ন (Evaluations)-এর মোট নম্বর ও ফলাফল দেখা যাবে।
+      <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীদের রোল নম্বর লিখে নিচের 'ফলাফল দেখুন' বাটনে ক্লিক করলে প্রথম, দ্বিতীয় ও তৃতীয় পর্যায়ক্রমিক মূল্যায়ন (Evaluations)-এর মোট নম্বর ও ফলাফল দেখা যাবে।
     </div>
 
     <!-- রোল নম্বর সার্চ ইনপুট কার্ড -->
@@ -399,7 +399,7 @@
       
       <!-- স্টুডেন্ট ইনফরমেশন কার্ড -->
       <div class="student-card">
-        <h3><i class="fa-solid fa-user-graduate"></i> শিক্ষার্থির সংক্ষিপ্ত বিবরণ (Student Details)</h3>
+        <h3><i class="fa-solid fa-user-graduate"></i> শিক্ষার্থীর সংক্ষিপ্ত বিবরণ (Student Details)</h3>
         <div class="info-grid">
           <div class="info-item">
             <span class="label">শিক্ষার্থির নাম</span>
@@ -525,7 +525,7 @@
 
       // ইনপুট ভ্যালিডেশন (০ থেকে ৭০০ এর মধ্যে হতে হবে)
       if (isNaN(rollNo) || rollNo < 0 || rollNo > 700) {
-        showStatus("অনুগ্রহ করে 0 থেকে 700 এর মধ্যে একটি বৈধ রোল নম্বর দিন!", "warning");
+        showStatus("অনুগ্রহ করে বৈধ রোল নম্বর দিন!", "warning");
         return;
       }
 
