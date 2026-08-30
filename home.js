@@ -80,7 +80,7 @@ function setupLiveSearch() {
                     resDiv.className = 'search-dropdown-item';
                     resDiv.innerHTML = `
                         <span class="item-title">${item.title}</span>
-                        <a href="${item.url}" class="item-btn" target="_blank">🚀 Go ➔</a>
+                        <a href="${item.url}" class="item-btn" target="_self">🚀 Go ➔</a>
                     `;
                     searchResultsDropdown.appendChild(resDiv);
                 });
@@ -465,6 +465,10 @@ function setupUniversalLinkHandler() {
         const targetBtn = event.target.closest('.exam-link, .nav-link, .class-link-btn');
 
         if (targetBtn) {
+            // 🛡️ নতুন ট্যাব খোলা বন্ধ করে একই ট্যাবে খোলার ব্যবস্থা
+            targetBtn.removeAttribute('target');
+            targetBtn.setAttribute('target', '_self');
+
             const href = targetBtn.getAttribute('href');
 
             if (!href || href.trim() === '' || href.trim() === '#' || href.startsWith('javascript:')) {
@@ -474,7 +478,6 @@ function setupUniversalLinkHandler() {
         }
     });
 }
-
 // =================================
 // 🧭 সাইড বার মেনু ও ড্রপডাউন ফাংশন
 // =================================
