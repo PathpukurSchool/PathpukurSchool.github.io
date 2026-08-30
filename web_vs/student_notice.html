@@ -4,25 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- মেন ওয়েব পেজে রিডাইরেক্ট করার কোড -->
-  <meta name="robots" content="noindex, nofollow, noarchive">
-  <script>
-  (function() {
+  <!-- ১. সার্চ ইঞ্জিন ইনডেক্স প্রতিরোধ -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+
+<!-- ২. কন্টেন্ট ফ্ল্যাশ প্রতিরোধ (রিডাইরেক্ট হওয়া পর্যন্ত পেজ সাদা থাকবে) -->
+<style id="auth-shield">
+    body { display: none !important; }
+</style>
+
+<script>
+(function() {
     try {
-      var ref = document.referrer;
-      if (!ref) {
-        window.location.replace("https://pathpukurschool.github.io/");
-        return;
-      }
-      var refUrl = new URL(ref);
-      // হুবহু ডোমেইন মেলাচ্ছে (সাব-ডোমেইন বাইপাস আটকাতে)
-      if (refUrl.hostname !== "pathpukurschool.github.io") {
-        window.location.replace("https://pathpukurschool.github.io/");
-      }
+        var ref = document.referrer;
+        var hasValidSession = sessionStorage.getItem("school_login_auth") === "true"; // হোম পেজের সেশন
+
+        // চেক ১: সেশন না থাকলে এবং রিফারার ডোমেইন সঠিক না থাকলে রিডাইরেক্ট
+        var isValidReferrer = false;
+        if (ref) {
+            var refUrl = new URL(ref);
+            if (refUrl.hostname === "pathpukurschool.github.io") {
+                isValidReferrer = true;
+            }
+        }
+
+        // যদি সেশনও না থাকে এবং সঠিক রিফারারও না থাকে -> সরাসরি মূল পোর্টালে রিডাইরেক্ট
+        if (!hasValidSession && !isValidReferrer) {
+            window.location.replace("https://pathpukurschool.github.io/");
+            return;
+        }
+
+        // অনুমোদন থাকলে পেজ দৃশ্যমান করার স্ক্রিপ্ট
+        document.addEventListener("DOMContentLoaded", function() {
+            var shield = document.getElementById("auth-shield");
+            if (shield) shield.remove();
+        });
+
     } catch (e) {
-      window.location.replace("https://pathpukurschool.github.io/");
+        window.location.replace("https://pathpukurschool.github.io/");
     }
-  })();
-  </script>
+})();
+</script>
   
   <title>পাতপুকুর হাই স্কুল (উ: মা:) - নোটিশ প্যানেল</title>
 
