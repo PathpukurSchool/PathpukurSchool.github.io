@@ -74,8 +74,54 @@
     .passkey-wrapper input { width: 100%; padding-right: 26px; }
     .passkey-wrapper i { position: absolute; right: 8px; cursor: pointer; color: #64748b; font-size: 12px; }
     .passkey-bar { display: flex; gap: 6px; align-items: center; }
+
+
+
+
+
+    .excel-action-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 10px;
+}
+.excel-btn-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+.excel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+.excel-btn:hover { opacity: 0.9; }
+.btn-export { background: #059669; }
+.btn-import { background: #0284c7; margin: 0; }
+.excel-desc {
+  margin: 6px 0 0 0;
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.4;
+}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+
+
+
+  
 </head>
 <body>
 
@@ -123,17 +169,35 @@
         <input type="text" id="searchInput" class="form-control" placeholder="Name / Roll..." oninput="applyFilters()" autocomplete="off">
       </div>
 
-<!-- Excel Import/Export Buttons -->
-<div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
-  <button onclick="downloadExcelTemplate()" class="form-control" style="background:#059669; color:#fff; cursor:pointer; width:auto; font-weight:bold;">
-    <i class="fa-solid fa-file-excel"></i> এক্সেল টেমপ্লেট ডাউনলোড
-  </button>
-  
-  <label class="form-control" style="background:#0284c7; color:#fff; cursor:pointer; width:auto; font-weight:bold; display:inline-flex; align-items:center; gap:5px; margin:0;">
-    <i class="fa-solid fa-file-import"></i> এক্সেল ফাইল আপলোড করুন
-    <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="handleExcelUpload(event)" style="display:none;">
-  </label>
+
+
+
+      
+
+<!-- Excel Import/Export Box -->
+<div class="excel-action-box">
+  <div class="excel-btn-group">
+    <button onclick="downloadExcelTemplate()" class="excel-btn btn-export">
+      <i class="fa-solid fa-file-excel"></i> Download Excel
+    </button>
+    
+    <label class="excel-btn btn-import">
+      <i class="fa-solid fa-file-import"></i> Upload Excel
+      <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="handleExcelUpload(event)" style="display:none;">
+    </label>
+  </div>
+  <p class="excel-desc">
+    <i class="fa-solid fa-circle-info"></i> নির্বাচিত Exam ও Section অনুযায়ী ডাউনলোড হওয়া excel ফাইলে নম্বর বসিয়ে আপলোড করুন। ভুল বা সীমা বহির্ভূত নম্বর স্কিপ হবে।
+  </p>
 </div>
+
+
+
+
+
+
+
+      
       
     </div>
 
