@@ -29,12 +29,12 @@
     <div class="max-w-4xl mx-auto px-4 py-5 text-center">
       <!-- School Name -->
       <div class="flex items-center justify-center gap-2 mb-1">
-        <h1 class="text-2xl md:text-3xl font-extrabold tracking-wide">Pathpukur High School (H: S:)</h1>
+        <h1 class="text-2xl md:text-3xl font-extrabold tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
       </div>
       <!-- Sub-heading & Session -->
       <p class="text-indigo-200 text-base md:text-lg font-medium flex items-center justify-center gap-2 mt-1">
         <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
-        Result Download | Session: <span id="currentSessionDisplay" class="bg-indigo-800 px-2 py-0.5 rounded text-yellow-300 font-bold">2026</span>
+        রেজাল্ট ডাউনলোড | শিক্ষাবর্ষ: <span id="currentSessionDisplay" class="bg-indigo-800 px-2 py-0.5 rounded text-yellow-300 font-bold">2026</span>
       </p>
     </div>
   </header>
@@ -77,9 +77,9 @@
             <i data-lucide="users" class="w-4 h-4 text-indigo-500"></i> সেকশন (Section)
           </label>
           <select id="sectionSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white text-sm font-medium">
-            <option value="A">Section A</option>
-            <option value="B">Section B</option>
-            <option value="C">Section C</option>
+            <option value="A">সেকশন A</option>
+            <option value="B">সেকশন B</option>
+            <option value="C">সেকশন C</option>
           </select>
         </div>
 
@@ -144,60 +144,60 @@
     // Dynamic Exam Mapping according to Class
     const examMapByClass = {
       v: [
-        { val: "e1", label: "প্রথম পর্যায়ক্রমিক মূল্যায়ন (1st Exam)" },
-        { val: "e2", label: "দ্বিতীয় পর্যায়ক্রমিক মূল্যায়ন (2nd Exam)" },
-        { val: "e3", label: "তৃতীয় পর্যায়ক্রমিক মূল্যায়ন (3rd Exam)" }
+        { val: "e1", label: "1st Exam" },
+        { val: "e2", label: "2nd Exam" },
+        { val: "e3", label: "3rd Exam" }
       ],
       vi: [
-        { val: "e1", label: "প্রথম পর্যায়ক্রমিক মূল্যায়ন (1st Exam)" },
-        { val: "e2", label: "দ্বিতীয় পর্যায়ক্রমিক মূল্যায়ন (2nd Exam)" },
-        { val: "e3", label: "তৃতীয় পর্যায়ক্রমিক মূল্যায়ন (3rd Exam)" }
+        { val: "e1", label: "1st Exam" },
+        { val: "e2", label: "2nd Exam" },
+        { val: "e3", label: "3rd Exam" }
       ],
       vii: [
-        { val: "e1", label: "প্রথম পর্যায়ক্রমিক মূল্যায়ন (1st Exam)" },
-        { val: "e2", label: "দ্বিতীয় পর্যায়ক্রমিক মূল্যায়ন (2nd Exam)" },
-        { val: "e3", label: "তৃতীয় পর্যায়ক্রমিক মূল্যায়ন (3rd Exam)" }
+        { val: "e1", label: "1st Exam" },
+        { val: "e2", label: "2nd Exam" },
+        { val: "e3", label: "3rd Exam" }
       ],
       viii: [
-        { val: "e1", label: "প্রথম পর্যায়ক্রমিক মূল্যায়ন (1st Exam)" },
-        { val: "e2", label: "দ্বিতীয় পর্যায়ক্রমিক মূল্যায়ন (2nd Exam)" },
-        { val: "e3", label: "তৃতীয় পর্যায়ক্রমিক মূল্যায়ন (3rd Exam)" }
+        { val: "e1", label: "1st Exam" },
+        { val: "e2", label: "2nd Exam" },
+        { val: "e3", label: "3rd Exam" }
       ],
       ix: [
-        { val: "e1", label: "প্রথম পর্যায়ক্রমিক মূল্যায়ন (1st Exam)" },
-        { val: "e2", label: "দ্বিতীয় পর্যায়ক্রমিক মূল্যায়ন (2nd Exam)" },
-        { val: "e3", label: "তৃতীয় পর্যায়ক্রমিক মূল্যায়ন (3rd Exam)" },
-        { val: "proj", label: "প্রকল্প মূল্যায়ন (Project)" }
+        { val: "e1", label: "1st Exam" },
+        { val: "e2", label: "2nd Exam" },
+        { val: "e3", label: "3rd Exam" },
+        { val: "proj", label: "Project" }
       ],
       x: [
-        { val: "e1", label: "প্রথম পর্যায়ক্রমিক মূল্যায়ন (1st Exam)" },
-        { val: "e2", label: "দ্বিতীয় পর্যায়ক্রমিক মূল্যায়ন (2nd Exam)" },
-        { val: "test", label: "টেস্ট পরীক্ষা (Test Exam)" }
+        { val: "e1", label: "1st Exam" },
+        { val: "e2", label: "2nd Exam" },
+        { val: "test", label: "Test Exam" }
       ],
       xi: [
-        { val: "sem1", label: "সেমিস্টার ১ (Semester I)" },
-        { val: "sem2", label: "সেমিস্টার ২ (Semester II)" },
-        { val: "proj", label: "প্রকল্প (Project)" }
+        { val: "sem1", label: "Semester I" },
+        { val: "sem2", label: "Semester II" },
+        { val: "proj", label: "Project / Practical" }
       ]
     };
 
     // Bengali Subject Names Mapping for PDF Header
     const bengaliSubjectNames = {
-      bengali: "বাংলা",
-      english: "ইংরেজি",
-      math: "গণিত",
-      science: "বিজ্ঞান",
-      life_science: "জীবন বিজ্ঞান",
-      physical_science: "ভৌত বিজ্ঞান",
-      history: "ইতিহাস",
-      geography: "ভূগোল",
-      arabic: "আরবি",
-      sanskrit: "সংস্কৃত",
-      philosophy: "দর্শন",
-      education: "শিক্ষাবিজ্ঞান",
-      political_science: "রাষ্ট্রবিজ্ঞান",
-      work_education: "কর্মশিক্ষা",
-      physical_education: "শারীরশিক্ষা"
+      bengali: "BEN",
+      english: "ENG",
+      math: "MATH",
+      science: "EVS",
+      life_science: "LSC",
+      physical_science: "PSC",
+      history: "HIST",
+      geography: "GEO",
+      arabic: "ARAB",
+      sanskrit: "SNSK",
+      philosophy: "PHIL",
+      education: "EDCN",
+      political_science: "POLS",
+      work_education: "WED",
+      physical_education: "PED"
     };
 
     // Update Exam dropdown when class selection changes
