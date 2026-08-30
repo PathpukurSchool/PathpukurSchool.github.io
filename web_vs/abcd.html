@@ -83,37 +83,43 @@
   background: #f8fafc;
   border: 1px dashed #cbd5e1;
   border-radius: 8px;
-  padding: 10px;
+  padding: 8px 10px;
   margin-top: 10px;
 }
 .excel-btn-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-direction: row; /* সবসময় পাশাপাশি থাকবে */
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 .excel-btn {
+  flex: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 4px 6px;
+  padding: 6px 10px;
   border-radius: 6px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   border: none;
   color: #fff;
   width: 100%;
+  white-space: nowrap;
   transition: opacity 0.2s;
 }
 .excel-btn:hover { opacity: 0.9; }
 .btn-export { background: #059669; }
 .btn-import { background: #0284c7; margin: 0; }
+/* বোতাম দুটির ঠিক নিচে ডেসক্রিপশন */
 .excel-desc {
   margin: 6px 0 0 0;
   font-size: 10px;
   color: #64748b;
-  line-height: 1.4;
+  line-height: 1.3;
+  text-align: left;
 }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
