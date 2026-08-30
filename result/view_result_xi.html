@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -36,6 +37,7 @@
       margin: 0 auto;
     }
 
+    /* হেডার সেকশন */
     .header-card {
       background: linear-gradient(135deg, #2563eb, #7c3aed);
       color: #ffffff;
@@ -48,10 +50,24 @@
       overflow: hidden;
     }
 
+    .header-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.08);
+      transform: rotate(45deg);
+      pointer-events: none;
+    }
+
     .school-name {
       font-size: 24px;
       font-weight: 700;
       margin-bottom: 5px;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
 
     .page-title {
@@ -71,8 +87,10 @@
       border-radius: 20px;
       font-size: 13px;
       margin-top: 8px;
+      backdrop-filter: blur(4px);
     }
 
+    /* বিবরণ বক্স */
     .description-card {
       background: #ffffff;
       border-radius: 12px;
@@ -85,6 +103,12 @@
       color: #475569;
     }
 
+    .description-card i {
+      color: #06b6d4;
+      margin-right: 6px;
+    }
+
+    /* সার্চ ফর্ম */
     .search-card {
       background: #ffffff;
       border-radius: 14px;
@@ -103,6 +127,9 @@
       font-weight: 700;
       font-size: 14px;
       color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .input-wrapper {
@@ -117,6 +144,7 @@
       border-radius: 10px;
       font-size: 16px;
       outline: none;
+      transition: all 0.3s ease;
     }
 
     .roll-input:focus {
@@ -136,8 +164,20 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
     }
 
+    .btn-search:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-search:active {
+      transform: translateY(0);
+    }
+
+    /* স্ট্যাটাস নোটিফিকেশন মেসেজ */
     .status-box {
       margin-top: 15px;
       padding: 12px 15px;
@@ -153,6 +193,7 @@
     .status-error { background: #ffe4e6; color: #e11d48; border: 1px solid #fecdd3; }
     .status-warning { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
 
+    /* ফলাফল কন্টেইনার */
     #resultContainer {
       display: none;
       animation: fadeIn 0.4s ease-in-out;
@@ -163,6 +204,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* স্টুডেন্ট প্রোফাইল কার্ড */
     .student-card {
       background: #ffffff;
       border-radius: 14px;
@@ -176,8 +218,11 @@
       font-size: 16px;
       color: #6d28d9;
       margin-bottom: 12px;
-      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 8px;
     }
 
     .info-grid {
@@ -198,6 +243,7 @@
       color: #64748b;
       font-weight: 600;
       display: block;
+      margin-bottom: 2px;
     }
 
     .info-item .value {
@@ -216,6 +262,7 @@
       font-size: 17px;
     }
 
+    /* রেজাল্ট নম্বর টেবিল */
     .table-card {
       background: #ffffff;
       border-radius: 14px;
@@ -236,12 +283,39 @@
       color: #ffffff;
       padding: 12px 6px;
       font-size: 12px;
+      font-weight: 600;
+    }
+
+    .result-table th:first-child {
+      border-top-left-radius: 8px;
+      text-align: left;
+      padding-left: 15px;
+    }
+    .result-table th:last-child {
+      border-top-right-radius: 8px;
     }
 
     .result-table td {
       padding: 12px 6px;
       border-bottom: 1px solid #e2e8f0;
       font-size: 13px;
+      color: #1e293b;
+    }
+
+    .result-table td:first-child {
+      text-align: left;
+      padding-left: 15px;
+      font-weight: 600;
+      color: #334155;
+      background: #fafafa;
+    }
+
+    .result-table tr:nth-child(even) td:not(:first-child) {
+      background-color: #f8fafc;
+    }
+
+    .result-table tr:hover td {
+      background-color: #f1f5f9;
     }
 
     .mark-cell {
@@ -251,9 +325,11 @@
 
     .empty-mark {
       color: #cbd5e1;
+      font-weight: normal;
     }
 
     .exam-badge {
+      display: inline-block;
       padding: 4px 10px;
       border-radius: 6px;
       font-size: 12px;
@@ -265,8 +341,15 @@
     .badge-proj { background: #dcfce7; color: #16a34a; }
 
     @media (max-width: 480px) {
-      .input-wrapper { flex-direction: column; }
-      .btn-search { justify-content: center; }
+      .input-wrapper {
+        flex-direction: column;
+      }
+      .btn-search {
+        justify-content: center;
+      }
+      .school-name {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
@@ -274,16 +357,19 @@
 
   <div class="main-container">
     
+    <!-- হেডার কার্ড -->
     <div class="header-card">
-      <div class="school-name">পাতপুকুর হাই স্কুল (উ: মা:)</div>
+      <div class="school-name"> পাতপুকুর হাই স্কুল (উ: মা:)</div>
       <div class="page-title"><i class="fa-solid fa-square-poll-vertical"></i> পরীক্ষার নম্বর ও ফলাফল</div>
       <div class="session-badge"><i class="fa-solid fa-calendar-days"></i> ক্লাস: XI (একাদশ শ্রেণী) | সেশন: ২০২৬</div>
     </div>
 
+    <!-- বিবরণ কার্ড -->
     <div class="description-card">
-      <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীদের রোল নম্বর লিখে নিচের 'ফলাফল দেখুন' বাটনে ক্লিক করলে ফলাফল দেখা যাবে।
+      <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীদের রোল নম্বর লিখে নিচের 'ফলাফল দেখুন' বাটনে ক্লিক করলে সেমিস্টার-১, সেমিস্টার-২ এবং প্রজেক্ট/প্র্যাকটিক্যাল মূল্যায়নের বিষয়ভিত্তিক নম্বর ও মোট ফলাফল দেখা যাবে।
     </div>
 
+    <!-- রোল নম্বর সার্চ ইনপুট কার্ড -->
     <div class="search-card">
       <div class="search-group">
         <label for="rollInput"><i class="fa-solid fa-id-card-clip"></i> ছাত্র/ছাত্রীর রোল নম্বর লিখুন:</label>
@@ -294,7 +380,8 @@
             class="roll-input" 
             placeholder="উদাহরণ: 25" 
             inputmode="numeric" 
-            min="1"
+            pattern="[0-9]*"
+            min="0"
             max="700" 
             onkeydown="if(event.key==='Enter') searchResult()"
           >
@@ -303,10 +390,14 @@
           </button>
         </div>
       </div>
+      <!-- স্ট্যাটাস মেসেজ ইন-লাইন ডায়ালগ -->
       <div id="statusBox" class="status-box"></div>
     </div>
 
+    <!-- রেজাল্ট সেকশন -->
     <div id="resultContainer">
+      
+      <!-- স্টুডেন্ট ইনফরমেশন কার্ড -->
       <div class="student-card">
         <h3><i class="fa-solid fa-user-graduate"></i> শিক্ষার্থীর সংক্ষিপ্ত বিবরণ (Student Details)</h3>
         <div class="info-grid">
@@ -337,6 +428,7 @@
         </div>
       </div>
 
+      <!-- বিষয়ভিত্তিক নম্বর টেবিল -->
       <div class="table-card">
         <table class="result-table">
           <thead>
@@ -397,15 +489,20 @@
           </tbody>
         </table>
       </div>
+
     </div>
+
   </div>
 
   <script>
+    // Supabase কনফিগারেশন
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
     
+    // Supabase Client ইনিশিয়ালাইজ
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // মেসেজ দেখানোর ফাংশন (No Pop-ups)
     function showStatus(message, type) {
       const statusBox = document.getElementById('statusBox');
       statusBox.className = 'status-box status-' + type;
@@ -423,135 +520,139 @@
       document.getElementById('statusBox').style.display = 'none';
     }
 
+    // হেলপার ফাংশন: নম্বর না থাকলে ডট (-) রিটার্ন করবে
     function formatMark(val) {
       return (val !== null && val !== undefined && val !== "") ? val : '<span class="empty-mark">-</span>';
     }
 
+    // সার্চ ও রেজাল্ট ফেচিং ফাংশন
     async function searchResult() {
       const rollInput = document.getElementById('rollInput');
-      const rollVal = rollInput.value.trim();
+      const rollNo = parseInt(rollInput.value.trim(), 10);
       const resultContainer = document.getElementById('resultContainer');
 
+      // কন্টেইনার ও স্ট্যাটাস রিসেট
       resultContainer.style.display = 'none';
       hideStatus();
 
-      if (!rollVal || isNaN(rollVal)) {
-        showStatus("অনুগ্রহ করে সঠিক রোল নম্বর লিখুন!", "warning");
+      // ইনপুট ভ্যালিডেশন
+      if (isNaN(rollNo) || rollNo < 0 || rollNo > 700) {
+        showStatus("অনুগ্রহ করে বৈধ রোল নম্বর দিন!", "warning");
         return;
       }
 
-      const rollNo = parseInt(rollVal, 10);
-      showStatus("ডাটাবেজ থেকে তথ্য খোঁজা হচ্ছে...", "info");
+      showStatus("ডাটাবেজ থেকে তথ্য খোঁজা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...", "info");
 
       try {
-        // roll_no-কে ইন্টিজার এবং স্ট্রিং দুইভাবেই নিরাপদ কোয়েরি করা
+        // Supabase result_xi টেবিল থেকে রেজাল্ট রিড করা (.maybeSingle() বা .single() বাদ দিয়ে অ্যারে কোয়েরি ব্যবহার)
         const { data, error } = await _supabase
           .from('result_xi')
           .select('*')
-          .eq('roll_no', rollNo)
-          .maybeSingle();
+          .eq('roll_no', rollNo);
 
         if (error) {
-          console.error("Supabase Error Details:", error);
-          showStatus(`এরর: ${error.message || "তথ্য আনতে সমস্যা হয়েছে।"}`, "error");
+          console.error(error);
+          showStatus("তথ্য আনতে সমস্যা হয়েছে! ইন্টারনেট সংযোগ পরীক্ষা করে পুনরায় চেষ্টা করুন।", "error");
           return;
         }
 
-        if (!data) {
+        if (!data || data.length === 0) {
           showStatus(`রোল নম্বর ${rollNo} এর কোনো ফলাফল পাওয়া যায়নি!`, "warning");
           return;
         }
 
+        // একাধিক এন্ট্রি থাকলে প্রথম সারির ডাটা নেওয়া হবে
+        const student = data[0];
+
+        // সফলভাবে তথ্য পাওয়া গেলে পেজে রেন্ডার করা
         hideStatus();
-        renderStudentData(data);
+        renderStudentData(student);
         resultContainer.style.display = 'block';
 
       } catch (err) {
-        console.error("Catch Exception:", err);
-        showStatus("সার্ভারে অভ্যন্তরীণ সমস্যা দেখা দিয়েছে!", "error");
+        console.error(err);
+        showStatus("সার্ভারে সমস্যা দেখা দিয়েছে!", "error");
       }
     }
 
+    // ফলাফল রেন্ডারিং ফাংশন
     function renderStudentData(data) {
-      document.getElementById('resName').innerText = data.student_name || data.name || '-';
-      document.getElementById('resClass').innerText = data.class_name || data.class || 'XI';
+      // ১. প্রোফাইল ডাটা সেট করা
+      document.getElementById('resName').innerText = data.student_name || '-';
+      document.getElementById('resClass').innerText = data.class_name || 'XI';
       document.getElementById('resSection').innerText = data.section || '-';
       document.getElementById('resRoll').innerText = data.roll_no || '-';
-      document.getElementById('resSession').innerText = data.session || '2025-26';
+      document.getElementById('resSession').innerText = data.session || '2026';
 
-      // Semester 1
-      document.getElementById('sem1_ben').innerHTML = formatMark(data.sem1_bengali ?? data.sem1_ben);
-      document.getElementById('sem1_eng').innerHTML = formatMark(data.sem1_english ?? data.sem1_eng);
-      document.getElementById('sem1_his').innerHTML = formatMark(data.sem1_history ?? data.sem1_his);
-      document.getElementById('sem1_phi').innerHTML = formatMark(data.sem1_philosophy ?? data.sem1_phi);
-      document.getElementById('sem1_edu').innerHTML = formatMark(data.sem1_education ?? data.sem1_edu);
-      document.getElementById('sem1_geo').innerHTML = formatMark(data.sem1_geography ?? data.sem1_geo);
-      document.getElementById('sem1_pol').innerHTML = formatMark(data.sem1_political_science ?? data.sem1_pol);
-      document.getElementById('sem1_ara').innerHTML = formatMark(data.sem1_arabic ?? data.sem1_ara);
-      document.getElementById('sem1_san').innerHTML = formatMark(data.sem1_sanskrit ?? data.sem1_san);
+      // ২. বিষয়ভিত্তিক নম্বর সেট (Semester 1 - ডাটাবেজের সঠিক কলাম ম্যাপিং)
+      document.getElementById('sem1_ben').innerHTML = formatMark(data.sem1_ben);
+      document.getElementById('sem1_eng').innerHTML = formatMark(data.sem1_eng);
+      document.getElementById('sem1_his').innerHTML = formatMark(data.sem1_his);
+      document.getElementById('sem1_phi').innerHTML = formatMark(data.sem1_phi);
+      document.getElementById('sem1_edu').innerHTML = formatMark(data.sem1_edu);
+      document.getElementById('sem1_geo').innerHTML = formatMark(data.sem1_geo);
+      document.getElementById('sem1_pol').innerHTML = formatMark(data.sem1_pol);
+      document.getElementById('sem1_ara').innerHTML = formatMark(data.sem1_ara);
+      document.getElementById('sem1_san').innerHTML = formatMark(data.sem1_san);
 
       // Semester 2
-      document.getElementById('sem2_ben').innerHTML = formatMark(data.sem2_bengali ?? data.sem2_ben);
-      document.getElementById('sem2_eng').innerHTML = formatMark(data.sem2_english ?? data.sem2_eng);
-      document.getElementById('sem2_his').innerHTML = formatMark(data.sem2_history ?? data.sem2_his);
-      document.getElementById('sem2_phi').innerHTML = formatMark(data.sem2_philosophy ?? data.sem2_phi);
-      document.getElementById('sem2_edu').innerHTML = formatMark(data.sem2_education ?? data.sem2_edu);
-      document.getElementById('sem2_geo').innerHTML = formatMark(data.sem2_geography ?? data.sem2_geo);
-      document.getElementById('sem2_pol').innerHTML = formatMark(data.sem2_political_science ?? data.sem2_pol);
-      document.getElementById('sem2_ara').innerHTML = formatMark(data.sem2_arabic ?? data.sem2_ara);
-      document.getElementById('sem2_san').innerHTML = formatMark(data.sem2_sanskrit ?? data.sem2_san);
+      document.getElementById('sem2_ben').innerHTML = formatMark(data.sem2_ben);
+      document.getElementById('sem2_eng').innerHTML = formatMark(data.sem2_eng);
+      document.getElementById('sem2_his').innerHTML = formatMark(data.sem2_his);
+      document.getElementById('sem2_phi').innerHTML = formatMark(data.sem2_phi);
+      document.getElementById('sem2_edu').innerHTML = formatMark(data.sem2_edu);
+      document.getElementById('sem2_geo').innerHTML = formatMark(data.sem2_geo);
+      document.getElementById('sem2_pol').innerHTML = formatMark(data.sem2_pol);
+      document.getElementById('sem2_ara').innerHTML = formatMark(data.sem2_ara);
+      document.getElementById('sem2_san').innerHTML = formatMark(data.sem2_san);
 
       // Project
-      document.getElementById('proj_ben').innerHTML = formatMark(data.proj_bengali ?? data.proj_ben);
-      document.getElementById('proj_eng').innerHTML = formatMark(data.proj_english ?? data.proj_eng);
-      document.getElementById('proj_his').innerHTML = formatMark(data.proj_history ?? data.proj_his);
-      document.getElementById('proj_phi').innerHTML = formatMark(data.proj_philosophy ?? data.proj_phi);
-      document.getElementById('proj_edu').innerHTML = formatMark(data.proj_education ?? data.proj_edu);
-      document.getElementById('proj_geo').innerHTML = formatMark(data.proj_geography ?? data.proj_geo);
-      document.getElementById('proj_pol').innerHTML = formatMark(data.proj_political_science ?? data.proj_pol);
-      document.getElementById('proj_ara').innerHTML = formatMark(data.proj_arabic ?? data.proj_ara);
-      document.getElementById('proj_san').innerHTML = formatMark(data.proj_sanskrit ?? data.proj_san);
+      document.getElementById('proj_ben').innerHTML = formatMark(data.proj_ben);
+      document.getElementById('proj_eng').innerHTML = formatMark(data.proj_eng);
+      document.getElementById('proj_his').innerHTML = formatMark(data.proj_his);
+      document.getElementById('proj_phi').innerHTML = formatMark(data.proj_phi);
+      document.getElementById('proj_edu').innerHTML = formatMark(data.proj_edu);
+      document.getElementById('proj_geo').innerHTML = formatMark(data.proj_geo);
+      document.getElementById('proj_pol').innerHTML = formatMark(data.proj_pol);
+      document.getElementById('proj_ara').innerHTML = formatMark(data.proj_ara);
+      document.getElementById('proj_san').innerHTML = formatMark(data.proj_san);
 
-      // Totals calculation
+      // ৩. পর্যায়ভিত্তিক মোট নম্বর হিসাব (Exam Totals)
       const sem1Total = calculateSum([
-        data.sem1_bengali ?? data.sem1_ben, data.sem1_english ?? data.sem1_eng, 
-        data.sem1_history ?? data.sem1_his, data.sem1_philosophy ?? data.sem1_phi,
-        data.sem1_education ?? data.sem1_edu, data.sem1_geography ?? data.sem1_geo, 
-        data.sem1_political_science ?? data.sem1_pol, data.sem1_arabic ?? data.sem1_ara, 
-        data.sem1_sanskrit ?? data.sem1_san
+        data.sem1_ben, data.sem1_eng, data.sem1_his, data.sem1_phi,
+        data.sem1_edu, data.sem1_geo, data.sem1_pol, data.sem1_ara, data.sem1_san
       ]);
 
       const sem2Total = calculateSum([
-        data.sem2_bengali ?? data.sem2_ben, data.sem2_english ?? data.sem2_eng, 
-        data.sem2_history ?? data.sem2_his, data.sem2_philosophy ?? data.sem2_phi,
-        data.sem2_education ?? data.sem2_edu, data.sem2_geography ?? data.sem2_geo, 
-        data.sem2_political_science ?? data.sem2_pol, data.sem2_arabic ?? data.sem2_ara, 
-        data.sem2_sanskrit ?? data.sem2_san
+        data.sem2_ben, data.sem2_eng, data.sem2_his, data.sem2_phi,
+        data.sem2_edu, data.sem2_geo, data.sem2_pol, data.sem2_ara, data.sem2_san
       ]);
 
       const projTotal = calculateSum([
-        data.proj_bengali ?? data.proj_ben, data.proj_english ?? data.proj_eng, 
-        data.proj_history ?? data.proj_his, data.proj_philosophy ?? data.proj_phi,
-        data.proj_education ?? data.proj_edu, data.proj_geography ?? data.proj_geo, 
-        data.proj_political_science ?? data.proj_pol, data.proj_arabic ?? data.proj_ara, 
-        data.proj_sanskrit ?? data.proj_san
+        data.proj_ben, data.proj_eng, data.proj_his, data.proj_phi,
+        data.proj_edu, data.proj_geo, data.proj_pol, data.proj_ara, data.proj_san
       ]);
 
-      document.getElementById('sem1_tot').innerText = sem1Total !== null ? sem1Total : '-';
-      document.getElementById('sem2_tot').innerText = sem2Total !== null ? sem2Total : '-';
-      document.getElementById('proj_tot').innerText = projTotal !== null ? projTotal : '-';
+      document.getElementById('sem1_tot').innerHTML = sem1Total !== null ? sem1Total : '-';
+      document.getElementById('sem2_tot').innerHTML = sem2Total !== null ? sem2Total : '-';
+      document.getElementById('proj_tot').innerHTML = projTotal !== null ? projTotal : '-';
 
+      // ৪. সর্বমোট প্রাপ্ত নম্বর (Grand Total)
       const grandTotal = (sem1Total || 0) + (sem2Total || 0) + (projTotal || 0);
-      document.getElementById('resTotalMarks').innerText = grandTotal;
+      document.getElementById('resTotalMarks').innerText = grandTotal > 0 ? grandTotal : 0;
     }
 
+    // নম্বর যোগ করার সুবিধাজনক ফাংশন
     function calculateSum(marksArray) {
       let sum = 0;
       let hasValue = false;
       marksArray.forEach(m => {
         if (m !== null && m !== undefined && m !== "") {
-          sum += Number(m);
-          hasValue = true;
+          const num = Number(m);
+          if (!isNaN(num)) {
+            sum += num;
+            hasValue = true;
+          }
         }
       });
       return hasValue ? sum : null;
