@@ -676,7 +676,7 @@
         return;
       }
 
-      // এক্সেল শীটের জন্য ডাটা তৈরি
+      // এক্সেল শীটের জন্য ডাটা প্রিপেয়ার করা
       const excelData = dataset.map(row => {
         let rowData = {
           "ID": row.id,
@@ -685,7 +685,7 @@
           "Student Name": row.student_name
         };
 
-        // সিলেক্টেড Exam অনুযায়ী প্রতিটি বিষয়ের মান বসানো
+        // সিলেক্টেড Exam অনুযায়ী বিষয়ের মার্কস দেওয়া
         subjectsList.forEach(sub => {
           const colName = columnMap[exam][sub];
           rowData[sub] = (row[colName] !== null && row[colName] !== undefined) ? row[colName] : "";
@@ -698,7 +698,7 @@
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, `VIII_${sec}_${exam}`);
 
-      // ফাইল ডাউনলোড (Class VIII হিসেবে নাম নির্দিষ্ট করা হয়েছে)
+      // ফাইল ডাউনলোড নাম (Class VIII নির্দিষ্ট করা হয়েছে)
       XLSX.writeFile(workbook, `Class_VIII_Marks_${exam}_Sec_${sec}.xlsx`);
     }
 
@@ -734,7 +734,7 @@
             alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে! দয়া করে পোর্টালে প্রদত্ত 'এক্সেল টেমপ্লেট ডাউনলোড' করে তাতে নম্বর লিখে আপলোড করুন।");
             return;
           }
-
+          
           // 🔔 ৩. কনফার্মেশন পপ-আপ মেসেজ
           const confirmUpload = window.confirm(
             `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে নম্বরগুলো ডাটাবেসে আপলোড করতে চান?\n\n` +
@@ -759,9 +759,7 @@
             const rowId = parseInt(row["ID"]);
             if (!rowId) continue;
 
-            const targetStudent = rawData.find(r => r.id === rowId);
-
-            // সংস্কৃত ও আরবি বিষয়ের মিউচুয়াল এক্সক্লুসিভিটি চেক
+            // সংস্কৃত ও আরবি বিষয়ের এক্সেলে উপস্থিতি চেক
             const hasSanskritInExcel = row.hasOwnProperty("Sanskrit") && String(row["Sanskrit"]).trim() !== "";
             const hasArabicInExcel = row.hasOwnProperty("Arabic") && String(row["Arabic"]).trim() !== "";
 
@@ -770,32 +768,32 @@
                 const rawVal = row[sub];
                 const colName = columnMap[exam][sub];
 
-                // বিষয়ভিত্তিক মার্কস সীমা নির্ধারণ (General Sub vs Science/Physical Ed Sub)
+                // বিষয়ভিত্তিক মার্কস সীমা নির্ধারণ (General: 30/50/70, Sci/W&P: 15/25/35)
                 const maxLimit = halfLimitSubjects.includes(sub) ? subjectLimits[exam].half : subjectLimits[exam].default;
 
-                // সংস্কৃত ও আরবি চেক লজিক
+                // সংস্কৃত ও আরবি চেক
                 if (sub === "Sanskrit" && hasArabicInExcel) {
                   skippedCount++;
-                  continue; // আরবি ও সংস্কৃত দুটি এক সাথে দেওয়া থাকলে স্কিপ
+                  continue;
                 }
                 if (sub === "Arabic" && hasSanskritInExcel) {
                   skippedCount++;
                   continue;
                 }
 
+                // শুধু ফাঁকা না হলে (নম্বর থাকলে) ডাটাবেসে যাবে, ফাঁকা সেল স্কিপ হবে
                 if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
                   const num = Number(rawVal);
-
-                  // নম্বর ভ্যালিডেশন (০ থেকে সীমার মধ্যে পূর্ণসংখ্যা)
+                  
                   if (Number.isInteger(num) && num >= 0 && num <= maxLimit) {
                     
-                    // RPC secure_update_result_viii কল
+                    // RPC: secure_update_result_viii
                     const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_viii`, {
                       method: 'POST',
-                      headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                        'Content-Type': 'application/json'
+                      headers: { 
+                        'apikey': SUPABASE_ANON_KEY, 
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 
+                        'Content-Type': 'application/json' 
                       },
                       body: JSON.stringify({
                         p_passkey: currentPasskey,
@@ -816,7 +814,7 @@
 
                     updatePromises.push(promise);
                   } else {
-                    skippedCount++; // সীমা বহির্ভূত বা ভুল নম্বর হলে স্কিপ
+                    skippedCount++; // সীমা বহির্ভূত বা ভুল নম্বর স্কিপ
                   }
                 }
               }
@@ -824,24 +822,24 @@
           }
 
           if (updatePromises.length === 0) {
-            alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা কোনো বৈধ নম্বর নেই!");
+            alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা কোনো বৈধ নম্বর নেই!");
             applyFilters();
             return;
           }
 
-          // সব আপডেট রিকোয়েস্ট সমান্তরালে (Parallel Execution) প্রসেস করা
+          // সব আপডেট রিকোয়েস্ট সমান্তরালে (Parallel Execution) সম্পন্ন করা
           await Promise.all(updatePromises);
 
-          alert(`🎉 Class VIII-এর নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর: ${validNumbersUploaded}\n❌ বাতিল/স্কিপড নম্বর: ${skippedCount}`);
-
-          // সর্বশেষ তথ্য দেখতে ডাটা রিফ্রেশ
+          alert(`🎉 Class VIII-এর নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর: ${validNumbersUploaded}\n❌ বাতিল/স্কিপড নম্বর: ${skippedCount}`);
+          
+          // টেবিল ও ডাটা রিফ্রেশ
           await fetchMarksData();
 
         } catch (err) {
           console.error(err);
           alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে! ফাইলটি ক্ষতিগ্রস্ত বা অমিল ফরম্যাটের হতে পারে।");
         } finally {
-          event.target.value = ''; // ফাইল ইনপুট উপাদান রিসেট
+          event.target.value = ''; // ইনপুট রিসেট
         }
       };
 
