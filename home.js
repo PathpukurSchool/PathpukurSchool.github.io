@@ -7,6 +7,19 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 // Supabase Client তৈরি
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// =================================
+// 🔄 LOADER SHOW/HIDE UTILITY
+// =================================
+function showLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.style.display = 'flex';
+}
+
+function hideLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.style.display = 'none';
+}
+
 // ত্রুটি বা লোডিং বার্তা তৈরির জন্য HTML
 function errorBox(title, message) {
     let typeClass = '';
@@ -462,7 +475,6 @@ function showAvailableSoonMessage(button) {
 
 // 🎯 ইউনিভার্সাল লিংক হ্যান্ডলার (একই ট্যাবে ওপেন নিশ্চিতকরণ)
 function setupUniversalLinkHandler() {
-    // ১. DOM-এর সমস্ত বিদ্যমান <a> ট্যাগের target='_self' করে দেওয়া
     document.querySelectorAll('a').forEach(a => {
         a.setAttribute('target', '_self');
     });
@@ -482,8 +494,9 @@ function setupUniversalLinkHandler() {
             }
             // যদি এটি কোনো অন-পেজ সেকশন আইডি স্ক্রোল না হয়ে থাকে (যেমন #section-id)
             if (!href.startsWith('#')) {
-                event.preventDefault(); // ব্রাউজারের ডিফল্ট নতুন ট্যাব ওপেন আটকানো
-                window.location.href = href; // একই ট্যাবে লিংক ওপেন করানো
+                event.preventDefault();
+                showLoader();
+                window.location.href = href;
             }
         }
     }, true);
@@ -567,8 +580,9 @@ function initializeSidebar() {
 // =================================
 // 🚀 ইনিশিয়ালাইজেশন (Page Load)
 // =================================
-
 document.addEventListener("DOMContentLoaded", () => {
+    showLoader();
+
     // সেশন যাচাই
     if (sessionStorage.getItem("teacherLoggedIn") === "true") {
         const overlay = document.getElementById('masterLoginOverlay');
@@ -590,4 +604,9 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeSidebar();
     setupLiveSearch();
     setupUniversalLinkHandler();
+    hideLoader();
+});
+
+window.addEventListener('pageshow', (event) => {
+    hideLoader();
 });
