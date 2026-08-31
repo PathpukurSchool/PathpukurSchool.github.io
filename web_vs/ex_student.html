@@ -3,22 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow, noarchive">
 
-  <script>
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (অনুমোদিত না হলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
+    <style id="security-shield">
+        body { display: none !important; }
+    </style>
+
+    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট (লিংক সরাসরি কপি করে খোলা আটকাবে) -->
+    <script>
     (function() {
-      // ইউজার কোন পেজ থেকে এসেছে তার ইউআরএল (Referrer)
-      var referrer = document.referrer;
-      
-      // মূল ডোমেইন এর নাম
-      var allowedDomain = "pathpukurschool.github.io";
+        try {
+            var ref = document.referrer;
+            var isValidReferrer = false;
 
-      // যদি ইউজার মূল সাইটের কোন লিংক থেকে না আসে (সরাসরি URL Paste করে)
-      if (!referrer || referrer.indexOf(allowedDomain) === -1) {
-        // সরাসরি মূল সাইটে রিডাইরেক্ট করা হচ্ছে
-        window.location.replace("https://pathpukurschool.github.io/");
-      }
+            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
+            if (ref) {
+                var refUrl = new URL(ref);
+                if (refUrl.hostname === "pathpukurschool.github.io") {
+                    isValidReferrer = true;
+                }
+            }
+
+            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
+            if (!isValidReferrer) {
+                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
+                window.location.replace("https://pathpukurschool.github.io/");
+                return;
+            }
+
+            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
+
+        } catch (e) {
+            window.location.replace("https://pathpukurschool.github.io/");
+        }
     })();
-  </script>
+    </script>
   <title>প্রাক্তন ছাত্র-ছাত্রীদের তথ্য - পাতপুকুর হাই স্কুল (উঃ মাঃ)</title>
 
   <!-- Google Fonts & Font Awesome Icons -->
