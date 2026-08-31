@@ -397,31 +397,31 @@ h2{font-size:1.7em}
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.85); /* হালকা ঝাপসা ব্যাকগ্রাউন্ড */
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.95); /* প্রায় খাঁটি সাদা ব্যাকগ্রাউন্ড */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 99999; /* যেন সব উপাদানের উপরে থাকে */
+  z-index: 999999; /* সর্বোচ্চ লেয়ার নিশ্চিত করতে */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
-/* যখন লোডার সক্রিয় হবে */
+/* লোডার সক্রিয় হলে */
 .page-loader-overlay.active {
   opacity: 1;
   visibility: visible;
 }
 
-/* ঘুরতে থাকা স্পিনার */
+/* খয়েরী রঙের স্পিনার */
 .spinner {
-  width: 45px;
-  height: 45px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #007bff; /* আপনার পছন্দমতো কালার কোড দিতে পারেন */
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3e6e6; /* হালকা খয়েরী সীমানা */
+  border-top: 5px solid #800000; /* গাঢ় খয়েরী (Maroon) স্পিনার */
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -431,10 +431,11 @@ h2{font-size:1.7em}
   100% { transform: rotate(360deg); }
 }
 
+/* খয়েরী রঙের টেক্সট */
 .page-loader-overlay p {
-  margin-top: 12px;
-  font-size: 15px;
-  color: #333;
-  font-family: Arial, sans-serif;
-  font-weight: 500;
+  margin-top: 15px;
+  font-size: 16px;
+  color: #800000; /* খয়েরী কালার */
+  font-family: inherit;
+  font-weight: 600;
 }
