@@ -162,6 +162,11 @@
   line-height: 1.3;
   text-align: left;
 }
+/* 🟤 Life Science & Physical Science Mismatch Highlight (Light Warm Brown / Soft Peach) */
+.lsc-psc-mismatch {
+    background-color: #f5e6d3 !important; /* হালকা খয়েরি / সফট পীচ কালার */
+    border-color: #d7ccc8 !important;
+}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
@@ -503,6 +508,50 @@
       });
     }
 
+    // সেকশন অনুযায়ী LSC এবং PSC-তে অন্তত ১টি নম্বর এন্ট্রি আছে কিনা চেক করার ফাংশন
+function getSectionSciencePresence(dataset, exam) {
+    const lscCol = columnMap[exam]["Life Science"];
+    const pscCol = columnMap[exam]["Physical Science"];
+
+    let hasLscEntries = dataset.some(r => r[lscCol] !== null && r[lscCol] !== undefined && String(r[lscCol]).trim() !== "");
+    let hasPscEntries = dataset.some(r => r[pscCol] !== null && r[pscCol] !== undefined && String(r[pscCol]).trim() !== "");
+
+    return { hasLscEntries, hasPscEntries };
+}
+
+// প্রতি শিক্ষার্থীর LSC ও PSC নম্বর ভ্যালিডেশন চেক এবং ক্লাস আপডেট
+function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
+    // যদি সেকশনে অন্তত একটির কলাম সম্পূর্ণ খালি থাকে, তবে কোনো হাইলাইট করার প্রয়োজন নেই
+    if (!presenceInfo.hasLscEntries || !presenceInfo.hasPscEntries) return;
+
+    const lscCol = columnMap[exam]["Life Science"];
+    const pscCol = columnMap[exam]["Physical Science"];
+
+    const lscInput = trElement.querySelector(`input[data-subject="Life Science"]`);
+    const pscInput = trElement.querySelector(`input[data-subject="Physical Science"]`);
+
+    if (!lscInput || !pscInput) return;
+
+    const lscVal = rowData[lscCol] !== null && rowData[lscCol] !== undefined ? String(rowData[lscCol]).trim() : "";
+    const pscVal = rowData[pscCol] !== null && rowData[pscCol] !== undefined ? String(rowData[pscCol]).trim() : "";
+
+    const lscHasValue = lscVal !== "";
+    const pscHasValue = pscVal !== "";
+
+    // কন্ডিশন: যেকোনো একটিতে নম্বর এন্ট্রি আছে কিন্তু অন্যটিতে নেই
+    if (lscHasValue && !pscHasValue) {
+        pscInput.classList.add('lsc-psc-mismatch');
+        lscInput.classList.remove('lsc-psc-mismatch');
+    } else if (!lscHasValue && pscHasValue) {
+        lscInput.classList.add('lsc-psc-mismatch');
+        pscInput.classList.remove('lsc-psc-mismatch');
+    } else {
+        // দুটিই ভর্তি বা দুটিই খালি হলে কোনো এরর হাইলাইট থাকবে না
+        lscInput.classList.remove('lsc-psc-mismatch');
+        pscInput.classList.remove('lsc-psc-mismatch');
+    }
+}
+
     function renderTable(dataList, exam, selectedSub) {
       const headerRow = document.getElementById('tableHeaderRow');
       const tbody = document.getElementById('tableBody');
@@ -550,7 +599,22 @@
       });
 
       tbody.innerHTML = rowsHTML;
-    }
+    // 🟤 All Subjects সিলেক্ট থাকলে LSC এবং PSC হাইলাইট চেক হবে
+  if (!isSingleSub) {
+    const sec = document.getElementById('sectionSelect').value;
+    const sectionData = rawData.filter(item => sec === "--All--" || item.section === sec);
+    const presenceInfo = getSectionSciencePresence(sectionData, exam);
+
+    const trList = tbody.querySelectorAll('tr');
+    trList.forEach(tr => {
+      const rowId = parseInt(tr.getAttribute('data-row-id'));
+      const rowData = rawData.find(r => r.id === rowId);
+      if (rowData) {
+        validateLscPscHighlight(tr, rowData, exam, presenceInfo);
+      }
+    });
+  }
+}
 
     function checkPasskeyPrompt(inputElem) {
       if (!isEditAllowed) {
@@ -604,7 +668,20 @@
           return;
         }
       }
+      
+// saveMarks ফাংশনের একদম শেষে (অনলাইন বা অফলাইন ডাটাবেজ আপডেট কল করার ঠিক আগে) নিচের অংশটুকু যোগ করুন:
 
+// 🟤 LSC বা PSC আপডেট হলে রিয়েলটাইমে হাইলাইট রিমুভ/শো করার লজিক
+if (subjectName === "Life Science" || subjectName === "Physical Science") {
+    const trElem = inputElem.closest('tr');
+    if (trElem) {
+        const sec = document.getElementById('sectionSelect').value;
+        const sectionData = rawData.filter(item => sec === "--All--" || item.section === sec);
+        const presenceInfo = getSectionSciencePresence(sectionData, exam);
+        validateLscPscHighlight(trElem, target, exam, presenceInfo);
+    }
+}
+      
       const marksVal = val === "" ? null : parseInt(val);
 
       // লোকাল মেমোরি আপডেট
