@@ -570,32 +570,33 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-
-
-    document.addEventListener("DOMContentLoaded", function () {
+    
+/* =========================================================
+ * ৮. পেজ লোড স্পিনার
+ * ========================================================= */
+document.addEventListener("DOMContentLoaded", function () {
     const loader = document.getElementById("page-loader");
 
-    // ফাংশন: লোডার দেখানোর জন্য
     function showLoader() {
         if (loader) {
             loader.classList.add("active");
         }
     }
 
-    // ১. যেকোনো সাধারণ লিংকে ক্লিক করলে লোডার দেখাবে
-    document.addEventListener("click", function (e) {
-        // ক্লিক করা উপাদানটি <a> ট্যাগ নাকি তা চেক করা
+    // পুরো ডকুমেন্টে যেকোনো লিংকে ক্লিকে লোডার ট্রিগারের জন্য
+    document.body.addEventListener("click", function (e) {
         const link = e.target.closest("a");
 
         if (link) {
             const href = link.getAttribute("href");
             const target = link.getAttribute("target");
 
-            // যদি লিংকটি বৈধ হয়, নতুন ট্যাবে না খোলে, এবং হ্যাশ/জাভাস্ক্রিপ্ট লিংক না হয়
+            // যদি লিংকটি বৈধ হয় এবং হ্যাশ (#) বা খালি না হয়
             if (
-                href &&
-                !href.startsWith("#") &&
-                !href.startsWith("javascript:") &&
+                href && 
+                href.trim() !== "" && 
+                href !== "#" && 
+                !href.startsWith("javascript:") && 
                 target !== "_blank"
             ) {
                 showLoader();
@@ -603,16 +604,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ২. পেইজ ব্যাক বা ফরোয়ার্ড বোতাম টিপলে যেন লোডার বন্ধ হয় (Cache Browser Fix)
-    window.addEventListener("pageshow", function (event) {
+    // পেজ রিলোড বা ব্যাকে আসলে লোডার লুকানোর জন্য
+    window.addEventListener("pageshow", function () {
         if (loader) {
             loader.classList.remove("active");
         }
     });
 });
-    
+ 
 /* =========================================================
- * ৮. নতুন যোগ করা সার্চ লজিক (সংশোধিত)
+ * ৯. নতুন যোগ করা সার্চ লজিক (সংশোধিত)
  * ========================================================= */
 const searchInput = document.getElementById('site-search-input');
 const searchResultsDropdown = document.getElementById('search-dropdown-list');
