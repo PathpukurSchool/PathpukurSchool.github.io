@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>পাতপুকুর হাই স্কুল (উ: মা:) - ছাত্রছাত্রীদের মেধা র‍্যাঙ্ক পোর্টাল</title>
 
-    <!-- Tailwind CSS (Styling) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Chart.js (Visual Analytics Bar Graph) -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2pdf.js (for Result Card PDF Download) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <!-- Font Awesome & Google Fonts -->
+    <!-- Font Awesome & Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -24,53 +24,48 @@
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        .gold-gradient {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        }
-        .custom-shadow {
-            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.15), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
+        .active-row {
+            background-color: #e0f2fe !important;
+            border-left: 4px solid #0284c7 !important;
         }
     </style>
 </head>
 <body class="min-h-screen pb-12 text-slate-800">
 
-    <!-- Header Section -->
+    <!-- Header -->
     <header class="bg-gradient-to-r from-blue-900 via-indigo-800 to-sky-900 text-white shadow-xl">
         <div class="max-w-7xl mx-auto px-4 py-8 text-center">
             <div class="inline-flex items-center justify-center p-3 bg-white/10 rounded-full mb-3 backdrop-blur-md">
                 <i class="fa-solid fa-graduation-cap text-3xl text-amber-400 mr-3"></i>
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
+                <h1 class="text-2xl md:text-4xl font-extrabold tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
             </div>
-            <h2 class="text-lg md:text-xl text-sky-200 font-medium">মেধা র‍্যাঙ্ক ও পারফরম্যান্স অ্যানালিটিক্স পোর্টাল</h2>
+            <h2 class="text-base md:text-xl text-sky-200 font-medium">মেধা র‍্যাঙ্ক ও পারফরম্যান্স অ্যানালিটিক্স পোর্টাল</h2>
             
-            <div class="mt-4 inline-flex items-center bg-white/15 px-4 py-1.5 rounded-full border border-white/20 text-sm">
+            <div class="mt-4 inline-flex items-center bg-white/15 px-4 py-1.5 rounded-full border border-white/20 text-xs md:text-sm">
                 <i class="fa-regular fa-calendar-check text-amber-300 mr-2"></i>
                 <span>শিক্ষাবর্ষ (Session): <strong id="sessionDisplay" class="text-amber-300">লোডিং...</strong></span>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 mt-8 space-y-8">
+    <main class="max-w-7xl mx-auto px-4 mt-6 space-y-6">
 
         <!-- Disclaimer Box -->
-        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm text-amber-900 flex items-start space-x-3">
-            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl mt-0.5"></i>
-            <div class="text-sm leading-relaxed">
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm text-amber-900 flex items-start space-x-3 text-xs md:text-sm">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
+            <div>
                 <strong>সতর্কবার্তা / আনুমানিক র‍্যাঙ্ক ঘোষণার বিজ্ঞপ্তি:</strong> 
-                এটি একটি <em>আনুমানিক র‍্যাঙ্ক তালিকা</em>। পরবর্তী সময়ে কোনো শিক্ষার্থীর প্রাপ্ত নম্বরের কোনো প্রকার সংশোধন/পুনর্মূল্যায়ন হলে অথবা কোনো শিক্ষার্থী স্থানান্তরিত (TC) হলে সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এই র‍্যাঙ্ক কোনোভাবেই চুড়ান্ত বা অভ্রান্ত হিসেবে গণ্য হবে না।
+                এটি একটি <em>আনুমানিক র‍্যাঙ্ক তালিকা</em>। পরবর্তী সময়ে কোনো শিক্ষার্থীর প্রাপ্ত নম্বরের কোনো প্রকার সংশোধন/পুনর্মূল্যায়ন হলে অথবা কোনো শিক্ষার্থী স্থানান্তরিত (TC) হলে সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এই র‍্যাঙ্ক চূড়ান্ত বা অভ্রান্ত নয়।
             </div>
         </div>
 
-        <!-- Class & Roll Selection Card -->
-        <div class="glass-card rounded-2xl p-6 custom-shadow border border-sky-100">
-            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
-                <i class="fa-solid fa-filter text-sky-600 mr-2"></i> শ্রেণী এবং রোল ফিল্টার করুন
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Class Filter & Subject Info -->
+        <div class="glass-card rounded-2xl p-4 md:p-6 shadow-md border border-sky-100">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">শ্রেণী নির্বাচন করুন</label>
                     <select id="classSelect" onchange="loadClassData()" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 font-semibold shadow-sm">
@@ -86,91 +81,120 @@
                 <div>
                     <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">রোল নম্বর দিয়ে খুঁজুন</label>
                     <div class="relative">
-                        <input type="number" id="rollInput" placeholder="যেমন: 1, 5, 12" oninput="highlightStudent()" class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 font-semibold shadow-sm">
+                        <input type="number" id="rollInput" placeholder="যেমন: 1, 5, 12" oninput="highlightStudentByRoll()" class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 font-semibold shadow-sm">
                         <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400"></i>
                     </div>
                 </div>
                 <div class="flex items-end">
-                    <button onclick="loadClassData()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2">
+                    <button onclick="loadClassData()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md flex items-center justify-center space-x-2">
                         <i class="fa-solid fa-rotate-right"></i>
                         <span>ডাটা রিফ্রেশ করুন</span>
                     </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Highlighted Student Dashboard (Shows on Roll Selection) -->
-        <div id="studentAnalytics" class="hidden glass-card rounded-2xl p-6 custom-shadow border-2 border-sky-400 bg-gradient-to-br from-white to-sky-50 relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 text-sky-100 opacity-50 pointer-events-none">
-                <i class="fa-solid fa-trophy text-9xl"></i>
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-200 pb-4 mb-6 gap-4">
-                <div>
-                    <span id="stRankBadge" class="gold-gradient text-white font-extrabold text-sm px-4 py-1.5 rounded-full shadow-sm uppercase tracking-wider inline-block mb-2">
-                        <i class="fa-solid fa-award mr-1"></i> র‍্যাঙ্ক #--
-                    </span>
-                    <h2 id="stName" class="text-2xl md:text-3xl font-bold text-slate-900">শিক্ষার্থীর নাম</h2>
-                    <p class="text-slate-500 text-sm font-medium mt-1">
-                        শ্রেণী: <span id="stClass" class="text-slate-800 font-semibold">--</span> | 
-                        সেকশন: <span id="stSec" class="text-slate-800 font-semibold">--</span> | 
-                        রোল: <span id="stRoll" class="text-slate-800 font-semibold">--</span>
-                    </p>
-                </div>
-                <div class="flex gap-3">
-                    <div class="bg-white p-3 rounded-xl border border-slate-200 text-center min-w-[100px] shadow-sm">
-                        <div class="text-xs text-slate-400 font-semibold">প্রাপ্ত মোট নম্বর</div>
-                        <div id="stTotal" class="text-xl font-bold text-sky-600">0/0</div>
-                    </div>
-                    <div class="bg-white p-3 rounded-xl border border-slate-200 text-center min-w-[100px] shadow-sm">
-                        <div class="text-xs text-slate-400 font-semibold">শতকরা (Percentage)</div>
-                        <div id="stPercentage" class="text-xl font-bold text-emerald-600">0%</div>
-                    </div>
-                    <div class="bg-white p-3 rounded-xl border border-slate-200 text-center min-w-[100px] shadow-sm">
-                        <div class="text-xs text-slate-400 font-semibold">পার্সেন্টাইল</div>
-                        <div id="stPercentile" class="text-xl font-bold text-indigo-600">0%</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Subject Highest Badges -->
-            <div id="highestBadges" class="flex flex-wrap gap-2 mb-6"></div>
-
-            <!-- Visual Bar Chart -->
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center">
-                    <i class="fa-solid fa-chart-column text-sky-500 mr-2"></i> বিষয়ভিত্তিক প্রাপ্ত নম্বর বিশ্লেষণ (Bar Chart)
-                </h4>
-                <div class="h-64">
-                    <canvas id="studentChart"></canvas>
-                </div>
+            <!-- Subject & Full Marks Banner -->
+            <div class="mt-4 pt-4 border-t border-slate-200">
+                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider"><i class="fa-solid fa-book text-sky-600 mr-1"></i> নির্বাচিত শ্রেণীর বিষয় ও নম্বর বিভাজন:</span>
+                <div id="subjectInfoBanner" class="mt-2 flex flex-wrap gap-2"></div>
             </div>
         </div>
 
-        <!-- Class Full Rank Table -->
-        <div class="glass-card rounded-2xl p-6 custom-shadow border border-sky-100 overflow-hidden">
+        <!-- Top 3 Podium View -->
+        <div id="podiumSection" class="hidden glass-card rounded-2xl p-6 shadow-md border border-amber-200 bg-gradient-to-r from-amber-50 via-sky-50 to-indigo-50">
+            <h3 class="text-center font-bold text-slate-800 mb-4 text-base md:text-lg flex items-center justify-center">
+                <i class="fa-solid fa-trophy text-amber-500 mr-2"></i> শ্রেণীর মেধা সেরা ৩ জন (Top 3 Performers)
+            </h3>
+            <div id="podiumCards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- No Data Alert Message -->
+        <div id="noDataAlert" class="hidden bg-red-50 border-l-4 border-red-500 p-6 rounded-xl text-red-700 shadow-sm text-center">
+            <i class="fa-solid fa-folder-open text-4xl text-red-400 mb-2"></i>
+            <h4 class="text-lg font-bold">নম্বর তথ্য অনুপস্থিত!</h4>
+            <p class="text-sm mt-1">মনোনীত শ্রেণীর জন্য রেজাল্ট টেবিলে কোনো নম্বরের তথ্য পাওয়া যায়নি। এর অর্থ হতে পারে এখনও কোনো পরীক্ষা সম্পন্ন হয়নি অথবা শিক্ষকমণ্ডলী নম্বর সিস্টেমে আপলোড করেননি। ফলে এই মুহূর্তে মেধা র‍্যাঙ্ক হিসাব করা সম্ভব নয়।</p>
+        </div>
+
+        <!-- Student Search & Analytics Card -->
+        <div id="studentAnalytics" class="hidden glass-card rounded-2xl p-4 md:p-6 shadow-lg border-2 border-sky-400 relative overflow-hidden">
+            <div id="pdfPrintArea" class="space-y-6">
+                <!-- Header Info -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-200 pb-4 gap-4">
+                    <div>
+                        <span id="stRankBadge" class="bg-amber-500 text-white font-extrabold text-xs md:text-sm px-4 py-1.5 rounded-full shadow-sm inline-block mb-2">
+                            <i class="fa-solid fa-award mr-1"></i> র‍্যাঙ্ক #--
+                        </span>
+                        <h2 id="stName" class="text-2xl md:text-3xl font-bold text-slate-900">--</h2>
+                        <p class="text-slate-500 text-xs md:text-sm font-medium mt-1">
+                            শ্রেণী: <span id="stClass" class="text-slate-800 font-semibold">--</span> | 
+                            সেকশন: <span id="stSec" class="text-slate-800 font-semibold">--</span> | 
+                            রোল: <span id="stRoll" class="text-slate-800 font-semibold">--</span>
+                        </p>
+                    </div>
+
+                    <!-- Statistics Grid for Mobile Responsiveness -->
+                    <div class="grid grid-cols-3 gap-2 w-full md:w-auto">
+                        <div class="bg-white p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
+                            <div class="text-[10px] md:text-xs text-slate-400 font-semibold">মোট নম্বর</div>
+                            <div id="stTotal" class="text-sm md:text-xl font-bold text-sky-600">0</div>
+                        </div>
+                        <div class="bg-white p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
+                            <div class="text-[10px] md:text-xs text-slate-400 font-semibold">শতকরা</div>
+                            <div id="stPercentage" class="text-sm md:text-xl font-bold text-emerald-600">0%</div>
+                        </div>
+                        <div class="bg-white p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
+                            <div class="text-[10px] md:text-xs text-slate-400 font-semibold">পার্সেন্টাইল</div>
+                            <div id="stPercentile" class="text-sm md:text-xl font-bold text-indigo-600">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subject Highest Badges -->
+                <div id="highestBadges" class="flex flex-wrap gap-2"></div>
+
+                <!-- Bar Graph -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <h4 class="text-xs md:text-sm font-bold text-slate-700 mb-3 flex items-center">
+                        <i class="fa-solid fa-chart-column text-sky-500 mr-2"></i> বিষয়ভিত্তিক নম্বর বিশ্লেষণ (Bar Chart)
+                    </h4>
+                    <div class="h-60 md:h-64">
+                        <canvas id="studentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download PDF Button -->
+            <div class="mt-4 flex justify-end">
+                <button onclick="downloadResultCardPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl transition-all shadow flex items-center space-x-2">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>রেজাল্ট কার্ড ডাউনলোড (PDF)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Class Full Student Table (Sorted by Roll) -->
+        <div id="tableSection" class="glass-card rounded-2xl p-4 md:p-6 shadow-md border border-sky-100 overflow-hidden">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-slate-800 flex items-center">
-                    <i class="fa-solid fa-list-ol text-indigo-600 mr-2"></i> শ্রেণীর মেধা তালিকা (Full Class Rank List)
+                <h3 class="text-base md:text-lg font-bold text-slate-800 flex items-center">
+                    <i class="fa-solid fa-list-numeric text-indigo-600 mr-2"></i> রোল অনুযায়ী শিক্ষার্থীর তালিকা
                 </h3>
-                <span id="studentCountBadge" class="bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1 rounded-full">মোট শিক্ষার্থী: 0</span>
+                <span id="studentCountBadge" class="bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1 rounded-full">মোট: 0</span>
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left border-collapse min-w-[600px]">
                     <thead>
                         <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
-                            <th class="py-3 px-4 rounded-tl-xl text-center">র‍্যাঙ্ক</th>
                             <th class="py-3 px-4">রোল</th>
                             <th class="py-3 px-4">সেকশন</th>
                             <th class="py-3 px-4">শিক্ষার্থীর নাম</th>
+                            <th class="py-3 px-4 text-center">মেধা র‍্যাঙ্ক</th>
                             <th class="py-3 px-4 text-center">প্রাপ্ত নম্বর</th>
                             <th class="py-3 px-4 text-center">শতকরা (%)</th>
-                            <th class="py-3 px-4 text-center">উপস্থিতি স্থিতি</th>
-                            <th class="py-3 px-4 rounded-tr-xl text-center">অ্যাকশন</th>
+                            <th class="py-3 px-4 text-center rounded-tr-xl">অ্যাকশন</th>
                         </tr>
                     </thead>
-                    <tbody id="rankTableBody" class="divide-y divide-slate-200 text-sm">
+                    <tbody id="rankTableBody" class="divide-y divide-slate-200 text-xs md:text-sm">
                         <!-- Dynamic Rows -->
                     </tbody>
                 </table>
@@ -179,106 +203,121 @@
 
     </main>
 
-    <!-- Supabase and Logic Script -->
     <script>
-        // === 1. Supabase Connection Configuration ===
         const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let currentClassStudents = [];
         let chartInstance = null;
+        let selectedRowElement = null;
 
-        // Dynamic Subjects Configuration per Class
+        // Subject & Full Marks Meta Info Config
         const classConfig = {
-            'v': { table: 'result_v', subjects: ['bengali', 'english', 'math', 'science', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
-            'vi': { table: 'result_vi', subjects: ['bengali', 'english', 'math', 'science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
-            'vii': { table: 'result_vii', subjects: ['bengali', 'english', 'arabic', 'sanskrit', 'math', 'life_science', 'physical_science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
-            'viii': { table: 'result_viii', subjects: ['bengali', 'english', 'arabic', 'sanskrit', 'math', 'life_science', 'physical_science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
-            'ix': { table: 'result_ix', subjects: ['bengali', 'english', 'math', 'physical_science', 'life_science', 'history', 'geography'], exams: ['e1_', 'e2_', 'e3_', 'proj_'] },
-            'x': { table: 'result_x', subjects: ['bengali', 'english', 'math', 'physical_science', 'life_science', 'history', 'geography'], exams: ['e1_', 'e2_', 'test_'] },
-            'xi': { table: 'result_xi', subjects: ['bengali', 'english', 'history', 'philosophy', 'education', 'geography', 'political_science', 'arabic', 'sanskrit'], exams: ['sem1_', 'sem2_', 'proj_'] }
+            'v': { table: 'result_v', fullMarks: 400, subjects: ['bengali', 'english', 'math', 'science', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
+            'vi': { table: 'result_vi', fullMarks: 500, subjects: ['bengali', 'english', 'math', 'science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
+            'vii': { table: 'result_vii', fullMarks: 500, subjects: ['bengali', 'english', 'arabic', 'sanskrit', 'math', 'life_science', 'physical_science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
+            'viii': { table: 'result_viii', fullMarks: 500, subjects: ['bengali', 'english', 'arabic', 'sanskrit', 'math', 'life_science', 'physical_science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
+            'ix': { table: 'result_ix', fullMarks: 800, subjects: ['bengali', 'english', 'math', 'physical_science', 'life_science', 'history', 'geography'], exams: ['e1_', 'e2_', 'e3_', 'proj_'] },
+            'x': { table: 'result_x', fullMarks: 800, subjects: ['bengali', 'english', 'math', 'physical_science', 'life_science', 'history', 'geography'], exams: ['e1_', 'e2_', 'test_'] },
+            'xi': { table: 'result_xi', fullMarks: 500, subjects: ['bengali', 'english', 'history', 'philosophy', 'education', 'geography', 'political_science', 'arabic', 'sanskrit'], exams: ['sem1_', 'sem2_', 'proj_'] }
         };
 
-        // Load Class Data on Startup
-        window.onload = () => {
-            loadClassData();
-        };
+        window.onload = () => { loadClassData(); };
 
         async function loadClassData() {
             const selectedClass = document.getElementById('classSelect').value;
             const config = classConfig[selectedClass];
 
-            // Fetch Data from Supabase
+            renderSubjectInfoBanner(config);
+
             const { data, error } = await _supabase.from(config.table).select('*');
 
             if (error) {
-                alert("ডাটা লোড করতে সমস্যা হয়েছে: " + error.message);
+                alert("ডাটা পেতে সমস্যা হয়েছে: " + error.message);
                 return;
             }
 
-            if (data.length > 0) {
+            if (data && data.length > 0) {
                 document.getElementById('sessionDisplay').innerText = data[0].session || "2026";
             } else {
-                document.getElementById('sessionDisplay').innerText = "ডাটা নেই";
+                document.getElementById('sessionDisplay').innerText = "--";
             }
 
-            // Process and Rank Students based on Rules
+            // Rank calculation
             currentClassStudents = processAndRankStudents(data, config);
-            renderRankTable(currentClassStudents);
 
-            // Re-highlight if roll search is active
-            highlightStudent();
+            // Check if scores exist in DB
+            const totalClassMarks = currentClassStudents.reduce((acc, curr) => acc + curr.grandTotal, 0);
+
+            if (currentClassStudents.length === 0 || totalClassMarks === 0) {
+                // Show Alert & Hide Ranks
+                document.getElementById('noDataAlert').classList.remove('hidden');
+                document.getElementById('podiumSection').classList.add('hidden');
+                document.getElementById('studentAnalytics').classList.add('hidden');
+                document.getElementById('tableSection').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('noDataAlert').classList.add('hidden');
+            document.getElementById('podiumSection').classList.remove('hidden');
+            document.getElementById('tableSection').classList.remove('hidden');
+
+            renderPodiumView(currentClassStudents);
+            
+            // Sort Students by ROLL NUMBER for Display (Requirement 6)
+            const rollSortedStudents = [...currentClassStudents].sort((a, b) => a.roll_no - b.roll_no);
+            renderStudentTable(rollSortedStudents);
+
+            highlightStudentByRoll();
         }
 
-        // === 2. Multi-tier Tie-breaking Ranking Algorithm ===
+        // Subject details & full marks banner
+        function renderSubjectInfoBanner(config) {
+            const banner = document.getElementById('subjectInfoBanner');
+            banner.innerHTML = `<span class="bg-indigo-100 text-indigo-800 text-xs px-2.5 py-1 rounded-md font-bold">মোট বিষয় নম্বর: ${config.fullMarks}</span>`;
+            config.subjects.forEach(sub => {
+                const subName = sub.replace('_', ' ').toUpperCase();
+                banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${subName}</span>`;
+            });
+        }
+
+        // Multi-tier Tie Breaking Ranking Algorithm
         function processAndRankStudents(rawData, config) {
-            const processed = rawData.map(st => {
+            let processed = rawData.map(st => {
                 let subjectTotals = {};
                 let grandTotal = 0;
-                let maxPossibleTotal = 0;
                 let hasAbsent = false;
                 let failed25PercentRule = false;
 
                 config.subjects.forEach(sub => {
                     let subSum = 0;
-                    let hasExams = false;
+                    let hasScore = false;
 
                     config.exams.forEach(ex => {
                         const key = ex + sub;
                         if (st[key] !== undefined && st[key] !== null) {
                             subSum += Number(st[key]);
-                            hasExams = true;
-                        }
-                    });
-
-                    if (hasExams) {
-                        subjectTotals[sub] = subSum;
-                        grandTotal += subSum;
-
-                        // Absent check (If student scored NULL or missing in mandatory exam fields)
-                        // Here assuming 0 or null as absent criteria if unsubmitted
-                    }
-                });
-
-                // Check attendance (Rule 3)
-                // A student is considered absent if key exam columns are null
-                config.exams.forEach(ex => {
-                    config.subjects.forEach(sub => {
-                        const key = ex + sub;
-                        if (st.hasOwnProperty(key) && st[key] === null) {
+                            hasScore = true;
+                        } else if (st.hasOwnProperty(key) && st[key] === null) {
                             hasAbsent = true;
                         }
                     });
+
+                    if (hasScore) {
+                        subjectTotals[sub] = subSum;
+                        grandTotal += subSum;
+                    }
                 });
 
-                // Check 25% marks rule per subject (Rule 4)
-                // Approximate 25% check across total subject aggregate
+                // Rule 4: Check if scored under 25% marks
                 Object.values(subjectTotals).forEach(val => {
-                    if (val < 25) { // Threshold condition
+                    if (val < (config.fullMarks * 0.25 / config.subjects.length)) {
                         failed25PercentRule = true;
                     }
                 });
+
+                const pct = ((grandTotal / config.fullMarks) * 100).toFixed(1);
 
                 return {
                     ...st,
@@ -286,81 +325,75 @@
                     grandTotal,
                     hasAbsent,
                     allPassed25: !failed25PercentRule,
-                    percentage: (grandTotal / 7).toFixed(2) // Standard divisor adjustment
+                    percentage: isNaN(pct) ? 0 : pct
                 };
             });
 
-            // Sorting Algorithm Implementation
+            // Ranking Tie-Breaker Logic
             processed.sort((a, b) => {
-                // Rule 1: Highest Total Marks First
-                if (b.grandTotal !== a.grandTotal) {
-                    return b.grandTotal - a.grandTotal;
-                }
-
-                // Rule 3: Attendance (Full Present > Has Absent)
-                if (a.hasAbsent !== b.hasAbsent) {
-                    return a.hasAbsent ? 1 : -1;
-                }
-
-                // Rule 4: All Subjects >25% Marks
-                if (a.allPassed25 !== b.allPassed25) {
-                    return a.allPassed25 ? -1 : 1;
-                }
-
-                // Rule 2: Lower Roll Number gets higher rank
-                return a.roll_no - b.roll_no;
+                if (b.grandTotal !== a.grandTotal) return b.grandTotal - a.grandTotal; // Rule 1
+                if (a.hasAbsent !== b.hasAbsent) return a.hasAbsent ? 1 : -1;          // Rule 3
+                if (a.allPassed25 !== b.allPassed25) return a.allPassed25 ? -1 : 1;    // Rule 4
+                return a.roll_no - b.roll_no;                                          // Rule 2
             });
 
-            // Assign Calculated Rank
             return processed.map((st, index) => ({
                 ...st,
-                calculatedRank: index + 1
+                calculatedRank: st.grandTotal > 0 ? index + 1 : null // Hide Rank if 0 Total Marks
             }));
         }
 
-        // === 3. Render Rank Table ===
-        function renderRankTable(students) {
+        // Podium View for Top 3 Performers
+        function renderPodiumView(students) {
+            const container = document.getElementById('podiumCards');
+            container.innerHTML = '';
+            
+            const top3 = students.filter(s => s.calculatedRank && s.calculatedRank <= 3);
+
+            top3.forEach(st => {
+                let badgeColor = "from-amber-400 to-yellow-500";
+                let icon = "fa-crown text-amber-500";
+                if (st.calculatedRank === 2) { badgeColor = "from-slate-300 to-slate-400"; icon = "fa-medal text-slate-400"; }
+                if (st.calculatedRank === 3) { badgeColor = "from-amber-700 to-amber-800"; icon = "fa-award text-amber-700"; }
+
+                const card = `
+                    <div onclick="selectStudentRow(${st.roll_no})" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4 cursor-pointer hover:shadow-md transition-all">
+                        <div class="text-2xl"><i class="fa-solid ${icon}"></i></div>
+                        <div>
+                            <span class="text-xs font-bold text-slate-400">র‍্যাঙ্ক #${st.calculatedRank}</span>
+                            <div class="font-bold text-slate-800 text-sm md:text-base">${st.student_name}</div>
+                            <div class="text-xs text-slate-500">রোল: ${st.roll_no} | প্রাপ্ত নম্বর: <strong class="text-sky-600">${st.grandTotal}</strong></div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        // Render Student Table (Sorted by Roll Number)
+        function renderStudentTable(students) {
             const tbody = document.getElementById('rankTableBody');
-            document.getElementById('studentCountBadge').innerText = `মোট শিক্ষার্থী: ${students.length}`;
+            document.getElementById('studentCountBadge').innerText = `মোট: ${students.length}`;
             tbody.innerHTML = '';
 
-            if (students.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400">কোনো ডাটা পাওয়া যায়নি।</td></tr>`;
-                return;
-            }
-
             students.forEach(st => {
-                let rankBadgeClass = "bg-slate-100 text-slate-700";
-                if (st.calculatedRank === 1) rankBadgeClass = "bg-amber-400 text-slate-900 font-extrabold shadow-sm";
-                else if (st.calculatedRank === 2) rankBadgeClass = "bg-slate-300 text-slate-900 font-bold";
-                else if (st.calculatedRank === 3) rankBadgeClass = "bg-amber-700 text-white font-bold";
-
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-sky-50 transition-colors cursor-pointer border-b border-slate-100";
-                tr.onclick = () => {
-                    document.getElementById('rollInput').value = st.roll_no;
-                    highlightStudent();
-                };
+                tr.id = `row-roll-${st.roll_no}`;
+                tr.className = "hover:bg-sky-50 transition-colors border-b border-slate-100";
 
                 tr.innerHTML = `
-                    <td class="py-3 px-4 text-center">
-                        <span class="inline-block px-3 py-1 rounded-full text-xs ${rankBadgeClass}">
-                            #${st.calculatedRank}
-                        </span>
-                    </td>
-                    <td class="py-3 px-4 font-bold text-slate-700">${st.roll_no}</td>
+                    <td class="py-3 px-4 font-bold text-slate-800">${st.roll_no}</td>
                     <td class="py-3 px-4 font-semibold text-slate-600">${st.section}</td>
-                    <td class="py-3 px-4 font-bold text-slate-800">${st.student_name}</td>
+                    <td class="py-3 px-4 font-bold text-slate-900">${st.student_name}</td>
+                    <td class="py-3 px-4 text-center">
+                        ${st.calculatedRank ? `<span class="inline-block bg-sky-100 text-sky-800 px-2.5 py-0.5 rounded-full font-bold text-xs">#${st.calculatedRank}</span>` : '<span class="text-slate-400">N/A</span>'}
+                    </td>
                     <td class="py-3 px-4 text-center font-extrabold text-sky-600">${st.grandTotal}</td>
                     <td class="py-3 px-4 text-center font-bold text-emerald-600">${st.percentage}%</td>
                     <td class="py-3 px-4 text-center">
-                        ${st.hasAbsent 
-                            ? '<span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full"><i class="fa-solid fa-user-xmark"></i> অনুপস্থিতি আছে</span>' 
-                            : '<span class="text-xs bg-emerald-100 text-emerald-600 px-2 py-1 rounded-full"><i class="fa-solid fa-user-check"></i> সম্পূর্ণ উপস্থিত</span>'}
-                    </td>
-                    <td class="py-3 px-4 text-center">
-                        <button class="bg-sky-100 hover:bg-sky-200 text-sky-700 p-2 rounded-lg text-xs font-semibold">
-                            <i class="fa-solid fa-chart-line"></i> ডিটেলস
+                        <button onclick="selectStudentRow(${st.roll_no})" class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center justify-center mx-auto space-x-1">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>ডিটেলস</span>
                         </button>
                     </td>
                 `;
@@ -368,10 +401,24 @@
             });
         }
 
-        // === 4. Roll Search & Analytics Display ===
-        function highlightStudent() {
+        // Select student, highlight row and scroll to analytics section
+        function selectStudentRow(roll) {
+            document.getElementById('rollInput').value = roll;
+            highlightStudentByRoll();
+
+            // Smooth Scroll to Analytics Card (Requirement 5)
+            const analyticsCard = document.getElementById('studentAnalytics');
+            analyticsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function highlightStudentByRoll() {
             const rollVal = parseInt(document.getElementById('rollInput').value);
             const analyticsCard = document.getElementById('studentAnalytics');
+
+            // Clear previous highlight effect
+            if (selectedRowElement) {
+                selectedRowElement.classList.remove('active-row');
+            }
 
             if (isNaN(rollVal)) {
                 analyticsCard.classList.add('hidden');
@@ -380,16 +427,22 @@
 
             const student = currentClassStudents.find(s => s.roll_no === rollVal);
 
-            if (!student) {
+            if (!student || !student.calculatedRank) {
                 analyticsCard.classList.add('hidden');
                 return;
+            }
+
+            // Apply highlight effect on table row (Requirement 5)
+            const row = document.getElementById(`row-roll-${rollVal}`);
+            if (row) {
+                row.classList.add('active-row');
+                selectedRowElement = row;
             }
 
             // Show Analytics Card
             analyticsCard.classList.remove('hidden');
 
-            // Set Metadata
-            document.getElementById('stRankBadge').innerHTML = `<i class="fa-solid fa-trophy mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
+            document.getElementById('stRankBadge').innerHTML = `<i class="fa-solid fa-award mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
             document.getElementById('stName').innerText = student.student_name;
             document.getElementById('stClass').innerText = student.class_name;
             document.getElementById('stSec').innerText = student.section;
@@ -402,33 +455,25 @@
             const percentile = ((lowerRankCount / currentClassStudents.length) * 100).toFixed(1);
             document.getElementById('stPercentile').innerText = `${percentile}%`;
 
-            // Check Highest Marks per subject
+            // Render Badges
             const highestDiv = document.getElementById('highestBadges');
             highestDiv.innerHTML = '';
             Object.keys(student.subjectTotals).forEach(sub => {
                 const maxInClass = Math.max(...currentClassStudents.map(s => s.subjectTotals[sub] || 0));
                 if (student.subjectTotals[sub] === maxInClass && maxInClass > 0) {
-                    const badge = document.createElement('span');
-                    badge.className = 'bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold flex items-center shadow-sm';
-                    badge.innerHTML = `<i class="fa-solid fa-crown text-amber-500 mr-1.5"></i> ${sub.toUpperCase()}-এ সর্বোচ্চ নম্বর (${maxInClass})`;
-                    highestDiv.appendChild(badge);
+                    highestDiv.innerHTML += `<span class="bg-amber-100 border border-amber-300 text-amber-800 text-xs px-2.5 py-1 rounded-full font-bold flex items-center shadow-sm"><i class="fa-solid fa-crown text-amber-500 mr-1"></i> ${sub.toUpperCase()}-এ সর্বোচ্চ (${maxInClass})</span>`;
                 }
             });
 
-            // Render Chart
             renderChart(student.subjectTotals);
         }
 
-        // === 5. Chart.js Bar Graph Generation ===
         function renderChart(subjectData) {
             const ctx = document.getElementById('studentChart').getContext('2d');
-            
             const labels = Object.keys(subjectData).map(s => s.toUpperCase().replace('_', ' '));
             const dataValues = Object.values(subjectData);
 
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
+            if (chartInstance) chartInstance.destroy();
 
             chartInstance = new Chart(ctx, {
                 type: 'bar',
@@ -437,29 +482,38 @@
                     datasets: [{
                         label: 'প্রাপ্ত নম্বর',
                         data: dataValues,
-                        backgroundColor: 'rgba(14, 165, 233, 0.7)',
+                        backgroundColor: 'rgba(14, 165, 233, 0.75)',
                         borderColor: 'rgba(2, 132, 199, 1)',
-                        borderWidth: 2,
-                        borderRadius: 8
+                        borderWidth: 1.5,
+                        borderRadius: 6
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(226, 232, 240, 0.6)' }
-                        },
-                        x: {
-                            grid: { display: false }
-                        }
+                        y: { beginAtZero: true },
+                        x: { grid: { display: false } }
                     },
-                    plugins: {
-                        legend: { display: false }
-                    }
+                    plugins: { legend: { display: false } }
                 }
             });
+        }
+
+        // Download Result Card PDF Functionality
+        function downloadResultCardPDF() {
+            const element = document.getElementById('pdfPrintArea');
+            const stName = document.getElementById('stName').innerText;
+            
+            const opt = {
+                margin:       10,
+                filename:     `Result_Card_${stName}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
         }
     </script>
 </body>
