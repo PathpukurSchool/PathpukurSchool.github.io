@@ -66,7 +66,7 @@ function renderMarquee() {
         const newMarqueeItems = newItems.map(item => {
             const title = item.title;
             const url = item.url || '#';
-            return `<a href="${url}" target="_blank" class="marquee-link">
+            return `<a href="${url}" class="marquee-link">
                         <span class="new-badge blink">✨ NEW</span> ${title} 
                     </a>`;
         });
@@ -333,7 +333,6 @@ function showPopup(titleText, date, link, subjText) {
         const linkBtn = document.createElement('a');
         linkBtn.href = link;
         linkBtn.innerText = 'Open Link';
-        linkBtn.target = '_blank';
         linkBtn.classList.add('popup-link-btn');
         buttonContainer.appendChild(linkBtn);
     }
@@ -605,7 +604,7 @@ if (searchInput && searchResultsDropdown) {
                 resDiv.className = 'search-dropdown-item';
                 resDiv.innerHTML = `
                     <span class="item-title">${item.title}</span>
-                    <a href="${item.url}" class="item-btn" target="_blank">🚀 Go ➔</a>
+                    <a href="${item.url}" class="item-btn">🚀 Go ➔</a>
                 `;
                 searchResultsDropdown.appendChild(resDiv);
             });
