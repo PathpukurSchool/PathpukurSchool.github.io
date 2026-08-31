@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পাতপুকুর হাই স্কুল (উ: মা:) - ছাত্রছাত্রীদের মেধা র‍্যাঙ্ক পোর্টাল</title>
+
+    <!-- Tailwind CSS (Styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Chart.js (Visual Analytics Bar Graph) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', 'Tiro Bangla', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        .custom-shadow {
+            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.15), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12 text-slate-800">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-800 to-sky-900 text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 py-8 text-center">
+            <div class="inline-flex items-center justify-center p-3 bg-white/10 rounded-full mb-3 backdrop-blur-md">
+                <i class="fa-solid fa-graduation-cap text-3xl text-amber-400 mr-3"></i>
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
+            </div>
+            <h2 class="text-lg md:text-xl text-sky-200 font-medium">মেধা র‍্যাঙ্ক ও পারফরম্যান্স অ্যানালিটিক্স পোর্টাল</h2>
+            
+            <div class="mt-4 inline-flex items-center bg-white/15 px-4 py-1.5 rounded-full border border-white/20 text-sm">
+                <i class="fa-regular fa-calendar-check text-amber-300 mr-2"></i>
+                <span>শিক্ষাবর্ষ (Session): <strong id="sessionDisplay" class="text-amber-300">লোডিং...</strong></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 mt-8 space-y-8">
+
+        <!-- Disclaimer Box -->
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm text-amber-900 flex items-start space-x-3">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl mt-0.5"></i>
+            <div class="text-sm leading-relaxed">
+                <strong>সতর্কবার্তা / আনুমানিক র‍্যাঙ্ক ঘোষণার বিজ্ঞপ্তি:</strong> 
+                এটি একটি <em>আনুমানিক র‍্যাঙ্ক তালিকা</em>। পরবর্তী সময়ে কোনো শিক্ষার্থীর প্রাপ্ত নম্বরের কোনো প্রকার সংশোধন/পুনর্মূল্যায়ন হলে অথবা কোনো শিক্ষার্থী স্থানান্তরিত (TC) হলে সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এই র‍্যাঙ্ক কোনোভাবেই চুড়ান্ত বা অভ্রান্ত হিসেবে গণ্য হবে না।
+            </div>
+        </div>
+
+        <!-- Class & Roll Selection Card -->
+        <div class="glass-card rounded-2xl p-6 custom-shadow border border-sky-100">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                <i class="fa-solid fa-filter text-sky-600 mr-2"></i> শ্রেণী এবং রোল ফিল্টার করুন
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">শ্রেণী নির্বাচন করুন</label>
+                    <select id="classSelect" onchange="loadClassData()" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 font-semibold shadow-sm">
+                        <option value="v">পঞ্চম শ্রেণী (Class V)</option>
+                        <option value="vi">ষষ্ঠ শ্রেণী (Class VI)</option>
+                        <option value="vii">সপ্তম শ্রেণী (Class VII)</option>
+                        <option value="viii">অষ্টম শ্রেণী (Class VIII)</option>
+                        <option value="ix">নবম শ্রেণী (Class IX)</option>
+                        <option value="x">দশম শ্রেণী (Class X)</option>
+                        <option value="xi">একাদশ শ্রেণী (Class XI)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">রোল নম্বর দিয়ে খুঁজুন</label>
+                    <div class="relative">
+                        <input type="number" id="rollInput" placeholder="যেমন: 1, 5, 12" oninput="highlightStudent()" class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 font-semibold shadow-sm">
+                        <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400"></i>
+                    </div>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="loadClassData()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>ডাটা রিফ্রেশ করুন</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Highlighted Student Dashboard (Shows on Roll Selection) -->
+        <div id="studentAnalytics" class="hidden glass-card rounded-2xl p-6 custom-shadow border-2 border-sky-400 bg-gradient-to-br from-white to-sky-50 relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 text-sky-100 opacity-50 pointer-events-none">
+                <i class="fa-solid fa-trophy text-9xl"></i>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-200 pb-4 mb-6 gap-4">
+                <div>
+                    <span id="stRankBadge" class="gold-gradient text-white font-extrabold text-sm px-4 py-1.5 rounded-full shadow-sm uppercase tracking-wider inline-block mb-2">
+                        <i class="fa-solid fa-award mr-1"></i> র‍্যাঙ্ক #--
+                    </span>
+                    <h2 id="stName" class="text-2xl md:text-3xl font-bold text-slate-900">শিক্ষার্থীর নাম</h2>
+                    <p class="text-slate-500 text-sm font-medium mt-1">
+                        শ্রেণী: <span id="stClass" class="text-slate-800 font-semibold">--</span> | 
+                        সেকশন: <span id="stSec" class="text-slate-800 font-semibold">--</span> | 
+                        রোল: <span id="stRoll" class="text-slate-800 font-semibold">--</span>
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <div class="bg-white p-3 rounded-xl border border-slate-200 text-center min-w-[100px] shadow-sm">
+                        <div class="text-xs text-slate-400 font-semibold">প্রাপ্ত মোট নম্বর</div>
+                        <div id="stTotal" class="text-xl font-bold text-sky-600">0/0</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-200 text-center min-w-[100px] shadow-sm">
+                        <div class="text-xs text-slate-400 font-semibold">শতকরা (Percentage)</div>
+                        <div id="stPercentage" class="text-xl font-bold text-emerald-600">0%</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-200 text-center min-w-[100px] shadow-sm">
+                        <div class="text-xs text-slate-400 font-semibold">পার্সেন্টাইল</div>
+                        <div id="stPercentile" class="text-xl font-bold text-indigo-600">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Highest Badges -->
+            <div id="highestBadges" class="flex flex-wrap gap-2 mb-6"></div>
+
+            <!-- Visual Bar Chart -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center">
+                    <i class="fa-solid fa-chart-column text-sky-500 mr-2"></i> বিষয়ভিত্তিক প্রাপ্ত নম্বর বিশ্লেষণ (Bar Chart)
+                </h4>
+                <div class="h-64">
+                    <canvas id="studentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Class Full Rank Table -->
+        <div class="glass-card rounded-2xl p-6 custom-shadow border border-sky-100 overflow-hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                    <i class="fa-solid fa-list-ol text-indigo-600 mr-2"></i> শ্রেণীর মেধা তালিকা (Full Class Rank List)
+                </h3>
+                <span id="studentCountBadge" class="bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1 rounded-full">মোট শিক্ষার্থী: 0</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
+                            <th class="py-3 px-4 rounded-tl-xl text-center">র‍্যাঙ্ক</th>
+                            <th class="py-3 px-4">রোল</th>
+                            <th class="py-3 px-4">সেকশন</th>
+                            <th class="py-3 px-4">শিক্ষার্থীর নাম</th>
+                            <th class="py-3 px-4 text-center">প্রাপ্ত নম্বর</th>
+                            <th class="py-3 px-4 text-center">শতকরা (%)</th>
+                            <th class="py-3 px-4 text-center">উপস্থিতি স্থিতি</th>
+                            <th class="py-3 px-4 rounded-tr-xl text-center">অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankTableBody" class="divide-y divide-slate-200 text-sm">
+                        <!-- Dynamic Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Supabase and Logic Script -->
+    <script>
+        // === 1. Supabase Connection Configuration ===
+        const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentClassStudents = [];
+        let chartInstance = null;
+
+        // Dynamic Subjects Configuration per Class
+        const classConfig = {
+            'v': { table: 'result_v', subjects: ['bengali', 'english', 'math', 'science', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
+            'vi': { table: 'result_vi', subjects: ['bengali', 'english', 'math', 'science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
+            'vii': { table: 'result_vii', subjects: ['bengali', 'english', 'arabic', 'sanskrit', 'math', 'life_science', 'physical_science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
+            'viii': { table: 'result_viii', subjects: ['bengali', 'english', 'arabic', 'sanskrit', 'math', 'life_science', 'physical_science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
+            'ix': { table: 'result_ix', subjects: ['bengali', 'english', 'math', 'physical_science', 'life_science', 'history', 'geography'], exams: ['e1_', 'e2_', 'e3_', 'proj_'] },
+            'x': { table: 'result_x', subjects: ['bengali', 'english', 'math', 'physical_science', 'life_science', 'history', 'geography'], exams: ['e1_', 'e2_', 'test_'] },
+            'xi': { table: 'result_xi', subjects: ['bengali', 'english', 'history', 'philosophy', 'education', 'geography', 'political_science', 'arabic', 'sanskrit'], exams: ['sem1_', 'sem2_', 'proj_'] }
+        };
+
+        // Load Class Data on Startup
+        window.onload = () => {
+            loadClassData();
+        };
+
+        async function loadClassData() {
+            const selectedClass = document.getElementById('classSelect').value;
+            const config = classConfig[selectedClass];
+
+            // Fetch Data from Supabase
+            const { data, error } = await _supabase.from(config.table).select('*');
+
+            if (error) {
+                alert("ডাটা লোড করতে সমস্যা হয়েছে: " + error.message);
+                return;
+            }
+
+            if (data.length > 0) {
+                document.getElementById('sessionDisplay').innerText = data[0].session || "2026";
+            } else {
+                document.getElementById('sessionDisplay').innerText = "ডাটা নেই";
+            }
+
+            // Process and Rank Students based on Rules
+            currentClassStudents = processAndRankStudents(data, config);
+            renderRankTable(currentClassStudents);
+
+            // Re-highlight if roll search is active
+            highlightStudent();
+        }
+
+        // === 2. Multi-tier Tie-breaking Ranking Algorithm ===
+        function processAndRankStudents(rawData, config) {
+            const processed = rawData.map(st => {
+                let subjectTotals = {};
+                let grandTotal = 0;
+                let maxPossibleTotal = 0;
+                let hasAbsent = false;
+                let failed25PercentRule = false;
+
+                config.subjects.forEach(sub => {
+                    let subSum = 0;
+                    let hasExams = false;
+
+                    config.exams.forEach(ex => {
+                        const key = ex + sub;
+                        if (st[key] !== undefined && st[key] !== null) {
+                            subSum += Number(st[key]);
+                            hasExams = true;
+                        }
+                    });
+
+                    if (hasExams) {
+                        subjectTotals[sub] = subSum;
+                        grandTotal += subSum;
+
+                        // Absent check (If student scored NULL or missing in mandatory exam fields)
+                        // Here assuming 0 or null as absent criteria if unsubmitted
+                    }
+                });
+
+                // Check attendance (Rule 3)
+                // A student is considered absent if key exam columns are null
+                config.exams.forEach(ex => {
+                    config.subjects.forEach(sub => {
+                        const key = ex + sub;
+                        if (st.hasOwnProperty(key) && st[key] === null) {
+                            hasAbsent = true;
+                        }
+                    });
+                });
+
+                // Check 25% marks rule per subject (Rule 4)
+                // Approximate 25% check across total subject aggregate
+                Object.values(subjectTotals).forEach(val => {
+                    if (val < 25) { // Threshold condition
+                        failed25PercentRule = true;
+                    }
+                });
+
+                return {
+                    ...st,
+                    subjectTotals,
+                    grandTotal,
+                    hasAbsent,
+                    allPassed25: !failed25PercentRule,
+                    percentage: (grandTotal / 7).toFixed(2) // Standard divisor adjustment
+                };
+            });
+
+            // Sorting Algorithm Implementation
+            processed.sort((a, b) => {
+                // Rule 1: Highest Total Marks First
+                if (b.grandTotal !== a.grandTotal) {
+                    return b.grandTotal - a.grandTotal;
+                }
+
+                // Rule 3: Attendance (Full Present > Has Absent)
+                if (a.hasAbsent !== b.hasAbsent) {
+                    return a.hasAbsent ? 1 : -1;
+                }
+
+                // Rule 4: All Subjects >25% Marks
+                if (a.allPassed25 !== b.allPassed25) {
+                    return a.allPassed25 ? -1 : 1;
+                }
+
+                // Rule 2: Lower Roll Number gets higher rank
+                return a.roll_no - b.roll_no;
+            });
+
+            // Assign Calculated Rank
+            return processed.map((st, index) => ({
+                ...st,
+                calculatedRank: index + 1
+            }));
+        }
+
+        // === 3. Render Rank Table ===
+        function renderRankTable(students) {
+            const tbody = document.getElementById('rankTableBody');
+            document.getElementById('studentCountBadge').innerText = `মোট শিক্ষার্থী: ${students.length}`;
+            tbody.innerHTML = '';
+
+            if (students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400">কোনো ডাটা পাওয়া যায়নি।</td></tr>`;
+                return;
+            }
+
+            students.forEach(st => {
+                let rankBadgeClass = "bg-slate-100 text-slate-700";
+                if (st.calculatedRank === 1) rankBadgeClass = "bg-amber-400 text-slate-900 font-extrabold shadow-sm";
+                else if (st.calculatedRank === 2) rankBadgeClass = "bg-slate-300 text-slate-900 font-bold";
+                else if (st.calculatedRank === 3) rankBadgeClass = "bg-amber-700 text-white font-bold";
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-sky-50 transition-colors cursor-pointer border-b border-slate-100";
+                tr.onclick = () => {
+                    document.getElementById('rollInput').value = st.roll_no;
+                    highlightStudent();
+                };
+
+                tr.innerHTML = `
+                    <td class="py-3 px-4 text-center">
+                        <span class="inline-block px-3 py-1 rounded-full text-xs ${rankBadgeClass}">
+                            #${st.calculatedRank}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 font-bold text-slate-700">${st.roll_no}</td>
+                    <td class="py-3 px-4 font-semibold text-slate-600">${st.section}</td>
+                    <td class="py-3 px-4 font-bold text-slate-800">${st.student_name}</td>
+                    <td class="py-3 px-4 text-center font-extrabold text-sky-600">${st.grandTotal}</td>
+                    <td class="py-3 px-4 text-center font-bold text-emerald-600">${st.percentage}%</td>
+                    <td class="py-3 px-4 text-center">
+                        ${st.hasAbsent 
+                            ? '<span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full"><i class="fa-solid fa-user-xmark"></i> অনুপস্থিতি আছে</span>' 
+                            : '<span class="text-xs bg-emerald-100 text-emerald-600 px-2 py-1 rounded-full"><i class="fa-solid fa-user-check"></i> সম্পূর্ণ উপস্থিত</span>'}
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <button class="bg-sky-100 hover:bg-sky-200 text-sky-700 p-2 rounded-lg text-xs font-semibold">
+                            <i class="fa-solid fa-chart-line"></i> ডিটেলস
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // === 4. Roll Search & Analytics Display ===
+        function highlightStudent() {
+            const rollVal = parseInt(document.getElementById('rollInput').value);
+            const analyticsCard = document.getElementById('studentAnalytics');
+
+            if (isNaN(rollVal)) {
+                analyticsCard.classList.add('hidden');
+                return;
+            }
+
+            const student = currentClassStudents.find(s => s.roll_no === rollVal);
+
+            if (!student) {
+                analyticsCard.classList.add('hidden');
+                return;
+            }
+
+            // Show Analytics Card
+            analyticsCard.classList.remove('hidden');
+
+            // Set Metadata
+            document.getElementById('stRankBadge').innerHTML = `<i class="fa-solid fa-trophy mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
+            document.getElementById('stName').innerText = student.student_name;
+            document.getElementById('stClass').innerText = student.class_name;
+            document.getElementById('stSec').innerText = student.section;
+            document.getElementById('stRoll').innerText = student.roll_no;
+            document.getElementById('stTotal').innerText = student.grandTotal;
+            document.getElementById('stPercentage').innerText = `${student.percentage}%`;
+
+            // Calculate Percentile
+            const lowerRankCount = currentClassStudents.filter(s => s.grandTotal < student.grandTotal).length;
+            const percentile = ((lowerRankCount / currentClassStudents.length) * 100).toFixed(1);
+            document.getElementById('stPercentile').innerText = `${percentile}%`;
+
+            // Check Highest Marks per subject
+            const highestDiv = document.getElementById('highestBadges');
+            highestDiv.innerHTML = '';
+            Object.keys(student.subjectTotals).forEach(sub => {
+                const maxInClass = Math.max(...currentClassStudents.map(s => s.subjectTotals[sub] || 0));
+                if (student.subjectTotals[sub] === maxInClass && maxInClass > 0) {
+                    const badge = document.createElement('span');
+                    badge.className = 'bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold flex items-center shadow-sm';
+                    badge.innerHTML = `<i class="fa-solid fa-crown text-amber-500 mr-1.5"></i> ${sub.toUpperCase()}-এ সর্বোচ্চ নম্বর (${maxInClass})`;
+                    highestDiv.appendChild(badge);
+                }
+            });
+
+            // Render Chart
+            renderChart(student.subjectTotals);
+        }
+
+        // === 5. Chart.js Bar Graph Generation ===
+        function renderChart(subjectData) {
+            const ctx = document.getElementById('studentChart').getContext('2d');
+            
+            const labels = Object.keys(subjectData).map(s => s.toUpperCase().replace('_', ' '));
+            const dataValues = Object.values(subjectData);
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'প্রাপ্ত নম্বর',
+                        data: dataValues,
+                        backgroundColor: 'rgba(14, 165, 233, 0.7)',
+                        borderColor: 'rgba(2, 132, 199, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(226, 232, 240, 0.6)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
