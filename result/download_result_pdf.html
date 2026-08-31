@@ -3,7 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>পতপুকুর হাই স্কুল (উ: মা:) - রেজাল্ট পোর্টাল</title>
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (লগইন না থাকলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
+    <style id="security-shield">
+        body { display: none !important; }
+    </style>
+
+    <!-- 🛡️ ২. বুলেটপ্রুফ সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+    <script>
+    (function() {
+        try {
+            // সেশন চেক
+            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+
+            // রিফারার চেক (লিংক সরাসরি কপি করে পেস্ট করা আটকানো)
+            var ref = document.referrer;
+            var isValidReferrer = false;
+            if (ref) {
+                var refUrl = new URL(ref);
+                if (refUrl.hostname === "pathpukurschool.github.io") {
+                    isValidReferrer = true;
+                }
+            }
+
+            // সেশন না থাকলে অথবা ভুল উপায়ে (সরাসরি লিংক পেস্ট করে) আসলে রিডাইরেক্ট
+            if (!isLoggedIn || !isValidReferrer) {
+                // সেশন মুছে ফেলা
+                sessionStorage.clear();
+                // হোম পেজে রিডাইরেক্ট
+                window.location.replace("https://pathpukurschool.github.io/");
+                return;
+            }
+
+            // ভ্যালিড ইউজার হলে পেজের স্টাইল শিল্ড সরিয়ে কন্টেন্ট দৃশ্যমান করা
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
+
+        } catch (e) {
+            sessionStorage.clear();
+            window.location.replace("https://pathpukurschool.github.io/");
+        }
+    })();
+    </script>
+  <title>পাতপুকুর হাই স্কুল (উ: মা:) - রেজাল্ট পোর্টাল</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
