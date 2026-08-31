@@ -14,6 +14,19 @@ let dynamicSectionsState = {
 };
 
 /* =================================
+ * 🔄 LOADER SHOW/HIDE UTILITIES (খয়েরি স্পিনার কন্ট্রোল)
+ * ================================= */
+function showLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.style.display = 'flex';
+}
+
+function hideLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.style.display = 'none';
+}
+
+/* =================================
  * HTML Element থেকে Data এবং LocalStorage ম্যানেজমেন্ট
  * ================================= */
 function getSavedNewStatus() {
@@ -334,6 +347,8 @@ function showPopup(titleText, date, link, subjText) {
         linkBtn.href = link;
         linkBtn.innerText = 'Open Link';
         linkBtn.classList.add('popup-link-btn');
+        // পপআপের লিংকে ক্লিক করলেও স্পিনার শো করবে
+        linkBtn.addEventListener('click', () => showLoader());
         buttonContainer.appendChild(linkBtn);
     }
 
@@ -413,9 +428,11 @@ document.addEventListener('keydown', event => {
 /* =================================
  * DOMContentLoaded - একমাত্র মূল ইনিশিয়ালাইজেশন অংশ
  * ================================= */
-document.addEventListener('DOMContentLoaded', function () {
-    
-    // ১. হিরো সেকশনের ছবি স্ক্রলিং
+document.addEventListener('DOMContentLoaded', async function () {
+    // ⚡ ১. প্রথম পেজ লোডের সময় স্পিনার দেখানো
+    showLoader();
+
+    // হিরো সেকশনের ছবি স্ক্রলিং
     const heroImagesContainer = document.querySelector('.hero-images');
     if (heroImagesContainer) {
         const totalImages = heroImagesContainer.querySelectorAll('.hero-image').length;
@@ -555,82 +572,93 @@ document.addEventListener('DOMContentLoaded', function () {
     collectDetailsFromHTML();
     applyNewBadgesToHTML();
     renderMarquee();
-    fetchNotices();
+    await fetchNotices();
 
-    // ৭. খালি/লিঙ্ক ছাড়া বোতামে ক্লিক করলে 'Available Soon' মেসেজ দেখানোর লজিক
+    // ⚡ প্রাথমিক সব ডাটা লোড হওয়ার পর স্পিনার বন্ধ করা
+    hideLoader();
+
+    // ⚡ ৭. কোনো লিংক বা বাটনে ক্লিক করলে নতুন পেজে যাওয়ার আগে স্পিনার দেখানোর লজিক
     const allLinks = document.querySelectorAll('.site-link, .notice-item-link, .link-item, a');
     
     allLinks.forEach(link => {
         link.addEventListener('click', function(event) {
             const href = this.getAttribute('href');
             
+            // খালি/ইনভ্যালিড লিংক হলে 'Available Soon' দেখাবে
             if (!href || href.trim() === '' || href === '#' || href.startsWith('javascript:')) {
                 event.preventDefault(); 
                 showAvailableSoonMessage(this); 
+            } 
+            // যদি পেজের ভেতরের আইডি লিংক (#section-id) না হয়ে বাইরের আসল পেজের লিংক হয়
+            else if (!href.startsWith('#')) {
+                showLoader(); // 👈 রিডাইরেক্ট হওয়ার আগে স্পিনার প্লে হবে
             }
         });
     });
- 
-/* =========================================================
- * ৮. নতুন যোগ করা সার্চ লজিক (সংশোধিত)
- * ========================================================= */
-const searchInput = document.getElementById('site-search-input');
-const searchResultsDropdown = document.getElementById('search-dropdown-list');
-const clearSearchBtn = document.getElementById('clear-search-btn');
 
-if (searchInput && searchResultsDropdown) {
-    searchInput.addEventListener('input', function() {
-        const query = this.value.trim().toLowerCase();
-        searchResultsDropdown.innerHTML = '';
+    /* =========================================================
+     * ৮. সার্চ লজিক (সংশোধিত)
+     * ========================================================= */
+    const searchInput = document.getElementById('site-search-input');
+    const searchResultsDropdown = document.getElementById('search-dropdown-list');
+    const clearSearchBtn = document.getElementById('clear-search-btn');
 
-        // ক্লিয়ার বাটন দেখানো বা লুকানোর লজিক
-        if (clearSearchBtn) {
-            clearSearchBtn.style.display = query.length > 0 ? 'block' : 'none';
-        }
-
-        if (query.length < 2) {
-            searchResultsDropdown.classList.remove('active');
-            return;
-        }
-
-        // HTML লিঙ্ক এবং Supabase নোটিশ থেকে ডাটা ফিল্টার করা
-        let matchedItems = ALL_ITEMS_DETAILS.filter(item => 
-            item.title && item.title.toLowerCase().includes(query)
-        );
-
-        if (matchedItems.length > 0) {
-            matchedItems.forEach(item => {
-                const resDiv = document.createElement('div');
-                resDiv.className = 'search-dropdown-item';
-                resDiv.innerHTML = `
-                    <span class="item-title">${item.title}</span>
-                    <a href="${item.url}" class="item-btn">🚀 Go ➔</a>
-                `;
-                searchResultsDropdown.appendChild(resDiv);
-            });
-            searchResultsDropdown.classList.add('active');
-        } else {
-            searchResultsDropdown.innerHTML = `<div style="padding:15px; text-align:center; color:#777;">🕵️‍♂️ No Data Found!</div>`;
-            searchResultsDropdown.classList.add('active');
-        }
-    });
-
-    // ✖ ক্লিয়ার বাটনে ক্লিক করলে সার্চ ইনপুট ফাকা হওয়া
-    if (clearSearchBtn) {
-        clearSearchBtn.addEventListener('click', function() {
-            searchInput.value = '';
+    if (searchInput && searchResultsDropdown) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase();
             searchResultsDropdown.innerHTML = '';
-            searchResultsDropdown.classList.remove('active');
-            this.style.display = 'none';
-            searchInput.focus();
+
+            if (clearSearchBtn) {
+                clearSearchBtn.style.display = query.length > 0 ? 'block' : 'none';
+            }
+
+            if (query.length < 2) {
+                searchResultsDropdown.classList.remove('active');
+                return;
+            }
+
+            let matchedItems = ALL_ITEMS_DETAILS.filter(item => 
+                item.title && item.title.toLowerCase().includes(query)
+            );
+
+            if (matchedItems.length > 0) {
+                matchedItems.forEach(item => {
+                    const resDiv = document.createElement('div');
+                    resDiv.className = 'search-dropdown-item';
+                    resDiv.innerHTML = `
+                        <span class="item-title">${item.title}</span>
+                        <a href="${item.url}" class="item-btn">🚀 Go ➔</a>
+                    `;
+                    // সার্চ ড্রপডাউনের 'Go' লিংকে চাপলেও স্পিনার ট্রিপ করবে
+                    resDiv.querySelector('.item-btn').addEventListener('click', () => showLoader());
+                    searchResultsDropdown.appendChild(resDiv);
+                });
+                searchResultsDropdown.classList.add('active');
+            } else {
+                searchResultsDropdown.innerHTML = `<div style="padding:15px; text-align:center; color:#777;">🕵️‍♂️ No Data Found!</div>`;
+                searchResultsDropdown.classList.add('active');
+            }
+        });
+
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                searchResultsDropdown.innerHTML = '';
+                searchResultsDropdown.classList.remove('active');
+                this.style.display = 'none';
+                searchInput.focus();
+            });
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResultsDropdown.contains(e.target)) {
+                searchResultsDropdown.classList.remove('active');
+            }
         });
     }
+});
 
-    // সার্চ বক্সের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হয়ে যাওয়া
-    document.addEventListener('click', function(e) {
-        if (!searchInput.contains(e.target) && !searchResultsDropdown.contains(e.target)) {
-            searchResultsDropdown.classList.remove('active');
-        }
-    });
-}
+// ⚡ ব্যাক বাটন প্রেস করে ফিরে এলে স্পিনার লুকিয়ে রাখার নিশ্চয়তা
+window.addEventListener('pageshow', function() {
+    hideLoader();
 });
