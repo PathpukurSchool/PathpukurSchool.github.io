@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- html2pdf.js (for Result Card PDF Download) -->
+    <!-- html2pdf.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <!-- Font Awesome & Fonts -->
@@ -31,6 +31,9 @@
         .active-row {
             background-color: #e0f2fe !important;
             border-left: 4px solid #0284c7 !important;
+        }
+        .top10-highlight {
+            background-color: #fef3c7 !important; /* Amber-100 highlight for Top 10 */
         }
     </style>
 </head>
@@ -95,7 +98,7 @@
 
             <!-- Subject & Full Marks Banner -->
             <div class="mt-4 pt-4 border-t border-slate-200">
-                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider"><i class="fa-solid fa-book text-sky-600 mr-1"></i> নির্বাচিত শ্রেণীর বিষয় ও নম্বর বিভাজন:</span>
+                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider"><i class="fa-solid fa-book text-sky-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার মোট পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-sky-700">0</strong></span>
                 <div id="subjectInfoBanner" class="mt-2 flex flex-wrap gap-2"></div>
             </div>
         </div>
@@ -132,7 +135,7 @@
                         </p>
                     </div>
 
-                    <!-- Statistics Grid for Mobile Responsiveness -->
+                    <!-- Statistics Grid -->
                     <div class="grid grid-cols-3 gap-2 w-full md:w-auto">
                         <div class="bg-white p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
                             <div class="text-[10px] md:text-xs text-slate-400 font-semibold">মোট নম্বর</div>
@@ -211,25 +214,118 @@
         let currentClassStudents = [];
         let chartInstance = null;
         let selectedRowElement = null;
+        let currentCalculatedFullMarks = 0;
 
-        // Subject & Full Marks Meta Info Config
-        const classConfig = {
-            'v': { table: 'result_v', fullMarks: 400, subjects: ['bengali', 'english', 'math', 'science', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
-            'vi': { table: 'result_vi', fullMarks: 500, subjects: ['bengali', 'english', 'math', 'science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
-            'vii': { table: 'result_vii', fullMarks: 500, subjects: ['bengali', 'english', 'arabic', 'sanskrit', 'math', 'life_science', 'physical_science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
-            'viii': { table: 'result_viii', fullMarks: 500, subjects: ['bengali', 'english', 'arabic', 'sanskrit', 'math', 'life_science', 'physical_science', 'history', 'geography', 'work_education', 'physical_education'], exams: ['e1_', 'e2_', 'e3_'] },
-            'ix': { table: 'result_ix', fullMarks: 800, subjects: ['bengali', 'english', 'math', 'physical_science', 'life_science', 'history', 'geography'], exams: ['e1_', 'e2_', 'e3_', 'proj_'] },
-            'x': { table: 'result_x', fullMarks: 800, subjects: ['bengali', 'english', 'math', 'physical_science', 'life_science', 'history', 'geography'], exams: ['e1_', 'e2_', 'test_'] },
-            'xi': { table: 'result_xi', fullMarks: 500, subjects: ['bengali', 'english', 'history', 'philosophy', 'education', 'geography', 'political_science', 'arabic', 'sanskrit'], exams: ['sem1_', 'sem2_', 'proj_'] }
+        // Exam Wise Subject Mark Structure Mapping
+        const classRules = {
+            'v': {
+                table: 'result_v', passPct: 0.25,
+                exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }],
+                subjects: [
+                    { key: 'bengali', name: 'Bengali', marks: [20, 30, 50] },
+                    { key: 'english', name: 'English', marks: [20, 30, 50] },
+                    { key: 'math', name: 'Math', marks: [20, 30, 50] },
+                    { key: 'science', name: 'Science', marks: [20, 30, 50] },
+                    { key: 'work_education', name: 'Work Ed.', marks: [10, 15, 25] },
+                    { key: 'physical_education', name: 'Physical Ed.', marks: [10, 15, 25] }
+                ]
+            },
+            'vi': {
+                table: 'result_vi', passPct: 0.25,
+                exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }],
+                subjects: [
+                    { key: 'bengali', name: 'Bengali', marks: [30, 50, 70] },
+                    { key: 'english', name: 'English', marks: [30, 50, 70] },
+                    { key: 'math', name: 'Math', marks: [30, 50, 70] },
+                    { key: 'science', name: 'Science', marks: [30, 50, 70] },
+                    { key: 'history', name: 'History', marks: [30, 50, 70] },
+                    { key: 'geography', name: 'Geography', marks: [30, 50, 70] },
+                    { key: 'work_education', name: 'Work Ed.', marks: [15, 25, 35] },
+                    { key: 'physical_education', name: 'Physical Ed.', marks: [15, 25, 35] }
+                ]
+            },
+            'vii': {
+                table: 'result_vii', passPct: 0.25,
+                exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }],
+                subjects: [
+                    { key: 'bengali', name: 'Bengali', marks: [30, 50, 70] },
+                    { key: 'english', name: 'English', marks: [30, 50, 70] },
+                    { key: 'arabic', name: 'Arabic', marks: [30, 50, 70] },
+                    { key: 'sanskrit', name: 'Sanskrit', marks: [30, 50, 70] },
+                    { key: 'math', name: 'Math', marks: [30, 50, 70] },
+                    { key: 'life_science', name: 'Life Science', marks: [15, 25, 35] },
+                    { key: 'physical_science', name: 'Physical Science', marks: [15, 25, 35] },
+                    { key: 'history', name: 'History', marks: [30, 50, 70] },
+                    { key: 'geography', name: 'Geography', marks: [30, 50, 70] },
+                    { key: 'work_education', name: 'Work Ed.', marks: [15, 25, 35] },
+                    { key: 'physical_education', name: 'Physical Ed.', marks: [15, 25, 35] }
+                ]
+            },
+            'viii': {
+                table: 'result_viii', passPct: 0.25,
+                exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }],
+                subjects: [
+                    { key: 'bengali', name: 'Bengali', marks: [30, 50, 70] },
+                    { key: 'english', name: 'English', marks: [30, 50, 70] },
+                    { key: 'arabic', name: 'Arabic', marks: [30, 50, 70] },
+                    { key: 'sanskrit', name: 'Sanskrit', marks: [30, 50, 70] },
+                    { key: 'math', name: 'Math', marks: [30, 50, 70] },
+                    { key: 'life_science', name: 'Life Science', marks: [15, 25, 35] },
+                    { key: 'physical_science', name: 'Physical Science', marks: [15, 25, 35] },
+                    { key: 'history', name: 'History', marks: [30, 50, 70] },
+                    { key: 'geography', name: 'Geography', marks: [30, 50, 70] },
+                    { key: 'work_education', name: 'Work Ed.', marks: [15, 25, 35] },
+                    { key: 'physical_education', name: 'Physical Ed.', marks: [15, 25, 35] }
+                ]
+            },
+            'ix': {
+                table: 'result_ix', passPct: 0.25,
+                exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }, { key: 'proj_', name: 'Project' }],
+                subjects: [
+                    { key: 'bengali', name: 'Bengali', marks: [40, 40, 90, 30] },
+                    { key: 'english', name: 'English', marks: [40, 40, 90, 30] },
+                    { key: 'math', name: 'Math', marks: [40, 40, 90, 30] },
+                    { key: 'physical_science', name: 'Physical Science', marks: [40, 40, 90, 30] },
+                    { key: 'life_science', name: 'Life Science', marks: [40, 40, 90, 30] },
+                    { key: 'history', name: 'History', marks: [40, 40, 90, 30] },
+                    { key: 'geography', name: 'Geography', marks: [40, 40, 90, 30] }
+                ]
+            },
+            'x': {
+                table: 'result_x', passPct: 0.25,
+                exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'test_', name: 'Test Exam' }],
+                subjects: [
+                    { key: 'bengali', name: 'Bengali', marks: [40, 40, 90] },
+                    { key: 'english', name: 'English', marks: [40, 40, 90] },
+                    { key: 'math', name: 'Math', marks: [40, 40, 90] },
+                    { key: 'physical_science', name: 'Physical Science', marks: [40, 40, 90] },
+                    { key: 'life_science', name: 'Life Science', marks: [40, 40, 90] },
+                    { key: 'history', name: 'History', marks: [40, 40, 90] },
+                    { key: 'geography', name: 'Geography', marks: [40, 40, 90] }
+                ]
+            },
+            'xi': {
+                table: 'result_xi', passPct: 0.30, isBestOfFive: true,
+                exams: [{ key: 'sem1_', name: 'Semester I' }, { key: 'sem2_', name: 'Semester II' }, { key: 'proj_', name: 'Project/Practical' }],
+                subjects: [
+                    { key: 'bengali', name: 'Bengali', marks: [40, 40, 20] },
+                    { key: 'english', name: 'English', marks: [40, 40, 20] },
+                    { key: 'history', name: 'History', marks: [40, 40, 20] },
+                    { key: 'philosophy', name: 'Philosophy', marks: [40, 40, 20] },
+                    { key: 'education', name: 'Education', marks: [40, 40, 20] },
+                    { key: 'geography', name: 'Geography', marks: [35, 35, 30] },
+                    { key: 'political_science', name: 'Political Science', marks: [40, 40, 20] },
+                    { key: 'arabic', name: 'Arabic', marks: [40, 40, 20] },
+                    { key: 'sanskrit', name: 'Sanskrit', marks: [40, 40, 20] }
+                ]
+            }
         };
 
         window.onload = () => { loadClassData(); };
 
         async function loadClassData() {
             const selectedClass = document.getElementById('classSelect').value;
-            const config = classConfig[selectedClass];
-
-            renderSubjectInfoBanner(config);
+            const config = classRules[selectedClass];
 
             const { data, error } = await _supabase.from(config.table).select('*');
 
@@ -244,14 +340,14 @@
                 document.getElementById('sessionDisplay').innerText = "--";
             }
 
-            // Rank calculation
-            currentClassStudents = processAndRankStudents(data, config);
+            // Process Active Exams & Rank Calculation
+            currentClassStudents = processAndRankStudents(data || [], config, selectedClass);
 
-            // Check if scores exist in DB
+            renderSubjectInfoBanner(config);
+
             const totalClassMarks = currentClassStudents.reduce((acc, curr) => acc + curr.grandTotal, 0);
 
             if (currentClassStudents.length === 0 || totalClassMarks === 0) {
-                // Show Alert & Hide Ranks
                 document.getElementById('noDataAlert').classList.remove('hidden');
                 document.getElementById('podiumSection').classList.add('hidden');
                 document.getElementById('studentAnalytics').classList.add('hidden');
@@ -265,82 +361,160 @@
 
             renderPodiumView(currentClassStudents);
             
-            // Sort Students by ROLL NUMBER for Display (Requirement 6)
+            // Sort Students by ROLL NUMBER for Display
             const rollSortedStudents = [...currentClassStudents].sort((a, b) => a.roll_no - b.roll_no);
             renderStudentTable(rollSortedStudents);
 
             highlightStudentByRoll();
         }
 
-        // Subject details & full marks banner
-        function renderSubjectInfoBanner(config) {
-            const banner = document.getElementById('subjectInfoBanner');
-            banner.innerHTML = `<span class="bg-indigo-100 text-indigo-800 text-xs px-2.5 py-1 rounded-md font-bold">মোট বিষয় নম্বর: ${config.fullMarks}</span>`;
-            config.subjects.forEach(sub => {
-                const subName = sub.replace('_', ' ').toUpperCase();
-                banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${subName}</span>`;
-            });
-        }
+        // Processing dynamic uploaded exams & dynamic ranking
+        function processAndRankStudents(rawData, config, classKey) {
+            if (!rawData || rawData.length === 0) return [];
 
-        // Multi-tier Tie Breaking Ranking Algorithm
-        function processAndRankStudents(rawData, config) {
+            // Detect active uploaded exams across the class
+            let activeExamIndexes = [];
+
+            // Special Condition for Class X: If Test Exam is uploaded, ignore Exam 1 & Exam 2
+            if (classKey === 'x') {
+                const hasTestUploaded = rawData.some(st => 
+                    config.subjects.some(sub => st[`test_${sub.key}`] !== null && st[`test_${sub.key}`] !== undefined)
+                );
+
+                if (hasTestUploaded) {
+                    activeExamIndexes = [2]; // Only Test Exam
+                } else {
+                    config.exams.forEach((ex, exIdx) => {
+                        const hasMarks = rawData.some(st => 
+                            config.subjects.some(sub => st[`${ex.key}${sub.key}`] !== null && st[`${ex.key}${sub.key}`] !== undefined)
+                        );
+                        if (hasMarks) activeExamIndexes.push(exIdx);
+                    });
+                }
+            } else {
+                config.exams.forEach((ex, exIdx) => {
+                    const hasMarks = rawData.some(st => 
+                        config.subjects.some(sub => st[`${ex.key}${sub.key}`] !== null && st[`${ex.key}${sub.key}`] !== undefined)
+                    );
+                    if (hasMarks) activeExamIndexes.push(exIdx);
+                });
+            }
+
+            // Calculate Dynamic Full Marks
+            let fullMarksPerSubject = {};
+            let classTotalFullMarks = 0;
+
+            config.subjects.forEach(sub => {
+                let subFM = 0;
+                activeExamIndexes.forEach(exIdx => {
+                    subFM += sub.marks[exIdx];
+                });
+                fullMarksPerSubject[sub.key] = subFM;
+            });
+
+            if (config.isBestOfFive) {
+                // Class XI Best 5 Subjects (Approx Max FM = 5 * SubFM)
+                const sortedFMs = Object.values(fullMarksPerSubject).sort((a, b) => b - a);
+                classTotalFullMarks = sortedFMs.slice(0, 5).reduce((a, b) => a + b, 0);
+            } else {
+                classTotalFullMarks = Object.values(fullMarksPerSubject).reduce((a, b) => a + b, 0);
+            }
+
+            currentCalculatedFullMarks = classTotalFullMarks;
+
+            // Process Individual Scores
             let processed = rawData.map(st => {
                 let subjectTotals = {};
+                let subjectScoresList = [];
                 let grandTotal = 0;
                 let hasAbsent = false;
-                let failed25PercentRule = false;
+                let failedPassRule = false;
 
                 config.subjects.forEach(sub => {
                     let subSum = 0;
-                    let hasScore = false;
+                    let subHasData = false;
 
-                    config.exams.forEach(ex => {
-                        const key = ex + sub;
+                    activeExamIndexes.forEach(exIdx => {
+                        const ex = config.exams[exIdx];
+                        const key = `${ex.key}${sub.key}`;
                         if (st[key] !== undefined && st[key] !== null) {
                             subSum += Number(st[key]);
-                            hasScore = true;
+                            subHasData = true;
                         } else if (st.hasOwnProperty(key) && st[key] === null) {
                             hasAbsent = true;
                         }
                     });
 
-                    if (hasScore) {
-                        subjectTotals[sub] = subSum;
-                        grandTotal += subSum;
+                    if (subHasData) {
+                        subjectTotals[sub.key] = subSum;
+                        subjectScoresList.push({ key: sub.key, score: subSum, fm: fullMarksPerSubject[sub.key] });
                     }
                 });
 
-                // Rule 4: Check if scored under 25% marks
-                Object.values(subjectTotals).forEach(val => {
-                    if (val < (config.fullMarks * 0.25 / config.subjects.length)) {
-                        failed25PercentRule = true;
-                    }
-                });
+                // Class XI Best of 5 Logic
+                if (config.isBestOfFive) {
+                    subjectScoresList.sort((a, b) => b.score - a.score);
+                    const best5 = subjectScoresList.slice(0, 5);
+                    grandTotal = best5.reduce((acc, curr) => acc + curr.score, 0);
 
-                const pct = ((grandTotal / config.fullMarks) * 100).toFixed(1);
+                    // Check Pass Rule 30% on Best 5 Total
+                    if (grandTotal < (classTotalFullMarks * config.passPct)) {
+                        failedPassRule = true;
+                    }
+                } else {
+                    // Standard Classes Total
+                    grandTotal = Object.values(subjectTotals).reduce((a, b) => a + b, 0);
+
+                    // Class X Special Test Pass Rule (Minimum 15 marks in Test)
+                    if (classKey === 'x' && activeExamIndexes.includes(2)) {
+                        Object.values(subjectTotals).forEach(val => {
+                            if (val < 15) failedPassRule = true;
+                        });
+                    } else {
+                        // Standard Classes Pass Rule (25%)
+                        Object.entries(subjectTotals).forEach(([sKey, val]) => {
+                            if (val < (fullMarksPerSubject[sKey] * config.passPct)) {
+                                failedPassRule = true;
+                            }
+                        });
+                    }
+                }
+
+                const pct = classTotalFullMarks > 0 ? ((grandTotal / classTotalFullMarks) * 100).toFixed(1) : 0;
 
                 return {
                     ...st,
                     subjectTotals,
                     grandTotal,
                     hasAbsent,
-                    allPassed25: !failed25PercentRule,
+                    allPassed: !failedPassRule,
                     percentage: isNaN(pct) ? 0 : pct
                 };
             });
 
-            // Ranking Tie-Breaker Logic
+            // Ranking Algorithm
             processed.sort((a, b) => {
-                if (b.grandTotal !== a.grandTotal) return b.grandTotal - a.grandTotal; // Rule 1
-                if (a.hasAbsent !== b.hasAbsent) return a.hasAbsent ? 1 : -1;          // Rule 3
-                if (a.allPassed25 !== b.allPassed25) return a.allPassed25 ? -1 : 1;    // Rule 4
-                return a.roll_no - b.roll_no;                                          // Rule 2
+                if (b.grandTotal !== a.grandTotal) return b.grandTotal - a.grandTotal;
+                if (a.hasAbsent !== b.hasAbsent) return a.hasAbsent ? 1 : -1;
+                if (a.allPassed !== b.allPassed) return a.allPassed ? -1 : 1;
+                return a.roll_no - b.roll_no;
             });
 
             return processed.map((st, index) => ({
                 ...st,
-                calculatedRank: st.grandTotal > 0 ? index + 1 : null // Hide Rank if 0 Total Marks
+                calculatedRank: st.grandTotal > 0 ? index + 1 : null
             }));
+        }
+
+        // Subject details & dynamic full marks banner
+        function renderSubjectInfoBanner(config) {
+            const banner = document.getElementById('subjectInfoBanner');
+            document.getElementById('dynamicFullMarksText').innerText = currentCalculatedFullMarks;
+            
+            banner.innerHTML = '';
+            config.subjects.forEach(sub => {
+                banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${sub.name}</span>`;
+            });
         }
 
         // Podium View for Top 3 Performers
@@ -370,7 +544,7 @@
             });
         }
 
-        // Render Student Table (Sorted by Roll Number)
+        // Render Student Table (Sorted by Roll Number & Top 10 Rank Highlighted)
         function renderStudentTable(students) {
             const tbody = document.getElementById('rankTableBody');
             document.getElementById('studentCountBadge').innerText = `মোট: ${students.length}`;
@@ -379,14 +553,19 @@
             students.forEach(st => {
                 const tr = document.createElement('tr');
                 tr.id = `row-roll-${st.roll_no}`;
-                tr.className = "hover:bg-sky-50 transition-colors border-b border-slate-100";
+                
+                // Top 10 Rank Highlight Condition
+                const isTop10 = st.calculatedRank && st.calculatedRank <= 10;
+                const highlightClass = isTop10 ? 'top10-highlight font-semibold' : 'hover:bg-sky-50';
+
+                tr.className = `${highlightClass} transition-colors border-b border-slate-200`;
 
                 tr.innerHTML = `
                     <td class="py-3 px-4 font-bold text-slate-800">${st.roll_no}</td>
                     <td class="py-3 px-4 font-semibold text-slate-600">${st.section}</td>
                     <td class="py-3 px-4 font-bold text-slate-900">${st.student_name}</td>
                     <td class="py-3 px-4 text-center">
-                        ${st.calculatedRank ? `<span class="inline-block bg-sky-100 text-sky-800 px-2.5 py-0.5 rounded-full font-bold text-xs">#${st.calculatedRank}</span>` : '<span class="text-slate-400">N/A</span>'}
+                        ${st.calculatedRank ? `<span class="inline-block ${isTop10 ? 'bg-amber-500 text-white' : 'bg-sky-100 text-sky-800'} px-2.5 py-0.5 rounded-full font-bold text-xs">#${st.calculatedRank}</span>` : '<span class="text-slate-400">N/A</span>'}
                     </td>
                     <td class="py-3 px-4 text-center font-extrabold text-sky-600">${st.grandTotal}</td>
                     <td class="py-3 px-4 text-center font-bold text-emerald-600">${st.percentage}%</td>
@@ -406,7 +585,6 @@
             document.getElementById('rollInput').value = roll;
             highlightStudentByRoll();
 
-            // Smooth Scroll to Analytics Card (Requirement 5)
             const analyticsCard = document.getElementById('studentAnalytics');
             analyticsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -415,7 +593,6 @@
             const rollVal = parseInt(document.getElementById('rollInput').value);
             const analyticsCard = document.getElementById('studentAnalytics');
 
-            // Clear previous highlight effect
             if (selectedRowElement) {
                 selectedRowElement.classList.remove('active-row');
             }
@@ -432,14 +609,12 @@
                 return;
             }
 
-            // Apply highlight effect on table row (Requirement 5)
             const row = document.getElementById(`row-roll-${rollVal}`);
             if (row) {
                 row.classList.add('active-row');
                 selectedRowElement = row;
             }
 
-            // Show Analytics Card
             analyticsCard.classList.remove('hidden');
 
             document.getElementById('stRankBadge').innerHTML = `<i class="fa-solid fa-award mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
@@ -500,7 +675,7 @@
             });
         }
 
-        // Download Result Card PDF Functionality
+        // Download Result Card PDF
         function downloadResultCardPDF() {
             const element = document.getElementById('pdfPrintArea');
             const stName = document.getElementById('stName').innerText;
