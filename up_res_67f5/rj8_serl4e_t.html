@@ -162,6 +162,11 @@
   line-height: 1.3;
   text-align: left;
 }
+    /* 🟤 Life Science & Physical Science Mismatch Highlight (Light Warm Brown / Soft Peach) */
+.lsc-psc-mismatch {
+    background-color: #f5e6d3 !important; /* হালকা খয়েরি / সফট পীচ কালার */
+    border-color: #d7ccc8 !important;
+}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
@@ -489,7 +494,49 @@
         if (tdElem) tdElem.textContent = count;
       });
     }
+// সেকশন অনুযায়ী LSC এবং PSC-তে অন্তত ১টি নম্বর এন্ট্রি আছে কিনা চেক করার ফাংশন
+function getSectionSciencePresence(dataset, exam) {
+    const lscCol = columnMap[exam]["Life Science"];
+    const pscCol = columnMap[exam]["Physical Science"];
 
+    let hasLscEntries = dataset.some(r => r[lscCol] !== null && r[lscCol] !== undefined && String(r[lscCol]).trim() !== "");
+    let hasPscEntries = dataset.some(r => r[pscCol] !== null && r[pscCol] !== undefined && String(r[pscCol]).trim() !== "");
+
+    return { hasLscEntries, hasPscEntries };
+}
+
+// প্রতি শিক্ষার্থীর LSC ও PSC নম্বর ভ্যালিডেশন চেক এবং ক্লাস আপডেট
+function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
+    // যদি সেকশনে অন্তত একটির কলাম সম্পূর্ণ খালি থাকে, তবে কোনো হাইলাইট করার প্রয়োজন নেই
+    if (!presenceInfo.hasLscEntries || !presenceInfo.hasPscEntries) return;
+
+    const lscCol = columnMap[exam]["Life Science"];
+    const pscCol = columnMap[exam]["Physical Science"];
+
+    const lscInput = trElement.querySelector(`input[data-subject="Life Science"]`);
+    const pscInput = trElement.querySelector(`input[data-subject="Physical Science"]`);
+
+    if (!lscInput || !pscInput) return;
+
+    const lscVal = rowData[lscCol] !== null && rowData[lscCol] !== undefined ? String(rowData[lscCol]).trim() : "";
+    const pscVal = rowData[pscCol] !== null && rowData[pscCol] !== undefined ? String(rowData[pscCol]).trim() : "";
+
+    const lscHasValue = lscVal !== "";
+    const pscHasValue = pscVal !== "";
+
+    // কন্ডিশন: যেকোনো একটিতে নম্বর এন্ট্রি আছে কিন্তু অন্যটিতে নেই
+    if (lscHasValue && !pscHasValue) {
+        pscInput.classList.add('lsc-psc-mismatch');
+        lscInput.classList.remove('lsc-psc-mismatch');
+    } else if (!lscHasValue && pscHasValue) {
+        lscInput.classList.add('lsc-psc-mismatch');
+        pscInput.classList.remove('lsc-psc-mismatch');
+    } else {
+        // দুটিই ভর্তি বা দুটিই খালি হলে কোনো এরর হাইলাইট থাকবে না
+        lscInput.classList.remove('lsc-psc-mismatch');
+        pscInput.classList.remove('lsc-psc-mismatch');
+    }
+}
     function renderTable(dataList, exam, selectedSub) {
       const headerRow = document.getElementById('tableHeaderRow');
       const tbody = document.getElementById('tableBody');
@@ -517,12 +564,14 @@
           const val = row[colName] !== null && row[colName] !== undefined ? row[colName] : '';
           return `
             <td>
-              <input type="number" pattern="[0-9]*" inputmode="numeric" class="mark-input"
-                     value="${val}" ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
-                     onclick="checkPasskeyPrompt(this)" onfocus="this.select()"
-                     onkeydown="handleKeyNavigation(event, this)"
-                     onchange="saveMarks(${row.id}, '${colName}', '${sub}', this)" />
-            </td>`;
+            <!-- ⚡ সংশোধনী: এখানে data-subject="${sub}" যোগ করা হয়েছে -->
+            <input type="number" pattern="[0-9]*" inputmode="numeric" class="mark-input"
+                    data-subject="${sub}"
+                    value="${val}" ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
+                    onclick="checkPasskeyPrompt(this)" onfocus="this.select()"
+                    onkeydown="handleKeyNavigation(event, this)"
+                    onchange="saveMarks(${row.id}, '${sub}', '${colName}', this)" />
+        </td>`;
         };
 
         if (isSingleSub) {
@@ -533,12 +582,28 @@
           activeSubjects.forEach(sub => { cellsHTML += getMarkInputHTML(sub); });
         }
 
-        rowsHTML += `<tr>${cellsHTML}</tr>`;
-      });
+       // ⚡ সংশোধনী: এখানে data-row-id="${row.id}" যোগ করা হয়েছে পরবর্তী ব্যবহারের জন্য
+    rowsHTML += `<tr data-row-id="${row.id}">${cellsHTML}</tr>`;
+    });
 
-      tbody.innerHTML = rowsHTML;
+     tbody.innerHTML = rowsHTML;
+
+    // 🟤 All Subjects সিলেক্ট থাকলে LSC এবং PSC হাইলাইট চেক হবে (পেজ লোড বা ফিল্টার চেঞ্জের সময়)
+    if (!isSingleSub) {
+    const sec = document.getElementById('sectionSelect').value;
+    const sectionData = rawData.filter(item => sec === "--All--" || item.section === sec);
+    const presenceInfo = getSectionSciencePresence(sectionData, exam);
+
+    const trList = tbody.querySelectorAll('tr');
+    trList.forEach(tr => {
+        const rowId = parseInt(tr.getAttribute('data-row-id'));
+        const rowData = rawData.find(r => r.id === rowId);
+        if (rowData) {
+        validateLscPscHighlight(tr, rowData, exam, presenceInfo);
+        }
+    });
     }
-
+}
     function checkPasskeyPrompt(inputElem) {
       if (!isEditAllowed) {
         alert("⚠️ এডিট মুড বর্তমানে বন্ধ রয়েছে।");
@@ -596,10 +661,23 @@
 
       const marksVal = val === "" ? null : parseInt(val);
 
-      // লোকাল মেমোরি ইনস্ট্যান্ট আপডেট
-      if (target) target[colName] = marksVal;
+    // লোকাল মেমোরি আপডেট
+    if (target) target[colName] = marksVal;
 
-      // সরাসরি সামারি স্ট্যাটাস আপডেট
+    // 🟤 LSC বা PSC আপডেট হলে রিয়েলটাইমে হাইলাইট রিমুভ/শো করার লজিক (আপনার দেওয়া কন্ডিশন)
+    // ⚡ সংশোধনী: লোকাল মেমোরি আপডেটের ঠিক পরে এটি রাখা হয়েছে যাতে সঠিক ভ্যালু চেক হয়।
+    if (subjectName === "Life Science" || subjectName === "Physical Science") {
+    const trElem = inputElem.closest('tr');
+    if (trElem) {
+        const sec = document.getElementById('sectionSelect').value;
+        const sectionData = rawData.filter(item => sec === "--All--" || item.section === sec);
+        const presenceInfo = getSectionSciencePresence(sectionData, exam);
+        // এখানে target পাস করা হয়েছে কারণ লোকাল মেমোরিতে rawData আপডেট হয়ে গেছে।
+        validateLscPscHighlight(trElem, target, exam, presenceInfo);
+    }
+    }
+    
+    // সামারি স্ট্যাটাস আপডেট
       const sec = document.getElementById('sectionSelect').value;
       let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
       updateSummaryTable(sectionFiltered, exam);
