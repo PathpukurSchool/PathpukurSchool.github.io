@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>পাতপুকুর হাই স্কুল (উ: মা:) - ছাত্রছাত্রীদের মেধা র‍্যাঙ্ক পোর্টাল</title>
+    <title>Pathpukur High School - ছাত্রছাত্রীদের মেধা র‍্যাঙ্ক</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -83,21 +83,21 @@
                 <div>
                     <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">রোল নম্বর দিয়ে খুঁজুন</label>
                     <div class="relative">
-                        <input type="number" id="rollInput" placeholder="যেমন: 1, 5, 12" oninput="highlightStudentByRoll()" class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 font-semibold shadow-sm">
+                        <input type="number" id="rollInput" placeholder="যেমন: 25" oninput="highlightStudentByRoll()" class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 font-semibold shadow-sm">
                         <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400"></i>
                     </div>
                 </div>
                 <div class="flex items-end">
                     <button id="refreshBtn" onclick="loadClassData()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md flex items-center justify-center space-x-2">
                         <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
-                        <span>সার্চ / রিফ্রেশ</span>
+                        <span>সার্চ / রিফ্রেশ করুন</span>
                     </button>
                 </div>
             </div>
 
             <!-- Subject & Full Marks Banner -->
             <div class="mt-4 pt-4 border-t border-slate-200">
-                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider"><i class="fa-solid fa-book text-sky-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার মোট পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-sky-700">0</strong></span>
+                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider"><i class="fa-solid fa-book text-sky-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-sky-700">0</strong></span>
                 <div id="subjectInfoBanner" class="mt-2 flex flex-wrap gap-2"></div>
             </div>
         </div>
@@ -105,7 +105,7 @@
         <!-- Top 3 Podium View -->
         <div id="podiumSection" class="hidden glass-card rounded-2xl p-6 shadow-md border border-amber-200 bg-gradient-to-r from-amber-50 via-sky-50 to-indigo-50">
             <h3 class="text-center font-bold text-slate-800 mb-4 text-base md:text-lg flex items-center justify-center">
-                <i class="fa-solid fa-trophy text-amber-500 mr-2"></i> <span id="podiumClassTitle">শ্রেণীর</span> মেধা সেরা ৩ জন (Top 3 Performers)
+                <i class="fa-solid fa-trophy text-amber-500 mr-2"></i> <span id="podiumClassTitle">শ্রেণীর</span> মেধা তালিকায় সেরা ৩ জন (Top 3 Performers)
             </h3>
             <div id="podiumCards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
         </div>
@@ -114,7 +114,7 @@
         <div id="noDataAlert" class="hidden bg-red-50 border-l-4 border-red-500 p-6 rounded-xl text-red-700 shadow-sm text-center">
             <i class="fa-solid fa-folder-open text-4xl text-red-400 mb-2"></i>
             <h4 class="text-lg font-bold">নম্বর তথ্য অনুপস্থিত!</h4>
-            <p class="text-sm mt-1">মনোনীত শ্রেণীর জন্য রেজাল্ট টেবিলে কোনো নম্বরের তথ্য পাওয়া যায়নি। এর অর্থ হতে পারে এখনও কোনো পরীক্ষা সম্পন্ন হয়নি অথবা শিক্ষকমণ্ডলী নম্বর সিস্টেমে আপলোড করেননি। ফলে এই মুহূর্তে মেধা র‍্যাঙ্ক নির্ণয় করা সম্ভব নয়।</p>
+            <p class="text-sm mt-1">নির্বাচিত শ্রেণীর জন্য কোনো নম্বরের তথ্য পাওয়া যায়নি। এর অর্থ হতে পারে এখনও এই শ্রেনীর পরীক্ষা সম্পন্ন হয়নি অথবা শিক্ষকমণ্ডলী নম্বর আপলোড করেননি। ফলে এই মুহূর্তে মেধা র‍্যাঙ্ক নির্ণয় করা সম্ভব নয়।</p>
         </div>
 
         <!-- Student Search & Analytics Card -->
