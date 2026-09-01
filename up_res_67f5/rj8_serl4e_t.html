@@ -494,49 +494,48 @@
         if (tdElem) tdElem.textContent = count;
       });
     }
-// সেকশন অনুযায়ী LSC এবং PSC-তে অন্তত ১টি নম্বর এন্ট্রি আছে কিনা চেক করার ফাংশন
-function getSectionSciencePresence(dataset, exam) {
-    const lscCol = columnMap[exam]["Life Science"];
-    const pscCol = columnMap[exam]["Physical Science"];
 
-    let hasLscEntries = dataset.some(r => r[lscCol] !== null && r[lscCol] !== undefined && String(r[lscCol]).trim() !== "");
-    let hasPscEntries = dataset.some(r => r[pscCol] !== null && r[pscCol] !== undefined && String(r[pscCol]).trim() !== "");
+    // সেকশন অনুযায়ী LSC এবং PSC-তে অন্তত ১টি নম্বর এন্ট্রি আছে কিনা চেক করার ফাংশন
+    function getSectionSciencePresence(dataset, exam) {
+        const lscCol = columnMap[exam]["Life Science"];
+        const pscCol = columnMap[exam]["Physical Science"];
 
-    return { hasLscEntries, hasPscEntries };
-}
+        let hasLscEntries = dataset.some(r => r[lscCol] !== null && r[lscCol] !== undefined && String(r[lscCol]).trim() !== "");
+        let hasPscEntries = dataset.some(r => r[pscCol] !== null && r[pscCol] !== undefined && String(r[pscCol]).trim() !== "");
 
-// প্রতি শিক্ষার্থীর LSC ও PSC নম্বর ভ্যালিডেশন চেক এবং ক্লাস আপডেট
-function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
-    // যদি সেকশনে অন্তত একটির কলাম সম্পূর্ণ খালি থাকে, তবে কোনো হাইলাইট করার প্রয়োজন নেই
-    if (!presenceInfo.hasLscEntries || !presenceInfo.hasPscEntries) return;
-
-    const lscCol = columnMap[exam]["Life Science"];
-    const pscCol = columnMap[exam]["Physical Science"];
-
-    const lscInput = trElement.querySelector(`input[data-subject="Life Science"]`);
-    const pscInput = trElement.querySelector(`input[data-subject="Physical Science"]`);
-
-    if (!lscInput || !pscInput) return;
-
-    const lscVal = rowData[lscCol] !== null && rowData[lscCol] !== undefined ? String(rowData[lscCol]).trim() : "";
-    const pscVal = rowData[pscCol] !== null && rowData[pscCol] !== undefined ? String(rowData[pscCol]).trim() : "";
-
-    const lscHasValue = lscVal !== "";
-    const pscHasValue = pscVal !== "";
-
-    // কন্ডিশন: যেকোনো একটিতে নম্বর এন্ট্রি আছে কিন্তু অন্যটিতে নেই
-    if (lscHasValue && !pscHasValue) {
-        pscInput.classList.add('lsc-psc-mismatch');
-        lscInput.classList.remove('lsc-psc-mismatch');
-    } else if (!lscHasValue && pscHasValue) {
-        lscInput.classList.add('lsc-psc-mismatch');
-        pscInput.classList.remove('lsc-psc-mismatch');
-    } else {
-        // দুটিই ভর্তি বা দুটিই খালি হলে কোনো এরর হাইলাইট থাকবে না
-        lscInput.classList.remove('lsc-psc-mismatch');
-        pscInput.classList.remove('lsc-psc-mismatch');
+        return { hasLscEntries, hasPscEntries };
     }
-}
+
+    // প্রতি শিক্ষার্থীর LSC ও PSC নম্বর ভ্যালিডেশন চেক এবং ক্লাস আপডেট
+    function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
+        if (!presenceInfo.hasLscEntries || !presenceInfo.hasPscEntries) return;
+
+        const lscCol = columnMap[exam]["Life Science"];
+        const pscCol = columnMap[exam]["Physical Science"];
+
+        const lscInput = trElement.querySelector(`input[data-subject="Life Science"]`);
+        const pscInput = trElement.querySelector(`input[data-subject="Physical Science"]`);
+
+        if (!lscInput || !pscInput) return;
+
+        const lscVal = rowData[lscCol] !== null && rowData[lscCol] !== undefined ? String(rowData[lscCol]).trim() : "";
+        const pscVal = rowData[pscCol] !== null && rowData[pscCol] !== undefined ? String(rowData[pscCol]).trim() : "";
+
+        const lscHasValue = lscVal !== "";
+        const pscHasValue = pscVal !== "";
+
+        if (lscHasValue && !pscHasValue) {
+            pscInput.classList.add('lsc-psc-mismatch');
+            lscInput.classList.remove('lsc-psc-mismatch');
+        } else if (!lscHasValue && pscHasValue) {
+            lscInput.classList.add('lsc-psc-mismatch');
+            pscInput.classList.remove('lsc-psc-mismatch');
+        } else {
+            lscInput.classList.remove('lsc-psc-mismatch');
+            pscInput.classList.remove('lsc-psc-mismatch');
+        }
+    }
+
     function renderTable(dataList, exam, selectedSub) {
       const headerRow = document.getElementById('tableHeaderRow');
       const tbody = document.getElementById('tableBody');
@@ -564,14 +563,13 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
           const val = row[colName] !== null && row[colName] !== undefined ? row[colName] : '';
           return `
             <td>
-            <!-- ⚡ সংশোধনী: এখানে data-subject="${sub}" যোগ করা হয়েছে -->
-            <input type="number" pattern="[0-9]*" inputmode="numeric" class="mark-input"
+              <input type="number" pattern="[0-9]*" inputmode="numeric" class="mark-input"
                     data-subject="${sub}"
                     value="${val}" ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
                     onclick="checkPasskeyPrompt(this)" onfocus="this.select()"
                     onkeydown="handleKeyNavigation(event, this)"
                     onchange="saveMarks(${row.id}, '${sub}', '${colName}', this)" />
-        </td>`;
+            </td>`;
         };
 
         if (isSingleSub) {
@@ -582,28 +580,27 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
           activeSubjects.forEach(sub => { cellsHTML += getMarkInputHTML(sub); });
         }
 
-       // ⚡ সংশোধনী: এখানে data-row-id="${row.id}" যোগ করা হয়েছে পরবর্তী ব্যবহারের জন্য
-    rowsHTML += `<tr data-row-id="${row.id}">${cellsHTML}</tr>`;
-    });
+        rowsHTML += `<tr data-row-id="${row.id}">${cellsHTML}</tr>`;
+      });
 
-     tbody.innerHTML = rowsHTML;
+      tbody.innerHTML = rowsHTML;
 
-    // 🟤 All Subjects সিলেক্ট থাকলে LSC এবং PSC হাইলাইট চেক হবে (পেজ লোড বা ফিল্টার চেঞ্জের সময়)
-    if (!isSingleSub) {
-    const sec = document.getElementById('sectionSelect').value;
-    const sectionData = rawData.filter(item => sec === "--All--" || item.section === sec);
-    const presenceInfo = getSectionSciencePresence(sectionData, exam);
+      if (!isSingleSub) {
+        const sec = document.getElementById('sectionSelect').value;
+        const sectionData = rawData.filter(item => sec === "--All--" || item.section === sec);
+        const presenceInfo = getSectionSciencePresence(sectionData, exam);
 
-    const trList = tbody.querySelectorAll('tr');
-    trList.forEach(tr => {
-        const rowId = parseInt(tr.getAttribute('data-row-id'));
-        const rowData = rawData.find(r => r.id === rowId);
-        if (rowData) {
-        validateLscPscHighlight(tr, rowData, exam, presenceInfo);
-        }
-    });
+        const trList = tbody.querySelectorAll('tr');
+        trList.forEach(tr => {
+          const rowId = parseInt(tr.getAttribute('data-row-id'));
+          const rowData = rawData.find(r => r.id === rowId);
+          if (rowData) {
+            validateLscPscHighlight(tr, rowData, exam, presenceInfo);
+          }
+        });
+      }
     }
-}
+
     function checkPasskeyPrompt(inputElem) {
       if (!isEditAllowed) {
         alert("⚠️ এডিট মুড বর্তমানে বন্ধ রয়েছে।");
@@ -616,8 +613,8 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
       }
     }
 
-    // স্মার্ট সেভ ও স্মুথ কিবোর্ড ফোকাসিং
-    async function saveMarks(rowId, colName, subName, inputElem) {
+    // স্মার্ট সেভ ও স্মুথ কিবোর্ড ফোকাসিং (সংশোধিত পজিশন ও প্যারামিটার)
+    async function saveMarks(rowId, subName, colName, inputElem) {
       if (!currentPasskey || !isEditAllowed) {
         checkPasskeyPrompt(inputElem);
         return;
@@ -629,7 +626,6 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
 
       const target = rawData.find(r => r.id === rowId);
 
-      // --- বিশেষ শর্ত: Arabic এবং Sanskrit মিউচুয়াল এক্সক্লুসিভিটি চেক (Front-end) ---
       if (val !== "") {
         if (subName === "Sanskrit") {
           const arabicCol = columnMap[exam]["Arabic"];
@@ -646,9 +642,7 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
             return;
           }
         }
-      }
 
-      if (val !== "") {
         const num = Number(val);
         if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
           alert(`❌ নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
@@ -661,28 +655,24 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
 
       const marksVal = val === "" ? null : parseInt(val);
 
-    // লোকাল মেমোরি আপডেট
-    if (target) target[colName] = marksVal;
+      // লোকাল মেমোরি আপডেট
+      if (target) target[colName] = marksVal;
 
-    // 🟤 LSC বা PSC আপডেট হলে রিয়েলটাইমে হাইলাইট রিমুভ/শো করার লজিক (আপনার দেওয়া কন্ডিশন)
-    // ⚡ সংশোধনী: লোকাল মেমোরি আপডেটের ঠিক পরে এটি রাখা হয়েছে যাতে সঠিক ভ্যালু চেক হয়।
-    if (subjectName === "Life Science" || subjectName === "Physical Science") {
-    const trElem = inputElem.closest('tr');
-    if (trElem) {
-        const sec = document.getElementById('sectionSelect').value;
-        const sectionData = rawData.filter(item => sec === "--All--" || item.section === sec);
-        const presenceInfo = getSectionSciencePresence(sectionData, exam);
-        // এখানে target পাস করা হয়েছে কারণ লোকাল মেমোরিতে rawData আপডেট হয়ে গেছে।
-        validateLscPscHighlight(trElem, target, exam, presenceInfo);
-    }
-    }
+      // 🟤 LSC বা PSC আপডেট হলে রিয়েলটাইমে হাইলাইট রিমুভ/শো করার লজিক (subName দিয়ে সংশোধিত)
+      if (subName === "Life Science" || subName === "Physical Science") {
+        const trElem = inputElem.closest('tr');
+        if (trElem) {
+            const sec = document.getElementById('sectionSelect').value;
+            const sectionData = rawData.filter(item => sec === "--All--" || item.section === sec);
+            const presenceInfo = getSectionSciencePresence(sectionData, exam);
+            validateLscPscHighlight(trElem, target, exam, presenceInfo);
+        }
+      }
     
-    // সামারি স্ট্যাটাস আপডেট
       const sec = document.getElementById('sectionSelect').value;
       let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
       updateSummaryTable(sectionFiltered, exam);
 
-      // ইন্টারনেট সংযোগ না থাকলে লোকাল স্টোরেজে সেভ
       if (!navigator.onLine) {
         saveToLocalStorage(rowId, colName, marksVal);
         inputElem.classList.add('save-offline');
@@ -708,7 +698,6 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
           setTimeout(() => inputElem.classList.remove('save-success'), 1000);
         } else {
           alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
-          // ব্যাকএন্ডে ফেইল হলে লোকাল ভ্যালু আবার রিভার্ট করা
           if (target) target[colName] = null;
           inputElem.value = "";
           inputElem.classList.add('save-error');
@@ -721,7 +710,6 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
       }
     }
 
-    // স্মুথ কিবোর্ড নেভিগেশন
     function handleKeyNavigation(e, elem) {
       const inputs = Array.from(document.querySelectorAll('.mark-input:not([readonly])'));
       const index = inputs.indexOf(elem);
@@ -741,7 +729,6 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
       }
     }
 
-    // লোকাল স্টোরেজে সুরক্ষিত সেভ
     function saveToLocalStorage(id, col, val) {
       let draft = JSON.parse(localStorage.getItem('offline_marks_viii') || '[]');
       const existingIndex = draft.findIndex(item => item.id === id && item.col === col);
@@ -753,7 +740,6 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
       localStorage.setItem('offline_marks_viii', JSON.stringify(draft));
     }
 
-    // ব্যাকগ্রাউন্ড অটোমেটিক সুপাবেস সিঙ্ক
     function setupOfflineSync() {
       window.addEventListener('online', syncOfflineData);
     }
@@ -787,7 +773,6 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
       }
     }
 
-// ১. নির্বাচিত Exam ও Section অনুযায়ী এক্সেল টেমপ্লেট তৈরি ও ডাউনলোড
     function downloadExcelTemplate() {
       const exam = document.getElementById('examSelect').value;
       const sec = document.getElementById('sectionSelect').value;
@@ -799,7 +784,6 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
         return;
       }
 
-      // এক্সেল শীটের জন্য ডাটা প্রিপেয়ার করা
       const excelData = dataset.map(row => {
         let rowData = {
           "ID": row.id,
@@ -808,7 +792,6 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
           "Student Name": row.student_name
         };
 
-        // সিলেক্টেড Exam অনুযায়ী বিষয়ের মার্কস দেওয়া
         subjectsList.forEach(sub => {
           const colName = columnMap[exam][sub];
           rowData[sub] = (row[colName] !== null && row[colName] !== undefined) ? row[colName] : "";
@@ -821,11 +804,9 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, `VIII_${sec}_${exam}`);
 
-      // ফাইল ডাউনলোড নাম (Class VIII নির্দিষ্ট করা হয়েছে)
       XLSX.writeFile(workbook, `Class_VIII_Marks_${exam}_Sec_${sec}.xlsx`);
     }
 
-    // ২. এক্সেল ফাইল আপলোড এবং সুপাবেস ডাটাবেজে বাল্ক আপডেট
     async function handleExcelUpload(event) {
       if (!currentPasskey || !isEditAllowed) {
         alert("⚠️ এক্সেল ফাইল আপলোড করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
@@ -846,19 +827,16 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
           const sheetName = workbook.SheetNames[0];
           const jsonRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-          // ১. ফাইল খালি কিনা চেক
           if (!jsonRows || jsonRows.length === 0) {
             alert("❌ আপলোড করা এক্সেল ফাইলে কোনো ডাটা পাওয়া যায়নি!");
             return;
           }
 
-          // ২. সঠিক ফাইল / ID কলাম আছে কিনা ভ্যালিডেশন চেক
           if (!jsonRows[0].hasOwnProperty("ID")) {
             alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে! দয়া করে পোর্টালে প্রদত্ত 'এক্সেল টেমপ্লেট ডাউনলোড' করে তাতে নম্বর লিখে আপলোড করুন।");
             return;
           }
           
-          // 🔔 ৩. কনফার্মেশন পপ-আপ মেসেজ
           const confirmUpload = window.confirm(
             `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে নম্বরগুলো ডাটাবেসে আপলোড করতে চান?\n\n` +
             `• শ্রেণী: Class VIII\n` +
@@ -868,7 +846,7 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
           );
 
           if (!confirmUpload) {
-            event.target.value = ''; // ফাইল ইনপুট রিসেট
+            event.target.value = '';
             return;
           }
 
@@ -882,7 +860,6 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
             const rowId = parseInt(row["ID"]);
             if (!rowId) continue;
 
-            // সংস্কৃত ও আরবি বিষয়ের এক্সেলে উপস্থিতি চেক
             const hasSanskritInExcel = row.hasOwnProperty("Sanskrit") && String(row["Sanskrit"]).trim() !== "";
             const hasArabicInExcel = row.hasOwnProperty("Arabic") && String(row["Arabic"]).trim() !== "";
 
@@ -891,10 +868,8 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
                 const rawVal = row[sub];
                 const colName = columnMap[exam][sub];
 
-                // বিষয়ভিত্তিক মার্কস সীমা নির্ধারণ (General: 30/50/70, Sci/W&P: 15/25/35)
                 const maxLimit = halfLimitSubjects.includes(sub) ? subjectLimits[exam].half : subjectLimits[exam].default;
 
-                // সংস্কৃত ও আরবি চেক
                 if (sub === "Sanskrit" && hasArabicInExcel) {
                   skippedCount++;
                   continue;
@@ -904,13 +879,11 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
                   continue;
                 }
 
-                // শুধু ফাঁকা না হলে (নম্বর থাকলে) ডাটাবেসে যাবে, ফাঁকা সেল স্কিপ হবে
                 if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
                   const num = Number(rawVal);
                   
                   if (Number.isInteger(num) && num >= 0 && num <= maxLimit) {
                     
-                    // RPC: secure_update_result_viii
                     const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_viii`, {
                       method: 'POST',
                       headers: { 
@@ -937,7 +910,7 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
 
                     updatePromises.push(promise);
                   } else {
-                    skippedCount++; // সীমা বহির্ভূত বা ভুল নম্বর স্কিপ
+                    skippedCount++;
                   }
                 }
               }
@@ -950,24 +923,22 @@ function validateLscPscHighlight(trElement, rowData, exam, presenceInfo) {
             return;
           }
 
-          // সব আপডেট রিকোয়েস্ট সমান্তরালে (Parallel Execution) সম্পন্ন করা
           await Promise.all(updatePromises);
 
           alert(`🎉 Class VIII-এর নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর: ${validNumbersUploaded}\n❌ বাতিল/স্কিপড নম্বর: ${skippedCount}`);
           
-          // টেবিল ও ডাটা রিফ্রেশ
           await fetchMarksData();
 
         } catch (err) {
           console.error(err);
           alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে! ফাইলটি ক্ষতিগ্রস্ত বা অমিল ফরম্যাটের হতে পারে।");
         } finally {
-          event.target.value = ''; // ইনপুট রিসেট
+          event.target.value = '';
         }
       };
 
       reader.readAsArrayBuffer(file);
     }
-  </script>
+</script>
 </body>
 </html>
