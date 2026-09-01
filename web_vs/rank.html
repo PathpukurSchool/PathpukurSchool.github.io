@@ -62,7 +62,7 @@
             <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
             <div>
                 <strong>সতর্কবার্তা / আনুমানিক র‍্যাঙ্ক ঘোষণার বিজ্ঞপ্তি:</strong> 
-                এটি একটি <em>আনুমানিক র‍্যাঙ্ক তালিকা</em>। পরবর্তী সময়ে কোনো শিক্ষার্থীর প্রাপ্ত নম্বরের কোনো প্রকার সংশোধন/পুনর্মূল্যায়ন হলে অথবা কোনো শিক্ষার্থী স্থানান্তরিত (TC) হলে সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এই র‍্যাঙ্ক চূড়ান্ত বা অভ্রান্ত নয়।
+                এটি একটি <em>আনুমানিক র‍্যাঙ্ক তালিকা</em>। পরবর্তী সময়ে কোনো শিক্ষার্থীর প্রাপ্ত নম্বরের কোনো প্রকার সংশোধন/পুনর্মূল্যায়ন হলে অথবা কোনো শিক্ষার্থী স্থানান্তরিত (TC) হলে সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। উল্লেখ্য, এই র‍্যাঙ্ক তালিকাটি একটি স্বয়ংক্রিয় অনলাইন সিস্টেম দ্বারা তৈরি, এটি শিক্ষক মণ্ডলী কর্তৃক সরাসরি প্রস্তুত নয়। তাই এতে কোনো কারিগরি ভুলত্রুটি থাকতেই পারে।
             </div>
         </div>
 
@@ -89,8 +89,8 @@
                     </div>
                 </div>
                 <div class="flex items-end">
-                    <button onclick="loadClassData()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-rotate-right"></i>
+                    <button id="refreshBtn" onclick="loadClassData()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md flex items-center justify-center space-x-2">
+                        <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
                         <span>ডাটা রিফ্রেশ করুন</span>
                     </button>
                 </div>
@@ -106,7 +106,7 @@
         <!-- Top 3 Podium View -->
         <div id="podiumSection" class="hidden glass-card rounded-2xl p-6 shadow-md border border-amber-200 bg-gradient-to-r from-amber-50 via-sky-50 to-indigo-50">
             <h3 class="text-center font-bold text-slate-800 mb-4 text-base md:text-lg flex items-center justify-center">
-                <i class="fa-solid fa-trophy text-amber-500 mr-2"></i> শ্রেণীর মেধা সেরা ৩ জন (Top 3 Performers)
+                <i class="fa-solid fa-trophy text-amber-500 mr-2"></i> <span id="podiumClassTitle">শ্রেণীর</span> মেধা সেরা ৩ জন (Top 3 Performers)
             </h3>
             <div id="podiumCards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
         </div>
@@ -120,7 +120,7 @@
 
         <!-- Student Search & Analytics Card -->
         <div id="studentAnalytics" class="hidden glass-card rounded-2xl p-4 md:p-6 shadow-lg border-2 border-sky-400 relative overflow-hidden">
-            <div id="pdfPrintArea" class="space-y-6">
+            <div id="pdfPrintArea" class="space-y-6 bg-white p-4 rounded-xl">
                 <!-- Header Info -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-200 pb-4 gap-4">
                     <div>
@@ -137,15 +137,15 @@
 
                     <!-- Statistics Grid -->
                     <div class="grid grid-cols-3 gap-2 w-full md:w-auto">
-                        <div class="bg-white p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
+                        <div class="bg-slate-50 p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
                             <div class="text-[10px] md:text-xs text-slate-400 font-semibold">মোট নম্বর</div>
                             <div id="stTotal" class="text-sm md:text-xl font-bold text-sky-600">0</div>
                         </div>
-                        <div class="bg-white p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
+                        <div class="bg-slate-50 p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
                             <div class="text-[10px] md:text-xs text-slate-400 font-semibold">শতকরা</div>
                             <div id="stPercentage" class="text-sm md:text-xl font-bold text-emerald-600">0%</div>
                         </div>
-                        <div class="bg-white p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
+                        <div class="bg-slate-50 p-2 md:p-3 rounded-xl border border-slate-200 text-center shadow-sm">
                             <div class="text-[10px] md:text-xs text-slate-400 font-semibold">পার্সেন্টাইল</div>
                             <div id="stPercentile" class="text-sm md:text-xl font-bold text-indigo-600">0%</div>
                         </div>
@@ -156,7 +156,7 @@
                 <div id="highestBadges" class="flex flex-wrap gap-2"></div>
 
                 <!-- Bar Graph -->
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
                     <h4 class="text-xs md:text-sm font-bold text-slate-700 mb-3 flex items-center">
                         <i class="fa-solid fa-chart-column text-sky-500 mr-2"></i> বিষয়ভিত্তিক নম্বর বিশ্লেষণ (Bar Chart)
                     </h4>
@@ -215,8 +215,18 @@
         let chartInstance = null;
         let selectedRowElement = null;
         let currentCalculatedFullMarks = 0;
+        let activeFullMarksPerSubject = {};
 
-        // Exam Wise Subject Mark Structure Mapping
+        const classNameMap = {
+            'v': 'পঞ্চম শ্রেণী',
+            'vi': 'ষষ্ঠ শ্রেণী',
+            'vii': 'সপ্তম শ্রেণী',
+            'viii': 'অষ্টম শ্রেণী',
+            'ix': 'নবম শ্রেণী',
+            'x': 'দশম শ্রেণী',
+            'xi': 'একাদশ শ্রেণী'
+        };
+
         const classRules = {
             'v': {
                 table: 'result_v', passPct: 0.25,
@@ -324,13 +334,21 @@
         window.onload = () => { loadClassData(); };
 
         async function loadClassData() {
+            // Spinner Trigger on Refresh Button
+            const refreshIcon = document.getElementById('refreshIcon');
+            refreshIcon.classList.add('fa-spin');
+
             const selectedClass = document.getElementById('classSelect').value;
             const config = classRules[selectedClass];
+
+            // Set Title in Top 3 Podium
+            document.getElementById('podiumClassTitle').innerText = classNameMap[selectedClass] || 'শ্রেণীর';
 
             const { data, error } = await _supabase.from(config.table).select('*');
 
             if (error) {
                 alert("ডাটা পেতে সমস্যা হয়েছে: " + error.message);
+                refreshIcon.classList.remove('fa-spin');
                 return;
             }
 
@@ -352,6 +370,7 @@
                 document.getElementById('podiumSection').classList.add('hidden');
                 document.getElementById('studentAnalytics').classList.add('hidden');
                 document.getElementById('tableSection').classList.add('hidden');
+                refreshIcon.classList.remove('fa-spin');
                 return;
             }
 
@@ -366,23 +385,23 @@
             renderStudentTable(rollSortedStudents);
 
             highlightStudentByRoll();
+
+            setTimeout(() => { refreshIcon.classList.remove('fa-spin'); }, 500);
         }
 
         // Processing dynamic uploaded exams & dynamic ranking
         function processAndRankStudents(rawData, config, classKey) {
             if (!rawData || rawData.length === 0) return [];
 
-            // Detect active uploaded exams across the class
             let activeExamIndexes = [];
 
-            // Special Condition for Class X: If Test Exam is uploaded, ignore Exam 1 & Exam 2
             if (classKey === 'x') {
                 const hasTestUploaded = rawData.some(st => 
                     config.subjects.some(sub => st[`test_${sub.key}`] !== null && st[`test_${sub.key}`] !== undefined)
                 );
 
                 if (hasTestUploaded) {
-                    activeExamIndexes = [2]; // Only Test Exam
+                    activeExamIndexes = [2];
                 } else {
                     config.exams.forEach((ex, exIdx) => {
                         const hasMarks = rawData.some(st => 
@@ -400,7 +419,6 @@
                 });
             }
 
-            // Calculate Dynamic Full Marks
             let fullMarksPerSubject = {};
             let classTotalFullMarks = 0;
 
@@ -412,8 +430,9 @@
                 fullMarksPerSubject[sub.key] = subFM;
             });
 
+            activeFullMarksPerSubject = fullMarksPerSubject;
+
             if (config.isBestOfFive) {
-                // Class XI Best 5 Subjects (Approx Max FM = 5 * SubFM)
                 const sortedFMs = Object.values(fullMarksPerSubject).sort((a, b) => b - a);
                 classTotalFullMarks = sortedFMs.slice(0, 5).reduce((a, b) => a + b, 0);
             } else {
@@ -422,7 +441,6 @@
 
             currentCalculatedFullMarks = classTotalFullMarks;
 
-            // Process Individual Scores
             let processed = rawData.map(st => {
                 let subjectTotals = {};
                 let subjectScoresList = [];
@@ -451,27 +469,22 @@
                     }
                 });
 
-                // Class XI Best of 5 Logic
                 if (config.isBestOfFive) {
                     subjectScoresList.sort((a, b) => b.score - a.score);
                     const best5 = subjectScoresList.slice(0, 5);
                     grandTotal = best5.reduce((acc, curr) => acc + curr.score, 0);
 
-                    // Check Pass Rule 30% on Best 5 Total
                     if (grandTotal < (classTotalFullMarks * config.passPct)) {
                         failedPassRule = true;
                     }
                 } else {
-                    // Standard Classes Total
                     grandTotal = Object.values(subjectTotals).reduce((a, b) => a + b, 0);
 
-                    // Class X Special Test Pass Rule (Minimum 15 marks in Test)
                     if (classKey === 'x' && activeExamIndexes.includes(2)) {
                         Object.values(subjectTotals).forEach(val => {
                             if (val < 15) failedPassRule = true;
                         });
                     } else {
-                        // Standard Classes Pass Rule (25%)
                         Object.entries(subjectTotals).forEach(([sKey, val]) => {
                             if (val < (fullMarksPerSubject[sKey] * config.passPct)) {
                                 failedPassRule = true;
@@ -492,7 +505,6 @@
                 };
             });
 
-            // Ranking Algorithm
             processed.sort((a, b) => {
                 if (b.grandTotal !== a.grandTotal) return b.grandTotal - a.grandTotal;
                 if (a.hasAbsent !== b.hasAbsent) return a.hasAbsent ? 1 : -1;
@@ -506,18 +518,19 @@
             }));
         }
 
-        // Subject details & dynamic full marks banner
+        // Subject details & dynamic full marks banner with marks per subject
         function renderSubjectInfoBanner(config) {
             const banner = document.getElementById('subjectInfoBanner');
             document.getElementById('dynamicFullMarksText').innerText = currentCalculatedFullMarks;
             
             banner.innerHTML = '';
             config.subjects.forEach(sub => {
-                banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${sub.name}</span>`;
+                const subFm = activeFullMarksPerSubject[sub.key] || 0;
+                banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${sub.name}: <strong class="text-sky-600">${subFm}</strong></span>`;
             });
         }
 
-        // Podium View for Top 3 Performers
+        // Podium View for Top 3 Performers with Section
         function renderPodiumView(students) {
             const container = document.getElementById('podiumCards');
             container.innerHTML = '';
@@ -525,10 +538,9 @@
             const top3 = students.filter(s => s.calculatedRank && s.calculatedRank <= 3);
 
             top3.forEach(st => {
-                let badgeColor = "from-amber-400 to-yellow-500";
                 let icon = "fa-crown text-amber-500";
-                if (st.calculatedRank === 2) { badgeColor = "from-slate-300 to-slate-400"; icon = "fa-medal text-slate-400"; }
-                if (st.calculatedRank === 3) { badgeColor = "from-amber-700 to-amber-800"; icon = "fa-award text-amber-700"; }
+                if (st.calculatedRank === 2) { icon = "fa-medal text-slate-400"; }
+                if (st.calculatedRank === 3) { icon = "fa-award text-amber-700"; }
 
                 const card = `
                     <div onclick="selectStudentRow(${st.roll_no})" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4 cursor-pointer hover:shadow-md transition-all">
@@ -536,12 +548,26 @@
                         <div>
                             <span class="text-xs font-bold text-slate-400">র‍্যাঙ্ক #${st.calculatedRank}</span>
                             <div class="font-bold text-slate-800 text-sm md:text-base">${st.student_name}</div>
-                            <div class="text-xs text-slate-500">রোল: ${st.roll_no} | প্রাপ্ত নম্বর: <strong class="text-sky-600">${st.grandTotal}</strong></div>
+                            <div class="text-xs text-slate-500">সেকশন: <strong class="text-slate-700">${st.section}</strong> | রোল: ${st.roll_no} | প্রাপ্ত নম্বর: <strong class="text-sky-600">${st.grandTotal}</strong></div>
                         </div>
                     </div>
                 `;
                 container.innerHTML += card;
             });
+        }
+
+        // Top 10 Specific Rank Icons Mapping
+        function getRankBadgeWithIcon(rank) {
+            let iconHtml = '';
+            if (rank === 1) iconHtml = `<i class="fa-solid fa-crown text-amber-400 mr-1"></i>`;
+            else if (rank === 2) iconHtml = `<i class="fa-solid fa-medal text-slate-300 mr-1"></i>`;
+            else if (rank === 3) iconHtml = `<i class="fa-solid fa-award text-amber-600 mr-1"></i>`;
+            else if (rank >= 4 && rank <= 10) iconHtml = `<i class="fa-solid fa-star text-amber-400 mr-1"></i>`;
+
+            const isTop10 = rank <= 10;
+            const badgeBg = isTop10 ? 'bg-amber-500 text-white shadow-sm' : 'bg-sky-100 text-sky-800';
+
+            return `<span class="inline-flex items-center justify-center ${badgeBg} px-2.5 py-0.5 rounded-full font-bold text-xs">${iconHtml}#${rank}</span>`;
         }
 
         // Render Student Table (Sorted by Roll Number & Top 10 Rank Highlighted)
@@ -554,7 +580,6 @@
                 const tr = document.createElement('tr');
                 tr.id = `row-roll-${st.roll_no}`;
                 
-                // Top 10 Rank Highlight Condition
                 const isTop10 = st.calculatedRank && st.calculatedRank <= 10;
                 const highlightClass = isTop10 ? 'top10-highlight font-semibold' : 'hover:bg-sky-50';
 
@@ -565,7 +590,7 @@
                     <td class="py-3 px-4 font-semibold text-slate-600">${st.section}</td>
                     <td class="py-3 px-4 font-bold text-slate-900">${st.student_name}</td>
                     <td class="py-3 px-4 text-center">
-                        ${st.calculatedRank ? `<span class="inline-block ${isTop10 ? 'bg-amber-500 text-white' : 'bg-sky-100 text-sky-800'} px-2.5 py-0.5 rounded-full font-bold text-xs">#${st.calculatedRank}</span>` : '<span class="text-slate-400">N/A</span>'}
+                        ${st.calculatedRank ? getRankBadgeWithIcon(st.calculatedRank) : '<span class="text-slate-400">N/A</span>'}
                     </td>
                     <td class="py-3 px-4 text-center font-extrabold text-sky-600">${st.grandTotal}</td>
                     <td class="py-3 px-4 text-center font-bold text-emerald-600">${st.percentage}%</td>
@@ -580,7 +605,6 @@
             });
         }
 
-        // Select student, highlight row and scroll to analytics section
         function selectStudentRow(roll) {
             document.getElementById('rollInput').value = roll;
             highlightStudentByRoll();
@@ -625,12 +649,10 @@
             document.getElementById('stTotal').innerText = student.grandTotal;
             document.getElementById('stPercentage').innerText = `${student.percentage}%`;
 
-            // Calculate Percentile
             const lowerRankCount = currentClassStudents.filter(s => s.grandTotal < student.grandTotal).length;
             const percentile = ((lowerRankCount / currentClassStudents.length) * 100).toFixed(1);
             document.getElementById('stPercentile').innerText = `${percentile}%`;
 
-            // Render Badges
             const highestDiv = document.getElementById('highestBadges');
             highestDiv.innerHTML = '';
             Object.keys(student.subjectTotals).forEach(sub => {
@@ -666,6 +688,9 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 0 // Disable animation for instant PDF capture
+                    },
                     scales: {
                         y: { beginAtZero: true },
                         x: { grid: { display: false } }
@@ -675,16 +700,16 @@
             });
         }
 
-        // Download Result Card PDF
+        // Fixed HTML2PDF Download Functionality
         function downloadResultCardPDF() {
             const element = document.getElementById('pdfPrintArea');
             const stName = document.getElementById('stName').innerText;
             
             const opt = {
-                margin:       10,
+                margin:       [10, 10, 10, 10],
                 filename:     `Result_Card_${stName}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
