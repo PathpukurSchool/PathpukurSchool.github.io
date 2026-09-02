@@ -72,28 +72,6 @@
             background-color: #e0f2fe !important;
             border-left: 4px solid #0284c7 !important;
         }
-        
-    /* 🖨️ প্রিন্ট করার সময় শুধু রেজাল্ট কার্ড দৃশ্যমান রাখার স্টাইল */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #studentAnalytics, #studentAnalytics * {
-                visibility: visible;
-            }
-            #studentAnalytics {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                border: none !important;
-                box-shadow: none !important;
-                background: white !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-        }
     </style>
 </head>
 <body class="min-h-screen pb-12 text-slate-800">
@@ -224,27 +202,13 @@
                 </div>
             </div>
 
-            <!-- বিষয়ভিত্তিক লিখিত নম্বরের টেবিল (প্রিন্টে স্পষ্টভাবে দৃশ্যমান হবে) -->
-            <div id="subjectMarksTable" class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm"></div>
-
-            <!-- Bar Graph -->
-            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
-                <h4 class="text-xs md:text-sm font-bold text-slate-700 mb-3 flex items-center">
-                    <i class="fa-solid fa-chart-column text-sky-500 mr-2"></i> বিষয়ভিত্তিক নম্বর বিশ্লেষণ (Bar Chart)
-                </h4>
-                <div class="h-60 md:h-64">
-                    <canvas id="studentChart"></canvas>
-                </div>
+            <!-- Download PDF Button -->
+            <div class="mt-4 flex justify-end">
+                <button onclick="downloadResultCardPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl transition-all shadow flex items-center space-x-2">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>রেজাল্ট কার্ড ডাউনলোড (PDF)</span>
+                </button>
             </div>
-        </div>
-
-        <!-- Print Result Card Button (আইকন যুক্ত প্রিন্ট বোতাম) -->
-        <div class="mt-4 flex justify-end no-print">
-            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs md:text-sm font-bold py-2.5 px-5 rounded-xl transition-all shadow-md flex items-center space-x-2">
-                <i class="fa-solid fa-print text-base"></i>
-                <span>রেজাল্ট কার্ড প্রিন্ট করুন</span>
-            </button>
-           </div>
         </div>
 
         <!-- Class Full Student Table (Sorted by Roll) -->
@@ -735,7 +699,6 @@
             });
 
             renderChart(student.subjectTotals);
-            renderSubjectMarksTable(student);
         }
 
         function renderChart(subjectData) {
@@ -773,33 +736,6 @@
             });
         }
 
-        function renderSubjectMarksTable(student) {
-    const tableContainer = document.getElementById('subjectMarksTableBody'); // নিশ্চিত করুন এই ID টি আপনার HTML এ আছে
-    if (!tableContainer) return;
-
-    const selectedClass = document.getElementById('classSelect').value;
-    const config = classRules[selectedClass];
-    
-    tableContainer.innerHTML = '';
-
-    config.subjects.forEach(sub => {
-        const obtained = student.subjectTotals[sub.key] !== undefined ? student.subjectTotals[sub.key] : 'N/A';
-        const fullMarks = activeFullMarksPerSubject[sub.key] || 0;
-
-        const tr = document.createElement('tr');
-        tr.className = "border-b border-slate-200 hover:bg-slate-50";
-        tr.innerHTML = `
-            <td class="py-2 px-3 text-left font-semibold text-slate-700">${sub.name}</td>
-            <td class="py-2 px-3 text-center font-bold text-slate-600">${fullMarks}</td>
-            <td class="py-2 px-3 text-center font-extrabold text-sky-600">${obtained}</td>
-        `;
-        tableContainer.appendChild(tr);
-    });
-}
-        
-function printResultCard() {
-    window.print();
-}
         // Fixed HTML2PDF Download Functionality
         function downloadResultCardPDF() {
             const element = document.getElementById('pdfPrintArea');
