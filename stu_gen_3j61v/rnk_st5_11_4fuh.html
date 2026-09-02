@@ -736,21 +736,44 @@
             });
         }
 
-        // Fixed HTML2PDF Download Functionality
-        function downloadResultCardPDF() {
-            const element = document.getElementById('pdfPrintArea');
-            const stName = document.getElementById('stName').innerText;
-            
-            const opt = {
-                margin:       [10, 10, 10, 10],
-                filename:     `Result_Card_${stName}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+        // Fixed HTML2PDF Download Functionality with Canvas Rendering Delay
+async function downloadResultCardPDF() {
+    const element = document.getElementById('pdfPrintArea');
+    const stName = document.getElementById('stName').innerText || 'Student';
 
-            html2pdf().set(opt).from(element).save();
-        }
+    // ১. প্রিন্ট এরিয়াটি সঠিকভাবে দৃশ্যমান হওয়া নিশ্চিত করা
+    element.style.background = "#ffffff";
+
+    // ২. Chart.js ক্যানভাস যাতে PDF-এ স্পষ্ট আসে তার জন্য ক্যানভাস ইমেজ রূপান্তর
+    const canvas = document.getElementById('studentChart');
+    let chartImageSrc = '';
+    if (canvas) {
+        chartImageSrc = canvas.toDataURL('image/png');
+    }
+
+    // ৩. html2pdf সেটআপ
+    const opt = {
+        margin:       [8, 8, 8, 8],
+        filename:     `Result_Card_${stName.replace(/\s+/g, '_')}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { 
+            scale: 2, 
+            useCORS: true, 
+            allowTaint: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+        },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    // ৪. কিছু মিলিসেকেন্ড সময় দিয়ে রেন্ডার এবং ডাউনলোড শুরু
+    try {
+        await html2pdf().set(opt).from(element).save();
+    } catch (err) {
+        console.error("PDF ডাউনলোডে ত্রুটি:", err);
+        alert("PDF ডাউনলোডে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
+    }
+}
     </script>
 </body>
 </html>
