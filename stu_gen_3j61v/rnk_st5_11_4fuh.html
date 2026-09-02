@@ -735,6 +735,7 @@
             });
 
             renderChart(student.subjectTotals);
+            renderSubjectMarksTable(student);
         }
 
         function renderChart(subjectData) {
@@ -772,6 +773,33 @@
             });
         }
 
+        function renderSubjectMarksTable(student) {
+    const tableContainer = document.getElementById('subjectMarksTableBody'); // নিশ্চিত করুন এই ID টি আপনার HTML এ আছে
+    if (!tableContainer) return;
+
+    const selectedClass = document.getElementById('classSelect').value;
+    const config = classRules[selectedClass];
+    
+    tableContainer.innerHTML = '';
+
+    config.subjects.forEach(sub => {
+        const obtained = student.subjectTotals[sub.key] !== undefined ? student.subjectTotals[sub.key] : 'N/A';
+        const fullMarks = activeFullMarksPerSubject[sub.key] || 0;
+
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-slate-200 hover:bg-slate-50";
+        tr.innerHTML = `
+            <td class="py-2 px-3 text-left font-semibold text-slate-700">${sub.name}</td>
+            <td class="py-2 px-3 text-center font-bold text-slate-600">${fullMarks}</td>
+            <td class="py-2 px-3 text-center font-extrabold text-sky-600">${obtained}</td>
+        `;
+        tableContainer.appendChild(tr);
+    });
+}
+        
+function printResultCard() {
+    window.print();
+}
         // Fixed HTML2PDF Download Functionality
         function downloadResultCardPDF() {
             const element = document.getElementById('pdfPrintArea');
