@@ -261,33 +261,33 @@
         </div>
 
         <!-- Class Full Student Table (Sorted by Roll) -->
-        <div id="tableSection" class="glass-card rounded-2xl p-4 md:p-6 shadow-md border border-sky-100 overflow-hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-base md:text-lg font-bold text-slate-800 flex items-center">
-                    <i class="fa-solid fa-list-numeric text-indigo-600 mr-2"></i> রোল অনুযায়ী শিক্ষার্থীর তালিকা
-                </h3>
-                <span id="studentCountBadge" class="bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1 rounded-full">মোট: 0</span>
-            </div>
+<div id="tableSection" class="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-300 overflow-hidden">
+    <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base md:text-lg font-bold text-slate-800 flex items-center">
+            <i class="fa-solid fa-list-numeric text-indigo-600 mr-2"></i> রোল অনুযায়ী শিক্ষার্থীর তালিকা
+        </h3>
+        <span id="studentCountBadge" class="bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold px-3 py-1 rounded-full">মোট: 0</span>
+    </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse min-w-[600px]">
-                    <thead>
-                        <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
-                            <th class="py-3 px-4">রোল</th>
-                            <th class="py-3 px-4">সেকশন</th>
-                            <th class="py-3 px-4">শিক্ষার্থীর নাম</th>
-                            <th class="py-3 px-4 text-center">মেধা র‍্যাঙ্ক</th>
-                            <th class="py-3 px-4 text-center">প্রাপ্ত নম্বর</th>
-                            <th class="py-3 px-4 text-center">শতকরা (%)</th>
-                            <th class="py-3 px-4 text-center rounded-tr-xl">অ্যাকশন</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rankTableBody" class="divide-y divide-slate-200 text-xs md:text-sm">
-                        <!-- Dynamic Rows -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse min-w-[600px] bg-white">
+            <thead>
+                <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
+                    <th class="py-3 px-4">রোল</th>
+                    <th class="py-3 px-4">সেকশন</th>
+                    <th class="py-3 px-4">শিক্ষার্থীর নাম</th>
+                    <th class="py-3 px-4 text-center">মেধা র‍্যাঙ্ক</th>
+                    <th class="py-3 px-4 text-center">প্রাপ্ত নম্বর</th>
+                    <th class="py-3 px-4 text-center">শতকরা (%)</th>
+                    <th class="py-3 px-4 text-center rounded-tr-xl">অ্যাকশন</th>
+                </tr>
+            </thead>
+            <tbody id="rankTableBody" class="divide-y divide-slate-300 text-xs md:text-sm bg-white">
+                <!-- Dynamic Rows -->
+            </tbody>
+        </table>
+    </div>
+</div>
 
     </main>
 
