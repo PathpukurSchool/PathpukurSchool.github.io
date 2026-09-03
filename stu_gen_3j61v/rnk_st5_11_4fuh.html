@@ -43,71 +43,117 @@
         }
     })();
     </script>
-    <!-- ছাত্র-ছাত্রীদের পরীক্ষার rank -->
-   <title>Pathpukur High School (H: S:)</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- html2pdf.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- ছাত্র-ছাত্রীদের পরীক্ষার rank -->
+<title>Pathpukur High School (H: S:)</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- html2pdf.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <!-- Font Awesome & Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Font Awesome & Fonts -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: 'Inter', 'Tiro Bangla', sans-serif;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        .active-row {
-            background-color: #e0f2fe !important;
-            border-left: 4px solid #0284c7 !important;
-        }
-    </style>
+<style>
+    * {
+        font-family: 'Tiro Bangla', 'Poppins', 'Inter', sans-serif;
+    }
+    body {
+        background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%);
+    }
+    .header-card {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #ffffff;
+        border-radius: 16px;
+        padding: 25px 15px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+        position: relative;
+        overflow: hidden;
+    }
+    .header-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.08);
+        transform: rotate(45deg);
+        pointer-events: none;
+    }
+    .session-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        margin-top: 10px;
+        backdrop-filter: blur(4px);
+    }
+    .description-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 15px 18px;
+        border-left: 5px solid #06b6d4;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        font-size: 14px;
+        line-height: 1.6;
+        color: #475569;
+    }
+    .btn-search-style {
+        background: linear-gradient(135deg, #10b981, #059669);
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        transition: all 0.2s ease;
+    }
+    .btn-search-style:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
+    }
+    .active-row {
+        background-color: #e0f2fe !important;
+        border-left: 4px solid #0284c7 !important;
+    }
+</style>
 </head>
 <body class="min-h-screen pb-12 text-slate-800">
 
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-900 via-indigo-800 to-sky-900 text-white shadow-xl">
-        <div class="max-w-7xl mx-auto px-4 py-8 text-center">
-            <div class="inline-flex items-center justify-center p-3 bg-white/10 rounded-full mb-3 backdrop-blur-md">
-                <h1 class="text-2xl md:text-4xl font-extrabold tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
-            </div>
-            <h2 class="text-base md:text-xl text-sky-200 font-medium"><i class="fa-solid fa-graduation-cap"></i> মেধা র‍্যাঙ্ক ও পারফরম্যান্স অ্যানালিটিক্স</h2>
+    <main class="max-w-5xl mx-auto px-4 pt-6 space-y-5">
+        
+        <!-- Header (Code 2 Style) -->
+        <header class="header-card">
+            <h1 class="text-2xl md:text-3xl font-bold mb-1 tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
+            <h2 class="text-base md:text-lg text-indigo-100 font-medium flex items-center justify-center gap-2">
+                <i class="fa-solid fa-graduation-cap"></i> মেধা র‍্যাঙ্ক ও পারফরম্যান্স অ্যানালিটিক্স
+            </h2>
             
-            <div class="mt-4 inline-flex items-center bg-white/15 px-4 py-1.5 rounded-full border border-white/20 text-xs md:text-sm">
-                <i class="fa-regular fa-calendar-check text-amber-300 mr-2"></i>
+            <div class="session-badge">
+                <i class="fa-regular fa-calendar-check text-amber-300 mr-1.5"></i>
                 <span>শিক্ষাবর্ষ (Session): <strong id="sessionDisplay" class="text-amber-300">লোডিং...</strong></span>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <main class="max-w-7xl mx-auto px-4 mt-6 space-y-6">
-
-        <!-- Disclaimer Box -->
-        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm text-amber-900 flex items-start space-x-3 text-xs md:text-sm">
-            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
+        <!-- Disclaimer Box (Code 2 Style) -->
+        <div class="description-card flex items-start space-x-3">
+            <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg mt-0.5"></i>
             <div>
-                <strong>সতর্কবার্তা:</strong> 
-                এটি একটি অনলাইন সিস্টেম দ্বারা তৈরি <b><em>আনুমানিক মেধা তালিকা</em></b>। নম্বর সংশোধন/পুনর্মূল্যায়ন, শিক্ষার্থী স্থানান্তর (TC), ড্রপআউট, পরীক্ষায় অকৃতকার্য (fail) হিসাবে বিবেচিত হলে বা টেকনিক্যাল ত্রুটির কারণে যেকোনো সময় সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এটি <b>চূড়ান্ত বলে গণ্য নয়</b>।
+                <strong class="text-slate-700">সতর্কবার্তা:</strong> 
+                এটি একটি অনলাইন সিস্টেম দ্বারা তৈরি <b><em>আনুমানিক মেধা তালিকা</em></b>। নম্বর সংশোধন/পুনর্মূল্যায়ন, শিক্ষার্থী স্থানান্তর (TC), ড্রপআউট, পরীক্ষায় অকৃতকার্য (fail) হিসাবে বিবেচিত হলে বা টেকনিক্যাল ত্রুটির কারণে যেকোনো সময় সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এটি <b>চূড়ান্ত বলে গণ্য নয়</b>।
             </div>
         </div>
 
-        <!-- Class Filter & Subject Info -->
-        <div class="glass-card rounded-2xl p-4 md:p-6 shadow-md border border-sky-100">
+        <!-- Class Filter & Subject Info (Code 2 Style Form) -->
+        <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-100">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">শ্রেণী নির্বাচন করুন</label>
-                    <select id="classSelect" onchange="loadClassData()" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 font-semibold shadow-sm">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-layer-group text-indigo-500 mr-1"></i> শ্রেণী নির্বাচন করুন
+                    </label>
+                    <select id="classSelect" onchange="loadClassData()" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-600 text-slate-700 font-semibold transition-all">
                         <option value="v">পঞ্চম শ্রেণী (Class V)</option>
                         <option value="vi">ষষ্ঠ শ্রেণী (Class VI)</option>
                         <option value="vii">সপ্তম শ্রেণী (Class VII)</option>
@@ -118,20 +164,23 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">রোল নম্বর দিয়ে খুঁজুন</label>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-id-card text-indigo-500 mr-1"></i> রোল নম্বর দিয়ে খুঁজুন
+                    </label>
                     <div class="relative">
-                        <input type="number" id="rollInput" placeholder="যেমন: 25" oninput="highlightStudentByRoll()" class="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 font-semibold shadow-sm">
-                        <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400"></i>
+                        <input type="number" id="rollInput" placeholder="যেমন: 25" oninput="highlightStudentByRoll()" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl pl-10 pr-4 py-2.5 focus:outline-none focus:border-blue-600 text-slate-700 font-semibold transition-all">
+                        <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400"></i>
                     </div>
                 </div>
                 <div class="flex items-end">
-                    <button id="refreshBtn" onclick="loadClassData()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md flex items-center justify-center space-x-2">
+                    <button id="refreshBtn" onclick="loadClassData()" class="w-full btn-search-style text-white font-bold py-2.5 px-6 rounded-xl text-sm flex items-center justify-center space-x-2">
                         <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
                         <span>সার্চ / রিফ্রেশ করুন</span>
                     </button>
                 </div>
             </div>
-
+        </div>
+    
             <!-- Subject & Full Marks Banner -->
             <div class="mt-4 pt-4 border-t border-slate-200">
                 <span class="text-xs font-bold text-slate-600 uppercase tracking-wider"><i class="fa-solid fa-book text-sky-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-sky-700">0</strong></span>
