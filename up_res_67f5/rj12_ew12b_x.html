@@ -179,8 +179,8 @@
       <div class="form-group">
         <label><i class="fa-solid fa-file-pen"></i> Exam / Sem</label>
         <select id="examSelect" class="form-control" onchange="applyFilters()">
-          <option value="Semester I">Semester I</option>
-          <option value="Semester II">Semester II</option>
+          <option value="Semester III">Semester III</option>
+          <option value="Semester IV">Semester IV</option>
           <option value="Project">Project</option>
         </select>
       </div>
@@ -214,28 +214,27 @@
         <input type="text" id="searchInput" class="form-control" placeholder="Name / Roll..." oninput="applyFilters()" autocomplete="off">
       </div>
     </div>
-<!-- 2 এক্সেল ফাইল ডাউনলোড ও আপলোডের জন্য পরিবর্তন শুরু -->
-<!-- Excel Import/Export Box -->
-<div class="excel-action-box">
-  <div class="excel-btn-group">
-    <button onclick="downloadExcelTemplate()" class="excel-btn btn-export">
-      <i class="fa-solid fa-file-excel"></i> Download Excel
-    </button>
-    
-    <label class="excel-btn btn-import">
-      <i class="fa-solid fa-file-import"></i> Upload Excel
-      <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="handleExcelUpload(event)" style="display:none;">
-    </label>
-  </div>
-  <p class="excel-desc">
-    <i class="fa-solid fa-circle-info"></i> নির্বাচিত <b>Exam</b> ও <b>Section</b> অনুযায়ী excel ফাইল ডাউনলোড করুন। নম্বর এন্ট্রি করুন। <b>ID, ROLL, NAME কলাম</b> এবং <b>হেডিং রো</b> পরিবর্তন করবেন না। ফাইল আপলোড করুন। 
-    <i class="fa-solid fa-circle-check text-success"></i> পোর্টালের পূর্বের নম্বর এক্সেলের নতুন নম্বর দিয়ে পরিবর্তিত (Replace) হয়ে যাবে। 
-    <i class="fa-solid fa-shield-halved text-info"></i> এক্সেলে কোনো ঘর ফাঁকা রাখলে, পোর্টালে থাকা সেই ঘরের নম্বর মুছে যাবে না, অক্ষত থাকবে। 
-    <i class="fa-solid fa-filter text-warning"></i> ভুল বা সীমা বহির্ভূত নম্বর স্কিপ হবে।  
-  </p>
-</div>
 
-<!-- 2 এক্সেল ফাইল ডাউনলোড ও আপলোডের জন্য পরিবর্তনের শেষ -->
+    <!-- Excel Import/Export Box -->
+    <div class="excel-action-box">
+      <div class="excel-btn-group">
+        <button onclick="downloadExcelTemplate()" class="excel-btn btn-export">
+          <i class="fa-solid fa-file-excel"></i> Download Excel
+        </button>
+        
+        <label class="excel-btn btn-import">
+          <i class="fa-solid fa-file-import"></i> Upload Excel
+          <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="handleExcelUpload(event)" style="display:none;">
+        </label>
+      </div>
+      <p class="excel-desc">
+        <i class="fa-solid fa-circle-info"></i> নির্বাচিত <b>Exam</b> ও <b>Section</b> অনুযায়ী excel ফাইল ডাউনলোড করুন। নম্বর এন্ট্রি করুন। <b>ID, ROLL, NAME কলাম</b> এবং <b>হেডিং রো</b> পরিবর্তন করবেন না। ফাইল আপলোড করুন। 
+        <i class="fa-solid fa-circle-check text-success"></i> পোর্টালের পূর্বের নম্বর এক্সেলের নতুন নম্বর দিয়ে পরিবর্তিত (Replace) হয়ে যাবে। 
+        <i class="fa-solid fa-shield-halved text-info"></i> এক্সেলে কোনো ঘর ফাঁকা রাখলে, পোর্টালে থাকা সেই ঘরের নম্বর মুছে যাবে না, অক্ষত থাকবে। 
+        <i class="fa-solid fa-filter text-warning"></i> ভুল বা সীমা বহির্ভূত নম্বর স্কিপ হবে।  
+      </p>
+    </div>
+
     <!-- সংক্ষিপ্ত মার্কস স্ট্যাটাস টেবিল -->
     <div class="summary-card">
       <div class="summary-header">
@@ -306,15 +305,15 @@
     ];
 
     const columnMap = {
-      "Semester I": { 
-        "Bengali":"sem1_bengali", "English":"sem1_english", "History":"sem1_history", "Philosophy":"sem1_philosophy",
-        "Education":"sem1_education", "Geography":"sem1_geography", "Political Science":"sem1_political_science",
-        "Arabic":"sem1_arabic", "Sanskrit":"sem1_sanskrit"
+      "Semester III": { 
+        "Bengali":"sem3_bengali", "English":"sem3_english", "History":"sem3_history", "Philosophy":"sem3_philosophy",
+        "Education":"sem3_education", "Geography":"sem3_geography", "Political Science":"sem3_political_science",
+        "Arabic":"sem3_arabic", "Sanskrit":"sem3_sanskrit"
       },
-      "Semester II": { 
-        "Bengali":"sem2_bengali", "English":"sem2_english", "History":"sem2_history", "Philosophy":"sem2_philosophy",
-        "Education":"sem2_education", "Geography":"sem2_geography", "Political Science":"sem2_political_science",
-        "Arabic":"sem2_arabic", "Sanskrit":"sem2_sanskrit"
+      "Semester IV": { 
+        "Bengali":"sem4_bengali", "English":"sem4_english", "History":"sem4_history", "Philosophy":"sem4_philosophy",
+        "Education":"sem4_education", "Geography":"sem4_geography", "Political Science":"sem4_political_science",
+        "Arabic":"sem4_arabic", "Sanskrit":"sem4_sanskrit"
       },
       "Project": { 
         "Bengali":"proj_bengali", "English":"proj_english", "History":"proj_history", "Philosophy":"proj_philosophy",
@@ -329,7 +328,7 @@
       "Arabic": "ARA", "Sanskrit": "SAN"
     };
 
-    // বিষয় ভিত্তিক সর্বোচ্চ নম্বর সীমা নির্ধারণ ফাংশন
+    // বিষয় ভিত্তিক সর্বোচ্চ নম্বর সীমা নির্ধারণ ফাংশন
     function getMaxLimit(exam, subject) {
       if (exam === "Project") {
         return subject === "Geography" ? 30 : 20;
@@ -463,7 +462,7 @@
         document.getElementById('limitDisplay').textContent = exam === "Project" ? "0-20 (GEO: 0-30)" : "0-40 (GEO: 0-35)";
       }
       
-      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> XI ${sec} : 2026 | ${exam} : ${sub}`;
+      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> XII ${sec} : 2026 | ${exam} : ${sub}`;
 
       let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
       updateSummaryTable(sectionFiltered, exam);
@@ -716,188 +715,181 @@
       }
     }
 
-// --- ১. এক্সেল ডাউনলোডের সংশোধিত ফাংশন ---
-  function downloadExcelTemplate() {
-    const exam = document.getElementById('examSelect').value;
-    const sec = document.getElementById('sectionSelect').value;
+    // --- ১. এক্সেল ডাউনলোডের সংশোধিত ফাংশন ---
+    function downloadExcelTemplate() {
+      const exam = document.getElementById('examSelect').value;
+      const sec = document.getElementById('sectionSelect').value;
 
-    let dataset = rawData.filter(item => sec === "--All--" || item.section === sec);
+      let dataset = rawData.filter(item => sec === "--All--" || item.section === sec);
 
-    if (dataset.length === 0) {
-      alert("⚠️ কোনো শিক্ষার্থী পাওয়া যায়নি!");
-      return;
-    }
+      if (dataset.length === 0) {
+        alert("⚠️ কোনো শিক্ষার্থী পাওয়া যায়নি!");
+        return;
+      }
 
-    const excelData = dataset.map(row => {
-      let rowData = {
-        "ID": row.id,
-        "Roll": row.roll_no,
-        "Section": row.section,
-        "Student Name": row.student_name
-      };
+      const excelData = dataset.map(row => {
+        let rowData = {
+          "ID": row.id,
+          "Roll": row.roll_no,
+          "Section": row.section,
+          "Student Name": row.student_name
+        };
 
-      subjectsList.forEach(sub => {
-        const colName = columnMap[exam][sub];
-        rowData[sub] = row[colName] !== null && row[colName] !== undefined ? row[colName] : "";
+        subjectsList.forEach(sub => {
+          const colName = columnMap[exam][sub];
+          rowData[sub] = row[colName] !== null && row[colName] !== undefined ? row[colName] : "";
+        });
+
+        return rowData;
       });
 
-      return rowData;
-    });
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, `${exam}_Section_${sec}`);
 
-    const worksheet = XLSX.utils.json_to_sheet(excelData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, `${exam}_Section_${sec}`);
-
-    // নাম সঠিকভাবে Class XII দেওয়া হয়েছে
-    XLSX.writeFile(workbook, `Class_XII_Marks_${exam}_Sec_${sec}.xlsx`);
-  }
-
-  // --- ২. এক্সেল আপলোডের সম্পূর্ণ সংশোধিত এবং সুরক্ষিত ফাংশন ---
-  async function handleExcelUpload(event) {
-    if (!currentPasskey || !isEditAllowed) {
-      alert("⚠️ এক্সেল ফাইল আপলোড করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
-      event.target.value = '';
-      return;
+      XLSX.writeFile(workbook, `Class_XII_Marks_${exam}_Sec_${sec}.xlsx`);
     }
 
-    const file = event.target.files[0];
-    if (!file) return;
+    // --- ২. এক্সেল আপলোডের সম্পূর্ণ সংশোধিত এবং সুরক্ষিত ফাংশন ---
+    async function handleExcelUpload(event) {
+      if (!currentPasskey || !isEditAllowed) {
+        alert("⚠️ এক্সেল ফাইল আপলোড করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
+        event.target.value = '';
+        return;
+      }
 
-    const exam = document.getElementById('examSelect').value;
+      const file = event.target.files[0];
+      if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const jsonRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+      const exam = document.getElementById('examSelect').value;
 
-        if (!jsonRows || jsonRows.length === 0) {
-          alert("❌ আপলোড করা এক্সেল ফাইলে কোনো ডাটা পাওয়া যায়নি!");
-          return;
-        }
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const jsonRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-        if (!jsonRows[0].hasOwnProperty("ID")) {
-          alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে! দয়া করে পোর্টালে প্রদত্ত 'Download Excel' করে তাতে নম্বর লিখে আপলোড করুন।");
-          return;
-        }
-        
-        const confirmUpload = window.confirm(
-          `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে নম্বরগুলো ডাটাবেসে আপলোড করতে চান?\n\n` +
-          `• পরীক্ষা: ${exam.toUpperCase()}\n` +
-          `• মোট শিক্ষার্থী সংখ্যা: ${jsonRows.length}\n\n` +
-          `[OK] চাপলে আপলোড শুরু হবে, [Cancel] চাপলে বাতিল হবে।`
-        );
+          if (!jsonRows || jsonRows.length === 0) {
+            alert("❌ আপলোড করা এক্সেল ফাইলে কোনো ডাটা পাওয়া যায়নি!");
+            return;
+          }
 
-        if (!confirmUpload) {
-          event.target.value = '';
-          return;
-        }
+          if (!jsonRows[0].hasOwnProperty("ID")) {
+            alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে! দয়া করে পোর্টালে প্রদত্ত 'Download Excel' করে তাতে নম্বর লিখে আপলোড করুন।");
+            return;
+          }
+          
+          const confirmUpload = window.confirm(
+            `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে নম্বরগুলো ডাটাবেসে আপলোড করতে চান?\n\n` +
+            `• পরীক্ষা: ${exam.toUpperCase()}\n` +
+            `• মোট শিক্ষার্থী সংখ্যা: ${jsonRows.length}\n\n` +
+            `[OK] চাপলে আপলোড শুরু হবে, [Cancel] চাপলে বাতিল হবে।`
+          );
 
-        document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> এক্সেলে নম্বর দ্রুত ডাটাবেজে আপডেট হচ্ছে...`;
+          if (!confirmUpload) {
+            event.target.value = '';
+            return;
+          }
 
-        let updatePromises = [];
-        let skippedCount = 0;
-        let validNumbersUploaded = 0;
+          document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> এক্সেলে নম্বর দ্রুত ডাটাবেজে আপডেট হচ্ছে...`;
 
-        for (let row of jsonRows) {
-          const rowId = row["ID"];
-          if (!rowId) continue;
+          let updatePromises = [];
+          let skippedCount = 0;
+          let validNumbersUploaded = 0;
 
-          // ডাটাবেস থেকে সংশ্লিষ্ট শিক্ষার্থীর তথ্য খোঁজা (সাবজেক্ট কম্বিনেশন চেক করার জন্য)
-          const student = rawData.find(r => r.id === parseInt(rowId));
+          for (let row of jsonRows) {
+            const rowId = row["ID"];
+            if (!rowId) continue;
 
-          for (let sub of subjectsList) {
-            if (row.hasOwnProperty(sub)) {
-              const rawVal = row[sub];
-              const colName = columnMap[exam][sub];
+            const student = rawData.find(r => r.id === parseInt(rowId));
 
-              if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
-                const num = Number(rawVal);
-                
-                // ১. ডাইনামিক বিষয় ভিত্তিক সর্বোচ্চ নম্বর সীমার ভ্যালিডেশন
-                const maxLimit = getMaxLimit(exam, sub);
+            for (let sub of subjectsList) {
+              if (row.hasOwnProperty(sub)) {
+                const rawVal = row[sub];
+                const colName = columnMap[exam][sub];
 
-                // ২. বিষয় নির্বাচন বিধিনিষেধ ভ্যালিডেশন চেক (Geography vs Education)
-                let isSubjectCombinationValid = true;
-                if (sub === "Geography") {
-                  const eduCol = columnMap[exam]["Education"];
-                  if ((row["Education"] !== "" && row["Education"] !== undefined) || (student && student[eduCol])) isSubjectCombinationValid = false;
-                } else if (sub === "Education") {
-                  const geoCol = columnMap[exam]["Geography"];
-                  if ((row["Geography"] !== "" && row["Geography"] !== undefined) || (student && student[geoCol])) isSubjectCombinationValid = false;
-                }
+                if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
+                  const num = Number(rawVal);
+                  
+                  const maxLimit = getMaxLimit(exam, sub);
 
-                // Pol.Science / Arabic / Sanskrit 
-                const group2 = ["Political Science", "Arabic", "Sanskrit"];
-                if (group2.includes(sub)) {
-                  const otherSubs = group2.filter(s => s !== sub);
-                  for (let other of otherSubs) {
-                    const otherCol = columnMap[exam][other];
-                    if ((row[other] !== "" && row[other] !== undefined) || (student && student[otherCol])) {
-                      isSubjectCombinationValid = false;
-                      break;
+                  let isSubjectCombinationValid = true;
+                  if (sub === "Geography") {
+                    const eduCol = columnMap[exam]["Education"];
+                    if ((row["Education"] !== "" && row["Education"] !== undefined) || (student && student[eduCol])) isSubjectCombinationValid = false;
+                  } else if (sub === "Education") {
+                    const geoCol = columnMap[exam]["Geography"];
+                    if ((row["Geography"] !== "" && row["Geography"] !== undefined) || (student && student[geoCol])) isSubjectCombinationValid = false;
+                  }
+
+                  const group2 = ["Political Science", "Arabic", "Sanskrit"];
+                  if (group2.includes(sub)) {
+                    const otherSubs = group2.filter(s => s !== sub);
+                    for (let other of otherSubs) {
+                      const otherCol = columnMap[exam][other];
+                      if ((row[other] !== "" && row[other] !== undefined) || (student && student[otherCol])) {
+                        isSubjectCombinationValid = false;
+                        break;
+                      }
                     }
                   }
-                }
 
-                // সমস্ত ভ্যালিডেশন ঠিক থাকলে ডাটাবেজে আপডেট পাঠানো হবে
-                if (Number.isInteger(num) && num >= 0 && num <= maxLimit && isSubjectCombinationValid) {
-                  const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_xii`, {
-                    method: 'POST',
-                    headers: { 
-                      'apikey': SUPABASE_ANON_KEY, 
-                      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 
-                      'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify({
-                      p_passkey: currentPasskey,
-                      p_id: parseInt(rowId),
-                      p_column_name: colName,
-                      p_marks: num
+                  if (Number.isInteger(num) && num >= 0 && num <= maxLimit && isSubjectCombinationValid) {
+                    const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_xii`, {
+                      method: 'POST',
+                      headers: { 
+                        'apikey': SUPABASE_ANON_KEY, 
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 
+                        'Content-Type': 'application/json' 
+                      },
+                      body: JSON.stringify({
+                        p_passkey: currentPasskey,
+                        p_id: parseInt(rowId),
+                        p_column_name: colName,
+                        p_marks: num
+                      })
                     })
-                  })
-                  .then(res => res.json())
-                  .then(resData => {
-                    if (resData && resData.success) {
-                      validNumbersUploaded++;
-                    } else {
-                      skippedCount++;
-                    }
-                  })
-                  .catch(() => { skippedCount++; });
+                    .then(res => res.json())
+                    .then(resData => {
+                      if (resData && resData.success) {
+                        validNumbersUploaded++;
+                      } else {
+                        skippedCount++;
+                      }
+                    })
+                    .catch(() => { skippedCount++; });
 
-                  updatePromises.push(promise);
-                } else {
-                  skippedCount++; // ভ্যালিডেশন ফেল করলে স্কিপ
+                    updatePromises.push(promise);
+                  } else {
+                    skippedCount++;
+                  }
                 }
               }
             }
           }
+
+          if (updatePromises.length === 0) {
+            alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা সঠিক শর্তাবলি মেনে নম্বর দেওয়া হয়নি!");
+            return;
+          }
+
+          await Promise.all(updatePromises);
+
+          alert(`🎉 নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর: ${validNumbersUploaded}\n❌ স্কিপড/বাতিলকৃত নম্বর: ${skippedCount}`);
+          
+          await fetchMarksData();
+
+        } catch (err) {
+          alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে! ফাইলটি ক্ষতিগ্রস্ত বা অমিল ফরম্যাটের হতে পারে।");
+        } finally {
+          event.target.value = ''; 
         }
+      };
 
-        if (updatePromises.length === 0) {
-          alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা সঠিক শর্তাবলি মেনে নম্বর দেওয়া হয়নি!");
-          return;
-        }
-
-        // সমস্ত রিকোয়েস্ট সমান্তরালে এক্সিকিউট করা
-        await Promise.all(updatePromises);
-
-        alert(`🎉 নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর: ${validNumbersUploaded}\n❌ স্কিপড/বাতিলকৃত নম্বর: ${skippedCount}`);
-        
-        await fetchMarksData();
-
-      } catch (err) {
-        alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে! ফাইলটি ক্ষতিগ্রস্ত বা অমিল ফরম্যাটের হতে পারে।");
-      } finally {
-        event.target.value = ''; 
-      }
-    };
-
-    reader.readAsArrayBuffer(file);
-  }
+      reader.readAsArrayBuffer(file);
+    }
   </script>
 </body>
 </html>
