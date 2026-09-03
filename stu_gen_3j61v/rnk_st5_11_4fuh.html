@@ -272,14 +272,35 @@
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse min-w-[600px] bg-white">
             <thead>
-                <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
-                    <th class="py-3 px-4">রোল</th>
-                    <th class="py-3 px-4">সেকশন</th>
-                    <th class="py-3 px-4">শিক্ষার্থীর নাম</th>
-                    <th class="py-3 px-4 text-center">মেধা র‍্যাঙ্ক</th>
-                    <th class="py-3 px-4 text-center">প্রাপ্ত নম্বর</th>
-                    <th class="py-3 px-4 text-center">শতকরা (%)</th>
-                    <th class="py-3 px-4 text-center rounded-tr-xl">অ্যাকশন</th>
+                <tr class="text-white text-xs uppercase tracking-wider">
+                    <!-- কলাম ১: রোল -->
+                    <th class="py-3.5 px-4 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600 rounded-tl-xl">
+                        রোল
+                    </th>
+                    <!-- কলাম ২: সেকশন -->
+                    <th class="py-3.5 px-4 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                        সেকশন
+                    </th>
+                    <!-- কলাম ৩: শিক্ষার্থীর নাম -->
+                    <th class="py-3.5 px-4 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                        শিক্ষার্থীর নাম
+                    </th>
+                    <!-- কলাম ৪: মেধা র‍্যাঙ্ক -->
+                    <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                        মেধা র‍্যাঙ্ক
+                    </th>
+                    <!-- কলাম ৫: প্রাপ্ত নম্বর -->
+                    <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                        প্রাপ্ত নম্বর
+                    </th>
+                    <!-- কলাম ৬: শতকরা (%) -->
+                    <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                        শতকরা (%)
+                    </th>
+                    <!-- কলাম ৭: অ্যাকশন -->
+                    <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 rounded-tr-xl">
+                        অ্যাকশন
+                    </th>
                 </tr>
             </thead>
             <tbody id="rankTableBody" class="divide-y divide-slate-300 text-xs md:text-sm bg-white">
