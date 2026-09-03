@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (লগইন না থাকলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
+    <style id="security-shield">
+        body { display: none !important; }
+    </style>
+
+    <!-- 🛡️ ২. বুলেটপ্রুফ সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+    <script>
+    (function() {
+        try {
+            // সেশন চেক
+            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+
+            // রিফারার চেক (লিংক সরাসরি কপি করে পেস্ট করা আটকানো)
+            var ref = document.referrer;
+            var isValidReferrer = false;
+            if (ref) {
+                var refUrl = new URL(ref);
+                if (refUrl.hostname === "pathpukurschool.github.io") {
+                    isValidReferrer = true;
+                }
+            }
+
+            // সেশন না থাকলে অথবা ভুল উপায়ে (সরাসরি লিংক পেস্ট করে) আসলে রিডাইরেক্ট
+            if (!isLoggedIn || !isValidReferrer) {
+                // সেশন মুছে ফেলা
+                sessionStorage.clear();
+                // হোম পেজে রিডাইরেক্ট
+                window.location.replace("https://pathpukurschool.github.io/");
+                return;
+            }
+
+            // ভ্যালিড ইউজার হলে পেজের স্টাইল শিল্ড সরিয়ে কন্টেন্ট দৃশ্যমান করা
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
+
+        } catch (e) {
+            sessionStorage.clear();
+            window.location.replace("https://pathpukurschool.github.io/");
+        }
+    })();
+    </script>
+  <!-- টিচারগণ কর্তৃক একাদশ শ্রেণীর নম্বর আপলোডের পোর্টাল -->
+<title>Pathpukur High School (H: S:)</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * { box-sizing: border-box; font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
+    body { margin: 0; background: #f8fafc; color: #1e293b; }
+    
+    .header-container { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff; padding: 14px 10px; text-align: center; }
+    .header-container h1 { margin: 0; font-size: 19px; letter-spacing: 0.5px; }
+    .header-container h2 { margin: 4px 0 0; font-size: 13px; font-weight: 400; color: #93c5fd; }
+    
+    .controls-panel { background: #fff; padding: 10px; border-bottom: 2px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; align-items: end; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 3px; }
+    .form-group label i { margin-right: 4px; color: #2563eb; }
+    .form-control { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none; background: #fff; }
+    .form-control:focus { border-color: #2563eb; }
+    
+    /* Micro Summary Table CSS */
+    .summary-card { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 6px; width: fit-content; max-width: 100%; overflow-x: auto; margin-top: 10px; }
+    .summary-header { display: flex; justify-content: space-between; align-items: center; font-size: 10px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
+    .summary-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-family: 'Poppins', sans-serif; }
+    .summary-table th, .summary-table td { border: 1px solid #94a3b8; padding: 3px 4px; text-align: center; font-size: 10px; line-height: 1.1; word-break: break-all; min-width: 22px; }
+    .summary-table th { background: #334155; color: #fff; font-weight: 600; }
+    .summary-table td { background: #fff; font-weight: 700; color: #2563eb; }
+
+    .status-bar { display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #0369a1; border-bottom: 1px solid #bae6fd; }
+    
+    /* Edit Mode Dynamic Badges */
+    .edit-status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .edit-on-badge { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .edit-off-badge { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+
+    .active-info { background: #fef3c7; color: #92400e; padding: 8px 12px; font-size: 12px; font-weight: 700; border-left: 4px solid #f59e0b; }
+    
+    /* Sticky Top Header & Scroll Setup */
+    .table-container { width: 100%; max-height: calc(100vh - 240px); overflow: auto; background: #fff; position: relative; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 600px; }
+    th, td { border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 6px 4px; text-align: center; font-size: 13px; }
+    
+    /* Header STICKY Top */
+    thead th { position: sticky; top: 0; background: #0f172a !important; color: #fff !important; z-index: 10; font-size: 12px; }
+    
+    /* Roll Column Sticky Left */
+    th.sticky-roll, td.sticky-roll { 
+      position: sticky; 
+      left: 0; 
+      z-index: 5; 
+      background: #334155; 
+      color: #fff; 
+      font-weight: bold; 
+      width: 55px; 
+      min-width: 55px;
+    }
+    thead th.sticky-roll { z-index: 20; background: #020617 !important; }
+
+    .mark-input { width: 55px; text-align: center; padding: 6px 2px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; font-weight: bold; outline: none; }
+    .mark-input:focus { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
+    .mark-input[readonly] { background: #f8fafc; color: #64748b; border-color: #e2e8f0; cursor: pointer; }
+    
+    .save-success { background: #dcfce7 !important; border-color: #22c55e !important; transition: background 0.4s; }
+    .save-offline { background: #fef08a !important; border-color: #eab308 !important; }
+    .save-error { background: #fee2e2 !important; border-color: #ef4444 !important; }
+    
+    /* Passkey Field */
+    .passkey-wrapper { display: flex; align-items: center; position: relative; width: 130px; }
+    .passkey-wrapper input { width: 100%; padding-right: 26px; }
+    .passkey-wrapper i { position: absolute; right: 8px; cursor: pointer; color: #64748b; font-size: 12px; }
+    .passkey-bar { display: flex; gap: 6px; align-items: center; }
+ /* 1 এক্সেল ফাইল ডাউনলোড ও আপলোড এর জন্য পরিবর্তনের শুরু */
+    .excel-action-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-top: 10px;
+}
+.excel-btn-group {
+  display: flex;
+  flex-direction: row; /* সবসময় পাশাপাশি থাকবে */
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.excel-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  width: 100%;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+.excel-btn:hover { opacity: 0.9; }
+.btn-export { background: #059669; }
+.btn-import { background: #0284c7; margin: 0; }
+/* বোতাম দুটির ঠিক নিচে ডেসক্রিপশন */
+.excel-desc {
+  margin: 6px 0 0 0;
+  font-size: 10px;
+  color: #64748b;
+  line-height: 1.3;
+  text-align: left;
+}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- 1 এক্সেল ফাইল ডাউনলোড ও আপলোডের জন্য পরিবর্তন শেষ -->
+</head>
+<body>
+
+  <div class="header-container">
+    <h1>Pathpukur High School (HS)</h1>
+    <h2><i class="fa-solid fa-graduation-cap"></i> Marks Upload | Session: <span id="sessionDisplay">2026</span> | Class: XII</h2>
+  </div>
+
+  <div class="controls-panel">
+    <div class="filter-grid">
+      <div class="form-group">
+        <label><i class="fa-solid fa-file-pen"></i> Exam / Sem</label>
+        <select id="examSelect" class="form-control" onchange="applyFilters()">
+          <option value="Semester I">Semester I</option>
+          <option value="Semester II">Semester II</option>
+          <option value="Project">Project</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-users"></i> Section</label>
+        <select id="sectionSelect" class="form-control" onchange="applyFilters()">
+          <option value="--All--">--All--</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-book-open"></i> Subject</label>
+        <select id="subjectSelect" class="form-control" onchange="applyFilters()">
+          <option value="--All--">-- All Subjects --</option>
+          <option value="Bengali">Bengali</option>
+          <option value="English">English</option>
+          <option value="History">History</option>
+          <option value="Philosophy">Philosophy</option>
+          <option value="Education">Education</option>
+          <option value="Geography">Geography</option>
+          <option value="Political Science">Political Science</option>
+          <option value="Arabic">Arabic</option>
+          <option value="Sanskrit">Sanskrit</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fa-solid fa-magnifying-glass"></i> Search</label>
+        <input type="text" id="searchInput" class="form-control" placeholder="Name / Roll..." oninput="applyFilters()" autocomplete="off">
+      </div>
+    </div>
+<!-- 2 এক্সেল ফাইল ডাউনলোড ও আপলোডের জন্য পরিবর্তন শুরু -->
+<!-- Excel Import/Export Box -->
+<div class="excel-action-box">
+  <div class="excel-btn-group">
+    <button onclick="downloadExcelTemplate()" class="excel-btn btn-export">
+      <i class="fa-solid fa-file-excel"></i> Download Excel
+    </button>
+    
+    <label class="excel-btn btn-import">
+      <i class="fa-solid fa-file-import"></i> Upload Excel
+      <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="handleExcelUpload(event)" style="display:none;">
+    </label>
+  </div>
+  <p class="excel-desc">
+    <i class="fa-solid fa-circle-info"></i> নির্বাচিত <b>Exam</b> ও <b>Section</b> অনুযায়ী excel ফাইল ডাউনলোড করুন। নম্বর এন্ট্রি করুন। <b>ID, ROLL, NAME কলাম</b> এবং <b>হেডিং রো</b> পরিবর্তন করবেন না। ফাইল আপলোড করুন। 
+    <i class="fa-solid fa-circle-check text-success"></i> পোর্টালের পূর্বের নম্বর এক্সেলের নতুন নম্বর দিয়ে পরিবর্তিত (Replace) হয়ে যাবে। 
+    <i class="fa-solid fa-shield-halved text-info"></i> এক্সেলে কোনো ঘর ফাঁকা রাখলে, পোর্টালে থাকা সেই ঘরের নম্বর মুছে যাবে না, অক্ষত থাকবে। 
+    <i class="fa-solid fa-filter text-warning"></i> ভুল বা সীমা বহির্ভূত নম্বর স্কিপ হবে।  
+  </p>
+</div>
+
+<!-- 2 এক্সেল ফাইল ডাউনলোড ও আপলোডের জন্য পরিবর্তনের শেষ -->
+    <!-- সংক্ষিপ্ত মার্কস স্ট্যাটাস টেবিল -->
+    <div class="summary-card">
+      <div class="summary-header">
+        <span><i class="fa-solid fa-chart-simple"></i> <b>Marks Uploading Status</b></span>
+        <span><i class="fa-solid fa-users-rectangle"></i> Total Student: <strong id="totalStudentCount" style="color:#2563eb;">0</strong></span>
+      </div>
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>BEN</th>
+            <th>ENG</th>
+            <th>HIS</th>
+            <th>PHI</th>
+            <th>EDU</th>
+            <th>GEO</th>
+            <th>POL</th>
+            <th>ARA</th>
+            <th>SAN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="stat-BEN">0</td>
+            <td id="stat-ENG">0</td>
+            <td id="stat-HIS">0</td>
+            <td id="stat-PHI">0</td>
+            <td id="stat-EDU">0</td>
+            <td id="stat-GEO">0</td>
+            <td id="stat-POL">0</td>
+            <td id="stat-ARA">0</td>
+            <td id="stat-SAN">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div><i class="fa-solid fa-circle-info"></i> Marks Limit: <span id="limitDisplay" style="color:#d97706; font-weight: bold;">0-40</span></div>
+    <div id="securityStatus"></div>
+  </div>
+
+  <div class="active-info" id="activeFilterBadge">
+    <i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোডিং ...
+  </div>
+
+  <div class="table-container">
+    <table id="marksTable">
+      <thead>
+        <tr id="tableHeaderRow"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+    
+    let rawData = [];
+    let currentPasskey = "";
+    let isEditAllowed = false;
+    let inactivityTimer = null;
+
+    const subjectsList = [
+      "Bengali", "English", "History", "Philosophy", 
+      "Education", "Geography", "Political Science", "Arabic", "Sanskrit"
+    ];
+
+    const columnMap = {
+      "Semester I": { 
+        "Bengali":"sem1_bengali", "English":"sem1_english", "History":"sem1_history", "Philosophy":"sem1_philosophy",
+        "Education":"sem1_education", "Geography":"sem1_geography", "Political Science":"sem1_political_science",
+        "Arabic":"sem1_arabic", "Sanskrit":"sem1_sanskrit"
+      },
+      "Semester II": { 
+        "Bengali":"sem2_bengali", "English":"sem2_english", "History":"sem2_history", "Philosophy":"sem2_philosophy",
+        "Education":"sem2_education", "Geography":"sem2_geography", "Political Science":"sem2_political_science",
+        "Arabic":"sem2_arabic", "Sanskrit":"sem2_sanskrit"
+      },
+      "Project": { 
+        "Bengali":"proj_bengali", "English":"proj_english", "History":"proj_history", "Philosophy":"proj_philosophy",
+        "Education":"proj_education", "Geography":"proj_geography", "Political Science":"proj_political_science",
+        "Arabic":"proj_arabic", "Sanskrit":"proj_sanskrit"
+      }
+    };
+
+    const shortSubCodes = {
+      "Bengali": "BEN", "English": "ENG", "History": "HIS", "Philosophy": "PHI",
+      "Education": "EDU", "Geography": "GEO", "Political Science": "POL",
+      "Arabic": "ARA", "Sanskrit": "SAN"
+    };
+
+    // বিষয় ভিত্তিক সর্বোচ্চ নম্বর সীমা নির্ধারণ ফাংশন
+    function getMaxLimit(exam, subject) {
+      if (exam === "Project") {
+        return subject === "Geography" ? 30 : 20;
+      } else {
+        return subject === "Geography" ? 35 : 40;
+      }
+    }
+
+    window.onload = async () => {
+      await checkSecurityStatus();
+      await fetchMarksData();
+      setupInactivityTracker();
+      setupOfflineSync();
+    };
+
+    function setupInactivityTracker() {
+      ['mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(evt => {
+        window.addEventListener(evt, resetInactivityTimer);
+      });
+    }
+
+    function resetInactivityTimer() {
+      if (!currentPasskey) return;
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        currentPasskey = "";
+        checkSecurityStatus();
+        applyFilters();
+      }, 15 * 60 * 1000);
+    }
+
+    async function checkSecurityStatus() {
+      const secDiv = document.getElementById('securityStatus');
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_page_security_status`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_page_name: 'result_xii' })
+        });
+        const data = await res.json();
+
+        if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
+          isEditAllowed = true;
+          if (currentPasskey) {
+            secDiv.innerHTML = `<span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>`;
+          } else {
+            secDiv.innerHTML = `
+              <div class="passkey-bar">
+              <input type="text" style="display:none;" name="fake_username" tabindex="-1">
+               <input type="password" style="display:none;" name="fake_password" tabindex="-1">
+                <div class="passkey-wrapper">
+                  <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." autocomplete="new-password">
+                  <i class="fa-solid fa-eye" id="togglePassEye" onclick="togglePassVisibility()"></i>
+                </div>
+                <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i> Verify</button>
+              </div>`;
+          }
+        } else {
+          isEditAllowed = false;
+          secDiv.innerHTML = `<span class="edit-status-badge edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড অফ</span>`;
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    function togglePassVisibility() {
+      const pInput = document.getElementById('passkeyInput');
+      const pIcon = document.getElementById('togglePassEye');
+      if (pInput.type === 'password') {
+        pInput.type = 'text';
+        pIcon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        pInput.type = 'password';
+        pIcon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+
+    async function unlockEdit() {
+      const inputElem = document.getElementById('passkeyInput');
+      const inputPass = inputElem ? inputElem.value.trim() : '';
+      
+      if (!inputPass) {
+        alert("⚠️ সঠিক পাসকি লিখুন!");
+        if(inputElem) inputElem.focus();
+        return;
+      }
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_result_passkey_xii`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_passkey: inputPass })
+        });
+
+        const result = await res.json();
+
+        if (result && result.success) {
+          currentPasskey = inputPass;
+          checkSecurityStatus();
+          alert("🔓 পাসকি সঠিক! এডিট মুড সক্রিয় হয়েছে।");
+          resetInactivityTimer();
+          applyFilters();
+        } else {
+          currentPasskey = "";
+          alert("❌ " + (result.message || "ভুল পাসকি দেওয়া হয়েছে!"));
+          if(inputElem) { inputElem.value = ""; inputElem.focus(); }
+        }
+      } catch (err) {
+        alert("❌ সংযোগ ব্যর্থ হয়েছে!");
+      }
+    }
+
+    async function fetchMarksData() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/result_xii?select=*&order=section.asc,roll_no.asc`, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        rawData = await res.json();
+        applyFilters();
+      } catch (err) { console.error(err); }
+    }
+
+    function applyFilters() {
+      const exam = document.getElementById('examSelect').value;
+      const sec = document.getElementById('sectionSelect').value;
+      const sub = document.getElementById('subjectSelect').value;
+      const search = document.getElementById('searchInput').value.toLowerCase();
+
+      if (sub !== "--All--") {
+        document.getElementById('limitDisplay').textContent = `0-${getMaxLimit(exam, sub)}`;
+      } else {
+        document.getElementById('limitDisplay').textContent = exam === "Project" ? "0-20 (GEO: 0-30)" : "0-40 (GEO: 0-35)";
+      }
+      
+      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> XI ${sec} : 2026 | ${exam} : ${sub}`;
+
+      let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
+      updateSummaryTable(sectionFiltered, exam);
+
+      let filtered = sectionFiltered.filter(item => {
+        return item.student_name.toLowerCase().includes(search) || String(item.roll_no).includes(search);
+      });
+
+      renderTable(filtered, exam, sub);
+    }
+
+    function updateSummaryTable(dataset, exam) {
+      document.getElementById('totalStudentCount').textContent = dataset.length;
+
+      subjectsList.forEach(sub => {
+        const colName = columnMap[exam][sub];
+        const count = dataset.filter(r => r[colName] !== null && r[colName] !== undefined && r[colName] !== '').length;
+        const code = shortSubCodes[sub];
+        const tdElem = document.getElementById(`stat-${code}`);
+        if (tdElem) tdElem.textContent = count;
+      });
+    }
+
+    function renderTable(dataList, exam, selectedSub) {
+      const headerRow = document.getElementById('tableHeaderRow');
+      const tbody = document.getElementById('tableBody');
+      
+      let isSingleSub = (selectedSub !== "--All--");
+      let activeSubjects = isSingleSub ? [selectedSub] : subjectsList;
+
+      let headerHTML = `<th class="sticky-roll">Roll</th>`;
+      
+      if (isSingleSub) {
+        headerHTML += `<th>${selectedSub}</th><th>Sec</th><th>Student Name</th>`;
+      } else {
+        headerHTML += `<th>Sec</th><th>Student Name</th>`;
+        activeSubjects.forEach(sub => { headerHTML += `<th>${sub}</th>`; });
+      }
+      
+      headerRow.innerHTML = headerHTML;
+
+      let rowsHTML = "";
+      dataList.forEach(row => {
+        let cellsHTML = `<td class="sticky-roll">${row.roll_no}</td>`;
+
+        const getMarkInputHTML = (sub) => {
+          const colName = columnMap[exam][sub];
+          const val = row[colName] !== null && row[colName] !== undefined ? row[colName] : '';
+          return `
+            <td>
+              <input type="number" pattern="[0-9]*" inputmode="numeric" class="mark-input"
+                     value="${val}" ${!currentPasskey || !isEditAllowed ? 'readonly' : ''}
+                     onclick="checkPasskeyPrompt(this)" onfocus="this.select()"
+                     onkeydown="handleKeyNavigation(event, this)"
+                     onchange="saveMarks(${row.id}, '${sub}', '${colName}', this)" />
+            </td>`;
+        };
+
+        if (isSingleSub) {
+          cellsHTML += getMarkInputHTML(selectedSub);
+          cellsHTML += `<td>${row.section}</td><td style="text-align:left; font-size:12px;">${row.student_name}</td>`;
+        } else {
+          cellsHTML += `<td>${row.section}</td><td style="text-align:left; font-size:12px;">${row.student_name}</td>`;
+          activeSubjects.forEach(sub => { cellsHTML += getMarkInputHTML(sub); });
+        }
+
+        rowsHTML += `<tr>${cellsHTML}</tr>`;
+      });
+
+      tbody.innerHTML = rowsHTML;
+    }
+
+    function checkPasskeyPrompt(inputElem) {
+      if (!isEditAllowed) {
+        alert("⚠️ এডিট মুড বর্তমানে বন্ধ রয়েছে।");
+        return;
+      }
+      if (!currentPasskey) {
+        alert("⚠️ নম্বর এন্ট্রি করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
+        const pInput = document.getElementById('passkeyInput');
+        if (pInput) pInput.focus();
+      }
+    }
+
+    // স্মার্ট সেভ ও বিশেষ শর্ত ভ্যালিডেশন
+    async function saveMarks(rowId, subName, colName, inputElem) {
+      if (!currentPasskey || !isEditAllowed) {
+        checkPasskeyPrompt(inputElem);
+        return;
+      }
+
+      const exam = document.getElementById('examSelect').value;
+      const maxLimit = getMaxLimit(exam, subName);
+      const val = inputElem.value.trim();
+
+      const student = rawData.find(r => r.id === rowId);
+
+      // --- বিশেষ শর্ত ১: Education ও Geography-এর মধ্যে যেকোনো একটি ---
+      if (val !== "") {
+        if (subName === "Geography") {
+          const eduCol = columnMap[exam]["Education"];
+          if (student && student[eduCol] !== null && student[eduCol] !== undefined && student[eduCol] !== '') {
+            alert("⚠️ ইতিপূর্বে শিক্ষাবিজ্ঞান (Education) বিষয়ে নম্বর এন্ট্রি করা হয়ে গেছে, তাই ভূগোলে (Geography) নম্বর এন্ট্রি করা যাবে না।");
+            inputElem.value = "";
+            return;
+          }
+        } else if (subName === "Education") {
+          const geoCol = columnMap[exam]["Geography"];
+          if (student && student[geoCol] !== null && student[geoCol] !== undefined && student[geoCol] !== '') {
+            alert("⚠️ ইতিপূর্বে ভূগোল (Geography) বিষয়ে নম্বর এন্ট্রি করা হয়ে গেছে, তাই শিক্ষাবিজ্ঞানে (Education) নম্বর এন্ট্রি করা যাবে না।");
+            inputElem.value = "";
+            return;
+          }
+        }
+
+        // --- বিশেষ শর্ত ২: Political Science, Arabic, Sanskrit-এর মধ্যে যেকোনো একটি ---
+        const group2 = ["Political Science", "Arabic", "Sanskrit"];
+        if (group2.includes(subName)) {
+          const otherSubs = group2.filter(s => s !== subName);
+          for (let other of otherSubs) {
+            const otherCol = columnMap[exam][other];
+            if (student && student[otherCol] !== null && student[otherCol] !== undefined && student[otherCol] !== '') {
+              alert(`⚠️ ইতিপূর্বে ${other} বিষয়ে নম্বর এন্ট্রি করা হয়ে গেছে, তাই ${subName} বিষয়ে নম্বর এন্ট্রি করা যাবে না।`);
+              inputElem.value = "";
+              return;
+            }
+          }
+        }
+      }
+
+      // নম্বর রেঞ্জ ভ্যালিডেশন
+      if (val !== "") {
+        const num = Number(val);
+        if (!Number.isInteger(num) || num < 0 || num > maxLimit) {
+          alert(`❌ নম্বর ০ থেকে ${maxLimit}-এর মধ্যে ধনাত্মক পূর্ণসংখ্যা হতে হবে।`);
+          inputElem.classList.add('save-error');
+          inputElem.value = "";
+          setTimeout(() => inputElem.classList.remove('save-error'), 1500);
+          return;
+        }
+      }
+
+      const marksVal = val === "" ? null : parseInt(val);
+
+      // লোকাল অবজেক্ট আপডেট
+      if (student) student[colName] = marksVal;
+
+      // সামারি আপডেট
+      const sec = document.getElementById('sectionSelect').value;
+      let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
+      updateSummaryTable(sectionFiltered, exam);
+
+      // অফলাইন মোড হ্যান্ডলিং
+      if (!navigator.onLine) {
+        saveToLocalStorage(rowId, colName, marksVal);
+        inputElem.classList.add('save-offline');
+        return;
+      }
+
+      // সুপাবেসে ডাটা পুশ (RPC Call)
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_xii`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            p_passkey: currentPasskey,
+            p_id: parseInt(rowId),
+            p_column_name: colName,
+            p_marks: marksVal
+          })
+        });
+
+        const result = await res.json();
+        if (result && result.success) {
+          inputElem.classList.remove('save-offline');
+          inputElem.classList.add('save-success');
+          setTimeout(() => inputElem.classList.remove('save-success'), 1000);
+        } else {
+          alert("❌ " + (result.message || "সেভ করতে ব্যর্থ হয়েছে!"));
+          inputElem.classList.add('save-error');
+          setTimeout(() => inputElem.classList.remove('save-error'), 1500);
+        }
+      } catch (err) {
+        saveToLocalStorage(rowId, colName, marksVal);
+        inputElem.classList.add('save-offline');
+      }
+    }
+
+    // কিবোর্ড নেভিগেশন
+    function handleKeyNavigation(e, elem) {
+      const inputs = Array.from(document.querySelectorAll('.mark-input:not([readonly])'));
+      const index = inputs.indexOf(elem);
+
+      if (e.key === 'Enter' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (index + 1 < inputs.length) {
+          inputs[index + 1].focus();
+          inputs[index + 1].select();
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (index - 1 >= 0) {
+          inputs[index - 1].focus();
+          inputs[index - 1].select();
+        }
+      }
+    }
+
+    function saveToLocalStorage(id, col, val) {
+      let draft = JSON.parse(localStorage.getItem('offline_marks_xii') || '[]');
+      const existingIndex = draft.findIndex(item => item.id === id && item.col === col);
+      if (existingIndex > -1) {
+        draft[existingIndex].val = val;
+      } else {
+        draft.push({ id, col, val });
+      }
+      localStorage.setItem('offline_marks_xii', JSON.stringify(draft));
+    }
+
+    function setupOfflineSync() {
+      window.addEventListener('online', syncOfflineData);
+    }
+
+    async function syncOfflineData() {
+      let draft = JSON.parse(localStorage.getItem('offline_marks_xii') || '[]');
+      if (draft.length > 0 && currentPasskey) {
+        let successCount = 0;
+        for (let item of draft) {
+          try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_xii`, {
+              method: 'POST',
+              headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                p_passkey: currentPasskey,
+                p_id: parseInt(item.id),
+                p_column_name: item.col,
+                p_marks: item.val
+              })
+            });
+            const result = await res.json();
+            if (result && result.success) successCount++;
+          } catch(e) {}
+        }
+
+        if (successCount > 0) {
+          localStorage.removeItem('offline_marks_xii');
+          alert(`🎉 অফলাইনে থাকা ${successCount} টি নম্বর ডাটাবেজে সফলভাবে সেভ হয়েছে!`);
+          applyFilters();
+        }
+      }
+    }
+
+// --- ১. এক্সেল ডাউনলোডের সংশোধিত ফাংশন ---
+  function downloadExcelTemplate() {
+    const exam = document.getElementById('examSelect').value;
+    const sec = document.getElementById('sectionSelect').value;
+
+    let dataset = rawData.filter(item => sec === "--All--" || item.section === sec);
+
+    if (dataset.length === 0) {
+      alert("⚠️ কোনো শিক্ষার্থী পাওয়া যায়নি!");
+      return;
+    }
+
+    const excelData = dataset.map(row => {
+      let rowData = {
+        "ID": row.id,
+        "Roll": row.roll_no,
+        "Section": row.section,
+        "Student Name": row.student_name
+      };
+
+      subjectsList.forEach(sub => {
+        const colName = columnMap[exam][sub];
+        rowData[sub] = row[colName] !== null && row[colName] !== undefined ? row[colName] : "";
+      });
+
+      return rowData;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, `${exam}_Section_${sec}`);
+
+    // নাম সঠিকভাবে Class XII দেওয়া হয়েছে
+    XLSX.writeFile(workbook, `Class_XII_Marks_${exam}_Sec_${sec}.xlsx`);
+  }
+
+  // --- ২. এক্সেল আপলোডের সম্পূর্ণ সংশোধিত এবং সুরক্ষিত ফাংশন ---
+  async function handleExcelUpload(event) {
+    if (!currentPasskey || !isEditAllowed) {
+      alert("⚠️ এক্সেল ফাইল আপলোড করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
+      event.target.value = '';
+      return;
+    }
+
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const exam = document.getElementById('examSelect').value;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const jsonRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+        if (!jsonRows || jsonRows.length === 0) {
+          alert("❌ আপলোড করা এক্সেল ফাইলে কোনো ডাটা পাওয়া যায়নি!");
+          return;
+        }
+
+        if (!jsonRows[0].hasOwnProperty("ID")) {
+          alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে! দয়া করে পোর্টালে প্রদত্ত 'Download Excel' করে তাতে নম্বর লিখে আপলোড করুন।");
+          return;
+        }
+        
+        const confirmUpload = window.confirm(
+          `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে নম্বরগুলো ডাটাবেসে আপলোড করতে চান?\n\n` +
+          `• পরীক্ষা: ${exam.toUpperCase()}\n` +
+          `• মোট শিক্ষার্থী সংখ্যা: ${jsonRows.length}\n\n` +
+          `[OK] চাপলে আপলোড শুরু হবে, [Cancel] চাপলে বাতিল হবে।`
+        );
+
+        if (!confirmUpload) {
+          event.target.value = '';
+          return;
+        }
+
+        document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> এক্সেলে নম্বর দ্রুত ডাটাবেজে আপডেট হচ্ছে...`;
+
+        let updatePromises = [];
+        let skippedCount = 0;
+        let validNumbersUploaded = 0;
+
+        for (let row of jsonRows) {
+          const rowId = row["ID"];
+          if (!rowId) continue;
+
+          // ডাটাবেস থেকে সংশ্লিষ্ট শিক্ষার্থীর তথ্য খোঁজা (সাবজেক্ট কম্বিনেশন চেক করার জন্য)
+          const student = rawData.find(r => r.id === parseInt(rowId));
+
+          for (let sub of subjectsList) {
+            if (row.hasOwnProperty(sub)) {
+              const rawVal = row[sub];
+              const colName = columnMap[exam][sub];
+
+              if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
+                const num = Number(rawVal);
+                
+                // ১. ডাইনামিক বিষয় ভিত্তিক সর্বোচ্চ নম্বর সীমার ভ্যালিডেশন
+                const maxLimit = getMaxLimit(exam, sub);
+
+                // ২. বিষয় নির্বাচন বিধিনিষেধ ভ্যালিডেশন চেক (Geography vs Education)
+                let isSubjectCombinationValid = true;
+                if (sub === "Geography") {
+                  const eduCol = columnMap[exam]["Education"];
+                  if ((row["Education"] !== "" && row["Education"] !== undefined) || (student && student[eduCol])) isSubjectCombinationValid = false;
+                } else if (sub === "Education") {
+                  const geoCol = columnMap[exam]["Geography"];
+                  if ((row["Geography"] !== "" && row["Geography"] !== undefined) || (student && student[geoCol])) isSubjectCombinationValid = false;
+                }
+
+                // Pol.Science / Arabic / Sanskrit 
+                const group2 = ["Political Science", "Arabic", "Sanskrit"];
+                if (group2.includes(sub)) {
+                  const otherSubs = group2.filter(s => s !== sub);
+                  for (let other of otherSubs) {
+                    const otherCol = columnMap[exam][other];
+                    if ((row[other] !== "" && row[other] !== undefined) || (student && student[otherCol])) {
+                      isSubjectCombinationValid = false;
+                      break;
+                    }
+                  }
+                }
+
+                // সমস্ত ভ্যালিডেশন ঠিক থাকলে ডাটাবেজে আপডেট পাঠানো হবে
+                if (Number.isInteger(num) && num >= 0 && num <= maxLimit && isSubjectCombinationValid) {
+                  const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_xii`, {
+                    method: 'POST',
+                    headers: { 
+                      'apikey': SUPABASE_ANON_KEY, 
+                      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 
+                      'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify({
+                      p_passkey: currentPasskey,
+                      p_id: parseInt(rowId),
+                      p_column_name: colName,
+                      p_marks: num
+                    })
+                  })
+                  .then(res => res.json())
+                  .then(resData => {
+                    if (resData && resData.success) {
+                      validNumbersUploaded++;
+                    } else {
+                      skippedCount++;
+                    }
+                  })
+                  .catch(() => { skippedCount++; });
+
+                  updatePromises.push(promise);
+                } else {
+                  skippedCount++; // ভ্যালিডেশন ফেল করলে স্কিপ
+                }
+              }
+            }
+          }
+        }
+
+        if (updatePromises.length === 0) {
+          alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা সঠিক শর্তাবলি মেনে নম্বর দেওয়া হয়নি!");
+          return;
+        }
+
+        // সমস্ত রিকোয়েস্ট সমান্তরালে এক্সিকিউট করা
+        await Promise.all(updatePromises);
+
+        alert(`🎉 নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর: ${validNumbersUploaded}\n❌ স্কিপড/বাতিলকৃত নম্বর: ${skippedCount}`);
+        
+        await fetchMarksData();
+
+      } catch (err) {
+        alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে! ফাইলটি ক্ষতিগ্রস্ত বা অমিল ফরম্যাটের হতে পারে।");
+      } finally {
+        event.target.value = ''; 
+      }
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+  </script>
+</body>
+</html>
