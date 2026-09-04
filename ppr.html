@@ -230,10 +230,16 @@
     <div class="header-card">
         <h1>পাতপুকুর হাই স্কুল (উ: মা:)</h1>
         <h3>
-            <i class="fa-solid fa-file-pen mr-1"></i> পরীক্ষার খাতা পুনঃমূল্যায়নের আবেদন পোর্টাল 
+            <i class="fa-solid fa-file-pen mr-1"></i> পরীক্ষার খাতা পুনঃমূল্যায়নের আবেদন 
             <span class="session-badge ml-2"><i class="fa-solid fa-calendar-days mr-1"></i> <span id="session-display">Session: Loading...</span></span>
         </h3>
     </div>
+
+    <!-- রুলস ও নির্দেশিকা -->
+        <div class="bg-white border-l-4 border-cyan-500 rounded-r-xl p-4 shadow-sm text-slate-700 text-xs md:text-sm">
+            <i class="fa-solid fa-circle-info text-cyan-600 mr-1 text-base"></i>
+            <strong>আবেদন নির্দেশিকা:</strong> শুধুমাত্র নম্বর আপলোড সম্পন্ন হওয়া পরীক্ষাগুলির জন্যই পুনর্মূল্যায়নের আবেদন গ্রহণ করা হবে। একজন শিক্ষার্থী <b>একবারের বেশি আবেদন করতে পারবে না</b>।
+        </div>
 
     <div id="alert-box" class="alert"></div>
 
@@ -246,7 +252,7 @@
             <div class="form-group">
                 <label><i class="fa-solid fa-layer-group text-slate-500 mr-1"></i> শ্রেণি (Class)</label>
                 <select id="class-select">
-                    <option value="">নির্বাচন করুন</option>
+                    <option value="">শ্রেণী নির্বাচন করুন</option>
                     <option value="V">Class V</option>
                     <option value="VI">Class VI</option>
                     <option value="VII">Class VII</option>
@@ -259,14 +265,15 @@
             <div class="form-group">
                 <label><i class="fa-solid fa-users text-slate-500 mr-1"></i> সেকশন (Section)</label>
                 <select id="section-select">
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
+                    <option value=""> সেকশন নির্বাচন করুন</option>
+                    <option value="A">Section A</option>
+                    <option value="B">Section B</option>
+                    <option value="C">Section C</option>
                 </select>
             </div>
             <div class="form-group">
-                <label><i class="fa-solid fa-hashtag text-slate-500 mr-1"></i> রোল নম্বর (1 - 700)</label>
-                <input type="number" id="roll-input" min="1" max="700" placeholder="যেমন: 12">
+                <label><i class="fa-solid fa-hashtag text-slate-500 mr-1"></i> রোল নম্বর (Roll) </label>
+                <input type="number" id="roll-input" min="1" max="700" placeholder="যেমন: 25">
             </div>
             <div class="form-group">
                 <label><i class="fa-solid fa-calendar-day text-slate-500 mr-1"></i> জন্ম তারিখ (DOB)</label>
@@ -275,7 +282,7 @@
             <div class="form-group" style="justify-content: flex-end;">
                 <button id="search-btn" class="btn-search" onclick="searchStudent()">
                     <i class="fa-solid fa-search"></i>
-                    <span>যাচাই ও খুঁজুন</span>
+                    <span> অনুসন্ধান </span>
                 </button>
             </div>
         </div>
