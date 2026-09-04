@@ -8,7 +8,7 @@
     <style>
         :root { --primary: #1e3a8a; --accent: #2563eb; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #333; }
-        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
         .header { text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; }
         .header h1 { color: var(--primary); margin: 0 0 5px 0; font-size: 24px; }
         .header h3 { color: #64748b; margin: 0; font-size: 16px; font-weight: normal; }
@@ -36,7 +36,7 @@
 
 <div class="container">
     <div class="header">
-        <h1 id="school-name">Pathpukur High School (H.S.)</h1>
+        <h1>Pathpukur High School (H.S.)</h1>
         <h3>পরীক্ষার খাতা পুনঃমূল্যায়নের আবেদন পোর্টাল (<span id="session-display">Session: Loading...</span>)</h3>
     </div>
 
@@ -75,8 +75,8 @@
 
     <!-- Marks & Application Area -->
     <div id="student-section" class="card" style="display: none;">
-        <h3>শিক্ষার্থীর বিবরণ ও নম্বর</h3>
-        <p><strong>নাম:</strong> <span id="st-name"></span> | <strong>শ্রেণি:</strong> <span id="st-class"></span> | <strong>রোল:</strong> <span id="st-roll"></span></p>
+        <h3>শিক্ষার্থীর বিবরণ ও প্রাপ্ত নম্বর</h3>
+        <p><strong>নাম:</strong> <span id="st-name"></span> | <strong>শ্রেণি:</strong> <span id="st-class"></span> | <strong>সেকশন:</strong> <span id="st-sec"></span> | <strong>রোল:</strong> <span id="st-roll"></span></p>
         
         <form id="scrutiny-form">
             <table id="marks-table">
@@ -104,7 +104,7 @@
                     <th>শ্রেণি ও সেকশন</th>
                     <th>রোল</th>
                     <th>নাম</th>
-                    <th>আবেদনকৃত বিষয় ও স্ট্যাটাস</th>
+                    <th>আবেদনকৃত বিষয়, স্ট্যাটাস ও নম্বর</th>
                     <th>সামগ্রিক স্ট্যাটাস</th>
                 </tr>
             </thead>
@@ -114,17 +114,13 @@
 </div>
 
 <script>
-    // Supabase Configuration
-    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentSession = new Date().getFullYear().toString();
     let currentStudentData = null;
-    let allowedColumns = [];
 
-    // Initialize Session & Load Application Table
     window.onload = async () => {
         document.getElementById('session-display').innerText = `Session: ${currentSession}`;
         loadAllApplications();
@@ -142,7 +138,6 @@
         document.getElementById('alert-box').style.display = 'none';
     }
 
-    // Mapping relevant exams per class
     function getExamConfig(className) {
         if (['V', 'VI', 'VII', 'VIII'].includes(className)) {
             return { table: `result_${className.toLowerCase()}`, prefix: 'e3_', label: '3rd Exam' };
@@ -165,41 +160,43 @@
         const roll = parseInt(document.getElementById('roll-input').value);
 
         if (!className || !roll) {
-            showAlert('দয়া করে শ্রেণি এবং রোল নম্বর সঠিকভাবে পূরণ করুন।');
+            showAlert('দয়া করে শ্রেণি এবং রোল নম্বর সঠিকভাবে নির্বাচন করুন।');
             return;
         }
 
         if (roll < 1 || roll > 700) {
-            showAlert('রোল নম্বর ১ থেকে ৭০০ এর মধ্যে হতে হবে।');
+            showAlert('রোল নম্বর অবশ্যই ১ থেকে ৭০০ এর মধ্যে হতে হবে।');
             return;
         }
 
         const config = getExamConfig(className);
 
-        // 1. Check if class-wide marks uploaded
-        const { data: classCheck } = await supabaseClient
+        // ১. ওই নির্দিষ্ট সেকশনের অন্তত একজনের একটি নম্বর আপলোড হয়েছে কিনা চেক করা
+        const { data: sectionCheck } = await supabaseClient
             .from(config.table)
             .select('*')
             .eq('session', currentSession)
-            .eq('section', section)
-            .limit(50);
+            .eq('section', section);
 
-        let isAnyUploaded = false;
-        if (classCheck && classCheck.length > 0) {
-            isAnyUploaded = classCheck.some(row => 
-                Object.keys(row).some(k => {
-                    if (Array.isArray(config.prefix)) return config.prefix.some(p => k.startsWith(p)) && row[k] !== null;
-                    return k.startsWith(config.prefix) && row[k] !== null;
+        let isSectionExamStarted = false;
+
+        if (sectionCheck && sectionCheck.length > 0) {
+            isSectionExamStarted = sectionCheck.some(row => 
+                Object.keys(row).some(col => {
+                    let isExamCol = Array.isArray(config.prefix) 
+                        ? config.prefix.some(p => col.startsWith(p)) 
+                        : col.startsWith(config.prefix);
+                    return isExamCol && row[col] !== null;
                 })
             );
         }
 
-        if (!isAnyUploaded) {
-            showAlert(`Class ${className}-এর ${config.label}-এর নম্বর এখনো আপলোড হয়নি, তাই আবেদন করা যাবে না।`, 'error');
+        if (!isSectionExamStarted) {
+            showAlert(`Class ${className} (${section})-এর ${config.label}-এর নম্বর এখনো কোনো স্টুডেন্টের জন্য আপলোড হয়নি। তাই এখন আবেদন করা যাবে না।`, 'error');
             return;
         }
 
-        // 2. Fetch specific student
+        // ২. এই রোল নম্বরের নির্দিষ্ট স্টুডেন্ট ডাটা ফেচ করা
         const { data: student, error } = await supabaseClient
             .from(config.table)
             .select('*')
@@ -213,7 +210,7 @@
             return;
         }
 
-        // 3. Check existing application
+        // ৩. পূর্বে আবেদন করেছে কিনা চেক
         const { data: existingApp } = await supabaseClient
             .from('scrutiny_applications')
             .select('*')
@@ -224,36 +221,34 @@
             .single();
 
         if (existingApp) {
-            showAlert(`ইতিপূর্বে আপনার আবেদন জমা নেওয়া হয়েছে (স্ট্যাটাস: ${existingApp.overall_status})। দ্বিতীয়বার আবেদন করা যাবে না।`, 'info');
+            showAlert(`ইতিপূর্বে আপনার আবেদন জমা নেওয়া হয়েছে (সামগ্রিক স্ট্যাটাস: ${existingApp.overall_status})। একই রোল নম্বরে দ্বিতীয়বার আবেদন করা যাবে না।`, 'info');
             return;
         }
 
-        // Display Student Data & Subject Table
+        // স্টুডেন্টের বিস্তারিত তথ্য ও সাবজেক্ট টেবিল তৈরি (নম্বর ফাঁকা/NULL হলেও দেখাবে)
         currentStudentData = student;
         document.getElementById('st-name').innerText = student.student_name;
         document.getElementById('st-class').innerText = className;
+        document.getElementById('st-sec').innerText = section;
         document.getElementById('st-roll').innerText = roll;
 
         const tbody = document.querySelector('#marks-table tbody');
         tbody.innerHTML = '';
-        allowedColumns = [];
 
         Object.keys(student).forEach(col => {
-            let matches = false;
-            if (Array.isArray(config.prefix)) {
-                matches = config.prefix.some(p => col.startsWith(p));
-            } else {
-                matches = col.startsWith(config.prefix);
-            }
+            let matches = Array.isArray(config.prefix) 
+                ? config.prefix.some(p => col.startsWith(p)) 
+                : col.startsWith(config.prefix);
 
-            if (matches && student[col] !== null) {
-                allowedColumns.push(col);
+            if (matches) {
+                const marksDisplay = student[col] !== null ? student[col] : '<span style="color:red;">Not Uploaded / Absent</span>';
                 const subLabel = col.replace(/_/g, ' ').toUpperCase();
+                
                 tbody.innerHTML += `
                     <tr>
                         <td><input type="checkbox" name="subject" value="${col}"></td>
                         <td>${subLabel}</td>
-                        <td>${student[col]}</td>
+                        <td>${marksDisplay}</td>
                     </tr>
                 `;
             }
@@ -270,14 +265,14 @@
             return;
         }
 
-        if (!confirm('আপনি কি নিশ্চিত যে আবেদনটি জমা দিতে চান? একবার সাবমিট করার পর আর পরিবর্তন করা যাবে না।')) {
+        if (!confirm('আপনি কি নিশ্চিত যে আবেদনটি জমা দিতে চান? একবার সাবমিট করার পর আর বিষয় পরিবর্তন করা যাবে না।')) {
             return;
         }
 
         const appliedSubjectsObj = {};
         selected.forEach(col => {
             appliedSubjectsObj[col] = {
-                old_marks: currentStudentData[col],
+                old_marks: currentStudentData[col] !== null ? currentStudentData[col] : 0,
                 status: 'Under Processing'
             };
         });
@@ -295,9 +290,9 @@
         const { error } = await supabaseClient.from('scrutiny_applications').insert([payload]);
 
         if (error) {
-            showAlert('আবেদন জমা দেওয়ার সময় সমস্যা হয়েছে: ' + error.message);
+            showAlert('আবেদন জমা দেওয়ার সময় সমস্যা হয়েছে: ' + error.message);
         } else {
-            showAlert('আপনার পুনঃমূল্যায়নের আবেদন সফলভাবে জমা নেওয়া হয়েছে!', 'success');
+            showAlert('আপনার পুনঃমূল্যায়নের আবেদন সফলভাবে জমা নেওয়া হয়েছে!', 'success');
             document.getElementById('student-section').style.display = 'none';
             loadAllApplications();
         }
@@ -320,8 +315,24 @@
             let subjectsFormatted = '';
             Object.keys(app.applied_subjects).forEach(k => {
                 const sub = app.applied_subjects[k];
-                const badgeClass = sub.status.includes('Verified') ? 'badge-success' : 'badge-pending';
-                subjectsFormatted += `<div><strong>${k.toUpperCase()}:</strong> ${sub.old_marks} → <span class="status-badge ${badgeClass}">${sub.status}</span></div>`;
+                let badgeClass = 'badge-pending';
+                let statusText = sub.status;
+
+                // নতুন পরিবর্তিত নম্বর প্রদর্শন লজিক
+                if (sub.status === 'Verified (Changed)') {
+                    badgeClass = 'badge-success';
+                    statusText = `Verified (Changed) ➔ New: ${sub.new_marks}`;
+                } else if (sub.status === 'Verified (No Change)') {
+                    badgeClass = 'badge-success';
+                    statusText = `Verified (No Change)`;
+                }
+
+                const subLabel = k.replace(/_/g, ' ').toUpperCase();
+                subjectsFormatted += `
+                    <div style="margin-bottom: 4px;">
+                        <strong>${subLabel}:</strong> (Old: ${sub.old_marks}) ➔ 
+                        <span class="status-badge ${badgeClass}">${statusText}</span>
+                    </div>`;
             });
 
             const overallBadge = app.overall_status === 'Completed' ? 'badge-success' : 'badge-pending';
