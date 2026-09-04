@@ -588,28 +588,31 @@
         tbody.innerHTML = '';
 
         data.forEach(app => {
-            let subjectsFormatted = '';
-            
-            Object.keys(app.applied_subjects).forEach(k => {
-                const sub = app.applied_subjects[k];
-                let badgeClass = 'badge-pending';
-                let statusText = sub.status;
+    let subjectsFormatted = '';
+    
+    Object.keys(app.applied_subjects).forEach(k => {
+        const sub = app.applied_subjects[k];
+        let badgeClass = 'badge-pending';
+        let statusText = sub.status;
 
-                if (sub.status === 'Verified (Changed)') {
-                    badgeClass = 'badge-success';
-                    statusText = `Verified (Changed) ➔ New: ${sub.new_marks}`;
-                } else if (sub.status === 'Verified (No Change)') {
-                    badgeClass = 'badge-success';
-                    statusText = `Verified (No Change)`;
-                }
+        // লেটেস্ট নম্বর ও স্ট্যাটাস প্রদর্শনের লজিক
+        if (sub.status === 'Verified (Changed)') {
+            badgeClass = 'badge-success';
+            statusText = `Verified (Changed) ➔ New: ${sub.new_marks !== undefined ? sub.new_marks : 'N/A'}`;
+        } else if (sub.status === 'Verified (No Change)') {
+            badgeClass = 'badge-success';
+            statusText = `Verified (No Change) ➔ Final: ${sub.new_marks !== undefined ? sub.new_marks : sub.old_marks}`;
+        } else {
+            statusText = `Under Processing`;
+        }
 
-                const subLabel = k.replace(/_/g, ' ').toUpperCase();
-                subjectsFormatted += `
-                    <div style="margin-bottom: 4px;">
-                        <strong>${subLabel}:</strong> (Applied Marks: ${sub.old_marks}) ➔ 
-                        <span class="status-badge ${badgeClass}">${statusText}</span>
-                    </div>`;
-            });
+        const subLabel = k.replace(/_/g, ' ').toUpperCase();
+        subjectsFormatted += `
+            <div style="margin-bottom: 6px;">
+                <strong>${subLabel}:</strong> (Applied Marks: ${sub.old_marks}) ➔ 
+                <span class="status-badge ${badgeClass}">${statusText}</span>
+            </div>`;
+    });
 
             const overallBadge = app.overall_status === 'Completed' ? 'badge-success' : 'badge-pending';
             const dt = new Date(app.created_at).toLocaleDateString('bn-IN');
