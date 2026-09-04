@@ -3,520 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>খাতা পুনর্মূল্যায়ন ও স্ক্রুটিনি পোর্টাল - পাতপুকুর হাই স্কুল</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS -->
+    <title>পরীক্ষার খাতা পুনঃমূল্যায়নের আবেদন</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- FontAwesome & Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <style>
-        * { font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
-        body { background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%); }
-        .header-card {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
-        }
+        :root { --primary: #1e3a8a; --accent: #2563eb; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .header { text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; }
+        .header h1 { color: var(--primary); margin: 0 0 5px 0; font-size: 24px; }
+        .header h3 { color: #64748b; margin: 0; font-size: 16px; font-weight: normal; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        input, select, button { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
+        button { background: var(--accent); color: #fff; font-weight: bold; border: none; cursor: pointer; transition: 0.2s; }
+        button:hover { background: var(--primary); }
+        .alert { padding: 12px 15px; border-radius: 6px; margin-bottom: 15px; display: none; font-size: 14px; }
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+        .alert-info { background: #e0f2fe; color: #075985; border: 1px solid #38bdf8; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+        th { background: #f1f5f9; color: var(--primary); }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .badge-success { background: #dcfce7; color: #166534; }
+        .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-top: 20px; }
+        @media(max-width: 600px) { table { display: block; overflow-x: auto; } }
     </style>
 </head>
-<body class="min-h-screen pb-12 text-slate-800">
+<body>
 
-    <main class="max-w-5xl mx-auto px-4 pt-6 space-y-6">
+<div class="container">
+    <div class="header">
+        <h1 id="school-name">Pathpukur High School (H.S.)</h1>
+        <h3>পরীক্ষার খাতা পুনঃমূল্যায়নের আবেদন পোর্টাল (<span id="session-display">Session: Loading...</span>)</h3>
+    </div>
 
-        <!-- হেডার সেকশন -->
-        <header class="header-card text-white rounded-2xl p-6 text-center relative overflow-hidden">
-            <h1 class="text-2xl md:text-3xl font-bold mb-1">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
-            <h2 class="text-base md:text-lg text-indigo-100 font-medium flex items-center justify-center gap-2">
-                <i class="fa-solid fa-file-pen"></i> খাতা পুনর্মূল্যায়ন / স্ক্রুটিনি আবেদন পোর্টাল
-            </h2>
-            <div class="inline-block bg-white/20 px-4 py-1 rounded-full text-xs md:text-sm mt-3 backdrop-blur-sm">
-                <i class="fa-regular fa-calendar-check text-amber-300 mr-1"></i>
-                শিক্ষাবর্ষ (Session): <strong id="sessionDisplay" class="text-amber-300">2026</strong>
-            </div>
-        </header>
+    <div id="alert-box" class="alert"></div>
 
-        <!-- রুলস ও নির্দেশিকা -->
-        <div class="bg-white border-l-4 border-cyan-500 rounded-r-xl p-4 shadow-sm text-slate-700 text-xs md:text-sm">
-            <i class="fa-solid fa-circle-info text-cyan-600 mr-1 text-base"></i>
-            <strong>আবেদন নির্দেশিকা:</strong> একজন শিক্ষার্থী <b>একবারের বেশি আবেদন করতে পারবে না</b>। নম্বর না থাকা (অনুপস্থিত) বা ০ পাওয়া বিষয়ের জন্যও আবেদন করা যাবে।
+    <div class="grid">
+        <div class="form-group">
+            <label>শ্রেণি (Class)</label>
+            <select id="class-select">
+                <option value="">নির্বাচন করুন</option>
+                <option value="V">Class V</option>
+                <option value="VI">Class VI</option>
+                <option value="VII">Class VII</option>
+                <option value="VIII">Class VIII</option>
+                <option value="IX">Class IX</option>
+                <option value="X">Class X</option>
+                <option value="XI">Class XI</option>
+            </select>
         </div>
-
-        <!-- সার্চ ও স্টুডেন্ট ডাটা ফেচিং -->
-        <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">শ্রেণী নির্বাচন</label>
-                    <select id="classSelect" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500">
-                        <option value="v">পঞ্চম (Class V)</option>
-                        <option value="vi">ষষ্ঠ (Class VI)</option>
-                        <option value="vii">সপ্তম (Class VII)</option>
-                        <option value="viii">অষ্টম (Class VIII)</option>
-                        <option value="ix">নবম (Class IX)</option>
-                        <option value="x">দশম (Class X)</option>
-                        <option value="xi">একাদশ (Class XI)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">সেকশন</label>
-                    <select id="sectionSelect" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500">
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">রোল নম্বর (১ - ৭০০)</label>
-                    <input type="number" id="rollInput" min="1" max="700" placeholder="১ - ৭০০" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 font-semibold focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div class="flex items-end">
-                    <button id="fetchBtn" onclick="fetchStudentMarks()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl transition shadow-md flex justify-center items-center gap-2">
-                        <i class="fa-solid fa-magnifying-glass" id="btnIcon"></i> <span id="btnText">নম্বর দেখুন</span>
-                    </button>
-                </div>
-            </div>
+        <div class="form-group">
+            <label>সেকশন (Section)</label>
+            <select id="section-select">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select>
         </div>
-
-        <!-- পূর্বে আবেদন করা স্টুডেন্টের স্ট্যাটাস কার্ড (ডিফল্ট হিডেন) -->
-        <div id="existingAppCard" class="hidden bg-amber-50 border border-amber-300 rounded-2xl p-5 shadow-sm space-y-2">
-            <div class="flex items-center gap-2 text-amber-800 font-bold text-lg">
-                <i class="fa-solid fa-circle-check text-amber-600"></i> আপনার আবেদন জমা রয়েছে
-            </div>
-            <p class="text-xs text-amber-900" id="existingAppMeta"></p>
-            <div class="pt-2 border-t border-amber-200 text-xs font-semibold text-slate-700">
-                আবেদনকৃত বিষয়সমূহ: <span id="existingAppSubjects" class="font-normal text-slate-900"></span>
-            </div>
-            <div class="mt-2">
-                স্ট্যাটাস: <span id="existingAppStatus" class="px-2.5 py-1 rounded-full text-xs font-bold border"></span>
-            </div>
+        <div class="form-group">
+            <label>রোল নম্বর (1 - 700)</label>
+            <input type="number" id="roll-input" min="1" max="700" placeholder="যেমন: 12">
         </div>
-
-        <!-- স্টুডেন্ট ডিটেইলস এবং স্ক্রুটিনি সাবজেক্ট ফর্ম -->
-        <div id="applicationFormContainer" class="hidden bg-white rounded-2xl p-5 md:p-6 shadow-md border border-slate-200 space-y-4">
-            <div class="border-b pb-3 flex justify-between items-center">
-                <div>
-                    <h3 class="font-bold text-slate-800 text-lg" id="studentNameDisplay">-</h3>
-                    <p class="text-xs text-slate-500" id="studentMetaDisplay">-</p>
-                </div>
-                <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full" id="examTypeDisplay">পরীক্ষা</span>
-            </div>
-
-            <p class="text-xs font-semibold text-slate-600">যে বিষয়গুলির জন্য পুনর্মূল্যায়ন করতে চান সেগুলো টিক (✔) দিন:</p>
-            
-            <div id="subjectCheckboxGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                <!-- ডাইনামিক চেক-বক্স -->
-            </div>
-
-            <button id="submitBtn" onclick="submitApplication()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-md flex justify-center items-center gap-2">
-                <i class="fa-solid fa-paper-plane"></i> আবেদন জমা দিন
-            </button>
+        <div class="form-group" style="justify-content: flex-end;">
+            <button onclick="searchStudent()">খুঁজুন (Search)</button>
         </div>
+    </div>
 
-        <!-- আবেদনকারীদের তালিকা টেবিল -->
-        <div class="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-300 overflow-hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-base md:text-lg font-bold text-slate-800 flex items-center">
-                    <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> জমা পড়া আবেদনের তালিকা
-                </h3>
-                <span id="appCountBadge" class="bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold px-3 py-1 rounded-full">মোট: 0</span>
-            </div>
+    <!-- Marks & Application Area -->
+    <div id="student-section" class="card" style="display: none;">
+        <h3>শিক্ষার্থীর বিবরণ ও নম্বর</h3>
+        <p><strong>নাম:</strong> <span id="st-name"></span> | <strong>শ্রেণি:</strong> <span id="st-class"></span> | <strong>রোল:</strong> <span id="st-roll"></span></p>
+        
+        <form id="scrutiny-form">
+            <table id="marks-table">
+                <thead>
+                    <tr>
+                        <th>নির্বাচন</th>
+                        <th>বিষয় (Subject)</th>
+                        <th>প্রাপ্ত নম্বর</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <br>
+            <button type="button" id="submit-btn" onclick="confirmAndSubmit()">আবেদন সাবমিট করুন</button>
+        </form>
+    </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse min-w-[650px]">
-                    <thead>
-                        <tr class="text-white text-xs uppercase tracking-wider">
-                            <th class="py-3 px-3 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600 rounded-tl-xl">শ্রেণী ও সেকশন</th>
-                            <th class="py-3 px-3 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">রোল</th>
-                            <th class="py-3 px-3 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">শিক্ষার্থীর নাম</th>
-                            <th class="py-3 px-3 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">আবেদনকৃত বিষয়</th>
-                            <th class="py-3 px-3 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600 text-center">তারিখ</th>
-                            <th class="py-3 px-3 bg-gradient-to-r from-slate-900 to-slate-700 rounded-tr-xl text-center">স্ট্যাটাস</th>
-                        </tr>
-                    </thead>
-                    <tbody id="applicationTableBody" class="divide-y divide-slate-300 text-xs md:text-sm bg-white">
-                        <tr>
-                            <td colspan="6" class="text-center py-4 text-slate-500">ডাটা লোড হচ্ছে...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <!-- Application List Area -->
+    <div class="card">
+        <h3>আবেদনকারীদের তালিকা ও স্ট্যাটাস</h3>
+        <table id="applications-table">
+            <thead>
+                <tr>
+                    <th>তারিখ</th>
+                    <th>শ্রেণি ও সেকশন</th>
+                    <th>রোল</th>
+                    <th>নাম</th>
+                    <th>আবেদনকৃত বিষয় ও স্ট্যাটাস</th>
+                    <th>সামগ্রিক স্ট্যাটাস</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
 
-    </main>
+<script>
+    // Supabase Configuration
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    <script>
-        // --- Supabase Credentials ---
-        const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-    
-        let db = null;
-        try {
-            if(SUPABASE_URL && SUPABASE_URL !== "YOUR_SUPABASE_URL") {
-                db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            }
-        } catch(e) {
-            console.error("Supabase Initialization Error:", e);
+    let currentSession = new Date().getFullYear().toString();
+    let currentStudentData = null;
+    let allowedColumns = [];
+
+    // Initialize Session & Load Application Table
+    window.onload = async () => {
+        document.getElementById('session-display').innerText = `Session: ${currentSession}`;
+        loadAllApplications();
+    };
+
+    function showAlert(msg, type = 'error') {
+        const box = document.getElementById('alert-box');
+        box.className = `alert alert-${type}`;
+        box.innerText = msg;
+        box.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function clearAlert() {
+        document.getElementById('alert-box').style.display = 'none';
+    }
+
+    // Mapping relevant exams per class
+    function getExamConfig(className) {
+        if (['V', 'VI', 'VII', 'VIII'].includes(className)) {
+            return { table: `result_${className.toLowerCase()}`, prefix: 'e3_', label: '3rd Exam' };
+        } else if (className === 'IX') {
+            return { table: 'result_ix', prefix: ['e3_', 'proj_'], label: '3rd Exam & Project' };
+        } else if (className === 'X') {
+            return { table: 'result_x', prefix: 'test_', label: 'Test Exam' };
+        } else if (className === 'XI') {
+            return { table: 'result_xi', prefix: ['sem2_', 'proj_'], label: 'Semester II & Project' };
+        }
+        return null;
+    }
+
+    async function searchStudent() {
+        clearAlert();
+        document.getElementById('student-section').style.display = 'none';
+
+        const className = document.getElementById('class-select').value;
+        const section = document.getElementById('section-select').value;
+        const roll = parseInt(document.getElementById('roll-input').value);
+
+        if (!className || !roll) {
+            showAlert('দয়া করে শ্রেণি এবং রোল নম্বর সঠিকভাবে পূরণ করুন।');
+            return;
         }
 
-        let currentStudent = null;
-        const activeSession = "2026"; 
-
-        document.getElementById('sessionDisplay').innerText = activeSession;
-
-        const subjectMap = {
-            e3_bengali: "বাংলা (3rd Exam)", e3_english: "ইংরেজি (3rd Exam)", e3_math: "গণিত (3rd Exam)",
-            e3_science: "বিজ্ঞান (3rd Exam)", e3_history: "ইতিহাস (3rd Exam)", e3_geography: "ভূগোল (3rd Exam)",
-            e3_work_education: "কর্মশিক্ষা (3rd Exam)", e3_physical_education: "শারীরশিক্ষা (3rd Exam)",
-            e3_life_science: "জীবন বিজ্ঞান (3rd Exam)", e3_physical_science: "ভৌত বিজ্ঞান (3rd Exam)",
-            e3_arabic: "আরবি (3rd Exam)", e3_sanskrit: "সংস্কৃত (3rd Exam)",
-            proj_bengali: "বাংলা প্রজেক্ট", proj_english: "ইংরেজি প্রজেক্ট", proj_math: "গণিত প্রজেক্ট",
-            proj_physical_science: "ভৌত বিজ্ঞান প্রজেক্ট", proj_life_science: "জীবন বিজ্ঞান প্রজেক্ট",
-            proj_history: "ইতিহাস প্রজেক্ট", proj_geography: "ভূগোল প্রজেক্ট", proj_philosophy: "দর্শন প্রজেক্ট",
-            proj_education: "শিক্ষাবিজ্ঞান প্রজেক্ট", proj_political_science: "রাষ্ট্রবিজ্ঞান প্রজেক্ট",
-            test_bengali: "বাংলা (Test)", test_english: "ইংরেজি (Test)", test_math: "গণিত (Test)",
-            test_physical_science: "ভৌত বিজ্ঞান (Test)", test_life_science: "জীবন বিজ্ঞান (Test)",
-            test_history: "ইতিহাস (Test)", test_geography: "ভূগোল (Test)",
-            sem2_bengali: "বাংলা (Sem II)", sem2_english: "ইংরেজি (Sem II)", sem2_history: "ইতিহাস (Sem II)",
-            sem2_philosophy: "দর্শন (Sem II)", sem2_education: "শিক্ষাবিজ্ঞান (Sem II)", sem2_geography: "ভূগোল (Sem II)",
-            sem2_political_science: "রাষ্ট্রবিজ্ঞান (Sem II)", sem2_arabic: "আরবি (Sem II)", sem2_sanskrit: "সংস্কৃত (Sem II)"
-        };
-
-        const classRules = {
-            v: { table: "result_v", fields: ["e3_bengali","e3_english","e3_math","e3_science","e3_work_education","e3_physical_education"], examName: "3rd Exam" },
-            vi: { table: "result_vi", fields: ["e3_bengali","e3_english","e3_math","e3_science","e3_history","e3_geography","e3_work_education","e3_physical_education"], examName: "3rd Exam" },
-            vii: { table: "result_vii", fields: ["e3_bengali","e3_english","e3_arabic","e3_sanskrit","e3_math","e3_life_science","e3_physical_science","e3_history","e3_geography","e3_work_education","e3_physical_education"], examName: "3rd Exam" },
-            viii: { table: "result_viii", fields: ["e3_bengali","e3_english","e3_arabic","e3_sanskrit","e3_math","e3_life_science","e3_physical_science","e3_history","e3_geography","e3_work_education","e3_physical_education"], examName: "3rd Exam" },
-            ix: { table: "result_ix", fields: ["e3_bengali","e3_english","e3_math","e3_physical_science","e3_life_science","e3_history","e3_geography","proj_bengali","proj_english","proj_math","proj_physical_science","proj_life_science","proj_history","proj_geography"], examName: "3rd Exam & Project" },
-            x: { table: "result_x", fields: ["test_bengali","test_english","test_math","test_physical_science","test_life_science","test_history","test_geography"], examName: "Test Exam" },
-            xi: { table: "result_xi", fields: ["sem2_bengali","sem2_english","sem2_history","sem2_philosophy","sem2_education","sem2_geography","sem2_political_science","sem2_arabic","sem2_sanskrit","proj_bengali","proj_english","proj_history","proj_philosophy","proj_education","proj_geography","proj_political_science","proj_arabic","proj_sanskrit"], examName: "Semester II & Project" }
-        };
-
-        // --- নম্বর ও পূর্ব আবেদন তথ্য লোড করার প্রধান ফাংশন ---
-        async function fetchStudentMarks() {
-            if (!checkSupabaseConfig()) return;
-
-            // পুরাতন ডিসপ্লেগুলো ক্লিন করা
-            document.getElementById('applicationFormContainer').classList.add('hidden');
-            document.getElementById('existingAppCard').classList.add('hidden');
-
-            const className = document.getElementById('classSelect').value;
-            const section = document.getElementById('sectionSelect').value;
-            const rollVal = document.getElementById('rollInput').value;
-            const roll = parseInt(rollVal);
-
-            if(!rollVal || isNaN(roll) || roll < 1 || roll > 700) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'ভুল রোল নম্বর!',
-                    text: 'রোল নম্বর অবশ্যই ১ থেকে ৭০০ এর মধ্যে হতে হবে।'
-                });
-                return;
-            }
-
-            setLoadingState(true);
-
-            try {
-                const rule = classRules[className];
-
-                // ১. চেক করা: ওই নির্দিষ্ট ক্লাস ও সেকশনের অন্তত কোনো একজন স্টুডেন্টের নম্বর আপলোড হয়েছে কিনা
-                const { data: sectionData, error: sectionError } = await db.from(rule.table)
-                    .select(rule.fields.join(','))
-                    .eq('session', activeSession)
-                    .eq('section', section);
-
-                if (sectionError) throw new Error(`শ্রেণীভিত্তিক ডাটা সার্চে সমস্যা: ${sectionError.message}`);
-
-                let isAnyMarkUploadedInSection = false;
-                if (sectionData && sectionData.length > 0) {
-                    for (let row of sectionData) {
-                        for (let field of rule.fields) {
-                            if (row[field] !== null && row[field] !== undefined && row[field] !== "") {
-                                isAnyMarkUploadedInSection = true;
-                                break;
-                            }
-                        }
-                        if (isAnyMarkUploadedInSection) break;
-                    }
-                }
-
-                if (!isAnyMarkUploadedInSection) {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'আবেদন করা যাবে না',
-                        text: `Class ${className.toUpperCase()} (${section}) সেকশনের কোনো শিক্ষার্থীর পরীক্ষার নম্বর এখনো আপলোড হয়নি। নম্বর আপলোডের পরেই কেবল আবেদন জমা নেওয়া সম্ভব।`
-                    });
-                    return;
-                }
-
-                // ২. চেক করা: এই নির্দিষ্ট ছাত্রটি আগে আবেদন করেছে কিনা
-                const { data: existingApp, error: appError } = await db.from('scrutiny_applications')
-                    .select('*')
-                    .eq('session', activeSession)
-                    .eq('class_name', className.toUpperCase())
-                    .eq('section', section)
-                    .eq('roll_no', roll)
-                    .maybeSingle();
-
-                if (appError) console.error("Check app error:", appError);
-
-                if(existingApp) {
-                    showExistingApplicationStatus(existingApp);
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'ইতিমধ্যে আবেদন করা হয়েছে!',
-                        text: 'আপনি ইতিপূর্বে আবেদন জমা দিয়েছেন। দ্বিতীয়বার আবেদন জমা করা যাবে না। আপনার আবেদনের স্ট্যাটাস নিচে দেখানো হয়েছে।',
-                        confirmButtonColor: '#2563eb'
-                    });
-                    return;
-                }
-
-                // ৩. ছাত্রটির নিজের রেজাল্ট বের করা
-                const { data, error } = await db.from(rule.table)
-                    .select('*')
-                    .eq('session', activeSession)
-                    .eq('section', section)
-                    .eq('roll_no', roll)
-                    .maybeSingle();
-
-                if (error) throw new Error(`ডাটাবেজ এরর: ${error.message}`);
-
-                if (!data) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'তথ্য পাওয়া যায়নি',
-                        html: `Class <b>${className.toUpperCase()}</b>, সেকশন <b>${section}</b>, রোল <b>${roll}</b>-এর কোনো রেজাল্ট তথ্য পাওয়া যায়নি।`
-                    });
-                    return;
-                }
-
-                // ৪. বিষয়ের তালিকা তৈরি (নম্বর না থাকলে 'অনুপস্থিত', ০ থাকলে '০')
-                let availableFields = [];
-                rule.fields.forEach(f => {
-                    let val = data[f];
-                    let displayMark = (val === null || val === undefined || val === "") ? "অনুপস্থিত" : val;
-                    availableFields.push({ code: f, mark: displayMark });
-                });
-
-                currentStudent = { ...data, targetClass: className, availableFields, classNameCaps: className.toUpperCase() };
-                renderApplicationForm(rule.examName);
-
-            } catch(err) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ত্রুটি!',
-                    html: `<code class="text-xs text-red-600 bg-red-50 p-2 block rounded text-left">${err.message}</code>`
-                });
-            } finally {
-                setLoadingState(false);
-            }
+        if (roll < 1 || roll > 700) {
+            showAlert('রোল নম্বর ১ থেকে ৭০০ এর মধ্যে হতে হবে।');
+            return;
         }
 
-        // --- পূর্বে আবেদন করা থাকলে তথ্য দেখানো ---
-        function showExistingApplicationStatus(app) {
-            const card = document.getElementById('existingAppCard');
-            document.getElementById('existingAppMeta').innerText = `শিক্ষার্থী: ${app.student_name} | Class: ${app.class_name} (${app.section}) | রোল: ${app.roll_no}`;
-            
-            let subjects = Array.isArray(app.requested_subjects) ? app.requested_subjects : [];
-            let subText = subjects.map(s => s.subject_name).join(', ');
-            document.getElementById('existingAppSubjects').innerText = subText || 'কোনো বিষয় পাওয়া যায়নি';
+        const config = getExamConfig(className);
 
-            const statusElem = document.getElementById('existingAppStatus');
-            statusElem.innerText = app.status;
+        // 1. Check if class-wide marks uploaded
+        const { data: classCheck } = await supabaseClient
+            .from(config.table)
+            .select('*')
+            .eq('session', currentSession)
+            .eq('section', section)
+            .limit(50);
 
-            let badgeColor = "bg-amber-100 text-amber-800 border-amber-300";
-            if(app.status === 'Verified - Mark Changed') badgeColor = "bg-emerald-100 text-emerald-800 border-emerald-300";
-            if(app.status === 'Verified - No Change') badgeColor = "bg-cyan-100 text-cyan-800 border-cyan-300";
-            if(app.status === 'Under Processing') badgeColor = "bg-blue-100 text-blue-800 border-blue-300";
-
-            statusElem.className = `px-2.5 py-1 rounded-full text-xs font-bold border ${badgeColor}`;
-            card.classList.remove('hidden');
+        let isAnyUploaded = false;
+        if (classCheck && classCheck.length > 0) {
+            isAnyUploaded = classCheck.some(row => 
+                Object.keys(row).some(k => {
+                    if (Array.isArray(config.prefix)) return config.prefix.some(p => k.startsWith(p)) && row[k] !== null;
+                    return k.startsWith(config.prefix) && row[k] !== null;
+                })
+            );
         }
 
-        // --- আবেদন ফর্ম রেন্ডার ---
-        function renderApplicationForm(examName) {
-            document.getElementById('studentNameDisplay').innerText = currentStudent.student_name || "শিক্ষার্থীর নাম পাওয়া যায়নি";
-            document.getElementById('studentMetaDisplay').innerText = `শ্রেণী: Class ${currentStudent.classNameCaps} | সেকশন: ${currentStudent.section} | রোল: ${currentStudent.roll_no}`;
-            document.getElementById('examTypeDisplay').innerText = examName;
-
-            const grid = document.getElementById('subjectCheckboxGrid');
-            grid.innerHTML = '';
-
-            currentStudent.availableFields.forEach(sub => {
-                grid.innerHTML += `
-                    <label class="flex items-center justify-between p-3 border rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer">
-                        <span class="font-medium text-slate-700">${subjectMap[sub.code] || sub.code}</span>
-                        <div class="flex items-center gap-3">
-                            <span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-1 rounded text-xs">প্রাপ্ত: ${sub.mark}</span>
-                            <input type="checkbox" value="${sub.code}" class="sub-checkbox w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                        </div>
-                    </label>
-                `;
-            });
-
-            document.getElementById('applicationFormContainer').classList.remove('hidden');
+        if (!isAnyUploaded) {
+            showAlert(`Class ${className}-এর ${config.label}-এর নম্বর এখনো আপলোড হয়নি, তাই আবেদন করা যাবে না।`, 'error');
+            return;
         }
 
-        // --- আবেদন জমা সাবমিট ---
-        async function submitApplication() {
-            if (!checkSupabaseConfig()) return;
+        // 2. Fetch specific student
+        const { data: student, error } = await supabaseClient
+            .from(config.table)
+            .select('*')
+            .eq('session', currentSession)
+            .eq('section', section)
+            .eq('roll_no', roll)
+            .single();
 
-            const selectedCheckboxes = document.querySelectorAll('.sub-checkbox:checked');
-            if (selectedCheckboxes.length === 0) {
-                Swal.fire('বিষয় নির্বাচন করুন', 'পুনর্মূল্যায়নের জন্য অন্তত একটি বিষয় নির্বাচন করতে হবে।', 'warning');
-                return;
-            }
-
-            let requestedSubjects = [];
-            selectedCheckboxes.forEach(cb => {
-                const subCode = cb.value;
-                const fieldObj = currentStudent.availableFields.find(f => f.code === subCode);
-                requestedSubjects.push({
-                    subject_code: subCode,
-                    subject_name: subjectMap[subCode] || subCode,
-                    applied_mark: fieldObj.mark,
-                    last_updated_mark: fieldObj.mark
-                });
-            });
-
-            const confirm = await Swal.fire({
-                title: 'আবেদন জমা দিতে চান?',
-                text: "একবার আবেদন জমা হলে তা পরিবর্তন বা বাতিল করা যাবে না!",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#2563eb',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'হ্যাঁ, সাবমিট করুন',
-                cancelButtonText: 'বাতিল'
-            });
-
-            if (confirm.isConfirmed) {
-                Swal.showLoading();
-                try {
-                    const { error } = await db.from('scrutiny_applications').insert([{
-                        session: activeSession,
-                        class_name: currentStudent.classNameCaps,
-                        section: currentStudent.section,
-                        roll_no: currentStudent.roll_no,
-                        student_name: currentStudent.student_name,
-                        requested_subjects: requestedSubjects,
-                        status: 'Verify Pending'
-                    }]);
-
-                    if (error) throw error;
-
-                    Swal.fire('সফল!', 'আপনার আবেদনটি সফলভাবে জমা নেওয়া হয়েছে।', 'success');
-                    document.getElementById('applicationFormContainer').classList.add('hidden');
-                    
-                    // টেবিল রিফ্রেশ
-                    loadApplicationsTable();
-
-                } catch(err) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'জমা ব্যর্থ হয়েছে!',
-                        html: `আবেদন জমা করার সময়ে সমস্যা হয়েছে:<br><code class="text-xs text-red-600">${err.message}</code>`
-                    });
-                }
-            }
+        if (error || !student) {
+            showAlert('এই রোল নম্বরের কোনো শিক্ষার্থী খুঁজে পাওয়া যায়নি।');
+            return;
         }
 
-        // --- আবেদনকারীদের টেবিল লোড করার ফাংশন ---
-        async function loadApplicationsTable() {
-            const tbody = document.getElementById('applicationTableBody');
-            if (!db) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500 font-semibold">Supabase ডাটাবেজ কানেক্ট করা নেই।</td></tr>`;
-                return;
-            }
+        // 3. Check existing application
+        const { data: existingApp } = await supabaseClient
+            .from('scrutiny_applications')
+            .select('*')
+            .eq('session', currentSession)
+            .eq('class_name', className)
+            .eq('section', section)
+            .eq('roll_no', roll)
+            .single();
 
-            try {
-                const { data, error } = await db.from('scrutiny_applications')
-                    .select('*')
-                    .eq('session', activeSession)
-                    .order('id', { ascending: false });
-
-                if (error) throw error;
-
-                document.getElementById('appCountBadge').innerText = `মোট: ${data ? data.length : 0}`;
-                
-                if (!data || data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-slate-500">এখনো পর্যন্ত কোনো আবেদন জমা পড়েনি।</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = '';
-                data.forEach(app => {
-                    let badgeColor = "bg-amber-100 text-amber-800 border-amber-300";
-                    if(app.status === 'Verified - Mark Changed') badgeColor = "bg-emerald-100 text-emerald-800 border-emerald-300";
-                    if(app.status === 'Verified - No Change') badgeColor = "bg-cyan-100 text-cyan-800 border-cyan-300";
-                    if(app.status === 'Under Processing') badgeColor = "bg-blue-100 text-blue-800 border-blue-300";
-
-                    let subjects = Array.isArray(app.requested_subjects) ? app.requested_subjects : [];
-                    let subText = subjects.map(s => s.subject_name || s.subject_code).join(', ') || "কোনো বিষয় সিলেক্ট নেই";
-                    
-                    let dateStr = app.applied_at ? new Date(app.applied_at).toLocaleDateString('bn-BD') : new Date().toLocaleDateString('bn-BD');
-
-                    tbody.innerHTML += `
-                        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
-                            <td class="p-3 border-r border-slate-200 font-semibold text-slate-700">Class ${app.class_name} (${app.section})</td>
-                            <td class="p-3 border-r border-slate-200 font-bold text-slate-900">${app.roll_no}</td>
-                            <td class="p-3 border-r border-slate-200 font-semibold text-slate-800">${app.student_name || '-'}</td>
-                            <td class="p-3 border-r border-slate-200 text-slate-600 max-w-[200px] truncate" title="${subText}">${subText}</td>
-                            <td class="p-3 border-r border-slate-200 text-center text-slate-500">${dateStr}</td>
-                            <td class="p-3 text-center">
-                                <span class="px-2.5 py-1 rounded-full text-xs font-bold border ${badgeColor}">
-                                    ${app.status || 'Verify Pending'}
-                                </span>
-                            </td>
-                        </tr>
-                    `;
-                });
-
-            } catch(err) {
-                console.error("Table load error:", err);
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500 font-semibold">আবেদনের তালিকা লোড করতে সমস্যা হয়েছে: ${err.message}</td></tr>`;
-            }
+        if (existingApp) {
+            showAlert(`ইতিপূর্বে আপনার আবেদন জমা নেওয়া হয়েছে (স্ট্যাটাস: ${existingApp.overall_status})। দ্বিতীয়বার আবেদন করা যাবে না।`, 'info');
+            return;
         }
 
-        // --- ইউটিলিটি ফাংশন ---
-        function checkSupabaseConfig() {
-            if (!db) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Supabase কানেকশন নেই!',
-                    html: 'আপনার আসল <b>SUPABASE_URL</b> এবং <b>SUPABASE_KEY</b> চেক করুন।'
-                });
-                return false;
-            }
-            return true;
-        }
+        // Display Student Data & Subject Table
+        currentStudentData = student;
+        document.getElementById('st-name').innerText = student.student_name;
+        document.getElementById('st-class').innerText = className;
+        document.getElementById('st-roll').innerText = roll;
 
-        function setLoadingState(isLoading) {
-            const btn = document.getElementById('fetchBtn');
-            const icon = document.getElementById('btnIcon');
-            const text = document.getElementById('btnText');
+        const tbody = document.querySelector('#marks-table tbody');
+        tbody.innerHTML = '';
+        allowedColumns = [];
 
-            if (isLoading) {
-                btn.disabled = true;
-                btn.classList.add('opacity-75', 'cursor-not-allowed');
-                icon.className = "fa-solid fa-spinner fa-spin";
-                text.innerText = "লোডিং...";
+        Object.keys(student).forEach(col => {
+            let matches = false;
+            if (Array.isArray(config.prefix)) {
+                matches = config.prefix.some(p => col.startsWith(p));
             } else {
-                btn.disabled = false;
-                btn.classList.remove('opacity-75', 'cursor-not-allowed');
-                icon.className = "fa-solid fa-magnifying-glass";
-                text.innerText = "নম্বর দেখুন";
+                matches = col.startsWith(config.prefix);
             }
+
+            if (matches && student[col] !== null) {
+                allowedColumns.push(col);
+                const subLabel = col.replace(/_/g, ' ').toUpperCase();
+                tbody.innerHTML += `
+                    <tr>
+                        <td><input type="checkbox" name="subject" value="${col}"></td>
+                        <td>${subLabel}</td>
+                        <td>${student[col]}</td>
+                    </tr>
+                `;
+            }
+        });
+
+        document.getElementById('student-section').style.display = 'block';
+    }
+
+    async function confirmAndSubmit() {
+        const selected = Array.from(document.querySelectorAll('input[name="subject"]:checked')).map(cb => cb.value);
+        
+        if (selected.length === 0) {
+            showAlert('পুনঃমূল্যায়নের জন্য নূন্যতম একটি বিষয় নির্বাচন করুন।');
+            return;
         }
 
-        // DOM লোড সম্পন্ন হলে টেবিল আপডেট
-        document.addEventListener('DOMContentLoaded', () => {
-            loadApplicationsTable();
+        if (!confirm('আপনি কি নিশ্চিত যে আবেদনটি জমা দিতে চান? একবার সাবমিট করার পর আর পরিবর্তন করা যাবে না।')) {
+            return;
+        }
+
+        const appliedSubjectsObj = {};
+        selected.forEach(col => {
+            appliedSubjectsObj[col] = {
+                old_marks: currentStudentData[col],
+                status: 'Under Processing'
+            };
         });
-    </script>
+
+        const payload = {
+            session: currentSession,
+            class_name: currentStudentData.class_name,
+            section: currentStudentData.section,
+            roll_no: currentStudentData.roll_no,
+            student_name: currentStudentData.student_name,
+            applied_subjects: appliedSubjectsObj,
+            overall_status: 'Under Processing'
+        };
+
+        const { error } = await supabaseClient.from('scrutiny_applications').insert([payload]);
+
+        if (error) {
+            showAlert('আবেদন জমা দেওয়ার সময় সমস্যা হয়েছে: ' + error.message);
+        } else {
+            showAlert('আপনার পুনঃমূল্যায়নের আবেদন সফলভাবে জমা নেওয়া হয়েছে!', 'success');
+            document.getElementById('student-section').style.display = 'none';
+            loadAllApplications();
+        }
+    }
+
+    async function loadAllApplications() {
+        const { data, error } = await supabaseClient
+            .from('scrutiny_applications')
+            .select('*')
+            .eq('session', currentSession)
+            .order('class_name', { ascending: true })
+            .order('roll_no', { ascending: true });
+
+        if (error) return;
+
+        const tbody = document.querySelector('#applications-table tbody');
+        tbody.innerHTML = '';
+
+        data.forEach(app => {
+            let subjectsFormatted = '';
+            Object.keys(app.applied_subjects).forEach(k => {
+                const sub = app.applied_subjects[k];
+                const badgeClass = sub.status.includes('Verified') ? 'badge-success' : 'badge-pending';
+                subjectsFormatted += `<div><strong>${k.toUpperCase()}:</strong> ${sub.old_marks} → <span class="status-badge ${badgeClass}">${sub.status}</span></div>`;
+            });
+
+            const overallBadge = app.overall_status === 'Completed' ? 'badge-success' : 'badge-pending';
+            const dt = new Date(app.created_at).toLocaleDateString('bn-IN');
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${dt}</td>
+                    <td>Class ${app.class_name} (${app.section})</td>
+                    <td>${app.roll_no}</td>
+                    <td>${app.student_name}</td>
+                    <td>${subjectsFormatted}</td>
+                    <td><span class="status-badge ${overallBadge}">${app.overall_status}</span></td>
+                </tr>
+            `;
+        });
+    }
+</script>
+
 </body>
 </html>
