@@ -23,7 +23,8 @@
         .alert-success { background: #dcfce7; color: #166534; border: 1px solid #4ade80; }
         .alert-info { background: #e0f2fe; color: #075985; border: 1px solid #38bdf8; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; table-layout: auto; }
-        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; min-width: 100px; max-width: 250px; word-wrap: break-word; overflow-wrap: break-word; }
+        th:nth-child(5), td:nth-child(5) { min-width: 180px; max-width: 320px; }
         th { background: #f1f5f9; color: var(--primary); }
         .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
         .badge-pending { background: #fef3c7; color: #92400e; }
