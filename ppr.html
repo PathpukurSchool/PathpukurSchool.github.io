@@ -43,7 +43,7 @@
         <!-- রুলস ও নির্দেশিকা -->
         <div class="bg-white border-l-4 border-cyan-500 rounded-r-xl p-4 shadow-sm text-slate-700 text-xs md:text-sm">
             <i class="fa-solid fa-circle-info text-cyan-600 mr-1 text-base"></i>
-            <strong>আবেদন নির্দেশিকা:</strong> একজন শিক্ষার্থী <b>একবারের বেশি আবেদন করতে পারবে না</b> (রোল নম্বর অবশ্যই ১ থেকে ৭০০ এর মধ্যে হতে হবে)। সেকশনের নম্বর আপলোড চালু হলেই অনুপস্থিত সহ সমস্ত ছাত্র আবেদন জমা দিতে পারবে।
+            <strong>আবেদন নির্দেশিকা:</strong> একজন শিক্ষার্থী <b>একবারের বেশি আবেদন করতে পারবে না</b>। নম্বর না থাকা (অনুপস্থিত) বা ০ পাওয়া বিষয়ের জন্যও আবেদন করা যাবে।
         </div>
 
         <!-- সার্চ ও স্টুডেন্ট ডাটা ফেচিং -->
@@ -79,6 +79,20 @@
                         <i class="fa-solid fa-magnifying-glass" id="btnIcon"></i> <span id="btnText">নম্বর দেখুন</span>
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- পূর্বে আবেদন করা স্টুডেন্টের স্ট্যাটাস কার্ড (ডিফল্ট হিডেন) -->
+        <div id="existingAppCard" class="hidden bg-amber-50 border border-amber-300 rounded-2xl p-5 shadow-sm space-y-2">
+            <div class="flex items-center gap-2 text-amber-800 font-bold text-lg">
+                <i class="fa-solid fa-circle-check text-amber-600"></i> আপনার আবেদন জমা রয়েছে
+            </div>
+            <p class="text-xs text-amber-900" id="existingAppMeta"></p>
+            <div class="pt-2 border-t border-amber-200 text-xs font-semibold text-slate-700">
+                আবেদনকৃত বিষয়সমূহ: <span id="existingAppSubjects" class="font-normal text-slate-900"></span>
+            </div>
+            <div class="mt-2">
+                স্ট্যাটাস: <span id="existingAppStatus" class="px-2.5 py-1 rounded-full text-xs font-bold border"></span>
             </div>
         </div>
 
@@ -142,8 +156,8 @@
     
         let db = null;
         try {
-            if(SUPABASE_URL && window.supabase) {
-                db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            if(SUPABASE_URL && SUPABASE_URL !== "YOUR_SUPABASE_URL") {
+                db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             }
         } catch(e) {
             console.error("Supabase Initialization Error:", e);
@@ -182,9 +196,13 @@
             xi: { table: "result_xi", fields: ["sem2_bengali","sem2_english","sem2_history","sem2_philosophy","sem2_education","sem2_geography","sem2_political_science","sem2_arabic","sem2_sanskrit","proj_bengali","proj_english","proj_history","proj_philosophy","proj_education","proj_geography","proj_political_science","proj_arabic","proj_sanskrit"], examName: "Semester II & Project" }
         };
 
-        // --- নম্বর ও পূর্ব আবেদন তথ্য লোড করা ---
+        // --- নম্বর ও পূর্ব আবেদন তথ্য লোড করার প্রধান ফাংশন ---
         async function fetchStudentMarks() {
             if (!checkSupabaseConfig()) return;
+
+            // পুরাতন ডিসপ্লেগুলো ক্লিন করা
+            document.getElementById('applicationFormContainer').classList.add('hidden');
+            document.getElementById('existingAppCard').classList.add('hidden');
 
             const className = document.getElementById('classSelect').value;
             const section = document.getElementById('sectionSelect').value;
@@ -203,21 +221,21 @@
             setLoadingState(true);
 
             try {
-                // ১. ওই সেকশনের অন্তত কোনো একজন ছাত্রের ন্যূনতম ১টি বিষয় নম্বর আপলোড হয়েছে কিনা চেক করা
                 const rule = classRules[className];
+
+                // ১. চেক করা: ওই নির্দিষ্ট ক্লাস ও সেকশনের অন্তত কোনো একজন স্টুডেন্টের নম্বর আপলোড হয়েছে কিনা
                 const { data: sectionData, error: sectionError } = await db.from(rule.table)
-                    .select('*')
+                    .select(rule.fields.join(','))
                     .eq('session', activeSession)
                     .eq('section', section);
 
-                if (sectionError) throw new Error(`ডাটাবেজ এরর [${rule.table}]: ${sectionError.message}`);
+                if (sectionError) throw new Error(`শ্রেণীভিত্তিক ডাটা সার্চে সমস্যা: ${sectionError.message}`);
 
-                // চেক করবো কোনো একটা বিষয়ের ঘরে কোনো ভ্যালু (নম্বর বা 0) আছে কিনা
                 let isAnyMarkUploadedInSection = false;
                 if (sectionData && sectionData.length > 0) {
                     for (let row of sectionData) {
-                        for (let f of rule.fields) {
-                            if (row[f] !== null && row[f] !== undefined && row[f] !== "") {
+                        for (let field of rule.fields) {
+                            if (row[field] !== null && row[field] !== undefined && row[field] !== "") {
                                 isAnyMarkUploadedInSection = true;
                                 break;
                             }
@@ -226,21 +244,18 @@
                     }
                 }
 
-                // যদি সেকশনের কারোই একটি নম্বরও আপলোড না থাকে
                 if (!isAnyMarkUploadedInSection) {
                     Swal.fire({
-                        icon: 'warning',
+                        icon: 'info',
                         title: 'আবেদন করা যাবে না',
-                        text: `Class ${className.toUpperCase()} (Section ${section})-এর ${rule.examName} পরীক্ষার নম্বর এখনো আপলোড হয়নি। নম্বর আপলোডের পর আবেদন করা যাবে।`,
-                        confirmButtonColor: '#2563eb'
+                        text: `Class ${className.toUpperCase()} (${section}) সেকশনের কোনো শিক্ষার্থীর পরীক্ষার নম্বর এখনো আপলোড হয়নি। নম্বর আপলোডের পরেই কেবল আবেদন জমা নেওয়া সম্ভব।`
                     });
-                    document.getElementById('applicationFormContainer').classList.add('hidden');
                     return;
                 }
 
-                // ২. ইতিপূর্বে আবেদন জমা আছে কিনা চেক
+                // ২. চেক করা: এই নির্দিষ্ট ছাত্রটি আগে আবেদন করেছে কিনা
                 const { data: existingApp, error: appError } = await db.from('scrutiny_applications')
-                    .select('id')
+                    .select('*')
                     .eq('session', activeSession)
                     .eq('class_name', className.toUpperCase())
                     .eq('section', section)
@@ -250,60 +265,79 @@
                 if (appError) console.error("Check app error:", appError);
 
                 if(existingApp) {
+                    showExistingApplicationStatus(existingApp);
                     Swal.fire({
                         icon: 'warning',
-                        title: 'ইতিপূর্বে আবেদন জমা হয়েছে!',
-                        text: 'যেহেতু ইতিপূর্বে আপনার আবেদনটি জমা নেওয়া হয়েছে, তাই দ্বিতীয়বার আর আবেদন জমা দেওয়া সম্ভব নয়।',
+                        title: 'ইতিমধ্যে আবেদন করা হয়েছে!',
+                        text: 'আপনি ইতিপূর্বে আবেদন জমা দিয়েছেন। দ্বিতীয়বার আবেদন জমা করা যাবে না। আপনার আবেদনের স্ট্যাটাস নিচে দেখানো হয়েছে।',
                         confirmButtonColor: '#2563eb'
                     });
-                    document.getElementById('applicationFormContainer').classList.add('hidden');
                     return;
                 }
 
-                // ৩. নির্দিষ্ট স্টুডেন্টের ডাটা বের করা
-                const studentData = sectionData.find(s => s.roll_no === roll);
+                // ৩. ছাত্রটির নিজের রেজাল্ট বের করা
+                const { data, error } = await db.from(rule.table)
+                    .select('*')
+                    .eq('session', activeSession)
+                    .eq('section', section)
+                    .eq('roll_no', roll)
+                    .maybeSingle();
 
-                if (!studentData) {
+                if (error) throw new Error(`ডাটাবেজ এরর: ${error.message}`);
+
+                if (!data) {
                     Swal.fire({
                         icon: 'error',
                         title: 'তথ্য পাওয়া যায়নি',
-                        html: `শ্রেণী: <b>Class ${className.toUpperCase()}</b>, সেকশন: <b>${section}</b>, রোল: <b>${roll}</b>-এর কোনো রেজাল্ট তথ্য পাওয়া যায়নি।`
+                        html: `Class <b>${className.toUpperCase()}</b>, সেকশন <b>${section}</b>, রোল <b>${roll}</b>-এর কোনো রেজাল্ট তথ্য পাওয়া যায়নি।`
                     });
-                    document.getElementById('applicationFormContainer').classList.add('hidden');
                     return;
                 }
 
-                // ৪. ওই স্টুডেন্টের নম্বর বা অনুপস্থিত ফরম্যাট তৈরি
+                // ৪. বিষয়ের তালিকা তৈরি (নম্বর না থাকলে 'অনুপস্থিত', ০ থাকলে '০')
                 let availableFields = [];
                 rule.fields.forEach(f => {
-                    let val = studentData[f];
+                    let val = data[f];
                     let displayMark = (val === null || val === undefined || val === "") ? "অনুপস্থিত" : val;
                     availableFields.push({ code: f, mark: displayMark });
                 });
 
-                currentStudent = { ...studentData, targetClass: className, availableFields, classNameCaps: className.toUpperCase() };
+                currentStudent = { ...data, targetClass: className, availableFields, classNameCaps: className.toUpperCase() };
                 renderApplicationForm(rule.examName);
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'ডাটা লোড হয়েছে',
-                    text: `${studentData.student_name}-এর নম্বর স্ক্রিনে প্রদর্শন করা হচ্ছে।`,
-                    timer: 1500,
-                    showConfirmButton: false
-                });
 
             } catch(err) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'কানেকশন সমস্যা!',
-                    html: `ডাটা আনা সম্ভব হয়নি:<br><code class="text-xs text-red-600 bg-red-50 p-2 block rounded text-left">${err.message}</code>`
+                    title: 'ত্রুটি!',
+                    html: `<code class="text-xs text-red-600 bg-red-50 p-2 block rounded text-left">${err.message}</code>`
                 });
             } finally {
                 setLoadingState(false);
             }
         }
 
-        // --- আবেদন ফর্ম দেখানো ---
+        // --- পূর্বে আবেদন করা থাকলে তথ্য দেখানো ---
+        function showExistingApplicationStatus(app) {
+            const card = document.getElementById('existingAppCard');
+            document.getElementById('existingAppMeta').innerText = `শিক্ষার্থী: ${app.student_name} | Class: ${app.class_name} (${app.section}) | রোল: ${app.roll_no}`;
+            
+            let subjects = Array.isArray(app.requested_subjects) ? app.requested_subjects : [];
+            let subText = subjects.map(s => s.subject_name).join(', ');
+            document.getElementById('existingAppSubjects').innerText = subText || 'কোনো বিষয় পাওয়া যায়নি';
+
+            const statusElem = document.getElementById('existingAppStatus');
+            statusElem.innerText = app.status;
+
+            let badgeColor = "bg-amber-100 text-amber-800 border-amber-300";
+            if(app.status === 'Verified - Mark Changed') badgeColor = "bg-emerald-100 text-emerald-800 border-emerald-300";
+            if(app.status === 'Verified - No Change') badgeColor = "bg-cyan-100 text-cyan-800 border-cyan-300";
+            if(app.status === 'Under Processing') badgeColor = "bg-blue-100 text-blue-800 border-blue-300";
+
+            statusElem.className = `px-2.5 py-1 rounded-full text-xs font-bold border ${badgeColor}`;
+            card.classList.remove('hidden');
+        }
+
+        // --- আবেদন ফর্ম রেন্ডার ---
         function renderApplicationForm(examName) {
             document.getElementById('studentNameDisplay').innerText = currentStudent.student_name || "শিক্ষার্থীর নাম পাওয়া যায়নি";
             document.getElementById('studentMetaDisplay').innerText = `শ্রেণী: Class ${currentStudent.classNameCaps} | সেকশন: ${currentStudent.section} | রোল: ${currentStudent.roll_no}`;
@@ -313,15 +347,11 @@
             grid.innerHTML = '';
 
             currentStudent.availableFields.forEach(sub => {
-                let markBadge = sub.mark === "অনুপস্থিত" 
-                    ? `<span class="bg-rose-100 text-rose-700 font-bold px-2 py-1 rounded text-xs">অনুপস্থিত</span>`
-                    : `<span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-1 rounded text-xs">প্রাপ্ত: ${sub.mark}</span>`;
-
                 grid.innerHTML += `
                     <label class="flex items-center justify-between p-3 border rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer">
                         <span class="font-medium text-slate-700">${subjectMap[sub.code] || sub.code}</span>
                         <div class="flex items-center gap-3">
-                            ${markBadge}
+                            <span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-1 rounded text-xs">প্রাপ্ত: ${sub.mark}</span>
                             <input type="checkbox" value="${sub.code}" class="sub-checkbox w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
                         </div>
                     </label>
@@ -331,7 +361,7 @@
             document.getElementById('applicationFormContainer').classList.remove('hidden');
         }
 
-        // --- আবেদন জমা সাবমিশন ---
+        // --- আবেদন জমা সাবমিট ---
         async function submitApplication() {
             if (!checkSupabaseConfig()) return;
 
@@ -355,7 +385,7 @@
 
             const confirm = await Swal.fire({
                 title: 'আবেদন জমা দিতে চান?',
-                text: "একবার আবেদন জমা হলে তা আর পরিবর্তন করা যাবে না!",
+                text: "একবার আবেদন জমা হলে তা পরিবর্তন বা বাতিল করা যাবে না!",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#2563eb',
@@ -379,7 +409,7 @@
 
                     if (error) throw error;
 
-                    Swal.fire('সফল!', 'আপনার আবেদনটি সফলভাবে জমা হয়েছে।', 'success');
+                    Swal.fire('সফল!', 'আপনার আবেদনটি সফলভাবে জমা নেওয়া হয়েছে।', 'success');
                     document.getElementById('applicationFormContainer').classList.add('hidden');
                     
                     // টেবিল রিফ্রেশ
@@ -395,7 +425,7 @@
             }
         }
 
-        // --- আবেদনকারীদের টেবিল লোড করা ---
+        // --- আবেদনকারীদের টেবিল লোড করার ফাংশন ---
         async function loadApplicationsTable() {
             const tbody = document.getElementById('applicationTableBody');
             if (!db) {
