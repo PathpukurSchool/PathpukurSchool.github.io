@@ -43,7 +43,7 @@
         <!-- রুলস ও নির্দেশিকা -->
         <div class="bg-white border-l-4 border-cyan-500 rounded-r-xl p-4 shadow-sm text-slate-700 text-xs md:text-sm">
             <i class="fa-solid fa-circle-info text-cyan-600 mr-1 text-base"></i>
-            <strong>আবেদন নির্দেশিকা:</strong> একজন শিক্ষার্থী <b>একবারের বেশি আবেদন করতে পারবে না</b> (রোল নম্বর অবশ্যই ১ থেকে ৭০০ এর মধ্যে হতে হবে)। নম্বর না বসানো থাকলেও আবেদন করা যাবে।
+            <strong>আবেদন নির্দেশিকা:</strong> একজন শিক্ষার্থী <b>একবারের বেশি আবেদন করতে পারবে না</b> (রোল নম্বর অবশ্যই ১ থেকে ৭০০ এর মধ্যে হতে হবে)। সেকশনের নম্বর আপলোড চালু হলেই অনুপস্থিত সহ সমস্ত ছাত্র আবেদন জমা দিতে পারবে।
         </div>
 
         <!-- সার্চ ও স্টুডেন্ট ডাটা ফেচিং -->
@@ -142,8 +142,8 @@
     
         let db = null;
         try {
-            if(SUPABASE_URL && SUPABASE_URL !== "YOUR_SUPABASE_URL") {
-                db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            if(SUPABASE_URL && window.supabase) {
+                db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             }
         } catch(e) {
             console.error("Supabase Initialization Error:", e);
@@ -203,7 +203,42 @@
             setLoadingState(true);
 
             try {
-                // ১. পূর্বের আবেদন রয়েছে কিনা শুরুতেই পরীক্ষা করা (সমস্যা ১ সমাধান)
+                // ১. ওই সেকশনের অন্তত কোনো একজন ছাত্রের ন্যূনতম ১টি বিষয় নম্বর আপলোড হয়েছে কিনা চেক করা
+                const rule = classRules[className];
+                const { data: sectionData, error: sectionError } = await db.from(rule.table)
+                    .select('*')
+                    .eq('session', activeSession)
+                    .eq('section', section);
+
+                if (sectionError) throw new Error(`ডাটাবেজ এরর [${rule.table}]: ${sectionError.message}`);
+
+                // চেক করবো কোনো একটা বিষয়ের ঘরে কোনো ভ্যালু (নম্বর বা 0) আছে কিনা
+                let isAnyMarkUploadedInSection = false;
+                if (sectionData && sectionData.length > 0) {
+                    for (let row of sectionData) {
+                        for (let f of rule.fields) {
+                            if (row[f] !== null && row[f] !== undefined && row[f] !== "") {
+                                isAnyMarkUploadedInSection = true;
+                                break;
+                            }
+                        }
+                        if (isAnyMarkUploadedInSection) break;
+                    }
+                }
+
+                // যদি সেকশনের কারোই একটি নম্বরও আপলোড না থাকে
+                if (!isAnyMarkUploadedInSection) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'আবেদন করা যাবে না',
+                        text: `Class ${className.toUpperCase()} (Section ${section})-এর ${rule.examName} পরীক্ষার নম্বর এখনো আপলোড হয়নি। নম্বর আপলোডের পর আবেদন করা যাবে।`,
+                        confirmButtonColor: '#2563eb'
+                    });
+                    document.getElementById('applicationFormContainer').classList.add('hidden');
+                    return;
+                }
+
+                // ২. ইতিপূর্বে আবেদন জমা আছে কিনা চেক
                 const { data: existingApp, error: appError } = await db.from('scrutiny_applications')
                     .select('id')
                     .eq('session', activeSession)
@@ -225,18 +260,10 @@
                     return;
                 }
 
-                // ২. রেজাল্ট টেবিল থেকে তথ্য বের করা
-                const rule = classRules[className];
-                const { data, error } = await db.from(rule.table)
-                    .select('*')
-                    .eq('session', activeSession)
-                    .eq('section', section)
-                    .eq('roll_no', roll)
-                    .maybeSingle();
+                // ৩. নির্দিষ্ট স্টুডেন্টের ডাটা বের করা
+                const studentData = sectionData.find(s => s.roll_no === roll);
 
-                if (error) throw new Error(`ডাটাবেজ এরর [${rule.table}]: ${error.message}`);
-
-                if (!data) {
+                if (!studentData) {
                     Swal.fire({
                         icon: 'error',
                         title: 'তথ্য পাওয়া যায়নি',
@@ -246,22 +273,21 @@
                     return;
                 }
 
-                // ৩. বিষয়ের নম্বর ফিল্টার করা (সমস্যা ৩ সমাধান)
-                // নম্বর না বসানো থাকলেও (Null/Empty) বা 0 বসানো থাকলেও সে আবেদন জমা দিতে পারবে।
+                // ৪. ওই স্টুডেন্টের নম্বর বা অনুপস্থিত ফরম্যাট তৈরি
                 let availableFields = [];
                 rule.fields.forEach(f => {
-                    let val = data[f];
-                    let displayMark = (val === null || val === undefined || val === "") ? "অনুপস্থিত / অপঠিত" : val;
+                    let val = studentData[f];
+                    let displayMark = (val === null || val === undefined || val === "") ? "অনুপস্থিত" : val;
                     availableFields.push({ code: f, mark: displayMark });
                 });
 
-                currentStudent = { ...data, targetClass: className, availableFields, classNameCaps: className.toUpperCase() };
+                currentStudent = { ...studentData, targetClass: className, availableFields, classNameCaps: className.toUpperCase() };
                 renderApplicationForm(rule.examName);
 
                 Swal.fire({
                     icon: 'success',
                     title: 'ডাটা লোড হয়েছে',
-                    text: `${data.student_name}-এর নম্বর দেখতে পাচ্ছেন।`,
+                    text: `${studentData.student_name}-এর নম্বর স্ক্রিনে প্রদর্শন করা হচ্ছে।`,
                     timer: 1500,
                     showConfirmButton: false
                 });
@@ -287,11 +313,15 @@
             grid.innerHTML = '';
 
             currentStudent.availableFields.forEach(sub => {
+                let markBadge = sub.mark === "অনুপস্থিত" 
+                    ? `<span class="bg-rose-100 text-rose-700 font-bold px-2 py-1 rounded text-xs">অনুপস্থিত</span>`
+                    : `<span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-1 rounded text-xs">প্রাপ্ত: ${sub.mark}</span>`;
+
                 grid.innerHTML += `
                     <label class="flex items-center justify-between p-3 border rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer">
                         <span class="font-medium text-slate-700">${subjectMap[sub.code] || sub.code}</span>
                         <div class="flex items-center gap-3">
-                            <span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-1 rounded text-xs">প্রাপ্ত: ${sub.mark}</span>
+                            ${markBadge}
                             <input type="checkbox" value="${sub.code}" class="sub-checkbox w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
                         </div>
                     </label>
@@ -325,7 +355,7 @@
 
             const confirm = await Swal.fire({
                 title: 'আবেদন জমা দিতে চান?',
-                text: "একবার আবেদন জমা হলে তা সংশোধন বা বাতিল করা যাবে না!",
+                text: "একবার আবেদন জমা হলে তা আর পরিবর্তন করা যাবে না!",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#2563eb',
@@ -349,10 +379,10 @@
 
                     if (error) throw error;
 
-                    Swal.fire('সফল!', 'আপনার আবেদনটি সফলভাবে ডাটাবেজে জমা নেওয়া হয়েছে।', 'success');
+                    Swal.fire('সফল!', 'আপনার আবেদনটি সফলভাবে জমা হয়েছে।', 'success');
                     document.getElementById('applicationFormContainer').classList.add('hidden');
                     
-                    // জমা নেওয়ার সাথে সাথেই টেবিল রিফ্রেশ (সমস্যা ২ সমাধান)
+                    // টেবিল রিফ্রেশ
                     loadApplicationsTable();
 
                 } catch(err) {
@@ -377,7 +407,7 @@
                 const { data, error } = await db.from('scrutiny_applications')
                     .select('*')
                     .eq('session', activeSession)
-                    .order('id', { ascending: false }); // সর্বশেষ জমা হওয়া আবেদন উপরে দেখাবে
+                    .order('id', { ascending: false });
 
                 if (error) throw error;
 
