@@ -9,6 +9,8 @@
 <!-- Font Awesome Icons & Google Fonts -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Supabase JS Library (নিচে যুক্ত করা হয়েছে) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
     * {
@@ -163,7 +165,7 @@
 
     /* টেবিল স্টাইল (স্পষ্ট বর্ডার ও কলাম সেপারেটর সহ) */
     .table-wrapper {
-        overflow-x-auto;
+        overflow-x: auto;
         border-radius: 10px;
         border: 1px solid #cbd5e1;
     }
@@ -180,7 +182,7 @@
         word-wrap: break-word; 
         overflow-wrap: break-word; 
     }
-    /* প্রতিটি কলামের হেডারের বাম থেকে ডানে হালকা গ্রেডিয়েন্ট এবং স্পষ্ট বর্ডার */
+    /* প্রতিটি কলামের হেডারের বাম থেকে ডানে হালকা গ্রেডিয়েন্ট এবং স্পষ্ট বর্ডার */
     th { 
         background: linear-gradient(to right, #1e293b, #334155); 
         color: #ffffff; 
@@ -414,20 +416,20 @@
             .single();
 
         if (dobErr || !validStudent) {
-            showAlert('প্রদত্ত তথ্য অনুযায়ী শিক্ষার্থীর রেকর্ড খুঁজে পাওয়া যায়নি।');
+            showAlert('প্রদত্ত তথ্য অনুযায়ী শিক্ষার্থীর রেকর্ড খুঁজে পাওয়া যায়নি।');
             return;
         }
 
         const dbDobClean = validStudent.dob_clean || cleanDateString(validStudent.dob);
 
         if (cleanedInputDob !== dbDobClean) {
-            showAlert('সতর্কতা: প্রবেশ করানো জন্ম তারিখ রেকর্ডকৃত তথ্যের সাথে মেলেনি। সঠিক জন্ম তারিখ দিয়ে পুনরায় চেষ্টা করুন।', 'error');
+            showAlert('সতর্কতা: প্রবেশ করানো জন্ম তারিখ রেকর্ডকৃত তথ্যের সাথে মেলেনি। সঠিক জন্ম তারিখ দিয়ে পুনরায় চেষ্টা করুন।', 'error');
             return;
         }
 
         const config = getExamConfig(className);
 
-        // ২. সেকশনে অন্তত একজন শিক্ষার্থীর নম্বর আপলোড হয়েছে কিনা চেক করা
+        // ২. সেকশনে অন্তত একজন শিক্ষার্থীর নম্বর আপলোড হয়েছে কিনা চেক করা
         const { data: sectionCheck } = await supabaseClient
             .from(config.table)
             .select('*')
@@ -492,7 +494,7 @@
         }
 
         // তথ্য সঠিক প্রমাণিত হলে ফর্ম দৃশ্যমান করা
-        showAlert('শিক্ষার্থীর পরিচয় ও জন্ম তারিখ সফলভাবে যাচাই করা হয়েছে।', 'success');
+        showAlert('শিক্ষার্থীর পরিচয় ও জন্ম তারিখ সফলভাবে যাচাই করা হয়েছে।', 'success');
         currentStudentData = student;
         document.getElementById('st-name').innerText = student.student_name;
         document.getElementById('st-class').innerText = className;
@@ -532,13 +534,13 @@
             return;
         }
 
-        if (!confirm('আপনি কি নিশ্চিত যে আবেদনটি জমা দিতে চান? একবার সাবমিট করার পর বিষয় পরিবর্তন করা যাবে না।')) {
+        if (!confirm('আপনি কি নিশ্চিত যে আবেদনটি জমা দিতে চান? একবার সাবমিট করার পর বিষয় পরিবর্তন করা যাবে না।')) {
             return;
         }
 
         const submitBtn = document.getElementById('submit-btn');
         submitBtn.disabled = true;
-        submitBtn.innerText = 'জমা দেওয়া হচ্ছে...';
+        submitBtn.innerText = 'জমা দেওয়া হচ্ছে...';
 
         const appliedSubjectsObj = {};
         selected.forEach(col => {
@@ -566,7 +568,7 @@
         if (error) {
             showAlert('আবেদন জমা দেওয়ার সময় সমস্যা হয়েছে: ' + error.message);
         } else {
-            showAlert('আপনার পুনঃমূল্যায়নের আবেদন সফলভাবে জমা নেওয়া হয়েছে!', 'success');
+            showAlert('আপনার পুনঃমূল্যায়নের আবেদন সফলভাবে জমা নেওয়া হয়েছে!', 'success');
             document.getElementById('student-section').style.display = 'none';
             loadAllApplications();
         }
