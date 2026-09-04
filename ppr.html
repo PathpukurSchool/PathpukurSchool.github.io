@@ -298,58 +298,59 @@
         }
     }
 
-    async function loadAllApplications() {
-        const { data, error } = await supabaseClient
-            .from('scrutiny_applications')
-            .select('*')
-            .eq('session', currentSession)
-            .order('class_name', { ascending: true })
-            .order('roll_no', { ascending: true });
+async function loadAllApplications() {
+    const { data, error } = await supabaseClient
+        .from('scrutiny_applications')
+        .select('*')
+        .eq('session', currentSession)
+        .order('class_name', { ascending: true })
+        .order('roll_no', { ascending: true });
 
-        if (error) return;
+    if (error) return;
 
-        const tbody = document.querySelector('#applications-table tbody');
-        tbody.innerHTML = '';
+    const tbody = document.querySelector('#applications-table tbody');
+    tbody.innerHTML = '';
 
-        data.forEach(app => {
-            let subjectsFormatted = '';
-            Object.keys(app.applied_subjects).forEach(k => {
-                const sub = app.applied_subjects[k];
-                let badgeClass = 'badge-pending';
-                let statusText = sub.status;
+    data.forEach(app => {
+        let subjectsFormatted = '';
+        
+        // 🔹 আপনার দেওয়া সংশোধিত সাবজেক্ট লুপ
+        Object.keys(app.applied_subjects).forEach(k => {
+            const sub = app.applied_subjects[k];
+            let badgeClass = 'badge-pending';
+            let statusText = sub.status;
 
-                // নতুন পরিবর্তিত নম্বর প্রদর্শন লজিক
-                if (sub.status === 'Verified (Changed)') {
-                    badgeClass = 'badge-success';
-                    statusText = `Verified (Changed) ➔ New: ${sub.new_marks}`;
-                } else if (sub.status === 'Verified (No Change)') {
-                    badgeClass = 'badge-success';
-                    statusText = `Verified (No Change)`;
-                }
+            if (sub.status === 'Verified (Changed)') {
+                badgeClass = 'badge-success';
+                statusText = `Verified (Changed) ➔ New: ${sub.new_marks}`;
+            } else if (sub.status === 'Verified (No Change)') {
+                badgeClass = 'badge-success';
+                statusText = `Verified (No Change)`;
+            }
 
-                const subLabel = k.replace(/_/g, ' ').toUpperCase();
-                subjectsFormatted += `
-                    <div style="margin-bottom: 4px;">
-                        <strong>${subLabel}:</strong> (Old: ${sub.old_marks}) ➔ 
-                        <span class="status-badge ${badgeClass}">${statusText}</span>
-                    </div>`;
-            });
-
-            const overallBadge = app.overall_status === 'Completed' ? 'badge-success' : 'badge-pending';
-            const dt = new Date(app.created_at).toLocaleDateString('bn-IN');
-
-            tbody.innerHTML += `
-                <tr>
-                    <td>${dt}</td>
-                    <td>Class ${app.class_name} (${app.section})</td>
-                    <td>${app.roll_no}</td>
-                    <td>${app.student_name}</td>
-                    <td>${subjectsFormatted}</td>
-                    <td><span class="status-badge ${overallBadge}">${app.overall_status}</span></td>
-                </tr>
-            `;
+            const subLabel = k.replace(/_/g, ' ').toUpperCase();
+            subjectsFormatted += `
+                <div style="margin-bottom: 4px;">
+                    <strong>${subLabel}:</strong> (Applied Marks: ${sub.old_marks}) ➔ 
+                    <span class="status-badge ${badgeClass}">${statusText}</span>
+                </div>`;
         });
-    }
+
+        const overallBadge = app.overall_status === 'Completed' ? 'badge-success' : 'badge-pending';
+        const dt = new Date(app.created_at).toLocaleDateString('bn-IN');
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${dt}</td>
+                <td>Class ${app.class_name} (${app.section})</td>
+                <td>${app.roll_no}</td>
+                <td>${app.student_name}</td>
+                <td>${subjectsFormatted}</td>
+                <td><span class="status-badge ${overallBadge}">${app.overall_status}</span></td>
+            </tr>
+        `;
+    });
+}
 </script>
 
 </body>
