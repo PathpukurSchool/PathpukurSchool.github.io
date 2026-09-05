@@ -15,14 +15,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Inter', 'Tiro Bangla', sans-serif;
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            margin: 0 !important;
+            padding: 0 !important;
         }
         html, body {
-           height: auto !important;
-           min-height: unset !important;
-          }
+            height: auto !important;
+            min-height: unset !important;
+            width: 100%;
+        }
         .glass-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
@@ -30,9 +38,11 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-sky-50 to-sky-100 text-slate-800 p-1 sm:p-2 h-fit overflow-x-hidden">
+<!-- Body ট্যাগের p-1 sm:p-2 সরিয়ে ফেলা হয়েছে -->
+<body class="bg-gradient-to-br from-sky-50 to-sky-100 text-slate-800 h-fit overflow-x-hidden">
     
-    <main class="max-w-4xl mx-auto space-y-2">
+    <!-- main ট্যাগের max-w-4xl ও mx-auto সরিয়ে w-full করা হয়েছে -->
+    <main class="w-full space-y-1">
 
         <!-- Legend Bar -->
         <div class="glass-card rounded-lg p-1.5 shadow-sm flex flex-wrap justify-center gap-2 md:gap-4 text-[10px] sm:text-xs font-bold">
