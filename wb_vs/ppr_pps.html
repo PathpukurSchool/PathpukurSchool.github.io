@@ -1,23 +1,23 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (অনুমোদিত না হলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড -->
     <style id="security-shield">
         body { display: none !important; }
     </style>
 
-    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট (লিংক সরাসরি কপি করে খোলা আটকাবে) -->
+    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
     <script>
     (function() {
         try {
             var ref = document.referrer;
             var isValidReferrer = false;
 
-            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
                 if (refUrl.hostname === "pathpukurschool.github.io") {
@@ -25,14 +25,11 @@
                 }
             }
 
-            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
             if (!isValidReferrer) {
-                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
                 window.location.replace("https://pathpukurschool.github.io/");
                 return;
             }
 
-            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
             document.addEventListener("DOMContentLoaded", function() {
                 var shield = document.getElementById("security-shield");
                 if (shield) shield.remove();
@@ -43,246 +40,303 @@
         }
     })();
     </script>
-   <!-- রিভিউ বা খাতা পুনর্মূল্যায়নের জন্য আবেদন -->
-    <title>Pathpukur High School (H.S.)</title>
-<!-- Tailwind CSS (For extra utility if needed) -->
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- Font Awesome Icons & Google Fonts -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- Supabase JS Library (নিচে যুক্ত করা হয়েছে) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-    * {
-        font-family: 'Tiro Bangla', 'Poppins', 'Inter', sans-serif;
-        box-sizing: border-box;
-    }
-    body { 
-        background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%); 
-        margin: 0; 
-        padding: 20px 15px; 
-        color: #1e293b; 
-        min-height: 100vh;
-    }
-    .container { 
-        max-width: 950px; 
-        margin: 0 auto; 
-    }
     
-    /* হেডার কার্ড স্টাইল (Code 2 Style) */
-    .header-card {
-        background: linear-gradient(135deg, #2563eb, #7c3aed);
-        color: #ffffff;
-        border-radius: 16px;
-        padding: 25px 15px;
-        text-align: center;
-        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
-        margin-bottom: 20px;
-        position: relative;
-        overflow: hidden;
-    }
-    .header-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: rgba(255, 255, 255, 0.08);
-        transform: rotate(45deg);
-        pointer-events: none;
-    }
-    .header-card h1 { 
-        font-size: 24px; 
-        font-weight: 700; 
-        margin-bottom: 6px; 
-        text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    }
-    .header-card h3 { 
-        font-size: 15px; 
-        font-weight: 500; 
-        color: #e0e7ff; 
-    }
-    .session-badge {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.2);
-        padding: 3px 12px;
-        border-radius: 20px;
-        font-size: 13px;
-        backdrop-filter: blur(4px);
-    }
+    <title>Pathpukur High School (H.S.)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    .instruction-card {
-        margin-bottom: 25px; /* ২. গ্যাপ বাড়ানো হলো */
-        border-radius: 16px;
-    }
+    <style>
+        * {
+            font-family: 'Tiro Bangla', 'Poppins', 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+        body { 
+            background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%); 
+            margin: 0; 
+            padding: 20px 15px; 
+            color: #1e293b; 
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 950px; 
+            margin: 0 auto; 
+        }
+        
+        /* হেডার কার্ড স্টাইল */
+        .header-card {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.08);
+            transform: rotate(45deg);
+            pointer-events: none;
+        }
+        .header-card h1 { 
+            font-size: 24px; 
+            font-weight: 700; 
+            margin-bottom: 6px; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .header-card h3 { 
+            font-size: 15px; 
+            font-weight: 500; 
+            color: #e0e7ff; 
+        }
+        .session-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            backdrop-filter: blur(4px);
+        }
 
-    /* সার্চ ও ফর্ম ইনপুট সেকশন */
-    .card { 
-        background: #ffffff; 
-        border: 1px solid #cbd5e1; 
-        border-radius: 14px; 
-        padding: 22px; 
-        margin-bottom: 20px; 
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    }
-    .grid { 
-        display: grid; 
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-        gap: 15px; 
-    }
-    .form-group { 
-        display: flex; 
-        flex-direction: column;  
-    }
-    .form-group label { 
-        font-weight: 700; 
-        margin-bottom: 6px; 
-        font-size: 13px; 
-        color: #334155;
-    }
-    /* ১. সাধারণ ইনপুট ও সিলেক্টে বামদিকে ফাঁকা স্পেস */
-    input, select { 
-        width: 100%;
-        padding: 12px 18px;
-        padding-left: 18px !important;
-        border: 2px solid #cbd5e1; 
-        border-radius: 10px; 
-        font-size: 14px; 
-        outline: none; 
-        background: #f8fafc;
-        transition: all 0.3s ease;
-        min-height: 48px;
-    }
-    input:focus, select:focus {
-        border-color: #2563eb;
-        background: #ffffff;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
+        .instruction-card {
+            margin-bottom: 25px;
+            border-radius: 16px;
+        }
 
-    /* বাটন স্টাইল */
-    .btn-search { 
-        background: linear-gradient(135deg, #10b981, #059669); 
-        color: #fff; 
-        font-weight: 700; 
-        border: none; 
-        border-radius: 10px;
-        padding: 12px 18px;
-        padding-left: 20px;
-        min-height: 48px; /* ইনপুট ফিল্ডের সাথে বাটন চওড়া ও লম্বা সামঞ্জস্যপূর্ণ করা হলো */
-        cursor: pointer; 
-        transition: all 0.2s ease; 
-        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        width: 100%;
-    }
-    .btn-search:hover { 
-        transform: translateY(-1px);
-        box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
-    }
-    .btn-primary {
-        background: linear-gradient(135deg, #2563eb, #1d4ed8);
-        color: #fff;
-        font-weight: 700;
-        padding: 10px 20px;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
-    }
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #1d4ed8, #1e40af);
-    }
-    button:disabled { 
-        background: #cbd5e1 !important; 
-        box-shadow: none !important;
-        cursor: not-allowed; 
-    }
+        /* কার্ড ও ইনপুট */
+        .card { 
+            background: #ffffff; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 14px; 
+            padding: 22px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 15px; 
+        }
+        .form-group { 
+            display: flex; 
+            flex-direction: column;  
+        }
+        .form-group label { 
+            font-weight: 700; 
+            margin-bottom: 6px; 
+            font-size: 13px; 
+            color: #334155;
+        }
+        input, select { 
+            width: 100%;
+            padding: 12px 18px;
+            padding-left: 18px !important;
+            border: 2px solid #cbd5e1; 
+            border-radius: 10px; 
+            font-size: 14px; 
+            outline: none; 
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            min-height: 48px;
+        }
+        input:focus, select:focus {
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
 
-    /* অ্যালার্ট মেসেজ */
-    .alert { 
-        padding: 12px 16px; 
-        border-radius: 10px; 
-        margin-bottom: 20px; 
-        display: none; 
-        font-size: 14px; 
-        font-weight: 600;
-    }
-    .alert-error { background: #ffe4e6; color: #e11d48; border: 1px solid #fecdd3; }
-    .alert-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-    .alert-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        /* বাটন স্টাইল */
+        .btn-search { 
+            background: linear-gradient(135deg, #10b981, #059669); 
+            color: #fff; 
+            font-weight: 700; 
+            border: none; 
+            border-radius: 10px;
+            padding: 12px 18px;
+            min-height: 48px;
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .btn-search:hover { 
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+        .btn-print {
+            background: linear-gradient(135deg, #475569, #334155);
+            color: #fff;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-print:hover {
+            background: linear-gradient(135deg, #334155, #1e293b);
+        }
+        button:disabled { 
+            background: #cbd5e1 !important; 
+            box-shadow: none !important;
+            cursor: not-allowed; 
+        }
 
-    /* টেবিল স্টাইল (স্পষ্ট বর্ডার ও কলাম সেপারেটর সহ) */
-    .table-wrapper {
-        overflow-x: auto;
-        border-radius: 10px;
-        border: 1px solid #cbd5e1;
-    }
-    table { 
-        width: 100%; 
-        border-collapse: collapse; 
-        font-size: 14px; 
-        background: #ffffff;
-    }
-    th, td { 
-        border: 1px solid #cbd5e1; 
-        padding: 12px; 
-        text-align: left; 
-        word-wrap: break-word; 
-        overflow-wrap: break-word; 
-    }
-    /* প্রতিটি কলামের হেডারের বাম থেকে ডানে হালকা গ্রেডিয়েন্ট এবং স্পষ্ট বর্ডার */
-    th { 
-        background: linear-gradient(to right, #1e293b, #334155); 
-        color: #ffffff; 
-        font-weight: 600;
-        border-right: 1px solid #475569;
-        text-transform: uppercase;
-        font-size: 12px;
-        letter-spacing: 0.5px;
-    }
-    th:last-child {
-        border-right: none;
-    }
-    td {
-        color: #334155;
-    }
-    tr:nth-child(even) td {
-        background-color: #f8fafc;
-    }
-    tr:hover td {
-        background-color: #f1f5f9;
-    }
+        /* অ্যালার্ট */
+        .alert { 
+            padding: 12px 16px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+            display: none; 
+            font-size: 14px; 
+            font-weight: 600;
+        }
+        .alert-error { background: #ffe4e6; color: #e11d48; border: 1px solid #fecdd3; }
+        .alert-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .alert-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
 
-    /* ব্যাজ ও হাইলাইট */
-    .status-badge { 
-        display: inline-block; 
-        padding: 4px 10px; 
-        border-radius: 6px; 
-        font-size: 12px; 
-        font-weight: 700; 
-    }
-    .badge-pending { background: #fef3c7; color: #d97706; }
-    .badge-success { background: #dcfce7; color: #16a34a; }
-    .highlight-row { background-color: #fef08a !important; transition: background-color 0.5s ease-in-out; }
+        /* টেবিল স্টাইল */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 14px; 
+            background: #ffffff;
+        }
+        th, td { 
+            border: 1px solid #cbd5e1; 
+            padding: 12px; 
+            text-align: left; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+        }
+        th { 
+            background: linear-gradient(to right, #1e293b, #334155); 
+            color: #ffffff; 
+            font-weight: 600;
+            border-right: 1px solid #475569;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        th:last-child { border-right: none; }
+        td { color: #334155; }
+        tr:nth-child(even) td { background-color: #f8fafc; }
+        tr:hover td { background-color: #f1f5f9; }
 
-    @media(max-width: 600px) { 
-        .header-card h1 { font-size: 20px; }
-        .card { padding: 15px; }
-    }
-    /* ঘুরন্ত লোডিং স্পিনারের অ্যানিমেশন */
-.fa-spin {
-    animation: fa-spin 1s infinite linear;
-}
-@keyframes fa-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-</style>
+        /* ব্যাজ */
+        .status-badge { 
+            display: inline-block; 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            font-size: 12px; 
+            font-weight: 700; 
+        }
+        .badge-pending { background: #fef3c7; color: #d97706; }
+        .badge-success { background: #dcfce7; color: #16a34a; }
+        .highlight-row { background-color: #fef08a !important; transition: background-color 0.5s ease-in-out; }
+
+        .fa-spin { animation: fa-spin 1s infinite linear; }
+        @keyframes fa-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* 🖨️ A4 প্রিন্ট CSS সেটআপ */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm 10mm 12mm 10mm;
+            }
+            body {
+                background: none !important;
+                padding: 0 !important;
+                color: #000 !important;
+            }
+            .container {
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            .no-print, .instruction-card, #search-card-wrapper, #student-section, #alert-box, .btn-print {
+                display: none !important;
+            }
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .header-card {
+                background: none !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                border-bottom: 2px solid #000 !important;
+                border-radius: 0 !important;
+                padding: 10px 0 !important;
+                margin-bottom: 15px !important;
+            }
+            .header-card h1 { color: #000 !important; font-size: 20px !important; }
+            .header-card h3 { color: #333 !important; font-size: 13px !important; }
+            .session-badge { background: #eee !important; color: #000 !important; border: 1px solid #ccc; }
+            
+            .table-wrapper {
+                border: none !important;
+                overflow: visible !important;
+            }
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                font-size: 11px !important;
+            }
+            thead {
+                display: table-header-group !important; /* প্রতি পেজে রিপিট হবে */
+            }
+            tr {
+                page-break-inside: avoid !important;
+            }
+            th, td {
+                border: 1px solid #000 !important;
+                padding: 6px 8px !important;
+                color: #000 !important;
+            }
+            th {
+                background: #f0f0f0 !important;
+                color: #000 !important;
+            }
+            .status-badge {
+                border: 1px solid #666 !important;
+                padding: 2px 5px !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -297,15 +351,15 @@
     </div>
 
     <!-- রুলস ও নির্দেশিকা -->
-        <div class="instruction-card bg-white border-l-4 border-cyan-500 rounded-r-xl p-4 shadow-sm text-slate-800 text-xs md:text-sm">
+    <div class="instruction-card bg-white border-l-4 border-cyan-500 rounded-r-xl p-4 shadow-sm text-slate-800 text-xs md:text-sm">
         <i class="fa-solid fa-circle-info text-cyan-600 mr-1 text-base"></i>
         <strong>আবেদন নির্দেশিকা:</strong> শুধুমাত্র <b>3rd Summative Evaluation</b> (ক্লাস: V-IX), <b>Test Exam</b> (ক্লাস: X), <b>Semester II</b> (ক্লাস: XI) এবং <b>Project / Practical</b> (ক্লাস: IX, X, XI) পরীক্ষাগুলির জন্যই নম্বর আপলোড এর প্রক্রিয়া সম্পন্ন হবার পর <em>পুনর্মূল্যায়নের আবেদন</em> গ্রহণ করা হবে। একজন শিক্ষার্থী <b>একবারের বেশি আবেদন করতে পারবে না</b>।
-        </div>
+    </div>
 
     <div id="alert-box" class="alert"></div>
 
-    <!-- Search Form Card -->
-    <div class="card">
+    <!-- Search Form Card (Edit Mode false হলে লুকানো থাকবে) -->
+    <div id="search-card-wrapper" class="card">
         <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center border-b pb-2 border-slate-200">
             <i class="fa-solid fa-magnifying-glass text-indigo-600 mr-2"></i> শিক্ষার্থী যাচাই ও তথ্য অনুসন্ধান
         </h3>
@@ -383,9 +437,14 @@
 
     <!-- Application List Area -->
     <div class="card">
-        <h3 class="text-base font-bold text-slate-800 mb-4 border-b pb-2 border-slate-200">
-            <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> আবেদনকারীদের তালিকা ও স্ট্যাটাস
-        </h3>
+        <div class="flex justify-between items-center mb-4 border-b pb-2 border-slate-200">
+            <h3 class="text-base font-bold text-slate-800 flex items-center">
+                <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> আবেদনকারীদের তালিকা ও স্ট্যাটাস
+            </h3>
+            <button onclick="window.print()" class="btn-print text-xs md:text-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-print"></i> প্রিন্ট করুন
+            </button>
+        </div>
         <div class="table-wrapper">
             <table id="applications-table">
                 <thead>
@@ -414,25 +473,46 @@
 
     window.onload = async () => {
         document.getElementById('session-display').innerText = `Session: ${currentSession}`;
+        await checkPageSecurity();
         loadAllApplications();
     };
+
+    // 🛡️ page_security টেবিল চেক করা
+    async function checkPageSecurity() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('page_security')
+                .select('edit_mode')
+                .eq('page_name', 'scrutiny_form') // 👈 নতুন পেজ নেম সেট করা হয়েছে
+                .single();
+
+            if (data) {
+                if (data.edit_mode === 'false' || data.edit_mode === false) {
+                    // edit_mode বন্ধ থাকলে সার্চ ও আবেদন সেকশন হাইড হবে
+                    document.getElementById('search-card-wrapper').style.display = 'none';
+                    showAlert('বর্তমানে খাতা পুনর্মূল্যায়নের আবেদন পোর্টাল বন্ধ রাখা হয়েছে। নতুন করে কোনো আবেদন জমা নেওয়া হচ্ছে না।', 'info');
+                } else {
+                    document.getElementById('search-card-wrapper').style.display = 'block';
+                }
+            }
+        } catch (err) {
+            console.error("Security Check Error:", err);
+        }
+    }
 
     function showAlert(msg, type = 'error') {
         const box = document.getElementById('alert-box');
         box.className = `alert alert-${type}`;
         box.innerText = msg;
         box.style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function clearAlert() {
         document.getElementById('alert-box').style.display = 'none';
     }
 
-    // তারিখ থেকে কেবল সংখ্যা এক্সট্রাক্ট করার হেল্পার ফাংশন (নর্মালাইজেশন)
     function cleanDateString(str) {
         if (!str) return '';
-        // YYYY-MM-DD ফরম্যাট থাকলে DDMMYYYY বানানোর লজিক
         if (str.includes('-') && str.split('-')[0].length === 4) {
             const parts = str.split('-');
             return `${parts[2]}${parts[1]}${parts[0]}`;
@@ -457,157 +537,150 @@
         clearAlert();
         document.getElementById('student-section').style.display = 'none';
 
-        // 🟢১. বোতামে লোডিং স্পিনার চালু করা
         const searchBtn = document.getElementById('search-btn');
         searchBtn.disabled = true;
         searchBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>অনুসন্ধান হচ্ছে...</span>`;
-try {
-        const className = document.getElementById('class-select').value;
-        const section = document.getElementById('section-select').value;
-        const roll = parseInt(document.getElementById('roll-input').value);
-        const inputDob = document.getElementById('dob-input').value.trim();
 
-        if (!className || !roll || !inputDob) {
-            showAlert('দয়া করে শ্রেণি, রোল নম্বর এবং জন্ম তারিখ সঠিকভাবে প্রদান করুন।');
-            return;
-        }
+        try {
+            const className = document.getElementById('class-select').value;
+            const section = document.getElementById('section-select').value;
+            const roll = parseInt(document.getElementById('roll-input').value);
+            const inputDob = document.getElementById('dob-input').value.trim();
 
-        if (roll < 1 || roll > 700) {
-            showAlert('দয়া করে সঠিক রোল নম্বর লিখুন!');
-            return;
-        }
-
-        const cleanedInputDob = cleanDateString(inputDob);
-
-        // ১. current_students টেবিলে জন্ম তারিখ যাচাই (Verification Checkpoint)
-        const { data: validStudent, error: dobErr } = await supabaseClient
-            .from('current_students')
-            .select('*')
-            .eq('class_name', className)
-            .eq('section', section)
-            .eq('roll_no', roll)
-            .single();
-
-        if (dobErr || !validStudent) {
-            showAlert('প্রদত্ত তথ্য অনুযায়ী শিক্ষার্থীর রেকর্ড খুঁজে পাওয়া যায়নি।');
-            return;
-        }
-
-        const dbDobClean = validStudent.dob_clean || cleanDateString(validStudent.dob);
-
-        if (cleanedInputDob !== dbDobClean) {
-            showAlert('সতর্কতা: প্রবেশ করানো জন্ম তারিখ রেকর্ডকৃত তথ্যের সাথে মেলেনি। সঠিক জন্ম তারিখ দিয়ে পুনরায় চেষ্টা করুন।', 'error');
-            return;
-        }
-
-        const config = getExamConfig(className);
-
-        // ২. সেকশনে অন্তত একজন শিক্ষার্থীর নম্বর আপলোড হয়েছে কিনা চেক করা
-        const { data: sectionCheck } = await supabaseClient
-            .from(config.table)
-            .select('*')
-            .eq('session', currentSession)
-            .eq('section', section);
-
-        let isSectionExamStarted = false;
-
-        if (sectionCheck && sectionCheck.length > 0) {
-            isSectionExamStarted = sectionCheck.some(row => 
-                Object.keys(row).some(col => {
-                    let isExamCol = Array.isArray(config.prefix) 
-                        ? config.prefix.some(p => col.startsWith(p)) 
-                        : col.startsWith(config.prefix);
-                    return isExamCol && row[col] !== null;
-                })
-            );
-        }
-
-        if (!isSectionExamStarted) {
-            showAlert(`Class ${className} (${section})-এর ${config.label}-এর নম্বর এখনো কোনো শিক্ষার্থীর জন্য আপলোড হয়নি। তাই আবেদন করা যাবে না।`, 'error');
-            return;
-        }
-
-        // ৩. রেজাল্ট টেবিল থেকে শিক্ষার্থী ডাটা ফেচ করা
-        const { data: student, error } = await supabaseClient
-            .from(config.table)
-            .select('*')
-            .eq('session', currentSession)
-            .eq('section', section)
-            .eq('roll_no', roll)
-            .single();
-
-        if (error || !student) {
-            showAlert('এই রোল নম্বরের পরীক্ষার্থীর রেজাল্ট ডাটা খুঁজে পাওয়া যায়নি।');
-            return;
-        }
-
-        // ৪. পূর্বে আবেদন করেছে কিনা চেক ও হাইলাইট লজিক
-        const { data: existingApp } = await supabaseClient
-            .from('scrutiny_applications')
-            .select('*')
-            .eq('session', currentSession)
-            .eq('class_name', className)
-            .eq('section', section)
-            .eq('roll_no', roll)
-            .single();
-
-        if (existingApp) {
-            showAlert(`ইতিপূর্বে আপনার আবেদন জমা নেওয়া হয়েছে (সামগ্রিক স্ট্যাটাস: ${existingApp.overall_status})। নিচে আপনার আবেদনের বর্তমান অবস্থা দেখুন।`, 'info');
-            
-            document.querySelectorAll('.highlight-row').forEach(row => row.classList.remove('highlight-row'));
-
-            const targetRowId = `app-row-${className}-${section}-${roll}`;
-            const targetRow = document.getElementById(targetRowId);
-
-            if (targetRow) {
-                targetRow.classList.add('highlight-row');
-                targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (!className || !roll || !inputDob) {
+                showAlert('দয়া করে শ্রেণি, রোল নম্বর এবং জন্ম তারিখ সঠিকভাবে প্রদান করুন।');
+                return;
             }
-            return;
-        }
 
-        // তথ্য সঠিক প্রমাণিত হলে ফর্ম দৃশ্যমান করা
-        showAlert('শিক্ষার্থীর পরিচয় ও জন্ম তারিখ সফলভাবে যাচাই করা হয়েছে।', 'success');
-        currentStudentData = student;
-        document.getElementById('st-name').innerText = student.student_name;
-        document.getElementById('st-class').innerText = className;
-        document.getElementById('st-sec').innerText = section;
-        document.getElementById('st-roll').innerText = roll;
+            if (roll < 1 || roll > 700) {
+                showAlert('দয়া করে সঠিক রোল নম্বর লিখুন!');
+                return;
+            }
 
-        const tbody = document.querySelector('#marks-table tbody');
-        tbody.innerHTML = '';
+            const cleanedInputDob = cleanDateString(inputDob);
 
-        Object.keys(student).forEach(col => {
-            let matches = Array.isArray(config.prefix) 
-                ? config.prefix.some(p => col.startsWith(p)) 
-                : col.startsWith(config.prefix);
+            const { data: validStudent, error: dobErr } = await supabaseClient
+                .from('current_students')
+                .select('*')
+                .eq('class_name', className)
+                .eq('section', section)
+                .eq('roll_no', roll)
+                .single();
 
-            if (matches) {
-                const marksDisplay = student[col] !== null ? student[col] : '<span style="color:red;">Not Uploaded / Absent</span>';
-                const subLabel = col.replace(/_/g, ' ').toUpperCase();
+            if (dobErr || !validStudent) {
+                showAlert('প্রদত্ত তথ্য অনুযায়ী শিক্ষার্থীর রেকর্ড খুঁজে পাওয়া যায়নি।');
+                return;
+            }
+
+            const dbDobClean = validStudent.dob_clean || cleanDateString(validStudent.dob);
+
+            if (cleanedInputDob !== dbDobClean) {
+                showAlert('সতর্কতা: এন্ট্রি করা জন্ম তারিখ রেকর্ডকৃত তথ্যের সাথে মেলেনি। সঠিক জন্ম তারিখ দিয়ে পুনরায় চেষ্টা করুন।', 'error');
+                return;
+            }
+
+            const config = getExamConfig(className);
+
+            const { data: sectionCheck } = await supabaseClient
+                .from(config.table)
+                .select('*')
+                .eq('session', currentSession)
+                .eq('section', section);
+
+            let isSectionExamStarted = false;
+
+            if (sectionCheck && sectionCheck.length > 0) {
+                isSectionExamStarted = sectionCheck.some(row => 
+                    Object.keys(row).some(col => {
+                        let isExamCol = Array.isArray(config.prefix) 
+                            ? config.prefix.some(p => col.startsWith(p)) 
+                            : col.startsWith(config.prefix);
+                        return isExamCol && row[col] !== null;
+                    })
+                );
+            }
+
+            if (!isSectionExamStarted) {
+                showAlert(`Class ${className} (${section})-এর ${config.label}-এর নম্বর এখনো কোনো শিক্ষার্থীর জন্য আপলোড হয়নি। তাই আবেদন করা যাবে না।`, 'error');
+                return;
+            }
+
+            const { data: student, error } = await supabaseClient
+                .from(config.table)
+                .select('*')
+                .eq('session', currentSession)
+                .eq('section', section)
+                .eq('roll_no', roll)
+                .single();
+
+            if (error || !student) {
+                showAlert('এই রোল নম্বরের পরীক্ষার্থীর রেজাল্ট ডাটা খুঁজে পাওয়া যায়নি।');
+                return;
+            }
+
+            const { data: existingApp } = await supabaseClient
+                .from('scrutiny_applications')
+                .select('*')
+                .eq('session', currentSession)
+                .eq('class_name', className)
+                .eq('section', section)
+                .eq('roll_no', roll)
+                .single();
+
+            if (existingApp) {
+                showAlert(`ইতিপূর্বে আপনার আবেদন জমা নেওয়া হয়েছে (সামগ্রিক স্ট্যাটাস: ${existingApp.overall_status})। নিচে আপনার আবেদনের বর্তমান অবস্থা দেখুন।`, 'info');
                 
-                tbody.innerHTML += `
-                    <tr>
-                        <td><input type="checkbox" name="subject" value="${col}"></td>
-                        <td>${subLabel}</td>
-                        <td>${marksDisplay}</td>
-                    </tr>
-                `;
+                document.querySelectorAll('.highlight-row').forEach(row => row.classList.remove('highlight-row'));
+
+                const targetRowId = `app-row-${className}-${section}-${roll}`;
+                const targetRow = document.getElementById(targetRowId);
+
+                if (targetRow) {
+                    targetRow.classList.add('highlight-row');
+                    targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
             }
-        });
 
-        document.getElementById('student-section').style.display = 'block';
+            showAlert('শিক্ষার্থীর পরিচয় ও জন্ম তারিখ সফলভাবে যাচাই করা হয়েছে।', 'success');
+            currentStudentData = student;
+            document.getElementById('st-name').innerText = student.student_name;
+            document.getElementById('st-class').innerText = className;
+            document.getElementById('st-sec').innerText = section;
+            document.getElementById('st-roll').innerText = roll;
 
-    } catch (err) {
-        // unexpected error বা সার্ভার সমস্যা হলেও যেন এলার্ট দেখায়
-        console.error("Search Error:", err);
-        showAlert("সার্ভারে সমস্যা হয়েছে। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।", "error");
-    } finally {
-        // 🟢 ২. কাজ শেষ হলে বা যেকোনো অবস্থায় বাটন আবার স্বাভাবিক করা
-        searchBtn.disabled = false;
-        searchBtn.innerHTML = `<i class="fa-solid fa-search"></i> <span>অনুসন্ধান</span>`;
+            const tbody = document.querySelector('#marks-table tbody');
+            tbody.innerHTML = '';
+
+            Object.keys(student).forEach(col => {
+                let matches = Array.isArray(config.prefix) 
+                    ? config.prefix.some(p => col.startsWith(p)) 
+                    : col.startsWith(config.prefix);
+
+                if (matches) {
+                    const marksDisplay = student[col] !== null ? student[col] : '<span style="color:red;">Not Uploaded / Absent</span>';
+                    const subLabel = col.replace(/_/g, ' ').toUpperCase();
+                    
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="text-center"><input type="checkbox" name="subject" value="${col}"></td>
+                            <td>${subLabel}</td>
+                            <td class="text-center">${marksDisplay}</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            document.getElementById('student-section').style.display = 'block';
+
+        } catch (err) {
+            console.error("Search Error:", err);
+            showAlert("সার্ভারে সমস্যা হয়েছে। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।", "error");
+        } finally {
+            searchBtn.disabled = false;
+            searchBtn.innerHTML = `<i class="fa-solid fa-search"></i> <span>অনুসন্ধান</span>`;
+        }
     }
-}
 
     async function confirmAndSubmit() {
         const selected = Array.from(document.querySelectorAll('input[name="subject"]:checked')).map(cb => cb.value);
@@ -651,7 +724,7 @@ try {
         if (error) {
             showAlert('আবেদন জমা দেওয়ার সময় সমস্যা হয়েছে: ' + error.message);
         } else {
-            showAlert('আপনার পুনঃমূল্যায়নের আবেদন সফলভাবে জমা নেওয়া হয়েছে!', 'success');
+            showAlert('খাতা পুনঃমূল্যায়নের আবেদন সফলভাবে জমা নেওয়া হয়েছে!', 'success');
             document.getElementById('student-section').style.display = 'none';
             loadAllApplications();
         }
@@ -671,31 +744,30 @@ try {
         tbody.innerHTML = '';
 
         data.forEach(app => {
-    let subjectsFormatted = '';
-    
-    Object.keys(app.applied_subjects).forEach(k => {
-        const sub = app.applied_subjects[k];
-        let badgeClass = 'badge-pending';
-        let statusText = sub.status;
+            let subjectsFormatted = '';
+            
+            Object.keys(app.applied_subjects).forEach(k => {
+                const sub = app.applied_subjects[k];
+                let badgeClass = 'badge-pending';
+                let statusText = sub.status;
 
-        // লেটেস্ট নম্বর ও স্ট্যাটাস প্রদর্শনের লজিক
-        if (sub.status === 'Verified (Changed)') {
-            badgeClass = 'badge-success';
-            statusText = `Verified (Changed) ➔ New: ${sub.new_marks !== undefined ? sub.new_marks : 'N/A'}`;
-        } else if (sub.status === 'Verified (No Change)') {
-            badgeClass = 'badge-success';
-            statusText = `Verified (No Change) ➔ Final: ${sub.new_marks !== undefined ? sub.new_marks : sub.old_marks}`;
-        } else {
-            statusText = `Under Processing`;
-        }
+                if (sub.status === 'Verified (Changed)') {
+                    badgeClass = 'badge-success';
+                    statusText = `Verified (Changed) ➔ New: ${sub.new_marks !== undefined ? sub.new_marks : 'N/A'}`;
+                } else if (sub.status === 'Verified (No Change)') {
+                    badgeClass = 'badge-success';
+                    statusText = `Verified (No Change) ➔ Final: ${sub.new_marks !== undefined ? sub.new_marks : sub.old_marks}`;
+                } else {
+                    statusText = `Under Processing`;
+                }
 
-        const subLabel = k.replace(/_/g, ' ').toUpperCase();
-        subjectsFormatted += `
-            <div style="margin-bottom: 6px;">
-                <strong>${subLabel}:</strong> (Applied Marks: ${sub.old_marks}) ➔ 
-                <span class="status-badge ${badgeClass}">${statusText}</span>
-            </div>`;
-    });
+                const subLabel = k.replace(/_/g, ' ').toUpperCase();
+                subjectsFormatted += `
+                    <div style="margin-bottom: 6px;">
+                        <strong>${subLabel}:</strong> (Applied Marks: ${sub.old_marks}) ➔ 
+                        <span class="status-badge ${badgeClass}">${statusText}</span>
+                    </div>`;
+            });
 
             const overallBadge = app.overall_status === 'Completed' ? 'badge-success' : 'badge-pending';
             const dt = new Date(app.created_at).toLocaleDateString('bn-IN');
