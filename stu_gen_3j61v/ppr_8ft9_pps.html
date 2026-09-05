@@ -438,10 +438,10 @@
     <div class="card">
         <div class="flex justify-between items-center mb-4 border-b pb-2 border-slate-200">
             <h3 class="text-base font-bold text-slate-800 flex items-center">
-                <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> আবেদনকারীদের তালিকা ও স্ট্যাটাস
+                <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> আবেদনকারীদের স্ট্যাটাস
             </h3>
             <button onclick="window.print()" class="btn-print text-xs md:text-sm flex items-center gap-1.5">
-                <i class="fa-solid fa-print"></i> প্রিন্ট করুন
+                <i class="fa-solid fa-print"></i> প্রিন্ট
             </button>
         </div>
         <div class="table-wrapper">
@@ -489,7 +489,7 @@
                 if (data.edit_mode === 'false' || data.edit_mode === false) {
                     // edit_mode বন্ধ থাকলে সার্চ ও আবেদন সেকশন হাইড হবে
                     document.getElementById('search-card-wrapper').style.display = 'none';
-                    showAlert('বর্তমানে খাতা পুনর্মূল্যায়নের অনলাইন আবেদন সিস্টেম বন্ধ রাখা হয়েছে। নতুন করে কোনো আবেদন জমা নেওয়া হচ্ছে না।', 'info');
+                    showAlert('বর্তমানে খাতা পুনর্মূল্যায়নের অনলাইন আবেদন বন্ধ আছে। নতুন করে কোনো আবেদন জমা নেওয়া হচ্ছে না।', 'info');
                 } else {
                     document.getElementById('search-card-wrapper').style.display = 'block';
                 }
