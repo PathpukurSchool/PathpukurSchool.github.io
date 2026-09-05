@@ -139,91 +139,190 @@
             renderCalendar();
         };
 
-// একক তারিখ সঠিকভাবে (DD.MM.YYYY / DD/MM/YYYY / YYYY-MM-DD) পার্স করার নিয়ম
+// ==========================================================
+// SUPABASE DATE PARSER
+// DD.MM.YYYY / DD/MM/YYYY / DD-MM-YYYY
+// YYYY-MM-DD
+// ==========================================================
 function parseSingleDate(str) {
     if (!str) return null;
-    str = str.trim();
 
-    // ১. DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY ফরম্যাট
-    let dmyRegex = /^(\d{1,2})[\.\/-](\d{1,2})[\.\/-](\d{4})$/;
-    let matchDMY = str.match(dmyRegex);
-    if (matchDMY) {
-        let day = parseInt(matchDMY[1], 10);
-        let month = parseInt(matchDMY[2], 10) - 1; // 0-indexed
-        let year = parseInt(matchDMY[3], 10);
-        
-        // Pure Local Date (তাং ঠিক রাখার জন্য)
-        return new Date(year, month, day);
+    str = String(str)
+        .trim()
+        .replace(/\u00A0/g, ' ')
+        .replace(/\s+/g, ' ');
+
+    // DD.MM.YYYY / DD/MM/YYYY / DD-MM-YYYY
+    let match = str.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})$/);
+
+    if (match) {
+        const day = parseInt(match[1], 10);
+        const month = parseInt(match[2], 10);
+        const year = parseInt(match[3], 10);
+
+        if (month < 1 || month > 12 || day < 1 || day > 31) {
+            return null;
+        }
+
+        return {
+            year: year,
+            month: month,
+            day: day
+        };
     }
 
-    // ২. YYYY-MM-DD ফরম্যাট
-    let ymdRegex = /^(\d{4})[\.\/-](\d{1,2})[\.\/-](\d{1,2})$/;
-    let matchYMD = str.match(ymdRegex);
-    if (matchYMD) {
-        let year = parseInt(matchYMD[1], 10);
-        let month = parseInt(matchYMD[2], 10) - 1;
-        let day = parseInt(matchYMD[3], 10);
-        return new Date(year, month, day);
+    // YYYY-MM-DD
+    match = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+
+    if (match) {
+        const year = parseInt(match[1], 10);
+        const month = parseInt(match[2], 10);
+        const day = parseInt(match[3], 10);
+
+        if (month < 1 || month > 12 || day < 1 || day > 31) {
+            return null;
+        }
+
+        return {
+            year: year,
+            month: month,
+            day: day
+        };
     }
 
     return null;
 }
 
-// তারিখকে স্ট্রিং এ রূপান্তর (YYYY-MM-DD)
-function formatDateKey(d) {
-    let y = d.getFullYear();
-    let m = (d.getMonth() + 1).toString().padStart(2, '0');
-    let day = d.getDate().toString().padStart(2, '0');
-    return `${y}-${m}-${day}`;
+
+// ==========================================================
+// DATE OBJECT -> YYYY-MM-DD
+// UTC ব্যবহার করা হয়েছে যাতে timezone-এর কারণে date shift না হয়
+// ==========================================================
+function formatDateKey(dateObj) {
+    const y = dateObj.getUTCFullYear();
+    const m = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+    const d = String(dateObj.getUTCDate()).padStart(2, '0');
+
+    return `${y}-${m}-${d}`;
 }
 
-// তারিখের রেঞ্জ এবং সিঙ্গেল ডেট থেকে 'YYYY-MM-DD' অ্যারে তৈরি
+
+// ==========================================================
+// DATE / DATE RANGE -> YYYY-MM-DD ARRAY
+// ==========================================================
 function parseToDateArray(dateStr) {
+
     if (!dateStr) return [];
-    
-    let str = String(dateStr).trim();
-    let dates = [];
-    let rangeParts = [];
 
-    // 'থেকে', 'to', বা ' - ' যুক্ত রেঞ্জ চেক করা
+    let str = String(dateStr)
+        .trim()
+        .replace(/\u00A0/g, ' ')
+        .replace(/\s+/g, ' ');
+
+    let startText = '';
+    let endText = '';
+
+    // ------------------------------------------------------
+    // 1. "থেকে" format
+    // উদাহরণ:
+    // 14.01.2026 থেকে 15.01.2026
+    // 16/06/2026 থেকে
+    // ------------------------------------------------------
     if (str.includes('থেকে')) {
-        rangeParts = str.split('থেকে');
-    } else if (str.includes(' to ')) {
-        rangeParts = str.split(' to ');
-    } else if (str.includes(' - ')) {
-        rangeParts = str.split(' - ');
-    } else if (str.includes('-') && !str.match(/^\d{4}-\d{2}-\d{2}$/)) {
-        let splitDash = str.split('-');
-        if (splitDash.length === 2) {
-            rangeParts = splitDash;
+
+        const parts = str.split('থেকে');
+
+        startText = parts[0].trim();
+        endText = parts[1] ? parts[1].trim() : '';
+
+    }
+
+    // ------------------------------------------------------
+    // 2. " - " format
+    // উদাহরণ:
+    // 01/04/2026 - 11/04/2026
+    // ------------------------------------------------------
+    else if (str.includes(' - ')) {
+
+        const parts = str.split(' - ');
+
+        startText = parts[0].trim();
+        endText = parts[1] ? parts[1].trim() : '';
+
+    }
+
+    // ------------------------------------------------------
+    // 3. " to " format
+    // ------------------------------------------------------
+    else if (/\s+to\s+/i.test(str)) {
+
+        const parts = str.split(/\s+to\s+/i);
+
+        startText = parts[0].trim();
+        endText = parts[1] ? parts[1].trim() : '';
+
+    }
+
+    // ------------------------------------------------------
+    // যদি range পাওয়া যায়
+    // ------------------------------------------------------
+    if (startText) {
+
+        const start = parseSingleDate(startText);
+
+        if (!start) return [];
+
+        // শুধু শুরু তারিখ আছে
+        // যেমন: 16/06/2026 থেকে
+        if (!endText) {
+            return [
+                `${start.year}-${String(start.month).padStart(2, '0')}-${String(start.day).padStart(2, '0')}`
+            ];
         }
-    }
 
-    // রেঞ্জ থাকলে (Start Date থেকে End Date পর্যন্ত)
-    if (rangeParts.length === 2) {
-        let startDate = parseSingleDate(rangeParts[0]);
-        let endDate = parseSingleDate(rangeParts[1]);
+        const end = parseSingleDate(endText);
 
-        if (startDate && endDate) {
-            let curr = new Date(startDate.getTime());
-            while (curr <= endDate) {
-                dates.push(formatDateKey(curr));
-                curr.setDate(curr.getDate() + 1); // ১ দিন যোগ
-            }
-            return dates;
-        } else if (startDate) {
-            return [formatDateKey(startDate)];
+        if (!end) {
+            return [
+                `${start.year}-${String(start.month).padStart(2, '0')}-${String(start.day).padStart(2, '0')}`
+            ];
         }
+
+        // UTC date ব্যবহার
+        const current = new Date(
+            Date.UTC(start.year, start.month - 1, start.day)
+        );
+
+        const endDate = new Date(
+            Date.UTC(end.year, end.month - 1, end.day)
+        );
+
+        const dates = [];
+
+        while (current.getTime() <= endDate.getTime()) {
+
+            dates.push(formatDateKey(current));
+
+            current.setUTCDate(
+                current.getUTCDate() + 1
+            );
+        }
+
+        return dates;
     }
 
-    // রেঞ্জ ছাড়া সিঙ্গেল ডেট
-    let singleDate = parseSingleDate(str);
-    if (singleDate) {
-        dates.push(formatDateKey(singleDate));
-    }
+    // ------------------------------------------------------
+    // Single Date
+    // ------------------------------------------------------
+    const single = parseSingleDate(str);
 
-    return dates;
+    if (!single) return [];
+
+    return [
+        `${single.year}-${String(single.month).padStart(2, '0')}-${String(single.day).padStart(2, '0')}`
+    ];
 }
+
         async function fetchYearEvents(targetYear) {
             eventsData = {};
 
