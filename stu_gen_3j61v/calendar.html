@@ -3,7 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>একাডেমিক ক্যালেন্ডার</title>
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (অনুমোদিত না হলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
+    <style id="security-shield">
+        body { display: none !important; }
+    </style>
+
+    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট (লিংক সরাসরি কপি করে খোলা আটকাবে) -->
+    <script>
+    (function() {
+        try {
+            var ref = document.referrer;
+            var isValidReferrer = false;
+
+            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
+            if (ref) {
+                var refUrl = new URL(ref);
+                if (refUrl.hostname === "pathpukurschool.github.io") {
+                    isValidReferrer = true;
+                }
+            }
+
+            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
+            if (!isValidReferrer) {
+                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
+                window.location.replace("https://pathpukurschool.github.io/");
+                return;
+            }
+
+            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
+
+        } catch (e) {
+            window.location.replace("https://pathpukurschool.github.io/");
+        }
+    })();
+    </script>
+   <!-- স্কুল ক্যালেন্ডার -->
+    <title>Pathpukur High School (H. S.)</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -362,7 +403,7 @@
                             if (e.type === 'academic') {
                                 let sub = (e.subject || '').toLowerCase();
                                 // যদি একাডেমিক ইভেন্টটি পরীক্ষার নাম হয় তবে বাদ যাবে (যেহেতু পরীক্ষার রুটিন আছে)
-                                if (sub.includes('পরীক্ষা') || sub.includes('exam') || sub.includes('সামেটিভ')) {
+                                if (sub.includes('পরীক্ষা') || sub.includes('exam') || sub.includes('সেমিস্টার') || sub.includes('সামেটিভ')) {
                                     return false;
                                 }
                             }
@@ -545,7 +586,7 @@
                         <div class="p-2 bg-emerald-50 border-l-4 border-emerald-500 rounded-r space-y-0.5">
                             <div class="font-bold text-emerald-900 text-xs"><i class="fa-solid fa-book-open mr-1"></i> একাডেমিক ইভেন্ট</div>
                             <div class="text-[11px] text-emerald-800">শ্রেণী: <strong>${ev.class_name}</strong></div>
-                            <div class="text-[11px] text-emerald-700">বিষয় / বিস্তারিত: ${ev.subject}</div>
+                            <div class="text-[11px] text-emerald-700">বিষয়: ${ev.subject}</div>
                             ${fromTextHtml}
                         </div>
                     `;
