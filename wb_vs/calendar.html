@@ -139,245 +139,170 @@
             renderCalendar();
         };
 
-// ==========================================================
-// SUPABASE DATE PARSER
-// DD.MM.YYYY / DD/MM/YYYY / DD-MM-YYYY
-// YYYY-MM-DD
-// ==========================================================
-function parseSingleDate(str) {
-    if (!str) return null;
+        // ১. একক তারিখ পার্স করার সময় Timezone Bug এড়ানো
+        function parseSingleDate(str) {
+            if (!str) return null;
+            str = String(str).trim().replace(/\u00A0/g, ' ').replace(/\s+/g, ' ');
 
-    str = String(str)
-        .trim()
-        .replace(/\u00A0/g, ' ')
-        .replace(/\s+/g, ' ');
-
-    // DD.MM.YYYY / DD/MM/YYYY / DD-MM-YYYY
-    let match = str.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})$/);
-
-    if (match) {
-        const day = parseInt(match[1], 10);
-        const month = parseInt(match[2], 10);
-        const year = parseInt(match[3], 10);
-
-        if (month < 1 || month > 12 || day < 1 || day > 31) {
-            return null;
-        }
-
-        return {
-            year: year,
-            month: month,
-            day: day
-        };
-    }
-
-    // YYYY-MM-DD
-    match = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-
-    if (match) {
-        const year = parseInt(match[1], 10);
-        const month = parseInt(match[2], 10);
-        const day = parseInt(match[3], 10);
-
-        if (month < 1 || month > 12 || day < 1 || day > 31) {
-            return null;
-        }
-
-        return {
-            year: year,
-            month: month,
-            day: day
-        };
-    }
-
-    return null;
-}
-
-// ১. একক তারিখ পার্স করার সঠিক নিয়ম (String manipulation দিয়ে Timezone Bug এড়ানো হয়েছে)
-function parseSingleDate(str) {
-    if (!str) return null;
-    str = str.trim();
-
-    // DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY ফরম্যাট
-    let dmyRegex = /^(\d{1,2})[\.\/-](\d{1,2})[\.\/-](\d{4})$/;
-    let matchDMY = str.match(dmyRegex);
-    if (matchDMY) {
-        let day = parseInt(matchDMY[1], 10);
-        let month = parseInt(matchDMY[2], 10);
-        let year = parseInt(matchDMY[3], 10);
-        return { day, month, year };
-    }
-
-    // YYYY-MM-DD, YYYY/MM/DD, YYYY.MM.DD ফরম্যাট
-    let ymdRegex = /^(\d{4})[\.\/-](\d{1,2})[\.\/-](\d{1,2})$/;
-    let matchYMD = str.match(ymdRegex);
-    if (matchYMD) {
-        let year = parseInt(matchYMD[1], 10);
-        let month = parseInt(matchYMD[2], 10);
-        let day = parseInt(matchYMD[3], 10);
-        return { day, month, year };
-    }
-
-    return null;
-}
-
-// ২. তারিখের রেঞ্জ এবং সিঙ্গেল ডেট থেকে 'YYYY-MM-DD' এর অবজেক্ট তৈরি
-function parseToDateDetails(dateStr) {
-    if (!dateStr) return { dates: [], isFromOnly: false, startDateStr: '' };
-
-    let str = String(dateStr).trim();
-    let dates = [];
-    let isFromOnly = false;
-    let startDateObj = null;
-
-    // 'থেকে', 'to', বা '-' যুক্ত রেঞ্জ চেক
-    let parts = [];
-    let delimiter = '';
-
-    if (str.includes('থেকে')) {
-        parts = str.split('থেকে');
-        delimiter = 'থেকে';
-    } else if (str.includes(' to ')) {
-        parts = str.split(' to ');
-        delimiter = 'to';
-    } else if (str.includes(' - ')) {
-        parts = str.split(' - ');
-        delimiter = '-';
-    } else if (str.includes('-')) {
-        // DD.MM.YYYY-DD.MM.YYYY ফরম্যাটের জন্য চেক
-        let splitDash = str.split('-');
-        if (splitDash.length === 2 && splitDash[1].trim() !== '') {
-            parts = splitDash;
-            delimiter = '-';
-        }
-    }
-
-    // কেস ১: "থেকে / to / -" আছে কিন্তু শেষের তারিখ নেই (যেমন: "16/06/2026 থেকে")
-    if (parts.length > 0 && (parts.length === 1 || parts[1].trim() === '')) {
-        let startParsed = parseSingleDate(parts[0]);
-        if (startParsed) {
-            let y = startParsed.year;
-            let m = startParsed.month.toString().padStart(2, '0');
-            let d = startParsed.day.toString().padStart(2, '0');
-            let key = `${y}-${m}-${d}`;
-            let formattedStart = `${d}/${m}/${y}`;
-            return { 
-                dates: [key], 
-                isFromOnly: true, 
-                startDateStr: formattedStart 
-            };
-        }
-    }
-
-    // কেস ২: "শুরুর তারিখ থেকে শেষের তারিখ" রেঞ্জ
-    if (parts.length === 2 && parts[1].trim() !== '') {
-        let startParsed = parseSingleDate(parts[0]);
-        let endParsed = parseSingleDate(parts[1]);
-
-        if (startParsed && endParsed) {
-            // বিশুদ্ধ JS Date তৈরি (Local Timezone এড়াতে 12:00 PM ধরে)
-            let current = new Date(startParsed.year, startParsed.month - 1, startParsed.day, 12, 0, 0);
-            let end = new Date(endParsed.year, endParsed.month - 1, endParsed.day, 12, 0, 0);
-
-            while (current <= end) {
-                let y = current.getFullYear();
-                let m = (current.getMonth() + 1).toString().padStart(2, '0');
-                let d = current.getDate().toString().padStart(2, '0');
-                dates.push(`${y}-${m}-${d}`);
-
-                // ১ দিন যোগ
-                current.setDate(current.getDate() + 1);
+            let dmyRegex = /^(\d{1,2})[\.\/-](\d{1,2})[\.\/-](\d{4})$/;
+            let matchDMY = str.match(dmyRegex);
+            if (matchDMY) {
+                let day = parseInt(matchDMY[1], 10);
+                let month = parseInt(matchDMY[2], 10);
+                let year = parseInt(matchDMY[3], 10);
+                return { day, month, year };
             }
+
+            let ymdRegex = /^(\d{4})[\.\/-](\d{1,2})[\.\/-](\d{1,2})$/;
+            let matchYMD = str.match(ymdRegex);
+            if (matchYMD) {
+                let year = parseInt(matchYMD[1], 10);
+                let month = parseInt(matchYMD[2], 10);
+                let day = parseInt(matchYMD[3], 10);
+                return { day, month, year };
+            }
+
+            return null;
+        }
+
+        // ২. তারিখের রেঞ্জ এবং সিঙ্গেল ডেট থেকে 'YYYY-MM-DD' অ্যারে গঠন
+        function parseToDateDetails(dateStr) {
+            if (!dateStr) return { dates: [], isFromOnly: false, startDateStr: '' };
+
+            let str = String(dateStr).trim();
+            let dates = [];
+
+            let parts = [];
+            if (str.includes('থেকে')) parts = str.split('থেকে');
+            else if (str.includes(' to ')) parts = str.split(' to ');
+            else if (str.includes(' - ')) parts = str.split(' - ');
+            else if (str.includes('-')) {
+                let splitDash = str.split('-');
+                if (splitDash.length === 2 && splitDash[1].trim() !== '') parts = splitDash;
+            }
+
+            // কেস ১: "X থেকে" (শেষ তারিখ অনুপস্থিত)
+            if (parts.length > 0 && (parts.length === 1 || parts[1].trim() === '')) {
+                let startParsed = parseSingleDate(parts[0]);
+                if (startParsed) {
+                    let y = startParsed.year;
+                    let m = startParsed.month.toString().padStart(2, '0');
+                    let d = startParsed.day.toString().padStart(2, '0');
+                    return { 
+                        dates: [`${y}-${m}-${d}`], 
+                        isFromOnly: true, 
+                        startDateStr: `${d}/${m}/${y}` 
+                    };
+                }
+            }
+
+            // কেস ২: "শুরু থেকে শেষ" তারিখ রেঞ্জ
+            if (parts.length === 2 && parts[1].trim() !== '') {
+                let startParsed = parseSingleDate(parts[0]);
+                let endParsed = parseSingleDate(parts[1]);
+
+                if (startParsed && endParsed) {
+                    let current = new Date(startParsed.year, startParsed.month - 1, startParsed.day, 12, 0, 0);
+                    let end = new Date(endParsed.year, endParsed.month - 1, endParsed.day, 12, 0, 0);
+
+                    while (current <= end) {
+                        let y = current.getFullYear();
+                        let m = (current.getMonth() + 1).toString().padStart(2, '0');
+                        let d = current.getDate().toString().padStart(2, '0');
+                        dates.push(`${y}-${m}-${d}`);
+                        current.setDate(current.getDate() + 1);
+                    }
+                    return { dates, isFromOnly: false, startDateStr: '' };
+                }
+            }
+
+            // কেস ৩: একক তারিখ
+            let single = parseSingleDate(str);
+            if (single) {
+                let y = single.year;
+                let m = single.month.toString().padStart(2, '0');
+                let d = single.day.toString().padStart(2, '0');
+                dates.push(`${y}-${m}-${d}`);
+            }
+
             return { dates, isFromOnly: false, startDateStr: '' };
         }
-    }
 
-    // কেস ৩: একক তারিখ (যেমন: "01.01.2026")
-    let single = parseSingleDate(str);
-    if (single) {
-        let y = single.year;
-        let m = single.month.toString().padStart(2, '0');
-        let d = single.day.toString().padStart(2, '0');
-        dates.push(`${y}-${m}-${d}`);
-    }
+        // ৩. ডাটাবেস থেকে ডাটা ফেচিং
+        async function fetchYearEvents(targetYear) {
+            eventsData = {};
 
-    return { dates, isFromOnly: false, startDateStr: '' };
-}
-
-// ৩. ডাটাবেস থেকে ডাটা ফেচ করার ফাংশন
-async function fetchYearEvents(targetYear) {
-    eventsData = {};
-
-    // ১. Holiday Table Fetch
-    const { data: holidays } = await _supabase.from('Holiday').select('*');
-    if (holidays) {
-        holidays.forEach(h => {
-            let parsed = parseToDateDetails(h.date_val);
-            parsed.dates.forEach(stdDate => {
-                if (stdDate.startsWith(targetYear.toString())) {
-                    if (!eventsData[stdDate]) eventsData[stdDate] = [];
-                    eventsData[stdDate].push({
-                        type: 'holiday',
-                        title: h.occasion || 'স্কুল ছুটি',
-                        days: h.days || 1,
-                        remarks: h.remarks || '',
-                        isFromOnly: parsed.isFromOnly,
-                        startDateStr: parsed.startDateStr
-                    });
-                }
-            });
-        });
-    }
-
-    // ২. Exam Routine Table Fetch
-    const { data: exams } = await _supabase.from('exam_routine').select('*').eq('session', targetYear.toString());
-    if (exams) {
-        exams.forEach(ex => {
-            let parsed = parseToDateDetails(ex.exam_date);
-            parsed.dates.forEach(stdDate => {
-                if (stdDate) {
-                    if (!eventsData[stdDate]) eventsData[stdDate] = [];
-                    eventsData[stdDate].push({
-                        type: 'exam',
-                        exam_name: ex.exam_name,
-                        isFromOnly: parsed.isFromOnly,
-                        startDateStr: parsed.startDateStr,
-                        classes: {
-                            'Class V': ex.class_v,
-                            'Class VI': ex.class_vi,
-                            'Class VII': ex.class_vii,
-                            'Class VIII': ex.class_viii,
-                            'Class IX': ex.class_ix,
-                            'Class X': ex.class_x,
-                            'Class XI': ex.class_xi
+            // ১. Holiday Table Fetch
+            const { data: holidays } = await _supabase.from('Holiday').select('*');
+            if (holidays) {
+                holidays.forEach(h => {
+                    let parsed = parseToDateDetails(h.date_val);
+                    parsed.dates.forEach(stdDate => {
+                        if (stdDate.startsWith(targetYear.toString())) {
+                            if (!eventsData[stdDate]) eventsData[stdDate] = [];
+                            eventsData[stdDate].push({
+                                type: 'holiday',
+                                title: h.occasion || 'স্কুল ছুটি',
+                                days: h.days || 1,
+                                remarks: h.remarks || '',
+                                isFromOnly: parsed.isFromOnly,
+                                startDateStr: parsed.startDateStr
+                            });
                         }
                     });
-                }
-            });
-        });
-    }
+                });
+            }
 
-    // ৩. Academic Calendar Table Fetch
-    const { data: academic } = await _supabase.from('Academic_Calendar').select('*');
-    if (academic) {
-        academic.forEach(ac => {
-            let parsed = parseToDateDetails(ac.date_val);
-            parsed.dates.forEach(stdDate => {
-                if (stdDate.startsWith(targetYear.toString())) {
-                    if (!eventsData[stdDate]) eventsData[stdDate] = [];
-                    eventsData[stdDate].push({
-                        type: 'academic',
-                        class_name: ac.class_name,
-                        subject: ac.subject,
-                        isFromOnly: parsed.isFromOnly,
-                        startDateStr: parsed.startDateStr
+            // ২. Exam Routine Table Fetch
+            const { data: exams } = await _supabase.from('exam_routine').select('*').eq('session', targetYear.toString());
+            if (exams) {
+                exams.forEach(ex => {
+                    let parsed = parseToDateDetails(ex.exam_date);
+                    parsed.dates.forEach(stdDate => {
+                        if (stdDate) {
+                            if (!eventsData[stdDate]) eventsData[stdDate] = [];
+                            eventsData[stdDate].push({
+                                type: 'exam',
+                                exam_name: ex.exam_name,
+                                isFromOnly: parsed.isFromOnly,
+                                startDateStr: parsed.startDateStr,
+                                classes: {
+                                    'Class V': ex.class_v,
+                                    'Class VI': ex.class_vi,
+                                    'Class VII': ex.class_vii,
+                                    'Class VIII': ex.class_viii,
+                                    'Class IX': ex.class_ix,
+                                    'Class X': ex.class_x,
+                                    'Class XI': ex.class_xi
+                                }
+                            });
+                        }
                     });
-                }
-            });
-        });
-    }
-}
+                });
+            }
 
+            // ৩. Academic Calendar Table Fetch
+            const { data: academic } = await _supabase.from('Academic_Calendar').select('*');
+            if (academic) {
+                academic.forEach(ac => {
+                    let parsed = parseToDateDetails(ac.date_val);
+                    parsed.dates.forEach(stdDate => {
+                        if (stdDate.startsWith(targetYear.toString())) {
+                            if (!eventsData[stdDate]) eventsData[stdDate] = [];
+                            eventsData[stdDate].push({
+                                type: 'academic',
+                                class_name: ac.class_name,
+                                subject: ac.subject,
+                                isFromOnly: parsed.isFromOnly,
+                                startDateStr: parsed.startDateStr
+                            });
+                        }
+                    });
+                });
+            }
+        }
+
+        // ৪. ক্যালেন্ডার রেন্ডারিং (সব নিয়ম ফিল্টারসহ)
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -405,12 +330,34 @@ async function fetchYearEvents(targetYear) {
                 const dayStr = day.toString().padStart(2, '0');
                 const dateKey = `${year}-${monthStr}-${dayStr}`;
 
-                const dayEvents = eventsData[dateKey] || [];
+                let rawEvents = eventsData[dateKey] || [];
 
                 let isSunday = dayOfWeek === 0;
-                let hasHoliday = isSunday || dayEvents.some(e => e.type === 'holiday');
-                let hasExam = dayEvents.some(e => e.type === 'exam');
-                let hasAcademic = dayEvents.some(e => e.type === 'academic');
+                let hasHoliday = isSunday || rawEvents.some(e => e.type === 'holiday');
+
+                // নিয়ম ১: রবিবার বা holiday থাকলে পরীক্ষা বা একাডেমিক ইভেন্ট সম্পূর্ণ বাদ দেওয়া হলো
+                let filteredEvents = rawEvents;
+                if (hasHoliday) {
+                    filteredEvents = rawEvents.filter(e => e.type === 'holiday');
+                } else {
+                    // নিয়ম ৩: একই দিনে পরীক্ষা এবং একাডেমিক ক্যালেন্ডারের ডুপ্লিকেট সামেটিভ এন্ট্রি ফিল্টার করা
+                    let hasExam = rawEvents.some(e => e.type === 'exam');
+                    if (hasExam) {
+                        filteredEvents = rawEvents.filter(e => {
+                            if (e.type === 'academic') {
+                                let sub = (e.subject || '').toLowerCase();
+                                // যদি একাডেমিক ইভেন্টটি পরীক্ষার নাম হয় তবে বাদ যাবে (যেহেতু পরীক্ষার রুটিন আছে)
+                                if (sub.includes('পরীক্ষা') || sub.includes('exam') || sub.includes('সামেটিভ')) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        });
+                    }
+                }
+
+                let hasExam = filteredEvents.some(e => e.type === 'exam');
+                let hasAcademic = filteredEvents.some(e => e.type === 'academic');
 
                 let bgStyle = "bg-white hover:bg-sky-50";
                 let textStyle = "text-slate-800";
@@ -419,23 +366,27 @@ async function fetchYearEvents(targetYear) {
                 if (hasHoliday) {
                     bgStyle = "bg-red-50 hover:bg-red-100 border-red-200";
                     textStyle = "text-red-600 font-extrabold";
-                } else if (hasExam) {
-                    bgStyle = "bg-sky-50 hover:bg-sky-100 border-sky-200";
-                    textStyle = "text-sky-800 font-bold";
-                } else if (hasAcademic) {
-                    bgStyle = "bg-emerald-50 hover:bg-emerald-100 border-emerald-200";
-                    textStyle = "text-emerald-800 font-bold";
+                    badgeDots += `<span class="w-1 h-1 rounded-full bg-red-500"></span>`;
+                } else {
+                    if (hasExam) {
+                        bgStyle = "bg-sky-50 hover:bg-sky-100 border-sky-200";
+                        textStyle = "text-sky-800 font-bold";
+                        badgeDots += `<span class="w-1 h-1 rounded-full bg-sky-500"></span>`;
+                    }
+                    if (hasAcademic) {
+                        if (!hasExam) {
+                            bgStyle = "bg-emerald-50 hover:bg-emerald-100 border-emerald-200";
+                            textStyle = "text-emerald-800 font-bold";
+                        }
+                        badgeDots += `<span class="w-1 h-1 rounded-full bg-emerald-500"></span>`;
+                    }
                 }
-
-                if (hasHoliday) badgeDots += `<span class="w-1 h-1 rounded-full bg-red-500"></span>`;
-                if (hasExam) badgeDots += `<span class="w-1 h-1 rounded-full bg-sky-500"></span>`;
-                if (hasAcademic) badgeDots += `<span class="w-1 h-1 rounded-full bg-emerald-500"></span>`;
 
                 const isToday = dateKey === todayStr ? 'ring-2 ring-amber-500 font-extrabold bg-amber-50' : '';
 
                 const dayCard = document.createElement('div');
                 dayCard.className = `p-1 h-9 sm:h-10 border rounded-lg flex flex-col justify-between cursor-pointer transition-all ${bgStyle} ${isToday}`;
-                dayCard.onclick = () => showEventDetails(dateKey, isSunday, dayEvents);
+                dayCard.onclick = () => showEventDetails(dateKey, isSunday, filteredEvents);
 
                 dayCard.innerHTML = `
                     <div class="text-[11px] leading-none ${textStyle}">${day}</div>
@@ -463,7 +414,6 @@ async function fetchYearEvents(targetYear) {
             renderCalendar();
         }
 
-        // Reset with Loading Spinner Animation
         async function resetToCurrentMonth() {
             const btn = document.getElementById('resetBtn');
             const icon = document.getElementById('resetIcon');
@@ -486,6 +436,7 @@ async function fetchYearEvents(targetYear) {
             }
         }
 
+        // ৫. পপ-আপ মেসেজ প্রদর্শন ফাংশন
         function showEventDetails(dateKey, isSunday, events) {
             const modal = document.getElementById('eventModal');
             const modalTitle = document.getElementById('modalTitle');
@@ -496,44 +447,62 @@ async function fetchYearEvents(targetYear) {
             modalDate.innerText = `তারিখ: ${dateKey}`;
             modalBody.innerHTML = '';
 
-            if (isSunday && events.length === 0) {
-                modalTitle.innerText = "রবিবার (সাপ্তাহিক ছুটি)";
+            // ক. রবিবার ছুটি
+            if (isSunday) {
+                modalTitle.innerText = "সাপ্তাহিক ছুটি (রবিবার)";
                 modalIcon.className = "p-2 rounded-full bg-red-500 text-white";
                 modalIcon.innerHTML = `<i class="fa-solid fa-umbrella-beach"></i>`;
-                modalBody.innerHTML = `<p class="text-slate-600 font-medium">সাপ্তাহিক ছুটির দিন হিসেবে বিদ্যালয় বন্ধ থাকবে।</p>`;
+                modalBody.innerHTML = `<p class="text-red-600 font-medium bg-red-50 p-2 rounded border border-red-100"><i class="fa-solid fa-circle-info mr-1"></i> রবিবার থাকার কারণে বিদ্যালয় বন্ধ থাকবে।</p>`;
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 return;
             }
 
+            // খ. ছুটির তালিকা অনুযায়ী ছুটি
+            let hasHoliday = events.some(e => e.type === 'holiday');
+            if (hasHoliday) {
+                modalTitle.innerText = "স্কুল বন্ধ (ছুটি)";
+                modalIcon.className = "p-2 rounded-full bg-red-500 text-white";
+                modalIcon.innerHTML = `<i class="fa-solid fa-gift"></i>`;
+
+                events.filter(e => e.type === 'holiday').forEach(ev => {
+                    let fromTextHtml = ev.isFromOnly 
+                        ? `<div class="text-[11px] text-amber-700 font-bold bg-amber-100 p-1 rounded my-1"><i class="fa-solid fa-clock mr-1"></i> ${ev.startDateStr || dateKey} তারিখ থেকে শুরু</div>` 
+                        : '';
+
+                    modalBody.innerHTML += `
+                        <div class="p-2 bg-red-50 border-l-4 border-red-500 rounded-r space-y-0.5">
+                            <div class="font-bold text-red-800 text-xs"><i class="fa-solid fa-umbrella-beach mr-1"></i> ছুটির উপলক্ষ: ${ev.title}</div>
+                            <div class="text-[11px] text-red-600">ছুটির সময়কাল: ${ev.days} দিন</div>
+                            ${ev.remarks ? `<div class="text-[11px] text-slate-600">মন্তব্য: ${ev.remarks}</div>` : ''}
+                            ${fromTextHtml}
+                        </div>
+                    `;
+                });
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                return;
+            }
+
+            // গ. কোনো ইভেন্ট না থাকলে (সাধারণ কার্যদিবস - কোনো বাড়তি মেসেজ ছাড়া)
             if (events.length === 0) {
-                modalTitle.innerText = "সাধারণ কার্যদিবস";
-                modalIcon.className = "p-2 rounded-full bg-slate-500 text-white";
-                modalIcon.innerHTML = `<i class="fa-solid fa-school"></i>`;
-                modalBody.innerHTML = `<p class="text-slate-600 font-medium">আজ সাধারণ ক্লাস চালু থাকবে।</p>`;
+                modalTitle.innerText = "কোনো বিশেষ সূচী নেই";
+                modalIcon.className = "p-2 rounded-full bg-slate-600 text-white";
+                modalIcon.innerHTML = `<i class="fa-solid fa-calendar-day"></i>`;
+                modalBody.innerHTML = `<p class="text-slate-500 text-center py-2 font-medium">আজকের দিনে নির্দিষ্ট কোনো ছুটির সূচী বা পরীক্ষার রুটিন নেই।</p>`;
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 return;
             }
 
+            // ঘ. পরীক্ষার রুটিন এবং অন্যান্য একাডেমিক ইভেন্ট প্রদর্শন
             modalTitle.innerText = "নির্ধারিত সূচী ও ইভেন্ট";
             modalIcon.className = "p-2 rounded-full bg-indigo-600 text-white";
             modalIcon.innerHTML = `<i class="fa-solid fa-bell"></i>`;
 
-            if (isSunday) {
-                modalBody.innerHTML += `<div class="p-1.5 bg-red-50 text-red-700 rounded text-xs font-bold"><i class="fa-solid fa-calendar-check mr-1"></i> সাপ্তাহিক ছুটি (রবিবার)</div>`;
-            }
-
             events.forEach(ev => {
-                if (ev.type === 'holiday') {
-                    modalBody.innerHTML += `
-                        <div class="p-2 bg-red-50 border-l-4 border-red-500 rounded-r space-y-0.5">
-                            <div class="font-bold text-red-800 text-xs"><i class="fa-solid fa-gift mr-1"></i> ছুটির উপলক্ষ: ${ev.title}</div>
-                            <div class="text-[11px] text-red-600">ছুটির মেয়াদ: ${ev.days} দিন</div>
-                            ${ev.remarks ? `<div class="text-[11px] text-slate-600">মন্তব্য: ${ev.remarks}</div>` : ''}
-                        </div>
-                    `;
-                } else if (ev.type === 'exam') {
+                if (ev.type === 'exam') {
                     let classListHtml = '';
                     Object.entries(ev.classes).forEach(([cls, sub]) => {
                         if (sub) {
@@ -541,18 +510,28 @@ async function fetchYearEvents(targetYear) {
                         }
                     });
 
+                    let fromTextHtml = ev.isFromOnly 
+                        ? `<div class="text-[11px] text-amber-700 font-bold bg-amber-100 p-1 rounded my-1"><i class="fa-solid fa-clock mr-1"></i> ${ev.startDateStr || dateKey} তারিখ থেকে শুরু</div>` 
+                        : '';
+
                     modalBody.innerHTML += `
                         <div class="p-2 bg-sky-50 border-l-4 border-sky-500 rounded-r space-y-1">
                             <div class="font-bold text-sky-900 text-xs"><i class="fa-solid fa-file-pen mr-1"></i> ${ev.exam_name || 'পরীক্ষার রুটিন'}</div>
                             <ul class="space-y-0.5 bg-white p-1.5 rounded border border-sky-100">${classListHtml}</ul>
+                            ${fromTextHtml}
                         </div>
                     `;
                 } else if (ev.type === 'academic') {
+                    let fromTextHtml = ev.isFromOnly 
+                        ? `<div class="text-[11px] text-amber-700 font-bold bg-amber-100 p-1 rounded my-1"><i class="fa-solid fa-clock mr-1"></i> ${ev.startDateStr || dateKey} তারিখ থেকে শুরু</div>` 
+                        : '';
+
                     modalBody.innerHTML += `
                         <div class="p-2 bg-emerald-50 border-l-4 border-emerald-500 rounded-r space-y-0.5">
                             <div class="font-bold text-emerald-900 text-xs"><i class="fa-solid fa-book-open mr-1"></i> একাডেমিক ইভেন্ট</div>
                             <div class="text-[11px] text-emerald-800">শ্রেণী: <strong>${ev.class_name}</strong></div>
                             <div class="text-[11px] text-emerald-700">বিষয় / বিস্তারিত: ${ev.subject}</div>
+                            ${fromTextHtml}
                         </div>
                     `;
                 }
