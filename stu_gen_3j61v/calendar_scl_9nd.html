@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড -->
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (অনুমোদিত না হলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
     <style id="security-shield">
         body { display: none !important; }
     </style>
 
-    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট (লিংক সরাসরি কপি করে খোলা আটকাবে) -->
     <script>
     (function() {
         try {
             var ref = document.referrer;
             var isValidReferrer = false;
 
+            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
                 if (refUrl.hostname === "pathpukurschool.github.io") {
@@ -24,11 +25,14 @@
                 }
             }
 
+            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
             if (!isValidReferrer) {
+                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
                 window.location.replace("https://pathpukurschool.github.io/");
                 return;
             }
 
+            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
             document.addEventListener("DOMContentLoaded", function() {
                 var shield = document.getElementById("security-shield");
                 if (shield) shield.remove();
@@ -39,7 +43,7 @@
         }
     })();
     </script>
-
+   <!-- স্কুল ক্যালেন্ডার -->
     <title>Pathpukur High School (H. S.)</title>
 
     <!-- Tailwind CSS -->
@@ -64,7 +68,8 @@
             padding: 0 !important;
         }
         html, body {
-            height: 100%;
+            height: auto !important;
+            min-height: unset !important;
             width: 100%;
         }
         .glass-card {
@@ -72,30 +77,12 @@
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
-
-        /* Fullscreen নির্দিষ্ট অ্যাডাপ্টিভ রেসপন্সিভ স্টাইল */
-        body.fullscreen-mode main {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        body.fullscreen-mode .glass-card.calendar-card {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        body.fullscreen-mode #calendarGrid {
-            flex: 1;
-            min-height: unset !important;
-        }
-        body.fullscreen-mode .day-card-item {
-            height: 100% !important;
-            min-height: 50px;
-        }
     </style>
 </head>
+<!-- Body ট্যাগের p-1 sm:p-2 সরিয়ে ফেলা হয়েছে -->
 <body class="bg-gradient-to-br from-sky-50 to-sky-100 text-slate-800 h-fit overflow-x-hidden">
     
+    <!-- main ট্যাগের max-w-4xl ও mx-auto সরিয়ে w-full করা হয়েছে -->
     <main class="w-full space-y-1">
 
         <!-- Legend Bar -->
@@ -115,7 +102,7 @@
         </div>
 
         <!-- Calendar Container -->
-        <div class="glass-card calendar-card rounded-xl shadow-md overflow-hidden border border-sky-100">
+        <div class="glass-card rounded-xl shadow-md overflow-hidden border border-sky-100">
             
             <!-- Controls Bar -->
             <div class="bg-slate-800 text-white p-2 flex flex-row justify-between items-center gap-1">
@@ -203,20 +190,12 @@
         let currentDate = new Date();
         let eventsData = {}; 
 
-        // প্যারেন্ট উইন্ডো থেকে পাঠানো ম্যাক্সিমাইজ/মিনিমাইজ বার্তা রিসিভ করা
-        window.addEventListener('message', function(event) {
-            if (event.data === 'isFullscreen') {
-                document.body.classList.add('fullscreen-mode');
-            } else if (event.data === 'isNormal') {
-                document.body.classList.remove('fullscreen-mode');
-            }
-        });
-
         window.onload = async () => {
             await fetchYearEvents(currentDate.getFullYear());
             renderCalendar();
         };
 
+        // ১. একক তারিখ পার্স করার সময় Timezone Bug এড়ানো
         function parseSingleDate(str) {
             if (!str) return null;
             str = String(str).trim().replace(/\u00A0/g, ' ').replace(/\s+/g, ' ');
@@ -242,6 +221,7 @@
             return null;
         }
 
+        // ২. তারিখের রেঞ্জ এবং সিঙ্গেল ডেট থেকে 'YYYY-MM-DD' অ্যারে গঠন
         function parseToDateDetails(dateStr) {
             if (!dateStr) return { dates: [], isFromOnly: false, startDateStr: '' };
 
@@ -257,6 +237,7 @@
                 if (splitDash.length === 2 && splitDash[1].trim() !== '') parts = splitDash;
             }
 
+            // কেস ১: "X থেকে" (শেষ তারিখ অনুপস্থিত)
             if (parts.length > 0 && (parts.length === 1 || parts[1].trim() === '')) {
                 let startParsed = parseSingleDate(parts[0]);
                 if (startParsed) {
@@ -271,6 +252,7 @@
                 }
             }
 
+            // কেস ২: "শুরু থেকে শেষ" তারিখ রেঞ্জ
             if (parts.length === 2 && parts[1].trim() !== '') {
                 let startParsed = parseSingleDate(parts[0]);
                 let endParsed = parseSingleDate(parts[1]);
@@ -290,6 +272,7 @@
                 }
             }
 
+            // কেস ৩: একক তারিখ
             let single = parseSingleDate(str);
             if (single) {
                 let y = single.year;
@@ -301,9 +284,11 @@
             return { dates, isFromOnly: false, startDateStr: '' };
         }
 
+        // ৩. ডাটাবেস থেকে ডাটা ফেচিং
         async function fetchYearEvents(targetYear) {
             eventsData = {};
 
+            // ১. Holiday Table Fetch
             const { data: holidays } = await _supabase.from('Holiday').select('*');
             if (holidays) {
                 holidays.forEach(h => {
@@ -324,6 +309,7 @@
                 });
             }
 
+            // ২. Exam Routine Table Fetch
             const { data: exams } = await _supabase.from('exam_routine').select('*').eq('session', targetYear.toString());
             if (exams) {
                 exams.forEach(ex => {
@@ -351,6 +337,7 @@
                 });
             }
 
+            // ৩. Academic Calendar Table Fetch
             const { data: academic } = await _supabase.from('Academic_Calendar').select('*');
             if (academic) {
                 academic.forEach(ac => {
@@ -371,6 +358,7 @@
             }
         }
 
+        // ৪. ক্যালেন্ডার রেন্ডারিং (সব নিয়ম ফিল্টারসহ)
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -403,15 +391,18 @@
                 let isSunday = dayOfWeek === 0;
                 let hasHoliday = isSunday || rawEvents.some(e => e.type === 'holiday');
 
+                // নিয়ম ১: রবিবার বা holiday থাকলে পরীক্ষা বা একাডেমিক ইভেন্ট সম্পূর্ণ বাদ দেওয়া হলো
                 let filteredEvents = rawEvents;
                 if (hasHoliday) {
                     filteredEvents = rawEvents.filter(e => e.type === 'holiday');
                 } else {
+                    // নিয়ম ৩: একই দিনে পরীক্ষা এবং একাডেমিক ক্যালেন্ডারের ডুপ্লিকেট সামেটিভ এন্ট্রি ফিল্টার করা
                     let hasExam = rawEvents.some(e => e.type === 'exam');
                     if (hasExam) {
                         filteredEvents = rawEvents.filter(e => {
                             if (e.type === 'academic') {
                                 let sub = (e.subject || '').toLowerCase();
+                                // যদি একাডেমিক ইভেন্টটি পরীক্ষার নাম হয় তবে বাদ যাবে (যেহেতু পরীক্ষার রুটিন আছে)
                                 if (sub.includes('পরীক্ষা') || sub.includes('exam') || sub.includes('সেমিস্টার') || sub.includes('সামেটিভ')) {
                                     return false;
                                 }
@@ -431,30 +422,30 @@
                 if (hasHoliday) {
                     bgStyle = "bg-red-50 hover:bg-red-100 border-red-200";
                     textStyle = "text-red-600 font-extrabold";
-                    badgeDots += `<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>`;
+                    badgeDots += `<span class="w-1 h-1 rounded-full bg-red-500"></span>`;
                 } else {
                     if (hasExam) {
                         bgStyle = "bg-sky-50 hover:bg-sky-100 border-sky-200";
                         textStyle = "text-sky-800 font-bold";
-                        badgeDots += `<span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>`;
+                        badgeDots += `<span class="w-1 h-1 rounded-full bg-sky-500"></span>`;
                     }
                     if (hasAcademic) {
                         if (!hasExam) {
                             bgStyle = "bg-emerald-50 hover:bg-emerald-100 border-emerald-200";
                             textStyle = "text-emerald-800 font-bold";
                         }
-                        badgeDots += `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>`;
+                        badgeDots += `<span class="w-1 h-1 rounded-full bg-emerald-500"></span>`;
                     }
                 }
 
                 const isToday = dateKey === todayStr ? 'ring-2 ring-amber-500 font-extrabold bg-amber-50' : '';
 
                 const dayCard = document.createElement('div');
-                dayCard.className = `day-card-item p-1 h-9 sm:h-10 border rounded-lg flex flex-col justify-between cursor-pointer transition-all ${bgStyle} ${isToday}`;
+                dayCard.className = `p-1 h-9 sm:h-10 border rounded-lg flex flex-col justify-between cursor-pointer transition-all ${bgStyle} ${isToday}`;
                 dayCard.onclick = () => showEventDetails(dateKey, isSunday, filteredEvents);
 
                 dayCard.innerHTML = `
-                    <div class="text-[11px] sm:text-xs leading-none ${textStyle}">${day}</div>
+                    <div class="text-[11px] leading-none ${textStyle}">${day}</div>
                     <div class="flex space-x-0.5 justify-end">${badgeDots}</div>
                 `;
 
@@ -501,6 +492,7 @@
             }
         }
 
+        // ৫. পপ-আপ মেসেজ প্রদর্শন ফাংশন
         function showEventDetails(dateKey, isSunday, events) {
             const modal = document.getElementById('eventModal');
             const modalTitle = document.getElementById('modalTitle');
@@ -511,6 +503,7 @@
             modalDate.innerText = `তারিখ: ${dateKey}`;
             modalBody.innerHTML = '';
 
+            // ক. রবিবার ছুটি
             if (isSunday) {
                 modalTitle.innerText = "সাপ্তাহিক ছুটি (রবিবার)";
                 modalIcon.className = "p-2 rounded-full bg-red-500 text-white";
@@ -521,6 +514,7 @@
                 return;
             }
 
+            // খ. ছুটির তালিকা অনুযায়ী ছুটি
             let hasHoliday = events.some(e => e.type === 'holiday');
             if (hasHoliday) {
                 modalTitle.innerText = "স্কুল বন্ধ (ছুটি)";
@@ -547,6 +541,7 @@
                 return;
             }
 
+            // গ. কোনো ইভেন্ট না থাকলে (সাধারণ কার্যদিবস - কোনো বাড়তি মেসেজ ছাড়া)
             if (events.length === 0) {
                 modalTitle.innerText = "কোনো বিশেষ সূচী নেই";
                 modalIcon.className = "p-2 rounded-full bg-slate-600 text-white";
@@ -557,6 +552,7 @@
                 return;
             }
 
+            // ঘ. পরীক্ষার রুটিন এবং অন্যান্য একাডেমিক ইভেন্ট প্রদর্শন
             modalTitle.innerText = "নির্ধারিত সূচী ও ইভেন্ট";
             modalIcon.className = "p-2 rounded-full bg-indigo-600 text-white";
             modalIcon.innerHTML = `<i class="fa-solid fa-bell"></i>`;
