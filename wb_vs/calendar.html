@@ -139,22 +139,77 @@
             renderCalendar();
         };
 
-        function parseToStandardDate(dateStr) {
-            if (!dateStr) return null;
-            let str = dateStr.trim();
+        // একক তারিখকে YYYY-MM-DD অবজেক্ট/স্ট্রিং এ রূপান্তর
+        function parseSingleDate(str) {
+            if (!str) return null;
+            str = str.trim();
+            
+            // DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY
+            if (/^\d{1,2}[\.\/-]\d{1,2}[\.\/-]\d{4}$/.test(str)) {
+                let parts = str.split(/[\.\/-]/);
+                let day = parseInt(parts[0], 10);
+                let month = parseInt(parts[1], 10) - 1;
+                let year = parseInt(parts[2], 10);
+                return new Date(year, month, day);
+            }
+            // YYYY-MM-DD
             if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(str)) {
                 let parts = str.split('-');
-                return `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
-            }
-            if (/^\d{1,2}[\/-]\d{1,2}[\/-]\d{4}$/.test(str)) {
-                let parts = str.split(/[\/-]/);
-                return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
-            }
-            let d = new Date(str);
-            if (!isNaN(d.getTime())) {
-                return d.toISOString().split('T')[0];
+                let year = parseInt(parts[0], 10);
+                let month = parseInt(parts[1], 10) - 1;
+                let day = parseInt(parts[2], 10);
+                return new Date(year, month, day);
             }
             return null;
+        }
+
+        // তারিখের রেঞ্জ এবং সিঙ্গেল ডেট পার্স করে সমস্ত YYYY-MM-DD স্ট্রিং এর তালিকা রিটার্ন করে
+        function parseToDateArray(dateStr) {
+            if (!dateStr) return [];
+            let str = dateStr.trim();
+            let dates = [];
+
+            // যদি 'থেকে' অথবা '-' দিয়ে ডেট রেঞ্জ থাকে (যেমন: 15.10.2026 থেকে 12.11.2026)
+            let rangeParts = [];
+            if (str.includes('থেকে')) {
+                rangeParts = str.split('থেকে');
+            } else if (str.includes(' - ')) {
+                rangeParts = str.split(' - ');
+            }
+
+            if (rangeParts.length === 2) {
+                let startDate = parseSingleDate(rangeParts[0]);
+                let endDate = parseSingleDate(rangeParts[1]);
+
+                if (startDate && endDate) {
+                    let curr = new Date(startDate);
+                    while (curr <= endDate) {
+                        let y = curr.getFullYear();
+                        let m = (curr.getMonth() + 1).toString().padStart(2, '0');
+                        let d = curr.getDate().toString().padStart(2, '0');
+                        dates.push(`${y}-${m}-${d}`);
+                        curr.setDate(curr.getDate() + 1);
+                    }
+                    return dates;
+                } else if (startDate) {
+                    // শুধু শুরুর তারিখ পাওয়া গেলে (যেমন: "16/06/2026 থেকে")
+                    let y = startDate.getFullYear();
+                    let m = (startDate.getMonth() + 1).toString().padStart(2, '0');
+                    let d = startDate.getDate().toString().padStart(2, '0');
+                    return [`${y}-${m}-${d}`];
+                }
+            }
+
+            // যদি সিঙ্গেল ডেট হয়
+            let singleDate = parseSingleDate(str);
+            if (singleDate) {
+                let y = singleDate.getFullYear();
+                let m = (singleDate.getMonth() + 1).toString().padStart(2, '0');
+                let d = singleDate.getDate().toString().padStart(2, '0');
+                dates.push(`${y}-${m}-${d}`);
+            }
+
+            return dates;
         }
 
         async function fetchYearEvents(targetYear) {
@@ -163,54 +218,60 @@
             const { data: holidays } = await _supabase.from('Holiday').select('*');
             if (holidays) {
                 holidays.forEach(h => {
-                    let stdDate = parseToStandardDate(h.date_val);
-                    if (stdDate && stdDate.startsWith(targetYear.toString())) {
-                        if (!eventsData[stdDate]) eventsData[stdDate] = [];
-                        eventsData[stdDate].push({
-                            type: 'holiday',
-                            title: h.occasion || 'স্কুল ছুটি',
-                            days: h.days || 1,
-                            remarks: h.remarks || ''
-                        });
-                    }
+                    let dateList = parseToDateArray(h.date_val);
+                    dateList.forEach(stdDate => {
+                        if (stdDate.startsWith(targetYear.toString())) {
+                            if (!eventsData[stdDate]) eventsData[stdDate] = [];
+                            eventsData[stdDate].push({
+                                type: 'holiday',
+                                title: h.occasion || 'স্কুল ছুটি',
+                                days: h.days || 1,
+                                remarks: h.remarks || ''
+                            });
+                        }
+                    });
                 });
             }
 
             const { data: exams } = await _supabase.from('exam_routine').select('*').eq('session', targetYear.toString());
             if (exams) {
                 exams.forEach(ex => {
-                    let stdDate = parseToStandardDate(ex.exam_date);
-                    if (stdDate) {
-                        if (!eventsData[stdDate]) eventsData[stdDate] = [];
-                        eventsData[stdDate].push({
-                            type: 'exam',
-                            exam_name: ex.exam_name,
-                            classes: {
-                                'Class V': ex.class_v,
-                                'Class VI': ex.class_vi,
-                                'Class VII': ex.class_vii,
-                                'Class VIII': ex.class_viii,
-                                'Class IX': ex.class_ix,
-                                'Class X': ex.class_x,
-                                'Class XI': ex.class_xi
-                            }
-                        });
-                    }
+                    let dateList = parseToDateArray(ex.exam_date);
+                    dateList.forEach(stdDate => {
+                        if (stdDate) {
+                            if (!eventsData[stdDate]) eventsData[stdDate] = [];
+                            eventsData[stdDate].push({
+                                type: 'exam',
+                                exam_name: ex.exam_name,
+                                classes: {
+                                    'Class V': ex.class_v,
+                                    'Class VI': ex.class_vi,
+                                    'Class VII': ex.class_vii,
+                                    'Class VIII': ex.class_viii,
+                                    'Class IX': ex.class_ix,
+                                    'Class X': ex.class_x,
+                                    'Class XI': ex.class_xi
+                                }
+                            });
+                        }
+                    });
                 });
             }
 
             const { data: academic } = await _supabase.from('Academic_Calendar').select('*');
             if (academic) {
                 academic.forEach(ac => {
-                    let stdDate = parseToStandardDate(ac.date_val);
-                    if (stdDate && stdDate.startsWith(targetYear.toString())) {
-                        if (!eventsData[stdDate]) eventsData[stdDate] = [];
-                        eventsData[stdDate].push({
-                            type: 'academic',
-                            class_name: ac.class_name,
-                            subject: ac.subject
-                        });
-                    }
+                    let dateList = parseToDateArray(ac.date_val);
+                    dateList.forEach(stdDate => {
+                        if (stdDate.startsWith(targetYear.toString())) {
+                            if (!eventsData[stdDate]) eventsData[stdDate] = [];
+                            eventsData[stdDate].push({
+                                type: 'academic',
+                                class_name: ac.class_name,
+                                subject: ac.subject
+                            });
+                        }
+                    });
                 });
             }
         }
@@ -305,7 +366,6 @@
             const btn = document.getElementById('resetBtn');
             const icon = document.getElementById('resetIcon');
 
-            // Disable button and add spinner
             btn.disabled = true;
             icon.className = "fa-solid fa-spinner fa-spin";
 
@@ -319,7 +379,6 @@
                 }
                 renderCalendar();
             } finally {
-                // Restore original icon and enable button
                 icon.className = "fa-solid fa-rotate-right";
                 btn.disabled = false;
             }
