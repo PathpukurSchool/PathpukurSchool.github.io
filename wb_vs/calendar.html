@@ -193,199 +193,190 @@ function parseSingleDate(str) {
     return null;
 }
 
+// ১. একক তারিখ পার্স করার সঠিক নিয়ম (String manipulation দিয়ে Timezone Bug এড়ানো হয়েছে)
+function parseSingleDate(str) {
+    if (!str) return null;
+    str = str.trim();
 
-// ==========================================================
-// DATE OBJECT -> YYYY-MM-DD
-// UTC ব্যবহার করা হয়েছে যাতে timezone-এর কারণে date shift না হয়
-// ==========================================================
-function formatDateKey(dateObj) {
-    const y = dateObj.getUTCFullYear();
-    const m = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
-    const d = String(dateObj.getUTCDate()).padStart(2, '0');
+    // DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY ফরম্যাট
+    let dmyRegex = /^(\d{1,2})[\.\/-](\d{1,2})[\.\/-](\d{4})$/;
+    let matchDMY = str.match(dmyRegex);
+    if (matchDMY) {
+        let day = parseInt(matchDMY[1], 10);
+        let month = parseInt(matchDMY[2], 10);
+        let year = parseInt(matchDMY[3], 10);
+        return { day, month, year };
+    }
 
-    return `${y}-${m}-${d}`;
+    // YYYY-MM-DD, YYYY/MM/DD, YYYY.MM.DD ফরম্যাট
+    let ymdRegex = /^(\d{4})[\.\/-](\d{1,2})[\.\/-](\d{1,2})$/;
+    let matchYMD = str.match(ymdRegex);
+    if (matchYMD) {
+        let year = parseInt(matchYMD[1], 10);
+        let month = parseInt(matchYMD[2], 10);
+        let day = parseInt(matchYMD[3], 10);
+        return { day, month, year };
+    }
+
+    return null;
 }
 
+// ২. তারিখের রেঞ্জ এবং সিঙ্গেল ডেট থেকে 'YYYY-MM-DD' এর অবজেক্ট তৈরি
+function parseToDateDetails(dateStr) {
+    if (!dateStr) return { dates: [], isFromOnly: false, startDateStr: '' };
 
-// ==========================================================
-// DATE / DATE RANGE -> YYYY-MM-DD ARRAY
-// ==========================================================
-function parseToDateArray(dateStr) {
+    let str = String(dateStr).trim();
+    let dates = [];
+    let isFromOnly = false;
+    let startDateObj = null;
 
-    if (!dateStr) return [];
+    // 'থেকে', 'to', বা '-' যুক্ত রেঞ্জ চেক
+    let parts = [];
+    let delimiter = '';
 
-    let str = String(dateStr)
-        .trim()
-        .replace(/\u00A0/g, ' ')
-        .replace(/\s+/g, ' ');
-
-    let startText = '';
-    let endText = '';
-
-    // ------------------------------------------------------
-    // 1. "থেকে" format
-    // উদাহরণ:
-    // 14.01.2026 থেকে 15.01.2026
-    // 16/06/2026 থেকে
-    // ------------------------------------------------------
     if (str.includes('থেকে')) {
-
-        const parts = str.split('থেকে');
-
-        startText = parts[0].trim();
-        endText = parts[1] ? parts[1].trim() : '';
-
-    }
-
-    // ------------------------------------------------------
-    // 2. " - " format
-    // উদাহরণ:
-    // 01/04/2026 - 11/04/2026
-    // ------------------------------------------------------
-    else if (str.includes(' - ')) {
-
-        const parts = str.split(' - ');
-
-        startText = parts[0].trim();
-        endText = parts[1] ? parts[1].trim() : '';
-
-    }
-
-    // ------------------------------------------------------
-    // 3. " to " format
-    // ------------------------------------------------------
-    else if (/\s+to\s+/i.test(str)) {
-
-        const parts = str.split(/\s+to\s+/i);
-
-        startText = parts[0].trim();
-        endText = parts[1] ? parts[1].trim() : '';
-
-    }
-
-    // ------------------------------------------------------
-    // যদি range পাওয়া যায়
-    // ------------------------------------------------------
-    if (startText) {
-
-        const start = parseSingleDate(startText);
-
-        if (!start) return [];
-
-        // শুধু শুরু তারিখ আছে
-        // যেমন: 16/06/2026 থেকে
-        if (!endText) {
-            return [
-                `${start.year}-${String(start.month).padStart(2, '0')}-${String(start.day).padStart(2, '0')}`
-            ];
+        parts = str.split('থেকে');
+        delimiter = 'থেকে';
+    } else if (str.includes(' to ')) {
+        parts = str.split(' to ');
+        delimiter = 'to';
+    } else if (str.includes(' - ')) {
+        parts = str.split(' - ');
+        delimiter = '-';
+    } else if (str.includes('-')) {
+        // DD.MM.YYYY-DD.MM.YYYY ফরম্যাটের জন্য চেক
+        let splitDash = str.split('-');
+        if (splitDash.length === 2 && splitDash[1].trim() !== '') {
+            parts = splitDash;
+            delimiter = '-';
         }
-
-        const end = parseSingleDate(endText);
-
-        if (!end) {
-            return [
-                `${start.year}-${String(start.month).padStart(2, '0')}-${String(start.day).padStart(2, '0')}`
-            ];
-        }
-
-        // UTC date ব্যবহার
-        const current = new Date(
-            Date.UTC(start.year, start.month - 1, start.day)
-        );
-
-        const endDate = new Date(
-            Date.UTC(end.year, end.month - 1, end.day)
-        );
-
-        const dates = [];
-
-        while (current.getTime() <= endDate.getTime()) {
-
-            dates.push(formatDateKey(current));
-
-            current.setUTCDate(
-                current.getUTCDate() + 1
-            );
-        }
-
-        return dates;
     }
 
-    // ------------------------------------------------------
-    // Single Date
-    // ------------------------------------------------------
-    const single = parseSingleDate(str);
+    // কেস ১: "থেকে / to / -" আছে কিন্তু শেষের তারিখ নেই (যেমন: "16/06/2026 থেকে")
+    if (parts.length > 0 && (parts.length === 1 || parts[1].trim() === '')) {
+        let startParsed = parseSingleDate(parts[0]);
+        if (startParsed) {
+            let y = startParsed.year;
+            let m = startParsed.month.toString().padStart(2, '0');
+            let d = startParsed.day.toString().padStart(2, '0');
+            let key = `${y}-${m}-${d}`;
+            let formattedStart = `${d}/${m}/${y}`;
+            return { 
+                dates: [key], 
+                isFromOnly: true, 
+                startDateStr: formattedStart 
+            };
+        }
+    }
 
-    if (!single) return [];
+    // কেস ২: "শুরুর তারিখ থেকে শেষের তারিখ" রেঞ্জ
+    if (parts.length === 2 && parts[1].trim() !== '') {
+        let startParsed = parseSingleDate(parts[0]);
+        let endParsed = parseSingleDate(parts[1]);
 
-    return [
-        `${single.year}-${String(single.month).padStart(2, '0')}-${String(single.day).padStart(2, '0')}`
-    ];
+        if (startParsed && endParsed) {
+            // বিশুদ্ধ JS Date তৈরি (Local Timezone এড়াতে 12:00 PM ধরে)
+            let current = new Date(startParsed.year, startParsed.month - 1, startParsed.day, 12, 0, 0);
+            let end = new Date(endParsed.year, endParsed.month - 1, endParsed.day, 12, 0, 0);
+
+            while (current <= end) {
+                let y = current.getFullYear();
+                let m = (current.getMonth() + 1).toString().padStart(2, '0');
+                let d = current.getDate().toString().padStart(2, '0');
+                dates.push(`${y}-${m}-${d}`);
+
+                // ১ দিন যোগ
+                current.setDate(current.getDate() + 1);
+            }
+            return { dates, isFromOnly: false, startDateStr: '' };
+        }
+    }
+
+    // কেস ৩: একক তারিখ (যেমন: "01.01.2026")
+    let single = parseSingleDate(str);
+    if (single) {
+        let y = single.year;
+        let m = single.month.toString().padStart(2, '0');
+        let d = single.day.toString().padStart(2, '0');
+        dates.push(`${y}-${m}-${d}`);
+    }
+
+    return { dates, isFromOnly: false, startDateStr: '' };
 }
 
-        async function fetchYearEvents(targetYear) {
-            eventsData = {};
+// ৩. ডাটাবেস থেকে ডাটা ফেচ করার ফাংশন
+async function fetchYearEvents(targetYear) {
+    eventsData = {};
 
-            const { data: holidays } = await _supabase.from('Holiday').select('*');
-            if (holidays) {
-                holidays.forEach(h => {
-                    let dateList = parseToDateArray(h.date_val);
-                    dateList.forEach(stdDate => {
-                        if (stdDate.startsWith(targetYear.toString())) {
-                            if (!eventsData[stdDate]) eventsData[stdDate] = [];
-                            eventsData[stdDate].push({
-                                type: 'holiday',
-                                title: h.occasion || 'স্কুল ছুটি',
-                                days: h.days || 1,
-                                remarks: h.remarks || ''
-                            });
+    // ১. Holiday Table Fetch
+    const { data: holidays } = await _supabase.from('Holiday').select('*');
+    if (holidays) {
+        holidays.forEach(h => {
+            let parsed = parseToDateDetails(h.date_val);
+            parsed.dates.forEach(stdDate => {
+                if (stdDate.startsWith(targetYear.toString())) {
+                    if (!eventsData[stdDate]) eventsData[stdDate] = [];
+                    eventsData[stdDate].push({
+                        type: 'holiday',
+                        title: h.occasion || 'স্কুল ছুটি',
+                        days: h.days || 1,
+                        remarks: h.remarks || '',
+                        isFromOnly: parsed.isFromOnly,
+                        startDateStr: parsed.startDateStr
+                    });
+                }
+            });
+        });
+    }
+
+    // ২. Exam Routine Table Fetch
+    const { data: exams } = await _supabase.from('exam_routine').select('*').eq('session', targetYear.toString());
+    if (exams) {
+        exams.forEach(ex => {
+            let parsed = parseToDateDetails(ex.exam_date);
+            parsed.dates.forEach(stdDate => {
+                if (stdDate) {
+                    if (!eventsData[stdDate]) eventsData[stdDate] = [];
+                    eventsData[stdDate].push({
+                        type: 'exam',
+                        exam_name: ex.exam_name,
+                        isFromOnly: parsed.isFromOnly,
+                        startDateStr: parsed.startDateStr,
+                        classes: {
+                            'Class V': ex.class_v,
+                            'Class VI': ex.class_vi,
+                            'Class VII': ex.class_vii,
+                            'Class VIII': ex.class_viii,
+                            'Class IX': ex.class_ix,
+                            'Class X': ex.class_x,
+                            'Class XI': ex.class_xi
                         }
                     });
-                });
-            }
+                }
+            });
+        });
+    }
 
-            const { data: exams } = await _supabase.from('exam_routine').select('*').eq('session', targetYear.toString());
-            if (exams) {
-                exams.forEach(ex => {
-                    let dateList = parseToDateArray(ex.exam_date);
-                    dateList.forEach(stdDate => {
-                        if (stdDate) {
-                            if (!eventsData[stdDate]) eventsData[stdDate] = [];
-                            eventsData[stdDate].push({
-                                type: 'exam',
-                                exam_name: ex.exam_name,
-                                classes: {
-                                    'Class V': ex.class_v,
-                                    'Class VI': ex.class_vi,
-                                    'Class VII': ex.class_vii,
-                                    'Class VIII': ex.class_viii,
-                                    'Class IX': ex.class_ix,
-                                    'Class X': ex.class_x,
-                                    'Class XI': ex.class_xi
-                                }
-                            });
-                        }
+    // ৩. Academic Calendar Table Fetch
+    const { data: academic } = await _supabase.from('Academic_Calendar').select('*');
+    if (academic) {
+        academic.forEach(ac => {
+            let parsed = parseToDateDetails(ac.date_val);
+            parsed.dates.forEach(stdDate => {
+                if (stdDate.startsWith(targetYear.toString())) {
+                    if (!eventsData[stdDate]) eventsData[stdDate] = [];
+                    eventsData[stdDate].push({
+                        type: 'academic',
+                        class_name: ac.class_name,
+                        subject: ac.subject,
+                        isFromOnly: parsed.isFromOnly,
+                        startDateStr: parsed.startDateStr
                     });
-                });
-            }
-
-            const { data: academic } = await _supabase.from('Academic_Calendar').select('*');
-            if (academic) {
-                academic.forEach(ac => {
-                    let dateList = parseToDateArray(ac.date_val);
-                    dateList.forEach(stdDate => {
-                        if (stdDate.startsWith(targetYear.toString())) {
-                            if (!eventsData[stdDate]) eventsData[stdDate] = [];
-                            eventsData[stdDate].push({
-                                type: 'academic',
-                                class_name: ac.class_name,
-                                subject: ac.subject
-                            });
-                        }
-                    });
-                });
-            }
-        }
+                }
+            });
+        });
+    }
+}
 
         function renderCalendar() {
             const year = currentDate.getFullYear();
