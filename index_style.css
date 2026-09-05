@@ -101,15 +101,6 @@ ul{list-style:none;padding:0;margin:0}
 .principal-text h3{margin-top:0;font-size:1.5em;color:var(--dark-khaki);border-left:none;padding-left:0}
 .principal-text p{font-size:1.1em;line-height:1.7;color:var(--black)}
 
-/* 🗣️ কোট সেকশন (Quotes Section) */
-.quotes{background:linear-gradient(135deg,#e6f7ff 0%,#cceeff 100%);border-top:8px solid #007bff}
-.quote-item{margin-bottom:25px;padding:20px;border-left:6px solid #0056b3;background-color:#f0faff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.08);transition:background-color .3s ease}
-.quote-item:hover{background-color:#e3f2fd}
-.quote-text{font-size:1.3em;font-style:italic;color:#444;margin-bottom:10px}
-.quote-author{text-align:right;font-weight:600;color:var(--dark-khaki);font-size:1.1em;margin-bottom:5px}
-.quote-english{font-size:1.1em;color:#666;margin-top:10px;border-top:1px dashed #ccc;padding-top:10px}
-.quote-author-english{text-align:right;font-weight:400;color:#888;font-size:.95em}
-
 /* 🔗 গুরুত্বপূর্ণ লিঙ্ক (Important Links Section) */
 .important-links{background:linear-gradient(135deg,#fefefe 0%,#fefefe 100%);padding:30px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.1);margin-bottom:30px;border-left:none;transition:transform .3s ease,box-shadow .3s ease}
 .important-links:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(0,0,0,.15)}
