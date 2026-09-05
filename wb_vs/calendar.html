@@ -139,60 +139,67 @@
             renderCalendar();
         };
 
-// একক তারিখ সঠিকভাবে (Day-Month-Year) পার্স করার নিয়ম
+// একক তারিখ সঠিকভাবে (DD.MM.YYYY / DD/MM/YYYY / YYYY-MM-DD) পার্স করার নিয়ম
 function parseSingleDate(str) {
     if (!str) return null;
     str = str.trim();
 
-    // ১. DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY ফরম্যাটের জন্য
+    // ১. DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY ফরম্যাট
     let dmyRegex = /^(\d{1,2})[\.\/-](\d{1,2})[\.\/-](\d{4})$/;
     let matchDMY = str.match(dmyRegex);
     if (matchDMY) {
         let day = parseInt(matchDMY[1], 10);
-        let month = parseInt(matchDMY[2], 10) - 1; // 0-indexed Month
+        let month = parseInt(matchDMY[2], 10) - 1; // 0-indexed
         let year = parseInt(matchDMY[3], 10);
         
-        // Local Timezone বজায় রাখতে UTC Date তৈরি
-        return new Date(Date.UTC(year, month, day));
+        // Pure Local Date (তাং ঠিক রাখার জন্য)
+        return new Date(year, month, day);
     }
 
-    // ২. YYYY-MM-DD ফরম্যাটের জন্য
+    // ২. YYYY-MM-DD ফরম্যাট
     let ymdRegex = /^(\d{4})[\.\/-](\d{1,2})[\.\/-](\d{1,2})$/;
     let matchYMD = str.match(ymdRegex);
     if (matchYMD) {
         let year = parseInt(matchYMD[1], 10);
         let month = parseInt(matchYMD[2], 10) - 1;
         let day = parseInt(matchYMD[3], 10);
-        return new Date(Date.UTC(year, month, day));
+        return new Date(year, month, day);
     }
 
     return null;
+}
+
+// তারিখকে স্ট্রিং এ রূপান্তর (YYYY-MM-DD)
+function formatDateKey(d) {
+    let y = d.getFullYear();
+    let m = (d.getMonth() + 1).toString().padStart(2, '0');
+    let day = d.getDate().toString().padStart(2, '0');
+    return `${y}-${m}-${day}`;
 }
 
 // তারিখের রেঞ্জ এবং সিঙ্গেল ডেট থেকে 'YYYY-MM-DD' অ্যারে তৈরি
 function parseToDateArray(dateStr) {
     if (!dateStr) return [];
     
-    // অতিরিক্ত স্পেস পরিষ্কার করা
     let str = String(dateStr).trim();
     let dates = [];
-
     let rangeParts = [];
-    
-    // 'থেকে', 'to', বা '-' যুক্ত রেঞ্জ চেক করা
+
+    // 'থেকে', 'to', বা ' - ' যুক্ত রেঞ্জ চেক করা
     if (str.includes('থেকে')) {
         rangeParts = str.split('থেকে');
     } else if (str.includes(' to ')) {
         rangeParts = str.split(' to ');
-    } else if (str.includes('-')) {
-        // যদি DD.MM.YYYY-DD.MM.YYYY ফরম্যাটে থাকে
+    } else if (str.includes(' - ')) {
+        rangeParts = str.split(' - ');
+    } else if (str.includes('-') && !str.match(/^\d{4}-\d{2}-\d{2}$/)) {
         let splitDash = str.split('-');
         if (splitDash.length === 2) {
             rangeParts = splitDash;
         }
     }
 
-    // রেঞ্জ থাকলে (Start Date থেকে End Date পর্যন্ত সব দিন)
+    // রেঞ্জ থাকলে (Start Date থেকে End Date পর্যন্ত)
     if (rangeParts.length === 2) {
         let startDate = parseSingleDate(rangeParts[0]);
         let endDate = parseSingleDate(rangeParts[1]);
@@ -200,30 +207,19 @@ function parseToDateArray(dateStr) {
         if (startDate && endDate) {
             let curr = new Date(startDate.getTime());
             while (curr <= endDate) {
-                let y = curr.getUTCFullYear();
-                let m = (curr.getUTCMonth() + 1).toString().padStart(2, '0');
-                let d = curr.getUTCDate().toString().padStart(2, '0');
-                dates.push(`${y}-${m}-${d}`);
-                
-                // ১ দিন যোগ
-                curr.setUTCDate(curr.getUTCDate() + 1);
+                dates.push(formatDateKey(curr));
+                curr.setDate(curr.getDate() + 1); // ১ দিন যোগ
             }
             return dates;
         } else if (startDate) {
-            let y = startDate.getUTCFullYear();
-            let m = (startDate.getUTCMonth() + 1).toString().padStart(2, '0');
-            let d = startDate.getUTCDate().toString().padStart(2, '0');
-            return [`${y}-${m}-${d}`];
+            return [formatDateKey(startDate)];
         }
     }
 
-    // রেঞ্জ না থাকলে একক তারিখ পার্স করা
+    // রেঞ্জ ছাড়া সিঙ্গেল ডেট
     let singleDate = parseSingleDate(str);
     if (singleDate) {
-        let y = singleDate.getUTCFullYear();
-        let m = (singleDate.getUTCMonth() + 1).toString().padStart(2, '0');
-        let d = singleDate.getUTCDate().toString().padStart(2, '0');
-        dates.push(`${y}-${m}-${d}`);
+        dates.push(formatDateKey(singleDate));
     }
 
     return dates;
