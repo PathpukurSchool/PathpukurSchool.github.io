@@ -21,100 +21,78 @@
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
     </style>
 </head>
-<body class="min-h-screen pb-12 text-slate-800">
-
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-900 via-indigo-800 to-sky-900 text-white shadow-xl">
-        <div class="max-w-6xl mx-auto px-4 py-4 md:py-6 text-center">
-            <h1 class="text-xl md:text-3xl font-extrabold tracking-wide flex items-center justify-center gap-2">
-                <i class="fa-solid fa-calendar-days text-amber-400"></i> পাতপুকুর হাই স্কুল (উ: মা:)
-            </h1>
-            <p class="text-xs md:text-sm text-sky-200 mt-1">একাডেমিক ক্যালেন্ডার, ছুটির তালিকা ও পরীক্ষার সময়সূচী</p>
-        </div>
-    </header>
-
-    <main class="max-w-5xl mx-auto px-2 sm:px-4 mt-4 md:mt-6 space-y-4 md:space-y-6">
+<body class="min-h-screen text-slate-800 p-1 sm:p-2">
+    <main class="max-w-4xl mx-auto space-y-2">
 
         <!-- Legend Bar -->
-        <div class="glass-card rounded-xl p-3 shadow-sm flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold">
-            <div class="flex items-center space-x-1.5">
-                <span class="w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-red-500 inline-block"></span>
+        <div class="glass-card rounded-lg p-1.5 shadow-sm flex flex-wrap justify-center gap-2 md:gap-4 text-[10px] sm:text-xs font-bold">
+            <div class="flex items-center space-x-1">
+                <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
                 <span>রবিবার / ছুটি</span>
             </div>
-            <div class="flex items-center space-x-1.5">
-                <span class="w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-sky-500 inline-block"></span>
+            <div class="flex items-center space-x-1">
+                <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block"></span>
                 <span>পরীক্ষার রুটিন</span>
             </div>
-            <div class="flex items-center space-x-1.5">
-                <span class="w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-emerald-500 inline-block"></span>
+            <div class="flex items-center space-x-1">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
                 <span>একাডেমিক ইভেন্ট</span>
             </div>
         </div>
 
         <!-- Calendar Container -->
-        <div class="glass-card rounded-2xl shadow-xl overflow-hidden border border-sky-100">
+        <div class="glass-card rounded-xl shadow-md overflow-hidden border border-sky-100">
             
             <!-- Controls Bar -->
-            <div class="bg-slate-800 text-white p-3 md:p-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="bg-slate-800 text-white p-2 flex flex-row justify-between items-center gap-1">
                 
                 <!-- Left Buttons -->
-                <div class="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-start">
-                    <div class="flex items-center space-x-1">
-                        <button onclick="changeYear(-1)" class="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-semibold transition" title="আগের বছর">
-                            <i class="fa-solid fa-angles-left"></i>
-                        </button>
-                        <button onclick="changeMonth(-1)" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 rounded-lg text-xs font-semibold transition">
-                            <i class="fa-solid fa-chevron-left"></i> আগের মাস
-                        </button>
-                    </div>
-
-                    <!-- Reset / Today Button (Mobile View Right Align) -->
-                    <button onclick="resetToCurrentMonth()" class="sm:hidden px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-md">
-                        <i class="fa-solid fa-rotate-right"></i> বর্তমান মাস
+                <div class="flex items-center space-x-1">
+                    <button onclick="changeYear(-1)" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 rounded text-[10px] sm:text-xs font-semibold transition" title="আগের বছর">
+                        <i class="fa-solid fa-angles-left"></i>
+                    </button>
+                    <button onclick="changeMonth(-1)" class="px-2 py-1 bg-sky-600 hover:bg-sky-500 rounded text-[10px] sm:text-xs font-semibold transition">
+                        <i class="fa-solid fa-chevron-left"></i> <span class="hidden sm:inline">আগের মাস</span>
                     </button>
                 </div>
 
-                <!-- Calendar Title -->
-                <div class="text-center my-1 sm:my-0">
-                    <h2 id="calendarTitle" class="text-lg md:text-2xl font-bold tracking-wide text-amber-300">--</h2>
+                <!-- Calendar Title & Reset -->
+                <div class="text-center flex items-center gap-2">
+                    <h2 id="calendarTitle" class="text-xs sm:text-base font-bold text-amber-300">--</h2>
+                    <button onclick="resetToCurrentMonth()" class="p-1 sm:px-2 sm:py-1 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded text-[10px] font-bold transition shadow-sm" title="বর্তমান মাস">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
                 </div>
 
-                <!-- Right Buttons & Reset Button for Desktop -->
-                <div class="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-end">
-                    <!-- Reset Button for Desktop -->
-                    <button onclick="resetToCurrentMonth()" class="hidden sm:flex px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-lg text-xs font-bold transition items-center gap-1.5 shadow-md" title="বর্তমান মাসে ফিরে যান">
-                        <i class="fa-solid fa-rotate-right"></i> বর্তমান মাস
+                <!-- Right Buttons -->
+                <div class="flex items-center space-x-1">
+                    <button onclick="changeMonth(1)" class="px-2 py-1 bg-sky-600 hover:bg-sky-500 rounded text-[10px] sm:text-xs font-semibold transition">
+                        <span class="hidden sm:inline">পরের মাস</span> <i class="fa-solid fa-chevron-right"></i>
                     </button>
-
-                    <div class="flex items-center space-x-1">
-                        <button onclick="changeMonth(1)" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 rounded-lg text-xs font-semibold transition">
-                            পরের মাস <i class="fa-solid fa-chevron-right"></i>
-                        </button>
-                        <button onclick="changeYear(1)" class="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-semibold transition" title="পরের বছর">
-                            <i class="fa-solid fa-angles-right"></i>
-                        </button>
-                    </div>
+                    <button onclick="changeYear(1)" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 rounded text-[10px] sm:text-xs font-semibold transition" title="পরের বছর">
+                        <i class="fa-solid fa-angles-right"></i>
+                    </button>
                 </div>
             </div>
 
             <!-- Calendar Days Header -->
-            <div class="grid grid-cols-7 bg-slate-100 text-center text-xs md:text-sm font-bold border-b border-slate-200">
-                <div class="py-2 text-red-600">রবি</div>
-                <div class="py-2 text-slate-700">সোম</div>
-                <div class="py-2 text-slate-700">মঙ্গল</div>
-                <div class="py-2 text-slate-700">বুধ</div>
-                <div class="py-2 text-slate-700">বৃহস্পতি</div>
-                <div class="py-2 text-slate-700">শুক্র</div>
-                <div class="py-2 text-slate-700">শনি</div>
+            <div class="grid grid-cols-7 bg-slate-100 text-center text-[11px] font-bold border-b border-slate-200">
+                <div class="py-1 text-red-600">রবি</div>
+                <div class="py-1 text-slate-700">সোম</div>
+                <div class="py-1 text-slate-700">মঙ্গল</div>
+                <div class="py-1 text-slate-700">বুধ</div>
+                <div class="py-1 text-slate-700">বৃহস্পতি</div>
+                <div class="py-1 text-slate-700">শুক্র</div>
+                <div class="py-1 text-slate-700">শনি</div>
             </div>
 
             <!-- Calendar Days Grid -->
-            <div id="calendarGrid" class="grid grid-cols-7 gap-1 p-1.5 md:p-2 bg-slate-50 min-h-[320px] md:min-h-[380px]">
+            <div id="calendarGrid" class="grid grid-cols-7 gap-0.5 p-1 bg-slate-50 min-h-[220px]">
                 <!-- Dynamic Days -->
             </div>
         </div>
@@ -122,26 +100,26 @@
     </main>
 
     <!-- Event Modal Details -->
-    <div id="eventModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-3 md:p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-5 md:p-6 shadow-2xl border border-sky-100 relative space-y-4">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold">
+    <div id="eventModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-2 z-50">
+        <div class="bg-white rounded-xl max-w-md w-full p-3 sm:p-4 shadow-2xl border border-sky-100 relative space-y-2">
+            <button onclick="closeModal()" class="absolute top-2 right-3 text-slate-400 hover:text-slate-600 text-lg font-bold">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <div class="flex items-center space-x-3 border-b border-slate-200 pb-3">
-                <div id="modalIcon" class="p-2.5 md:p-3 rounded-full text-white text-lg md:text-xl"></div>
+            <div class="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <div id="modalIcon" class="p-2 rounded-full text-white text-base"></div>
                 <div>
-                    <h3 id="modalTitle" class="text-base md:text-lg font-bold text-slate-900">ইভেন্ট ডিটেইলস</h3>
-                    <p id="modalDate" class="text-xs text-slate-500 font-semibold">--</p>
+                    <h3 id="modalTitle" class="text-sm font-bold text-slate-900">ইভেন্ট ডিটেইলস</h3>
+                    <p id="modalDate" class="text-[10px] text-slate-500 font-semibold">--</p>
                 </div>
             </div>
 
-            <div id="modalBody" class="text-xs md:text-sm text-slate-700 space-y-2 max-h-72 overflow-y-auto">
+            <div id="modalBody" class="text-xs text-slate-700 space-y-1.5 max-h-60 overflow-y-auto">
                 <!-- Dynamic Content -->
             </div>
 
-            <div class="text-right pt-2">
-                <button onclick="closeModal()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold transition">বন্ধ করুন</button>
+            <div class="text-right pt-1">
+                <button onclick="closeModal()" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold transition">বন্ধ করুন</button>
             </div>
         </div>
     </div>
@@ -151,7 +129,7 @@
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const bengaliMonths = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
+        const bengaliMonths = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
 
         let currentDate = new Date();
         let eventsData = {}; 
@@ -161,11 +139,9 @@
             renderCalendar();
         };
 
-        // Standardize Date into YYYY-MM-DD
         function parseToStandardDate(dateStr) {
             if (!dateStr) return null;
             let str = dateStr.trim();
-            
             if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(str)) {
                 let parts = str.split('-');
                 return `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
@@ -181,11 +157,9 @@
             return null;
         }
 
-        // Fetch Supabase Data according to Selected Year
         async function fetchYearEvents(targetYear) {
             eventsData = {};
 
-            // 1. Fetch Holidays
             const { data: holidays } = await _supabase.from('Holiday').select('*');
             if (holidays) {
                 holidays.forEach(h => {
@@ -202,7 +176,6 @@
                 });
             }
 
-            // 2. Fetch Exam Routines
             const { data: exams } = await _supabase.from('exam_routine').select('*').eq('session', targetYear.toString());
             if (exams) {
                 exams.forEach(ex => {
@@ -226,7 +199,6 @@
                 });
             }
 
-            // 3. Fetch Academic Calendar
             const { data: academic } = await _supabase.from('Academic_Calendar').select('*');
             if (academic) {
                 academic.forEach(ac => {
@@ -243,7 +215,6 @@
             }
         }
 
-        // Render Calendar UI
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -257,7 +228,7 @@
             grid.innerHTML = '';
 
             for (let i = 0; i < firstDayOfMonth; i++) {
-                grid.innerHTML += `<div class="p-1 bg-transparent"></div>`;
+                grid.innerHTML += `<div class="p-0.5 bg-transparent"></div>`;
             }
 
             const today = new Date();
@@ -293,19 +264,19 @@
                     textStyle = "text-emerald-800 font-bold";
                 }
 
-                if (hasHoliday) badgeDots += `<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>`;
-                if (hasExam) badgeDots += `<span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>`;
-                if (hasAcademic) badgeDots += `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>`;
+                if (hasHoliday) badgeDots += `<span class="w-1 h-1 rounded-full bg-red-500"></span>`;
+                if (hasExam) badgeDots += `<span class="w-1 h-1 rounded-full bg-sky-500"></span>`;
+                if (hasAcademic) badgeDots += `<span class="w-1 h-1 rounded-full bg-emerald-500"></span>`;
 
-                const isToday = dateKey === todayStr ? 'ring-2 ring-amber-500 ring-offset-1 font-extrabold bg-amber-50/50' : '';
+                const isToday = dateKey === todayStr ? 'ring-2 ring-amber-500 font-extrabold bg-amber-50' : '';
 
                 const dayCard = document.createElement('div');
-                dayCard.className = `p-1.5 md:p-2 h-14 md:h-16 border rounded-xl flex flex-col justify-between cursor-pointer transition-all ${bgStyle} ${isToday}`;
+                dayCard.className = `p-1 h-9 sm:h-10 border rounded-lg flex flex-col justify-between cursor-pointer transition-all ${bgStyle} ${isToday}`;
                 dayCard.onclick = () => showEventDetails(dateKey, isSunday, dayEvents);
 
                 dayCard.innerHTML = `
-                    <div class="text-xs md:text-sm ${textStyle}">${day}</div>
-                    <div class="flex space-x-1 justify-end">${badgeDots}</div>
+                    <div class="text-[11px] leading-none ${textStyle}">${day}</div>
+                    <div class="flex space-x-0.5 justify-end">${badgeDots}</div>
                 `;
 
                 grid.appendChild(dayCard);
@@ -329,9 +300,7 @@
             renderCalendar();
         }
 
-        // Reset to Current Month & Year
         async function resetToCurrentMonth() {
-            const today = new Date();
             const oldYear = currentDate.getFullYear();
             currentDate = new Date();
             const newYear = currentDate.getFullYear();
@@ -342,7 +311,6 @@
             renderCalendar();
         }
 
-        // Show Event Modal Details
         function showEventDetails(dateKey, isSunday, events) {
             const modal = document.getElementById('eventModal');
             const modalTitle = document.getElementById('modalTitle');
@@ -355,7 +323,7 @@
 
             if (isSunday && events.length === 0) {
                 modalTitle.innerText = "রবিবার (সাপ্তাহিক ছুটি)";
-                modalIcon.className = "p-2.5 md:p-3 rounded-full bg-red-500 text-white";
+                modalIcon.className = "p-2 rounded-full bg-red-500 text-white";
                 modalIcon.innerHTML = `<i class="fa-solid fa-umbrella-beach"></i>`;
                 modalBody.innerHTML = `<p class="text-slate-600 font-medium">সাপ্তাহিক ছুটির দিন হিসেবে বিদ্যালয় বন্ধ থাকবে।</p>`;
                 modal.classList.remove('hidden');
@@ -365,51 +333,51 @@
 
             if (events.length === 0) {
                 modalTitle.innerText = "সাধারণ কার্যদিবস";
-                modalIcon.className = "p-2.5 md:p-3 rounded-full bg-slate-500 text-white";
+                modalIcon.className = "p-2 rounded-full bg-slate-500 text-white";
                 modalIcon.innerHTML = `<i class="fa-solid fa-school"></i>`;
-                modalBody.innerHTML = `<p class="text-slate-600 font-medium"></p>`;
+                modalBody.innerHTML = `<p class="text-slate-600 font-medium">আজ সাধারণ ক্লাস চালু থাকবে।</p>`;
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 return;
             }
 
             modalTitle.innerText = "নির্ধারিত সূচী ও ইভেন্ট";
-            modalIcon.className = "p-2.5 md:p-3 rounded-full bg-indigo-600 text-white";
+            modalIcon.className = "p-2 rounded-full bg-indigo-600 text-white";
             modalIcon.innerHTML = `<i class="fa-solid fa-bell"></i>`;
 
             if (isSunday) {
-                modalBody.innerHTML += `<div class="p-2 bg-red-50 text-red-700 rounded-lg text-xs font-bold"><i class="fa-solid fa-calendar-check mr-1"></i> সাপ্তাহিক ছুটি (রবিবার)</div>`;
+                modalBody.innerHTML += `<div class="p-1.5 bg-red-50 text-red-700 rounded text-xs font-bold"><i class="fa-solid fa-calendar-check mr-1"></i> সাপ্তাহিক ছুটি (রবিবার)</div>`;
             }
 
             events.forEach(ev => {
                 if (ev.type === 'holiday') {
                     modalBody.innerHTML += `
-                        <div class="p-2.5 bg-red-50 border-l-4 border-red-500 rounded-r-xl space-y-1">
-                            <div class="font-bold text-red-800 text-xs md:text-sm"><i class="fa-solid fa-gift mr-1"></i> ছুটির উপলক্ষ: ${ev.title}</div>
-                            <div class="text-xs text-red-600">ছুটির মেয়াদ: ${ev.days} দিন</div>
-                            ${ev.remarks ? `<div class="text-xs text-slate-600">মন্তব্য: ${ev.remarks}</div>` : ''}
+                        <div class="p-2 bg-red-50 border-l-4 border-red-500 rounded-r space-y-0.5">
+                            <div class="font-bold text-red-800 text-xs"><i class="fa-solid fa-gift mr-1"></i> ছুটির উপলক্ষ: ${ev.title}</div>
+                            <div class="text-[11px] text-red-600">ছুটির মেয়াদ: ${ev.days} দিন</div>
+                            ${ev.remarks ? `<div class="text-[11px] text-slate-600">মন্তব্য: ${ev.remarks}</div>` : ''}
                         </div>
                     `;
                 } else if (ev.type === 'exam') {
                     let classListHtml = '';
                     Object.entries(ev.classes).forEach(([cls, sub]) => {
                         if (sub) {
-                            classListHtml += `<li class="text-xs"><strong>${cls}:</strong> ${sub}</li>`;
+                            classListHtml += `<li class="text-[11px]"><strong>${cls}:</strong> ${sub}</li>`;
                         }
                     });
 
                     modalBody.innerHTML += `
-                        <div class="p-2.5 bg-sky-50 border-l-4 border-sky-500 rounded-r-xl space-y-2">
-                            <div class="font-bold text-sky-900 text-xs md:text-sm"><i class="fa-solid fa-file-pen mr-1"></i> ${ev.exam_name || 'পরীক্ষার রুটিন'}</div>
-                            <ul class="space-y-1 bg-white p-2 rounded-lg border border-sky-100">${classListHtml}</ul>
+                        <div class="p-2 bg-sky-50 border-l-4 border-sky-500 rounded-r space-y-1">
+                            <div class="font-bold text-sky-900 text-xs"><i class="fa-solid fa-file-pen mr-1"></i> ${ev.exam_name || 'পরীক্ষার রুটিন'}</div>
+                            <ul class="space-y-0.5 bg-white p-1.5 rounded border border-sky-100">${classListHtml}</ul>
                         </div>
                     `;
                 } else if (ev.type === 'academic') {
                     modalBody.innerHTML += `
-                        <div class="p-2.5 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-xl space-y-1">
-                            <div class="font-bold text-emerald-900 text-xs md:text-sm"><i class="fa-solid fa-book-open mr-1"></i> একাডেমিক ইভেন্ট</div>
-                            <div class="text-xs text-emerald-800">শ্রেণী: <strong>${ev.class_name}</strong></div>
-                            <div class="text-xs text-emerald-700">বিষয় / বিস্তারিত: ${ev.subject}</div>
+                        <div class="p-2 bg-emerald-50 border-l-4 border-emerald-500 rounded-r space-y-0.5">
+                            <div class="font-bold text-emerald-900 text-xs"><i class="fa-solid fa-book-open mr-1"></i> একাডেমিক ইভেন্ট</div>
+                            <div class="text-[11px] text-emerald-800">শ্রেণী: <strong>${ev.class_name}</strong></div>
+                            <div class="text-[11px] text-emerald-700">বিষয় / বিস্তারিত: ${ev.subject}</div>
                         </div>
                     `;
                 }
