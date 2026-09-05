@@ -101,16 +101,32 @@
         font-size: 13px; 
         color: #334155;
     }
+    /* ১. সাধারণ ইনপুট ও সিলেক্টে বামদিকে ফাঁকা স্পেস */
     input, select { 
-        width: 100%; /* সব ঘর সমান পাশাপাশি বিস্তৃত হবে */
-        padding: 12px 14px; /* উপর নিচে বড় করার জন্য প্যাডিং বাড়ানো হয়েছে */
+        width: 100%;
+        padding: 12px 18px; /* বাম ও ডানদিকে ১৮px প্যাডিং */
         border: 2px solid #cbd5e1; 
         border-radius: 10px; 
         font-size: 14px; 
         outline: none; 
         background: #f8fafc;
         transition: all 0.3s ease;
-        min-height: 48px; /* ঘরগুলির নির্দিষ্ট বড় সাইজ নিশ্চিত করার জন্য */
+        min-height: 48px;
+    }
+
+    /* ২. রোল নম্বর (Type Number) ইনপুটের জন্য বামদিকের স্পেস জোরপূর্বক কার্যকর করা */
+    input[type="number"] {
+        padding-left: 18px !important;
+    }
+
+    /* ৩. ব্রাউজারের ডিফল্ট ইনপুট স্পিনার (Up/Down Arrow) সরিয়ে দেওয়া যাতে স্পেসটি ঠিক থাকে */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield; /* Firefox-এর জন্য */
     }
     input:focus, select:focus {
         border-color: #2563eb;
