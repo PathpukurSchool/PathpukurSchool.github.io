@@ -61,11 +61,11 @@
                     </button>
                 </div>
 
-                <!-- Calendar Title & Reset -->
+                <!-- Calendar Title & Reset Button with Spinner -->
                 <div class="text-center flex items-center gap-2">
                     <h2 id="calendarTitle" class="text-xs sm:text-base font-bold text-amber-300">--</h2>
-                    <button onclick="resetToCurrentMonth()" class="p-1 sm:px-2 sm:py-1 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded text-[10px] font-bold transition shadow-sm" title="বর্তমান মাস">
-                        <i class="fa-solid fa-rotate-right"></i>
+                    <button id="resetBtn" onclick="resetToCurrentMonth()" class="p-1 sm:px-2 sm:py-1 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded text-[10px] font-bold transition shadow-sm flex items-center justify-center min-w-[24px]" title="বর্তমান মাস">
+                        <i id="resetIcon" class="fa-solid fa-rotate-right"></i>
                     </button>
                 </div>
 
@@ -300,15 +300,29 @@
             renderCalendar();
         }
 
+        // Reset with Loading Spinner Animation
         async function resetToCurrentMonth() {
-            const oldYear = currentDate.getFullYear();
-            currentDate = new Date();
-            const newYear = currentDate.getFullYear();
+            const btn = document.getElementById('resetBtn');
+            const icon = document.getElementById('resetIcon');
 
-            if (oldYear !== newYear) {
-                await fetchYearEvents(newYear);
+            // Disable button and add spinner
+            btn.disabled = true;
+            icon.className = "fa-solid fa-spinner fa-spin";
+
+            try {
+                const oldYear = currentDate.getFullYear();
+                currentDate = new Date();
+                const newYear = currentDate.getFullYear();
+
+                if (oldYear !== newYear || Object.keys(eventsData).length === 0) {
+                    await fetchYearEvents(newYear);
+                }
+                renderCalendar();
+            } finally {
+                // Restore original icon and enable button
+                icon.className = "fa-solid fa-rotate-right";
+                btn.disabled = false;
             }
-            renderCalendar();
         }
 
         function showEventDetails(dateKey, isSunday, events) {
