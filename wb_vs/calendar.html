@@ -139,79 +139,95 @@
             renderCalendar();
         };
 
-        // একক তারিখকে YYYY-MM-DD অবজেক্ট/স্ট্রিং এ রূপান্তর
-        function parseSingleDate(str) {
-            if (!str) return null;
-            str = str.trim();
-            
-            // DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY
-            if (/^\d{1,2}[\.\/-]\d{1,2}[\.\/-]\d{4}$/.test(str)) {
-                let parts = str.split(/[\.\/-]/);
-                let day = parseInt(parts[0], 10);
-                let month = parseInt(parts[1], 10) - 1;
-                let year = parseInt(parts[2], 10);
-                return new Date(year, month, day);
-            }
-            // YYYY-MM-DD
-            if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(str)) {
-                let parts = str.split('-');
-                let year = parseInt(parts[0], 10);
-                let month = parseInt(parts[1], 10) - 1;
-                let day = parseInt(parts[2], 10);
-                return new Date(year, month, day);
-            }
-            return null;
+// একক তারিখ সঠিকভাবে (Day-Month-Year) পার্স করার নিয়ম
+function parseSingleDate(str) {
+    if (!str) return null;
+    str = str.trim();
+
+    // ১. DD.MM.YYYY, DD/MM/YYYY, DD-MM-YYYY ফরম্যাটের জন্য
+    let dmyRegex = /^(\d{1,2})[\.\/-](\d{1,2})[\.\/-](\d{4})$/;
+    let matchDMY = str.match(dmyRegex);
+    if (matchDMY) {
+        let day = parseInt(matchDMY[1], 10);
+        let month = parseInt(matchDMY[2], 10) - 1; // 0-indexed Month
+        let year = parseInt(matchDMY[3], 10);
+        
+        // Local Timezone বজায় রাখতে UTC Date তৈরি
+        return new Date(Date.UTC(year, month, day));
+    }
+
+    // ২. YYYY-MM-DD ফরম্যাটের জন্য
+    let ymdRegex = /^(\d{4})[\.\/-](\d{1,2})[\.\/-](\d{1,2})$/;
+    let matchYMD = str.match(ymdRegex);
+    if (matchYMD) {
+        let year = parseInt(matchYMD[1], 10);
+        let month = parseInt(matchYMD[2], 10) - 1;
+        let day = parseInt(matchYMD[3], 10);
+        return new Date(Date.UTC(year, month, day));
+    }
+
+    return null;
+}
+
+// তারিখের রেঞ্জ এবং সিঙ্গেল ডেট থেকে 'YYYY-MM-DD' অ্যারে তৈরি
+function parseToDateArray(dateStr) {
+    if (!dateStr) return [];
+    
+    // অতিরিক্ত স্পেস পরিষ্কার করা
+    let str = String(dateStr).trim();
+    let dates = [];
+
+    let rangeParts = [];
+    
+    // 'থেকে', 'to', বা '-' যুক্ত রেঞ্জ চেক করা
+    if (str.includes('থেকে')) {
+        rangeParts = str.split('থেকে');
+    } else if (str.includes(' to ')) {
+        rangeParts = str.split(' to ');
+    } else if (str.includes('-')) {
+        // যদি DD.MM.YYYY-DD.MM.YYYY ফরম্যাটে থাকে
+        let splitDash = str.split('-');
+        if (splitDash.length === 2) {
+            rangeParts = splitDash;
         }
+    }
 
-        // তারিখের রেঞ্জ এবং সিঙ্গেল ডেট পার্স করে সমস্ত YYYY-MM-DD স্ট্রিং এর তালিকা রিটার্ন করে
-        function parseToDateArray(dateStr) {
-            if (!dateStr) return [];
-            let str = dateStr.trim();
-            let dates = [];
+    // রেঞ্জ থাকলে (Start Date থেকে End Date পর্যন্ত সব দিন)
+    if (rangeParts.length === 2) {
+        let startDate = parseSingleDate(rangeParts[0]);
+        let endDate = parseSingleDate(rangeParts[1]);
 
-            // যদি 'থেকে' অথবা '-' দিয়ে ডেট রেঞ্জ থাকে (যেমন: 15.10.2026 থেকে 12.11.2026)
-            let rangeParts = [];
-            if (str.includes('থেকে')) {
-                rangeParts = str.split('থেকে');
-            } else if (str.includes(' - ')) {
-                rangeParts = str.split(' - ');
-            }
-
-            if (rangeParts.length === 2) {
-                let startDate = parseSingleDate(rangeParts[0]);
-                let endDate = parseSingleDate(rangeParts[1]);
-
-                if (startDate && endDate) {
-                    let curr = new Date(startDate);
-                    while (curr <= endDate) {
-                        let y = curr.getFullYear();
-                        let m = (curr.getMonth() + 1).toString().padStart(2, '0');
-                        let d = curr.getDate().toString().padStart(2, '0');
-                        dates.push(`${y}-${m}-${d}`);
-                        curr.setDate(curr.getDate() + 1);
-                    }
-                    return dates;
-                } else if (startDate) {
-                    // শুধু শুরুর তারিখ পাওয়া গেলে (যেমন: "16/06/2026 থেকে")
-                    let y = startDate.getFullYear();
-                    let m = (startDate.getMonth() + 1).toString().padStart(2, '0');
-                    let d = startDate.getDate().toString().padStart(2, '0');
-                    return [`${y}-${m}-${d}`];
-                }
-            }
-
-            // যদি সিঙ্গেল ডেট হয়
-            let singleDate = parseSingleDate(str);
-            if (singleDate) {
-                let y = singleDate.getFullYear();
-                let m = (singleDate.getMonth() + 1).toString().padStart(2, '0');
-                let d = singleDate.getDate().toString().padStart(2, '0');
+        if (startDate && endDate) {
+            let curr = new Date(startDate.getTime());
+            while (curr <= endDate) {
+                let y = curr.getUTCFullYear();
+                let m = (curr.getUTCMonth() + 1).toString().padStart(2, '0');
+                let d = curr.getUTCDate().toString().padStart(2, '0');
                 dates.push(`${y}-${m}-${d}`);
+                
+                // ১ দিন যোগ
+                curr.setUTCDate(curr.getUTCDate() + 1);
             }
-
             return dates;
+        } else if (startDate) {
+            let y = startDate.getUTCFullYear();
+            let m = (startDate.getUTCMonth() + 1).toString().padStart(2, '0');
+            let d = startDate.getUTCDate().toString().padStart(2, '0');
+            return [`${y}-${m}-${d}`];
         }
+    }
 
+    // রেঞ্জ না থাকলে একক তারিখ পার্স করা
+    let singleDate = parseSingleDate(str);
+    if (singleDate) {
+        let y = singleDate.getUTCFullYear();
+        let m = (singleDate.getUTCMonth() + 1).toString().padStart(2, '0');
+        let d = singleDate.getUTCDate().toString().padStart(2, '0');
+        dates.push(`${y}-${m}-${d}`);
+    }
+
+    return dates;
+}
         async function fetchYearEvents(targetYear) {
             eventsData = {};
 
