@@ -72,6 +72,10 @@
         backdrop-filter: blur(4px);
     }
 
+    .instruction-card {
+        margin-bottom: 25px; /* ২. গ্যাপ বাড়ানো হলো */
+    }
+
     /* সার্চ ও ফর্ম ইনপুট সেকশন */
     .card { 
         background: #ffffff; 
@@ -97,13 +101,15 @@
         color: #334155;
     }
     input, select { 
-        padding: 10px 14px; 
+        width: 100%; /* সব ঘর সমান পাশাপাশি বিস্তৃত হবে */
+        padding: 12px 14px; /* উপর নিচে বড় করার জন্য প্যাডিং বাড়ানো হয়েছে */
         border: 2px solid #cbd5e1; 
         border-radius: 10px; 
         font-size: 14px; 
         outline: none; 
         background: #f8fafc;
         transition: all 0.3s ease;
+        min-height: 48px; /* ঘরগুলির নির্দিষ্ট বড় সাইজ নিশ্চিত করার জন্য */
     }
     input:focus, select:focus {
         border-color: #2563eb;
@@ -118,7 +124,8 @@
         font-weight: 700; 
         border: none; 
         border-radius: 10px;
-        padding: 11px 18px;
+        padding: 12px 18px;
+        min-height: 48px; /* ইনপুট ফিল্ডের সাথে বাটন চওড়া ও লম্বা সামঞ্জস্যপূর্ণ করা হলো */
         cursor: pointer; 
         transition: all 0.2s ease; 
         box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
@@ -126,6 +133,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
+        width: 100%;
     }
     .btn-search:hover { 
         transform: translateY(-1px);
@@ -238,7 +246,7 @@
     <!-- রুলস ও নির্দেশিকা -->
         <div class="bg-white border-l-4 border-cyan-500 rounded-r-xl p-4 shadow-sm text-slate-800 text-xs md:text-sm">
             <i class="fa-solid fa-circle-info text-cyan-600 mr-1 text-base"></i>
-            <strong>আবেদন নির্দেশিকা:</strong> শুধুমাত্র 3rd Summative Evaluation (ক্লাস: V-IX), Test Exam (ক্লাস: X), Semester II (ক্লাস: XI) এবং Project / Practical পরীক্ষাগুলির জন্যই নম্বর আপলোড এর প্রক্রিয়া সম্পন্ন হবার পর পুনর্মূল্যায়নের আবেদন গ্রহণ করা হবে। একজন শিক্ষার্থী <b>একবারের বেশি আবেদন করতে পারবে না</b>।
+            <strong>আবেদন নির্দেশিকা:</strong> শুধুমাত্র <b>3rd Summative Evaluation</b> (ক্লাস: V-IX), <b>Test Exam</b> (ক্লাস: X), <b>Semester II</b> (ক্লাস: XI) এবং <b>Project / Practical</b> (ক্লাস: IX, X, XI) পরীক্ষাগুলির জন্যই নম্বর আপলোড এর প্রক্রিয়া সম্পন্ন হবার পর <em>পুনর্মূল্যায়নের আবেদন</em> গ্রহণ করা হবে। একজন শিক্ষার্থী <b>একবারের বেশি আবেদন করতে পারবে না</b>।
         </div>
 
     <div id="alert-box" class="alert"></div>
@@ -277,7 +285,7 @@
             </div>
             <div class="form-group">
                 <label><i class="fa-solid fa-calendar-day text-slate-500 mr-1"></i> জন্ম তারিখ (DOB) </label>
-                <input type="date" id="dob-input" placeholder="বিদ্যালয় রেকর্ড অনুযায়ী">
+                <input type="text" id="dob-input" placeholder="বিদ্যালয় রেকর্ড অনুযায়ী" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'">
             </div>
             <div class="form-group" style="justify-content: flex-end;">
                 <button id="search-btn" class="btn-search" onclick="searchStudent()">
