@@ -375,19 +375,82 @@
             <button class="toggle-button more-btn">More...</button>
         </section>
 
-     <section id="school-calendar-section-website" class="school-calendar card animated-card fade-in delay-13">
-    <h2><i class="fas fa-calendar-alt icon"></i> School Calendar</h2>
-    <div class="map-container">
-<iframe 
-  src="https://pathpukurschool.github.io/stu_gen_3j61v/calendar_scl_9nd.html" 
-  title="School Calendar" 
-  style="width: 100%; min-height: 330px; border: 0; outline: none; margin: 0; padding: 0;" 
-  frameborder="0" 
-  scrolling="no" 
-  loading="lazy">
-</iframe>
+<section id="school-calendar-section-website" class="school-calendar card animated-card fade-in delay-13" style="position: relative;">
+    <!-- হেডার ও ফুলস্ক্রীন বাটন -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h2><i class="fas fa-calendar-alt icon"></i> School Calendar</h2>
+        <button id="calendar-fullscreen-btn" onclick="toggleCalendarFullscreen()" 
+                style="background: #0284c7; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; items-center: center; gap: 6px; transition: background 0.2s;">
+            <i class="fas fa-expand"></i> <span id="fs-btn-text">Maximize</span>
+        </button>
     </div>
-    </section>
+
+    <div id="calendar-map-container" class="map-container">
+        <iframe 
+            id="calendar-iframe"
+            src="https://pathpukurschool.github.io/stu_gen_3j61v/calendar_scl_9nd.html" 
+            title="School Calendar" 
+            style="width: 100%; min-height: 330px; border: 0; outline: none; margin: 0; padding: 0; transition: all 0.3s ease;" 
+            frameborder="0" 
+            scrolling="no" 
+            loading="lazy"
+            allow="fullscreen">
+        </iframe>
+    </div>
+</section>
+
+<!-- Fullscreen CSS & JavaScript -->
+<style>
+    /* ফুলস্ক্রীন মোডের ক্লাসের স্টাইল */
+    .calendar-fullscreen-active {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 999999 !important;
+        background: #ffffff !important;
+        padding: 15px !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+    .calendar-fullscreen-active iframe {
+        height: calc(100vh - 50px) !important;
+    }
+</style>
+
+<script>
+    function toggleCalendarFullscreen() {
+        const calendarSection = document.getElementById('school-calendar-section-website');
+        const btnText = document.getElementById('fs-btn-text');
+        const btnIcon = document.querySelector('#calendar-fullscreen-btn i');
+        const iframe = document.getElementById('calendar-iframe');
+
+        if (!calendarSection.classList.contains('calendar-fullscreen-active')) {
+            // Maximize Mode
+            calendarSection.classList.add('calendar-fullscreen-active');
+            btnText.innerText = 'Minimize';
+            btnIcon.className = 'fas fa-compress';
+            document.body.style.overflow = 'hidden'; // স্ক্রোলবার সাময়িক বন্ধ রাখবে
+            
+            // আইফ্রেমে সিগন্যাল পাঠানো
+            if (iframe.contentWindow) {
+                iframe.contentWindow.postMessage('isFullscreen', '*');
+            }
+        } else {
+            // Minimize Mode
+            calendarSection.classList.remove('calendar-fullscreen-active');
+            btnText.innerText = 'Maximize';
+            btnIcon.className = 'fas fa-expand';
+            document.body.style.overflow = '';
+            
+            // আইফ্রেমে সিগন্যাল পাঠানো
+            if (iframe.contentWindow) {
+                iframe.contentWindow.postMessage('isNormal', '*');
+            }
+        }
+    }
+</script>
     
         <section id="location-section" class="location card animated-card fade-in delay-14">
             <h2><i class="fas fa-map-marked-alt icon"></i> Our Location</h2>
