@@ -554,12 +554,17 @@ try {
         });
 
         document.getElementById('student-section').style.display = 'block';
+
+    } catch (err) {
+        // unexpected error বা সার্ভার সমস্যা হলেও যেন এলার্ট দেখায়
+        console.error("Search Error:", err);
+        showAlert("সার্ভারে সমস্যা হয়েছে। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।", "error");
     } finally {
-        // 🟢২. ডাটা লোড সম্পন্ন হলে বা মাঝপথে কোনো Error/Return হলেও বাটন আবার স্বাভাবিক হবে
+        // 🟢 ২. কাজ শেষ হলে বা যেকোনো অবস্থায় বাটন আবার স্বাভাবিক করা
         searchBtn.disabled = false;
         searchBtn.innerHTML = `<i class="fa-solid fa-search"></i> <span>অনুসন্ধান</span>`;
     }
-    }
+}
 
     async function confirmAndSubmit() {
         const selected = Array.from(document.querySelectorAll('input[name="subject"]:checked')).map(cb => cb.value);
