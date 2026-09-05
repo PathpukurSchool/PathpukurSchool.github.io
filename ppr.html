@@ -231,6 +231,14 @@
         .header-card h1 { font-size: 20px; }
         .card { padding: 15px; }
     }
+    /* ঘুরন্ত লোডিং স্পিনারের অ্যানিমেশন */
+.fa-spin {
+    animation: fa-spin 1s infinite linear;
+}
+@keyframes fa-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
 </head>
 <body>
@@ -406,6 +414,11 @@
         clearAlert();
         document.getElementById('student-section').style.display = 'none';
 
+        // 🟢১. বোতামে লোডিং স্পিনার চালু করা
+        const searchBtn = document.getElementById('search-btn');
+        searchBtn.disabled = true;
+        searchBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>অনুসন্ধান হচ্ছে...</span>`;
+try {
         const className = document.getElementById('class-select').value;
         const section = document.getElementById('section-select').value;
         const roll = parseInt(document.getElementById('roll-input').value);
@@ -417,7 +430,7 @@
         }
 
         if (roll < 1 || roll > 700) {
-            showAlert('রোল নম্বর অবশ্যই ১ থেকে ৭০০ এর মধ্যে হতে হবে।');
+            showAlert('দয়া করে সঠিক রোল নম্বর লিখুন!');
             return;
         }
 
@@ -541,6 +554,11 @@
         });
 
         document.getElementById('student-section').style.display = 'block';
+    } finally {
+        // 🟢২. ডাটা লোড সম্পন্ন হলে বা মাঝপথে কোনো Error/Return হলেও বাটন আবার স্বাভাবিক হবে
+        searchBtn.disabled = false;
+        searchBtn.innerHTML = `<i class="fa-solid fa-search"></i> <span>অনুসন্ধান</span>`;
+    }
     }
 
     async function confirmAndSubmit() {
