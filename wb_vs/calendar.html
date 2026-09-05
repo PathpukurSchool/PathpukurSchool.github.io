@@ -19,6 +19,10 @@
             font-family: 'Inter', 'Tiro Bangla', sans-serif;
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
         }
+        html, body {
+           height: auto !important;
+           min-height: unset !important;
+          }
         .glass-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
@@ -26,7 +30,8 @@
         }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 p-1 sm:p-2">
+<body class="bg-gradient-to-br from-sky-50 to-sky-100 text-slate-800 p-1 sm:p-2 h-fit overflow-x-hidden">
+    
     <main class="max-w-4xl mx-auto space-y-2">
 
         <!-- Legend Bar -->
