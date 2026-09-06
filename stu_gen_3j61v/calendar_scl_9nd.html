@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -201,12 +200,13 @@
             await fetchYearEvents(currentDate.getFullYear());
             renderCalendar();
             
-            // ডেটের বাইরে অন্য কোথাও ক্লিক করলে সিলেক্টেড বর্ডার হাইলাইট রিমুভ করা
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.day-card')) {
-                    clearSelectedHighlight();
-                }
-            });
+            // ডেট এবং পপ-আপ মডালের বাইরে অন্য কোথাও ক্লিক করলে সিলেক্টেড বর্ডার হাইলাইট রিমুভ করা
+             document.addEventListener('click', function(e) {
+          // যদি ক্লিকটি day-card বা eventModal-এর ভেতরে না হয়ে থাকে, তবেই হাইলাইট রিমুভ হবে
+              if (!e.target.closest('.day-card') && !e.target.closest('#eventModal')) {
+              clearSelectedHighlight();
+             }
+          });
         };
 
         function clearSelectedHighlight() {
