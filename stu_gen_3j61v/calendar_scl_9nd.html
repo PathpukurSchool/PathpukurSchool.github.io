@@ -155,30 +155,30 @@
 
     </main>
 
-    <!-- Event Modal Details -->
-    <div id="eventModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-2 z-50">
-        <div class="bg-white rounded-xl max-w-md w-full p-3 sm:p-4 shadow-2xl border border-sky-100 relative space-y-2">
-            <button onclick="closeModal()" class="absolute top-2 right-3 text-slate-400 hover:text-slate-600 text-lg font-bold">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+<!-- Event Modal Details -->
+<div id="eventModal" onclick="closeModalOnOutsideClick(event)" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-2 z-50">
+    <div class="bg-white rounded-xl max-w-md w-full p-3 sm:p-4 shadow-2xl border border-sky-100 relative space-y-2 max-h-[90vh] overflow-y-auto">
+        <button onclick="closeModal()" class="absolute top-2 right-3 text-slate-400 hover:text-slate-600 text-lg font-bold">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
 
-            <div class="flex items-center space-x-2 border-b border-slate-200 pb-2">
-                <div id="modalIcon" class="p-2 rounded-full text-white text-base"></div>
-                <div>
-                    <h3 id="modalTitle" class="text-sm font-bold text-slate-900">ইভেন্ট ডিটেইলস</h3>
-                    <p id="modalDate" class="text-[10px] text-slate-500 font-semibold">--</p>
-                </div>
-            </div>
-
-            <div id="modalBody" class="text-xs text-slate-700 space-y-1.5 max-h-60 overflow-y-auto">
-                <!-- Dynamic Content -->
-            </div>
-
-            <div class="text-right pt-1">
-                <button onclick="closeModal()" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold transition">বন্ধ করুন</button>
+        <div class="flex items-center space-x-2 border-b border-slate-200 pb-2">
+            <div id="modalIcon" class="p-2 rounded-full text-white text-base"></div>
+            <div>
+                <h3 id="modalTitle" class="text-sm font-bold text-slate-900">ইভেন্ট ডিটেইলস</h3>
+                <p id="modalDate" class="text-[10px] text-slate-500 font-semibold">--</p>
             </div>
         </div>
+
+        <div id="modalBody" class="text-xs text-slate-700 space-y-1.5">
+            <!-- Dynamic Content -->
+        </div>
+
+        <div class="text-right pt-1">
+            <button onclick="closeModal()" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold transition">বন্ধ করুন</button>
+        </div>
     </div>
+</div>
 
     <script>
         const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
@@ -602,6 +602,41 @@
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
+        // পপ-আপ এর বাইরের ফাঁকা জায়গায় ক্লিক করলে বন্ধ করার ফাংশন
+function closeModalOnOutsideClick(event) {
+    if (event.target.id === 'eventModal') {
+        closeModal();
+    }
+}
+
+// স্ক্রীন ডানে বা বামে স্লাইড/সোয়াইপ করে মাস পরিবর্তন (Touch Swipe Handling)
+let touchstartX = 0;
+let touchendX = 0;
+
+document.addEventListener('touchstart', e => {
+    touchstartX = e.changedTouches[0].screenX;
+}, false);
+
+document.addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    const modal = document.getElementById('eventModal');
+    // পপ-আপ খোলা থাকা অবস্থায় সোয়াইপ বন্ধ থাকবে
+    if (!modal.classList.contains('hidden')) return;
+
+    const threshold = 50; // সর্বনিম্ন সোয়াইপ ডিস্টেন্স (পিক্সেল)
+    if (touchendX < touchstartX - threshold) {
+        // বামে সোয়াইপ (পরের মাস)
+        changeMonth(1);
+    }
+    if (touchendX > touchstartX + threshold) {
+        // ডানে সোয়াইপ (আগের মাস)
+        changeMonth(-1);
+    }
+}
     </script>
 </body>
 </html>
