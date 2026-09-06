@@ -101,18 +101,6 @@ ul{list-style:none;padding:0;margin:0}
 .principal-text h3{margin-top:0;font-size:1.5em;color:var(--dark-khaki);border-left:none;padding-left:0}
 .principal-text p{font-size:1.1em;line-height:1.7;color:var(--black)}
 
-/* 🔗 গুরুত্বপূর্ণ লিঙ্ক (Important Links Section) */
-.important-links{background:linear-gradient(135deg,#fefefe 0%,#fefefe 100%);padding:30px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.1);margin-bottom:30px;border-left:none;transition:transform .3s ease,box-shadow .3s ease}
-.important-links:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(0,0,0,.15)}
-.important-links h2{color:var(--dark-khaki);font-size:2em;margin-bottom:25px;text-align:center;position:relative;border-bottom:0;padding-bottom:0}
-.important-links h2 .icon{margin-right:10px;color:var(--primary-red)}
-.important-links h2::after{content:'';display:block;width:100%;height:3px;background-color:var(--accent-color);margin-top:10px;border-radius:5px}
-.links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;justify-content:center}
-.link-item{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background-color:#f9f9f9;padding:15px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.08);transition:all .3s ease;text-decoration:none;color:var(--text-color);font-weight:600;border-left:6px solid var(--dark-khaki)}
-.link-item:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 8px 15px rgba(0,0,0,.15);background-color:var(--light-accent-color)}
-.link-item .link-icon{font-size:3em;color:var(--primary-red);margin-bottom:10px;transition:transform .3s ease,color .3s ease}
-.link-item:hover .link-icon{transform:scale(1.1);color:var(--dark-khaki)}
-
 /* 📸 গ্যালারি সেকশন (Gallery Section) */
 .gallery{background:linear-gradient(135deg,#fdf6e3 0%,#fae6b5 100%);border-top:8px solid var(--dark-khaki)}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin-top:20px}
