@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -5,17 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive">
 
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (অনুমোদিত না হলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
     <style id="security-shield">
         body { display: none !important; }
     </style>
 
+    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট (লিংক সরাসরি কপি করে খোলা আটকাবে) -->
     <script>
     (function() {
         try {
             var ref = document.referrer;
             var isValidReferrer = false;
 
-            // রিফারার চেক
+            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
                 if (refUrl.hostname === "pathpukurschool.github.io") {
@@ -23,11 +26,14 @@
                 }
             }
 
+            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
             if (!isValidReferrer) {
+                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
                 window.location.replace("https://pathpukurschool.github.io/");
                 return;
             }
 
+            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
             document.addEventListener("DOMContentLoaded", function() {
                 var shield = document.getElementById("security-shield");
                 if (shield) shield.remove();
@@ -38,11 +44,15 @@
         }
     })();
     </script>
-   <title>Pathpukur High School (H. S.)</title>
+   <!-- স্কুল ক্যালেন্ডার -->
+    <title>Pathpukur High School (H. S.)</title>
 
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <!-- Font Awesome & Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -68,12 +78,11 @@
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        /* ক্লিক করা তারিখের স্পেশাল সিলেকশন স্টাইল */
-        .selected-day {
-            ring: 2px !important;
-            ring-color: #4f46e5 !important;
-            background-color: #e0e7ff !important;
-            border-color: #6366f1 !important;
+        /* একটিভ ডেট হাইলাইটের স্টাইল */
+        .selected-day-highlight {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 2px #2563eb !important;
+            z-index: 10;
         }
     </style>
 </head>
@@ -81,6 +90,7 @@
     
     <main class="w-full space-y-1">
 
+        <!-- Legend Bar -->
         <div class="glass-card rounded-lg p-1.5 shadow-sm flex flex-wrap justify-center gap-2 md:gap-4 text-[10px] sm:text-xs font-bold">
             <div class="flex items-center space-x-1">
                 <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
@@ -96,10 +106,13 @@
             </div>
         </div>
 
+        <!-- Calendar Container -->
         <div class="glass-card rounded-xl shadow-md overflow-hidden border border-sky-100">
             
+            <!-- Controls Bar -->
             <div class="bg-slate-800 text-white p-2 flex flex-row justify-between items-center gap-1">
                 
+                <!-- Left Buttons -->
                 <div class="flex items-center space-x-1">
                     <button onclick="changeYear(-1)" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 rounded text-[10px] sm:text-xs font-semibold transition" title="আগের বছর">
                         <i class="fa-solid fa-angles-left"></i>
@@ -109,6 +122,7 @@
                     </button>
                 </div>
 
+                <!-- Calendar Title & Reset Button with Spinner -->
                 <div class="text-center flex items-center gap-2">
                     <h2 id="calendarTitle" class="text-xs sm:text-base font-bold text-amber-300">--</h2>
                     <button id="resetBtn" onclick="resetToCurrentMonth()" class="p-1 sm:px-2 sm:py-1 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded text-[10px] font-bold transition shadow-sm flex items-center justify-center min-w-[24px]" title="বর্তমান মাস">
@@ -116,6 +130,7 @@
                     </button>
                 </div>
 
+                <!-- Right Buttons -->
                 <div class="flex items-center space-x-1">
                     <button onclick="changeMonth(1)" class="px-2 py-1 bg-sky-600 hover:bg-sky-500 rounded text-[10px] sm:text-xs font-semibold transition">
                         <span class="hidden sm:inline">পরের মাস</span> <i class="fa-solid fa-chevron-right"></i>
@@ -126,6 +141,7 @@
                 </div>
             </div>
 
+            <!-- Calendar Days Header -->
             <div class="grid grid-cols-7 bg-slate-100 text-center text-[11px] font-bold border-b border-slate-200">
                 <div class="py-1 text-red-600">রবি</div>
                 <div class="py-1 text-slate-700">সোম</div>
@@ -136,12 +152,15 @@
                 <div class="py-1 text-slate-700">শনি</div>
             </div>
 
+            <!-- Calendar Days Grid -->
             <div id="calendarGrid" class="grid grid-cols-7 gap-0.5 p-1 bg-slate-50 min-h-[220px]">
-                </div>
+                <!-- Dynamic Days -->
+            </div>
         </div>
 
     </main>
 
+    <!-- Event Modal Details -->
     <div id="eventModal" onclick="closeModalOnOutsideClick(event)" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-2 z-50">
         <div class="bg-white rounded-xl max-w-md w-full p-3 sm:p-4 shadow-2xl border border-sky-100 relative space-y-2 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal()" class="absolute top-2 right-3 text-slate-400 hover:text-slate-600 text-lg font-bold">
@@ -157,7 +176,8 @@
             </div>
 
             <div id="modalBody" class="text-xs text-slate-700 space-y-1.5">
-                </div>
+                <!-- Dynamic Content -->
+            </div>
 
             <div class="text-right pt-1">
                 <button onclick="closeModal()" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold transition">বন্ধ করুন</button>
@@ -175,12 +195,26 @@
 
         let currentDate = new Date();
         let eventsData = {}; 
-        let selectedDateKey = null; // সিলেক্টেড ডেটের ট্র্যাকার
+        let selectedDayCard = null; // সিলেক্ট করা ডেট কার্ড ট্র্যাকিংয়ের জন্য
 
         window.onload = async () => {
             await fetchYearEvents(currentDate.getFullYear());
             renderCalendar();
+            
+            // ডেটের বাইরে অন্য কোথাও ক্লিক করলে সিলেক্টেড বর্ডার হাইলাইট রিমুভ করা
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.day-card')) {
+                    clearSelectedHighlight();
+                }
+            });
         };
+
+        function clearSelectedHighlight() {
+            if (selectedDayCard) {
+                selectedDayCard.classList.remove('selected-day-highlight');
+                selectedDayCard = null;
+            }
+        }
 
         function parseSingleDate(str) {
             if (!str) return null;
@@ -337,6 +371,7 @@
         }
 
         function renderCalendar() {
+            clearSelectedHighlight();
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
 
@@ -413,20 +448,21 @@
                 }
 
                 const isToday = dateKey === todayStr ? 'ring-2 ring-amber-500 font-extrabold bg-amber-50' : '';
-                const isSelected = dateKey === selectedDateKey ? 'selected-day' : '';
 
                 const dayCard = document.createElement('div');
-                dayCard.className = `p-1 h-9 sm:h-10 border rounded-lg flex flex-col justify-between cursor-pointer transition-all ${bgStyle} ${isToday} ${isSelected}`;
-                dayCard.setAttribute('data-date-key', dateKey);
+                dayCard.className = `day-card p-1 h-9 sm:h-10 border rounded-lg flex flex-col justify-between cursor-pointer transition-all ${bgStyle} ${isToday}`;
+                
+                dayCard.onclick = (e) => {
+                    e.stopPropagation(); // ক্লিক ইভেন্ট বাইরে যাওয়া থামাবে
+                    
+                    // পূর্বে সিলেক্ট করা কার্ডের বর্ডার হাইলাইট রিমুভ করা
+                    clearSelectedHighlight();
 
-                dayCard.onclick = () => {
-                    // ১. ক্লিক করা ডেট হাইলাইট সেট করা
-                    selectedDateKey = dateKey;
-                    document.querySelectorAll('#calendarGrid > div').forEach(el => el.classList.remove('selected-day'));
-                    dayCard.classList.add('selected-day');
+                    // বর্তমান ক্লিক করা কার্ডে উজ্জ্বল হাইলাইট যুক্ত করা
+                    dayCard.classList.add('selected-day-highlight');
+                    selectedDayCard = dayCard;
 
-                    // ২. পপ-আপ ওপেন করা (বার সংগৃহীত হবে)
-                    showEventDetails(dateKey, dayOfWeek, filteredEvents);
+                    showEventDetails(dateKey, isSunday, filteredEvents, dayOfWeek);
                 };
 
                 dayCard.innerHTML = `
@@ -477,20 +513,20 @@
             }
         }
 
-        // ৫. পপ-আপ মেসেজ প্রদর্শন ফাংশন (বার সহ)
-        function showEventDetails(dateKey, dayOfWeek, events) {
+        // ৫. পপ-আপ মেসেজ প্রদর্শন ফাংশন (বাংলা বারসহ)
+        function showEventDetails(dateKey, isSunday, events, dayOfWeek) {
             const modal = document.getElementById('eventModal');
             const modalTitle = document.getElementById('modalTitle');
             const modalDate = document.getElementById('modalDate');
             const modalIcon = document.getElementById('modalIcon');
             const modalBody = document.getElementById('modalBody');
 
-            const dayName = bengaliDays[dayOfWeek]; // বার বের করা হলো
+            // বাংলা বার যুক্ত করা হলো
+            const dayName = bengaliDays[dayOfWeek !== undefined ? dayOfWeek : new Date(dateKey).getDay()];
             modalDate.innerText = `তারিখ: ${dateKey} (${dayName})`;
             modalBody.innerHTML = '';
 
-            let isSunday = dayOfWeek === 0;
-
+            // ক. রবিবার ছুটি
             if (isSunday) {
                 modalTitle.innerText = "সাপ্তাহিক ছুটি (রবিবার)";
                 modalIcon.className = "p-2 rounded-full bg-red-500 text-white";
@@ -501,6 +537,7 @@
                 return;
             }
 
+            // খ. ছুটির তালিকা অনুযায়ী ছুটি
             let hasHoliday = events.some(e => e.type === 'holiday');
             if (hasHoliday) {
                 modalTitle.innerText = "স্কুল বন্ধ (ছুটি)";
@@ -527,6 +564,7 @@
                 return;
             }
 
+            // গ. কোনো ইভেন্ট না থাকলে (সাধারণ কার্যদিবস)
             if (events.length === 0) {
                 modalTitle.innerText = "কোনো বিশেষ সূচী নেই";
                 modalIcon.className = "p-2 rounded-full bg-slate-600 text-white";
@@ -537,6 +575,7 @@
                 return;
             }
 
+            // ঘ. পরীক্ষার রুটিন এবং অন্যান্য একাডেমিক ইভেন্ট প্রদর্শন
             modalTitle.innerText = "নির্ধারিত সূচী ও ইভেন্ট";
             modalIcon.className = "p-2 rounded-full bg-indigo-600 text-white";
             modalIcon.innerHTML = `<i class="fa-solid fa-bell"></i>`;
@@ -593,6 +632,7 @@
             }
         }
 
+        // স্ক্রীন ডানে বা বামে স্লাইড/সোয়াইপ করে মাস পরিবর্তন (Touch Swipe Handling)
         let touchstartX = 0;
         let touchendX = 0;
 
