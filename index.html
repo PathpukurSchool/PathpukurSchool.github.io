@@ -61,128 +61,6 @@
   gtag('config', 'G-70Q6QCPED4');
 </script>
 
-<style>
-/* ==========================================
-   User Guide Modal & Icon Styling
-   ========================================== */
-.guide-icon {
-    font-size: 0.8em;
-    color: #8b0000;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
-    vertical-align: middle;
-}
-
-.guide-icon:hover {
-    color: #d97706;
-    transform: scale(1.2);
-}
-
-/* Modal Background Overlay */
-.guide-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.guide-modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Modal Card Box */
-.guide-modal-card {
-    background: #ffffff;
-    width: 90%;
-    max-width: 550px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    overflow: hidden;
-    transform: translateY(-20px);
-    transition: transform 0.3s ease;
-    border-top: 5px solid #8b0000;
-}
-
-.guide-modal-overlay.active .guide-modal-card {
-    transform: translateY(0);
-}
-
-/* Modal Header */
-.guide-modal-header {
-    background: #fdf2f2;
-    padding: 12px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #fee2e2;
-}
-
-.guide-modal-header h4 {
-    margin: 0;
-    color: #8b0000;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.guide-modal-close {
-    background: transparent;
-    border: none;
-    font-size: 1.4rem;
-    color: #666;
-    cursor: pointer;
-    line-height: 1;
-    padding: 2px 8px;
-    border-radius: 50%;
-    transition: background 0.2s, color 0.2s;
-}
-
-.guide-modal-close:hover {
-    background: #fee2e2;
-    color: #8b0000;
-}
-
-/* Modal Body */
-.guide-modal-body {
-    padding: 20px;
-    max-height: 70vh;
-    overflow-y: auto;
-    color: #333;
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
-
-.guide-modal-body h3 {
-    margin-top: 0;
-    color: #8b0000;
-    font-size: 1.2rem;
-    border-bottom: 2px solid #fef3c7;
-    padding-bottom: 6px;
-}
-
-.guide-modal-body ul {
-    padding-left: 20px;
-    margin-bottom: 10px;
-}
-
-.guide-modal-body li {
-    margin-bottom: 8px;
-}
-</style>
-
 </head>
     
 <body>
@@ -273,7 +151,7 @@
 <main class="container">
 <!-- Notice Section -->
 <section id="important-links-section-notice" class="important-links card animated-card fade-in delay-1">
-            <h2><i class="fas fa-info-circle icon"></i> Notice <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+            <h2><i class="fas fa-info-circle icon"></i> Notice</h2>
             <div class="section-content-wrapper">
                 <div id="help-list"></div>
                 <div id="pagination-controls" style="text-align: center; margin-top: 20px;"></div>
@@ -283,7 +161,7 @@
 
 <!-- 1. Routine Section -->
 <section id="routine-calendar-section" class="routine-calendar card animated-card fade-in delay-2">
-    <h2><i class="fas fa-calendar-alt icon"></i> Schedule <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+    <h2><i class="fas fa-calendar-alt icon"></i> Schedule</h2>
     <div class="section-content-wrapper">
         <div id="routine-list">
             <a href="https://script.google.com/macros/s/AKfycbxt0BkY0rGGdyhxhga3izLp1DqNea6SjIe2b1gS9qMQMSmZZhljZqRFAjlWZt5Zv9CuNQ/exec?page=student" class="site-link notice-item" data-title="Class Routine" data-isnew="false">
@@ -309,7 +187,7 @@
 
 <!-- 2. Results Section -->
 <section id="results-section" class="results-section card animated-card fade-in delay-3">
-    <h2><i class="fas fa-trophy icon"></i> Exam Result <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+    <h2><i class="fas fa-trophy icon"></i> Exam Result</h2>
     <div class="section-content-wrapper">
         <div id="results-list">
             <a href="https://pathpukurschool.github.io/stu_gen_3j61v/rnk_st5_11_4fuh.html" class="site-link notice-item" data-title="Exam Rank List" data-isnew="true">
@@ -347,7 +225,7 @@
 
 <!-- 3. Student Section -->
 <section id="student-section" class="student-info card animated-card fade-in delay-4">
-    <h2><i class="fas fa-user-graduate icon"></i> Student <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+    <h2><i class="fas fa-user-graduate icon"></i> Student</h2>
     <div class="section-content-wrapper">
         <div id="students-list">
             <a href="https://pathpukurschool.github.io/stu_gen_3j61v/r96_s43c_m.html" class="site-link notice-item" data-title="Student Roll Strength" data-isnew="false">
@@ -373,7 +251,7 @@
 
 <!-- 4. Form Section -->
 <section id="forms-section" class="forms-info card animated-card fade-in delay-5">
-    <h2><i class="fas fa-file-signature icon"></i> Form <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+    <h2><i class="fas fa-file-signature icon"></i> Form</h2>
     <div class="section-content-wrapper">
         <div id="forms-list">
             <a href="https://script.google.com/macros/s/AKfycbyz1dAPMQ284ZZE95zX5901nAArycJk8KP7NEWlRfLpbIZn2tz5L2Yl70HWBO4tr_7-/exec" class="site-link notice-item" data-title="New Admission Form (V-IX)" data-isnew="false">
@@ -392,7 +270,7 @@
 </section>
 
 <section id="about-us-section" class="about-us card animated-card fade-in delay-6">
-            <h2><i class="fas fa-school icon"></i> About Us <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+            <h2><i class="fas fa-school icon"></i> About Us</h2>
             <div class="section-content-wrapper">
                 <p><strong>Pathpukur High School (H.S.)</strong>, located in South 24 Parganas district of West Bengal, was established in 1954. It is a co-educational institution, approved and fully sponsored by the Government of West Bengal.</p>
                 <p>Since its inception, the school has played a vital role in shaping the lives of students in the area. Our goal is not just to provide textbook-based education; we place special emphasis on the overall mental, moral, and social development of each student.</p>
@@ -403,7 +281,7 @@
 
 
         <section id="academics-section" class="academics card animated-card fade-in delay-7">
-            <h2><i class="fas fa-book-open icon"></i> Academics <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+            <h2><i class="fas fa-book-open icon"></i> Academics</h2>
             <div class="section-content-wrapper">
                 <h3>Classes Taught:</h3>
                 <ul class="class-list">
@@ -419,7 +297,7 @@
         </section>
 
         <section id="uniform-details-section" class="uniform-details card animated-card fade-in delay-8">
-            <h2><i class="fas fa-tshirt icon"></i> Uniform <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+            <h2><i class="fas fa-tshirt icon"></i> Uniform</h2>
             <div class="section-content-wrapper">
                 <div class="uniform-description">
                     <p><strong>Classes V to X:</strong></p>
@@ -439,7 +317,7 @@
         </section>
 
         <section id="principal-message-section" class="principal-message card animated-card fade-in delay-9">
-            <h2><i class="fas fa-user-tie icon"></i> Head of School's Message <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+            <h2><i class="fas fa-user-tie icon"></i> Head of School's Message</h2>
             <div class="section-content-wrapper">
                 <div class="principal-info">
                     <img src="photo/hoi.png" alt="Head of School's Photo" class="principal-photo">
@@ -453,8 +331,23 @@
             <button class="toggle-button more-btn">More...</button>
         </section>
 
+        <!--<section id="president-message-section" class="principal-message card animated-card fade-in delay-10">
+            <h2><i class="fas fa-user-tie icon"></i> President's Message</h2>
+            <div class="section-content-wrapper">
+                <div class="principal-info">
+                    <img src="photo/president.png" alt="President's Photo" class="principal-photo">
+                    <div class="principal-text">
+                        <h3>Shri Shubhajyoti Mondal</h3>
+                        <p>President, School Managing Committee</p>
+                        <p>Our Pathpukur High School (H.S.) is not just a government educational institution; it is a family. Our primary goal is to ensure the good education, moral development, and bright future of our students. I believe that the combined efforts of teachers, students, and guardians can build an ideal learning environment. With everyone's cooperation and good wishes, we will remain steadfast in achieving our goals.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="toggle-button more-btn">More...</button>
+        </section>-->
+
         <section id="gallery-section" class="gallery card animated-card fade-in delay-11">
-            <h2><i class="fas fa-images icon"></i> Gallery <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+            <h2><i class="fas fa-images icon"></i> Gallery</h2>
             <div class="section-content-wrapper">
                 <div class="gallery-grid">
                     <img src="photo/teacher_1.jpg" data-src="photo/teacher_1.jpg" alt="Teacher 1" class="gallery-image">
@@ -472,7 +365,7 @@
         </section>
 
        <section id="contact-info-section" class="contact-info card animated-card fade-in delay-12">
-            <h2><i class="fas fa-address-book icon"></i> Contact Us <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+            <h2><i class="fas fa-address-book icon"></i> Contact Us</h2>
             <div class="section-content-wrapper">
                 <p><i class="fas fa-map-marker-alt icon"></i> <strong>Address:</strong> Vill: Pathpukur, P.O.: Bokultala Hat, P.S.: Bokultala, Block: Joynagar II, Circle: Joynagar, Dist.: South 24 Parganas, State: West Bengal, Pin Code: 743338</p>
                 <p><i class="fas fa-phone-alt icon"></i> <strong>Landline:</strong> <a href="tel:+913218248083">+91 3218248083</a></p>
@@ -483,21 +376,11 @@
         </section>
 
 <section id="school-calendar-section-website" class="school-calendar card animated-card fade-in delay-13">
-
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2><i class="fas fa-calendar-alt icon"></i> Calendar</h2>
-    
-    <a href="https://pathpukurschool.github.io/stu_gen_3j61v/calendar_scl_9nd.html" 
-       data-title="School Calendar"
-       title="Maximize Calendar"
-       style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; width: 34px; height: 34px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
-       onmouseover="this.style.background='#7f1d1d'; this.style.color='#ffffff'; this.style.borderColor='#7f1d1d';"
-       onmouseout="this.style.background='#fef2f2'; this.style.color='#991b1b'; this.style.borderColor='#fecaca';">
-    <i class="fas fa-expand" style="font-size: 14px;"></i>
-</a>
-</div>
-
-    <div class="section-content-wrapper">     
+    <h2><i class="fas fa-calendar-alt icon"></i> School Calendar</h2>
+    <div class="section-content-wrapper">
+        <a href="https://pathpukurschool.github.io/stu_gen_3j61v/calendar_scl_9nd.html" class="site-link notice-item" data-title="School Calendar" data-isnew="false">
+                View Full Screen Calendar 
+            </a>
 <iframe 
   src="https://pathpukurschool.github.io/stu_gen_3j61v/calendar_scl_9nd.html" 
   title="School Calendar" 
@@ -511,7 +394,7 @@
 
     
         <section id="location-section" class="location card animated-card fade-in delay-14">
-            <h2><i class="fas fa-map-marked-alt icon"></i> Our Location <i class="far fa-question-circle guide-icon" title="ইউজার গাইড দেখুন"></i></h2>
+            <h2><i class="fas fa-map-marked-alt icon"></i> Our Location</h2>
             <div class="map-container">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3695.7657554878074!2d88.49233607413503!3d22.134905148872374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0238b4c0b17541%3A0x88e12a2d33998b38!2z4Kaq4Ka-4Kak4Kaq4KeB4KaV4KeB4KawIOCmueCmvuCmhyDgprjgp43gppXgp4HgprIo4KaJ4KaDIOCmruCmvuCmgyk!5e0!3m2!1sbn!2sin!4v1748601954798!5m2!1sbn!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
@@ -528,94 +411,8 @@
         <img id="fullscreen-image" src="" alt="Fullscreen Image">
     </div>
 
-    <!-- 📖 User Guide Modal Markup -->
-    <div id="guide-modal-overlay" class="guide-modal-overlay">
-        <div class="guide-modal-card">
-            <div class="guide-modal-header">
-                <h4><i class="fas fa-book-reader"></i> ইউজার গাইড (User Guide)</h4>
-                <button id="guide-modal-close" class="guide-modal-close" aria-label="Close">&times;</button>
-            </div>
-            <div id="guide-modal-body" class="guide-modal-body">
-                <p>গাইড তথ্য লোড হচ্ছে...</p>
-            </div>
-        </div>
-    </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="index.js"></script>
-
-    <!-- 📖 User Guide Dynamic Fetch & Modal Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const guideModalOverlay = document.getElementById('guide-modal-overlay');
-            const guideModalBody = document.getElementById('guide-modal-body');
-            const guideModalClose = document.getElementById('guide-modal-close');
-            let cachedGuideDoc = null;
-
-            // user_guide.html থেকে ফেচ করার ফাংশন
-            async function fetchUserGuide() {
-                if (cachedGuideDoc) return cachedGuideDoc;
-                try {
-                    const response = await fetch('user_guide.html');
-                    const text = await response.text();
-                    const parser = new DOMParser();
-                    cachedGuideDoc = parser.parseFromString(text, 'text/html');
-                    return cachedGuideDoc;
-                } catch (error) {
-                    console.error('Error loading user guide:', error);
-                    return null;
-                }
-            }
-
-            // হেল্প আইকনে ক্লিক ইভেন্ট হ্যান্ডলার
-            document.querySelectorAll('.guide-icon').forEach(icon => {
-                icon.addEventListener('click', async function(e) {
-                    e.stopPropagation(); // বাবলিং বন্ধ
-                    
-                    const parentSection = this.closest('section');
-                    if (!parentSection) return;
-
-                    const sectionId = parentSection.id;
-                    guideModalBody.innerHTML = '<p style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> তথ্য লোড হচ্ছে...</p>';
-                    guideModalOverlay.classList.add('active');
-
-                    const guideDoc = await fetchUserGuide();
-                    if (guideDoc) {
-                        const content = guideDoc.querySelector(`[data-section="${sectionId}"]`);
-                        if (content) {
-                            guideModalBody.innerHTML = content.innerHTML;
-                        } else {
-                            guideModalBody.innerHTML = '<p style="color:red;">দুঃখিত, এই সেকশনের জন্য কোনো বিস্তারিত নির্দেশিকা পাওয়া যায়নি।</p>';
-                        }
-                    } else {
-                        guideModalBody.innerHTML = '<p style="color:red;">ইউজার গাইড লোড করতে সমস্যা হয়েছে। অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করুন।</p>';
-                    }
-                });
-            });
-
-            // মোডাল বন্ধ করার ফাংশন
-            function closeModal() {
-                guideModalOverlay.classList.remove('active');
-            }
-
-            // ক্যানসেল বাটন (✕) দিয়ে বন্ধ
-            guideModalClose.addEventListener('click', closeModal);
-
-            // মোডালের বাইরে বা ফাঁকা জায়গায় ক্লিক করলে বন্ধ
-            guideModalOverlay.addEventListener('click', function(e) {
-                if (e.target === guideModalOverlay) {
-                    closeModal();
-                }
-            });
-
-            // Escape কী চাপলে মোডাল বন্ধ
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && guideModalOverlay.classList.contains('active')) {
-                    closeModal();
-                }
-            });
-        });
-    </script>
+     <script src="index.js"></script>
     
 </body>
 </html>
