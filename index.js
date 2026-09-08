@@ -700,3 +700,51 @@ document.addEventListener('DOMContentLoaded', async function () {
 window.addEventListener('pageshow', function() {
     hideLoader();
 });
+
+/* =================================
+ * 📱 PWA / App Install Logic
+ * ================================= */
+
+// ১. সার্ভিস ওয়ার্কার রেজিস্টার করা
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker Registered Successfully!'))
+            .catch(err => console.error('Service Worker Registration Failed:', err));
+    });
+}
+
+// ২. অ্যাপ ইনস্টল বাটন কন্ট্রোল করা
+let deferredPrompt;
+const installBtn = document.getElementById('app-download-btn'); // html-এ এই ID যুক্ত বাটন থাকতে হবে
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // ব্রাউজারের ডিফল্ট ইনস্টল ব্যানার বন্ধ রাখা
+    e.preventDefault();
+    deferredPrompt = e;
+
+    // ডাউনলোড/ইনস্টল বাটনটি দৃশ্যমান করা
+    if (installBtn && !IS_APP_MODE) {
+        installBtn.style.display = 'inline-block';
+    }
+});
+
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            installBtn.style.display = 'none';
+        }
+    });
+}
+
+// অ্যাপ মোডে ইনস্টল বাটন সম্পূর্ণ হাইড রাখার ব্যবস্থা
+window.addEventListener('appinstalled', () => {
+    if (installBtn) installBtn.style.display = 'none';
+    console.log('PWA was installed');
+});
