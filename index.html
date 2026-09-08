@@ -32,9 +32,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="PHS-LOGO.png">
     <link rel="stylesheet" href="index_style.css">
-    <!-- PWA Manifest Integration -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1e3a8a">
     <meta name="google-site-verification" content="rN5vO9tbgSHnquvJXEOUgPn0ydz9mmwwCC22EWqzW8E" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -91,7 +88,7 @@
             <p class="slogan"><span class="sparkle-emoji">✨</span> "शिक्षा ददाति विनयम्" <span class="sparkle-emoji">✨</span></p>
         </div>
         <!-- Header Login Button -->
-    <a href="home.html" class="top-login-button teacher-login-btn">Teacher Login</a>
+    <a href="home.html" class="top-login-button">Teacher Login</a>
     </header>
 
     <section class="hero-section">
@@ -121,7 +118,7 @@
         <a href="#contact-info-section">Contact Us</a>
         <a href="#school-calendar-section-website">Our Calendar</a>
         <a href="#location-section">Our Location</a>
-        <a href="home.html" id="sidebar-login-link" class="site-link notice-item teacher-login-btn" data-title="Teacher Login">Teacher Login</a>
+        <a href="home.html" id="sidebar-login-link" class="site-link notice-item" data-title="Teacher Login">Teacher Login</a>
         <a href="#" style="font-weight: bold; color: #6B0000;" onclick="goBack()">Logout</a>
     </nav>
 
@@ -141,17 +138,12 @@
     <div class="scrolling-wrapper" id="new-marquee-wrapper"></div>
 </div>
     
-<!-- 🔍 Live Search Box with PWA Install Button -->
+<!-- 🔍 Live Search Box -->
 <div class="search-container" role="search">
     <div class="search-input-wrapper">
         <span class="search-icon" aria-hidden="true">🔍</span>
         <input type="search" id="site-search-input" placeholder="Search..." autocomplete="off" aria-label="Search website content">
         <span class="clear-icon" id="clear-search-btn" role="button" aria-label="Clear search">Clear</span>
-        
-        <!-- PWA Install Button (Right side of Search Bar) -->
-        <button id="pwa-install-btn" class="pwa-install-btn" aria-label="Install App" style="display: none;">
-            <i class="fas fa-download"></i> Install
-        </button>
     </div>
     <div id="search-dropdown-list" class="search-dropdown" aria-live="polite"></div>
 </div>
