@@ -1,0 +1,18 @@
+{
+  "short_name": "PHS",
+  "name": "Pathpukur High School (H.S.)",
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "PHS-LOGO.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
+  "display": "standalone",
+  "orientation": "portrait-primary"
+}
