@@ -1,4 +1,3 @@
-
 /* =================================
  * NEW স্ট্যাটাস কন্ট্রোল লজিক (LocalStorage ভিত্তিক)
  * ================================= */
@@ -6,16 +5,6 @@
 let NEW_STATUS_CONTROL = {};
 let ALL_ITEMS_DETAILS = [];
 const LOCAL_STORAGE_KEY = 'newStatusControl';
-
-// 📱 অ্যাপ মোড চেক করা (URL-এ ?mode=app থাকলে অথবা মোবাইল অ্যাপ থেকে লোড হলে)
-const urlParams = new URLSearchParams(window.location.search);
-const IS_APP_MODE = urlParams.get('mode') === 'app' || navigator.userAgent.includes('MySchoolApp');
-
-if (IS_APP_MODE) {
-    document.addEventListener('DOMContentLoaded', () => {
-        document.body.classList.add('app-mode');
-    });
-}
 
 let dynamicSectionsState = {
     'students-list': { data: [], currentPage: 1, totalPages: 0 },
@@ -182,9 +171,6 @@ async function fetchNotices() {
             Helping = [];
         }
 
-        // 🔔 নতুন নোটিশ অ্যালার্ট চেক লজিক
-        checkAndShowNoticeAlert(Helping);
-
         currentPage = 1; 
         renderHelpList();
         
@@ -194,32 +180,6 @@ async function fetchNotices() {
     } catch (error) {
         console.error("Failed to fetch notices from Supabase:", error);
         container.innerHTML = errorBox("Error!", "Failed to load notices from server.");
-    }
-}
-
-/* 🔔 নতুন নোটিশ থাকলে সেকশন হেডারে নোটিফিকেশন আইকন দেখানোর ফাংশন */
-function checkAndShowNoticeAlert(noticesList) {
-    const hasNewNotice = noticesList.some(item => 
-        item.is_new === true || item.is_new === "true" || String(item.is_new).toLowerCase() === "yes"
-    );
-
-    // নোটিশ সেকশনের হেডার আইডি বা ক্লাস অনুযায়ী টার্গেট করুন
-    const noticeHeader = document.querySelector('#notice-section-header, .notice-title-header');
-    
-    if (noticeHeader) {
-        let alertBell = noticeHeader.querySelector('.notice-alert-bell');
-        
-        if (hasNewNotice) {
-            if (!alertBell) {
-                alertBell = document.createElement('span');
-                alertBell.className = 'notice-alert-bell';
-                alertBell.innerHTML = ' 🔔';
-                alertBell.title = 'New Notice Available!';
-                noticeHeader.appendChild(alertBell);
-            }
-        } else if (alertBell) {
-            alertBell.remove();
-        }
     }
 }
 
@@ -387,6 +347,7 @@ function showPopup(titleText, date, link, subjText) {
         linkBtn.href = link;
         linkBtn.innerText = 'Open Link';
         linkBtn.classList.add('popup-link-btn');
+        // পপআপের লিংকে ক্লিক করলেও স্পিনার শো করবে
         linkBtn.addEventListener('click', () => showLoader());
         buttonContainer.appendChild(linkBtn);
     }
@@ -468,12 +429,8 @@ document.addEventListener('keydown', event => {
  * DOMContentLoaded - একমাত্র মূল ইনিশিয়ালাইজেশন অংশ
  * ================================= */
 document.addEventListener('DOMContentLoaded', async function () {
+    // ⚡ ১. প্রথম পেজ লোডের সময় স্পিনার দেখানো
     showLoader();
-
-    // 🔑 টিচার লগইন বা নির্দিষ্ট উপাদান অ্যাপে হাইড করার অতিরিক্ত গ্যারান্টি
-    if (IS_APP_MODE) {
-        document.body.classList.add('app-mode');
-    }
 
     // হিরো সেকশনের ছবি স্ক্রলিং
     const heroImagesContainer = document.querySelector('.hero-images');
@@ -617,6 +574,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     renderMarquee();
     await fetchNotices();
 
+    // ⚡ প্রাথমিক সব ডাটা লোড হওয়ার পর স্পিনার বন্ধ করা
     hideLoader();
 
     // ⚡ ৭. কোনো লিংক বা বাটনে ক্লিক করলে নতুন পেজে যাওয়ার আগে স্পিনার দেখানোর লজিক
@@ -626,18 +584,20 @@ document.addEventListener('DOMContentLoaded', async function () {
         link.addEventListener('click', function(event) {
             const href = this.getAttribute('href');
             
+            // খালি/ইনভ্যালিড লিংক হলে 'Available Soon' দেখাবে
             if (!href || href.trim() === '' || href === '#' || href.startsWith('javascript:')) {
                 event.preventDefault(); 
                 showAvailableSoonMessage(this); 
             } 
+            // যদি পেজের ভেতরের আইডি লিংক (#section-id) না হয়ে বাইরের আসল পেজের লিংক হয়
             else if (!href.startsWith('#')) {
-                showLoader(); 
+                showLoader(); // 👈 রিডাইরেক্ট হওয়ার আগে স্পিনার প্লে হবে
             }
         });
     });
 
     /* =========================================================
-     * ৮. সার্চ লজিক
+     * ৮. সার্চ লজিক (সংশোধিত)
      * ========================================================= */
     const searchInput = document.getElementById('site-search-input');
     const searchResultsDropdown = document.getElementById('search-dropdown-list');
@@ -669,6 +629,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <span class="item-title">${item.title}</span>
                         <a href="${item.url}" class="item-btn">🚀 Go ➔</a>
                     `;
+                    // সার্চ ড্রপডাউনের 'Go' লিংকে চাপলেও স্পিনার ট্রিপ করবে
                     resDiv.querySelector('.item-btn').addEventListener('click', () => showLoader());
                     searchResultsDropdown.appendChild(resDiv);
                 });
@@ -697,54 +658,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 });
 
+// ⚡ ব্যাক বাটন প্রেস করে ফিরে এলে স্পিনার লুকিয়ে রাখার নিশ্চয়তা
 window.addEventListener('pageshow', function() {
     hideLoader();
-});
-
-/* =================================
- * 📱 PWA / App Install Logic
- * ================================= */
-
-// ১. সার্ভিস ওয়ার্কার রেজিস্টার করা
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('Service Worker Registered Successfully!'))
-            .catch(err => console.error('Service Worker Registration Failed:', err));
-    });
-}
-
-// ২. অ্যাপ ইনস্টল বাটন কন্ট্রোল করা
-let deferredPrompt;
-const installBtn = document.getElementById('app-download-btn'); // html-এ এই ID যুক্ত বাটন থাকতে হবে
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    // ব্রাউজারের ডিফল্ট ইনস্টল ব্যানার বন্ধ রাখা
-    e.preventDefault();
-    deferredPrompt = e;
-
-    // ডাউনলোড/ইনস্টল বাটনটি দৃশ্যমান করা
-    if (installBtn && !IS_APP_MODE) {
-        installBtn.style.display = 'inline-block';
-    }
-});
-
-if (installBtn) {
-    installBtn.addEventListener('click', async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-            }
-            deferredPrompt = null;
-            installBtn.style.display = 'none';
-        }
-    });
-}
-
-// অ্যাপ মোডে ইনস্টল বাটন সম্পূর্ণ হাইড রাখার ব্যবস্থা
-window.addEventListener('appinstalled', () => {
-    if (installBtn) installBtn.style.display = 'none';
-    console.log('PWA was installed');
 });
