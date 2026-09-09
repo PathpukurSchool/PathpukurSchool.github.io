@@ -318,65 +318,76 @@
       }
     }
 
-    /* Print Optimization for Pure A4 Paper */
-    @media print {
-      @page {
-        size: A4 portrait;
-        margin: 0mm;
-      }
+/* Print Optimization for Pure A4 Paper */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0mm;
+  }
 
-      body {
-        background: white;
-        padding: 0;
-        margin: 0;
-        -webkit-print-color-adjust: exact;
-      }
+  html, body {
+    background: white;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100%;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact;
+  }
 
-      .container {
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        max-width: 100%;
-        background: white;
-      }
+  .container {
+    box-shadow: none;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100%;
+    max-width: 100%;
+    background: white;
+  }
 
-      .header, .notice-box, .filter-section, .action-bar {
-        display: none !important;
-      }
+  .header, .notice-box, .filter-section, .action-bar {
+    display: none !important;
+  }
 
-      .pages-wrapper {
-        gap: 0;
-      }
+  .pages-wrapper {
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
 
-      .a4-wrapper {
-        box-shadow: none;
-        width: 210mm;
-        height: 297mm;
-        padding: 3mm 4mm;
-        margin: 0;
-        page-break-after: always;
-        overflow: hidden;
-      }
+  .a4-wrapper {
+    box-shadow: none;
+    width: 210mm;
+    height: 297mm;
+    padding: 3mm 4mm;
+    margin: 0 auto;
+    page-break-after: auto; /* অটো পেজ ব্রেক */
+    page-break-inside: avoid; /* পেজের ভেতরের কন্টেন্ট যেন ভেঙে না যায় */
+    box-sizing: border-box;
+    overflow: hidden;
+  }
 
-      .columns-container {
-        min-width: 100% !important;
-      }
+  /* শেষ পেজের পরে যেন বাড়তি কোনো পেজ ব্রেক না হয় */
+  .a4-wrapper:not(:last-child) {
+    page-break-after: always;
+  }
 
-      .marks-table th {
-        background-color: #eee !important;
-        color: #000 !important;
-        border: 1px solid #000 !important;
-      }
+  .columns-container {
+    min-width: 100% !important;
+  }
 
-      .marks-table td {
-        border: 1px solid #000 !important;
-      }
+  .marks-table th {
+    background-color: #eee !important;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+  }
 
-      /* Printable state - Hide borders on empty rows during print */
-      .marks-table tr.empty-row td {
-        border: none !important;
-      }
-    }
+  .marks-table td {
+    border: 1px solid #000 !important;
+  }
+
+  .marks-table tr.empty-row td {
+    border: none !important;
+  }
+}
   </style>
 </head>
 <body>
