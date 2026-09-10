@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHS Teacher Portal</title>
+    <title>PHS Teacher Portal - App Download & Access</title>
     <meta name="robots" content="noindex, nofollow, noarchive">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e293b">
@@ -16,29 +16,22 @@
     <!-- HTML5 QR Code Scanner -->
     <script src="https://unpkg.com/html5-qrcode"></script>
 
+    <script>
+        // 🛡️ ১. সিকিউরিটি শিল্ড বাইপাস এবং সেশন সেট
+        // এই ফাইলটি সরাসরি ওপেন করলেও যাতে রিডাইরেক্ট না হয় এবং অন্যান্য পেজ সুরক্ষিতভাবে ওপেন হয়:
+        try {
+            sessionStorage.setItem("teacherLoggedIn", "true");
+        } catch (e) {
+            console.error(e);
+        }
+    </script>
+
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; }
         .glass { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
-
-    <!-- 🛡️ সিকিউরিটি ভ্যালিডেশন (সরাসরি লিংক অ্যাক্সেস আটকাতে) 
-    <script>
-        (function() {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            const hasValidToken = localStorage.getItem("phs_teacher_registered") === "true";
-            
-            // যদি এটি PWA বা মোবাইল অ্যাপ ইন্টারফেস না হয় এবং টোকেন না থাকে
-            if (!isStandalone && !hasValidToken) {
-                // অ্যাপ না হলে রিডাইরেক্ট করবে
-                window.location.replace("https://pathpukurschool.github.io/");
-            }
-            
-            // অ্যাপের ভেতরে থাকলে সিকিউরিটি শিল্ড বাইপাস করতে Session ভ্যালিডেশন সেট
-            sessionStorage.setItem("teacherLoggedIn", "true");
-        })();
-    </script> -->
 
     <!-- Header Section -->
     <header class="bg-slate-800/90 border-b border-slate-700 p-4 sticky top-0 z-50 flex items-center justify-between">
@@ -49,20 +42,33 @@
                 <p class="text-xs text-slate-400">PHS Teacher's Mobile Workspace</p>
             </div>
         </div>
-        <button id="pwaInstallBtn" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 font-medium transition">
-            <i data-lucide="download" class="w-4 h-4"></i> অ্যাপ ইনস্টল
+        <button id="pwaInstallBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 font-medium transition shadow-lg">
+            <i data-lucide="download" class="w-4 h-4"></i> অ্যাপ ইনস্টল করুন
         </button>
     </header>
 
     <!-- Main Container -->
     <main class="p-4 flex-1 max-w-md mx-auto w-full">
 
+        <!-- Banner Card for App Download/Install Instructions -->
+        <div id="installBanner" class="glass p-4 rounded-2xl border border-amber-500/30 mb-6 bg-amber-500/10">
+            <div class="flex items-start gap-3">
+                <i data-lucide="smartphone" class="w-6 h-6 text-amber-400 shrink-0 mt-1"></i>
+                <div>
+                    <h3 class="text-sm font-bold text-amber-400 mb-1">মোবাইলে অ্যাপ ইনস্টল করার নির্দেশ</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        উপরে ডানদিকের <b>"অ্যাপ ইনস্টল করুন"</b> বোতামে ক্লিক করুন। অথবা আপনার ব্রাউজারের <b>Menu (⋮)</b> থেকে <b>"Add to Home screen" / "Install app"</b> অপশন সিলেক্ট করুন।
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- ১. রেজিস্ট্রেশন স্ক্রিন (যদি আগে না করে থাকে) -->
-        <section id="registerSection" class="hidden space-y-6">
+        <section id="registerSection" class="space-y-6">
             <div class="text-center space-y-2">
-                <img src="photo/master_login_image.jpg" alt="Login" class="w-24 h-24 mx-auto rounded-2xl object-cover shadow-lg border border-slate-700">
+                <img src="photo/master_login_image.jpg" alt="Login" class="w-24 h-24 mx-auto rounded-2xl object-cover shadow-lg border border-slate-700" onerror="this.src='photo/phs.jpg'">
                 <h2 class="text-xl font-bold">শিক্ষক পোর্টালে নিবন্ধন করুন</h2>
-                <p class="text-xs text-slate-400">একবার নিবন্ধন করলে ডিভাইসটি সিস্টেমের সাথে যুক্ত হয়ে যাবে।</p>
+                <p class="text-xs text-slate-400">একবার নিবন্ধন করলে এই ডিভাইসটি সিস্টেমের সাথে যুক্ত হয়ে যাবে।</p>
             </div>
 
             <form id="regForm" class="space-y-4 glass p-5 rounded-2xl border border-slate-700">
@@ -203,7 +209,7 @@
         // Lucide Icons init
         lucide.createIcons();
 
-        // 1. Supabase Initialization (আপাতত আপনার প্রজেক্টের আসল URL ও Anon Key দিন)
+        // 1. Supabase Initialization
         const SUPABASE_URL = 'YOUR_SUPABASE_URL';
         const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -298,13 +304,11 @@
                 .single();
 
             if (existing) {
-                // আপডেট ডিভাইস টোকেন যদি পুরোনো ইউজার থাকে
                 await supabase
                     .from('teachers_app')
                     .update({ device_id: currentDeviceId, status: 'pending' })
                     .eq('phone_number', phone);
             } else {
-                // নতুন রেকর্ড তৈরি
                 await supabase
                     .from('teachers_app')
                     .insert([{
@@ -332,9 +336,11 @@
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 if (outcome === 'accepted') {
-                    document.getElementById('pwaInstallBtn').classList.add('hidden');
+                    console.log('App installed');
                 }
                 deferredPrompt = null;
+            } else {
+                alert("অ্যাপটি সরাসরি ইনস্টল করতে আপনার মোবাইল ব্রাউজারের Menu (৩টি ডট ⋮) অপশনে গিয়ে 'Add to Home screen' বা 'Install app' এ ক্লিক করুন।");
             }
         });
 
@@ -356,9 +362,8 @@
                 { fps: 10, qrbox: { width: 200, height: 200 } },
                 (decodedText) => {
                     document.getElementById('qrResult').innerText = "QR Data: " + decodedText;
-                    // প্রয়োজনে স্ক্যান করা রেজাল্ট নিয়ে পরবর্তী পেজে নিয়ে যাওয়া যাবে
                 },
-                (errorMessage) => { /* scanning error ignore */ }
+                (errorMessage) => { /* ignore error */ }
             );
         }
 
@@ -367,6 +372,8 @@
                 html5QrcodeScanner.stop().then(() => {
                     document.getElementById('qrModal').classList.add('hidden');
                     document.getElementById('qrModal').classList.remove('flex');
+                }).catch(() => {
+                    document.getElementById('qrModal').classList.add('hidden');
                 });
             } else {
                 document.getElementById('qrModal').classList.add('hidden');
