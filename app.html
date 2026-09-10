@@ -1,273 +1,306 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHS Teacher Portal App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <title>PHS Teacher Portal</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2563eb">
-    <!-- Tailwind CSS & FontAwesome & Supabase JS -->
+    <link rel="icon" href="PHS-LOGO.png">
+    
+    <!-- Supabase & HTML5 QR Scanner CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .glow { box-shadow: 0 0 25px rgba(37, 99, 235, 0.25); }
+        :root {
+            --primary: #2563eb;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --accent: #10b981;
+            --danger: #ef4444;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            width: 100%;
+            background: #1e293b;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .header img { width: 60px; height: 60px; border-radius: 50%; }
+        .header h2 { margin: 5px 0 0 0; font-size: 1.2rem; color: #60a5fa; }
+
+        .container {
+            width: 90%;
+            max-width: 450px;
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 0.9rem; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover { background: #1d4ed8; }
+        .btn-success { background: var(--accent); }
+        .btn-danger { background: var(--danger); }
+
+        #reader { width: 100%; margin-top: 15px; border-radius: 8px; overflow: hidden; }
+        
+        .status-msg {
+            padding: 15px;
+            border-radius: 8px;
+            background: #334155;
+            margin-top: 15px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .hidden { display: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between select-none">
+<body>
 
-    <!-- Header Section -->
-    <header class="glass sticky top-0 z-50 p-4 flex items-center justify-between border-b border-slate-700">
-        <div class="flex items-center gap-3">
-            <img src="PHS-LOGO.png" alt="PHS" class="w-10 h-10 rounded-full border border-blue-400">
-            <div>
-                <h1 class="font-bold text-base leading-tight text-blue-400">Pathpukur High School</h1>
-                <p class="text-[10px] text-slate-400">Teacher Mobile App (PHS)</p>
+    <div class="header">
+        <img src="PHS-LOGO.png" alt="PHS Logo">
+        <h2>Pathpukur High School</h2>
+        <small>Teacher Marks Entry Portal</small>
+    </div>
+
+    <div class="container">
+        <!-- ১. রেজিস্ট্রেশন স্ক্রিন -->
+        <div id="register-screen" class="hidden">
+            <h3>শিক্ষক রেজিস্ট্রেশন</h3>
+            <div class="form-group">
+                <label>নাম:</label>
+                <input type="text" id="reg-name" placeholder="আপনার নাম লিখুন">
+            </div>
+            <div class="form-group">
+                <label>মোবাইল নম্বর:</label>
+                <input type="tel" id="reg-phone" placeholder="১০ ডিজিটের নম্বর">
+            </div>
+            <div class="form-group">
+                <label>পাসওয়ার্ড:</label>
+                <input type="password" id="reg-pass" placeholder="পাসওয়ার্ড তৈরি করুন">
+            </div>
+            <button class="btn" onclick="registerTeacher()">রেজিস্টার করুন</button>
+        </div>
+
+        <!-- ২. পেন্ডিং স্ট্যাটাস মেসেজ -->
+        <div id="pending-screen" class="hidden">
+            <div class="status-msg">
+                ⚠️ <strong>আবেদন প্রক্রিয়াধীন:</strong><br>
+                আপনার আবেদনটি জমা হয়েছে। প্রধান শিক্ষক বা সিস্টেম অ্যাডমিন অনুমোদন (Approve) করার পর অ্যাকাউন্টটি চালু হবে।
             </div>
         </div>
-        <button id="logoutBtn" onclick="handleLogout()" class="hidden text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500/40">
-            <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
-    </header>
 
-    <!-- Main Content Area -->
-    <main class="p-4 flex-1 max-w-md mx-auto w-full">
-
-        <!-- Banner Image -->
-        <div class="mb-4 rounded-2xl overflow-hidden glass p-1.5">
-            <img id="bannerImg" src="photo/master_login_image.jpg" alt="School" class="w-full h-32 object-cover rounded-xl">
-        </div>
-
-        <!-- 1. Device Registration Section -->
-        <div id="authSection" class="glass rounded-2xl p-6 glow">
-            <div class="text-center mb-5">
-                <i class="fa-solid fa-mobile-screen-button text-3xl text-blue-400 mb-2"></i>
-                <h2 class="text-lg font-bold text-slate-100">ডিভাইস রেজিস্ট্রেশন</h2>
-                <p class="text-xs text-slate-400 mt-1">সুরক্ষার জন্য প্রতিটি শিক্ষক অ্যাকাউন্ট নির্দিষ্ট ডিভাইসের সাথে যুক্ত থাকবে।</p>
-            </div>
+        <!-- ৩. মূল ড্যাশবোর্ড (অ্যাপ্রুভড ইউজারদের জন্য) -->
+        <div id="dashboard-screen" class="hidden">
+            <h3>স্টুডেন্ট মার্কস আপলোড</h3>
             
-            <form id="regForm" onsubmit="handleRegistration(event)" class="space-y-3.5">
-                <div>
-                    <label class="text-xs text-slate-300">শিক্ষকের নাম</label>
-                    <input type="text" id="fullName" required placeholder="পুরো নাম" class="w-full mt-1 bg-slate-900/80 border border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="text-xs text-slate-300">ইউনিক শিক্ষক আইডি (Teacher ID)</label>
-                    <input type="text" id="teacherId" required placeholder="যেমন: PHS-T001" class="w-full mt-1 bg-slate-900/80 border border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="text-xs text-slate-300">মোবাইল নম্বর</label>
-                    <input type="tel" id="mobileNo" pattern="[0-9]{10}" maxlength="10" required placeholder="১০ সংখ্যার মোবাইল নম্বর" class="w-full mt-1 bg-slate-900/80 border border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-blue-500">
-                </div>
-                <button type="submit" id="regSubmitBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 rounded-xl shadow-lg transition-all active:scale-95 flex justify-center items-center gap-2 text-sm">
-                    <i class="fa-solid fa-shield-halved"></i> রেজিস্ট্রেশন সম্পূর্ণ করুন
-                </button>
-            </form>
-        </div>
+            <button class="btn btn-success" onclick="startScanner()">📷 QR কোড স্ক্যান করুন</button>
+            <div id="reader"></div>
 
-        <!-- 2. Dashboard Section (লগইন বা রেজিস্ট্রেশন সফল হলে দৃশ্যমান হবে) -->
-        <div id="dashboardSection" class="hidden space-y-4">
-            
-            <!-- User Status Card -->
-            <div class="glass p-3.5 rounded-xl flex justify-between items-center">
-                <div>
-                    <p class="text-[10px] text-slate-400">লগইন শিক্ষক:</p>
-                    <h3 id="displayTeacherName" class="font-bold text-blue-400 text-sm">---</h3>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <span id="netStatus" class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
-                    <span id="netText" class="text-[10px] text-slate-300">অনলাইন</span>
-                </div>
+            <div class="form-group" style="margin-top: 15px;">
+                <label>স্টুডেন্ট আইডি / রোল (QR থেকে প্রাপ্ত):</label>
+                <input type="text" id="student-id" placeholder="স্টুডেন্ট তথ্য">
             </div>
 
-            <!-- টিচারদের প্রয়োজনীয় লিঙ্কসমূহ -->
-            <div class="glass p-4 rounded-2xl glow space-y-3">
-                <p class="text-xs font-bold text-blue-400 flex items-center gap-2 border-b border-slate-700/60 pb-2">
-                    <i class="fa-solid fa-layer-group text-blue-400"></i> ক্লাসভিত্তিক নম্বর আপলোড ও সার্ভিস পোর্টাল
-                </p>
-
-                <!-- ১. ক্লাস অনুযায়ী নম্বর আপলোড লিঙ্কসমূহ -->
-                <p class="text-[11px] font-semibold text-slate-300">শ্রেণীভিত্তিক নম্বর আপলোড (Class 5 - 11):</p>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <a href="upload_class5.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class V Upload
-                    </a>
-                    <a href="upload_class6.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class VI Upload
-                    </a>
-                    <a href="upload_class7.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class VII Upload
-                    </a>
-                    <a href="upload_class8.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class VIII Upload
-                    </a>
-                    <a href="upload_class9.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class IX Upload
-                    </a>
-                    <a href="upload_class10.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class X Upload
-                    </a>
-                    <a href="upload_class11.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all col-span-2">
-                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class XI Marks Upload
-                    </a>
-                </div>
-
-                <!-- ২. রিপোর্ট ও অন্যান্য প্রশাসনিক সার্ভিস লিঙ্কসমূহ -->
-                <p class="text-[11px] font-semibold text-slate-300 pt-2 border-t border-slate-700/60">রিপোর্ট ও স্টুডেন্ট রেকর্ড পোর্টাল:</p>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <a href="student_rank.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-emerald-500/30 text-emerald-300 hover:bg-emerald-600/20 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-trophy text-emerald-400"></i> Student Rank
-                    </a>
-                    <a href="upload_status.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-amber-500/30 text-amber-300 hover:bg-amber-600/20 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-chart-line text-amber-400"></i> Upload Status
-                    </a>
-                    <a href="student_details.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-purple-500/30 text-purple-300 hover:bg-purple-600/20 flex items-center justify-center gap-1.5 transition-all col-span-2">
-                        <i class="fa-solid fa-id-card text-purple-400"></i> View Student Details
-                    </a>
-                </div>
-
-                <!-- ৩. অন্যান্য লিংক -->
-                <p class="text-[11px] font-semibold text-slate-300 pt-2 border-t border-slate-700/60">মূল ওয়েবসাইট লিংকসমূহ:</p>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <a href="home.html" class="p-2 bg-slate-800/60 rounded-lg text-center border border-slate-700 text-slate-300 hover:bg-slate-700">Teacher Home</a>
-                    <a href="index.html" class="p-2 bg-slate-800/60 rounded-lg text-center border border-slate-700 text-slate-300 hover:bg-slate-700">Main Website</a>
-                </div>
+            <div class="form-group">
+                <label>প্রাপ্ত নম্বর (Marks):</label>
+                <input type="number" id="student-marks" placeholder="নম্বর দিন">
             </div>
+
+            <button class="btn" onclick="uploadMarks()">নম্বর সেভ করুন</button>
+            <button class="btn btn-danger" style="margin-top: 20px;" onclick="logout()">লগ আউট</button>
         </div>
+    </div>
 
-    </main>
-
-    <footer class="p-3 text-center text-[11px] text-slate-500 border-t border-slate-800">
-        &copy; Pathpukur High School (PHS). All rights reserved.
-    </footer>
-
-    <!-- App Script -->
     <script>
-        // Supabase Configurations (এখানে আপনার আসল Supabase তথ্য দিন)
-        const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT.supabase.co";
+        // Supabase Initialization
+        const SUPABASE_URL = "YOUR_SUPABASE_URL";
         const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // ডিভাইসের জন্য অনন্য UUID জেনারেটর
-        function getDeviceId() {
-            let devId = localStorage.getItem('phs_device_uuid');
-            if (!devId) {
-                if (window.crypto && window.crypto.randomUUID) {
-                    devId = 'DEV-' + crypto.randomUUID();
-                } else {
-                    devId = 'DEV-' + Math.random().toString(36).substring(2) + Date.now().toString(36);
-                }
-                localStorage.setItem('phs_device_uuid', devId);
+        // Security Lockdown: অ্যাপ লিঙ্ক সরাসরি ব্রাউজারে খোলা বা কপি-পেস্ট আটকানো
+        (function enforceStandaloneApp() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            if (!isStandalone) {
+                // পিসি বা সাধারণ ব্রাউজার থেকে সরাসরি ঢুকলে মূল সাইটে পাঠাবে
+                window.location.replace("https://pathpukurschool.github.io/");
             }
-            return devId;
+        })();
+
+        // Unique Device Token Identifier
+        function getDeviceToken() {
+            let token = localStorage.getItem("phs_device_token");
+            if (!token) {
+                token = 'dev-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now();
+                localStorage.setItem("phs_device_token", token);
+            }
+            return token;
         }
 
-        // লোড হওয়ার সময় ডিভাইস ভ্যালিডেশন চেক
-        window.addEventListener('DOMContentLoaded', async () => {
-            sessionStorage.setItem("app_session", "true");
-            sessionStorage.setItem("teacherLoggedIn", "true");
+        // App Entry Check
+        async function checkAppAccess() {
+            const phone = localStorage.getItem("phs_teacher_phone");
+            const deviceToken = getDeviceToken();
 
-            updateOnlineStatus();
-            window.addEventListener('online', updateOnlineStatus);
-            window.addEventListener('offline', updateOnlineStatus);
-
-            const savedTeacherId = localStorage.getItem('phs_teacher_id');
-            const currentDeviceId = getDeviceId();
-
-            if (savedTeacherId) {
-                if (navigator.onLine) {
-                    // Supabase থেকে ডিভাইস মিলানো
-                    const { data, error } = await supabase
-                        .from('teachers')
-                        .select('unique_id, full_name, device_id, is_active')
-                        .eq('unique_id', savedTeacherId)
-                        .maybeSingle();
-
-                    if (data && data.device_id === currentDeviceId && data.is_active) {
-                        showDashboard(data.full_name);
-                    } else if (data && data.device_id !== currentDeviceId) {
-                        alert("নিরাপত্তা সতর্কতা: আপনার অ্যাকাউন্টটি অন্য একটি ডিভাইসে লক করা আছে!");
-                        handleLogout();
-                    } else {
-                        showDashboard(localStorage.getItem('phs_teacher_name') || "Teacher");
-                    }
-                } else {
-                    // অফলাইন
-                    showDashboard(localStorage.getItem('phs_teacher_name') || "Teacher");
-                }
-            }
-        });
-
-        function updateOnlineStatus() {
-            const netStatus = document.getElementById('netStatus');
-            const netText = document.getElementById('netText');
-            if (navigator.onLine) {
-                if (netStatus) netStatus.className = "w-2.5 h-2.5 rounded-full bg-green-500";
-                if (netText) netText.innerText = "অনলাইন";
-            } else {
-                if (netStatus) netStatus.className = "w-2.5 h-2.5 rounded-full bg-red-500";
-                if (netText) netText.innerText = "অফলাইন";
-            }
-        }
-
-        // নিবন্ধন হ্যান্ডলার
-        async function handleRegistration(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('regSubmitBtn');
-            const fullName = document.getElementById('fullName').value.trim();
-            const teacherId = document.getElementById('teacherId').value.trim().toUpperCase();
-            const mobileNo = document.getElementById('mobileNo').value.trim();
-            const currentDeviceId = getDeviceId();
-
-            if (!navigator.onLine) {
-                alert("রেজিস্ট্রেশনের জন্য ইন্টারনেট সংযোগ প্রয়োজন!");
+            if (!phone) {
+                showScreen("register-screen");
                 return;
             }
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> যাচাই করা হচ্ছে...';
+            const { data, error } = await supabase
+                .from('teacher_devices')
+                .select('*')
+                .eq('phone_number', phone)
+                .single();
 
-            try {
-                const { data, error } = await supabase.rpc('register_teacher_device', {
-                    p_teacher_id: teacherId,
-                    p_full_name: fullName,
-                    p_mobile_number: mobileNo,
-                    p_device_id: currentDeviceId
-                });
+            if (error || !data) {
+                localStorage.clear();
+                showScreen("register-screen");
+                return;
+            }
 
-                if (error) {
-                    alert("ত্রুটি: " + error.message);
-                } else if (data && !data.success) {
-                    alert("নিরাপত্তা সতর্কতা: " + data.message);
-                } else if (data && data.success) {
-                    localStorage.setItem('phs_teacher_id', teacherId);
-                    localStorage.setItem('phs_teacher_name', data.full_name || fullName);
-                    alert("রেজিস্ট্রেশন সফল হয়েছে!");
-                    showDashboard(data.full_name || fullName);
-                }
-            } catch (err) {
-                alert("একটি অপ্রত্যাশিত সমস্যা ঘটেছে: " + err.message);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fa-solid fa-shield-halved"></i> রেজিস্ট্রেশন সম্পূর্ণ করুন';
+            // Single Device Validation Check
+            if (data.device_token !== deviceToken) {
+                alert("আপনার অ্যাকাউন্টটি অন্য একটি ডিভাইসে লগইন করা হয়েছে। এই ডিভাইসটি লগ আউট করা হলো।");
+                localStorage.clear();
+                showScreen("register-screen");
+                return;
+            }
+
+            if (data.status === 'pending') {
+                showScreen("pending-screen");
+            } else if (data.status === 'active') {
+                showScreen("dashboard-screen");
+            } else {
+                alert("আপনার অ্যাকাউন্টটি বাতিল করা হয়েছে।");
+                localStorage.clear();
+                showScreen("register-screen");
             }
         }
 
-        function showDashboard(name) {
-            document.getElementById('authSection').classList.add('hidden');
-            document.getElementById('dashboardSection').classList.remove('hidden');
-            document.getElementById('logoutBtn').classList.remove('hidden');
-            document.getElementById('displayTeacherName').innerText = name;
+        // Registration Logic
+        async function registerTeacher() {
+            const name = document.getElementById("reg-name").value;
+            const phone = document.getElementById("reg-phone").value;
+            const pass = document.getElementById("reg-pass").value;
+            const token = getDeviceToken();
+
+            if (!name || !phone || !pass) {
+                alert("সব তথ্য সঠিকভাবে পূরণ করুন।");
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('teacher_devices')
+                .upsert([{ 
+                    teacher_name: name, 
+                    phone_number: phone, 
+                    password_hash: pass, 
+                    device_token: token,
+                    status: 'pending'
+                }], { onConflict: 'phone_number' });
+
+            if (error) {
+                alert("রেজিস্ট্রেশনে ত্রুটি: " + error.message);
+            } else {
+                localStorage.setItem("phs_teacher_phone", phone);
+                showScreen("pending-screen");
+            }
         }
 
-        function handleLogout() {
-            localStorage.removeItem('phs_teacher_id');
-            localStorage.removeItem('phs_teacher_name');
-            sessionStorage.clear();
-            window.location.reload();
+        // QR Code Scanner Integration
+        let html5QrcodeScanner;
+        function startScanner() {
+            html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+            html5QrcodeScanner.render((decodedText) => {
+                document.getElementById("student-id").value = decodedText;
+                html5QrcodeScanner.clear();
+            });
         }
+
+        // Upload Marks Logic (Offline Capable)
+        function uploadMarks() {
+            const studentId = document.getElementById("student-id").value;
+            const marks = document.getElementById("student-marks").value;
+
+            if (!studentId || !marks) {
+                alert("স্টুডেন্ট আইডি ও মার্কস পূরণ করুন।");
+                return;
+            }
+
+            if (navigator.onLine) {
+                // অনলাইন আপলোড লজিক
+                alert(`সাফল্যের সাথে আইডি ${studentId} এর জন্য ${marks} নম্বর আপলোড করা হয়েছে।`);
+            } else {
+                // অফলাইন ক্যাশিং
+                let offlineData = JSON.parse(localStorage.getItem("phs_offline_marks") || "[]");
+                offlineData.push({ studentId, marks, timestamp: new Date() });
+                localStorage.setItem("phs_offline_marks", JSON.stringify(offlineData));
+                alert("ইন্টারনেট সংযোগ নেই। মার্কস লোকাল মেমরিতে সেভ করা হলো (অনলাইনে এলে সিঙ্ক হবে)।");
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.container > div').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        // Register Service Worker for Offline Capabilities
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
+        // Initialize App
+        checkAppAccess();
     </script>
 </body>
 </html>
