@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (লগইন না থাকলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
+    <style id="security-shield">
+        body { display: none !important; }
+    </style>
+
+    <!-- 🛡️ ২. বুলেটপ্রুফ সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+    <script>
+    (function() {
+        try {
+            // সেশন চেক
+            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+
+            // রিফারার চেক (লিংক সরাসরি কপি করে পেস্ট করা আটকানো)
+            var ref = document.referrer;
+            var isValidReferrer = false;
+            if (ref) {
+                var refUrl = new URL(ref);
+                if (refUrl.hostname === "pathpukurschool.github.io") {
+                    isValidReferrer = true;
+                }
+            }
+
+            // সেশন না থাকলে অথবা ভুল উপায়ে (সরাসরি লিংক পেস্ট করে) আসলে রিডাইরেক্ট
+            if (!isLoggedIn || !isValidReferrer) {
+                // সেশন মুছে ফেলা
+                sessionStorage.clear();
+                // হোম পেজে রিডাইরেক্ট
+                window.location.replace("https://pathpukurschool.github.io/");
+                return;
+            }
+
+            // ভ্যালিড ইউজার হলে পেজের স্টাইল শিল্ড সরিয়ে কন্টেন্ট দৃশ্যমান করা
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
+
+        } catch (e) {
+            sessionStorage.clear();
+            window.location.replace("https://pathpukurschool.github.io/");
+        }
+    })();
+    </script>
+
+    <!-- ছাত্র-ছাত্রীদের পরীক্ষার rank -->
+    <title>Pathpukur High School (H.S.) - মেধা তালিকা</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Font Awesome & Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Tiro Bangla', 'Poppins', 'Inter', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%);
+        }
+        .header-card {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.08);
+            transform: rotate(45deg);
+            pointer-events: none;
+        }
+        .session-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-top: 10px;
+            backdrop-filter: blur(4px);
+        }
+        .description-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px 18px;
+            border-left: 5px solid #06b6d4;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            font-size: 12px;
+            line-height: 1.6;
+            color: #856404;
+        }
+        .btn-search-style {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s ease;
+        }
+        .btn-search-style:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
+        }
+
+        /* 🖨️ A4 প্রিন্ট সিএসএস (Print Stylesheet) */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printSection, #printSection * {
+                visibility: visible;
+            }
+            #printSection {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse !important;
+                font-size: 11px !important;
+            }
+            th, td {
+                border: 1px solid #000 !important;
+                padding: 5px 3px !important;
+                text-align: center;
+            }
+            th {
+                background-color: #f2f2f2 !important;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12 text-slate-800">
+
+    <main class="max-w-6xl mx-auto px-4 pt-6 space-y-5">
+        
+        <!-- Header Section -->
+        <header class="header-card no-print">
+            <h1 class="text-2xl md:text-3xl font-bold mb-1 tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
+            <h2 class="text-base md:text-lg text-indigo-100 font-medium flex items-center justify-center gap-2">
+                <i class="fa-solid fa-graduation-cap"></i> বার্ষিক মেধা তালিকা
+            </h2>
+            
+            <div class="session-badge">
+                <i class="fa-regular fa-calendar-check text-amber-300 mr-1.5"></i>
+                <span>শিক্ষাবর্ষ (Session): <strong id="sessionDisplay" class="text-amber-300">লোডিং...</strong></span>
+            </div>
+        </header>
+
+        <!-- Disclaimer Box -->
+        <div class="description-card flex items-start space-x-3 no-print">
+            <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg mt-0.5"></i>
+            <div>
+                <strong class="text-slate-700">সতর্কবার্তা:</strong> 
+                এটি একটি অনলাইন সিস্টেম দ্বারা তৈরি <b><em>আনুমানিক মেধা তালিকা</em></b>। নম্বর সংশোধন/পুনর্মূল্যায়ন, শিক্ষার্থী স্থানান্তর (TC), ড্রপআউট, পরীক্ষায় অকৃতকার্য (fail) হিসাবে বিবেচিত হলে বা টেকনিক্যাল ত্রুটির কারণে যেকোনো সময় সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এটি <b>চূড়ান্ত বলে গণ্য নয়</b>।
+            </div>
+        </div>
+
+        <!-- Class Filter & Refresh Form -->
+        <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-100 no-print">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-layer-group text-indigo-500 mr-1"></i> শ্রেণী নির্বাচন করুন
+                    </label>
+                    <select id="classSelect" onchange="loadClassData()" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-600 text-slate-700 font-semibold transition-all">
+                        <option value="v">পঞ্চম শ্রেণী (Class V)</option>
+                        <option value="vi">ষষ্ঠ শ্রেণী (Class VI)</option>
+                        <option value="vii">সপ্তম শ্রেণী (Class VII)</option>
+                        <option value="viii">অষ্টম শ্রেণী (Class VIII)</option>
+                        <option value="ix">নবম শ্রেণী (Class IX)</option>
+                        <option value="x">দশম শ্রেণী (Class X)</option>
+                        <option value="xi">একাদশ শ্রেণী (Class XI)</option>
+                    </select>
+                </div>
+                <div>
+                    <button id="refreshBtn" onclick="loadClassData()" class="w-full btn-search-style text-white font-bold py-2.5 px-6 rounded-xl text-sm flex items-center justify-center space-x-2">
+                        <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
+                        <span>ডাটা রিফ্রেশ করুন</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Subject & Full Marks Banner -->
+            <div class="mt-4 pt-4 border-t border-slate-200">
+                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">
+                    <i class="fa-solid fa-book text-sky-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-sky-700">0</strong>
+                </span>
+                <div id="subjectInfoBanner" class="mt-2 flex flex-wrap gap-2"></div>
+            </div>
+        </div>
+
+        <!-- No Data Alert Message -->
+        <div id="noDataAlert" class="hidden bg-red-50 border-l-4 border-red-500 p-6 rounded-xl text-red-700 shadow-sm text-center no-print">
+            <i class="fa-solid fa-folder-open text-4xl text-red-400 mb-2"></i>
+            <h4 class="text-lg font-bold">নম্বর তথ্য অনুপস্থিত!</h4>
+            <p class="text-sm mt-1">নির্বাচিত শ্রেণীর জন্য কোনো নম্বরের তথ্য পাওয়া যায়নি। এর অর্থ হতে পারে এখনও এই শ্রেনীর পরীক্ষা সম্পন্ন হয়নি অথবা শিক্ষকমণ্ডলী নম্বর আপলোড করেননি। ফলে এই মুহূর্তে মেধা র‍্যাঙ্ক নির্ণয় করা সম্ভব নয়।</p>
+        </div>
+
+        <!-- Student Table Section -->
+        <div id="tableSection" class="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-300 overflow-hidden">
+            
+            <!-- Table Header Bar: Filter Input & Print Button -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-3 no-print">
+                <div class="flex items-center space-x-2 w-full md:w-auto">
+                    <h3 class="text-base md:text-lg font-bold text-slate-800 flex items-center whitespace-nowrap">
+                        <i class="fa-solid fa-list-numeric text-indigo-600 mr-2"></i> শিক্ষার্থীর মেধা তালিকা
+                    </h3>
+                    <span id="studentCountBadge" class="bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">মোট: 0</span>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
+                    <!-- Filter Input -->
+                    <div class="relative w-full sm:w-64">
+                        <input type="text" id="tableFilterInput" onkeyup="filterTable()" placeholder="রোল অথবা র‍্যাঙ্ক দিয়ে খুঁজুন..." class="w-full bg-slate-50 border border-slate-300 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:border-sky-500">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                    </div>
+
+                    <!-- Print Button -->
+                    <button onclick="printRankTable()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow transition-all flex items-center justify-center space-x-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-print"></i>
+                        <span>A4 পেজে প্রিন্ট করুন</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Print Section Container -->
+            <div id="printSection" class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[700px] bg-white">
+                    <thead id="rankTableHead">
+                        <!-- Dynamic Head Generation via JS -->
+                    </thead>
+                    <tbody id="rankTableBody" class="divide-y divide-slate-300 text-xs md:text-sm bg-white">
+                        <!-- Dynamic Rows via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+<script>
+    // Supabase কনফিগারেশন
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentClassStudents = [];
+    let currentCalculatedFullMarks = 0;
+    let activeFullMarksPerSubject = {};
+    let currentConfig = null;
+
+    const classNameMap = {
+        'v': 'পঞ্চম শ্রেণী',
+        'vi': 'ষষ্ঠ শ্রেণী',
+        'vii': 'সপ্তম শ্রেণী',
+        'viii': 'অষ্টম শ্রেণী',
+        'ix': 'নবম শ্রেণী',
+        'x': 'দশম শ্রেণী',
+        'xi': 'একাদশ শ্রেণী'
+    };
+
+    const classRules = {
+        'v': {
+            table: 'result_v', passPct: 0.25,
+            exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }],
+            subjects: [
+                { key: 'bengali', name: 'Bengali', marks: [20, 30, 50] },
+                { key: 'english', name: 'English', marks: [20, 30, 50] },
+                { key: 'math', name: 'Math', marks: [20, 30, 50] },
+                { key: 'science', name: 'Science', marks: [20, 30, 50] },
+                { key: 'work_education', name: 'Work Ed.', marks: [10, 15, 25] },
+                { key: 'physical_education', name: 'Physical Ed.', marks: [10, 15, 25] }
+            ]
+        },
+        'vi': {
+            table: 'result_vi', passPct: 0.25,
+            exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }],
+            subjects: [
+                { key: 'bengali', name: 'Bengali', marks: [30, 50, 70] },
+                { key: 'english', name: 'English', marks: [30, 50, 70] },
+                { key: 'math', name: 'Math', marks: [30, 50, 70] },
+                { key: 'science', name: 'Science', marks: [30, 50, 70] },
+                { key: 'history', name: 'History', marks: [30, 50, 70] },
+                { key: 'geography', name: 'Geography', marks: [30, 50, 70] },
+                { key: 'work_education', name: 'Work Ed.', marks: [15, 25, 35] },
+                { key: 'physical_education', name: 'Physical Ed.', marks: [15, 25, 35] }
+            ]
+        },
+        'vii': {
+            table: 'result_vii', passPct: 0.25,
+            exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }],
+            subjects: [
+                { key: 'bengali', name: 'Bengali', marks: [30, 50, 70] },
+                { key: 'english', name: 'English', marks: [30, 50, 70] },
+                { key: 'arabic', name: 'Arabic', marks: [30, 50, 70] },
+                { key: 'sanskrit', name: 'Sanskrit', marks: [30, 50, 70] },
+                { key: 'math', name: 'Math', marks: [30, 50, 70] },
+                { key: 'life_science', name: 'Life Science', marks: [15, 25, 35] },
+                { key: 'physical_science', name: 'Physical Science', marks: [15, 25, 35] },
+                { key: 'history', name: 'History', marks: [30, 50, 70] },
+                { key: 'geography', name: 'Geography', marks: [30, 50, 70] },
+                { key: 'work_education', name: 'Work Ed.', marks: [15, 25, 35] },
+                { key: 'physical_education', name: 'Physical Ed.', marks: [15, 25, 35] }
+            ]
+        },
+        'viii': {
+            table: 'result_viii', passPct: 0.25,
+            exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }],
+            subjects: [
+                { key: 'bengali', name: 'Bengali', marks: [30, 50, 70] },
+                { key: 'english', name: 'English', marks: [30, 50, 70] },
+                { key: 'arabic', name: 'Arabic', marks: [30, 50, 70] },
+                { key: 'sanskrit', name: 'Sanskrit', marks: [30, 50, 70] },
+                { key: 'math', name: 'Math', marks: [30, 50, 70] },
+                { key: 'life_science', name: 'Life Science', marks: [15, 25, 35] },
+                { key: 'physical_science', name: 'Physical Science', marks: [15, 25, 35] },
+                { key: 'history', name: 'History', marks: [30, 50, 70] },
+                { key: 'geography', name: 'Geography', marks: [30, 50, 70] },
+                { key: 'work_education', name: 'Work Ed.', marks: [15, 25, 35] },
+                { key: 'physical_education', name: 'Physical Ed.', marks: [15, 25, 35] }
+            ]
+        },
+        'ix': {
+            table: 'result_ix', passPct: 0.25,
+            exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'e3_', name: '3rd Exam' }, { key: 'proj_', name: 'Project' }],
+            subjects: [
+                { key: 'bengali', name: 'Bengali', marks: [40, 40, 90, 30] },
+                { key: 'english', name: 'English', marks: [40, 40, 90, 30] },
+                { key: 'math', name: 'Math', marks: [40, 40, 90, 30] },
+                { key: 'physical_science', name: 'Physical Science', marks: [40, 40, 90, 30] },
+                { key: 'life_science', name: 'Life Science', marks: [40, 40, 90, 30] },
+                { key: 'history', name: 'History', marks: [40, 40, 90, 30] },
+                { key: 'geography', name: 'Geography', marks: [40, 40, 90, 30] }
+            ]
+        },
+        'x': {
+            table: 'result_x', passPct: 0.25,
+            exams: [{ key: 'e1_', name: '1st Exam' }, { key: 'e2_', name: '2nd Exam' }, { key: 'test_', name: 'Test Exam' }],
+            subjects: [
+                { key: 'bengali', name: 'Bengali', marks: [40, 40, 90] },
+                { key: 'english', name: 'English', marks: [40, 40, 90] },
+                { key: 'math', name: 'Math', marks: [40, 40, 90] },
+                { key: 'physical_science', name: 'Physical Science', marks: [40, 40, 90] },
+                { key: 'life_science', name: 'Life Science', marks: [40, 40, 90] },
+                { key: 'history', name: 'History', marks: [40, 40, 90] },
+                { key: 'geography', name: 'Geography', marks: [40, 40, 90] }
+            ]
+        },
+        'xi': {
+            table: 'result_xi', passPct: 0.30, isBestOfFive: true,
+            exams: [{ key: 'sem1_', name: 'Semester I' }, { key: 'sem2_', name: 'Semester II' }, { key: 'proj_', name: 'Project/Practical' }],
+            subjects: [
+                { key: 'bengali', name: 'Bengali', marks: [40, 40, 20] },
+                { key: 'english', name: 'English', marks: [40, 40, 20] },
+                { key: 'history', name: 'History', marks: [40, 40, 20] },
+                { key: 'philosophy', name: 'Philosophy', marks: [40, 40, 20] },
+                { key: 'education', name: 'Education', marks: [40, 40, 20] },
+                { key: 'geography', name: 'Geography', marks: [35, 35, 30] },
+                { key: 'political_science', name: 'Political Science', marks: [40, 40, 20] },
+                { key: 'arabic', name: 'Arabic', marks: [40, 40, 20] },
+                { key: 'sanskrit', name: 'Sanskrit', marks: [40, 40, 20] }
+            ]
+        }
+    };
+
+    window.onload = () => { loadClassData(); };
+
+    // শ্রেণী অনুযায়ী ডাটা লোড ফাংশন
+    async function loadClassData() {
+        const refreshIcon = document.getElementById('refreshIcon');
+        if (refreshIcon) refreshIcon.classList.add('fa-spin');
+
+        const selectedClass = document.getElementById('classSelect').value;
+        currentConfig = classRules[selectedClass];
+
+        const { data, error } = await _supabase.from(currentConfig.table).select('*');
+
+        if (error) {
+            alert("ডাটা পেতে সমস্যা হয়েছে: " + error.message);
+            if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+            return;
+        }
+
+        if (data && data.length > 0) {
+            const sessionElem = document.getElementById('sessionDisplay');
+            if (sessionElem) sessionElem.innerText = data[0].session || "2026";
+        }
+
+        // প্রক্রিয়াকরণ এবং র‍্যাঙ্ক গণনা
+        currentClassStudents = processAndRankStudents(data || [], currentConfig, selectedClass);
+
+        renderSubjectInfoBanner(currentConfig);
+
+        const totalClassMarks = currentClassStudents.reduce((acc, curr) => acc + curr.grandTotal, 0);
+
+        const noDataAlert = document.getElementById('noDataAlert');
+        const tableSection = document.getElementById('tableSection');
+
+        if (currentClassStudents.length === 0 || totalClassMarks === 0) {
+            if (noDataAlert) noDataAlert.classList.remove('hidden');
+            if (tableSection) tableSection.classList.add('hidden');
+            if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+            return;
+        }
+
+        if (noDataAlert) noDataAlert.classList.add('hidden');
+        if (tableSection) tableSection.classList.remove('hidden');
+
+        // রোল অনুযায়ী ক্রমানুসারে সাজানো
+        const rollSortedStudents = [...currentClassStudents].sort((a, b) => a.roll_no - b.roll_no);
+        renderStudentTable(rollSortedStudents, currentConfig);
+
+        if (refreshIcon) setTimeout(() => { refreshIcon.classList.remove('fa-spin'); }, 500);
+    }
+
+    // ছাত্র-ছাত্রীদের নম্বর হিসাব ও র‍্যাঙ্ক নির্ধারণ
+    function processAndRankStudents(rawData, config, classKey) {
+        if (!rawData || rawData.length === 0) return [];
+
+        let activeExamIndexes = [];
+
+        if (classKey === 'x') {
+            const hasTestUploaded = rawData.some(st => 
+                config.subjects.some(sub => st[`test_${sub.key}`] !== null && st[`test_${sub.key}`] !== undefined)
+            );
+
+            if (hasTestUploaded) {
+                activeExamIndexes = [2];
+            } else {
+                config.exams.forEach((ex, exIdx) => {
+                    const hasMarks = rawData.some(st => 
+                        config.subjects.some(sub => st[`${ex.key}${sub.key}`] !== null && st[`${ex.key}${sub.key}`] !== undefined)
+                    );
+                    if (hasMarks) activeExamIndexes.push(exIdx);
+                });
+            }
+        } else {
+            config.exams.forEach((ex, exIdx) => {
+                const hasMarks = rawData.some(st => 
+                    config.subjects.some(sub => st[`${ex.key}${sub.key}`] !== null && st[`${ex.key}${sub.key}`] !== undefined)
+                );
+                if (hasMarks) activeExamIndexes.push(exIdx);
+            });
+        }
+
+        let fullMarksPerSubject = {};
+        let classTotalFullMarks = 0;
+
+        config.subjects.forEach(sub => {
+            let subFM = 0;
+            activeExamIndexes.forEach(exIdx => {
+                subFM += sub.marks[exIdx];
+            });
+            fullMarksPerSubject[sub.key] = subFM;
+        });
+
+        activeFullMarksPerSubject = fullMarksPerSubject;
+
+        if (config.isBestOfFive) {
+            const sortedFMs = Object.values(fullMarksPerSubject).sort((a, b) => b - a);
+            classTotalFullMarks = sortedFMs.slice(0, 5).reduce((a, b) => a + b, 0);
+        } else {
+            classTotalFullMarks = Object.values(fullMarksPerSubject).reduce((a, b) => a + b, 0);
+        }
+
+        currentCalculatedFullMarks = classTotalFullMarks;
+
+        let processed = rawData.map(st => {
+            let subjectTotals = {};
+            let subjectScoresList = [];
+            let grandTotal = 0;
+            let hasAbsent = false;
+            let failedPassRule = false;
+
+            config.subjects.forEach(sub => {
+                let subSum = 0;
+                let subHasData = false;
+
+                activeExamIndexes.forEach(exIdx => {
+                    const ex = config.exams[exIdx];
+                    const key = `${ex.key}${sub.key}`;
+                    if (st[key] !== undefined && st[key] !== null) {
+                        subSum += Number(st[key]);
+                        subHasData = true;
+                    } else if (st.hasOwnProperty(key) && st[key] === null) {
+                        hasAbsent = true;
+                    }
+                });
+
+                if (subHasData) {
+                    subjectTotals[sub.key] = subSum;
+                    subjectScoresList.push({ key: sub.key, score: subSum, fm: fullMarksPerSubject[sub.key] });
+                }
+            });
+
+            if (config.isBestOfFive) {
+                subjectScoresList.sort((a, b) => b.score - a.score);
+                const best5 = subjectScoresList.slice(0, 5);
+                grandTotal = best5.reduce((acc, curr) => acc + curr.score, 0);
+
+                if (grandTotal < (classTotalFullMarks * config.passPct)) {
+                    failedPassRule = true;
+                }
+            } else {
+                grandTotal = Object.values(subjectTotals).reduce((a, b) => a + b, 0);
+
+                if (classKey === 'x' && activeExamIndexes.includes(2)) {
+                    Object.values(subjectTotals).forEach(val => {
+                        if (val < 15) failedPassRule = true;
+                    });
+                } else {
+                    Object.entries(subjectTotals).forEach(([sKey, val]) => {
+                        if (val < (fullMarksPerSubject[sKey] * config.passPct)) {
+                            failedPassRule = true;
+                        }
+                    });
+                }
+            }
+
+            const pct = classTotalFullMarks > 0 ? ((grandTotal / classTotalFullMarks) * 100).toFixed(1) : 0;
+
+            return {
+                ...st,
+                subjectTotals,
+                grandTotal,
+                hasAbsent,
+                allPassed: !failedPassRule,
+                percentage: isNaN(pct) ? 0 : pct
+            };
+        });
+
+        // মেধা তালিকা অনুযায়ী সাজানো
+        processed.sort((a, b) => {
+            if (b.grandTotal !== a.grandTotal) return b.grandTotal - a.grandTotal;
+            if (a.hasAbsent !== b.hasAbsent) return a.hasAbsent ? 1 : -1;
+            if (a.allPassed !== b.allPassed) return a.allPassed ? -1 : 1;
+            return a.roll_no - b.roll_no;
+        });
+
+        return processed.map((st, index) => ({
+            ...st,
+            calculatedRank: st.grandTotal > 0 ? index + 1 : null
+        }));
+    }
+
+    // বিষয়ভিত্তিক পূর্ণমানের ব্যানার প্রদর্শন
+    function renderSubjectInfoBanner(config) {
+        const banner = document.getElementById('subjectInfoBanner');
+        const fmText = document.getElementById('dynamicFullMarksText');
+        if (fmText) fmText.innerText = currentCalculatedFullMarks;
+        
+        if (!banner) return;
+        banner.innerHTML = '';
+        config.subjects.forEach(sub => {
+            const subFm = activeFullMarksPerSubject[sub.key] || 0;
+            banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${sub.name}: <strong class="text-sky-600">${subFm}</strong></span>`;
+        });
+    }
+
+    // র‍্যাঙ্ক ব্যাজ ফরম্যাট
+    function getRankBadgeWithIcon(rank) {
+        let iconHtml = '';
+        if (rank === 1) iconHtml = `<i class="fa-solid fa-crown text-amber-400 mr-1"></i>`;
+        else if (rank === 2) iconHtml = `<i class="fa-solid fa-medal text-slate-300 mr-1"></i>`;
+        else if (rank === 3) iconHtml = `<i class="fa-solid fa-award text-amber-600 mr-1"></i>`;
+        else if (rank >= 4 && rank <= 10) iconHtml = `<i class="fa-solid fa-star text-amber-400 mr-1"></i>`;
+
+        const isTop10 = rank <= 10;
+        const badgeBg = isTop10 ? 'bg-amber-500 text-white shadow-sm' : 'bg-sky-100 text-sky-800';
+
+        return `<span class="inline-flex items-center justify-center ${badgeBg} px-2.5 py-0.5 rounded-full font-bold text-xs">${iconHtml}#${rank}</span>`;
+    }
+
+    // বিষয়ভিত্তিক টেবিল হেডার ও ডেটা রেন্ডারিং ফাংশন
+    function renderStudentTable(students, config) {
+        const thead = document.getElementById('rankTableHead');
+        const tbody = document.getElementById('rankTableBody');
+        const badge = document.getElementById('studentCountBadge');
+
+        if (badge) badge.innerText = `মোট: ${students.length}`;
+        if (!thead || !tbody) return;
+
+        // ১. ডাইনামিক টেবিল হেডার তৈরি
+        let subjectHeaders = config.subjects.map(sub => `<th class="py-3 px-2 text-center text-xs border">${sub.name}</th>`).join('');
+
+        thead.innerHTML = `
+            <tr class="bg-slate-100 text-slate-700 font-bold border-b">
+                <th class="py-3 px-3 text-center border">রোল</th>
+                <th class="py-3 px-3 text-center border">সেকশন</th>
+                <th class="py-3 px-4 text-left border">শিক্ষার্থীর নাম</th>
+                <th class="py-3 px-3 text-center border">মেধা র‍্যাঙ্ক</th>
+                ${subjectHeaders}
+                <th class="py-3 px-3 text-center border">প্রাপ্ত মোট নম্বর</th>
+                <th class="py-3 px-3 text-center border">শতকরা (%)</th>
+            </tr>
+        `;
+
+        // ২. টেবিল বডি রেন্ডার
+        tbody.innerHTML = '';
+
+        students.forEach(st => {
+            const tr = document.createElement('tr');
+            tr.id = `row-roll-${st.roll_no}`;
+            tr.setAttribute('data-roll', st.roll_no);
+            tr.setAttribute('data-rank', st.calculatedRank || 9999);
+            
+            const isTop10 = st.calculatedRank && st.calculatedRank <= 10;
+            const highlightClass = isTop10 ? 'bg-amber-50/50 font-semibold' : 'hover:bg-sky-50';
+
+            tr.className = `${highlightClass} transition-colors border-b border-slate-200`;
+
+            // বিষয়ভিত্তিক নম্বর সেল তৈরি
+            let subjectCells = config.subjects.map(sub => {
+                const mark = st.subjectTotals[sub.key] !== undefined ? st.subjectTotals[sub.key] : '-';
+                return `<td class="py-3 px-2 text-center text-slate-700 border">${mark}</td>`;
+            }).join('');
+
+            tr.innerHTML = `
+                <td class="py-3 px-3 text-center font-bold text-slate-800 border">${st.roll_no}</td>
+                <td class="py-3 px-3 text-center font-semibold text-slate-600 border">${st.section || '-'}</td>
+                <td class="py-3 px-4 text-left font-bold text-slate-900 border">${st.student_name}</td>
+                <td class="py-3 px-3 text-center border">
+                    ${st.calculatedRank ? getRankBadgeWithIcon(st.calculatedRank) : '<span class="text-slate-400">N/A</span>'}
+                </td>
+                ${subjectCells}
+                <td class="py-3 px-3 text-center font-extrabold text-sky-600 border">${st.grandTotal}</td>
+                <td class="py-3 px-3 text-center font-bold text-emerald-600 border">${st.percentage}%</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // রোল এবং র‍্যাঙ্ক অনুযায়ী টেবিল ফিল্টার করার অপশন
+    function filterTable() {
+        const searchInput = document.getElementById('tableFilterInput').value.trim().toLowerCase();
+        const rows = document.querySelectorAll('#rankTableBody tr');
+
+        rows.forEach(row => {
+            const roll = row.getAttribute('data-roll');
+            const rank = row.getAttribute('data-rank');
+
+            if (searchInput === '' || roll.includes(searchInput) || rank.includes(searchInput)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    // A4 পেজে প্রিন্ট করার বোতামের ফাংশন
+    function printRankTable() {
+        window.print();
+    }
+</script>
+</body>
+</html>
