@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PHS Teacher Portal App</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <!-- Tailwind CSS, FontAwesome, Supabase, HTML5-QRCode Scanner -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glow { box-shadow: 0 0 25px rgba(37, 99, 235, 0.25); }
+        #qr-reader video { border-radius: 12px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between select-none">
+
+    <!-- Header Section -->
+    <header class="glass sticky top-0 z-50 p-4 flex items-center justify-between border-b border-slate-700">
+        <div class="flex items-center gap-3">
+            <img src="PHS-LOGO.png" alt="PHS" class="w-10 h-10 rounded-full border border-blue-400">
+            <div>
+                <h1 class="font-bold text-base leading-tight text-blue-400">Pathpukur High School</h1>
+                <p class="text-[10px] text-slate-400">Teacher Mobile App (PHS)</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <span id="syncBadge" class="hidden text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-1 rounded-full animate-pulse">
+                <i class="fa-solid fa-cloud-arrow-up"></i> <span id="offlineCount">0</span> অফলাইন
+            </span>
+            <button id="logoutBtn" onclick="handleLogout()" class="hidden text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500/40">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="p-4 flex-1 max-w-md mx-auto w-full">
+
+        <!-- Banner Image Carousel/Grid -->
+        <div class="mb-4 rounded-2xl overflow-hidden glass p-1.5">
+            <img id="bannerImg" src="photo/master_login_image.jpg" alt="School" class="w-full h-32 object-cover rounded-xl">
+        </div>
+
+        <!-- 1. Registration Container -->
+        <div id="authSection" class="glass rounded-2xl p-6 glow">
+            <div class="text-center mb-5">
+                <i class="fa-solid fa-mobile-screen-button text-3xl text-blue-400 mb-2"></i>
+                <h2 class="text-lg font-bold text-slate-100">ডিভাইস রেজিস্ট্রেশন</h2>
+                <p class="text-xs text-slate-400 mt-1">একধিক মোবাইলে ব্যবহার রোধে ইউনিক ডিভাইস লক ব্যবহার করা হচ্ছে।</p>
+            </div>
+            
+            <form id="regForm" onsubmit="handleRegistration(event)" class="space-y-3.5">
+                <div>
+                    <label class="text-xs text-slate-300">শিক্ষকের নাম</label>
+                    <input type="text" id="fullName" required placeholder="পুরো নাম" class="w-full mt-1 bg-slate-900/80 border border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-300">ইউনিক শিক্ষক আইডি (Teacher ID)</label>
+                    <input type="text" id="teacherId" required placeholder="যেমন: PHS-T001" class="w-full mt-1 bg-slate-900/80 border border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-300">মোবাইল নম্বর</label>
+                    <input type="tel" id="mobileNo" required placeholder="১০ সংখ্যার নম্বর" class="w-full mt-1 bg-slate-900/80 border border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-blue-500">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 rounded-xl shadow-lg transition-all active:scale-95 flex justify-center items-center gap-2 text-sm">
+                    <i class="fa-solid fa-shield-halved"></i> রেজিস্ট্রেশন সম্পূর্ণ করুন
+                </button>
+            </form>
+        </div>
+
+        <!-- 2. Dashboard Container -->
+        <div id="dashboardSection" class="hidden space-y-4">
+            
+            <!-- User Status Card -->
+            <div class="glass p-3.5 rounded-xl flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] text-slate-400">লগইন শিক্ষক:</p>
+                    <h3 id="displayTeacherName" class="font-bold text-blue-400 text-sm">---</h3>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span id="netStatus" class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                    <span id="netText" class="text-[10px] text-slate-300">অনলাইন</span>
+                </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- 🔗 টিচারদের প্রয়োজনীয় লিঙ্কসমূহ (এখানে আপনার লিঙ্কগুলি যোগ করবেন) -->
+            <!-- ========================================================================= -->
+            <div class="glass p-4 rounded-2xl glow space-y-3">
+                <p class="text-xs font-bold text-blue-400 flex items-center gap-2 border-b border-slate-700/60 pb-2">
+                    <i class="fa-solid fa-layer-group text-blue-400"></i> ক্লাসভিত্তিক নম্বর আপলোড ও সার্ভিস পোর্টাল
+                </p>
+
+                <!-- ১. ক্লাস অনুযায়ী নম্বর আপলোড লিঙ্কসমূহ (৫ম থেকে ১১শ শ্রেণী) -->
+                <p class="text-[11px] font-semibold text-slate-300">শ্রেণীভিত্তিক নম্বর আপলোড (Class 5 - 11):</p>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <!-- href="আপনাদের_ফাইল_লিঙ্ক.html" পরিবর্তন করবেন -->
+                    <a href="upload_class5.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class V Upload
+                    </a>
+                    <a href="upload_class6.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class VI Upload
+                    </a>
+                    <a href="upload_class7.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class VII Upload
+                    </a>
+                    <a href="upload_class8.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class VIII Upload
+                    </a>
+                    <a href="upload_class9.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class IX Upload
+                    </a>
+                    <a href="upload_class10.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class X Upload
+                    </a>
+                    <a href="upload_class11.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5 transition-all col-span-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Class XI Marks Upload
+                    </a>
+                </div>
+
+                <!-- ২. রিপোর্ট ও অন্যান্য প্রশাসনিক সার্ভিস লিঙ্কসমূহ -->
+                <p class="text-[11px] font-semibold text-slate-300 pt-2 border-t border-slate-700/60">রিপোর্ট ও স্টুডেন্ট রেকর্ড পোর্টাল:</p>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <a href="student_rank.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-emerald-500/30 text-emerald-300 hover:bg-emerald-600/20 flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-trophy text-emerald-400"></i> Student Rank
+                    </a>
+                    <a href="upload_status.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-amber-500/30 text-amber-300 hover:bg-amber-600/20 flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-chart-line text-amber-400"></i> Upload Status
+                    </a>
+                    <a href="student_details.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-purple-500/30 text-purple-300 hover:bg-purple-600/20 flex items-center justify-center gap-1.5 transition-all col-span-2">
+                        <i class="fa-solid fa-id-card text-purple-400"></i> View Student Details
+                    </a>
+                    
+                    <!-- ➕ ভবিষ্যতে আরও লিঙ্ক যোগ করতে চাইলে নিচের ব্লকটি কপি করে বসিয়ে দেবেন -->
+                    <!-- 
+                    <a href="YOUR_NEW_PAGE.html" class="p-2.5 bg-slate-800/90 rounded-xl text-center border border-slate-700 text-blue-300 hover:bg-blue-600/30 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-link text-blue-400"></i> নতুন সার্ভিস নাম
+                    </a> 
+                    -->
+                </div>
+
+                <!-- ৩. সাধারণ পেজ লিঙ্ক (Home & Index Navigation) -->
+                <p class="text-[11px] font-semibold text-slate-300 pt-2 border-t border-slate-700/60">মূল ওয়েবসাইট লিংকসমূহ:</p>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <a href="home.html" class="p-2 bg-slate-800/60 rounded-lg text-center border border-slate-700 text-slate-300 hover:bg-slate-700">Teacher Home</a>
+                    <a href="index.html" class="p-2 bg-slate-800/60 rounded-lg text-center border border-slate-700 text-slate-300 hover:bg-slate-700">Main Website</a>
+                </div>
+            </div>
+            <!-- ========================================================================= -->
+
+            <!-- Quick Marks Upload Form with QR Code Scanner (ডিফল্ট ফর্ম) -->
+            <div class="glass p-4 rounded-2xl glow space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+                    <h3 class="font-bold text-sm text-blue-400 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square"></i> সরাসরি দ্রুত নম্বর আপলোড
+                    </h3>
+                    <button onclick="toggleScanner()" class="text-xs bg-blue-600/30 border border-blue-500/40 text-blue-300 px-2.5 py-1 rounded-lg">
+                        <i class="fa-solid fa-qrcode mr-1"></i> QR স্ক্যান
+                    </button>
+                </div>
+
+                <!-- Camera QR Scanner View -->
+                <div id="scannerContainer" class="hidden bg-slate-900 p-2 rounded-xl border border-blue-500/40">
+                    <div id="qr-reader" class="w-full"></div>
+                    <button onclick="stopScanner()" class="w-full mt-2 bg-red-500/20 text-red-400 border border-red-500/30 text-xs py-1 rounded-lg">
+                        স্ক্যানার বন্ধ করুন
+                    </button>
+                </div>
+
+                <form onsubmit="handleMarksSubmit(event)" class="space-y-3">
+                    <div>
+                        <label class="text-[10px] text-slate-400">স্টুডেন্ট আইডি (QR থেকে অটো-ইনপুট বা ম্যানুয়াল)</label>
+                        <input type="text" id="studentId" placeholder="স্টুডেন্ট আইডি ইনপুট করুন" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] text-slate-400">বিষয়</label>
+                            <select id="subjectName" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm">
+                                <option value="">নির্বাচন</option>
+                                <option value="Sanskrit">Sanskrit</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Bengali">Bengali</option>
+                                <option value="English">English</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400">পরীক্ষা</label>
+                            <select id="examName" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm">
+                                <option value="">নির্বাচন</option>
+                                <option value="Unit-1">Unit Test 1</option>
+                                <option value="Unit-2">Unit Test 2</option>
+                                <option value="Annual">Annual Exam</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400">প্রাপ্ত নম্বর</label>
+                        <input type="number" id="marksObtained" placeholder="নম্বর (যেমন: 85)" required min="0" max="100" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 font-semibold py-2.5 rounded-xl shadow transition-all active:scale-95 text-sm">
+                        নম্বর সাবমিট করুন
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="p-3 text-center text-[11px] text-slate-500 border-t border-slate-800">
+        &copy; Pathpukur High School (PHS). All rights reserved.
+    </footer>
+
+    <!-- App Logic & Integration Script -->
+    <script>
+        // Supabase Configurations
+        const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT.supabase.co";
+        const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let html5QrcodeScanner = null;
+
+        // ডিভাইস সনাক্তকরণ UUID
+        function getDeviceId() {
+            let devId = localStorage.getItem('phs_device_uuid');
+            if (!devId) {
+                devId = 'DEV-' + Math.random().toString(36).substring(2) + Date.now();
+                localStorage.setItem('phs_device_uuid', devId);
+            }
+            return devId;
+        }
+
+        // পৃষ্ঠা লোডে সিকিউরিটি ফ্ল্যাগ এবং সেশন চেক
+        window.addEventListener('DOMContentLoaded', async () => {
+            // মোবাইল অ্যাপে সিকিউরিটি পাসওয়ার্ড ফ্ল্যাগ সেট করা
+            sessionStorage.setItem("app_session", "true");
+            sessionStorage.setItem("teacherLoggedIn", "true");
+
+            updateOnlineStatus();
+            window.addEventListener('online', syncOfflineMarks);
+            window.addEventListener('offline', updateOnlineStatus);
+
+            const savedTeacherId = localStorage.getItem('phs_teacher_id');
+            const currentDeviceId = getDeviceId();
+
+            if (savedTeacherId) {
+                // Supabase থেকে যাচাইকরণ
+                if (navigator.onLine) {
+                    const { data, error } = await supabase
+                        .from('teachers')
+                        .select('*')
+                        .eq('unique_id', savedTeacherId)
+                        .single();
+
+                    if (data && data.device_id === currentDeviceId && data.is_active) {
+                        showDashboard(data.full_name);
+                    } else if (data && data.device_id !== currentDeviceId) {
+                        alert("এই শিক্ষক অ্যাকাউন্টটি অন্য একটি মোবাইলে নিবন্ধিত হয়েছে! এই ডিভাইস থেকে এক্সিট করা হচ্ছে।");
+                        handleLogout();
+                    } else {
+                        showDashboard(localStorage.getItem('phs_teacher_name') || "Teacher");
+                    }
+                } else {
+                    // অফলাইন মোডে লোকাল তথ্য ব্যবহার করে ড্যাশবোর্ড ওপেন
+                    showDashboard(localStorage.getItem('phs_teacher_name') || "Teacher");
+                }
+            }
+            checkOfflineCount();
+        });
+
+        // অনলাইন/অফলাইন নেটওয়ার্ক স্টেট আপডেট
+        function updateOnlineStatus() {
+            const netStatus = document.getElementById('netStatus');
+            const netText = document.getElementById('netText');
+            if (navigator.onLine) {
+                netStatus.className = "w-2.5 h-2.5 rounded-full bg-green-500";
+                netText.innerText = "অনলাইন";
+                syncOfflineMarks();
+            } else {
+                netStatus.className = "w-2.5 h-2.5 rounded-full bg-red-500";
+                netText.innerText = "অফলাইন";
+            }
+        }
+
+        // টিচার রেজিস্ট্রেশন প্রক্রিয়া
+        async function handleRegistration(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value.trim();
+            const teacherId = document.getElementById('teacherId').value.trim();
+            const mobileNo = document.getElementById('mobileNo').value.trim();
+            const currentDeviceId = getDeviceId();
+
+            if (!navigator.onLine) {
+                alert("রেজিস্ট্রেশন সম্পূর্ণ করার জন্য ইন্টারনেট সংযোগ প্রয়োজন!");
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('teachers')
+                .upsert([
+                    { full_name: fullName, unique_id: teacherId, mobile_number: mobileNo, device_id: currentDeviceId, is_active: true }
+                ], { onConflict: 'unique_id' })
+                .select();
+
+            if (error) {
+                alert("রেজিস্ট্রেশনে ত্রুটি: " + error.message);
+            } else {
+                localStorage.setItem('phs_teacher_id', teacherId);
+                localStorage.setItem('phs_teacher_name', fullName);
+                alert("রেজিস্ট্রেশন সফল হয়েছে!");
+                showDashboard(fullName);
+            }
+        }
+
+        // QR স্ক্যানার হ্যান্ডলিং
+        function toggleScanner() {
+            const container = document.getElementById('scannerContainer');
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                html5QrcodeScanner = new Html5Qrcode("qr-reader");
+                html5QrcodeScanner.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 200, height: 200 } },
+                    (decodedText) => {
+                        document.getElementById('studentId').value = decodedText;
+                        stopScanner();
+                    },
+                    (errorMessage) => { }
+                );
+            } else {
+                stopScanner();
+            }
+        }
+
+        function stopScanner() {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().then(() => {
+                    document.getElementById('scannerContainer').classList.add('hidden');
+                }).catch(() => {
+                    document.getElementById('scannerContainer').classList.add('hidden');
+                });
+            } else {
+                document.getElementById('scannerContainer').classList.add('hidden');
+            }
+        }
+
+        // নম্বর সাবমিশন (অনলাইন ও অফলাইন ড্রাফট হ্যান্ডলিং)
+        async function handleMarksSubmit(e) {
+            e.preventDefault();
+            const teacherId = localStorage.getItem('phs_teacher_id');
+            const studentId = document.getElementById('studentId').value.trim();
+            const subject = document.getElementById('subjectName').value;
+            const exam_name = document.getElementById('examName').value;
+            const marks_obtained = parseFloat(document.getElementById('marksObtained').value);
+
+            const record = { teacher_id: teacherId, student_id: studentId, subject, exam_name, marks_obtained };
+
+            if (navigator.onLine) {
+                const { error } = await supabase.from('marks_entry').insert([record]);
+                if (error) {
+                    alert("অনলাইনে জমা নেওয়া যায়নি, ড্রাফট হিসেবে সেভ করা হচ্ছে।");
+                    saveOfflineRecord(record);
+                } else {
+                    alert("নম্বর সফলভাবে সরাসরি আপলোড হয়েছে!");
+                }
+            } else {
+                saveOfflineRecord(record);
+                alert("অফলাইন মোড: নম্বরটি স্থানীয়ভাবে ড্রাফট সেভ হয়েছে। নেটওয়ার্ক পেলে নিজে থেকেই সিঙ্ক হয়ে যাবে।");
+            }
+            e.target.reset();
+        }
+
+        // অফলাইন রেকর্ড ড্রাফট সেভ
+        function saveOfflineRecord(record) {
+            let drafts = JSON.parse(localStorage.getItem('phs_offline_marks') || "[]");
+            drafts.push(record);
+            localStorage.setItem('phs_offline_marks', JSON.stringify(drafts));
+            checkOfflineCount();
+        }
+
+        function checkOfflineCount() {
+            let drafts = JSON.parse(localStorage.getItem('phs_offline_marks') || "[]");
+            const badge = document.getElementById('syncBadge');
+            const count = document.getElementById('offlineCount');
+            if (drafts.length > 0) {
+                badge.classList.remove('hidden');
+                count.innerText = drafts.length;
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // ব্যাকগ্রাউন্ড অটো-সিঙ্ক (ইন্টারনেট কানেকশন এলে)
+        async function syncOfflineMarks() {
+            let drafts = JSON.parse(localStorage.getItem('phs_offline_marks') || "[]");
+            if (drafts.length === 0 || !navigator.onLine) return;
+
+            const { error } = await supabase.from('marks_entry').insert(drafts);
+            if (!error) {
+                localStorage.removeItem('phs_offline_marks');
+                checkOfflineCount();
+                alert("অফলাইনে সেভ রাখা " + drafts.length + " টি নম্বর সফলভাবে সুপাবেসে সিঙ্ক সম্পন্ন হয়েছে!");
+            }
+        }
+
+        function showDashboard(name) {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('logoutBtn').classList.remove('hidden');
+            document.getElementById('displayTeacherName').innerText = name;
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('phs_teacher_id');
+            localStorage.removeItem('phs_teacher_name');
+            sessionStorage.clear();
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
