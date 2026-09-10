@@ -1,0 +1,21 @@
+{
+  "short_name": "PHS App",
+  "name": "Pathpukur High School - Teacher Portal",
+  "icons": [
+    {
+      "src": "PHS-LOGO.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "PHS-LOGO.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/app.html",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "display": "standalone",
+  "orientation": "portrait"
+}
