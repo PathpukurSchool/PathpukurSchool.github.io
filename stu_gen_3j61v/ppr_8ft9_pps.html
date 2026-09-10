@@ -270,72 +270,103 @@
 
         /* 🖨️ A4 প্রিন্ট CSS সেটআপ */
         @media print {
-            @page {
-                size: A4 portrait;
-                margin: 12mm 10mm 12mm 10mm;
-            }
-            body {
-                background: none !important;
-                padding: 0 !important;
-                color: #000 !important;
-            }
-            .container {
-                max-width: 100% !important;
-                width: 100% !important;
-                margin: 0 !important;
-            }
-            .no-print, .instruction-card, #search-card-wrapper, #student-section, #alert-box, .btn-print {
-                display: none !important;
-            }
-            .card {
-                border: none !important;
-                box-shadow: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            .header-card {
-                background: none !important;
-                color: #000 !important;
-                box-shadow: none !important;
-                border-bottom: 2px solid #000 !important;
-                border-radius: 0 !important;
-                padding: 10px 0 !important;
-                margin-bottom: 15px !important;
-            }
-            .header-card h1 { color: #000 !important; font-size: 20px !important; }
-            .header-card h3 { color: #333 !important; font-size: 13px !important; }
-            .session-badge { background: #eee !important; color: #000 !important; border: 1px solid #ccc; }
-            
-            .table-wrapper {
-                border: none !important;
-                overflow: visible !important;
-            }
-            table {
-                width: 100% !important;
-                border-collapse: collapse !important;
-                font-size: 11px !important;
-            }
-            thead {
-                display: table-header-group !important; /* প্রতি পেজে রিপিট হবে */
-            }
-            tr {
-                page-break-inside: avoid !important;
-            }
-            th, td {
-                border: 1px solid #000 !important;
-                padding: 6px 8px !important;
-                color: #000 !important;
-            }
-            th {
-                background: #f0f0f0 !important;
-                color: #000 !important;
-            }
-            .status-badge {
-                border: 1px solid #666 !important;
-                padding: 2px 5px !important;
-            }
-        }
-    </style>
+    /* ১. HTML ও BODY-এর ফিক্সড হাইট নিশ্চিত করা */
+    html, body {
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        color: #000 !important;
+        overflow: visible !important;
+    }
+
+    @page {
+        size: A4 portrait;
+        margin: 10mm 10mm 10mm 10mm; /* মার্জিন সামান্য কমানো হলো */
+    }
+
+    .container {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* ২. অপ্রয়োজনীয় এলিমেন্ট হাইড রাখা */
+    .no-print, 
+    .instruction-card, 
+    #search-card-wrapper, 
+    #student-section, 
+    #alert-box, 
+    .btn-print {
+        display: none !important;
+    }
+
+    /* ৩. কার্ডের প্যাডিং ও মার্জিন জিরো করা */
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+    }
+
+    .header-card {
+        background: none !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        border-bottom: 2px solid #000 !important;
+        border-radius: 0 !important;
+        padding: 5px 0 !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .header-card h1 { color: #000 !important; font-size: 18px !important; }
+    .header-card h3 { color: #333 !important; font-size: 12px !important; }
+    .session-badge { background: #eee !important; color: #000 !important; border: 1px solid #ccc; }
+
+    /* ৪. টেবিলে পেজ ব্রেক নিয়ন্ত্রণ করা */
+    .table-wrapper {
+        border: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 11px !important;
+        page-break-after: auto;
+    }
+
+    thead {
+        display: table-header-group !important; /* প্রতি পেজের শুরুতে হেডার আসবে */
+    }
+
+    tr {
+        page-break-inside: avoid !important; /* রো-এর মাঝখানে পেজ ভাঙবে না */
+        page-break-after: auto;
+    }
+
+    th, td {
+        border: 1px solid #000 !important;
+        padding: 5px 6px !important;
+        color: #000 !important;
+    }
+
+    th {
+        background: #f0f0f0 !important;
+        color: #000 !important;
+    }
+
+    .status-badge {
+        border: 1px solid #666 !important;
+        padding: 1px 4px !important;
+    }
+}
+</style>
 </head>
 <body>
 
