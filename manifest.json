@@ -1,6 +1,6 @@
 {
-  "name": "Pathpukur High School Teacher Portal",
-  "short_name": "PHS Portal",
+  "name": "Pathpukur High School Teacher App",
+  "short_name": "PHS Teacher App",
   "start_url": "/app.html",
   "display": "standalone",
   "background_color": "#0f172a",
