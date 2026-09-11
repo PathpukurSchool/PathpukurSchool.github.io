@@ -66,39 +66,56 @@
             font-family: 'Tiro Bangla', 'Poppins', 'Inter', sans-serif;
         }
         body {
-            background-color: #f8fafc;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%);
         }
-        /* ব্যাকগ্রাউন্ড ছাড়া ক্লিন হেডার */
         .header-card {
-            background: transparent;
-            padding: 10px 0;
-            text-align: center;
-        }
-        .school-title {
-            color: #047857; /* গাঢ় সবুজ */
-        }
-        .header-subtext {
-            color: #000000; /* কালো রঙ */
-        }
-        /* হালকা সবুজ ব্যাকগ্রাউন্ড ও বামদিকে মোটা বর্ডার সহ সতর্কবার্তা */
-        .description-card {
-            background: #ecfdf5;
-            border-left: 6px solid #059669;
-            border-radius: 8px;
-            padding: 12px 16px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-            font-size: 13px;
-            line-height: 1.6;
-            color: #064e3b;
-        }
-        /* গাঢ় সবুজ বোতাম */
-        .btn-dark-green {
-            background-color: #047857;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             color: #ffffff;
+            border-radius: 16px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.08);
+            transform: rotate(45deg);
+            pointer-events: none;
+        }
+        .session-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-top: 10px;
+            backdrop-filter: blur(4px);
+        }
+        .description-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px 18px;
+            border-left: 5px solid #06b6d4;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            font-size: 12px;
+            line-height: 1.6;
+            color: #856404;
+        }
+        .btn-search-style {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
             transition: all 0.2s ease;
         }
-        .btn-dark-green:hover {
-            background-color: #065f46;
+        .btn-search-style:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
         }
 
         /* 🖨️ A4 প্রিন্ট সিএসএস */
@@ -133,15 +150,6 @@
                 color: #000 !important;
                 -webkit-print-color-adjust: exact;
             }
-            .print-header {
-                display: block !important;
-                text-align: center;
-                margin-bottom: 15px;
-            }
-        }
-        
-        .print-header {
-            display: none;
         }
     </style>
 </head>
@@ -151,34 +159,34 @@
         
         <!-- Header Section -->
         <header class="header-card no-print">
-            <h1 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-wide school-title">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
+            <h1 class="text-2xl md:text-3xl font-bold mb-1 tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
+            <h2 class="text-base md:text-lg text-indigo-100 font-medium flex items-center justify-center gap-2">
+                <i class="fa-solid fa-graduation-cap"></i> বার্ষিক মেধা তালিকা
+            </h2>
             
-            <!-- বার্ষিক মেধা তালিকা ও শিক্ষাবর্ষ এক লাইনে (কালো রঙ) -->
-            <div class="header-subtext text-base md:text-lg font-bold flex items-center justify-center gap-2 flex-wrap">
-                <span><i class="fa-solid fa-graduation-cap"></i> বার্ষিক মেধা তালিকা</span>
-                <span class="text-slate-400">|</span>
-                <span><i class="fa-regular fa-calendar-check mr-1"></i> শিক্ষাবর্ষ (Session): <strong id="sessionDisplay">লোডিং...</strong></span>
+            <div class="session-badge">
+                <i class="fa-regular fa-calendar-check text-amber-300 mr-1.5"></i>
+                <span>শিক্ষাবর্ষ (Session): <strong id="sessionDisplay" class="text-amber-300">লোডিং...</strong></span>
             </div>
         </header>
 
-        <!-- Disclaimer Box (হালকা সবুজ ব্যাকগ্রাউন্ড ও বামদিকে মোটা বর্ডার) -->
+        <!-- Disclaimer Box -->
         <div class="description-card flex items-start space-x-3 no-print">
-            <i class="fa-solid fa-circle-info text-emerald-600 text-lg mt-0.5"></i>
+            <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg mt-0.5"></i>
             <div>
-                <strong class="text-emerald-950">সতর্কবার্তা:</strong> 
+                <strong class="text-slate-700">সতর্কবার্তা:</strong> 
                 এটি একটি অনলাইন সিস্টেম দ্বারা তৈরি <b><em>আনুমানিক মেধা তালিকা</em></b>। নম্বর সংশোধন/পুনর্মূল্যায়ন, শিক্ষার্থী স্থানান্তর (TC), ড্রপআউট, পরীক্ষায় অকৃতকার্য (fail) হিসাবে বিবেচিত হলে বা টেকনিক্যাল ত্রুটির কারণে যেকোনো সময় সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এটি <b>চূড়ান্ত বলে গণ্য নয়</b>।
             </div>
         </div>
 
         <!-- Class Filter & Refresh Form -->
-        <div class="bg-white rounded-xl p-5 md:p-6 shadow-sm border border-slate-200 no-print">
+        <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-100 no-print">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-layer-group text-emerald-600 mr-1"></i> শ্রেণী নির্বাচন করুন
+                        <i class="fa-solid fa-layer-group text-indigo-500 mr-1"></i> শ্রেণী নির্বাচন করুন
                     </label>
-                    <!-- বোতাম ও ড্রপডাউনের সাইজ একই করতে h-10 (40px) নিশ্চিত করা হয়েছে -->
-                    <select id="classSelect" onchange="loadClassData()" class="w-full h-10 bg-slate-50 border border-slate-300 rounded-lg px-3 text-xs md:text-sm focus:outline-none focus:border-emerald-600 text-slate-700 font-semibold transition-all">
+                    <select id="classSelect" onchange="loadClassData()" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-600 text-slate-700 font-semibold transition-all">
                         <option value="v">পঞ্চম শ্রেণী (Class V)</option>
                         <option value="vi">ষষ্ঠ শ্রেণী (Class VI)</option>
                         <option value="vii">সপ্তম শ্রেণী (Class VII)</option>
@@ -189,7 +197,7 @@
                     </select>
                 </div>
                 <div>
-                    <button id="refreshBtn" onclick="loadClassData()" class="w-full h-10 btn-dark-green font-bold px-6 rounded-lg text-xs md:text-sm flex items-center justify-center space-x-2 shadow-sm">
+                    <button id="refreshBtn" onclick="loadClassData()" class="w-full btn-search-style text-white font-bold py-2.5 px-6 rounded-xl text-sm flex items-center justify-center space-x-2">
                         <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
                         <span>ডাটা রিফ্রেশ করুন</span>
                     </button>
@@ -199,7 +207,7 @@
             <!-- Subject & Full Marks Banner -->
             <div class="mt-4 pt-4 border-t border-slate-200">
                 <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                    <i class="fa-solid fa-book text-emerald-700 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-emerald-700">0</strong>
+                    <i class="fa-solid fa-book text-sky-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-sky-700">0</strong>
                 </span>
                 <div id="subjectInfoBanner" class="mt-2 flex flex-wrap gap-2"></div>
             </div>
@@ -213,22 +221,21 @@
         </div>
 
         <!-- Student Table Section -->
-        <div id="tableSection" class="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-slate-200 overflow-hidden">
+        <div id="tableSection" class="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-300 overflow-hidden">
             
             <!-- Table Header Bar: Sort Select, Filter Input & Print Button -->
             <div class="flex flex-col lg:flex-row justify-between items-center mb-4 gap-3 no-print">
                 <div class="flex items-center space-x-2 w-full lg:w-auto">
                     <h3 class="text-base md:text-lg font-bold text-slate-800 flex items-center whitespace-nowrap">
-                        <i class="fa-solid fa-list-numeric text-emerald-700 mr-2"></i> শিক্ষার্থীর মেধা তালিকা
+                        <i class="fa-solid fa-list-numeric text-indigo-600 mr-2"></i> শিক্ষার্থীর মেধা তালিকা
                     </h3>
                     <span id="studentCountBadge" class="bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">মোট: 0</span>
                 </div>
 
-                <!-- সবগুলির সাইজ একই (h-10) রাখা হয়েছে -->
                 <div class="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto">
                     <!-- 🔽 রোল এবং র‍্যাঙ্ক ফিল্টার/সর্ট ড্রপডাউন -->
                     <div class="relative w-full sm:w-48">
-                        <select id="sortSelect" onchange="sortAndRenderTable()" class="w-full h-10 bg-slate-50 border border-slate-300 rounded-lg pl-3 pr-8 text-xs font-semibold text-slate-700 focus:outline-none focus:border-emerald-600">
+                        <select id="sortSelect" onchange="sortAndRenderTable()" class="w-full bg-slate-50 border border-slate-300 rounded-lg pl-3 pr-8 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-sky-500">
                             <option value="roll">ক্রম: রোল অনুযায়ী (১, ২, ৩...)</option>
                             <option value="rank">ক্রম: র‍্যাঙ্ক অনুযায়ী (১ম, ২য়...)</option>
                         </select>
@@ -236,12 +243,12 @@
 
                     <!-- 🔍 সার্চ ইনপুট -->
                     <div class="relative w-full sm:w-48">
-                        <input type="text" id="tableFilterInput" onkeyup="filterTable()" placeholder="রোল/র‍্যাঙ্ক দিয়ে খুঁজুন..." class="w-full h-10 bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-3 text-xs focus:outline-none focus:border-emerald-600">
-                        <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-slate-400 text-xs"></i>
+                        <input type="text" id="tableFilterInput" onkeyup="filterTable()" placeholder="রোল/র‍্যাঙ্ক দিয়ে খুঁজুন..." class="w-full bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-sky-500">
+                        <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                     </div>
 
                     <!-- 🖨️ প্রিন্ট বোতাম -->
-                    <button onclick="printRankTable()" class="w-full sm:w-auto h-10 btn-dark-green px-4 rounded-lg text-xs font-bold shadow-sm flex items-center justify-center space-x-1.5 whitespace-nowrap">
+                    <button onclick="printRankTable()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow transition-all flex items-center justify-center space-x-1.5 whitespace-nowrap">
                         <i class="fa-solid fa-print"></i>
                         <span>A4 পেজে প্রিন্ট করুন</span>
                     </button>
@@ -250,14 +257,6 @@
 
             <!-- Print Section Container -->
             <div id="printSection" class="overflow-x-auto">
-                <!-- প্রিন্ট পেজের জন্য ইংরেজিতে হেডিং (শুধুমাত্র প্রিন্ট করার সময় দৃশ্যমান হবে) -->
-                <div class="print-header">
-                    <h2 style="font-size: 18px; font-weight: bold; margin: 0; padding: 0;">PATHPUKUR HIGH SCHOOL (H.S.)</h2>
-                    <h3 style="font-size: 14px; font-weight: bold; margin: 3px 0;">MERIT RANK LIST</h3>
-                    <p id="printHeaderMeta" style="font-size: 11px; margin: 2px 0; font-weight: 500;"></p>
-                    <hr style="border: 0.5px solid #000; margin-top: 5px; margin-bottom: 10px;">
-                </div>
-
                 <table class="w-full text-left border-collapse min-w-[700px] bg-white">
                     <thead id="rankTableHead">
                         <!-- Dynamic Head Generation via JS -->
@@ -281,14 +280,14 @@
     let activeFullMarksPerSubject = {};
     let currentConfig = null;
 
-    const classNameMapEn = {
-        'v': 'Class V',
-        'vi': 'Class VI',
-        'vii': 'Class VII',
-        'viii': 'Class VIII',
-        'ix': 'Class IX',
-        'x': 'Class X',
-        'xi': 'Class XI'
+    const classNameMap = {
+        'v': 'পঞ্চম শ্রেণী',
+        'vi': 'ষষ্ঠ শ্রেণী',
+        'vii': 'সপ্তম শ্রেণী',
+        'viii': 'অষ্টম শ্রেণী',
+        'ix': 'নবম শ্রেণী',
+        'x': 'দশম শ্রেণী',
+        'xi': 'একাদশ শ্রেণী'
     };
 
     const classRules = {
@@ -584,20 +583,20 @@
         banner.innerHTML = '';
         config.subjects.forEach(sub => {
             const subFm = activeFullMarksPerSubject[sub.key] || 0;
-            banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${sub.name}: <strong class="text-emerald-700">${subFm}</strong></span>`;
+            banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${sub.name}: <strong class="text-sky-600">${subFm}</strong></span>`;
         });
     }
 
     // র‍্যাঙ্ক ব্যাজ ফরম্যাট
     function getRankBadgeWithIcon(rank) {
         let iconHtml = '';
-        if (rank === 1) iconHtml = `<i class="fa-solid fa-crown text-amber-500 mr-1"></i>`;
-        else if (rank === 2) iconHtml = `<i class="fa-solid fa-medal text-slate-400 mr-1"></i>`;
-        else if (rank === 3) iconHtml = `<i class="fa-solid fa-award text-amber-700 mr-1"></i>`;
-        else if (rank >= 4 && rank <= 10) iconHtml = `<i class="fa-solid fa-star text-amber-500 mr-1"></i>`;
+        if (rank === 1) iconHtml = `<i class="fa-solid fa-crown text-amber-400 mr-1"></i>`;
+        else if (rank === 2) iconHtml = `<i class="fa-solid fa-medal text-slate-300 mr-1"></i>`;
+        else if (rank === 3) iconHtml = `<i class="fa-solid fa-award text-amber-600 mr-1"></i>`;
+        else if (rank >= 4 && rank <= 10) iconHtml = `<i class="fa-solid fa-star text-amber-400 mr-1"></i>`;
 
         const isTop10 = rank <= 10;
-        const badgeBg = isTop10 ? 'bg-amber-100 text-amber-900 border border-amber-300 font-bold' : 'bg-slate-100 text-slate-800 border border-slate-300';
+        const badgeBg = isTop10 ? 'bg-amber-500 text-white shadow-sm' : 'bg-sky-100 text-sky-800';
 
         return `<span class="inline-flex items-center justify-center ${badgeBg} px-2.5 py-0.5 rounded-full font-bold text-xs">${iconHtml}#${rank}</span>`;
     }
@@ -608,8 +607,10 @@
         let sortedStudents = [...currentClassStudents];
 
         if (sortBy === 'roll') {
+            // রোল অনুযায়ী ছোট থেকে বড় (Ascending)
             sortedStudents.sort((a, b) => a.roll_no - b.roll_no);
         } else if (sortBy === 'rank') {
+            // র‍্যাঙ্ক অনুযায়ী সাজানো
             sortedStudents.sort((a, b) => {
                 const rankA = a.calculatedRank || 999999;
                 const rankB = b.calculatedRank || 999999;
@@ -619,7 +620,7 @@
         }
 
         renderStudentTable(sortedStudents, currentConfig);
-        filterTable();
+        filterTable(); // কোনো ফিল্টার টেক্সট আগে থেকে ইনপুটে লেখা থাকলে তাও অ্যাপ্লাই হবে
     }
 
     // বিষয়ভিত্তিক টেবিল হেডার ও ডেটা রেন্ডারিং ফাংশন
@@ -656,7 +657,7 @@
             tr.setAttribute('data-rank', st.calculatedRank || 9999);
             
             const isTop10 = st.calculatedRank && st.calculatedRank <= 10;
-            const highlightClass = isTop10 ? 'bg-amber-50/40 font-semibold' : 'hover:bg-slate-50';
+            const highlightClass = isTop10 ? 'bg-amber-50/50 font-semibold' : 'hover:bg-sky-50';
 
             tr.className = `${highlightClass} transition-colors border-b border-slate-200`;
 
@@ -666,30 +667,34 @@
                 return `<td class="py-3 px-2 text-center text-slate-700 border">${mark}</td>`;
             }).join('');
 
-            const rankHtml = st.calculatedRank ? getRankBadgeWithIcon(st.calculatedRank) : '<span class="text-slate-400 font-medium">-</span>';
-
             tr.innerHTML = `
                 <td class="py-3 px-3 text-center font-bold text-slate-800 border">${st.roll_no}</td>
-                <td class="py-3 px-3 text-center font-semibold text-slate-600 border">${st.section || 'A'}</td>
-                <td class="py-3 px-4 text-left font-bold text-slate-800 border">${st.student_name}</td>
-                <td class="py-3 px-3 text-center border">${rankHtml}</td>
+                <td class="py-3 px-3 text-center font-semibold text-slate-600 border">${st.section || '-'}</td>
+                <td class="py-3 px-4 text-left font-bold text-slate-900 border">${st.student_name}</td>
+                <td class="py-3 px-3 text-center border">
+                    ${st.calculatedRank ? getRankBadgeWithIcon(st.calculatedRank) : '<span class="text-slate-400">N/A</span>'}
+                </td>
                 ${subjectCells}
-                <td class="py-3 px-3 text-center font-bold text-emerald-700 border">${st.grandTotal}</td>
-                <td class="py-3 px-3 text-center font-bold text-slate-700 border">${st.percentage}%</td>
+                <td class="py-3 px-3 text-center font-extrabold text-sky-600 border">${st.grandTotal}</td>
+                <td class="py-3 px-3 text-center font-bold text-emerald-600 border">${st.percentage}%</td>
             `;
-
             tbody.appendChild(tr);
         });
     }
 
-    // ফিল্টার সার্চ ইনপুট
+    // রোল এবং র‍্যাঙ্ক অনুযায়ী টেক্সট সার্চ/ফিল্টার
     function filterTable() {
-        const input = document.getElementById('tableFilterInput').value.toLowerCase();
+        const filterInput = document.getElementById('tableFilterInput');
+        if (!filterInput) return;
+        
+        const searchInput = filterInput.value.trim().toLowerCase();
         const rows = document.querySelectorAll('#rankTableBody tr');
 
         rows.forEach(row => {
-            const text = row.innerText.toLowerCase();
-            if (text.includes(input)) {
+            const roll = row.getAttribute('data-roll');
+            const rank = row.getAttribute('data-rank');
+
+            if (searchInput === '' || roll.includes(searchInput) || rank.includes(searchInput)) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';
@@ -697,7 +702,7 @@
         });
     }
 
-    // 🖨️ প্রিন্ট করার সময় হেডার ইংরেজিতে রূপান্তর
+// 🖨️ প্রিন্ট করার সময় হেডার ইংরেজিতে রূপান্তর
     function printRankTable() {
         const selectedClassKey = document.getElementById('classSelect').value;
         const classNameEn = classNameMapEn[selectedClassKey] || selectedClassKey.toUpperCase();
