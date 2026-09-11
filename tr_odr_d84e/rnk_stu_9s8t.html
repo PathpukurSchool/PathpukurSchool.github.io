@@ -704,16 +704,6 @@
 
 // 🖨️ প্রিন্ট করার সময় হেডার ইংরেজিতে রূপান্তর
     function printRankTable() {
-        const selectedClassKey = document.getElementById('classSelect').value;
-        const classNameEn = classNameMapEn[selectedClassKey] || selectedClassKey.toUpperCase();
-        const sessionText = document.getElementById('sessionDisplay').innerText || '2026';
-        const visibleRows = Array.from(document.querySelectorAll('#rankTableBody tr')).filter(r => r.style.display !== 'none').length;
-
-        const headerMeta = document.getElementById('printHeaderMeta');
-        if (headerMeta) {
-            headerMeta.innerText = `Class: ${classNameEn} | Session: ${sessionText} | Total Students: ${visibleRows}`;
-        }
-
         window.print();
     }
 </script>
