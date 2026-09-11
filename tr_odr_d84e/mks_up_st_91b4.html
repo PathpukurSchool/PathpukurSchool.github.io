@@ -3,53 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (লগইন না থাকলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
-    <style id="security-shield">
-        body { display: none !important; }
-    </style>
+  <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (লগইন না থাকলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
+  <style id="security-shield">
+    body { display: none !important; }
+  </style>
 
-    <!-- 🛡️ ২. বুলেটপ্রুফ সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
-    <script>
-    (function() {
-        try {
-            // সেশন চেক
-            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+  <!-- 🛡️ ২. বুলেটপ্রুফ সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+  <script>
+  (function() {
+      try {
+          var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+          var ref = document.referrer;
+          var isValidReferrer = false;
+          if (ref) {
+              var refUrl = new URL(ref);
+              if (refUrl.hostname === "pathpukurschool.github.io") {
+                  isValidReferrer = true;
+              }
+          }
 
-            // রিফারার চেক (লিংক সরাসরি কপি করে পেস্ট করা আটকানো)
-            var ref = document.referrer;
-            var isValidReferrer = false;
-            if (ref) {
-                var refUrl = new URL(ref);
-                if (refUrl.hostname === "pathpukurschool.github.io") {
-                    isValidReferrer = true;
-                }
-            }
+          if (!isLoggedIn || !isValidReferrer) {
+              sessionStorage.clear();
+              window.location.replace("https://pathpukurschool.github.io/");
+              return;
+          }
 
-            // সেশন না থাকলে অথবা ভুল উপায়ে (সরাসরি লিংক পেস্ট করে) আসলে রিডাইরেক্ট
-            if (!isLoggedIn || !isValidReferrer) {
-                // সেশন মুছে ফেলা
-                sessionStorage.clear();
-                // হোম পেজে রিডাইরেক্ট
-                window.location.replace("https://pathpukurschool.github.io/");
-                return;
-            }
+          document.addEventListener("DOMContentLoaded", function() {
+              var shield = document.getElementById("security-shield");
+              if (shield) shield.remove();
+          });
 
-            // ভ্যালিড ইউজার হলে পেজের স্টাইল শিল্ড সরিয়ে কন্টেন্ট দৃশ্যমান করা
-            document.addEventListener("DOMContentLoaded", function() {
-                var shield = document.getElementById("security-shield");
-                if (shield) shield.remove();
-            });
-
-        } catch (e) {
-            sessionStorage.clear();
-            window.location.replace("https://pathpukurschool.github.io/");
-        }
-    })();
-    </script>
-  <!-- মার্কস আপলোডিং স্ট্যাটাস -->
-<title>Pathpukur High School (H: S:)</title>
+      } catch (e) {
+          sessionStorage.clear();
+          window.location.replace("https://pathpukurschool.github.io/");
+      }
+  })();
+  </script>
+  <title>Pathpukur High School (H: S:)</title>
   
   <!-- FontAwesome & Tailwind CSS CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -71,12 +63,12 @@
     @media print {
       @page {
         size: A4 portrait;
-        margin: 6mm; /* মার্জিন কমিয়ে ১ পাতায় ফিট করার জন্য */
+        margin: 6mm;
       }
       html, body {
         background-color: #ffffff !important;
         color: #000000 !important;
-        font-size: 11px !important; /* প্রিন্টের সামগ্রিক ফন্ট সাইজ কমানো হয়েছে */
+        font-size: 11px !important;
         line-height: 1.2 !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -87,17 +79,17 @@
       header {
         padding: 4px 8px !important;
         margin-bottom: 6px !important;
-        border-bottom: 2px solid #f59e0b !important;
+        border-bottom: 2px solid #166534 !important;
         background: none !important;
         color: #000 !important;
       }
       header h1 {
         font-size: 16px !important;
-        color: #000 !important;
+        color: #166534 !important;
       }
       header p {
         font-size: 11px !important;
-        color: #333 !important;
+        color: #000 !important;
       }
       #current-session {
         background: transparent !important;
@@ -129,7 +121,7 @@
       #tables-container {
         display: flex !important;
         flex-direction: column !important;
-        gap: 6px !important; /* টেবিলগুলির মধ্যকার গ্যাপ কমানো হয়েছে */
+        gap: 6px !important;
       }
       .page-break-inside-avoid {
         break-inside: avoid !important;
@@ -163,7 +155,7 @@
       }
       th, td {
         border: 1px solid #64748b !important;
-        padding: 2px 4px !important; /* ঘরের ভেতরের প্যাডিং কমানো হয়েছে */
+        padding: 2px 4px !important;
       }
       th {
         background-color: #f1f5f9 !important;
@@ -174,49 +166,57 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen pb-10">
 
-  <!-- হেডার সেকশন -->
-  <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-md py-6 px-4 mb-6 border-b-4 border-amber-500">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div class="text-center sm:text-left">
-        <h1 class="text-2xl sm:text-3xl font-bold tracking-wide flex items-center justify-center sm:justify-start gap-3">
-          পাতপুকুর হাই স্কুল (উ: মা:)
-        </h1>
-        <p class="text-indigo-200 text-sm sm:text-base font-medium mt-1">
-          মার্কস আপলোডের পরিসংখ্যান | শিক্ষাবর্ষ: <span id="current-session" class="bg-indigo-800 text-amber-300 px-2 py-0.5 rounded font-bold border border-indigo-700"></span>
-        </p>
-      </div>
-
-      <!-- প্রিন্ট বোতাম -->
-      <button onclick="handlePrint()" class="no-print bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-5 py-2.5 rounded-lg shadow-md transition-all duration-200 flex items-center gap-2 border border-amber-400">
-        <i class="fa-solid fa-print text-lg"></i>
-        <span> প্রিন্ট</span>
-      </button>
+  <!-- হেডার সেকশন (ব্যাকগ্রাউন্ড ছাড়া, সেন্টারে এলাইন্ড, গাঢ় সবুজ আন্ডারলাইন সহ) -->
+  <header class="bg-transparent text-center py-6 px-4 mb-6 border-b-4 border-green-800">
+    <div class="max-w-7xl mx-auto flex flex-col items-center justify-center">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-wide text-green-800 flex items-center justify-center gap-3">
+        পাতপুকুর হাই স্কুল (উ: মা:)
+      </h1>
+      <p class="text-black text-sm sm:text-base font-medium mt-1">
+        মার্কস আপলোডের পরিসংখ্যান | শিক্ষাবর্ষ: <span id="current-session" class="font-bold text-black"></span>
+      </p>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-4">
     
-    <!-- বিবরণ ও ড্রপডাউন কন্ট্রোল -->
-    <div class="no-print bg-white rounded-xl shadow-sm border border-slate-300 p-5 mb-6">
-      <p class="text-slate-600 text-sm sm:text-base mb-4 flex items-center">
-        <i class="fa-solid fa-circle-info text-indigo-600 mr-2 text-lg"></i>
-        নিচের ড্রপডাউন থেকে শ্রেণী নির্বাচন করে প্রতিটি পরীক্ষার বিষয়ভিত্তিক নম্বর আপলোডের হালনাগাদ সংখ্যা দেখুন।
-      </p>
+    <!-- তথ্য মেসেজ ও ড্রপডাউন/প্রিন্ট কন্ট্রোল -->
+    <div class="no-print space-y-4 mb-6">
+      
+      <!-- নতুন স্টাইলের মেসেজ বক্স (হালকা সবুজ ব্যাকগ্রাউন্ড, বামে মোটা বর্ডার) -->
+      <div class="bg-green-50 border border-green-300 border-l-4 border-l-green-800 rounded-r-lg p-4 shadow-sm">
+        <p class="text-slate-700 text-sm sm:text-base flex items-center">
+          <i class="fa-solid fa-circle-info text-green-800 mr-2 text-lg"></i>
+          নিচের ড্রপডাউন থেকে শ্রেণী নির্বাচন করে প্রতিটি পরীক্ষার বিষয়ভিত্তিক নম্বর আপলোডের হালনাগাদ সংখ্যা দেখুন।
+        </p>
+      </div>
 
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-        <label for="class-select" class="font-bold text-slate-700 whitespace-nowrap flex items-center">
-          <i class="fa-solid fa-layer-group text-indigo-600 mr-2"></i> শ্রেণী নির্বাচন করুন:
-        </label>
-        <select id="class-select" onchange="fetchClassStatus()" class="w-full sm:w-64 bg-slate-50 border-2 border-slate-300 rounded-lg px-4 py-2 font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none">
-          <option value="">-- শ্রেণী বেছে নিন --</option>
-          <option value="V">পঞ্চম শ্রেণী (V)</option>
-          <option value="VI">ষষ্ঠ শ্রেণী (VI)</option>
-          <option value="VII">সপ্তম শ্রেণী (VII)</option>
-          <option value="VIII">অষ্টম শ্রেণী (VIII)</option>
-          <option value="IX">নবম শ্রেণী (IX)</option>
-          <option value="X">দশম শ্রেণী (X)</option>
-          <option value="XI">একাদশ শ্রেণী (XI)</option>
-        </select>
+      <!-- রেসপন্সিভ ড্রপডাউন এবং প্রিন্ট বোতাম কন্টেইনার -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-300 p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        
+        <!-- ড্রপডাউন সেকশন -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+          <label for="class-select" class="font-bold text-slate-700 whitespace-nowrap flex items-center">
+            <i class="fa-solid fa-layer-group text-green-800 mr-2"></i> শ্রেণী নির্বাচন করুন:
+          </label>
+          <select id="class-select" onchange="fetchClassStatus()" class="w-full sm:w-64 bg-slate-50 border-2 border-slate-300 rounded-lg px-4 py-2 font-semibold text-slate-800 focus:ring-2 focus:ring-green-800 focus:border-green-800 focus:outline-none">
+            <option value="">-- শ্রেণী বেছে নিন --</option>
+            <option value="V">পঞ্চম শ্রেণী (V)</option>
+            <option value="VI">ষষ্ঠ শ্রেণী (VI)</option>
+            <option value="VII">সপ্তম শ্রেণী (VII)</option>
+            <option value="VIII">অষ্টম শ্রেণী (VIII)</option>
+            <option value="IX">নবম শ্রেণী (IX)</option>
+            <option value="X">দশম শ্রেণী (X)</option>
+            <option value="XI">একাদশ শ্রেণী (XI)</option>
+          </select>
+        </div>
+
+        <!-- প্রিন্ট বোতাম (গাঢ় সবুজ ব্যাকগ্রাউন্ড) -->
+        <button onclick="handlePrint()" class="w-full md:w-auto bg-green-800 hover:bg-green-900 text-white font-bold px-6 py-2.5 rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-print text-lg"></i>
+          <span>প্রিন্ট</span>
+        </button>
+
       </div>
     </div>
 
@@ -226,7 +226,7 @@
     <!-- মোট ও সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি -->
     <div id="summary-section" class="hidden mb-6 page-break-inside-avoid">
       <h2 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
-        <i class="fa-solid fa-users text-indigo-700 mr-2 no-print"></i>শিক্ষার্থীর সংখ্যা
+        <i class="fa-solid fa-users text-green-800 mr-2 no-print"></i>শিক্ষার্থীর সংখ্যা
       </h2>
       <div id="summary-cards" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3"></div>
     </div>
@@ -245,7 +245,7 @@
     
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let CURRENT_SESSION = '2026'; // ডিফল্ট সেশন
+    let CURRENT_SESSION = '2026';
 
     // ------------------------------------------------------------------
     // প্রিন্ট ভ্যালিডেশন ফাংশন
@@ -485,7 +485,7 @@
       let icon = '';
       if (type === 'processing') {
         msgDiv.classList.add('bg-blue-100', 'text-blue-900', 'border-2', 'border-blue-400');
-        icon = '<i class="fa-solid fa-spinner fa-spin mr-2 text-indigo-600"></i>';
+        icon = '<i class="fa-solid fa-spinner fa-spin mr-2 text-green-800"></i>';
       } else if (type === 'error') {
         msgDiv.classList.add('bg-red-100', 'text-red-900', 'border-2', 'border-red-400');
         icon = '<i class="fa-solid fa-triangle-exclamation mr-2 text-red-600"></i>';
@@ -526,10 +526,8 @@
       const config = classConfigs[selectedClass];
 
       try {
-        // ১. আগে টেবিল থেকে লেটেস্ট সেশন লোড করা
         await loadDynamicSession(config.tableName);
 
-        // ২. Supabase থেকে নির্বাচন করা সেশনের তথ্য ফেচ করা
         const { data, error } = await supabaseClient
           .from(config.tableName)
           .select('*')
@@ -542,14 +540,12 @@
           return;
         }
 
-        // সেকশন তালিকা বের করা ও সর্ট করা
         const sections = [...new Set(data.map(item => item.section))].sort();
 
-        // সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি রেন্ডার
         let totalStudents = data.length;
         summaryCards.innerHTML = `
-          <div class="bg-indigo-900 text-white border-2 border-indigo-950 rounded-lg p-3 text-center shadow">
-            <div class="text-xs uppercase font-semibold text-indigo-200">মোট শিক্ষার্থী</div>
+          <div class="bg-green-800 text-white border-2 border-green-900 rounded-lg p-3 text-center shadow">
+            <div class="text-xs uppercase font-semibold text-green-100">মোট শিক্ষার্থী</div>
             <div class="text-2xl font-bold text-amber-300">${totalStudents}</div>
           </div>
         `;
@@ -565,7 +561,6 @@
         });
         summarySection.classList.remove('hidden');
 
-        // প্রতিটি পরীক্ষার জন্য আলাদা টেবিল তৈরি (স্পষ্ট বর্ডার সহ)
         Object.keys(config.exams).forEach(examName => {
           const subjects = config.exams[examName];
           
@@ -596,7 +591,6 @@
             `;
 
             subjects.forEach(sub => {
-              // নম্বর আপলোড হয়েছে এমন শিক্ষার্থীর সংখ্যা গণনা (NOT NULL)
               const uploadedCount = secData.filter(d => d[sub.field] !== null && d[sub.field] !== undefined && d[sub.field] !== '').length;
               
               const isZero = uploadedCount === 0;
