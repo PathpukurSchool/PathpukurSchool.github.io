@@ -172,6 +172,11 @@
   line-height: 1.3;
   text-align: left;
 }
+    .proj-absent {
+    background-color: #fef2f2 !important;
+    border-color: #fca5a5 !important;
+    color: #dc2626 !important;
+}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <!-- 1 এক্সেল ফাইল ডাউনলোড ও আপলোডের জন্য পরিবর্তন শেষ -->
@@ -191,6 +196,7 @@
           <option value="1st Exam">1st Exam</option>
           <option value="2nd Exam">2nd Exam</option>
           <option value="Test Exam">Test Exam</option>
+          <option value="Project">Project</option>
         </select>
       </div>
       <div class="form-group">
@@ -296,7 +302,7 @@
 
   <script>
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6210239554330.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
     
     let rawData = [];
     let currentPasskey = "";
@@ -305,11 +311,12 @@
 
     const subjectsList = ["Bengali", "English", "Math", "Physical Science", "Life Science", "History", "Geography"];
 
-    // Class X Table Mapping
+    // Class X Table Mapping - Project যুক্ত করা হয়েছে
     const columnMap = {
       "1st Exam":  { "Bengali":"e1_bengali", "English":"e1_english", "Math":"e1_math", "Physical Science":"e1_physical_science", "Life Science":"e1_life_science", "History":"e1_history", "Geography":"e1_geography", limit: 40 },
       "2nd Exam":  { "Bengali":"e2_bengali", "English":"e2_english", "Math":"e2_math", "Physical Science":"e2_physical_science", "Life Science":"e2_life_science", "History":"e2_history", "Geography":"e2_geography", limit: 40 },
-      "Test Exam": { "Bengali":"test_bengali", "English":"test_english", "Math":"test_math", "Physical Science":"test_physical_science", "Life Science":"test_life_science", "History":"test_history", "Geography":"test_geography", limit: 90 }
+      "Test Exam": { "Bengali":"test_bengali", "English":"test_english", "Math":"test_math", "Physical Science":"test_physical_science", "Life Science":"test_life_science", "History":"test_history", "Geography":"test_geography", limit: 90 },
+      "Project":   { "Bengali":"proj_bengali", "English":"proj_english", "Math":"proj_math", "Physical Science":"proj_physical_science", "Life Science":"proj_life_science", "History":"proj_history", "Geography":"proj_geography", limit: 0 }
     };
 
     const shortSubCodes = {
@@ -347,7 +354,7 @@
         const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_page_security_status`, {
           method: 'POST',
           headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ p_page_name: 'result_v_x' }) // Updated for Class X
+          body: JSON.stringify({ p_page_name: 'result_v_x' })
         });
         const data = await res.json();
 
@@ -358,8 +365,8 @@
           } else {
             secDiv.innerHTML = `
               <div class="passkey-bar">
-              <input type="text" style="display:none;" name="fake_username" tabindex="-1">
-               <input type="password" style="display:none;" name="fake_password" tabindex="-1">
+                <input type="text" style="display:none;" name="fake_username" tabindex="-1">
+                <input type="password" style="display:none;" name="fake_password" tabindex="-1">
                 <div class="passkey-wrapper">
                   <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." autocomplete="new-password">
                   <i class="fa-solid fa-eye" id="togglePassEye" onclick="togglePassVisibility()"></i>
@@ -397,7 +404,7 @@
       }
 
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_result_passkey_x`, { // Class X Function
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_result_passkey_x`, {
           method: 'POST',
           headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ p_passkey: inputPass })
@@ -423,7 +430,7 @@
 
     async function fetchMarksData() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/result_x?select=*&order=section.asc,roll_no.asc`, { // Class X Table
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/result_x?select=*&order=section.asc,roll_no.asc`, {
           headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
         });
         rawData = await res.json();
@@ -438,7 +445,7 @@
       const search = document.getElementById('searchInput').value.toLowerCase();
 
       const limit = columnMap[exam].limit;
-      document.getElementById('limitDisplay').textContent = `0-${limit}`;
+      document.getElementById('limitDisplay').textContent = exam === "Project" ? "Status" : `0-${limit}`;
       document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> X ${sec} : 2026 | ${exam} : ${sub}`;
 
       let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
@@ -456,6 +463,7 @@
 
       subjectsList.forEach(sub => {
         const colName = columnMap[exam][sub];
+        // Project-এর ক্ষেত্রে Absent ছাড়াও Submitted (null) গণনা করার সুবিধার্থে
         const count = dataset.filter(r => r[colName] !== null && r[colName] !== undefined && r[colName] !== '').length;
         const code = shortSubCodes[sub];
         const tdElem = document.getElementById(`stat-${code}`);
@@ -488,6 +496,21 @@
         const getMarkInputHTML = (sub) => {
           const colName = columnMap[exam][sub];
           const val = row[colName] !== null && row[colName] !== undefined ? row[colName] : '';
+          
+          // যদি পরীক্ষার ধরন "Project" হয়
+          if (exam === "Project") {
+            const isAbsent = (val === 'Absent');
+            return `
+              <td>
+                <input type="text" class="mark-input proj-input ${isAbsent ? 'proj-absent' : ''}" 
+                       value="${isAbsent ? 'Absent' : ''}" readonly 
+                       placeholder="" 
+                       style="cursor: pointer; text-align: center; font-weight: bold; color: ${isAbsent ? '#dc2626' : '#16a34a'};"
+                       onclick="toggleProjectStatus(${row.id}, '${colName}', this)" />
+              </td>`;
+          }
+
+          // সাধারণ পরীক্ষার ক্ষেত্রে (1st, 2nd, Test)
           return `
             <td>
               <input type="number" pattern="[0-9]*" inputmode="numeric" class="mark-input"
@@ -518,9 +541,72 @@
         return;
       }
       if (!currentPasskey) {
-        alert("⚠️ নম্বর এন্ট্রি করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
+        alert("⚠️ নম্বর/স্ট্যাটাস এন্ট্রি করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
         const pInput = document.getElementById('passkeyInput');
         if (pInput) pInput.focus();
+      }
+    }
+
+    // --- নতুন যোগ করা প্রজেক্ট স্ট্যাটাস টগল ফাংশন ---
+    async function toggleProjectStatus(rowId, colName, inputElem) {
+      if (!isEditAllowed) {
+        alert("⚠️ এডিট মুড বর্তমানে বন্ধ রয়েছে।");
+        return;
+      }
+      if (!currentPasskey) {
+        checkPasskeyPrompt(inputElem);
+        return;
+      }
+
+      // বর্তমান অবস্থার ওপর ভিত্তি করে পরবর্তী অবস্থা নির্ধারণ (Toggle Logic)
+      const currentVal = inputElem.value.trim();
+      const newVal = (currentVal === 'Absent') ? null : 'Absent';
+
+      // লোকাল UI তড়িঘড়ি আপডেট
+      if (newVal === 'Absent') {
+        inputElem.value = 'Absent';
+        inputElem.style.color = '#dc2626';
+        inputElem.classList.add('proj-absent');
+      } else {
+        inputElem.value = '';
+        inputElem.style.color = '#16a34a';
+        inputElem.classList.remove('proj-absent');
+      }
+
+      // মেমোরি ডাটা আপডেট
+      const target = rawData.find(r => r.id === rowId);
+      if (target) target[colName] = newVal;
+
+      // সামারি আপডেট
+      const sec = document.getElementById('sectionSelect').value;
+      let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
+      updateSummaryTable(sectionFiltered, "Project");
+
+      // ডাটাবেজে সেভ করা
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_x`, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            p_passkey: currentPasskey,
+            p_id: parseInt(rowId),
+            p_column_name: colName,
+            p_marks: newVal // এখানে 'Absent' অথবা null যাবে
+          })
+        });
+
+        const result = await res.json();
+        if (result && result.success) {
+          inputElem.classList.add('save-success');
+          setTimeout(() => inputElem.classList.remove('save-success'), 1000);
+        } else {
+          alert("❌ " + (result.message || "স্ট্যাটাস আপডেট করতে ব্যর্থ হয়েছে!"));
+          // রিভার্ট ব্যাক (যদি ফেল করে)
+          fetchMarksData();
+        }
+      } catch (err) {
+        alert("❌ নেটওয়ার্ক ত্রুটি! পরিবর্তন সেভ হয়নি।");
+        fetchMarksData();
       }
     }
 
@@ -565,7 +651,7 @@
       }
 
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_x`, { // Class X RPC
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_x`, {
           method: 'POST',
           headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -612,7 +698,7 @@
       }
     }
 
-    // লোকাল স্টোরেজে সুরক্ষিত সেভ (Class X Specific Storage Key)
+    // লোকাল স্টোরেজে সুরক্ষিত সেভ
     function saveToLocalStorage(id, col, val) {
       let draft = JSON.parse(localStorage.getItem('offline_marks_x') || '[]');
       const existingIndex = draft.findIndex(item => item.id === id && item.col === col);
@@ -652,13 +738,13 @@
 
         if (successCount > 0) {
           localStorage.removeItem('offline_marks_x');
-          alert(`🎉 অফলাইনে থাকা ${successCount} টি নম্বর ডাটাবেজে সফলভাবে সেভ হয়েছে!`);
+          alert(`🎉 অফলাইনে থাকা ${successCount} টি ডাটা ডাটাবেজে সফলভাবে সেভ হয়েছে!`);
           applyFilters();
         }
       }
     }
 
-// --- ১. সংশোধিত এক্সেল ডাউনলোড ফাংশন (Class X specific filename) ---
+    // এক্সেল ডাউনলোড
     function downloadExcelTemplate() {
       const exam = document.getElementById('examSelect').value;
       const sec = document.getElementById('sectionSelect').value;
@@ -690,11 +776,10 @@
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, `${exam}_Section_${sec}`);
 
-      // ফাইলের নাম Class_X করা হয়েছে
       XLSX.writeFile(workbook, `Class_X_Marks_${exam}_Sec_${sec}.xlsx`);
     }
 
-    // --- ২. সংশোধিত এক্সেল আপলোড ফাংশন (Class X RPC Call সহ) ---
+    // এক্সেল আপলোড
     async function handleExcelUpload(event) {
       if (!currentPasskey || !isEditAllowed) {
         alert("⚠️ এক্সেল ফাইল আপলোড করতে হলে সঠিক Passkey দিয়ে এডিট মুড অন করুন!");
@@ -722,15 +807,15 @@
           }
 
           if (!jsonRows[0].hasOwnProperty("ID")) {
-            alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে! দয়া করে পোর্টালে প্রদত্ত 'এক্সেল টেমপ্লেট ডাউনলোড' করে তাতে নম্বর লিখে আপলোড করুন।");
+            alert("❌ ভুল এক্সেল ফাইল আপলোড করা হয়েছে!");
             return;
           }
           
           const confirmUpload = window.confirm(
-            `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে নম্বরগুলো ডাটাবেসে আপলোড করতে চান?\n\n` +
-            `• পরীক্ষা: ${exam.toUpperCase()}\n` +
+            `❓ আপনি কি নিশ্চিত যে এক্সেল ফাইল থেকে তথ্য ডাটাবেসে আপলোড করতে চান?\n\n` +
+            `• ক্যাটাগরি: ${exam.toUpperCase()}\n` +
             `• মোট শিক্ষার্থী সংখ্যা: ${jsonRows.length}\n\n` +
-            `[OK] চাপলে আপলোড শুরু হবে, [Cancel] চাপলে বাতিল হবে।`
+            `[OK] চাপলে আপলোড শুরু হবে।`
           );
 
           if (!confirmUpload) {
@@ -738,7 +823,7 @@
             return;
           }
 
-          document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> এক্সেলে নম্বর দ্রুত ডাটাবেজে আপডেট হচ্ছে...`;
+          document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ডাটাবেজে আপডেট হচ্ছে...`;
 
           let updatePromises = [];
           let skippedCount = 0;
@@ -753,57 +838,65 @@
                 const rawVal = row[sub];
                 const colName = columnMap[exam][sub];
 
-                if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
-                  const num = Number(rawVal);
-                  
-                  if (Number.isInteger(num) && num >= 0 && num <= maxLimit) {
-                    // Class X-এর RPC Function 'secure_update_result_x' ব্যবহার করা হয়েছে
-                    const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_x`, {
-                      method: 'POST',
-                      headers: { 
-                        'apikey': SUPABASE_ANON_KEY, 
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 
-                        'Content-Type': 'application/json' 
-                      },
-                      body: JSON.stringify({
-                        p_passkey: currentPasskey,
-                        p_id: parseInt(rowId),
-                        p_column_name: colName,
-                        p_marks: num
-                      })
-                    })
-                    .then(res => res.json())
-                    .then(resData => {
-                      if (resData && resData.success) {
-                        validNumbersUploaded++;
-                      } else {
-                        skippedCount++;
-                      }
-                    })
-                    .catch(() => { skippedCount++; });
+                let valToSend = null;
 
-                    updatePromises.push(promise);
-                  } else {
-                    skippedCount++;
+                if (exam === "Project") {
+                  if (String(rawVal).trim().toLowerCase() === "absent") {
+                    valToSend = "Absent";
                   }
+                } else {
+                  if (rawVal !== "" && rawVal !== null && rawVal !== undefined) {
+                    const num = Number(rawVal);
+                    if (Number.isInteger(num) && num >= 0 && num <= maxLimit) {
+                      valToSend = num;
+                    }
+                  }
+                }
+
+                if (valToSend !== null || rawVal === "") {
+                  const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_x`, {
+                    method: 'POST',
+                    headers: { 
+                      'apikey': SUPABASE_ANON_KEY, 
+                      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 
+                      'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify({
+                      p_passkey: currentPasskey,
+                      p_id: parseInt(rowId),
+                      p_column_name: colName,
+                      p_marks: valToSend
+                    })
+                  })
+                  .then(res => res.json())
+                  .then(resData => {
+                    if (resData && resData.success) {
+                      validNumbersUploaded++;
+                    } else {
+                      skippedCount++;
+                    }
+                  })
+                  .catch(() => { skippedCount++; });
+
+                  updatePromises.push(promise);
                 }
               }
             }
           }
 
           if (updatePromises.length === 0) {
-            alert("⚠️ ফাইলে নতুন কোনো নম্বর পাওয়া যায়নি বা কোনো বৈধ নম্বর নেই!");
+            alert("⚠️ ফাইলে নতুন কোনো ডাটা পাওয়া যায়নি!");
             return;
           }
 
           await Promise.all(updatePromises);
 
-          alert(`🎉 নম্বর আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত বৈধ নম্বর সংখ্যা: ${validNumbersUploaded}\n❌ বাতিল/স্কিপড নম্বরের সংখ্যা: ${skippedCount}`);
+          alert(`🎉 আপলোড সফলভাবে সম্পন্ন হয়েছে!\n\n✅ মোট আপলোডকৃত ডাটা সংখ্যা: ${validNumbersUploaded}\n❌ স্কিপড সংখ্যা: ${skippedCount}`);
           
           await fetchMarksData();
 
         } catch (err) {
-          alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে! ফাইলটি ক্ষতিগ্রস্ত বা অমিল ফরম্যাটের হতে পারে।");
+          alert("❌ এক্সেল ফাইলটি পড়তে সমস্যা হয়েছে!");
         } finally {
           event.target.value = '';
         }
@@ -811,6 +904,6 @@
 
       reader.readAsArrayBuffer(file);
     } 
-  </script>
+</script>
 </body>
 </html>
