@@ -3,53 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (লগইন না থাকলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
-    <style id="security-shield">
-        body { display: none !important; }
-    </style>
+  <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+  <style id="security-shield">
+    body { display: none !important; }
+  </style>
 
-    <!-- 🛡️ ২. বুলেটপ্রুফ সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
-    <script>
-    (function() {
-        try {
-            // সেশন চেক
-            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+  <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+  <script>
+  (function() {
+      try {
+          var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
 
-            // রিফারার চেক (লিংক সরাসরি কপি করে পেস্ট করা আটকানো)
-            var ref = document.referrer;
-            var isValidReferrer = false;
-            if (ref) {
-                var refUrl = new URL(ref);
-                if (refUrl.hostname === "pathpukurschool.github.io") {
-                    isValidReferrer = true;
-                }
-            }
+          var ref = document.referrer;
+          var isValidReferrer = false;
+          if (ref) {
+              var refUrl = new URL(ref);
+              // আপনার ডোমেন চেক
+              if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
+                  isValidReferrer = true;
+              }
+          }
 
-            // সেশন না থাকলে অথবা ভুল উপায়ে (সরাসরি লিংক পেস্ট করে) আসলে রিডাইরেক্ট
-            if (!isLoggedIn || !isValidReferrer) {
-                // সেশন মুছে ফেলা
-                sessionStorage.clear();
-                // হোম পেজে রিডাইরেক্ট
-                window.location.replace("https://pathpukurschool.github.io/");
-                return;
-            }
+          // সেশন না থাকলে বা অননুমোদিত উপায়ে আসলে হোম পেজে রিডাইরেক্ট
+          if (!isLoggedIn) {
+              sessionStorage.clear();
+              window.location.replace("https://pathpukurschool.github.io/");
+              return;
+          }
 
-            // ভ্যালিড ইউজার হলে পেজের স্টাইল শিল্ড সরিয়ে কন্টেন্ট দৃশ্যমান করা
-            document.addEventListener("DOMContentLoaded", function() {
-                var shield = document.getElementById("security-shield");
-                if (shield) shield.remove();
-            });
+          // ভ্যালিড ইউজার হলে পেজ দৃশ্যমান করা
+          document.addEventListener("DOMContentLoaded", function() {
+              var shield = document.getElementById("security-shield");
+              if (shield) shield.remove();
+          });
 
-        } catch (e) {
-            sessionStorage.clear();
-            window.location.replace("https://pathpukurschool.github.io/");
-        }
-    })();
-    </script>
-<!-- মার্কস ফয়েল / স্কোর সিট -->
-<title>Pathpukur High School (H: S:)</title>
+      } catch (e) {
+          sessionStorage.clear();
+          window.location.replace("https://pathpukurschool.github.io/");
+      }
+  })();
+  </script>
+
+  <!-- মার্কস ফয়েল / নম্বরপত্র শিরোনাম -->
+  <title>Pathpukur High School (H.S.) - Marks Foil</title>
     
   <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -318,76 +316,75 @@
       }
     }
 
-/* Print Optimization for Pure A4 Paper */
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 0mm;
-  }
+    /* Print Optimization for Pure A4 Paper */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0mm;
+      }
 
-  html, body {
-    background: white;
-    padding: 0 !important;
-    margin: 0 !important;
-    height: 100%;
-    overflow: hidden;
-    -webkit-print-color-adjust: exact;
-  }
+      html, body {
+        background: white;
+        padding: 0 !important;
+        margin: 0 !important;
+        height: 100%;
+        overflow: hidden;
+        -webkit-print-color-adjust: exact;
+      }
 
-  .container {
-    box-shadow: none;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100%;
-    max-width: 100%;
-    background: white;
-  }
+      .container {
+        box-shadow: none;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100%;
+        max-width: 100%;
+        background: white;
+      }
 
-  .header, .notice-box, .filter-section, .action-bar {
-    display: none !important;
-  }
+      .header, .notice-box, .filter-section, .action-bar {
+        display: none !important;
+      }
 
-  .pages-wrapper {
-    gap: 0;
-    margin: 0;
-    padding: 0;
-  }
+      .pages-wrapper {
+        gap: 0;
+        margin: 0;
+        padding: 0;
+      }
 
-  .a4-wrapper {
-    box-shadow: none;
-    width: 210mm;
-    height: 297mm;
-    padding: 3mm 4mm;
-    margin: 0 auto;
-    page-break-after: auto; /* অটো পেজ ব্রেক */
-    page-break-inside: avoid; /* পেজের ভেতরের কন্টেন্ট যেন ভেঙে না যায় */
-    box-sizing: border-box;
-    overflow: hidden;
-  }
+      .a4-wrapper {
+        box-shadow: none;
+        width: 210mm;
+        height: 297mm;
+        padding: 3mm 4mm;
+        margin: 0 auto;
+        page-break-after: auto;
+        page-break-inside: avoid;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
 
-  /* শেষ পেজের পরে যেন বাড়তি কোনো পেজ ব্রেক না হয় */
-  .a4-wrapper:not(:last-child) {
-    page-break-after: always;
-  }
+      .a4-wrapper:not(:last-child) {
+        page-break-after: always;
+      }
 
-  .columns-container {
-    min-width: 100% !important;
-  }
+      .columns-container {
+        min-width: 100% !important;
+      }
 
-  .marks-table th {
-    background-color: #eee !important;
-    color: #000 !important;
-    border: 1px solid #000 !important;
-  }
+      .marks-table th {
+        background-color: #eee !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+      }
 
-  .marks-table td {
-    border: 1px solid #000 !important;
-  }
+      .marks-table td {
+        border: 1px solid #000 !important;
+      }
 
-  .marks-table tr.empty-row td {
-    border: none !important;
-  }
-}
+      .marks-table tr.empty-row td {
+        border: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -396,12 +393,12 @@
     <!-- Header -->
     <div class="header">
       <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
-      <h2 class="page-title">মার্কস ফয়েল / নম্বরপত্র রেকর্ড : <span id="headerSessionYear">....</span></h2>
+      <h2 class="page-title">মার্কস ফয়েল / নম্বরপত্র রেকর্ড : <span id="headerSessionYear">....</span></h2>
     </div>
 
     <!-- Notice Box -->
     <div class="notice-box">
-      <i class="fa-solid fa-circle-info"></i> অনুগ্রহ করে ক্লাস ও সেকশন নির্বাচন করে মার্কস ফয়েল লোড করুন এবং প্রিন্ট করুন।
+      <i class="fa-solid fa-circle-info"></i> অনুগ্রহ করে ক্লাস ও সেকশন নির্বাচন করে মার্কস ফয়েল লোড করুন এবং প্রিন্ট করুন।
     </div>
 
     <!-- Filter Section -->
@@ -432,7 +429,7 @@
       </div>
     </div>
 
-    <!-- Action Bar / Screen Sub-Heading Status -->
+    <!-- Action Bar -->
     <div class="action-bar">
       <div class="total-badge" id="statusBadge">
         শ্রেণী ও সেকশন নির্বাচন করুন...
@@ -447,6 +444,14 @@
   </div>
 
   <script>
+    // ⚡ সাব-পেজে অ্যাক্টিভিটি ট্র্যাকিং আপডেট রাখা (যাতে অহেতুক অটো-লগআউট না হয়)
+    function updateActivityTime() {
+        localStorage.setItem('lastActivityTime', Date.now().toString());
+    }
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+        document.addEventListener(evt, updateActivityTime, { passive: true });
+    });
+
     // Supabase Settings
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
@@ -459,90 +464,89 @@
       }).join(' ');
     }
 
-   async function loadStudents() {
-  const cls = document.getElementById('selectClass').value;
-  const sec = document.getElementById('selectSection').value;
-  const statusBadge = document.getElementById('statusBadge');
-  const pagesContainer = document.getElementById('pagesContainer');
-  const mainHeaderSession = document.getElementById('headerSessionYear');
+    async function loadStudents() {
+      const cls = document.getElementById('selectClass').value;
+      const sec = document.getElementById('selectSection').value;
+      const statusBadge = document.getElementById('statusBadge');
+      const pagesContainer = document.getElementById('pagesContainer');
+      const mainHeaderSession = document.getElementById('headerSessionYear');
 
-  pagesContainer.innerHTML = '';
+      pagesContainer.innerHTML = '';
 
-  if (!cls) {
-    statusBadge.innerText = "শ্রেণী ও সেকশন নির্বাচন করুন...";
-    if (mainHeaderSession) mainHeaderSession.innerText = '....';
-    return;
-  }
-
-  statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন';
-
-  let queryParams = [
-    `class_name=eq.${encodeURIComponent(cls)}`,
-    `order=roll_no.asc`
-  ];
-
-  if (sec) {
-    queryParams.push(`section=eq.${encodeURIComponent(sec)}`);
-  }
-
-  try {
-    const fetchUrl = `${SUPABASE_URL}/rest/v1/current_students?${queryParams.join('&')}`;
-    
-    const response = await fetch(fetchUrl, {
-      method: 'GET',
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      if (!cls) {
+        statusBadge.innerText = "শ্রেণী ও সেকশন নির্বাচন করুন...";
+        if (mainHeaderSession) mainHeaderSession.innerText = '....';
+        return;
       }
-    });
 
-    if (!response.ok) {
-      throw new Error(`HTTP Error: ${response.status}`);
+      statusBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন';
+
+      let queryParams = [
+        `class_name=eq.${encodeURIComponent(cls)}`,
+        `order=roll_no.asc`
+      ];
+
+      if (sec) {
+        queryParams.push(`section=eq.${encodeURIComponent(sec)}`);
+      }
+
+      try {
+        const fetchUrl = `${SUPABASE_URL}/rest/v1/current_students?${queryParams.join('&')}`;
+        
+        const response = await fetch(fetchUrl, {
+          method: 'GET',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const students = await response.json();
+
+        if (!students || students.length === 0) {
+          statusBadge.innerText = "কোনো ছাত্র-ছাত্রীর রেকর্ড পাওয়া যায়নি!";
+          if (mainHeaderSession) mainHeaderSession.innerText = '....';
+          return;
+        }
+
+        // ১. Supabase থেকে সেশন বের করা
+        const currentSession = students[0].session ? students[0].session : new Date().getFullYear();
+
+        // ২. শিরোনামের সেশন আপডেট
+        if (mainHeaderSession) {
+          mainHeaderSession.innerText = currentSession;
+        }
+
+        const secText = sec ? `সেকশন: ${sec}` : 'সকল সেকশন';
+        statusBadge.innerHTML = `শ্রেণী: ${cls} | ${secText} | মোট ছাত্র-ছাত্রী: <b>${students.length}</b> জন`;
+
+        // Page setup: 50 Rows x 3 Columns = 150 per A4 Page
+        const ROWS_PER_COLUMN = 50;
+        const STUDENTS_PER_PAGE = ROWS_PER_COLUMN * 3; 
+
+        let totalPages = Math.ceil(students.length / STUDENTS_PER_PAGE);
+
+        // ৩. A4 পেজ রেন্ডারিং
+        for (let pageIdx = 0; pageIdx < totalPages; pageIdx++) {
+          let pageStudents = students.slice(pageIdx * STUDENTS_PER_PAGE, (pageIdx + 1) * STUDENTS_PER_PAGE);
+          renderA4Page(pageStudents, cls, sec);
+        }
+
+        // ৪. সেশন বছর আপডেট
+        document.querySelectorAll('.a4-session-year').forEach(el => {
+          el.innerText = currentSession;
+        });
+
+      } catch (err) {
+        console.error(err);
+        statusBadge.innerText = "ডাটা লোড করতে সমস্যা হয়েছে! ইন্টারনেট সংযোগ পরীক্ষা করুন।";
+        if (mainHeaderSession) mainHeaderSession.innerText = '....';
+      }
     }
-
-    const students = await response.json();
-
-    if (!students || students.length === 0) {
-      statusBadge.innerText = "কোনো ছাত্র-ছাত্রীর রেকর্ড পাওয়া যায়নি!";
-      if (mainHeaderSession) mainHeaderSession.innerText = '....';
-      return;
-    }
-
-    // ১. Supabase থেকে সেশন বছর বের করা (কলাম না থাকলে বর্তমান বছর বসবে)
-    const currentSession = students[0].session ? students[0].session : new Date().getFullYear();
-
-    // ২. মূল পেজের শিরোনামের (Header) সেশন বছর আপডেট
-    if (mainHeaderSession) {
-      mainHeaderSession.innerText = currentSession;
-    }
-
-    // Sub-heading summary for screen display (Class, Section, Total Students)
-    const secText = sec ? `সেকশন: ${sec}` : 'সকল সেকশন';
-    statusBadge.innerHTML = `শ্রেণী: ${cls} | ${secText} | মোট ছাত্র-ছাত্রী: <b>${students.length}</b> জন`;
-
-    // Page setup: 50 Rows x 3 Columns = 150 per A4 Page
-    const ROWS_PER_COLUMN = 50;
-    const STUDENTS_PER_PAGE = ROWS_PER_COLUMN * 3; 
-
-    let totalPages = Math.ceil(students.length / STUDENTS_PER_PAGE);
-
-    // ৩. A4 পেজসমূহ রেন্ডার করা
-    for (let pageIdx = 0; pageIdx < totalPages; pageIdx++) {
-      let pageStudents = students.slice(pageIdx * STUDENTS_PER_PAGE, (pageIdx + 1) * STUDENTS_PER_PAGE);
-      renderA4Page(pageStudents, cls, sec);
-    }
-
-    // ৪. রেন্ডার হওয়া সকল A4 পেজের ভেতরের সেশন বছর আপডেট করা
-    document.querySelectorAll('.a4-session-year').forEach(el => {
-      el.innerText = currentSession;
-    });
-
-  } catch (err) {
-    console.error(err);
-    statusBadge.innerText = "ডাটা লোড করতে সমস্যা হয়েছে! ইন্টারনেট সংযোগ পরীক্ষা করুন।";
-    if (mainHeaderSession) mainHeaderSession.innerText = '....';
-  }
-}
 
     function renderA4Page(studentList, className, sectionName) {
       const pagesContainer = document.getElementById('pagesContainer');
@@ -550,7 +554,6 @@
       const pageElement = document.createElement('div');
       pageElement.className = 'a4-wrapper';
 
-      // Header layout for Printable Document
       const headerHTML = `
         <div class="foil-header">
           <div class="foil-meta-grid">
@@ -564,7 +567,6 @@
         </div>
       `;
       
-      // Split 150 potential students into 3 columns
       const col1 = studentList.slice(0, 50);
       const col2 = studentList.slice(50, 100);
       const col3 = studentList.slice(100, 150);
@@ -572,7 +574,6 @@
       function generateTableHTML(list) {
         let rows = '';
         
-        // Render valid student data (English Roll Numbers maintained as in DB)
         list.forEach(st => {
           rows += `
             <tr>
@@ -583,7 +584,6 @@
           `;
         });
 
-        // Fill remaining rows up to 50 WITHOUT borders (empty-row class applied)
         for (let i = list.length; i < 50; i++) {
           rows += `
             <tr class="empty-row">
@@ -622,5 +622,8 @@
       pagesContainer.appendChild(pageElement);
     }
   </script>
+
+  <!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
+  <script src="home.js"></script>
 </body>
 </html>
