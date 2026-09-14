@@ -236,8 +236,11 @@ async function submitMasterLogin() {
     const captchaInput = document.getElementById('userCaptcha');
     const errorDiv = document.getElementById('masterLoginError');
     const successDiv = document.getElementById('masterLoginSuccess');
+    const loginBtn = document.getElementById('masterLoginBtn');
 
-    // লোকাল স্টোরেজে ভুল চেষ্টার হিসাব রাখা (Brute-Force Protection)
+    if (!idInput || !passInput || !captchaInput) return;
+
+    // লোকাল স্টোরেজে ভুল চেষ্টার হিসাব রাখা
     let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0', 10);
     let lockUntil = parseInt(localStorage.getItem('lockUntil') || '0', 10);
 
@@ -250,10 +253,6 @@ async function submitMasterLogin() {
         }
         return;
     }
-    
-    const loginBtn = document.getElementById('masterLoginBtn');
-
-    if (!idInput || !passInput || !captchaInput) return;
 
     const id = idInput.value.trim();
     const pass = passInput.value.trim();
@@ -268,7 +267,7 @@ async function submitMasterLogin() {
     // 🔹 ID বা Password ফাঁকা থাকলে সতর্কবার্তা
     if (!id || !pass) {
         if (errorDiv) {
-            errorDiv.innerText = "⚠️ Please fill both ID & Password.";
+            errorDiv.innerText = "⚠️ Please enter both User ID and Password.";
             errorDiv.style.color = "red";
         }
         return;
@@ -283,20 +282,20 @@ async function submitMasterLogin() {
         return;
     }
 
-    // 👈 ৫. ক্যাপচার মেয়াদ শেষ (Expired) হয়েছে কিনা তা পরীক্ষা
+    // 🔹 ক্যাপচার মেয়াদ শেষ (Expired) হয়েছে কিনা তা পরীক্ষা
     if (currentCaptchaCode === "") {
         if (errorDiv) {
             errorDiv.innerText = "⏳ CAPTCHA expired! Click refresh to get a new code.";
             errorDiv.style.color = "red";
         }
-        generateCaptcha(); // স্বয়ংক্রিয়ভাবে নতুন ক্যাপচা তৈরি করবে
+        generateCaptcha();
         return;
     }
 
     // 🔹 ক্যাপচা ভুল হলে মেসেজ
     if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
         if (errorDiv) {
-            errorDiv.innerText = "❌ Invalid CAPTCHA code! Please try again.";
+            errorDiv.innerText = "❌ Incorrect CAPTCHA code! Please try again.";
             errorDiv.style.color = "red";
         }
         generateCaptcha();
@@ -310,7 +309,7 @@ async function submitMasterLogin() {
     }
 
     try {
-        // 🔹 SUPABASE RPC কল (check_teacher_login ফাংশন দিয়ে আইডি ও পাসওয়ার্ড যাচাই)
+        // SUPABASE RPC কল
         const { data: isValidUser, error } = await supabaseClient.rpc('check_teacher_login', {
             p_id: id,
             p_pass: pass
@@ -320,7 +319,6 @@ async function submitMasterLogin() {
 
         if (isValidUser) {
             if (captchaTimer) clearTimeout(captchaTimer);
-            // সঠিক লগইন: আগের সমস্ত লিমিট ক্লিয়ার করা
             localStorage.removeItem('loginAttempts');
             localStorage.removeItem('lockUntil');
 
@@ -346,23 +344,21 @@ async function submitMasterLogin() {
             }, 800);
 
         } else {
-            // ❌ ভুল ID বা Password হলে ভুল চেষ্টার লিমিট বাড়ানো
+            // ❌ ভুল ID বা Password হলে
             loginAttempts++;
             if (loginAttempts >= 3) {
-                // ৩ বার ভুল হলে ৫ মিনিটের জন্য ব্লক
                 lockUntil = Date.now() + (5 * 60 * 1000); 
                 localStorage.setItem('lockUntil', lockUntil.toString());
-                loginAttempts = 0;
                 localStorage.setItem('loginAttempts', '0');
                 
                 if (errorDiv) {
-                    errorDiv.innerText = "⛔ Locked due to 3 failed attempts! Try after 5 minutes.";
+                    errorDiv.innerText = "⛔ Locked due to 3 failed attempts! Try again after 5 minutes.";
                     errorDiv.style.color = "red";
                 }
             } else {
                 localStorage.setItem('loginAttempts', loginAttempts.toString());
                 if (errorDiv) {
-                    errorDiv.innerText = `❌ Incorrect ID/Password! Attempt ${loginAttempts} of 3.`;
+                    errorDiv.innerText = `❌ Incorrect ID or Password! Attempt ${loginAttempts} of 3.`;
                     errorDiv.style.color = "red";
                 }
             }
@@ -377,7 +373,7 @@ async function submitMasterLogin() {
     } catch (error) {
         console.error("Error connecting to Supabase:", error);
         if (errorDiv) {
-            errorDiv.innerText = "⚠️ Authentication error. Contact Administrator.";
+            errorDiv.innerText = "⚠️ Authentication failed. Please verify your credentials.";
             errorDiv.style.color = "red";
         }
         generateCaptcha();
