@@ -20,6 +20,7 @@ function hideLoader() {
     if (loader) loader.style.display = 'none';
 }
 
+// ত্রুটি বা লোডিং বার্তা তৈরির জন্য HTML
 function errorBox(title, message) {
     let typeClass = '';
     if (title === "Loading...") {
@@ -35,6 +36,7 @@ function errorBox(title, message) {
     `;
 }
 
+// পেজিনেশন ও সাধারণ বোতাম তৈরির ইউটিলিটি
 function createButton(text, bgColor, onClick, disabled = false) {
     const btn = document.createElement('button');
     btn.innerText = text;
@@ -121,11 +123,11 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔢 ক্যাপচা ফাংশনালিটি
+// 🔢 ক্যাপচা ফাংশনালিটি (Cryptographically Secure & Timeout)
 // =================================
 let currentCaptchaCode = "";
-let captchaTimer = null;
-const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // ২ মিনিট
+let captchaTimer = null; // 👈 ১. নতুন টাইমার ভ্যারিয়েবল
+const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // 👈 ২. ২ মিনিট (মেগাসেকেন্ডে)
 
 function generateCaptcha() {
     const canvas = document.getElementById('captchaCanvas');
@@ -135,14 +137,18 @@ function generateCaptcha() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
+    // ১. আগের টাইমার বন্ধ করা
     if (captchaTimer) clearTimeout(captchaTimer);
 
-    // ⚠️ সংশোধিত: errorDiv ক্লিয়ার করার লাইনটি এখান থেকে তুলে দেওয়া হয়েছে
+    // ২. আগের মেসেজ মুছে ফেলা
+    if (errorDiv) errorDiv.innerText = "";
 
+    // ক্যানভাস রিসেট ও ব্যাকগ্রাউন্ড প্রস্তুত করা
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#f2f2f2";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // ক্যাপচা কোড তৈরি
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     const length = 5;
     let captcha = "";
@@ -154,8 +160,9 @@ function generateCaptcha() {
     }
     currentCaptchaCode = captcha;
 
+    // 🎨 ৩. ব্যাকগ্রাউন্ডে এলোমেলো লাল/নীল/সবুজ দাগ (Noise Lines) আঁকা
     for (let i = 0; i < 6; i++) {
-        ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+        ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`; // বিভিন্ন রঙ
         ctx.beginPath();
         ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
         ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
@@ -163,28 +170,32 @@ function generateCaptcha() {
         ctx.stroke();
     }
 
+    // 🎨 ৪. ক্যাপচার প্রতিটি অক্ষর কিছুটা বাঁকা ও রঙ বেরঙের করে আঁকা
     ctx.font = "bold 22px Arial";
     for (let i = 0; i < length; i++) {
         ctx.fillStyle = `rgb(${Math.random() * 150}, ${Math.random() * 150}, ${Math.random() * 150})`;
         ctx.save();
         ctx.translate(20 + i * 22, 28);
-        ctx.rotate((Math.random() - 0.5) * 0.4);
+        ctx.rotate((Math.random() - 0.5) * 0.4); // অক্ষর সামান্য বাঁকানো
         ctx.fillText(captcha[i], 0, 0);
         ctx.restore();
     }
 
-    ctx.strokeStyle = "rgba(255, 0, 0, 0.6)";
+    // 🎨 ৫. অক্ষরের ওপর দিয়ে অতিরিক্ত ১-২টি নয়েজ রেখা
+    ctx.strokeStyle = "rgba(255, 0, 0, 0.6)"; // লালচে আবছা দাগ
     ctx.beginPath();
     ctx.moveTo(10, Math.random() * canvas.height);
     ctx.lineTo(canvas.width - 10, Math.random() * canvas.height);
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    if (userInput) userInput.value = "";
+    if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
 
+    // ৬. নির্দিষ্ট সময় পর Expired হওয়ার টাইমার
     captchaTimer = setTimeout(() => {
-        currentCaptchaCode = "";
+        currentCaptchaCode = ""; // ক্যাপচা বাতিল করা
         
+        // ক্যানভাস মুছে EXPIRED লাল রঙে বড় করে আঁকা
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#ffe6e6";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -229,14 +240,18 @@ async function submitMasterLogin() {
 
     if (!idInput || !passInput || !captchaInput) return;
 
+    // Retrieve data from localStorage
     let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0', 10);
     let lockUntil = parseInt(localStorage.getItem('lockUntil') || '0', 10);
 
-    // ১. অ্যাকাউন্ট সাময়িকভাবে লক থাকলে
+    // 1. Check if account is temporarily locked
     if (Date.now() < lockUntil) {
-        let remainingMins = Math.ceil((lockUntil - Date.now()) / 60000);
+        let remainingSeconds = Math.ceil((lockUntil - Date.now()) / 1000);
+        let remainingMins = Math.floor(remainingSeconds / 60);
+        let secs = remainingSeconds % 60;
+        
         if (errorDiv) {
-            errorDiv.innerText = `⛔ Account locked due to 5 failed attempts! Try again after ${remainingMins} minutes.`;
+            errorDiv.innerText = `⛔ Account locked due to multiple failed attempts. Try again in ${remainingMins}m ${secs}s.`;
             errorDiv.style.color = "red";
         }
         return;
@@ -246,23 +261,22 @@ async function submitMasterLogin() {
     const pass = passInput.value.trim();
     const userCaptcha = captchaInput.value.trim();
 
-    // এরর পরিষ্কার করার সাধারণ পয়েন্ট
     if (errorDiv) errorDiv.innerText = "";
     if (successDiv) {
         successDiv.innerText = "";
         successDiv.style.display = "none";
     }
 
-    // 🔹 ID বা Password খালি থাকলে বার্তা
+    // 🔹 Empty ID or Password check
     if (!id || !pass) {
         if (errorDiv) {
-            errorDiv.innerText = "⚠️ Please enter both User ID and Password.";
+            errorDiv.innerText = "⚠️ Please fill in both ID & Password.";
             errorDiv.style.color = "red";
         }
         return;
     }
 
-    // 🔹 ক্যাপচা খালি থাকলে বার্তা
+    // 🔹 Empty CAPTCHA check
     if (!userCaptcha) {
         if (errorDiv) {
             errorDiv.innerText = "⚠️ Please enter the CAPTCHA code.";
@@ -271,7 +285,7 @@ async function submitMasterLogin() {
         return;
     }
 
-    // 🔹 ক্যাপচার মেয়াদ শেষ হলে বার্তা
+    // 🔹 Expired CAPTCHA check
     if (currentCaptchaCode === "") {
         if (errorDiv) {
             errorDiv.innerText = "⏳ CAPTCHA expired! Click refresh to get a new code.";
@@ -281,22 +295,22 @@ async function submitMasterLogin() {
         return;
     }
 
-    // 🔹 ক্যাপচা ভুল হলে বার্তা
+    // 🔹 Invalid CAPTCHA check
     if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
-        if (errorDiv) {
-            errorDiv.innerText = "❌ Incorrect CAPTCHA code! Please try again.";
-            errorDiv.style.color = "red";
-        }
+        loginAttempts++;
+        showAttemptStatus(loginAttempts, errorDiv, "❌ Invalid CAPTCHA code!");
         generateCaptcha();
         return;
     }
 
+    // Update button state during network call
     if (loginBtn) {
         loginBtn.innerText = "Validating...";
         loginBtn.disabled = true;
     }
 
     try {
+        // 🔹 Supabase RPC call to check user credentials
         const { data: isValidUser, error } = await supabaseClient.rpc('check_teacher_login', {
             p_id: id,
             p_pass: pass
@@ -304,10 +318,8 @@ async function submitMasterLogin() {
 
         if (error) throw error;
 
-        // সঠিকভাবে সত্য/মিথ্যা যাচাই করা
-        const authenticated = (isValidUser === true || isValidUser === "true");
-
-        if (authenticated) {
+        if (isValidUser) {
+            // ✅ Successful login
             if (captchaTimer) clearTimeout(captchaTimer);
             localStorage.removeItem('loginAttempts');
             localStorage.removeItem('lockUntil');
@@ -334,26 +346,10 @@ async function submitMasterLogin() {
             }, 800);
 
         } else {
-            // ❌ ৫ বার ভুল ID বা Password চেক
+            // ❌ Incorrect ID or Password
             loginAttempts++;
-
-            if (loginAttempts >= 5) {
-                lockUntil = Date.now() + (10 * 60 * 1000); // ১০ মিনিট লক
-                localStorage.setItem('lockUntil', lockUntil.toString());
-                localStorage.setItem('loginAttempts', '0');
-                
-                if (errorDiv) {
-                    errorDiv.innerText = "⛔ Locked due to 5 failed attempts! Try again after 10 minutes.";
-                    errorDiv.style.color = "red";
-                }
-            } else {
-                localStorage.setItem('loginAttempts', loginAttempts.toString());
-                if (errorDiv) {
-                    errorDiv.innerText = `❌ Incorrect ID or Password! Attempt ${loginAttempts} of 5.`;
-                    errorDiv.style.color = "red";
-                }
-            }
-           
+            showAttemptStatus(loginAttempts, errorDiv, "❌ Incorrect ID or Password!");
+            
             generateCaptcha();
             if (loginBtn) {
                 loginBtn.innerText = "🔓 Login";
@@ -364,13 +360,34 @@ async function submitMasterLogin() {
     } catch (error) {
         console.error("Error connecting to Supabase:", error);
         if (errorDiv) {
-            errorDiv.innerText = "⚠️ Incorrect ID or Password or Connection Error!";
+            errorDiv.innerText = "⚠️ Authentication error! Please contact Administrator.";
             errorDiv.style.color = "red";
         }
         generateCaptcha();
         if (loginBtn) {
             loginBtn.innerText = "🔓 Login";
             loginBtn.disabled = false;
+        }
+    }
+}
+
+// 📌 Helper function to update login attempt counts & block status in English
+function showAttemptStatus(attempts, errorDiv, mainMsg) {
+    if (attempts >= 3) {
+        let lockUntil = Date.now() + (5 * 60 * 1000); // 5-minute lock
+        localStorage.setItem('lockUntil', lockUntil.toString());
+        localStorage.setItem('loginAttempts', '0'); // Reset attempts after lock
+
+        if (errorDiv) {
+            errorDiv.innerText = `⛔ Account locked for 5 minutes due to 3 failed attempts!`;
+            errorDiv.style.color = "red";
+        }
+    } else {
+        localStorage.setItem('loginAttempts', attempts.toString());
+        let remainingAttempts = 3 - attempts;
+        if (errorDiv) {
+            errorDiv.innerText = `${mainMsg} (Attempt ${attempts} of 3). ${remainingAttempts} attempt(s) remaining.`;
+            errorDiv.style.color = "red";
         }
     }
 }
@@ -382,7 +399,7 @@ function logout() {
     window.location.reload();
 }
 
-// 🚫 ডেভেলপমেন্ট টুল প্রতিরোধ
+// 🚫 রাইট-ক্লিক, F12 এবং সোর্স কোড দেখা নিষ্ক্রিয় করা
 document.addEventListener('contextmenu', event => event.preventDefault());
 
 document.addEventListener('keydown', function(event) {
@@ -445,6 +462,7 @@ function startAutoLogoutTimer() {
 // =================================
 // 🔔 AVAILABLE SOON MESSAGE & CLICK HANDLER
 // =================================
+
 function showAvailableSoonMessage(button) {
     if (button.nextElementSibling && button.nextElementSibling.classList.contains('avail-msg')) return;
 
@@ -459,22 +477,26 @@ function showAvailableSoonMessage(button) {
     }, 3000);
 }
 
+// 🎯 ইউনিভার্সাল লিংক হ্যান্ডলার (একই ট্যাবে ওপেন নিশ্চিতকরণ)
 function setupUniversalLinkHandler() {
     document.querySelectorAll('a').forEach(a => {
         a.setAttribute('target', '_self');
     });
 
+    // ২. যেকোনো ক্লিকে ইভেন্ট ধরে একই উইন্ডোতে রিডাইরেক্ট করা
     document.addEventListener('click', (event) => {
         const targetBtn = event.target.closest('a, .exam-link, .nav-link, .class-link-btn, .item-btn');
 
         if (targetBtn) {
             const href = targetBtn.getAttribute('href');
 
+            // যদি লিংক খালি বা হাশি (#) বা ইনভ্যালিড হয়
             if (!href || href.trim() === '' || href.trim() === '#' || href.startsWith('javascript:')) {
                 event.preventDefault();
                 showAvailableSoonMessage(targetBtn);
                 return;
             }
+            // যদি এটি কোনো অন-পেজ সেকশন আইডি স্ক্রোল না হয়ে থাকে (যেমন #section-id)
             if (!href.startsWith('#')) {
                 event.preventDefault();
                 showLoader();
@@ -487,6 +509,7 @@ function setupUniversalLinkHandler() {
 // =================================
 // 🧭 সাইড বার মেনু ও ড্রপডাউন ফাংশন
 // =================================
+
 function initializeSidebar() {
     const menuButton = document.getElementById('menu-toggle-button');
     const sidebar = document.getElementById('sidebar-menu');
@@ -564,6 +587,7 @@ function initializeSidebar() {
 document.addEventListener("DOMContentLoaded", () => {
     showLoader();
 
+    // সেশন যাচাই
     if (sessionStorage.getItem("teacherLoggedIn") === "true") {
         const overlay = document.getElementById('masterLoginOverlay');
         const mainContent = document.getElementById('main-website-content');
