@@ -344,21 +344,21 @@ async function submitMasterLogin() {
             }, 800);
 
         } else {
-            // ❌ ভুল ID বা Password হলে
+            // ❌ 5 বার ভুল ID বা Password হলে 10 মিনিট ব্লক
             loginAttempts++;
-            if (loginAttempts >= 3) {
-                lockUntil = Date.now() + (5 * 60 * 1000); 
+            if (loginAttempts >= 5) {
+                lockUntil = Date.now() + (10 * 60 * 1000); 
                 localStorage.setItem('lockUntil', lockUntil.toString());
                 localStorage.setItem('loginAttempts', '0');
                 
                 if (errorDiv) {
-                    errorDiv.innerText = "⛔ Locked due to 3 failed attempts! Try again after 5 minutes.";
+                    errorDiv.innerText = "⛔ Locked due to 5 failed attempts! Try again after 10 minutes.";
                     errorDiv.style.color = "red";
                 }
             } else {
                 localStorage.setItem('loginAttempts', loginAttempts.toString());
                 if (errorDiv) {
-                    errorDiv.innerText = `❌ Incorrect ID or Password! Attempt ${loginAttempts} of 3.`;
+                    errorDiv.innerText = `❌ Incorrect ID or Password! Attempt ${loginAttempts} of 5.`;
                     errorDiv.style.color = "red";
                 }
             }
