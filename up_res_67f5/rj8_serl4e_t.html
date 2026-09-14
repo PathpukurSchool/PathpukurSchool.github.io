@@ -5,49 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (লগইন না থাকলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
-    <style id="security-shield">
-        body { display: none !important; }
-    </style>
+    <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+  <style id="security-shield">
+    body { display: none !important; }
+  </style>
 
-    <!-- 🛡️ ২. বুলেটপ্রুফ সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
-    <script>
-    (function() {
-        try {
-            // সেশন চেক
-            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+  <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+  <script>
+  (function() {
+      try {
+          var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
 
-            // রিফারার চেক (লিংক সরাসরি কপি করে পেস্ট করা আটকানো)
-            var ref = document.referrer;
-            var isValidReferrer = false;
-            if (ref) {
-                var refUrl = new URL(ref);
-                if (refUrl.hostname === "pathpukurschool.github.io") {
-                    isValidReferrer = true;
-                }
-            }
+          var ref = document.referrer;
+          var isValidReferrer = false;
+          if (ref) {
+              var refUrl = new URL(ref);
+              // আপনার ডোমেন চেক
+              if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
+                  isValidReferrer = true;
+              }
+          }
 
-            // সেশন না থাকলে অথবা ভুল উপায়ে (সরাসরি লিংক পেস্ট করে) আসলে রিডাইরেক্ট
-            if (!isLoggedIn || !isValidReferrer) {
-                // সেশন মুছে ফেলা
-                sessionStorage.clear();
-                // হোম পেজে রিডাইরেক্ট
-                window.location.replace("https://pathpukurschool.github.io/");
-                return;
-            }
+          // সেশন না থাকলে বা অননুমোদিত উপায়ে আসলে হোম পেজে রিডাইরেক্ট
+          if (!isLoggedIn) {
+              sessionStorage.clear();
+              window.location.replace("https://pathpukurschool.github.io/");
+              return;
+          }
 
-            // ভ্যালিড ইউজার হলে পেজের স্টাইল শিল্ড সরিয়ে কন্টেন্ট দৃশ্যমান করা
-            document.addEventListener("DOMContentLoaded", function() {
-                var shield = document.getElementById("security-shield");
-                if (shield) shield.remove();
-            });
+          // ভ্যালিড ইউজার হলে পেজ দৃশ্যমান করা
+          document.addEventListener("DOMContentLoaded", function() {
+              var shield = document.getElementById("security-shield");
+              if (shield) shield.remove();
+          });
 
-        } catch (e) {
-            sessionStorage.clear();
-            window.location.replace("https://pathpukurschool.github.io/");
-        }
-    })();
-    </script>
+      } catch (e) {
+          sessionStorage.clear();
+          window.location.replace("https://pathpukurschool.github.io/");
+      }
+  })();
+  </script>
+  
  <!-- টিচারগণ কর্তৃক অষ্টম শ্রেণীর নম্বর আপলোডের পোর্টাল -->
 <title>Pathpukur High School (H: S:)</title>
   
@@ -304,6 +302,14 @@
   </div>
 
   <script>
+    // ⚡ সাব-পেজে অ্যাক্টিভিটি ট্র্যাকিং আপডেট রাখা (যাতে অহেতুক অটো-লগআউট না হয়)
+    function updateActivityTime() {
+        localStorage.setItem('lastActivityTime', Date.now().toString());
+    }
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+        document.addEventListener(evt, updateActivityTime, { passive: true });
+    });
+    
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
     
@@ -901,5 +907,7 @@
       reader.readAsArrayBuffer(file);
     }
   </script>
+  <!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
+  <script src="home.js"></script>
 </body>
 </html>
