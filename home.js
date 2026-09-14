@@ -240,11 +240,10 @@ async function submitMasterLogin() {
 
     if (!idInput || !passInput || !captchaInput) return;
 
-    // Retrieve data from localStorage
     let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0', 10);
     let lockUntil = parseInt(localStorage.getItem('lockUntil') || '0', 10);
 
-    // 1. Check if account is temporarily locked
+    // 1. Check if account is locked
     if (Date.now() < lockUntil) {
         let remainingSeconds = Math.ceil((lockUntil - Date.now()) / 1000);
         let remainingMins = Math.floor(remainingSeconds / 60);
@@ -255,6 +254,12 @@ async function submitMasterLogin() {
             errorDiv.style.color = "red";
         }
         return;
+    } 
+    // 💡 সংশোধন: যদি লক আউট সময় পার হয়ে গিয়ে থাকে, তাহলে অ্যাটেম্পট কাউন্ট রিসেট ও lockUntil মুছে ফেলুন
+    else if (lockUntil > 0) {
+        localStorage.removeItem('lockUntil');
+        localStorage.setItem('loginAttempts', '0');
+        loginAttempts = 0;
     }
 
     const id = idInput.value.trim();
