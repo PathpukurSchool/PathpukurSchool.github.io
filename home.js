@@ -126,10 +126,11 @@ function setupLiveSearch() {
 // 🔢 ক্যাপচা ফাংশনালিটি (Cryptographically Secure & Timeout)
 // =================================
 let currentCaptchaCode = "";
-let captchaTimer = null; // 👈 ১. নতুন টাইমার ভ্যারিয়েবল
-const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // 👈 ২. ২ মিনিট (মেগাসেকেন্ডে)
+let captchaTimer = null;
+const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // ২ মিনিট
 
-function generateCaptcha() {
+// 💡 clearError প্যারামিটার যোগ করা হয়েছে (Default = true)
+function generateCaptcha(clearError = true) {
     const canvas = document.getElementById('captchaCanvas');
     const userInput = document.getElementById('userCaptcha');
     const errorDiv = document.getElementById('masterLoginError');
@@ -140,8 +141,10 @@ function generateCaptcha() {
     // ১. আগের টাইমার বন্ধ করা
     if (captchaTimer) clearTimeout(captchaTimer);
 
-    // ২. আগের মেসেজ মুছে ফেলা
-    if (errorDiv) errorDiv.innerText = "";
+    // 💡 ২. প্রয়োজন অনুয়াযী আগের এরর মেসেজ মোছা (ভুল ইনপুটের সময় মোছা হবে না)
+    if (clearError && errorDiv) {
+        errorDiv.innerText = "";
+    }
 
     // ক্যানভাস রিসেট ও ব্যাকগ্রাউন্ড প্রস্তুত করা
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -160,9 +163,9 @@ function generateCaptcha() {
     }
     currentCaptchaCode = captcha;
 
-    // 🎨 ৩. ব্যাকগ্রাউন্ডে এলোমেলো লাল/নীল/সবুজ দাগ (Noise Lines) আঁকা
+    // 🎨 ৩. ব্যাকগ্রাউন্ডে এলোমেলো দাগ (Noise Lines) আঁকা
     for (let i = 0; i < 6; i++) {
-        ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`; // বিভিন্ন রঙ
+        ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
         ctx.beginPath();
         ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
         ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
@@ -176,13 +179,13 @@ function generateCaptcha() {
         ctx.fillStyle = `rgb(${Math.random() * 150}, ${Math.random() * 150}, ${Math.random() * 150})`;
         ctx.save();
         ctx.translate(20 + i * 22, 28);
-        ctx.rotate((Math.random() - 0.5) * 0.4); // অক্ষর সামান্য বাঁকানো
+        ctx.rotate((Math.random() - 0.5) * 0.4);
         ctx.fillText(captcha[i], 0, 0);
         ctx.restore();
     }
 
     // 🎨 ৫. অক্ষরের ওপর দিয়ে অতিরিক্ত ১-২টি নয়েজ রেখা
-    ctx.strokeStyle = "rgba(255, 0, 0, 0.6)"; // লালচে আবছা দাগ
+    ctx.strokeStyle = "rgba(255, 0, 0, 0.6)";
     ctx.beginPath();
     ctx.moveTo(10, Math.random() * canvas.height);
     ctx.lineTo(canvas.width - 10, Math.random() * canvas.height);
@@ -195,7 +198,6 @@ function generateCaptcha() {
     captchaTimer = setTimeout(() => {
         currentCaptchaCode = ""; // ক্যাপচা বাতিল করা
         
-        // ক্যানভাস মুছে EXPIRED লাল রঙে বড় করে আঁকা
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#ffe6e6";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -255,7 +257,6 @@ async function submitMasterLogin() {
         }
         return;
     } 
-    // 💡 সংশোধন: যদি লক আউট সময় পার হয়ে গিয়ে থাকে, তাহলে অ্যাটেম্পট কাউন্ট রিসেট ও lockUntil মুছে ফেলুন
     else if (lockUntil > 0) {
         localStorage.removeItem('lockUntil');
         localStorage.setItem('loginAttempts', '0');
@@ -296,7 +297,7 @@ async function submitMasterLogin() {
             errorDiv.innerText = "⏳ CAPTCHA expired! Click refresh to get a new code.";
             errorDiv.style.color = "red";
         }
-        generateCaptcha();
+        generateCaptcha(false); // 💡 এরর মেসেজ মুছে ফেলা বন্ধ রাখা হয়েছে
         return;
     }
 
@@ -304,7 +305,7 @@ async function submitMasterLogin() {
     if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
         loginAttempts++;
         showAttemptStatus(loginAttempts, errorDiv, "❌ Invalid CAPTCHA code!");
-        generateCaptcha();
+        generateCaptcha(false); // 💡 এরর মেসেজ রেখে নতুন ক্যাপচা লোড হবে
         return;
     }
 
@@ -355,7 +356,7 @@ async function submitMasterLogin() {
             loginAttempts++;
             showAttemptStatus(loginAttempts, errorDiv, "❌ Incorrect ID or Password!");
             
-            generateCaptcha();
+            generateCaptcha(false); // 💡 এরর মেসেজ রেখে নতুন ক্যাপচা লোড হবে
             if (loginBtn) {
                 loginBtn.innerText = "🔓 Login";
                 loginBtn.disabled = false;
@@ -368,7 +369,7 @@ async function submitMasterLogin() {
             errorDiv.innerText = "⚠️ Authentication error! Please contact Administrator.";
             errorDiv.style.color = "red";
         }
-        generateCaptcha();
+        generateCaptcha(false); // 💡 এরর মেসেজ রেখে নতুন ক্যাপচা লোড হবে
         if (loginBtn) {
             loginBtn.innerText = "🔓 Login";
             loginBtn.disabled = false;
@@ -488,20 +489,17 @@ function setupUniversalLinkHandler() {
         a.setAttribute('target', '_self');
     });
 
-    // ২. যেকোনো ক্লিকে ইভেন্ট ধরে একই উইন্ডোতে রিডাইরেক্ট করা
     document.addEventListener('click', (event) => {
         const targetBtn = event.target.closest('a, .exam-link, .nav-link, .class-link-btn, .item-btn');
 
         if (targetBtn) {
             const href = targetBtn.getAttribute('href');
 
-            // যদি লিংক খালি বা হাশি (#) বা ইনভ্যালিড হয়
             if (!href || href.trim() === '' || href.trim() === '#' || href.startsWith('javascript:')) {
                 event.preventDefault();
                 showAvailableSoonMessage(targetBtn);
                 return;
             }
-            // যদি এটি কোনো অন-পেজ সেকশন আইডি স্ক্রোল না হয়ে থাকে (যেমন #section-id)
             if (!href.startsWith('#')) {
                 event.preventDefault();
                 showLoader();
@@ -592,7 +590,6 @@ function initializeSidebar() {
 document.addEventListener("DOMContentLoaded", () => {
     showLoader();
 
-    // সেশন যাচাই
     if (sessionStorage.getItem("teacherLoggedIn") === "true") {
         const overlay = document.getElementById('masterLoginOverlay');
         const mainContent = document.getElementById('main-website-content');
@@ -607,7 +604,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const overlay = document.getElementById('masterLoginOverlay');
         if (overlay) overlay.style.display = "flex";
         
-        generateCaptcha();
+        generateCaptcha(true);
     }
 
     initializeSidebar();
