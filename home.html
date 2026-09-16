@@ -20,20 +20,17 @@
           var isValidReferrer = false;
           if (ref) {
               var refUrl = new URL(ref);
-              // আপনার ডোমেন চেক
               if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
                   isValidReferrer = true;
               }
           }
 
-          // সেশন না থাকলে বা অননুমোদিত উপায়ে আসলে হোম পেজে রিডাইরেক্ট
           if (!isLoggedIn) {
               sessionStorage.clear();
               window.location.replace("https://pathpukurschool.github.io/");
               return;
           }
 
-          // ভ্যালিড ইউজার হলে পেজ দৃশ্যমান করা
           document.addEventListener("DOMContentLoaded", function() {
               var shield = document.getElementById("security-shield");
               if (shield) shield.remove();
@@ -45,8 +42,8 @@
       }
   })();
   </script>
-  
-  <!-- অটো লগআউট JS স্ক্রিপ্ট -->
+
+  <!-- ⚡ ১৫ মিনিটের অটো-লগআউট ফাইল লিংক -->
   <script src="auto-logout.js"></script>
   
   <title>Pathpukur High School (H: S:)</title>
