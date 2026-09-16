@@ -129,6 +129,7 @@ let currentCaptchaCode = "";
 let captchaTimer = null;
 const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // ২ মিনিট
 
+// 💡 clearError প্যারামিটার যোগ করা হয়েছে (Default = true)
 function generateCaptcha(clearError = true) {
     const canvas = document.getElementById('captchaCanvas');
     const userInput = document.getElementById('userCaptcha');
@@ -137,16 +138,20 @@ function generateCaptcha(clearError = true) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
+    // ১. আগের টাইমার বন্ধ করা
     if (captchaTimer) clearTimeout(captchaTimer);
 
+    // 💡 ২. প্রয়োজন অনুয়াযী আগের এরর মেসেজ মোছা (ভুল ইনপুটের সময় মোছা হবে না)
     if (clearError && errorDiv) {
         errorDiv.innerText = "";
     }
 
+    // ক্যানভাস রিসেট ও ব্যাকগ্রাউন্ড প্রস্তুত করা
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#f2f2f2";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // ক্যাপচা কোড তৈরি
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     const length = 5;
     let captcha = "";
@@ -158,6 +163,7 @@ function generateCaptcha(clearError = true) {
     }
     currentCaptchaCode = captcha;
 
+    // 🎨 ৩. ব্যাকগ্রাউন্ডে এলোমেলো দাগ (Noise Lines) আঁকা
     for (let i = 0; i < 6; i++) {
         ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
         ctx.beginPath();
@@ -167,6 +173,7 @@ function generateCaptcha(clearError = true) {
         ctx.stroke();
     }
 
+    // 🎨 ৪. ক্যাপচার প্রতিটি অক্ষর কিছুটা বাঁকা ও রঙ বেরঙের করে আঁকা
     ctx.font = "bold 22px Arial";
     for (let i = 0; i < length; i++) {
         ctx.fillStyle = `rgb(${Math.random() * 150}, ${Math.random() * 150}, ${Math.random() * 150})`;
@@ -177,6 +184,7 @@ function generateCaptcha(clearError = true) {
         ctx.restore();
     }
 
+    // 🎨 ৫. অক্ষরের ওপর দিয়ে অতিরিক্ত ১-২টি নয়েজ রেখা
     ctx.strokeStyle = "rgba(255, 0, 0, 0.6)";
     ctx.beginPath();
     ctx.moveTo(10, Math.random() * canvas.height);
@@ -184,10 +192,11 @@ function generateCaptcha(clearError = true) {
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    if (userInput) userInput.value = "";
+    if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
 
+    // ৬. নির্দিষ্ট সময় পর Expired হওয়ার টাইমার
     captchaTimer = setTimeout(() => {
-        currentCaptchaCode = "";
+        currentCaptchaCode = ""; // ক্যাপচা বাতিল করা
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#ffe6e6";
@@ -236,6 +245,7 @@ async function submitMasterLogin() {
     let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0', 10);
     let lockUntil = parseInt(localStorage.getItem('lockUntil') || '0', 10);
 
+    // 1. Check if account is locked
     if (Date.now() < lockUntil) {
         let remainingSeconds = Math.ceil((lockUntil - Date.now()) / 1000);
         let remainingMins = Math.floor(remainingSeconds / 60);
@@ -263,6 +273,7 @@ async function submitMasterLogin() {
         successDiv.style.display = "none";
     }
 
+    // 🔹 Empty ID or Password check
     if (!id || !pass) {
         if (errorDiv) {
             errorDiv.innerText = "⚠️ Please fill in both ID & Password.";
@@ -271,6 +282,7 @@ async function submitMasterLogin() {
         return;
     }
 
+    // 🔹 Empty CAPTCHA check
     if (!userCaptcha) {
         if (errorDiv) {
             errorDiv.innerText = "⚠️ Please enter the CAPTCHA code.";
@@ -279,28 +291,32 @@ async function submitMasterLogin() {
         return;
     }
 
+    // 🔹 Expired CAPTCHA check
     if (currentCaptchaCode === "") {
         if (errorDiv) {
             errorDiv.innerText = "⏳ CAPTCHA expired! Click refresh to get a new code.";
             errorDiv.style.color = "red";
         }
-        generateCaptcha(false);
+        generateCaptcha(false); // 💡 এরর মেসেজ মুছে ফেলা বন্ধ রাখা হয়েছে
         return;
     }
 
+    // 🔹 Invalid CAPTCHA check
     if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
         loginAttempts++;
         showAttemptStatus(loginAttempts, errorDiv, "❌ Invalid CAPTCHA code!");
-        generateCaptcha(false);
+        generateCaptcha(false); // 💡 এরর মেসেজ রেখে নতুন ক্যাপচা লোড হবে
         return;
     }
 
+    // Update button state during network call
     if (loginBtn) {
         loginBtn.innerText = "Validating...";
         loginBtn.disabled = true;
     }
 
     try {
+        // 🔹 Supabase RPC call to check user credentials
         const { data: isValidUser, error } = await supabaseClient.rpc('check_teacher_login', {
             p_id: id,
             p_pass: pass
@@ -309,6 +325,7 @@ async function submitMasterLogin() {
         if (error) throw error;
 
         if (isValidUser) {
+            // ✅ Successful login
             if (captchaTimer) clearTimeout(captchaTimer);
             localStorage.removeItem('loginAttempts');
             localStorage.removeItem('lockUntil');
@@ -331,14 +348,15 @@ async function submitMasterLogin() {
                 if (searchContainer) searchContainer.style.display = "block";
 
                 document.body.classList.remove('no-scroll');
-                updateLastActivity(); // টাইমার সক্রিয় করা হলো
+                startAutoLogoutTimer();
             }, 800);
 
         } else {
+            // ❌ Incorrect ID or Password
             loginAttempts++;
             showAttemptStatus(loginAttempts, errorDiv, "❌ Incorrect ID or Password!");
             
-            generateCaptcha(false);
+            generateCaptcha(false); // 💡 এরর মেসেজ রেখে নতুন ক্যাপচা লোড হবে
             if (loginBtn) {
                 loginBtn.innerText = "🔓 Login";
                 loginBtn.disabled = false;
@@ -351,7 +369,7 @@ async function submitMasterLogin() {
             errorDiv.innerText = "⚠️ Authentication error! Please contact Administrator.";
             errorDiv.style.color = "red";
         }
-        generateCaptcha(false);
+        generateCaptcha(false); // 💡 এরর মেসেজ রেখে নতুন ক্যাপচা লোড হবে
         if (loginBtn) {
             loginBtn.innerText = "🔓 Login";
             loginBtn.disabled = false;
@@ -359,11 +377,12 @@ async function submitMasterLogin() {
     }
 }
 
+// 📌 Helper function to update login attempt counts & block status in English
 function showAttemptStatus(attempts, errorDiv, mainMsg) {
     if (attempts >= 5) {
-        let lockUntil = Date.now() + (10 * 60 * 1000);
+        let lockUntil = Date.now() + (10 * 60 * 1000); // 5-minute lock
         localStorage.setItem('lockUntil', lockUntil.toString());
-        localStorage.setItem('loginAttempts', '0');
+        localStorage.setItem('loginAttempts', '0'); // Reset attempts after lock
 
         if (errorDiv) {
             errorDiv.innerText = `⛔ Account locked for 10 minutes due to 5 failed attempts!`;
@@ -379,12 +398,14 @@ function showAttemptStatus(attempts, errorDiv, mainMsg) {
     }
 }
 
+// 🔒 স্ট্রং লগআউট সিস্টেম
 function logout() {
     sessionStorage.clear();
-    localStorage.removeItem('global_last_activity');
+    localStorage.clear();
     window.location.reload();
 }
 
+// 🚫 রাইট-ক্লিক, F12 এবং সোর্স কোড দেখা নিষ্ক্রিয় করা
 document.addEventListener('contextmenu', event => event.preventDefault());
 
 document.addEventListener('keydown', function(event) {
@@ -400,65 +421,49 @@ document.addEventListener('keydown', function(event) {
 });
 
 // =================================================================
-// ⏳ UNIVERSAL AUTO-LOGOUT SYSTEM (Works Across All Pages)
+// ⏳ অটোমেটিক ইনঅ্যাক্টিভিটি লগআউট (১৫ মিনিট)
 // =================================================================
+let inactivityTimer;
+const TIMEOUT_DURATION = 15 * 60 * 1000;
 
-const INACTIVITY_LIMIT = 15 * 60 * 1000; // ১৫ মিনিট
+function startAutoLogoutTimer() {
+    if (sessionStorage.getItem("teacherLoggedIn") !== "true") return;
 
-function updateLastActivity() {
-    localStorage.setItem('global_last_activity', Date.now().toString());
-}
+    function resetTimer() {
+        localStorage.setItem('lastActivityTime', Date.now().toString());
 
-function checkInactivity() {
-    // লগইন করা না থাকলে চেক করার দরকার নেই
-    if (sessionStorage.getItem("teacherLoggedIn") !== "true") {
-        // যদি ইউজার মূল পেজে না থাকে এবং লগইনও না থাকে, তবে তাকে home.html-এ পাঠিয়ে দেবে
-        if (!window.location.pathname.endsWith("home.html") && window.location.pathname !== "/") {
-            window.location.replace("home.html");
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+            checkAndPerformAutoLogout();
+        }, TIMEOUT_DURATION);
+    }
+
+    function checkAndPerformAutoLogout() {
+        if (sessionStorage.getItem("teacherLoggedIn") !== "true") return;
+
+        const lastActivity = localStorage.getItem('lastActivityTime');
+        const currentTime = Date.now();
+
+        if (lastActivity && (currentTime - parseInt(lastActivity, 10)) >= TIMEOUT_DURATION) {
+            logout();
         }
-        return;
     }
 
-    const lastActivity = localStorage.getItem('global_last_activity');
-    const currentTime = Date.now();
+    const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+    activityEvents.forEach(evt => {
+        document.addEventListener(evt, resetTimer, { passive: true });
+    });
 
-    if (lastActivity) {
-        const inactiveTime = currentTime - parseInt(lastActivity, 10);
-        
-        // ১৫ মিনিট বা তার বেশি সময় ইনঅ্যাক্টিভ থাকলে
-        if (inactiveTime >= INACTIVITY_LIMIT) {
-            forceLogout();
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            checkAndPerformAutoLogout();
         }
-    } else {
-        updateLastActivity();
-    }
+    });
+
+    window.addEventListener('focus', checkAndPerformAutoLogout);
+
+    resetTimer();
 }
-
-function forceLogout() {
-    sessionStorage.clear();
-    localStorage.removeItem('global_last_activity');
-    alert("১৫ মিনিট কোনো অ্যাক্টিভিটি না থাকায় আপনাকে অটোমেটিক লগআউট করা হয়েছে।");
-    
-    // যেকোনো সাব-পেজে থাকলেও সরাসরি home.html-এ রিডাইরেক্ট করে দেবে
-    window.location.replace("home.html");
-}
-
-// ইভেন্ট লিসেনার (ইউজারের অ্যাক্টিভিটি ট্র্যাকিং)
-const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
-activityEvents.forEach(eventName => {
-    document.addEventListener(eventName, updateLastActivity, { passive: true });
-});
-
-// প্রতি ১০ সেকেন্ড পর পর ব্যাকগ্রাউন্ডে চেক করা
-setInterval(checkInactivity, 10000); 
-
-// ট্যাবে ফেরত এলে সাথে সাথে চেক করা
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === 'visible') {
-        checkInactivity();
-    }
-});
-window.addEventListener('focus', checkInactivity);
 
 // =================================
 // 🔔 AVAILABLE SOON MESSAGE & CLICK HANDLER
@@ -478,6 +483,7 @@ function showAvailableSoonMessage(button) {
     }, 3000);
 }
 
+// 🎯 ইউনিভার্সাল লিংক হ্যান্ডলার (একই ট্যাবে ওপেন নিশ্চিতকরণ)
 function setupUniversalLinkHandler() {
     document.querySelectorAll('a').forEach(a => {
         a.setAttribute('target', '_self');
@@ -593,8 +599,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (mainContent) mainContent.style.display = "block";
         if (searchContainer) searchContainer.style.display = "block";
 
-        checkInactivity();
-        updateLastActivity();
+        startAutoLogoutTimer();
     } else {
         const overlay = document.getElementById('masterLoginOverlay');
         if (overlay) overlay.style.display = "flex";
