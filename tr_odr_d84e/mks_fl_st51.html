@@ -327,8 +327,8 @@
         background: white;
         padding: 0 !important;
         margin: 0 !important;
-        height: 100%;
-        overflow: hidden;
+        height: auto !important; /* height: 100% তুলে দেওয়া হলো */
+        overflow: visible !important; /* overflow: hidden তুলে দেওয়া হলো */
         -webkit-print-color-adjust: exact;
       }
 
@@ -349,22 +349,24 @@
         gap: 0;
         margin: 0;
         padding: 0;
+        display: block !important; /* Flexbox থেকে Block এ পরিবর্তন */
       }
 
       .a4-wrapper {
         box-shadow: none;
         width: 210mm;
-        height: 297mm;
+        min-height: 297mm; /* height এর বদলে min-height */
+        height: auto !important;
         padding: 3mm 4mm;
         margin: 0 auto;
-        page-break-after: auto;
+        page-break-after: always !important; /* প্রতিটি পেজের পর নতুন পেজ ব্রেক করবে */
         page-break-inside: avoid;
         box-sizing: border-box;
-        overflow: hidden;
+        overflow: visible !important;
       }
 
-      .a4-wrapper:not(:last-child) {
-        page-break-after: always;
+      .a4-wrapper:last-child {
+        page-break-after: auto !important; /* শেষ পেজের পর অতিরিক্ত খালি পেজ আসবে না */
       }
 
       .columns-container {
