@@ -50,6 +50,9 @@
     }
 })();
 </script>
+  <!-- 💡 ৩. অটো-লগআউট ও শেয়ার্ড লজিক ফাইলটি এখানে যুক্ত করুন -->
+  <script src="home.js"></script>
+  
   <!-- মার্কস ফয়েল / নম্বরপত্র শিরোনাম -->
   <title>Pathpukur High School (H.S.) - Marks Foil</title>
     
@@ -449,16 +452,16 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-    // ১. পেজ লোড হওয়ামাত্রই ১৫ মিনিটের ইনঅ্যাক্টিভিটি চেক করবে
-    if (typeof checkInactivity === "function") {
-        checkInactivity();
-    }
+      // ১. পেজ লোড হওয়ার পর সেশন চেক
+      if (sessionStorage.getItem("teacherLoggedIn") !== "true") {
+          window.location.replace("https://pathpukurschool.github.io/");
+          return;
+      }
 
-    // ২. যদি ইউজার লগইন করা না থাকে (বা ১৫ মিনিট পার হয়ে লগআউট হয়ে যায়)
-    if (sessionStorage.getItem("teacherLoggedIn") !== "true") {
-        window.location.replace("home.html");
-        return;
-    }
+      // ২. ইনঅ্যাক্টিভিটি চেক (যদি home.js এ টাইমার শুরু করা থাকে)
+      if (typeof checkInactivity === "function") {
+          checkInactivity();
+      }
     
     // Supabase Settings
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
@@ -631,8 +634,5 @@
     }
     });
   </script>
-
-  <!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
-  <script src="home.js"></script>
 </body>
 </html>
