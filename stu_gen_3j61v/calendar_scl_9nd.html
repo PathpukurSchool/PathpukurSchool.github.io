@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (অনুমোদিত না হলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড -->
     <style id="security-shield">
         body { display: none !important; }
     </style>
 
-    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট (লিংক সরাসরি কপি করে খোলা আটকাবে) -->
+    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
     <script>
     (function() {
         try {
             var ref = document.referrer;
             var isValidReferrer = false;
 
-            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
                 if (refUrl.hostname === "pathpukurschool.github.io") {
@@ -25,14 +24,11 @@
                 }
             }
 
-            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
             if (!isValidReferrer) {
-                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
                 window.location.replace("https://pathpukurschool.github.io/");
                 return;
             }
 
-            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
             document.addEventListener("DOMContentLoaded", function() {
                 var shield = document.getElementById("security-shield");
                 if (shield) shield.remove();
@@ -43,7 +39,7 @@
         }
     })();
     </script>
-   <!-- স্কুল ক্যালেন্ডার -->
+    <!-- স্কুল ক্যালেন্ডার -->
     <title>Pathpukur High School (H. S.)</title>
 
     <!-- Tailwind CSS -->
@@ -82,6 +78,26 @@
             border-color: #2563eb !important;
             box-shadow: 0 0 0 2px #2563eb !important;
             z-index: 10;
+        }
+
+        /* 🔄 ৩ডি পেজ ফ্লিপ / পাতা ওলটানোর স্পেশাল ইফেক্ট */
+        .grid-flip-next {
+            animation: flipNext 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        .grid-flip-prev {
+            animation: flipPrev 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes flipNext {
+            0% { transform: perspective(800px) rotateY(0deg); opacity: 1; }
+            50% { transform: perspective(800px) rotateY(-90deg); opacity: 0.3; }
+            100% { transform: perspective(800px) rotateY(0deg); opacity: 1; }
+        }
+
+        @keyframes flipPrev {
+            0% { transform: perspective(800px) rotateY(0deg); opacity: 1; }
+            50% { transform: perspective(800px) rotateY(90deg); opacity: 0.3; }
+            100% { transform: perspective(800px) rotateY(0deg); opacity: 1; }
         }
     </style>
 </head>
@@ -194,19 +210,55 @@
 
         let currentDate = new Date();
         let eventsData = {}; 
-        let selectedDayCard = null; // সিলেক্ট করা ডেট কার্ড ট্র্যাকিংয়ের জন্য
+        let selectedDayCard = null;
+
+        // 🔊 পাতা ওলটানোর সাউন্ড ইফেক্ট (Web Audio API)
+        function playPageTurnSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                
+                const audioCtx = new AudioContext();
+                const bufferSize = audioCtx.sampleRate * 0.15; // 0.15 সেকেন্ডের জন্য হোয়াইট নয়েজ
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                // ফিল্টার ব্যবহার করে কাগজের শব্দ আনা
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1200; 
+                filter.Q.value = 1.2;
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime); 
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+
+                noise.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                noise.start();
+            } catch (e) {
+                // ব্রাউজার অডিও সাপোর্ট না করলে বা সাউন্ড ব্লক থাকলে এড়িয়ে যাবে
+            }
+        }
 
         window.onload = async () => {
             await fetchYearEvents(currentDate.getFullYear());
             renderCalendar();
             
-            // ডেট এবং পপ-আপ মডালের বাইরে অন্য কোথাও ক্লিক করলে সিলেক্টেড বর্ডার হাইলাইট রিমুভ করা
-             document.addEventListener('click', function(e) {
-          // যদি ক্লিকটি day-card বা eventModal-এর ভেতরে না হয়ে থাকে, তবেই হাইলাইট রিমুভ হবে
-              if (!e.target.closest('.day-card') && !e.target.closest('#eventModal')) {
-              clearSelectedHighlight();
-             }
-          });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.day-card') && !e.target.closest('#eventModal')) {
+                    clearSelectedHighlight();
+                }
+            });
         };
 
         function clearSelectedHighlight() {
@@ -453,12 +505,8 @@
                 dayCard.className = `day-card p-1 h-9 sm:h-10 border rounded-lg flex flex-col justify-between cursor-pointer transition-all ${bgStyle} ${isToday}`;
                 
                 dayCard.onclick = (e) => {
-                    e.stopPropagation(); // ক্লিক ইভেন্ট বাইরে যাওয়া থামাবে
-                    
-                    // পূর্বে সিলেক্ট করা কার্ডের বর্ডার হাইলাইট রিমুভ করা
+                    e.stopPropagation();
                     clearSelectedHighlight();
-
-                    // বর্তমান ক্লিক করা কার্ডে উজ্জ্বল হাইলাইট যুক্ত করা
                     dayCard.classList.add('selected-day-highlight');
                     selectedDayCard = dayCard;
 
@@ -474,7 +522,25 @@
             }
         }
 
+        // ✨ অ্যানিমেশন এবং সাউন্ড ট্রিগার করার ট্রানজিশন ফাংশন
+        function triggerFlipAnimation(directionClass) {
+            playPageTurnSound(); // 🔊 সাউন্ড চালু করা
+            
+            const grid = document.getElementById('calendarGrid');
+            grid.classList.remove('grid-flip-next', 'grid-flip-prev');
+            
+            void grid.offsetWidth; 
+            
+            grid.classList.add(directionClass);
+            
+            setTimeout(() => {
+                grid.classList.remove(directionClass);
+            }, 450);
+        }
+
         async function changeMonth(offset) {
+            triggerFlipAnimation(offset > 0 ? 'grid-flip-next' : 'grid-flip-prev');
+            
             const oldYear = currentDate.getFullYear();
             currentDate.setMonth(currentDate.getMonth() + offset);
             const newYear = currentDate.getFullYear();
@@ -482,13 +548,21 @@
             if (oldYear !== newYear) {
                 await fetchYearEvents(newYear);
             }
-            renderCalendar();
+            
+            setTimeout(() => {
+                renderCalendar();
+            }, 200);
         }
 
         async function changeYear(offset) {
+            triggerFlipAnimation(offset > 0 ? 'grid-flip-next' : 'grid-flip-prev');
+            
             currentDate.setFullYear(currentDate.getFullYear() + offset);
             await fetchYearEvents(currentDate.getFullYear());
-            renderCalendar();
+            
+            setTimeout(() => {
+                renderCalendar();
+            }, 200);
         }
 
         async function resetToCurrentMonth() {
@@ -499,6 +573,7 @@
             icon.className = "fa-solid fa-spinner fa-spin";
 
             try {
+                triggerFlipAnimation('grid-flip-next');
                 const oldYear = currentDate.getFullYear();
                 currentDate = new Date();
                 const newYear = currentDate.getFullYear();
@@ -506,14 +581,15 @@
                 if (oldYear !== newYear || Object.keys(eventsData).length === 0) {
                     await fetchYearEvents(newYear);
                 }
-                renderCalendar();
+                setTimeout(() => {
+                    renderCalendar();
+                }, 200);
             } finally {
                 icon.className = "fa-solid fa-rotate-right";
                 btn.disabled = false;
             }
         }
 
-        // ৫. পপ-আপ মেসেজ প্রদর্শন ফাংশন (বাংলা বারসহ)
         function showEventDetails(dateKey, isSunday, events, dayOfWeek) {
             const modal = document.getElementById('eventModal');
             const modalTitle = document.getElementById('modalTitle');
@@ -521,23 +597,20 @@
             const modalIcon = document.getElementById('modalIcon');
             const modalBody = document.getElementById('modalBody');
 
-            // বাংলা বার যুক্ত করা হলো
             const dayName = bengaliDays[dayOfWeek !== undefined ? dayOfWeek : new Date(dateKey).getDay()];
             modalDate.innerText = `তারিখ: ${dateKey} (${dayName})`;
             modalBody.innerHTML = '';
 
-            // ক. রবিবার ছুটি
             if (isSunday) {
                 modalTitle.innerText = "সাপ্তাহিক ছুটি (রবিবার)";
                 modalIcon.className = "p-2 rounded-full bg-red-500 text-white";
                 modalIcon.innerHTML = `<i class="fa-solid fa-umbrella-beach"></i>`;
-                modalBody.innerHTML = `<p class="text-red-600 font-medium bg-red-50 p-2 rounded border border-red-100"><i class="fa-solid fa-circle-info mr-1"></i> রবিবার থাকার কারণে বিদ্যালয় বন্ধ থাকবে।</p>`;
+                modalBody.innerHTML = `<p class="text-red-600 font-medium bg-red-50 p-2 rounded border border-red-100"><i class="fa-solid fa-circle-info mr-1"></i> রবিবার থাকার কারণে বিদ্যালয় বন্ধ থাকবে।</p>`;
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 return;
             }
 
-            // খ. ছুটির তালিকা অনুযায়ী ছুটি
             let hasHoliday = events.some(e => e.type === 'holiday');
             if (hasHoliday) {
                 modalTitle.innerText = "স্কুল বন্ধ (ছুটি)";
@@ -564,7 +637,6 @@
                 return;
             }
 
-            // গ. কোনো ইভেন্ট না থাকলে (সাধারণ কার্যদিবস)
             if (events.length === 0) {
                 modalTitle.innerText = "কোনো বিশেষ সূচী নেই";
                 modalIcon.className = "p-2 rounded-full bg-slate-600 text-white";
@@ -575,7 +647,6 @@
                 return;
             }
 
-            // ঘ. পরীক্ষার রুটিন এবং অন্যান্য একাডেমিক ইভেন্ট প্রদর্শন
             modalTitle.innerText = "নির্ধারিত সূচী ও ইভেন্ট";
             modalIcon.className = "p-2 rounded-full bg-indigo-600 text-white";
             modalIcon.innerHTML = `<i class="fa-solid fa-bell"></i>`;
@@ -632,7 +703,6 @@
             }
         }
 
-        // স্ক্রীন ডানে বা বামে স্লাইড/সোয়াইপ করে মাস পরিবর্তন (Touch Swipe Handling)
         let touchstartX = 0;
         let touchendX = 0;
 
