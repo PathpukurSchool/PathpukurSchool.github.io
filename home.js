@@ -400,19 +400,24 @@ document.addEventListener('keydown', function(event) {
 });
 
 // =================================================================
-// ⏳ UNIVERSAL AUTO-LOGOUT SYSTEM (Works Across All Sub-pages)
+// ⏳ UNIVERSAL AUTO-LOGOUT SYSTEM (Works Across All Pages)
 // =================================================================
 
-const INACTIVITY_LIMIT = 15 * 60 * 1000; // ১৫ মিনিট (milliseconds)
+const INACTIVITY_LIMIT = 15 * 60 * 1000; // ১৫ মিনিট
 
-// ১. ইউজারের যেকোনো অ্যাক্টিভিটিতে সময় আপডেট করার ফাংশন
 function updateLastActivity() {
     localStorage.setItem('global_last_activity', Date.now().toString());
 }
 
-// ২. ইনঅ্যাক্টিভিটি চেক করার ফাংশন
 function checkInactivity() {
-    if (sessionStorage.getItem("teacherLoggedIn") !== "true") return;
+    // লগইন করা না থাকলে চেক করার দরকার নেই
+    if (sessionStorage.getItem("teacherLoggedIn") !== "true") {
+        // যদি ইউজার মূল পেজে না থাকে এবং লগইনও না থাকে, তবে তাকে home.html-এ পাঠিয়ে দেবে
+        if (!window.location.pathname.endsWith("home.html") && window.location.pathname !== "/") {
+            window.location.replace("home.html");
+        }
+        return;
+    }
 
     const lastActivity = localStorage.getItem('global_last_activity');
     const currentTime = Date.now();
@@ -420,6 +425,7 @@ function checkInactivity() {
     if (lastActivity) {
         const inactiveTime = currentTime - parseInt(lastActivity, 10);
         
+        // ১৫ মিনিট বা তার বেশি সময় ইনঅ্যাক্টিভ থাকলে
         if (inactiveTime >= INACTIVITY_LIMIT) {
             forceLogout();
         }
@@ -428,24 +434,25 @@ function checkInactivity() {
     }
 }
 
-// ৩. অটো লগআউট সম্পাদন
 function forceLogout() {
     sessionStorage.clear();
     localStorage.removeItem('global_last_activity');
     alert("১৫ মিনিট কোনো অ্যাক্টিভিটি না থাকায় আপনাকে অটোমেটিক লগআউট করা হয়েছে।");
+    
+    // যেকোনো সাব-পেজে থাকলেও সরাসরি home.html-এ রিডাইরেক্ট করে দেবে
     window.location.replace("home.html");
 }
 
-// ৪. ইভেন্ট লিসেনার (ইউজারের অ্যাক্টিভিটি ট্র্যাক করা)
+// ইভেন্ট লিসেনার (ইউজারের অ্যাক্টিভিটি ট্র্যাকিং)
 const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
 activityEvents.forEach(eventName => {
     document.addEventListener(eventName, updateLastActivity, { passive: true });
 });
 
-// ৫. ব্যাকগ্রাউন্ডে প্রতি ১০ সেকেন্ডে চেক করবে
+// প্রতি ১০ সেকেন্ড পর পর ব্যাকগ্রাউন্ডে চেক করা
 setInterval(checkInactivity, 10000); 
 
-// ৬. অন্য ট্যাবে গিয়ে ফেরত এলে বা ফোকাস হলে সাথে সাথে চেক করা
+// ট্যাবে ফেরত এলে সাথে সাথে চেক করা
 document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === 'visible') {
         checkInactivity();
