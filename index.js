@@ -666,49 +666,63 @@ window.addEventListener('pageshow', function() {
 });
 
 /* =================================
- * 📢 Voice Welcome Message Logic
+ * 📢 Voice Welcome Message Logic (Mobile Fixed)
  * ================================= */
-function playWelcomeVoice() {
-    if (!('speechSynthesis' in window)) {
-        console.warn("Speech Synthesis API Supported নয় এই ব্রাউজারে।");
-        return;
-    }
+// গার্বেজ কালেকশন প্রতিরোধে গ্লোবাল স্কোপে রাখা আবশ্যক
+let welcomeUtterance = null;
+let hasSpoken = false;
+
+function initAndPlayVoice() {
+    if (hasSpoken || !('speechSynthesis' in window)) return;
+
+    // আগের স্পিচ থাকলে ক্যানসেল করা
+    window.speechSynthesis.cancel();
 
     const welcomeText = "পাতপুকুর হাই স্কুলের অফিশিয়াল ওয়েবসাইটে আপনাকে স্বাগতম";
-    const utterance = new SpeechSynthesisUtterance(welcomeText);
+    welcomeUtterance = new SpeechSynthesisUtterance(welcomeText);
 
-    // বাংলা ভয়েস নির্বাচন করা এবং Pitch/Rate পরিবর্তন করে শিশুসুলভ ও সুরেলা করার চেষ্টা
-    let voices = window.speechSynthesis.getVoices();
-    let bnVoice = voices.find(v => v.lang === 'bn-IN' || v.lang === 'bn-BD' || v.lang.startsWith('bn'));
+    // ভয়েস লিস্ট থেকে বাংলা ভয়েস নির্বাচন
+    const voices = window.speechSynthesis.getVoices();
+    const bnVoice = voices.find(v => v.lang === 'bn-IN' || v.lang === 'bn-BD' || v.lang.startsWith('bn'));
 
     if (bnVoice) {
-        utterance.voice = bnVoice;
+        welcomeUtterance.voice = bnVoice;
     }
 
-    utterance.lang = 'bn-IN';
-    utterance.pitch = 1.6; // গলার স্বর কিছুটা উঁচু/চিকন করে শিশুর মতো করার জন্য (১.২ - ১.৮ এর মধ্যে রাখতে পারেন)
-    utterance.rate = 0.9;  // কথার গতি সামান্য ধীর ও স্পষ্ট করার জন্য
+    welcomeUtterance.lang = 'bn-IN';
+    welcomeUtterance.pitch = 1.6;
+    welcomeUtterance.rate = 0.9;
 
-    // ব্রাউজার যদি অটো-প্লে ব্লক না করে তবে সরাসরি প্লে হবে
-    window.speechSynthesis.cancel(); // আগের কোনো স্পিচ থাকলে তা বন্ধ করবে
-    window.speechSynthesis.speak(utterance);
+    welcomeUtterance.onend = () => { hasSpoken = true; };
+    welcomeUtterance.onerror = (e) => { console.error("Speech error:", e); };
 
-    // অটো-প্লে পলিসির কারণে যদি ব্লক হয়ে যায়, তবে ইউজার প্রথম পেজে ক্লিক করলেই প্লে হবে
-    const playOnUserInteraction = () => {
-        if (!window.speechSynthesis.speaking) {
-            window.speechSynthesis.speak(utterance);
-        }
-        document.removeEventListener('click', playOnUserInteraction);
-        document.removeEventListener('touchstart', playOnUserInteraction);
-    };
-
-    document.addEventListener('click', playOnUserInteraction);
-    document.addEventListener('touchstart', playOnUserInteraction);
+    window.speechSynthesis.speak(welcomeUtterance);
 }
 
-// ভয়েস লোড হতে সময় লাগলে তা নিশ্চিত করার হ্যান্ডলার
-if ('speechSynthesis' in window) {
+function playWelcomeVoice() {
+    if (!('speechSynthesis' in window)) return;
+
+    // ১. ভয়েস অলরেডি লোড থাকলে সাথে সাথে ট্রাই করা
+    if (window.speechSynthesis.getVoices().length > 0) {
+        initAndPlayVoice();
+    }
+
+    // ২. মোবাইলে ভয়েস দেরিতে লোড হলে তা হ্যান্ডেল করা
     window.speechSynthesis.onvoiceschanged = () => {
-        // ভয়েস লিস্ট লোড হলে তৈরি থাকবে
+        if (!hasSpoken) {
+            initAndPlayVoice();
+        }
     };
+
+    // ৩. মোবাইল অটো-প্লে পলিসির কারণে ইউজারের প্রথম স্পর্শ বা ক্লিকে প্লে করা
+    const triggerOnInteraction = () => {
+        if (!hasSpoken) {
+            initAndPlayVoice();
+        }
+        document.removeEventListener('click', triggerOnInteraction);
+        document.removeEventListener('touchstart', triggerOnInteraction);
+    };
+
+    document.addEventListener('click', triggerOnInteraction, { once: true });
+    document.addEventListener('touchstart', triggerOnInteraction, { once: true });
 }
