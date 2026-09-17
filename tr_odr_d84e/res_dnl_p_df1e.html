@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow, noarchive">
 
-   <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+    <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
   <style id="security-shield">
     body { display: none !important; }
   </style>
@@ -45,11 +45,10 @@
       }
   })();
   </script>
+  <!-- রেজাল্ট টেবিল পিডিএফ ফাইল আকারে ডাউনলোড -->
+  <title>Pathpukur High School (H: S:)</title>
   
-  <!-- ওয়াল আপের জন্য রেজাল্ট টেবিল পিডিএফ আকারে ডাউনলোড-->
-<title>Pathpukur High School (H: S:)</title>
-  
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind Library Script (Removed Tailwind inline classes, utilizing clean CSS classes instead) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -58,53 +57,327 @@
   <!-- jsPDF & AutoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <!-- FontAwesome Icons & Bangla Font -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- SheetJS for Excel Export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Atma:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap');
-    body {
-      font-family: 'Noto Sans Bengali', sans-serif;
+/* Font Setup & Security Shield */
+@import url('https://fonts.googleapis.com/css2?family=Atma:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap');
+
+* {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tiro Bangla', 'Poppins', sans-serif;
     }
-  </style>
+
+    body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+    }
+
+/* Header Styles */
+.header-container {
+  background-color: #312e81;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  max-width: 56rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+
+.header-title-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+}
+
+@media (min-width: 768px) {
+  .header-title {
+    font-size: 1.875rem;
+  }
+}
+
+.header-subtitle {
+  color: #c7d2fe;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .header-subtitle {
+    font-size: 1.125rem;
+  }
+}
+
+.session-badge {
+  background-color: #3730a3;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  color: #fde047;
+  font-weight: 700;
+}
+
+/* Main Content & Card */
+.main-wrapper {
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.5rem 1rem;
+  width: 100%;
+  flex-grow: 1;
+}
+
+.controls-card {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  padding: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .controls-card {
+    padding: 1.5rem;
+  }
+}
+
+.card-header {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-indigo {
+  color: #4f46e5;
+}
+
+.icon-indigo-sm {
+  width: 1rem;
+  height: 1rem;
+  color: #6366f1;
+}
+
+.icon-lg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Form Controls */
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .controls-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.form-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.form-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #6366f1;
+}
+
+/* Action Button */
+.button-container {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.625rem 2rem;
+  background-color: #4f46e5;
+  color: #ffffff;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .btn-primary {
+    width: auto;
+  }
+}
+
+.btn-primary:hover {
+  background-color: #4338ca;
+}
+
+.btn-primary:active {
+  background-color: #3730a3;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Status Messages */
+.status-wrapper {
+  margin-top: 1.25rem;
+}
+
+.status-box {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-loading {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.status-success {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.status-error {
+  background-color: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #9f1239;
+}
+
+.status-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Spin animation for loading SVG */
+.animate-spin {
+  animation: spin 1s linear infinite;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #4f46e5;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+ </style>
+    
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between">
+<body>
 
   <!-- Header Section -->
-  <header class="bg-indigo-900 text-white shadow-lg">
-    <div class="max-w-4xl mx-auto px-4 py-5 text-center">
+  <header class="header-container">
+    <div class="header-content">
       <!-- School Name -->
-      <div class="flex items-center justify-center gap-2 mb-1">
-        <h1 class="text-2xl md:text-3xl font-extrabold tracking-wide">Pathpukur High School (H: S:)</h1>
+      <div class="header-title-box">
+        <h1 class="header-title">Pathpukur High School (H: S:)</h1>
       </div>
       <!-- Sub-heading & Session -->
-      <p class="text-indigo-200 text-base md:text-lg font-medium flex items-center justify-center gap-2 mt-1">
-        <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
-        Result Download | Academic Session: <span id="currentSessionDisplay" class="bg-indigo-800 px-2 py-0.5 rounded text-yellow-300 font-bold">2026</span>
+      <p class="header-subtitle">
+        <i data-lucide="file-spreadsheet" class="icon-indigo-sm"></i>
+        Result Download | Academic Session: <span id="currentSessionDisplay" class="session-badge">2026</span>
       </p>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="max-w-3xl mx-auto px-4 py-6 w-full flex-grow">
+  <main class="main-wrapper">
     
     <!-- Controls Card -->
-    <div class="bg-white rounded-xl shadow-md border border-slate-200 p-5 md:p-6">
+    <div class="controls-card">
       
-      <div class="border-b pb-3 mb-5 flex items-center justify-between">
-        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-          <i data-lucide="sliders" class="w-5 h-5 text-indigo-600"></i>
+      <div class="card-header">
+        <h2 class="card-title">
+          <i data-lucide="sliders" class="icon-lg icon-indigo"></i>
           বিবরণ ও ফিল্টার নির্বাচন
         </h2>
       </div>
 
       <!-- Controls Form -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="controls-grid">
         
         <!-- Class Select -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1">
-            <i data-lucide="book-open" class="w-4 h-4 text-indigo-500"></i> শ্রেণি (Class)
+          <label class="form-label">
+            <i data-lucide="book-open" class="icon-indigo-sm"></i> শ্রেণি (Class)
           </label>
-          <select id="classSelect" onchange="updateExamOptions()" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white text-sm font-medium">
+          <select id="classSelect" onchange="updateExamOptions()" class="form-select">
             <option value="v">পঞ্চম শ্রেণি (Class V)</option>
             <option value="vi">ষষ্ঠ শ্রেণি (Class VI)</option>
             <option value="vii">সপ্তম শ্রেণি (Class VII)</option>
@@ -117,10 +390,10 @@
 
         <!-- Section Select -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1">
-            <i data-lucide="users" class="w-4 h-4 text-indigo-500"></i> সেকশন (Section)
+          <label class="form-label">
+            <i data-lucide="users" class="icon-indigo-sm"></i> সেকশন (Section)
           </label>
-          <select id="sectionSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white text-sm font-medium">
+          <select id="sectionSelect" class="form-select">
             <option value="A">সেকশন A</option>
             <option value="B">সেকশন B</option>
             <option value="C">সেকশন C</option>
@@ -129,10 +402,10 @@
 
         <!-- Exam Select (Dynamic) -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1">
-            <i data-lucide="clipboard-check" class="w-4 h-4 text-indigo-500"></i> পরীক্ষা (Exam)
+          <label class="form-label">
+            <i data-lucide="clipboard-check" class="icon-indigo-sm"></i> পরীক্ষা (Exam)
           </label>
-          <select id="examSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white text-sm font-medium">
+          <select id="examSelect" class="form-select">
             <!-- Dynamic Population -->
           </select>
         </div>
@@ -140,34 +413,34 @@
       </div>
 
       <!-- Action Button -->
-      <div class="mt-6 flex justify-center">
-        <button id="downloadBtn" onclick="fetchAndGeneratePDF()" class="w-full md:w-auto px-8 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-lg shadow-md flex items-center justify-center gap-2 transition duration-200">
-          <i data-lucide="download" class="w-5 h-5"></i>
+      <div class="button-container">
+        <button id="downloadBtn" onclick="fetchAndGeneratePDF()" class="btn-primary">
+          <i data-lucide="download" class="icon-lg"></i>
           PDF ডাউনলোড করুন
         </button>
       </div>
 
-      <!-- Inline Status Messages (No Popups) -->
-      <div id="statusContainer" class="mt-5 hidden">
+      <!-- Inline Status Messages -->
+      <div id="statusContainer" class="status-wrapper hidden">
         <!-- Loading State -->
-        <div id="loadingStatus" class="hidden bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg flex items-center gap-3">
-          <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        <div id="loadingStatus" class="status-box status-loading hidden">
+          <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle opacity="0.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path opacity="0.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span class="text-sm font-medium">ডাটা সংগ্রহ করে PDF তৈরি হচ্ছে...</span>
+          <span class="status-text">ডাটা সংগ্রহ করে PDF তৈরি হচ্ছে...</span>
         </div>
 
         <!-- Success State -->
-        <div id="successStatus" class="hidden bg-emerald-50 border border-emerald-300 text-emerald-800 px-4 py-3 rounded-lg flex items-center gap-3">
-          <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>
-          <span id="successText" class="text-sm font-medium">PDF সফলভাবে ডাউনলোড হয়েছে!</span>
+        <div id="successStatus" class="status-box status-success hidden">
+          <i data-lucide="check-circle-2" class="icon-lg"></i>
+          <span id="successText" class="status-text">PDF সফলভাবে ডাউনলোড হয়েছে!</span>
         </div>
 
         <!-- Error State -->
-        <div id="errorStatus" class="hidden bg-rose-50 border border-rose-300 text-rose-800 px-4 py-3 rounded-lg flex items-center gap-3">
-          <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-600"></i>
-          <span id="errorText" class="text-sm font-medium">কোনো সমস্যা দেখা দিয়েছে।</span>
+        <div id="errorStatus" class="status-box status-error hidden">
+          <i data-lucide="alert-triangle" class="icon-lg"></i>
+          <span id="errorText" class="status-text">কোনো সমস্যা দেখা দিয়েছে।</span>
         </div>
       </div>
 
@@ -175,7 +448,6 @@
   </main>
 
   <script>
-    // ⚡ সাব-পেজে অ্যাক্টিভিটি ট্র্যাকিং আপডেট রাখা (যাতে অহেতুক অটো-লগআউট না হয়)
     function updateActivityTime() {
         localStorage.setItem('lastActivityTime', Date.now().toString());
     }
@@ -193,7 +465,6 @@
 
     const CURRENT_SESSION = "2026";
 
-    // Dynamic Exam Mapping according to Class
     const examMapByClass = {
       v: [
         { val: "e1", label: "1st Exam" },
@@ -233,7 +504,6 @@
       ]
     };
 
-    // Bengali Subject Names Mapping for PDF Header
     const bengaliSubjectNames = {
       bengali: "BEN",
       english: "ENG",
@@ -252,7 +522,6 @@
       physical_education: "PED"
     };
 
-    // Update Exam dropdown when class selection changes
     function updateExamOptions() {
       const cls = document.getElementById('classSelect').value;
       const examSelect = document.getElementById('examSelect');
@@ -267,10 +536,8 @@
       });
     }
 
-    // Initialize dropdown on load
     updateExamOptions();
 
-    // UI Status Renderer (No Popups)
     function showStatus(type, msg = '') {
       const container = document.getElementById('statusContainer');
       const loading = document.getElementById('loadingStatus');
@@ -293,7 +560,6 @@
       }
     }
 
-    // Fetch Data from Supabase and Build PDF
     async function fetchAndGeneratePDF() {
       const cls = document.getElementById('classSelect').value;
       const section = document.getElementById('sectionSelect').value;
@@ -306,7 +572,6 @@
       try {
         const tableName = `result_${cls}`;
 
-        // Fetch Data from Supabase
         const { data, error } = await supabaseClient
           .from(tableName)
           .select('*')
@@ -317,28 +582,25 @@
         if (error) throw error;
 
         if (!data || data.length === 0) {
-          showStatus('error', `শ্রেণি: ${cls.toUpperCase()}, সেকশন: ${section}-এর কোনো ডাটা পাওয়া যায়নি।`);
+          showStatus('error', `শ্রেণি: ${cls.toUpperCase()}, সেকশন: ${section}-এর কোনো ডাটা পাওয়া যায়নি।`);
           downloadBtn.disabled = false;
           return;
         }
 
-        // Generate A4 Compact PDF
         generateCompactPDF(data, cls, section, examPrefix);
-        showStatus('success', `শ্রেণি ${cls.toUpperCase()} (${section})-এর রেজাল্ট PDF ডাউনলোড হয়েছে।`);
+        showStatus('success', `শ্রেণি ${cls.toUpperCase()} (${section})-এর রেজাল্ট PDF ডাউনলোড হয়েছে।`);
 
       } catch (err) {
         console.error(err);
         showStatus('error', 'ডাটাবেজ কানেকশন বা তথ্য আনার ক্ষেত্রে ত্রুটি ঘটেছে: ' + err.message);
-      } fontFinally: {
+      } finally {
         downloadBtn.disabled = false;
       }
-      downloadBtn.disabled = false;
     }
 
     function generateCompactPDF(data, cls, section, examPrefix) {
       const { jsPDF } = window.jspdf;
       
-      // Vertical / Portrait A4 Page
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
@@ -348,10 +610,8 @@
       const prefix = `${examPrefix}_`;
       const sampleRow = data[0];
       
-      // Filter subjects related to chosen exam
       const examSubjectKeys = Object.keys(sampleRow).filter(k => k.startsWith(prefix));
 
-      // 1. Header Information (Compact Top Alignment)
       doc.setFontSize(13);
       doc.setFont('helvetica', 'bold');
       doc.text("Pathpukur High School (H.S.)", 105, 10, { align: "center" });
@@ -361,11 +621,9 @@
       const examLabelText = document.getElementById('examSelect').options[document.getElementById('examSelect').selectedIndex].text;
       doc.text(`Class: ${cls.toUpperCase()} | Section: ${section} | Exam: ${examLabelText} | Session: ${CURRENT_SESSION}`, 105, 15, { align: "center" });
       
-      // Minimal line separator
       doc.setLineWidth(0.3);
       doc.line(8, 17, 202, 17);
 
-      // 2. Dynamic Table Headers (Bengali labels)
       const tableHeaders = [["Roll", "Student Name"]];
       examSubjectKeys.forEach(k => {
         const rawSubject = k.replace(prefix, '');
@@ -374,7 +632,6 @@
       });
       tableHeaders[0].push("Total");
 
-      // 3. Dynamic Rows Data
       const tableRows = data.map(row => {
         let grandTotal = 0;
         const rowArr = [row.roll_no, row.student_name];
@@ -393,12 +650,11 @@
         return rowArr;
       });
 
-      // 4. Ultra-Compact Paper-Saving AutoTable PDF Layout
       doc.autoTable({
         startY: 19,
         head: tableHeaders,
         body: tableRows,
-        theme: 'plain', // Minimalist theme to remove thick borders and save ink/space
+        theme: 'plain',
         styles: {
           fontSize: 7.5,
           cellPadding: 1.2,
@@ -415,18 +671,16 @@
           lineColor: [100, 100, 100]
         },
         columnStyles: {
-          0: { cellWidth: 12 }, // Roll
-          1: { halign: 'left', cellWidth: 42 } // Student Name
+          0: { cellWidth: 12 },
+          1: { halign: 'left', cellWidth: 42 }
         },
-        margin: { top: 8, bottom: 8, left: 8, right: 8 }, // Ultra-narrow margins
+        margin: { top: 8, bottom: 8, left: 8, right: 8 },
         pageBreak: 'auto'
       });
 
-      // Save PDF
       doc.save(`Result_Class_${cls.toUpperCase()}_Sec_${section}_${CURRENT_SESSION}.pdf`);
     }
   </script>
-  <!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
   <script src="home.js"></script>
 </body>
 </html>
