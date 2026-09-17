@@ -212,44 +212,6 @@
         let eventsData = {}; 
         let selectedDayCard = null;
 
-        // 🔊 পাতা ওলটানোর সাউন্ড ইফেক্ট (Web Audio API)
-        function playPageTurnSound() {
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                
-                const audioCtx = new AudioContext();
-                const bufferSize = audioCtx.sampleRate * 0.15; // 0.15 সেকেন্ডের জন্য হোয়াইট নয়েজ
-                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-                const data = buffer.getChannelData(0);
-
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = Math.random() * 2 - 1;
-                }
-
-                const noise = audioCtx.createBufferSource();
-                noise.buffer = buffer;
-
-                // ফিল্টার ব্যবহার করে কাগজের শব্দ আনা
-                const filter = audioCtx.createBiquadFilter();
-                filter.type = 'bandpass';
-                filter.frequency.value = 1200; 
-                filter.Q.value = 1.2;
-
-                const gainNode = audioCtx.createGain();
-                gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime); 
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
-
-                noise.connect(filter);
-                filter.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-
-                noise.start();
-            } catch (e) {
-                // ব্রাউজার অডিও সাপোর্ট না করলে বা সাউন্ড ব্লক থাকলে এড়িয়ে যাবে
-            }
-        }
-
         window.onload = async () => {
             await fetchYearEvents(currentDate.getFullYear());
             renderCalendar();
@@ -522,17 +484,17 @@
             }
         }
 
-        // ✨ অ্যানিমেশন এবং সাউন্ড ট্রিগার করার ট্রানজিশন ফাংশন
+        // ✨ অ্যানিমেশন অ্যানিমেশন ট্রিগার করার সহায়ক ফাংশন
         function triggerFlipAnimation(directionClass) {
-            playPageTurnSound(); // 🔊 সাউন্ড চালু করা
-            
             const grid = document.getElementById('calendarGrid');
             grid.classList.remove('grid-flip-next', 'grid-flip-prev');
             
+            // Reflow ঘটিয়ে অ্যানিমেশন রিস্টার্ট নিশ্চিত করা
             void grid.offsetWidth; 
             
             grid.classList.add(directionClass);
             
+            // অ্যানিমেশন শেষে ক্লাস রিমুভ করা
             setTimeout(() => {
                 grid.classList.remove(directionClass);
             }, 450);
@@ -549,6 +511,7 @@
                 await fetchYearEvents(newYear);
             }
             
+            // অ্যানিমেশনের মাঝপথে ব্যাকগ্রাউন্ড ডেটা স্মুথলি চেঞ্জ করা
             setTimeout(() => {
                 renderCalendar();
             }, 200);
