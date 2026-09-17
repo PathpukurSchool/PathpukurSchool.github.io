@@ -511,7 +511,7 @@
       pagesContainer.innerHTML = '';
 
       if (!cls) {
-        statusBadge.innerText = "শ্রেণী ও সেকশন নির্বাচন করুন...";
+        statusBadge.innerText = "Select Class and Section...";
         if (mainHeaderSession) mainHeaderSession.innerText = '....';
         return;
       }
@@ -558,8 +558,8 @@
           mainHeaderSession.innerText = currentSession;
         }
 
-        const secText = sec ? `সেকশন: ${sec}` : 'সকল সেকশন';
-        statusBadge.innerHTML = `শ্রেণী: ${cls} | ${secText} | মোট ছাত্র-ছাত্রী: <b>${students.length}</b> জন`;
+        const secText = sec ? `Section: ${sec}` : 'All Section';
+        statusBadge.innerHTML = `Class: ${cls} | ${secText} | Total Student: <b>${students.length}</b>`;
 
         // Page setup: 50 Rows x 3 Columns = 150 per A4 Page
         const ROWS_PER_COLUMN = 50;
