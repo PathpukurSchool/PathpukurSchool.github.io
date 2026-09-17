@@ -576,6 +576,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // ⚡ প্রাথমিক সব ডাটা লোড হওয়ার পর স্পিনার বন্ধ করা
     hideLoader();
+    // 🔊 ওয়েলকাম ভয়েস মেসেজ প্লে করার কল
+    playWelcomeVoice();
 
     // ⚡ ৭. কোনো লিংক বা বাটনে ক্লিক করলে নতুন পেজে যাওয়ার আগে স্পিনার দেখানোর লজিক
     const allLinks = document.querySelectorAll('.site-link, .notice-item-link, .link-item, a');
@@ -662,3 +664,51 @@ document.addEventListener('DOMContentLoaded', async function () {
 window.addEventListener('pageshow', function() {
     hideLoader();
 });
+
+/* =================================
+ * 📢 Voice Welcome Message Logic
+ * ================================= */
+function playWelcomeVoice() {
+    if (!('speechSynthesis' in window)) {
+        console.warn("Speech Synthesis API Supported নয় এই ব্রাউজারে।");
+        return;
+    }
+
+    const welcomeText = "পাতপুকুর হাই স্কুলের অফিশিয়াল ওয়েবসাইটে আপনাকে স্বাগতম";
+    const utterance = new SpeechSynthesisUtterance(welcomeText);
+
+    // বাংলা ভয়েস নির্বাচন করা এবং Pitch/Rate পরিবর্তন করে শিশুসুলভ ও সুরেলা করার চেষ্টা
+    let voices = window.speechSynthesis.getVoices();
+    let bnVoice = voices.find(v => v.lang === 'bn-IN' || v.lang === 'bn-BD' || v.lang.startsWith('bn'));
+
+    if (bnVoice) {
+        utterance.voice = bnVoice;
+    }
+
+    utterance.lang = 'bn-IN';
+    utterance.pitch = 1.6; // গলার স্বর কিছুটা উঁচু/চিকন করে শিশুর মতো করার জন্য (১.২ - ১.৮ এর মধ্যে রাখতে পারেন)
+    utterance.rate = 0.9;  // কথার গতি সামান্য ধীর ও স্পষ্ট করার জন্য
+
+    // ব্রাউজার যদি অটো-প্লে ব্লক না করে তবে সরাসরি প্লে হবে
+    window.speechSynthesis.cancel(); // আগের কোনো স্পিচ থাকলে তা বন্ধ করবে
+    window.speechSynthesis.speak(utterance);
+
+    // অটো-প্লে পলিসির কারণে যদি ব্লক হয়ে যায়, তবে ইউজার প্রথম পেজে ক্লিক করলেই প্লে হবে
+    const playOnUserInteraction = () => {
+        if (!window.speechSynthesis.speaking) {
+            window.speechSynthesis.speak(utterance);
+        }
+        document.removeEventListener('click', playOnUserInteraction);
+        document.removeEventListener('touchstart', playOnUserInteraction);
+    };
+
+    document.addEventListener('click', playOnUserInteraction);
+    document.addEventListener('touchstart', playOnUserInteraction);
+}
+
+// ভয়েস লোড হতে সময় লাগলে তা নিশ্চিত করার হ্যান্ডলার
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => {
+        // ভয়েস লিস্ট লোড হলে তৈরি থাকবে
+    };
+}
