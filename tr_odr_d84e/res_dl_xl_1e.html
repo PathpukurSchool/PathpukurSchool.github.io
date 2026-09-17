@@ -229,9 +229,9 @@
     <!-- ফরম বডি -->
     <div class="form-body">
       <div class="form-group">
-        <label for="classSelect"><i class="fa-solid fa-layer-group"></i> শ্রেণী নির্বাচন করুন (Select Class):</label>
+        <label for="classSelect"><i class="fa-solid fa-layer-group"></i> Class:</label>
         <select id="classSelect" class="form-control">
-          <option value="">-- শ্রেণী নির্বাচন করুন --</option>
+          <option value="">-- Select Class--</option>
           <option value="v">Class V</option>
           <option value="vi">Class VI</option>
           <option value="vii">Class VII</option>
@@ -243,7 +243,7 @@
       </div>
 
       <button id="downloadBtn" class="btn-download" onclick="downloadExcel()">
-        <i class="fa-solid fa-file-excel"></i> Excel ফাইল ডাউনলোড করুন
+        <i class="fa-solid fa-file-excel"></i> Download Excel File
       </button>
 
       <!-- স্ট্যাটাস মেসেজ বক্স -->
@@ -298,12 +298,12 @@
       const downloadBtn = document.getElementById('downloadBtn');
 
       if (!selectedClass) {
-        showStatus("অনুগ্রহ করে একটি শ্রেণী নির্বাচন করুন!", "error");
+        showStatus("অনুগ্রহ করে একটি Class নির্বাচন করুন!", "error");
         return;
       }
 
       const tableName = tableMapping[selectedClass];
-      showStatus(`ক্লাস ${selectedClass.toUpperCase()} -এর ডাটা প্রসেস করা হচ্ছে...`, "info");
+      showStatus(`Class ${selectedClass.toUpperCase()} -এর ডাটা প্রসেস করা হচ্ছে...`, "info");
       downloadBtn.disabled = true;
 
       try {
