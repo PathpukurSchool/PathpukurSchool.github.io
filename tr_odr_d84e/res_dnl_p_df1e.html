@@ -44,11 +44,12 @@
           window.location.replace("https://pathpukurschool.github.io/");
       }
   })();
-  </script>
+</script>
+  
   <!-- রেজাল্ট টেবিল পিডিএফ ফাইল আকারে ডাউনলোড -->
   <title>Pathpukur High School (H: S:)</title>
   
-  <!-- Tailwind Library Script (Removed Tailwind inline classes, utilizing clean CSS classes instead) -->
+  <!-- Tailwind Library Script -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -57,7 +58,7 @@
   <!-- jsPDF & AutoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    <!-- FontAwesome Icons & Bangla Font -->
+  <!-- FontAwesome Icons & Bangla Font -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   
@@ -65,38 +66,40 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
-/* Font Setup & Security Shield */
+/* Font Setup */
 @import url('https://fonts.googleapis.com/css2?family=Atma:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap');
 
 * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Tiro Bangla', 'Poppins', sans-serif;
-    }
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Tiro Bangla', 'Poppins', sans-serif;
+}
 
-    body {
-      background-color: #f1f5f9;
-      color: #0f172a;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 15px;
-    }
+body {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+}
 
-/* Header Styles */
+/* Header Styles - Adopted from File 2 */
 .header-container {
-  background-color: #312e81;
+  background: linear-gradient(135deg, #1e3a8a, #0f172a);
   color: #ffffff;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .header-content {
-  max-width: 56rem;
+  max-width: 650px;
   margin-left: auto;
   margin-right: auto;
-  padding: 1.25rem 1rem;
+  padding: 20px 15px;
   text-align: center;
 }
 
@@ -105,25 +108,25 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 5px;
 }
 
 .header-title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: 0.025em;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 480px) {
   .header-title {
-    font-size: 1.875rem;
+    font-size: 18px;
   }
 }
 
 .header-subtitle {
-  color: #c7d2fe;
-  font-size: 1rem;
-  font-weight: 500;
+  color: #93c5fd;
+  font-size: 14px;
+  font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,70 +134,76 @@
   margin-top: 0.25rem;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 480px) {
   .header-subtitle {
-    font-size: 1.125rem;
+    font-size: 13px;
   }
 }
 
 .session-badge {
-  background-color: #3730a3;
+  background-color: rgba(255, 255, 255, 0.15);
   padding: 0.125rem 0.5rem;
   border-radius: 0.25rem;
-  color: #fde047;
+  color: #ffffff;
   font-weight: 700;
 }
 
-/* Main Content & Card */
+/* Main Content & Card Container - Adopted from File 2 */
 .main-wrapper {
-  max-width: 48rem;
+  max-width: 650px;
   margin-left: auto;
   margin-right: auto;
-  padding: 1.5rem 1rem;
   width: 100%;
   flex-grow: 1;
 }
 
 .controls-card {
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
-  padding: 1.25rem;
+  overflow: hidden;
+  margin-top: 10px;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 480px) {
   .controls-card {
-    padding: 1.5rem;
+    margin-top: 0;
+  }
+  body {
+    padding: 8px;
   }
 }
 
 .card-header {
-  border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 0.75rem;
-  margin-bottom: 1.25rem;
+  background: #f8fafc;
+  border-left: 4px solid #2563eb;
+  padding: 12px 15px;
+  margin: 15px 15px 0 15px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .card-title {
-  font-size: 1.125rem;
+  font-size: 13px;
   font-weight: 700;
-  color: #1e293b;
+  color: #334155;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  line-height: 1.6;
 }
 
 .icon-indigo {
-  color: #4f46e5;
+  color: #2563eb;
 }
 
 .icon-indigo-sm {
   width: 1rem;
   height: 1rem;
-  color: #6366f1;
+  color: #2563eb;
 }
 
 .icon-lg {
@@ -202,11 +211,12 @@
   height: 1.25rem;
 }
 
-/* Form Controls */
+/* Form Controls - Adopted from File 2 */
 .controls-grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 18px;
+  padding: 15px 20px 0 20px;
 }
 
 @media (min-width: 768px) {
@@ -216,108 +226,109 @@
 }
 
 .form-label {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #334155;
-  margin-bottom: 0.375rem;
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
 }
 
 .form-select {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.5rem;
+  padding: 10px 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
   background-color: #ffffff;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 500;
+  outline: none;
+  transition: all 0.2s ease-in-out;
 }
 
 .form-select:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #6366f1;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-/* Action Button */
+/* Action Button - Styled as Green Download Button from File 2 */
 .button-container {
-  margin-top: 1.5rem;
+  padding: 15px 20px 25px 20px;
   display: flex;
   justify-content: center;
 }
 
 .btn-primary {
   width: 100%;
-  padding: 0.625rem 2rem;
-  background-color: #4f46e5;
+  padding: 12px;
+  background-color: #16a34a;
   color: #ffffff;
+  font-size: 15px;
   font-weight: 700;
   border: none;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-@media (min-width: 768px) {
-  .btn-primary {
-    width: auto;
-  }
+  transition: background 0.2s ease-in-out, transform 0.1s;
 }
 
 .btn-primary:hover {
-  background-color: #4338ca;
+  background-color: #15803d;
 }
 
 .btn-primary:active {
-  background-color: #3730a3;
+  background-color: #15803d;
+  transform: scale(0.99);
 }
 
 .btn-primary:disabled {
-  opacity: 0.6;
+  background-color: #94a3b8;
+  opacity: 1;
   cursor: not-allowed;
 }
 
-/* Status Messages */
+/* Status Notification Messages - Adopted from File 2 */
 .status-wrapper {
-  margin-top: 1.25rem;
+  padding: 0 20px 20px 20px;
 }
 
 .status-box {
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  padding: 10px 14px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .status-loading {
-  background-color: #eff6ff;
-  border: 1px solid #bfdbfe;
-  color: #1e40af;
+  background-color: #e0f2fe;
+  border: 1px solid #bae6fd;
+  color: #0369a1;
 }
 
 .status-success {
-  background-color: #ecfdf5;
-  border: 1px solid #a7f3d0;
-  color: #065f46;
+  background-color: #dcfce7;
+  border: 1px solid #86efac;
+  color: #15803d;
 }
 
 .status-error {
-  background-color: #fff1f2;
-  border: 1px solid #fecdd3;
-  color: #9f1239;
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
 }
 
 .status-text {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .hidden {
@@ -329,15 +340,14 @@
   animation: spin 1s linear infinite;
   width: 1.25rem;
   height: 1.25rem;
-  color: #4f46e5;
+  color: #0369a1;
 }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
- </style>
-    
+</style> 
 </head>
 <body>
 
