@@ -375,7 +375,7 @@ body {
       <div class="card-header">
         <h2 class="card-title">
           <i data-lucide="sliders" class="icon-lg icon-indigo"></i>
-          বিবরণ ও ফিল্টার নির্বাচন
+           <strong>নির্দেশিকা:</strong> এখান থেকে নির্দিষ্ট ক্লাস সেকশনের রেজাল্ট টেবিল pdf ফাইল হিসেবে ডাউনলোড করতে পারবেন।</p>
         </h2>
       </div>
 
@@ -385,35 +385,35 @@ body {
         <!-- Class Select -->
         <div>
           <label class="form-label">
-            <i data-lucide="book-open" class="icon-indigo-sm"></i> শ্রেণি (Class)
+            <i data-lucide="book-open" class="icon-indigo-sm"></i> Class:
           </label>
           <select id="classSelect" onchange="updateExamOptions()" class="form-select">
-            <option value="v">পঞ্চম শ্রেণি (Class V)</option>
-            <option value="vi">ষষ্ঠ শ্রেণি (Class VI)</option>
-            <option value="vii">সপ্তম শ্রেণি (Class VII)</option>
-            <option value="viii">অষ্টম শ্রেণি (Class VIII)</option>
-            <option value="ix">নবম শ্রেণি (Class IX)</option>
-            <option value="x">দশম শ্রেণি (Class X)</option>
-            <option value="xi">একাদশ শ্রেণি (Class XI)</option>
+            <option value="v">Class V</option>
+            <option value="vi">Class VI</option>
+            <option value="vii">Class VII</option>
+            <option value="viii">Class VIII</option>
+            <option value="ix">Class IX</option>
+            <option value="x">Class X</option>
+            <option value="xi">Class XI</option>
           </select>
         </div>
 
         <!-- Section Select -->
         <div>
           <label class="form-label">
-            <i data-lucide="users" class="icon-indigo-sm"></i> সেকশন (Section)
+            <i data-lucide="users" class="icon-indigo-sm"></i> Section:
           </label>
           <select id="sectionSelect" class="form-select">
-            <option value="A">সেকশন A</option>
-            <option value="B">সেকশন B</option>
-            <option value="C">সেকশন C</option>
+            <option value="A">Section A</option>
+            <option value="B">Section B</option>
+            <option value="C">Section C</option>
           </select>
         </div>
 
         <!-- Exam Select (Dynamic) -->
         <div>
           <label class="form-label">
-            <i data-lucide="clipboard-check" class="icon-indigo-sm"></i> পরীক্ষা (Exam)
+            <i data-lucide="clipboard-check" class="icon-indigo-sm"></i> Exam:
           </label>
           <select id="examSelect" class="form-select">
             <!-- Dynamic Population -->
@@ -426,7 +426,7 @@ body {
       <div class="button-container">
         <button id="downloadBtn" onclick="fetchAndGeneratePDF()" class="btn-primary">
           <i data-lucide="download" class="icon-lg"></i>
-          PDF ডাউনলোড করুন
+          Download PDF File 
         </button>
       </div>
 
