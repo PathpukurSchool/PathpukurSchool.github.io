@@ -576,8 +576,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // ⚡ প্রাথমিক সব ডাটা লোড হওয়ার পর স্পিনার বন্ধ করা
     hideLoader();
-    // 🔊 ওয়েলকাম ভয়েস মেসেজ প্লে করার কল
-    playWelcomeVoice();
 
     // ⚡ ৭. কোনো লিংক বা বাটনে ক্লিক করলে নতুন পেজে যাওয়ার আগে স্পিনার দেখানোর লজিক
     const allLinks = document.querySelectorAll('.site-link, .notice-item-link, .link-item, a');
@@ -664,65 +662,3 @@ document.addEventListener('DOMContentLoaded', async function () {
 window.addEventListener('pageshow', function() {
     hideLoader();
 });
-
-/* =================================
- * 📢 Voice Welcome Message Logic (Mobile Fixed)
- * ================================= */
-// গার্বেজ কালেকশন প্রতিরোধে গ্লোবাল স্কোপে রাখা আবশ্যক
-let welcomeUtterance = null;
-let hasSpoken = false;
-
-function initAndPlayVoice() {
-    if (hasSpoken || !('speechSynthesis' in window)) return;
-
-    // আগের স্পিচ থাকলে ক্যানসেল করা
-    window.speechSynthesis.cancel();
-
-    const welcomeText = "পাতপুকুর হাই স্কুলের অফিশিয়াল ওয়েবসাইটে আপনাকে স্বাগতম";
-    welcomeUtterance = new SpeechSynthesisUtterance(welcomeText);
-
-    // ভয়েস লিস্ট থেকে বাংলা ভয়েস নির্বাচন
-    const voices = window.speechSynthesis.getVoices();
-    const bnVoice = voices.find(v => v.lang === 'bn-IN' || v.lang === 'bn-BD' || v.lang.startsWith('bn'));
-
-    if (bnVoice) {
-        welcomeUtterance.voice = bnVoice;
-    }
-
-    welcomeUtterance.lang = 'bn-IN';
-    welcomeUtterance.pitch = 1.6;
-    welcomeUtterance.rate = 0.9;
-
-    welcomeUtterance.onend = () => { hasSpoken = true; };
-    welcomeUtterance.onerror = (e) => { console.error("Speech error:", e); };
-
-    window.speechSynthesis.speak(welcomeUtterance);
-}
-
-function playWelcomeVoice() {
-    if (!('speechSynthesis' in window)) return;
-
-    // ১. ভয়েস অলরেডি লোড থাকলে সাথে সাথে ট্রাই করা
-    if (window.speechSynthesis.getVoices().length > 0) {
-        initAndPlayVoice();
-    }
-
-    // ২. মোবাইলে ভয়েস দেরিতে লোড হলে তা হ্যান্ডেল করা
-    window.speechSynthesis.onvoiceschanged = () => {
-        if (!hasSpoken) {
-            initAndPlayVoice();
-        }
-    };
-
-    // ৩. মোবাইল অটো-প্লে পলিসির কারণে ইউজারের প্রথম স্পর্শ বা ক্লিকে প্লে করা
-    const triggerOnInteraction = () => {
-        if (!hasSpoken) {
-            initAndPlayVoice();
-        }
-        document.removeEventListener('click', triggerOnInteraction);
-        document.removeEventListener('touchstart', triggerOnInteraction);
-    };
-
-    document.addEventListener('click', triggerOnInteraction, { once: true });
-    document.addEventListener('touchstart', triggerOnInteraction, { once: true });
-}
