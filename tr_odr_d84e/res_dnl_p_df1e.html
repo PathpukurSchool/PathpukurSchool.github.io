@@ -176,25 +176,22 @@ body {
 }
 
 .card-header {
-  background: #f8fafc;
-  border-left: 4px solid #2563eb;
-  padding: 12px 15px;
-  margin: 15px 15px 0 15px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+/* Description section */
+    .description-box {
+      background: #f8fafc;
+      border-left: 4px solid #2563eb;
+      padding: 12px 15px;
+      margin: 15px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.6;
+    }
 
-.card-title {
-  font-size: 12px;
-  font-weight: 400;
-  color: #334155;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  line-height: 1.6;
-}
+    .description-box i {
+      color: #2563eb;
+      margin-right: 5px;
+    }
 
 .icon-indigo {
   color: #2563eb;
@@ -372,11 +369,10 @@ body {
     <!-- Controls Card -->
     <div class="controls-card">
       
-      <div class="card-header">
-        <h2 class="card-title">
-          <i data-lucide="file-text" class="w-4 h-4 text-blue-600 shrink-0"> <b>নির্দেশিকা:</b> এখান থেকে নির্দিষ্ট শ্রেণি ও সেকশনের রেজাল্ট শীট PDF ফাইল আকারে ডাউনলোড করা যাবে।</i>
-        </h2>
-      </div>
+<!-- পেজের বিবরণ -->
+    <div class="description-box">
+      <p><i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> এখান থেকে নির্দিষ্ট ক্লাসের সম্পূর্ণ রেজাল্ট টেবিল এক্সেল ফাইল হিসেবে ডাউনলোড করতে পারবেন।</p>
+    </div>
 
       <!-- Controls Form -->
       <div class="controls-grid">
