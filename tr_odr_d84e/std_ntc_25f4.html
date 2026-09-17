@@ -362,8 +362,8 @@
   <div class="card">
     <!-- Header aligned with Code 2 -->
     <div class="header-box">
-      <h1 class="school-title">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
-      <h2><i class="fa-solid fa-bullhorn"></i> নোটিশ আপলোড ও ম্যানেজমেন্ট</h2>
+      <h1 class="school-title">Pathpukur High School (H.S.)</h1>
+      <h2><i class="fa-solid fa-bullhorn"></i> Upload Student Notice and Management</h2>
     </div>
 
     <!-- Local Draft Alert -->
@@ -378,14 +378,14 @@
         <!-- Sl Dropdown & Date -->
         <div class="row">
           <div class="form-group">
-            <label for="sl_no"><i class="fa-solid fa-list-ol"></i> ক্রমিক নং (Sl No) <span class="req">*</span></label>
+            <label for="sl_no"><i class="fa-solid fa-list-ol"></i> Serial No) <span class="req">*</span></label>
             <select id="sl_no" class="form-control" style="font-weight: 700; color: var(--primary);" onchange="onSlChange()">
               <option value="">লোডিং...</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="date_val"><i class="fa-solid fa-calendar-day"></i> তারিখ (dd-mm-yyyy) <span class="req">*</span></label>
+            <label for="date_val"><i class="fa-solid fa-calendar-day"></i> Date (dd-mm-yyyy) <span class="req">*</span></label>
             <div class="date-wrapper">
               <input type="text" id="date_val" class="form-control" placeholder="dd-mm-yyyy" required>
               <button type="button" class="date-picker-btn"><i class="fa-solid fa-calendar-days"></i></button>
@@ -396,25 +396,25 @@
 
         <!-- Heading -->
         <div class="form-group">
-          <label for="heading"><i class="fa-solid fa-heading"></i> নোটিশের বিষয়/শিরোনাম (Heading) <span class="req">*</span></label>
+          <label for="heading"><i class="fa-solid fa-heading"></i> Notice Heading <span class="req">*</span></label>
           <input type="text" id="heading" class="form-control" placeholder="এখানে শিরোনাম লিখুন..." required autocomplete="off">
         </div>
 
         <!-- Notice Body -->
         <div class="form-group">
-          <label for="notice_body"><i class="fa-solid fa-align-left"></i> বিস্তারিত নোটিশ (Notice Body) <span class="req">*</span></label>
+          <label for="notice_body"><i class="fa-solid fa-align-left"></i> Notice Body <span class="req">*</span></label>
           <textarea id="notice_body" class="form-control" placeholder="এখানে বিস্তারিত বিবরণ লিখুন..." required></textarea>
         </div>
 
         <!-- Link & Is New -->
         <div class="row">
           <div class="form-group">
-            <label for="link"><i class="fa-solid fa-link"></i> লিঙ্ক (Link - ঐচ্ছিক):</label>
+            <label for="link"><i class="fa-solid fa-link"></i> Link (if any):</label>
             <input type="url" id="link" class="form-control" placeholder="https://example.com/file.pdf">
           </div>
 
           <div class="form-group">
-            <label for="is_new"><i class="fa-solid fa-certificate"></i> নতুন ব্যাজ (Is New):</label>
+            <label for="is_new"><i class="fa-solid fa-certificate"></i> Is 'New' Badge:</label>
             <select id="is_new" class="form-control">
               <option value="true">True (নতুন)</option>
               <option value="false">False (পুরাতন)</option>
@@ -424,20 +424,20 @@
 
         <!-- Passkey Field -->
         <div class="form-group passkey-group">
-          <label for="passkey"><i class="fa-solid fa-key"></i> সিকিউরিটি পাসকি (Passkey) <span class="req">*</span></label>
+          <label for="passkey"><i class="fa-solid fa-key"></i> Security Passkey <span class="req">*</span></label>
           <input type="password" id="passkey" class="form-control" placeholder="Passkey প্রবেশ করান..." required autocomplete="new-password">
         </div>
 
         <!-- Action Buttons -->
         <div class="btn-group">
           <button type="button" class="btn btn-clear" onclick="clearForm(true)">
-            <i class="fa-solid fa-rotate-left"></i> রিফ্রেশ
+            <i class="fa-solid fa-rotate-left"></i> Refresh
           </button>
           <button type="button" class="btn btn-delete" id="deleteBtn" onclick="deleteNotice()">
-            <i class="fa-solid fa-trash-can"></i> ডিলিট
+            <i class="fa-solid fa-trash-can"></i> Delete 
           </button>
           <button type="submit" class="btn btn-submit" id="submitBtn">
-            <i class="fa-solid fa-paper-plane"></i> আপলোড করুন
+            <i class="fa-solid fa-paper-plane"></i> Upload Notice 
           </button>
         </div>
 
@@ -503,14 +503,14 @@
         for (let i = 1; i <= maxSlNo; i++) {
           const opt = document.createElement('option');
           opt.value = i;
-          opt.textContent = `ক্রমিক নং: ${i} (পুরাতন)`;
+          opt.textContent = `Sl No: ${i} (পুরাতন)`;
           slSelect.appendChild(opt);
         }
 
         // Add N+1 option for new notice
         const newOpt = document.createElement('option');
         newOpt.value = maxSlNo + 1;
-        newOpt.textContent = `ক্রমিক নং: ${maxSlNo + 1} (নতুন নোটিশ)`;
+        newOpt.textContent = `Sl No: ${maxSlNo + 1} (নতুন নোটিশ)`;
         slSelect.appendChild(newOpt);
 
         // Default to New Notice Selection
@@ -519,7 +519,7 @@
 
       } catch (err) {
         console.error("Dropdown loading error:", err);
-        slSelect.innerHTML = '<option value="1">ক্রমিক নং: 1 (নতুন)</option>';
+        slSelect.innerHTML = '<option value="1">Sl No: 1 (নতুন)</option>';
       }
     }
 
