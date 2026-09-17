@@ -610,7 +610,7 @@
         return;
       }
 
-      showStatus('processing', `শ্রেণী ${selectedClass}-এর তথ্য লোড করা হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।`);
+      showStatus('processing', `Class ${selectedClass}-এর তথ্য লোড করা হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।`);
 
       const config = classConfigs[selectedClass];
 
@@ -625,7 +625,7 @@
         if (error) throw error;
 
         if (!data || data.length === 0) {
-          showStatus('error', `শ্রেণী ${selectedClass}-এ সেশন ${CURRENT_SESSION}-এর কোনো শিক্ষার্থীর ডেটা পাওয়া যায়নি।`);
+          showStatus('error', `Class ${selectedClass}-এ Session ${CURRENT_SESSION}-এর কোনো শিক্ষার্থীর ডেটা পাওয়া যায়নি।`);
           return;
         }
 
