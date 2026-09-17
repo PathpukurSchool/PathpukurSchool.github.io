@@ -60,59 +60,116 @@
 
     <style>
         * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             font-family: 'Tiro Bangla', 'Poppins', 'Inter', sans-serif;
         }
         body {
-            background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%);
+            background-color: #f1f5f9;
+            color: #0f172a;
         }
-        .header-card {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: #ffffff;
-            border-radius: 16px;
-            padding: 25px 15px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
-            position: relative;
+
+        /* Container Limit for Card Alignment */
+        .card-container {
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            margin-top: 10px;
+            border: 1px solid #e2e8f0;
         }
-        .header-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.08);
-            transform: rotate(45deg);
-            pointer-events: none;
+
+        /* Header styling - Adopted from File 2 */
+        .header-card {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: #ffffff;
+            padding: 20px 15px;
+            text-align: center;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        .header-card h1 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .header-card h2 {
+            font-size: 14px;
+            font-weight: 400;
+            color: #93c5fd;
         }
         .session-badge {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             padding: 4px 14px;
             border-radius: 20px;
             font-size: 13px;
-            margin-top: 10px;
-            backdrop-filter: blur(4px);
+            margin-top: 8px;
+            color: #ffffff;
         }
+
+        /* Description Box - Adopted from File 2 */
         .description-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 15px 18px;
-            border-left: 5px solid #06b6d4;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            font-size: 12px;
+            background: #f8fafc;
+            border-left: 4px solid #2563eb;
+            padding: 12px 15px;
+            margin: 15px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #334155;
             line-height: 1.6;
-            color: #856404;
         }
+
+        /* Button Styling - Adopted from File 2 */
         .btn-search-style {
-            background: linear-gradient(135deg, #10b981, #059669);
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-            transition: all 0.2s ease;
+            width: 100%;
+            background: #16a34a;
+            color: #ffffff;
+            border: none;
+            padding: 10px 12px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s ease-in-out, transform 0.1s;
         }
         .btn-search-style:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
+            background: #15803d;
+        }
+        .btn-search-style:active {
+            transform: scale(0.99);
+        }
+
+        /* Form Control Focus Styling */
+        .form-select-custom {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+            transition: all 0.2s ease-in-out;
+        }
+        .form-select-custom:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        @media (max-width: 480px) {
+            .header-card h1 { font-size: 18px; }
+            .header-card h2 { font-size: 13px; }
+            .card-container { margin-top: 0; border-radius: 8px; }
+            body { padding: 8px; }
         }
 
         /* 🖨️ A4 প্রিন্ট সিএসএস */
@@ -152,79 +209,81 @@
 </head>
 <body class="min-h-screen pb-12 text-slate-800">
 
-    <main class="max-w-6xl mx-auto px-4 pt-6 space-y-5">
+    <main class="max-w-6xl mx-auto px-2 md:px-4 pt-4 space-y-4">
         
-        <!-- Header Section -->
-        <header class="header-card no-print">
-            <h1 class="text-2xl md:text-3xl font-bold mb-1 tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
-            <h2 class="text-base md:text-lg text-indigo-100 font-medium flex items-center justify-center gap-2">
-                <i class="fa-solid fa-graduation-cap"></i> বার্ষিক মেধা তালিকা
-            </h2>
-            
-            <div class="session-badge">
-                <i class="fa-regular fa-calendar-check text-amber-300 mr-1.5"></i>
-                <span>শিক্ষাবর্ষ (Session): <strong id="sessionDisplay" class="text-amber-300">লোডিং...</strong></span>
-            </div>
-        </header>
-
-        <!-- Disclaimer Box -->
-        <div class="description-card flex items-start space-x-3 no-print">
-            <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg mt-0.5"></i>
-            <div>
-                <strong class="text-slate-700">সতর্কবার্তা:</strong> 
-                এটি একটি অনলাইন সিস্টেম দ্বারা তৈরি <b><em>আনুমানিক মেধা তালিকা</em></b>। নম্বর সংশোধন/পুনর্মূল্যায়ন, শিক্ষার্থী স্থানান্তর (TC), ড্রপআউট, পরীক্ষায় অকৃতকার্য (fail) হিসাবে বিবেচিত হলে বা টেকনিক্যাল ত্রুটির কারণে যেকোনো সময় সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এটি <b>চূড়ান্ত বলে গণ্য নয়</b>।
-            </div>
-        </div>
-
-        <!-- Class Filter & Refresh Form -->
-        <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-100 no-print">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-layer-group text-indigo-500 mr-1"></i> শ্রেণী নির্বাচন করুন
-                    </label>
-                    <select id="classSelect" onchange="loadClassData()" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-600 text-slate-700 font-semibold transition-all">
-                        <option value="v">পঞ্চম শ্রেণী (Class V)</option>
-                        <option value="vi">ষষ্ঠ শ্রেণী (Class VI)</option>
-                        <option value="vii">সপ্তম শ্রেণী (Class VII)</option>
-                        <option value="viii">অষ্টম শ্রেণী (Class VIII)</option>
-                        <option value="ix">নবম শ্রেণী (Class IX)</option>
-                        <option value="x">দশম শ্রেণী (Class X)</option>
-                        <option value="xi">একাদশ শ্রেণী (Class XI)</option>
-                    </select>
+        <div class="card-container no-print">
+            <!-- Header Section -->
+            <header class="header-card">
+                <h1 class="font-bold tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
+                <h2 class="flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-blue-300"></i> বার্ষিক মেধা তালিকা
+                </h2>
+                
+                <div class="session-badge">
+                    <i class="fa-regular fa-calendar-check text-amber-300 mr-1.5"></i>
+                    <span>শিক্ষাবর্ষ (Session): <strong id="sessionDisplay" class="text-amber-300">লোডিং...</strong></span>
                 </div>
+            </header>
+
+            <!-- Disclaimer Box -->
+            <div class="description-card flex items-start space-x-3">
+                <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg mt-0.5"></i>
                 <div>
-                    <button id="refreshBtn" onclick="loadClassData()" class="w-full btn-search-style text-white font-bold py-2.5 px-6 rounded-xl text-sm flex items-center justify-center space-x-2">
-                        <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
-                        <span>ডাটা রিফ্রেশ করুন</span>
-                    </button>
+                    <strong class="text-slate-700">সতর্কবার্তা:</strong> 
+                    এটি একটি অনলাইন সিস্টেম দ্বারা তৈরি <b><em>আনুমানিক মেধা তালিকা</em></b>। নম্বর সংশোধন/পুনর্মূল্যায়ন, শিক্ষার্থী স্থানান্তর (TC), ড্রপআউট, পরীক্ষায় অকৃতকার্য (fail) হিসাবে বিবেচিত হলে বা টেকনিক্যাল ত্রুটির কারণে যেকোনো সময় সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এটি <b>চূড়ান্ত বলে গণ্য নয়</b>।
                 </div>
             </div>
 
-            <!-- Subject & Full Marks Banner -->
-            <div class="mt-4 pt-4 border-t border-slate-200">
-                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                    <i class="fa-solid fa-book text-sky-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-sky-700">0</strong>
-                </span>
-                <div id="subjectInfoBanner" class="mt-2 flex flex-wrap gap-2"></div>
+            <!-- Class Filter & Refresh Form -->
+            <div class="p-4 pt-0">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                            <i class="fa-solid fa-layer-group text-blue-600 mr-1"></i> শ্রেণী নির্বাচন করুন
+                        </label>
+                        <select id="classSelect" onchange="loadClassData()" class="form-select-custom text-slate-700 font-semibold">
+                            <option value="v">পঞ্চম শ্রেণী (Class V)</option>
+                            <option value="vi">ষষ্ঠ শ্রেণী (Class VI)</option>
+                            <option value="vii">সপ্তম শ্রেণী (Class VII)</option>
+                            <option value="viii">অষ্টম শ্রেণী (Class VIII)</option>
+                            <option value="ix">নবম শ্রেণী (Class IX)</option>
+                            <option value="x">দশম শ্রেণী (Class X)</option>
+                            <option value="xi">একাদশ শ্রেণী (Class XI)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button id="refreshBtn" onclick="loadClassData()" class="btn-search-style">
+                            <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
+                            <span>ডাটা রিফ্রেশ করুন</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Subject & Full Marks Banner -->
+                <div class="mt-4 pt-3 border-t border-slate-200">
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">
+                        <i class="fa-solid fa-book text-blue-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-blue-700">0</strong>
+                    </span>
+                    <div id="subjectInfoBanner" class="mt-2 flex flex-wrap gap-2"></div>
+                </div>
             </div>
         </div>
 
         <!-- No Data Alert Message -->
-        <div id="noDataAlert" class="hidden bg-red-50 border-l-4 border-red-500 p-6 rounded-xl text-red-700 shadow-sm text-center no-print">
+        <div id="noDataAlert" class="hidden max-w-6xl mx-auto bg-red-50 border-l-4 border-red-500 p-6 rounded-xl text-red-700 shadow-sm text-center no-print">
             <i class="fa-solid fa-folder-open text-4xl text-red-400 mb-2"></i>
             <h4 class="text-lg font-bold">নম্বর তথ্য অনুপস্থিত!</h4>
             <p class="text-sm mt-1">নির্বাচিত শ্রেণীর জন্য কোনো নম্বরের তথ্য পাওয়া যায়নি। এর অর্থ হতে পারে এখনও এই শ্রেনীর পরীক্ষা সম্পন্ন হয়নি অথবা শিক্ষকমণ্ডলী নম্বর আপলোড করেননি। ফলে এই মুহূর্তে মেধা র‍্যাঙ্ক নির্ণয় করা সম্ভব নয়।</p>
         </div>
 
         <!-- Student Table Section -->
-        <div id="tableSection" class="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-300 overflow-hidden">
+        <div id="tableSection" class="bg-white rounded-xl p-4 md:p-5 shadow-sm border border-slate-200 overflow-hidden">
             
             <!-- Table Header Bar: Sort Select, Filter Input & Print Button -->
             <div class="flex flex-col lg:flex-row justify-between items-center mb-4 gap-3 no-print">
                 <div class="flex items-center space-x-2 w-full lg:w-auto">
                     <h3 class="text-base md:text-lg font-bold text-slate-800 flex items-center whitespace-nowrap">
-                        <i class="fa-solid fa-list-numeric text-indigo-600 mr-2"></i> শিক্ষার্থীর মেধা তালিকা
+                        <i class="fa-solid fa-list-numeric text-blue-600 mr-2"></i> শিক্ষার্থীর মেধা তালিকা
                     </h3>
                     <span id="studentCountBadge" class="bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">মোট: 0</span>
                 </div>
@@ -232,7 +291,7 @@
                 <div class="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto">
                     <!-- 🔽 রোল এবং র‍্যাঙ্ক ফিল্টার/সর্ট ড্রপডাউন -->
                     <div class="relative w-full sm:w-48">
-                        <select id="sortSelect" onchange="sortAndRenderTable()" class="w-full bg-slate-50 border border-slate-300 rounded-lg pl-3 pr-8 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-sky-500">
+                        <select id="sortSelect" onchange="sortAndRenderTable()" class="form-select-custom py-1.5 text-xs font-semibold text-slate-700">
                             <option value="roll">ক্রম: রোল অনুযায়ী (১, ২, ৩...)</option>
                             <option value="rank">ক্রম: র‍্যাঙ্ক অনুযায়ী (১ম, ২য়...)</option>
                         </select>
@@ -240,7 +299,7 @@
 
                     <!-- 🔍 সার্চ ইনপুট -->
                     <div class="relative w-full sm:w-48">
-                        <input type="text" id="tableFilterInput" onkeyup="filterTable()" placeholder="রোল/র‍্যাঙ্ক দিয়ে খুঁজুন..." class="w-full bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-sky-500">
+                        <input type="text" id="tableFilterInput" onkeyup="filterTable()" placeholder="রোল/র‍্যাঙ্ক দিয়ে খুঁজুন..." class="form-select-custom pl-8 py-1.5 text-xs">
                         <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                     </div>
 
@@ -588,7 +647,7 @@
         banner.innerHTML = '';
         config.subjects.forEach(sub => {
             const subFm = activeFullMarksPerSubject[sub.key] || 0;
-            banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${sub.name}: <strong class="text-sky-600">${subFm}</strong></span>`;
+            banner.innerHTML += `<span class="bg-slate-100 border border-slate-200 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium">${sub.name}: <strong class="text-blue-600">${subFm}</strong></span>`;
         });
     }
 
@@ -601,7 +660,7 @@
         else if (rank >= 4 && rank <= 10) iconHtml = `<i class="fa-solid fa-star text-amber-400 mr-1"></i>`;
 
         const isTop10 = rank <= 10;
-        const badgeBg = isTop10 ? 'bg-amber-500 text-white shadow-sm' : 'bg-sky-100 text-sky-800';
+        const badgeBg = isTop10 ? 'bg-amber-500 text-white shadow-sm' : 'bg-blue-100 text-blue-800';
 
         return `<span class="inline-flex items-center justify-center ${badgeBg} px-2.5 py-0.5 rounded-full font-bold text-xs">${iconHtml}#${rank}</span>`;
     }
@@ -638,17 +697,17 @@
         if (!thead || !tbody) return;
 
         // ১. ডাইনামিক টেবিল হেডার তৈরি
-        let subjectHeaders = config.subjects.map(sub => `<th class="py-3 px-2 text-center text-xs border">${sub.name}</th>`).join('');
+        let subjectHeaders = config.subjects.map(sub => `<th class="py-3 px-2 text-center text-xs border border-slate-200">${sub.name}</th>`).join('');
 
         thead.innerHTML = `
-            <tr class="bg-slate-100 text-slate-700 font-bold border-b">
-                <th class="py-3 px-3 text-center border">রোল</th>
-                <th class="py-3 px-3 text-center border">সেকশন</th>
-                <th class="py-3 px-4 text-left border">শিক্ষার্থীর নাম</th>
-                <th class="py-3 px-3 text-center border">মেধা র‍্যাঙ্ক</th>
+            <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                <th class="py-3 px-3 text-center border border-slate-200">রোল</th>
+                <th class="py-3 px-3 text-center border border-slate-200">সেকশন</th>
+                <th class="py-3 px-4 text-left border border-slate-200">শিক্ষার্থীর নাম</th>
+                <th class="py-3 px-3 text-center border border-slate-200">মেধা র‍্যাঙ্ক</th>
                 ${subjectHeaders}
-                <th class="py-3 px-3 text-center border">প্রাপ্ত মোট নম্বর</th>
-                <th class="py-3 px-3 text-center border">শতকরা (%)</th>
+                <th class="py-3 px-3 text-center border border-slate-200">প্রাপ্ত মোট নম্বর</th>
+                <th class="py-3 px-3 text-center border border-slate-200">শতকরা (%)</th>
             </tr>
         `;
 
@@ -662,44 +721,43 @@
             tr.setAttribute('data-rank', st.calculatedRank || 9999);
             
             const isTop10 = st.calculatedRank && st.calculatedRank <= 10;
-            const highlightClass = isTop10 ? 'bg-amber-50/50 font-semibold' : 'hover:bg-sky-50';
+            const highlightClass = isTop10 ? 'bg-amber-50/50 font-semibold' : 'hover:bg-slate-50';
 
             tr.className = `${highlightClass} transition-colors border-b border-slate-200`;
 
             // বিষয়ভিত্তিক নম্বর সেল তৈরি
             let subjectCells = config.subjects.map(sub => {
                 const mark = st.subjectTotals[sub.key] !== undefined ? st.subjectTotals[sub.key] : '-';
-                return `<td class="py-3 px-2 text-center text-slate-700 border">${mark}</td>`;
+                return `<td class="py-3 px-2 text-center text-slate-700 border border-slate-200">${mark}</td>`;
             }).join('');
 
+            const rankBadge = st.calculatedRank ? getRankBadgeWithIcon(st.calculatedRank) : '-';
+
             tr.innerHTML = `
-                <td class="py-3 px-3 text-center font-bold text-slate-800 border">${st.roll_no}</td>
-                <td class="py-3 px-3 text-center font-semibold text-slate-600 border">${st.section || '-'}</td>
-                <td class="py-3 px-4 text-left font-bold text-slate-900 border">${st.student_name}</td>
-                <td class="py-3 px-3 text-center border">
-                    ${st.calculatedRank ? getRankBadgeWithIcon(st.calculatedRank) : '<span class="text-slate-400">N/A</span>'}
-                </td>
+                <td class="py-3 px-3 text-center font-bold text-slate-800 border border-slate-200">${st.roll_no}</td>
+                <td class="py-3 px-3 text-center font-semibold text-slate-600 border border-slate-200">${st.section || '-'}</td>
+                <td class="py-3 px-4 text-left font-bold text-slate-900 border border-slate-200">${st.student_name}</td>
+                <td class="py-3 px-3 text-center border border-slate-200">${rankBadge}</td>
                 ${subjectCells}
-                <td class="py-3 px-3 text-center font-extrabold text-sky-600 border">${st.grandTotal}</td>
-                <td class="py-3 px-3 text-center font-bold text-emerald-600 border">${st.percentage}%</td>
+                <td class="py-3 px-3 text-center font-bold text-blue-700 border border-slate-200">${st.grandTotal}</td>
+                <td class="py-3 px-3 text-center font-semibold text-slate-700 border border-slate-200">${st.percentage}%</td>
             `;
+
             tbody.appendChild(tr);
         });
     }
 
-    // রোল এবং র‍্যাঙ্ক অনুযায়ী টেক্সট সার্চ/ফিল্টার
+    // টেবিল সার্চ/ফিল্টারিং ফাংশন
     function filterTable() {
-        const filterInput = document.getElementById('tableFilterInput');
-        if (!filterInput) return;
+        const input = document.getElementById('tableFilterInput');
+        if (!input) return;
         
-        const searchInput = filterInput.value.trim().toLowerCase();
+        const filter = input.value.trim().toLowerCase();
         const rows = document.querySelectorAll('#rankTableBody tr');
 
         rows.forEach(row => {
-            const roll = row.getAttribute('data-roll');
-            const rank = row.getAttribute('data-rank');
-
-            if (searchInput === '' || roll.includes(searchInput) || rank.includes(searchInput)) {
+            const text = row.textContent.toLowerCase();
+            if (text.includes(filter)) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';
@@ -707,12 +765,10 @@
         });
     }
 
-// 🖨️ প্রিন্ট করার সময় হেডার ইংরেজিতে রূপান্তর
+    // প্রিন্ট ফাংশন
     function printRankTable() {
         window.print();
     }
 </script>
-<!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
- <script src="home.js"></script>
 </body>
 </html>
