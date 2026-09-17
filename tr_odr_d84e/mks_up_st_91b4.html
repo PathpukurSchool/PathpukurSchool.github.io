@@ -270,10 +270,11 @@
   <header class="header-style max-w-7xl mx-auto mb-6">
     <div class="flex flex-col items-center justify-center text-center">
       <h1 class="text-xl sm:text-2xl font-bold tracking-wide flex items-center gap-2 mb-1">
-        <i class="fa-solid fa-school text-blue-300 no-print"></i> পাতপুকুর হাই স্কুল (উ: মা:)
+       Pathpukur High School (H.S.)
       </h1>
       <p class="text-blue-200 text-xs sm:text-sm font-normal">
-        মার্কস আপলোডের পরিসংখ্যান | শিক্ষাবর্ষ: <span id="current-session" class="font-bold text-white"></span>
+        <i class="fa-solid fa-cloud-arrow-up text-blue-600 mr-2 text-base"></i>
+        Marks uploading status | Session: <span id="current-session" class="font-bold text-white"></span>
       </p>
     </div>
   </header>
@@ -296,23 +297,23 @@
         
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
           <label for="class-select" class="font-bold text-slate-700 text-xs sm:text-sm whitespace-nowrap flex items-center">
-            <i class="fa-solid fa-layer-group text-blue-600 mr-2"></i> শ্রেণী নির্বাচন করুন:
+            <i class="fa-solid fa-layer-group text-blue-600 mr-2"></i> Select Class:
           </label>
           <select id="class-select" onchange="fetchClassStatus()" class="w-full sm:w-64 form-control-style font-semibold text-slate-800">
-            <option value="">-- শ্রেণী বেছে নিন --</option>
-            <option value="V">পঞ্চম শ্রেণী (V)</option>
-            <option value="VI">ষষ্ঠ শ্রেণী (VI)</option>
-            <option value="VII">সপ্তম শ্রেণী (VII)</option>
-            <option value="VIII">অষ্টম শ্রেণী (VIII)</option>
-            <option value="IX">নবম শ্রেণী (IX)</option>
-            <option value="X">দশম শ্রেণী (X)</option>
-            <option value="XI">একাদশ শ্রেণী (XI)</option>
+            <option value="">-- Select a Class --</option>
+            <option value="V">Class V (5)</option>
+            <option value="VI">Class VI (6)</option>
+            <option value="VII">Class VII (7)</option>
+            <option value="VIII">Class VIII (8)</option>
+            <option value="IX">Class IX (9)</option>
+            <option value="X">Class X (10)</option>
+            <option value="XI">Class XI (11)</option>
           </select>
         </div>
 
         <button onclick="handlePrint()" class="w-full md:w-auto btn-download-style">
           <i class="fa-solid fa-print"></i>
-          <span>প্রিন্ট করুন</span>
+          <span>Print</span>
         </button>
 
       </div>
@@ -324,7 +325,7 @@
     <!-- মোট ও সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি -->
     <div id="summary-section" class="hidden mb-6 page-break-inside-avoid">
       <h2 class="text-sm sm:text-base font-bold text-slate-800 mb-3 flex items-center">
-        <i class="fa-solid fa-users text-blue-600 mr-2 no-print"></i>শিক্ষার্থীর সংক্ষিপ্ত বিবরণ
+        <i class="fa-solid fa-users text-blue-600 mr-2 no-print"></i>Student Summary
       </h2>
       <div id="summary-cards" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3"></div>
     </div>
