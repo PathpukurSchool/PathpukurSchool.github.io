@@ -78,6 +78,14 @@ body.no-scroll {
     scroll-margin-top: 6rem; 
 }
 
+.section-heading-wrapper {
+    display: flex; 
+    align-items: center; 
+    justify-content: 
+    space-between; 
+    gap: 12px;
+}
+
 /* ================================================= */
 /* 🔝 HEADER & TOP BAR                              */
 /* ================================================= */
