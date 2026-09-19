@@ -444,7 +444,7 @@ async function checkSecurityStatus() {
     } else {
       isEditAllowed = false;
       // এডিট মুড অফ থাকলে বোতামটির নাম Finalised হবে এবং "এডিট মুড অফ" এর কালারে রূপ নেবে
-      secDiv.innerHTML = `<span class="btn-finalised-disabled"><i class="fa-solid fa-lock"></i> Finalised</span>`;
+      secDiv.innerHTML = `<span class="btn-finalised-disabled"><i class="fa-solid fa-lock"></i> Finalised | এডিট মুড অফ</span>`;
     }
   } catch (err) { console.error(err); }
 }
