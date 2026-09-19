@@ -395,7 +395,7 @@
         const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_page_security_status`, {
           method: 'POST',
           headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ p_page_name: 'result_v_ix' })
+          body: JSON.stringify({ p_page_name: 'result_vii' })
         });
         const data = await res.json();
 
@@ -445,11 +445,11 @@
       }
 
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_result_passkey_vii`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_page_passkey`, {
           method: 'POST',
           headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ p_passkey: inputPass })
-        });
+          body: JSON.stringify({ p_page_name: 'result_vii', p_passkey: inputPass })
+     });
 
         const result = await res.json();
 
