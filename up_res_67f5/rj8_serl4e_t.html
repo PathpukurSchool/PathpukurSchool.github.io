@@ -427,7 +427,7 @@ async function checkSecurityStatus() {
         secDiv.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px;">
             <span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>
-            <button onclick="finalisePage()" class="btn-finalise"><i class="fa-solid fa-lock"></i> Finalisation</button>
+            <button onclick="finalisePage()" class="btn-finalise"><i class="fa-solid fa-lock"></i> Final Submit</button>
           </div>`;
       } else {
         secDiv.innerHTML = `
@@ -456,7 +456,7 @@ async function checkSecurityStatus() {
   }
 
   // নিশ্চিতকরণ কনফার্মেশন মেসেজ
-  const confirmAction = confirm("⚠️ সতর্কীকরণ: ফাইনাল সাবমিট করার পর এই ক্লাসের জন্য নম্বর এডিট বা আপডেট করার সুবিধা সম্পূর্ণ বন্ধ হয়ে যাবে।\n\nআপনি কি নিশ্চিতভাবে ফাইনাল সাবমিট করতে চান?");
+  const confirmAction = confirm("⚠️ সতর্কীকরণ: সমস্ত পরীক্ষার সকল স্টুডেন্টের নম্বর আপলোড সম্পন্ন হলে ফাইনাল সাবমিট করুন।\nফাইনাল সাবমিট করার পর এই ক্লাসের জন্য নম্বর এডিট বা আপডেট করার সুবিধা সম্পূর্ণ বন্ধ হয়ে যাবে।\n\nআপনি কি নিশ্চিতভাবে ফাইনাল সাবমিট করতে চান?");
   
   if (!confirmAction) return;
 
