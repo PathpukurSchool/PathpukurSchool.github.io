@@ -82,8 +82,17 @@
     .edit-on-badge { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
     .edit-off-badge { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
 
-    .active-info { background: #fef3c7; color: #92400e; padding: 8px 12px; font-size: 12px; font-weight: 700; border-left: 4px solid #f59e0b; }
-    
+    .active-info { 
+  background: #fef3c7; 
+  color: #92400e; 
+  padding: 6px 12px; 
+  font-size: 12px; 
+  font-weight: 700; 
+  border-left: 4px solid #f59e0b; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+}
     /* Sticky Top Header & Scroll Setup */
     .table-container { width: 100%; max-height: calc(100vh - 240px); overflow: auto; background: #fff; position: relative; }
     table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 700px; }
@@ -423,12 +432,7 @@ async function checkSecurityStatus() {
     if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
       isEditAllowed = true;
       if (currentPasskey) {
-        // পাসকি ভেরিফাইড হলে এডিট স্ট্যাটাসের পাশে Finalisation বোতাম প্রদর্শিত হবে
-        secDiv.innerHTML = `
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>
-            <button onclick="finalisePage()" class="btn-finalise"><i class="fa-solid fa-lock"></i> Final Submit</button>
-          </div>`;
+        secDiv.innerHTML = `<span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>`;
       } else {
         secDiv.innerHTML = `
           <div class="passkey-bar">
@@ -443,12 +447,11 @@ async function checkSecurityStatus() {
       }
     } else {
       isEditAllowed = false;
-      // এডিট মুড অফ থাকলে বোতামটির নাম Finalised হবে এবং "এডিট মুড অফ" এর কালারে রূপ নেবে
-      secDiv.innerHTML = `<span class="btn-finalised-disabled"><i class="fa-solid fa-lock"></i> Finalised | এডিট মুড অফ</span>`;
+      secDiv.innerHTML = `<span class="edit-status-badge edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড অফ</span>`;
     }
   } catch (err) { console.error(err); }
 }
-
+    
     async function finalisePage() {
   if (!currentPasskey || !isEditAllowed) {
     alert("⚠️ ফাইনাল সাবমিট করার জন্য পাসকি দিয়ে এডিট মুড অন করা আবশ্যক!");
@@ -563,8 +566,19 @@ async function checkSecurityStatus() {
         document.getElementById('limitDisplay').textContent = `Gen: 0-${subjectLimits[exam].default} | Sci/W&P: 0-${subjectLimits[exam].half}`;
       }
 
-      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> VIII ${sec} : 2026 | ${exam} : ${sub}`;
+      let finaliseBtnHTML = "";
+if (isEditAllowed && currentPasskey) {
+  // এডিট মুড অন এবং পাসকি ভেরিফাইড থাকলে
+  finaliseBtnHTML = `<button onclick="finalisePage()" class="btn-finalise"><i class="fa-solid fa-lock"></i> Finalisation</button>`;
+} else if (!isEditAllowed) {
+  // এডিট মুড অফ থাকলে
+  finaliseBtnHTML = `<span class="btn-finalised-disabled"><i class="fa-solid fa-lock"></i> Finalised</span>`;
+}
 
+document.getElementById('activeFilterBadge').innerHTML = `
+  <span><i class="fa-solid fa-filter"></i> VIII ${sec} : 2026 | ${exam} : ${sub}</span>
+  <div>${finaliseBtnHTML}</div>
+`;
       let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
       updateSummaryTable(sectionFiltered, exam);
 
