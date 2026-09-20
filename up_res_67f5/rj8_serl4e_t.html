@@ -182,8 +182,11 @@
   /* Finalisation Button Styles */
 .btn-finalise {
   background: #92400e;
-  color: #fff;
-  border: none;
+  color: #92400e;
+  border: 1px solid #78350f;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 
+              0 2px 4px -2px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 11px;
@@ -192,7 +195,6 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  transition: background 0.2s;
 }
 .btn-finalise:hover {
   background: #b91c1c;
