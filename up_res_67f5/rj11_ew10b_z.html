@@ -416,7 +416,7 @@
       }, 15 * 60 * 1000);
     }
 
-    async function checkSecurityStatus() {
+  async function checkSecurityStatus() {
   const secDiv = document.getElementById('securityStatus');
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_page_security_status`, {
