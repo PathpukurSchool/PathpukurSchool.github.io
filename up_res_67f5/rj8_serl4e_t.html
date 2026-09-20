@@ -569,7 +569,7 @@ async function checkSecurityStatus() {
       let finaliseBtnHTML = "";
 if (isEditAllowed && currentPasskey) {
   // এডিট মুড অন এবং পাসকি ভেরিফাইড থাকলে
-  finaliseBtnHTML = `<button onclick="finalisePage()" class="btn-finalise"><i class="fa-solid fa-lock"></i> Finalisation</button>`;
+  finaliseBtnHTML = `<button onclick="finalisePage()" class="btn-finalise"><i class="fa-solid fa-lock"></i> Final Submit</button>`;
 } else if (!isEditAllowed) {
   // এডিট মুড অফ থাকলে
   finaliseBtnHTML = `<span class="btn-finalised-disabled"><i class="fa-solid fa-lock"></i> Finalised</span>`;
