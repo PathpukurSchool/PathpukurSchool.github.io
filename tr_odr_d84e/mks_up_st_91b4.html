@@ -73,7 +73,7 @@
       font-weight: 700; 
     }
 
-    /* দ্বিতীয় ফাইলের হেডার স্টাইল */
+    /* হেডার স্টাইল */
     .header-style {
       background: linear-gradient(135deg, #1e3a8a, #0f172a);
       color: #ffffff;
@@ -83,7 +83,7 @@
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
     }
 
-    /* দ্বিতীয় ফাইলের ডেসক্রিপশন/ইনফো বক্স */
+    /* ডেসক্রিপশন/ইনফো বক্স */
     .description-box {
       background: #f8fafc;
       border-left: 4px solid #2563eb;
@@ -119,7 +119,7 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
-    /* দ্বিতীয় ফাইলের সবুজ বাটন */
+    /* সবুজ বাটন */
     .btn-download-style {
       background: #16a34a;
       color: #ffffff;
@@ -266,7 +266,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen pb-12">
 
-  <!-- হেডার সেকশন (দ্বিতীয় ফাইলের গ্র্যাডিয়েন্ট স্টাইলের অনুরূপ) -->
+  <!-- হেডার সেকশন -->
   <header class="header-style max-w-7xl mx-auto mb-6">
     <div class="flex flex-col items-center justify-center text-center">
       <h1 class="text-xl sm:text-2xl font-bold tracking-wide flex items-center gap-2 mb-1">
@@ -284,7 +284,7 @@
     <!-- তথ্য মেসেজ ও ড্রপডাউন/প্রিন্ট কন্ট্রোল -->
     <div class="no-print space-y-4 mb-6">
       
-      <!-- তথ্য বার্তা (দ্বিতীয় ফাইলের বর্ণনা বক্সের স্টাইলে) -->
+      <!-- তথ্য বার্তা (বর্ণনা বক্স) -->
       <div class="description-box">
         <p class="text-slate-700 text-xs sm:text-sm flex items-center">
           <i class="fa-solid fa-circle-info text-blue-600 mr-2 text-base"></i>
@@ -292,7 +292,48 @@
         </p>
       </div>
 
-      <!-- ফিল্টার কন্ট্রোল কার্ড (দ্বিতীয় ফাইলের ব্যাকগ্রাউন্ড ও বর্ডার) -->
+      <!-- 🟢 নতুন যোগ করা অংশ: সকল শ্রেণির ফাইনালাইজেশন স্ট্যাটাস টেবিল -->
+      <div class="card-container p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
+        <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
+          <h2 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-[#1e3a8a] fa-lock text-blue-600"></i> Finalisation Status Tracker
+          </h2>
+          <button onclick="fetchFinalisationStatus()" id="refreshStatusBtn" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold px-3 py-1.5 rounded-md border border-blue-200 transition-all flex items-center gap-1.5 cursor-pointer">
+            <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
+            <span>Refresh</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-center text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                <th class="p-2 border-r border-slate-200">Class V</th>
+                <th class="p-2 border-r border-slate-200">Class VI</th>
+                <th class="p-2 border-r border-slate-200">Class VII</th>
+                <th class="p-2 border-r border-slate-200">Class VIII</th>
+                <th class="p-2 border-r border-slate-200">Class IX</th>
+                <th class="p-2 border-r border-slate-200">Class X</th>
+                <th class="p-2">Class XI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="status-v" class="p-2.5 border-r border-slate-200 font-semibold text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                <td id="status-vi" class="p-2.5 border-r border-slate-200 font-semibold text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                <td id="status-vii" class="p-2.5 border-r border-slate-200 font-semibold text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                <td id="status-viii" class="p-2.5 border-r border-slate-200 font-semibold text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                <td id="status-ix" class="p-2.5 border-r border-slate-200 font-semibold text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                <td id="status-x" class="p-2.5 border-r border-slate-200 font-semibold text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                <td id="status-xi" class="p-2.5 font-semibold text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 🔴 ফাইনালাইজেশন স্ট্যাটাস টেবিল সমাপ্ত -->
+
+      <!-- ফিল্টার কন্ট্রোল কার্ড -->
       <div class="card-container p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
         
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
@@ -319,7 +360,7 @@
       </div>
     </div>
 
-    <!-- ইনলাইন স্টেটাস/নোটিফিকেশন মেসেজ (দ্বিতীয় ফাইলের স্ট্যাটাস মেসেজ অনুকরণে) -->
+    <!-- ইনলাইন স্টেটাস/নোটিফিকেশন মেসেজ -->
     <div id="status-message" class="no-print hidden rounded-md p-3 mb-6 transition-all duration-300 text-xs sm:text-sm font-semibold"></div>
 
     <!-- মোট ও সেকশন ওয়াইজ স্টুডেন্ট কাউন্ট সামারি -->
@@ -350,6 +391,54 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let CURRENT_SESSION = '2026';
+
+    // ⚡ পেজ লোড হওয়ার সাথে সাথে ফাইনালাইজেশন স্ট্যাটাস লোড হবে এবং অটো রিফ্রেশ চালু হবে
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchFinalisationStatus();
+        // প্রতি ৩০ সেকেন্ড পর পর স্বয়ংক্রিয়ভাবে রিফ্রেশ হবে
+        setInterval(fetchFinalisationStatus, 30000); 
+    });
+
+    // 🔄 ফাইনালাইজেশন স্ট্যাটাস চেক করার ফাংশন
+    async function fetchFinalisationStatus() {
+        const icon = document.getElementById('refreshIcon');
+        if (icon) icon.classList.add('fa-spin');
+
+        const classes = ['v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi'];
+
+        try {
+            const { data, error } = await supabaseClient
+                .from('page_security')
+                .select('page_name, edit_mode');
+
+            if (error) throw error;
+
+            classes.forEach(c => {
+                const cell = document.getElementById(`status-${c}`);
+                if (!cell) return;
+
+                const pageRecord = data ? data.find(p => p.page_name === `result_${c}`) : null;
+
+                if (pageRecord) {
+                    const isEditOn = String(pageRecord.edit_mode).toLowerCase() === 'true';
+                    if (isEditOn) {
+                        cell.innerHTML = `<span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 border border-amber-300 text-[11px] px-2 py-0.5 rounded-full font-bold"><i class="fa-solid fa-pen-to-square text-amber-600"></i> Active</span>`;
+                    } else {
+                        cell.innerHTML = `<span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-2 py-0.5 rounded-full font-bold"><i class="fa-solid fa-circle-check text-emerald-600"></i> Finalised</span>`;
+                    }
+                } else {
+                    cell.innerHTML = `<span class="text-slate-400 font-normal">N/A</span>`;
+                }
+            });
+
+        } catch (err) {
+            console.error('Finalisation Status Error:', err);
+        } finally {
+            if (icon) {
+                setTimeout(() => { icon.classList.remove('fa-spin'); }, 500);
+            }
+        }
+    }
 
     function handlePrint() {
       const selectedClass = document.getElementById('class-select').value;
