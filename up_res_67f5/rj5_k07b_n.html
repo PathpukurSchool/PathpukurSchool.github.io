@@ -676,7 +676,7 @@ document.getElementById('activeFilterBadge').innerHTML = `
       }
 
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/universal_secure_update_result`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_v`, {
           method: 'POST',
           headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -746,7 +746,7 @@ document.getElementById('activeFilterBadge').innerHTML = `
         let successCount = 0;
         for (let item of draft) {
           try {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/universal_secure_update_result`, {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_v`, {
               method: 'POST',
               headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -869,8 +869,8 @@ document.getElementById('activeFilterBadge').innerHTML = `
                   const num = Number(rawVal);
                   
                   if (Number.isInteger(num) && num >= 0 && num <= maxLimit) {
-                    // Class V-এর RPC Function 'universal_secure_update_result' ব্যবহার করা হয়েছে
-                    const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/universal_secure_update_result`, {
+                    // Class V-এর RPC Function 'secure_update_result_v' ব্যবহার করা হয়েছে
+                    const promise = fetch(`${SUPABASE_URL}/rest/v1/rpc/secure_update_result_v`, {
                       method: 'POST',
                       headers: { 
                         'apikey': SUPABASE_ANON_KEY, 
