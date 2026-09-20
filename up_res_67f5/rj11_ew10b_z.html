@@ -82,8 +82,17 @@
     .edit-on-badge { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
     .edit-off-badge { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
 
-    .active-info { background: #fef3c7; color: #92400e; padding: 8px 12px; font-size: 12px; font-weight: 700; border-left: 4px solid #f59e0b; }
-    
+    .active-info { 
+  background: #fef3c7; 
+  color: #92400e; 
+  padding: 6px 12px; 
+  font-size: 12px; 
+  font-weight: 700; 
+  border-left: 4px solid #f59e0b; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+}
     /* Sticky Top Header & Scroll Setup */
     .table-container { width: 100%; max-height: calc(100vh - 240px); overflow: auto; background: #fff; position: relative; }
     table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 600px; }
@@ -169,6 +178,37 @@
   color: #64748b;
   line-height: 1.3;
   text-align: left;
+}
+/* Finalisation Button Styles */
+.btn-finalise {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s;
+}
+.btn-finalise:hover {
+  background: #b91c1c;
+}
+.btn-finalised-disabled {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: not-allowed;
 }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -377,37 +417,81 @@
     }
 
     async function checkSecurityStatus() {
-      const secDiv = document.getElementById('securityStatus');
-      try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_page_security_status`, {
-          method: 'POST',
-          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ p_page_name: 'result_xi' })
-        });
-        const data = await res.json();
+  const secDiv = document.getElementById('securityStatus');
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_page_security_status`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_page_name: 'result_xi' })
+    });
+    const data = await res.json();
 
-        if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
-          isEditAllowed = true;
-          if (currentPasskey) {
-            secDiv.innerHTML = `<span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>`;
-          } else {
-            secDiv.innerHTML = `
-              <div class="passkey-bar">
-              <input type="text" style="display:none;" name="fake_username" tabindex="-1">
-               <input type="password" style="display:none;" name="fake_password" tabindex="-1">
-                <div class="passkey-wrapper">
-                  <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." autocomplete="new-password">
-                  <i class="fa-solid fa-eye" id="togglePassEye" onclick="togglePassVisibility()"></i>
-                </div>
-                <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i> Verify</button>
-              </div>`;
-          }
-        } else {
-          isEditAllowed = false;
-          secDiv.innerHTML = `<span class="edit-status-badge edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড অফ</span>`;
-        }
-      } catch (err) { console.error(err); }
+    if (data && data.length > 0 && String(data[0].edit_mode).toLowerCase() === 'true') {
+      isEditAllowed = true;
+      if (currentPasskey) {
+        secDiv.innerHTML = `<span class="edit-status-badge edit-on-badge"><i class="fa-solid fa-circle-check"></i> এডিট মুড সক্রিয়</span>`;
+      } else {
+        secDiv.innerHTML = `
+          <div class="passkey-bar">
+            <input type="text" style="display:none;" name="fake_username" tabindex="-1">
+            <input type="password" style="display:none;" name="fake_password" tabindex="-1">
+            <div class="passkey-wrapper">
+              <input type="password" id="passkeyInput" class="form-control" placeholder="Passkey..." autocomplete="new-password">
+              <i class="fa-solid fa-eye" id="togglePassEye" onclick="togglePassVisibility()"></i>
+            </div>
+            <button onclick="unlockEdit()" class="form-control" style="background:#2563eb; color:#fff; cursor:pointer; width:auto; padding:4px 8px;"><i class="fa-solid fa-key"></i> Verify</button>
+          </div>`;
+      }
+    } else {
+      isEditAllowed = false;
+      secDiv.innerHTML = `<span class="edit-status-badge edit-off-badge"><i class="fa-solid fa-lock"></i> এডিট মুড অফ</span>`;
     }
+  } catch (err) { console.error(err); }
+}
+
+    async function finalisePage() {
+  if (!currentPasskey || !isEditAllowed) {
+    alert("⚠️ ফাইনাল সাবমিট করার জন্য পাসকি দিয়ে এডিট মুড অন করা আবশ্যক!");
+    return;
+  }
+
+  // নিশ্চিতকরণ কনফার্মেশন মেসেজ
+  const confirmAction = confirm(
+  "⚠️ সতর্কীকরণ: ফাইনাল সাবমিট করার আগে নিশ্চিত করুন—\n\n" +
+  "• সকল শিক্ষার্থীর সমস্ত পরীক্ষার এবং সব বিষয়ের নম্বর আপলোড সম্পন্ন হয়েছে।\n" +
+  "• ফাইনাল সাবমিট করার পর নম্বর এডিট বা আপডেট করার সুযোগ সম্পূর্ণ বন্ধ হয়ে যাবে।\n\n" +
+  "আপনি কি নিশ্চিতভাবে ফাইনাল সাবমিট করতে চান?"
+);
+  if (!confirmAction) return;
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/finalise_page_status`, {
+      method: 'POST',
+      headers: { 
+        'apikey': SUPABASE_ANON_KEY, 
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 
+        'Content-Type': 'application/json' 
+      },
+      body: JSON.stringify({ 
+        p_page_name: 'result_xi', 
+        p_passkey: currentPasskey 
+      })
+    });
+
+    const result = await res.json();
+
+    if (result && result.success) {
+      alert("🎉 সফল হয়েছে! পেজটি ফাইনাল সাবমিট করা হয়েছে এবং এডিট মুড বন্ধ করা হয়েছে।");
+      currentPasskey = ""; // সেসন পাসকি ক্লিয়ার করা
+      await checkSecurityStatus(); // স্ট্যাটাস রিফ্রেশ করে Finalised দেখানো
+      await fetchMarksData(); // ইনপুট ফিল্ডগুলো রিড-অনলি করার জন্য ডাটা রিফ্রেশ
+    } else {
+      alert("❌ " + (result.message || "ফাইনাল সাবমিট করতে ব্যর্থ হয়েছে!"));
+    }
+  } catch (err) {
+    alert("❌ সার্ভারের সাথে সংযোগ করা যায়নি!");
+  }
+}
 
     function togglePassVisibility() {
       const pInput = document.getElementById('passkeyInput');
@@ -432,11 +516,11 @@
       }
 
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_result_passkey_xi`, {
-          method: 'POST',
-          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ p_passkey: inputPass })
-        });
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/verify_page_passkey`, {
+         method: 'POST',
+         headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+         body: JSON.stringify({ p_page_name: 'result_xi', p_passkey: inputPass })
+      });
 
         const result = await res.json();
 
@@ -477,8 +561,20 @@
       } else {
         document.getElementById('limitDisplay').textContent = exam === "Project" ? "0-20 (GEO: 0-30)" : "0-40 (GEO: 0-35)";
       }
-      
-      document.getElementById('activeFilterBadge').innerHTML = `<i class="fa-solid fa-filter"></i> XI ${sec} : 2026 | ${exam} : ${sub}`;
+
+      let finaliseBtnHTML = "";
+if (isEditAllowed && currentPasskey) {
+  // এডিট মুড অন এবং পাসকি ভেরিফাইড থাকলে
+  finaliseBtnHTML = `<button onclick="finalisePage()" class="btn-finalise"><i class="fa-solid fa-lock"></i> Finalisation</button>`;
+} else if (!isEditAllowed) {
+  // এডিট মুড অফ থাকলে
+  finaliseBtnHTML = `<span class="btn-finalised-disabled"><i class="fa-solid fa-lock"></i> Finalised</span>`;
+}
+
+document.getElementById('activeFilterBadge').innerHTML = `
+  <span><i class="fa-solid fa-filter"></i> XI ${sec} : 2026 | ${exam} : ${sub}</span>
+  <div>${finaliseBtnHTML}</div>
+`;
 
       let sectionFiltered = rawData.filter(item => sec === "--All--" || item.section === sec);
       updateSummaryTable(sectionFiltered, exam);
