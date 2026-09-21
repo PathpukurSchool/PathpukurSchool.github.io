@@ -751,111 +751,69 @@
             </div>
           `;
         });
-
         summarySection.classList.remove('hidden');
 
-        // প্রতিটি পরীক্ষার জন্য টেবিল রেন্ডার
-        for (const [examName, subjects] of Object.entries(config.exams)) {
-          const isProject = (examName === 'Project');
-          const bengaliClass = convertClassToBengali(selectedClass);
-
-          const tableCard = document.createElement('div');
-          tableCard.className = 'card-container table-card page-break-inside-avoid';
-
-          let headerTitle = `${examName} - Marks Upload Status`;
-          let headerBadge = `Class: ${selectedClass}`;
-
-          if (isProject) {
-            headerTitle = `<i class="fa-solid fa-file-circle-exclamation text-amber-500 mr-1.5 no-print"></i> ${bengaliClass} শ্রেণীর প্রজেক্ট জমা না দেওয়ার তালিকা`;
-            headerBadge = `Project Report Status`;
-          }
-
+        Object.keys(config.exams).forEach(examName => {
+          const subjects = config.exams[examName];
+          
           let tableHtml = `
-            <div class="table-header flex justify-between items-center bg-slate-50 p-3 sm:p-4 border-b border-slate-200">
-              <h3 class="font-bold text-slate-800 text-sm sm:text-base">${headerTitle}</h3>
-              <span class="text-xs font-semibold px-2.5 py-1 bg-slate-200 text-slate-700 rounded-full">${headerBadge}</span>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-center border-collapse">
-                <thead>
-                  <tr class="bg-slate-100 text-slate-700 font-bold text-xs border-b border-slate-200">
-                    <th class="p-2 sm:p-3 border-r border-slate-200 text-left min-w-[100px]">Section</th>
-                    ${subjects.map(s => `<th class="p-2 sm:p-3 border-r border-slate-200 last:border-r-0 min-w-[80px]">${s.label}</th>`).join('')}
-                  </tr>
-                </thead>
-                <tbody>
+            <div class="table-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden page-break-inside-avoid">
+              <div class="table-header bg-slate-900 text-white px-4 py-3 flex items-center justify-between border-b border-slate-800">
+                <h3 class="font-bold text-sm sm:text-base flex items-center gap-2 text-white">
+                  <i class="fa-solid fa-file-pen text-blue-300 no-print"></i> ${examName}
+                </h3>
+                <span class="text-xs bg-slate-800 font-medium text-blue-200 px-3 py-1 rounded-full border border-slate-700">Class: ${selectedClass} | Session: ${CURRENT_SESSION}</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                  <thead>
+                    <tr class="bg-slate-100 text-slate-800 font-bold border-b border-slate-300">
+                      <th class="p-3 border-r border-b border-slate-300 bg-slate-200 text-slate-900 w-28">Section</th>
+                      ${subjects.map(s => `<th class="p-3 text-center border-r border-b border-slate-300 min-w-[100px]">${s.label}</th>`).join('')}
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200">
           `;
 
           sections.forEach(sec => {
             const secData = data.filter(d => d.section === sec);
             tableHtml += `
-              <tr class="border-b border-slate-200 text-xs sm:text-sm hover:bg-slate-50">
-                <td class="p-2 sm:p-3 font-semibold text-slate-800 border-r border-slate-200 text-left bg-slate-50/50">Section ${sec}</td>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="p-3 font-bold bg-slate-50 border-r border-slate-300 text-slate-900">Section ${sec}</td>
             `;
 
-            subjects.forEach(subj => {
-              let count = 0;
-              if (isProject) {
-                // প্রজেক্টের ক্ষেত্রে কলামে 'Absent' থাকলে প্রজেক্ট জমা দেয়নি ধরা হবে
-                count = secData.filter(d => {
-                  const val = d[subj.field];
-                  return val !== null && val !== undefined && String(val).trim().toLowerCase() === 'absent';
-                }).length;
-              } else {
-                // লিখিত পরীক্ষার ক্ষেত্রে Not Null & Not Empty হলে নম্বর আপলোড করা হয়েছে ধরা হবে
-                count = secData.filter(d => {
-                  const val = d[subj.field];
-                  return val !== null && val !== undefined && String(val).trim() !== '';
-                }).length;
-              }
+            subjects.forEach(sub => {
+              const uploadedCount = secData.filter(d => d[sub.field] !== null && d[sub.field] !== undefined && d[sub.field] !== '').length;
+              
+              const isZero = uploadedCount === 0;
+              const displayVal = isZero ? '-' : uploadedCount;
+              const cellClass = isZero ? 'zero-count border-r border-red-200' : 'text-slate-900 font-semibold border-r border-slate-200';
 
-              const countClass = (count === 0 && !isProject) ? 'zero-count' : '';
-              tableHtml += `<td class="p-2 sm:p-3 border-r border-slate-200 last:border-r-0 font-medium ${countClass}">${count}</td>`;
+              tableHtml += `
+                <td class="p-3 text-center ${cellClass}">
+                  ${displayVal}
+                </td>
+              `;
             });
 
             tableHtml += `</tr>`;
           });
 
-          // Total Row
           tableHtml += `
-            <tr class="bg-slate-100/80 font-bold text-xs sm:text-sm border-t-2 border-slate-300">
-              <td class="p-2 sm:p-3 text-slate-800 border-r border-slate-200 text-left">Total</td>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           `;
 
-          subjects.forEach(subj => {
-            let totalCount = 0;
-            if (isProject) {
-              totalCount = data.filter(d => {
-                const val = d[subj.field];
-                return val !== null && val !== undefined && String(val).trim().toLowerCase() === 'absent';
-              }).length;
-            } else {
-              totalCount = data.filter(d => {
-                const val = d[subj.field];
-                return val !== null && val !== undefined && String(val).trim() !== '';
-              }).length;
-            }
+          tablesContainer.innerHTML += tableHtml;
+        });
 
-            const totalClass = (totalCount === 0 && !isProject) ? 'zero-count' : '';
-            tableHtml += `<td class="p-2 sm:p-3 border-r border-slate-200 last:border-r-0 text-blue-900 ${totalClass}">${totalCount}</td>`;
-          });
-
-          tableHtml += `
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          `;
-
-          tableCard.innerHTML = tableHtml;
-          tablesContainer.appendChild(tableCard);
-        }
-
-        showStatus('success', `Class ${selectedClass}-এর তথ্য সফলভাবে লোড করা হয়েছে।`);
+        showStatus('success', `Class ${selectedClass}-এর নম্বর আপলোড স্ট্যাটাস (Session ${CURRENT_SESSION}) সফলভাবে লোড করা হয়েছে।`);
 
       } catch (err) {
-        console.error('Fetch Class Status Error:', err);
-        showStatus('error', `তথ্য লোড করতে সমস্যা দেখা দিয়েছে: ${err.message || err}`);
+        console.error(err);
+        showStatus('error', `তথ্য লোড করতে সমস্যা হয়েছে: ${err.message || 'Internet সংযোগ চেক করুন।'}`);
       }
     }
   </script>
