@@ -265,13 +265,10 @@
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen pb-12">
-
   <!-- হেডার সেকশন -->
   <header class="header-style max-w-7xl mx-auto mb-6">
     <div class="flex flex-col items-center justify-center text-center">
-      <h1 class="text-xl sm:text-2xl font-bold tracking-wide flex items-center gap-2 mb-1">
-       Pathpukur High School (H.S.)
-      </h1>
+      <h1 class="text-xl sm:text-2xl font-bold tracking-wide flex items-center gap-2 mb-1">Pathpukur High School (H.S.)</h1>
       <p class="text-blue-200 text-xs sm:text-sm font-normal">
         <i class="fa-solid fa-pen-to-square text-blue-200 mr-2 text-base"></i>
         Marks uploading status | Session: <span id="current-session" class="font-bold text-white"></span>
@@ -286,17 +283,17 @@
       
       <!-- তথ্য বার্তা (বর্ণনা বক্স) -->
       <div class="description-box">
-        <p class="text-slate-700 text-xs sm:text-sm flex items-center">
+        <p id="info-text" class="text-slate-700 text-xs sm:text-sm flex items-center">
           <i class="fa-solid fa-circle-info text-blue-600 mr-2 text-base"></i>
           নিচের ড্রপডাউন থেকে শ্রেণী নির্বাচন করে প্রতিটি পরীক্ষার বিষয়ভিত্তিক নম্বর আপলোডের হালনাগাদ সংখ্যা দেখুন।
         </p>
       </div>
 
-      <!-- সকল শ্রেণির ফাইনালাইজেশন স্ট্যাটাস টেবিল -->
+      <!-- 🟢 নতুন যোগ করা অংশ: সকল শ্রেণির ফাইনালাইজেশন স্ট্যাটাস টেবিল -->
       <div class="card-container p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
         <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
           <h2 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
-            <i class="fa-solid fa-lock text-blue-600"></i> Finalisation Status Tracker
+            <i class="fa-solid fa-[#1e3a8a] fa-lock text-blue-600"></i> Finalisation Status Tracker
           </h2>
           <button onclick="fetchFinalisationStatus()" id="refreshStatusBtn" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold px-3 py-1.5 rounded-md border border-blue-200 transition-all flex items-center gap-1.5 cursor-pointer">
             <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
@@ -331,6 +328,7 @@
           </table>
         </div>
       </div>
+      <!-- 🔴 ফাইনালাইজেশন স্ট্যাটাস টেবিল সমাপ্ত -->
 
       <!-- ফিল্টার কন্ট্রোল কার্ড -->
       <div class="card-container p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
@@ -376,6 +374,7 @@
   </main>
 
   <script>
+    // ⚡ সাব-পেজে অ্যাক্টিভিটি ট্র্যাকিং আপডেট রাখা (যাতে অটো-লগআউট না হয়)
     function updateActivityTime() {
         localStorage.setItem('lastActivityTime', Date.now().toString());
     }
@@ -390,11 +389,14 @@
 
     let CURRENT_SESSION = '2026';
 
+    // ⚡ পেজ লোড হওয়ার সাথে সাথে ফাইনালাইজেশন স্ট্যাটাস লোড হবে এবং অটো রিফ্রেশ চালু হবে
     document.addEventListener("DOMContentLoaded", function() {
         fetchFinalisationStatus();
+        // প্রতি ৩০ সেকেন্ড পর পর স্বয়ংক্রিয়ভাবে রিফ্রেশ হবে
         setInterval(fetchFinalisationStatus, 30000); 
     });
 
+    // 🔄 ফাইনালাইজেশন স্ট্যাটাস চেক করার ফাংশন
     async function fetchFinalisationStatus() {
         const icon = document.getElementById('refreshIcon');
         if (icon) icon.classList.add('fa-spin');
@@ -685,24 +687,12 @@
       msgDiv.innerHTML = '';
     }
 
-    function convertClassToBengali(classStr) {
-      const classMap = {
-        'V': 'পঞ্চম',
-        'VI': 'ষষ্ঠ',
-        'VII': 'সপ্তম',
-        'VIII': 'অষ্টম',
-        'IX': 'নবম',
-        'X': 'দশম',
-        'XI': 'একাদশ'
-      };
-      return classMap[classStr] || classStr;
-    }
-
     async function fetchClassStatus() {
       const selectedClass = document.getElementById('class-select').value;
       const tablesContainer = document.getElementById('tables-container');
       const summarySection = document.getElementById('summary-section');
       const summaryCards = document.getElementById('summary-cards');
+      const infoText = document.getElementById('info-text');
 
       tablesContainer.innerHTML = '';
       summaryCards.innerHTML = '';
@@ -710,7 +700,19 @@
 
       if (!selectedClass) {
         clearStatus();
+        if (infoText) {
+          infoText.innerHTML = `<i class="fa-solid fa-circle-info text-blue-600 mr-2 text-base"></i> নিচের ড্রপডাউন থেকে শ্রেণী নির্বাচন করে প্রতিটি পরীক্ষার বিষয়ভিত্তিক নম্বর আপলোডের হালনাগাদ সংখ্যা দেখুন।`;
+        }
         return;
+      }
+
+      // তথ্য বার্তা অডপেট
+      if (infoText) {
+        if (selectedClass === 'X') {
+          infoText.innerHTML = `<i class="fa-solid fa-circle-info text-blue-600 mr-2 text-base"></i> দশম শ্রেণীর প্রজেক্ট জমা না দেওয়ার তালিকা এবং প্রতিটি পরীক্ষার বিষয়ভিত্তিক নম্বর আপলোডের স্ট্যাটাস দেখানো হচ্ছে।`;
+        } else {
+          infoText.innerHTML = `<i class="fa-solid fa-circle-info text-blue-600 mr-2 text-base"></i> Class ${selectedClass}-এর নম্বর আপলোড এবং প্রজেক্টের হালনাগাদ তথ্য নিচে দেখানো হচ্ছে।`;
+        }
       }
 
       showStatus('processing', `Class ${selectedClass}-এর তথ্য লোড করা হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।`);
@@ -755,12 +757,18 @@
 
         Object.keys(config.exams).forEach(examName => {
           const subjects = config.exams[examName];
+          const isProject = (examName === 'Project');
+
+          let headerTitle = examName;
+          if (isProject) {
+            headerTitle = selectedClass === 'X' ? 'দশম শ্রেণীর প্রজেক্ট জমা না দেওয়ার তালিকা (Not Submitted)' : `${examName} (Not Submitted List)`;
+          }
           
           let tableHtml = `
             <div class="table-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden page-break-inside-avoid">
               <div class="table-header bg-slate-900 text-white px-4 py-3 flex items-center justify-between border-b border-slate-800">
                 <h3 class="font-bold text-sm sm:text-base flex items-center gap-2 text-white">
-                  <i class="fa-solid fa-file-pen text-blue-300 no-print"></i> ${examName}
+                  <i class="fa-solid ${isProject ? 'fa-folder-minus text-amber-400' : 'fa-file-pen text-blue-300'} no-print"></i> ${headerTitle}
                 </h3>
                 <span class="text-xs bg-slate-800 font-medium text-blue-200 px-3 py-1 rounded-full border border-slate-700">Class: ${selectedClass} | Session: ${CURRENT_SESSION}</span>
               </div>
@@ -783,11 +791,24 @@
             `;
 
             subjects.forEach(sub => {
-              const uploadedCount = secData.filter(d => d[sub.field] !== null && d[sub.field] !== undefined && d[sub.field] !== '').length;
+              let count = 0;
+              if (isProject) {
+                // প্রজেক্টের ক্ষেত্রে 'Absent' থাকলে প্রজেক্ট জমা দেয়নি ধরা হবে
+                count = secData.filter(d => {
+                  const val = d[sub.field];
+                  return val !== null && val !== undefined && String(val).trim().toLowerCase() === 'absent';
+                }).length;
+              } else {
+                // লিখিত পরীক্ষার ক্ষেত্রে নম্বর আপলোড হলে গণনা হবে
+                count = secData.filter(d => {
+                  const val = d[sub.field];
+                  return val !== null && val !== undefined && String(val).trim() !== '';
+                }).length;
+              }
               
-              const isZero = uploadedCount === 0;
-              const displayVal = isZero ? '-' : uploadedCount;
-              const cellClass = isZero ? 'zero-count border-r border-red-200' : 'text-slate-900 font-semibold border-r border-slate-200';
+              const isZero = count === 0;
+              const displayVal = (isZero && !isProject) ? '-' : count;
+              const cellClass = (isZero && !isProject) ? 'zero-count border-r border-red-200' : 'text-slate-900 font-semibold border-r border-slate-200';
 
               tableHtml += `
                 <td class="p-3 text-center ${cellClass}">
