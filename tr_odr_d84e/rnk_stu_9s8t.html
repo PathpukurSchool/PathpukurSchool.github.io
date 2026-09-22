@@ -147,7 +147,7 @@
         
         <!-- Header Section -->
         <header class="header-card no-print">
-            <h1 class="text-2xl md:text-3xl font-bold mb-1 tracking-wide">Pathpukur High School (H.S.)</h1>
+            <h1 class="text-2xl md:text-2xl font-bold mb-1 tracking-wide">Pathpukur High School (H.S.)</h1>
             <h2 class="text-base md:text-lg text-indigo-100 font-medium flex items-center justify-center gap-2">
                 <i class="fa-solid fa-graduation-cap"></i> Student Exam Rank | Session: <strong id="sessionDisplay" class="text-amber-300">লোডিং...</strong>
             </h2>
@@ -167,9 +167,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-layer-group text-indigo-500 mr-1"></i> Select Class
+                        <i class="fa-solid fa-layer-group text-indigo-500 mr-1"></i> Class
                     </label>
                     <select id="classSelect" onchange="loadClassData()" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-600 text-slate-700 font-semibold transition-all">
+                        <option value="">-- Select Class --</option>
                         <option value="v">Class V</option>
                         <option value="vi">Class VI</option>
                         <option value="vii">Class VII</option>
