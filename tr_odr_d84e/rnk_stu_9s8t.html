@@ -220,14 +220,14 @@
                     <!-- 🔽 রোল এবং র‍্যাঙ্ক ফিল্টার/সর্ট ড্রপডাউন -->
                     <div class="relative w-full sm:w-48">
                         <select id="sortSelect" onchange="sortAndRenderTable()" class="w-full bg-slate-50 border border-slate-300 rounded-lg pl-3 pr-8 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-sky-500">
-                            <option value="roll">Filter by Roll (1, 2, 3...)</option>
-                            <option value="rank">Filter by Rank (1st, 2nd, 3rd...)</option>
+                            <option value="roll">🔻 Filter: by Roll (1, 2, 3...)</option>
+                            <option value="rank">🔻 Filter: by Rank (1st, 2nd...)</option>
                         </select>
                     </div>
 
                     <!-- 🔍 সার্চ ইনপুট -->
                     <div class="relative w-full sm:w-48">
-                        <input type="text" id="tableFilterInput" onkeyup="filterTable()" placeholder="রোল/র‍্যাঙ্ক দিয়ে খুঁজুন..." class="w-full bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-sky-500">
+                        <input type="text" id="tableFilterInput" onkeyup="filterTable()" placeholder="Search: by Roll or Rank" class="w-full bg-slate-50 border border-slate-300 rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-sky-500">
                         <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                     </div>
 
