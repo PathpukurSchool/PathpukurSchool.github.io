@@ -763,10 +763,15 @@
           let headerTitle = `${examName}`;
           let headerBadge = `Class: ${selectedClass} | Session: ${CURRENT_SESSION}`;
 
-          // ক্লাস X-এর প্রজেক্ট টেবিলের জন্য বিশেষ হেডার লজিক
           if (isProject && isClassX) {
             headerTitle = `Project Absent Status`;
           }
+
+          // 🟢 বিষয়ের মোট সংখ্যা রাখার জন্য অবজেক্ট
+          const totalsBySubject = {};
+          subjects.forEach(sub => {
+            totalsBySubject[sub.field] = 0;
+          });
 
           let tableHtml = `
             <div class="card-container table-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden page-break-inside-avoid">
@@ -798,18 +803,21 @@
               let count = 0;
               
               if (isProject && isClassX) {
-                // 🟢 শুধুমাত্র Class X-এর Project-এর ক্ষেত্রে 'Absent' ফিল্ডগুলো কাউন্ট করা হবে
+                // 🟢 Class X Project Absent count
                 count = secData.filter(d => {
                   const val = d[sub.field];
                   return val !== null && val !== undefined && String(val).trim().toLowerCase() === 'absent';
                 }).length;
               } else {
-                // 🔵 অন্যান্য সকল ক্ষেত্র ও অন্যান্য Class-এর প্রজেক্টে এন্ট্রি হওয়া নম্বরের সংখ্যা গণনা করবে
+                // 🔵 অন্যান্য ক্ষেত্র
                 count = secData.filter(d => {
                   const val = d[sub.field];
                   return val !== null && val !== undefined && String(val).trim() !== '';
                 }).length;
               }
+
+              // 🟢 টোটাল সামে যোগ করা
+              totalsBySubject[sub.field] += count;
 
               const isZero = (count === 0);
               const displayVal = (isZero && !(isProject && isClassX)) ? '-' : count;
@@ -827,6 +835,16 @@
 
           tableHtml += `
                   </tbody>
+                  <!-- 🟢 টোটাল (Total) রো যোগ করা হলো -->
+                  <tfoot>
+                    <tr class="bg-slate-200 text-slate-900 font-bold border-t-2 border-slate-400">
+                      <td class="p-3 font-bold border-r border-slate-300 bg-slate-300">Total</td>
+                      ${subjects.map(sub => {
+                        const totalCount = totalsBySubject[sub.field];
+                        return `<td class="p-3 text-center border-r border-slate-300 font-bold ${totalCount === 0 ? 'text-red-600' : 'text-slate-900'}">${totalCount}</td>`;
+                      }).join('')}
+                    </tr>
+                  </tfoot>
                 </table>
               </div>
             </div>
@@ -834,7 +852,7 @@
 
           tablesContainer.innerHTML += tableHtml;
         });
-
+        
         showStatus('success', `Class ${selectedClass}-এর নম্বর আপলোড স্ট্যাটাস (Session ${CURRENT_SESSION}) সফলভাবে লোড করা হয়েছে।`);
 
       } catch (err) {
