@@ -5,114 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>সংশোধিত মার্কশিট তালিকা</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background: #f4f6f9; color: #333; }
-        .container { max-width: 1050px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .header-area { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px; }
-        h2 { color: #1e3a8a; margin: 0; font-size: 22px; }
-        
-        .control-panel { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background: #f4f6f9; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #1e3a8a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 0; }
+        .control-panel { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         input[type="password"] { padding: 9px 12px; border: 1px solid #94a3b8; border-radius: 5px; font-size: 14px; outline: none; }
-        button { padding: 9px 16px; border: none; border-radius: 5px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
-        
+        button { padding: 9px 16px; border: none; border-radius: 5px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-enable { background: #16a34a; color: white; }
         .btn-enable:hover { background: #15803d; }
         .btn-disable { background: #dc2626; color: white; }
         .btn-disable:hover { background: #b91c1c; }
-        .btn-refresh { background: #0284c7; color: white; }
-        .btn-refresh:hover { background: #0369a1; }
-        .btn-print { background: #4f46e5; color: white; margin-left: auto; }
-        .btn-print:hover { background: #4338ca; }
-
         .status-badge { padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; margin-bottom: 15px; display: inline-block; }
         .status-active { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
         .status-inactive { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
-
-        /* স্ক্রলযোগ্য টেবিল কন্টেইনার */
-        .table-container { max-height: 550px; overflow-y: auto; overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; background: white; white-space: nowrap; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
         th, td { border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; font-size: 14px; }
-        th { background: #f1f5f9; color: #334155; position: sticky; top: 0; z-index: 10; }
+        th { background: #f1f5f9; color: #334155; }
         tr:nth-child(even) { background: #f8fafc; }
-        .badge-col { background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; font-weight: bold; }
-        
-        /* মার্কশিট প্রিন্ট সম্পন্ন রো-এর স্টাইল */
-        tr.completed-row { background-color: #f1f5f9 !important; color: #94a3b8; opacity: 0.6; }
-        tr.completed-row td { text-decoration: line-through; }
-        tr.completed-row .badge-col { background: #e2e8f0; color: #64748b; }
-        
-        /* লোডিং স্পিনার অ্যানিমেশন */
-        .spinner { border: 2px solid #f3f3f3; border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 0.8s linear infinite; display: inline-block; }
-        .spinning { animation: spin 0.8s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* A4 পেজে প্রিন্ট স্টাইল */
-        @media print {
-            body { background: white; margin: 0; padding: 0; }
-            .container { box-shadow: none; padding: 0; max-width: 100%; }
-            .control-panel, .header-area button, #statusMessage, .col-check, td:first-child, th:first-child { display: none !important; }
-            .table-container { max-height: none; overflow: visible; border: none; }
-            table { border: 1px solid #000; width: 100%; }
-            th, td { border: 1px solid #000; font-size: 12px; padding: 6px 8px; text-decoration: none !important; color: #000 !important; }
-            th { background-color: #eee !important; }
-            tr.completed-row { opacity: 1; color: #000; }
-            @page { size: A4; margin: 12mm; }
-        }
+        .badge-col { background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+        @media print { .control-panel, button, input { display: none !important; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header-area">
-        <h2>সংশোধিত মার্কশিটের তালিকা (Re-print List)</h2>
-        <button class="btn-refresh" id="refreshBtn" onclick="loadModifiedData()">
-            <span id="spinIcon">🔄</span> রিফ্রেশ
-        </button>
-    </div>
+    <h2>সংশোধিত মার্কশিটের তালিকা (Re-print List)</h2>
 
     <!-- পাসকি ও বাটন কন্ট্রোল প্যানেল -->
     <div class="control-panel">
         <label for="passkey"><strong>পাসকি:</strong></label>
         <input type="password" id="passkey" placeholder="Enter Passkey">
-        
-        <!-- ডায়নামিক বোতাম (JS দ্বারা অন/অফ অনুযায়ী পরিবর্তিত হবে) -->
-        <button id="btnEnable" class="btn-enable" onclick="toggleMode(true)" style="display: none;">
-            ট্র্যাকিং মোড চালু করুন
-        </button>
-        <button id="btnDisable" class="btn-disable" onclick="toggleMode(false)" style="display: none;">
-            ট্র্যাকিং মোড বন্ধ ও তালিকা ক্লিয়ার করুন
-        </button>
-
-        <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+        <button class="btn-enable" onclick="toggleMode(true)">ট্র্যাকিং মোড চালু করুন</button>
+        <button class="btn-disable" onclick="toggleMode(false)">বন্ধ ও তালিকা ক্লিয়ার করুন</button>
     </div>
 
     <!-- স্ট্যাটাস বার্তা -->
     <div id="statusMessage">লোডিং...</div>
 
-    <!-- রি-প্রিন্ট তালিকা স্ক্রলযোগ্য টেবিল কন্টেইনার -->
-    <div class="table-container" id="tableWrapper" style="display: none;">
-        <table id="studentTable">
-            <thead>
-                <tr>
-                    <th class="col-check" style="text-align: center; width: 40px;">প্রিন্ট</th>
-                    <th>Class</th>
-                    <th>Section</th>
-                    <th>Roll No</th>
-                    <th>Student Name</th>
-                    <th>Updated Exam/Subject</th>
-                    <th>Last Modified Time</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
-    </div>
+    <!-- রি-প্রিন্ট তালিকা টেবিল -->
+    <table id="studentTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Section</th>
+                <th>Roll No</th>
+                <th>Student Name</th>
+                <th>Updated Exam/Subject</th>
+                <th>Last Modified Time</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
 </div>
 
 <script>
 const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
 const ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // আপনার Supabase Anon Key প্রদান করুন
-
-// ক্লাসের রোমান সংখ্যানুসারে ক্রমানুযায়ী সাজানোর অর্ডার
-const CLASS_ORDER = { 'V': 1, 'VI': 2, 'VII': 3, 'VIII': 4, 'IX': 5, 'X': 6 };
 
 // ট্র্যাকিং মোড অন/অফ করার কল
 async function toggleMode(enable) {
@@ -135,32 +83,14 @@ async function toggleMode(enable) {
 
         const result = await response.json();
         alert(result.message);
-        if (result.success) {
-            document.getElementById('passkey').value = "";
-        }
         loadModifiedData();
     } catch (err) {
         alert("Error: " + err.message);
     }
 }
 
-// প্রিন্ট ট্র্যাকিং চেক বক্স স্টেট পরিবর্তন ও লোকাল স্টোরেজে সংরক্ষণ
-function togglePrintStatus(checkbox, key) {
-    const row = checkbox.closest('tr');
-    if (checkbox.checked) {
-        row.classList.add('completed-row');
-        localStorage.setItem(key, 'true');
-    } else {
-        row.classList.remove('completed-row');
-        localStorage.removeItem(key);
-    }
-}
-
-// সংশোধিত ডাটা লোড করার মূল ফাংশন
+// সংশোধিত ডাটা লোড করার কাজ
 async function loadModifiedData() {
-    const spinIcon = document.getElementById("spinIcon");
-    spinIcon.classList.add("spinning");
-
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_modified_students_list`, {
             method: "POST",
@@ -173,60 +103,30 @@ async function loadModifiedData() {
 
         const result = await response.json();
         const statusDiv = document.getElementById("statusMessage");
-        const tableWrapper = document.getElementById("tableWrapper");
+        const table = document.getElementById("studentTable");
         const tbody = document.getElementById("tableBody");
-        const btnEnable = document.getElementById("btnEnable");
-        const btnDisable = document.getElementById("btnDisable");
 
         if (!result.is_active) {
             statusDiv.innerHTML = `<span class="status-badge status-inactive">ট্র্যাকিং মোড বন্ধ রয়েছে। কোনো রেকর্ড দেখা যাবে না।</span>`;
-            tableWrapper.style.display = "none";
-            btnEnable.style.display = "inline-flex";
-            btnDisable.style.display = "none";
+            table.style.display = "none";
             return;
         }
 
-        // ট্র্যাকিং মোড চালু থাকলে লাল বোতাম দেখাবে
-        btnEnable.style.display = "none";
-        btnDisable.style.display = "inline-flex";
-
-        if (!result.data || result.data.length === 0) {
+        if (result.data.length === 0) {
             statusDiv.innerHTML = `<span class="status-badge status-active">ট্র্যাকিং মোড চালু রয়েছে। তবে এখনও কোনো নম্বর সংশোধন করা হয়নি।</span>`;
-            tableWrapper.style.display = "none";
+            table.style.display = "none";
             return;
         }
 
         statusDiv.innerHTML = `<span class="status-badge status-active">ট্র্যাকিং মোড চালু রয়েছে। মোট ${result.data.length}টি সংশোধন পাওয়া গেছে।</span>`;
         tbody.innerHTML = "";
 
-        // ক্লাস ও রোল অনুসারে ডাটা সাজানো
-        result.data.sort((a, b) => {
-            const classA = a.class_name.replace('result_', '').toUpperCase();
-            const classB = b.class_name.replace('result_', '').toUpperCase();
-            
-            const orderA = CLASS_ORDER[classA] || 99;
-            const orderB = CLASS_ORDER[classB] || 99;
-
-            if (orderA !== orderB) {
-                return orderA - orderB;
-            }
-            return (a.roll_no || 0) - (b.roll_no || 0);
-        });
-
-        // টেবিল রেন্ডার করা
         result.data.forEach(row => {
             const time = new Date(row.modified_at).toLocaleString('bn-IN');
             const classNameFormatted = row.class_name.replace('result_', '').toUpperCase();
             
-            // প্রিন্ট ট্র্যাকের ইউনিক কি (যেমন: print_result_v_12_e1_bengali)
-            const printStorageKey = `print_${row.class_name}_${row.student_id}_${row.updated_column}`;
-            const isPrinted = localStorage.getItem(printStorageKey) === 'true';
-
             tbody.innerHTML += `
-                <tr class="${isPrinted ? 'completed-row' : ''}">
-                    <td class="col-check" style="text-align: center;">
-                        <input type="checkbox" ${isPrinted ? 'checked' : ''} onchange="togglePrintStatus(this, '${printStorageKey}')" style="cursor: pointer; width: 16px; height: 16px;">
-                    </td>
+                <tr>
                     <td><strong>${classNameFormatted}</strong></td>
                     <td>${row.section || 'A'}</td>
                     <td>${row.roll_no}</td>
@@ -237,18 +137,13 @@ async function loadModifiedData() {
             `;
         });
 
-        tableWrapper.style.display = "block";
+        table.style.display = "table";
     } catch (err) {
-        console.error("Error fetching data:", err);
-    } finally {
-        setTimeout(() => spinIcon.classList.remove("spinning"), 500);
+        console.error(err);
     }
 }
 
-// প্রতি ৩০ সেকেন্ড পর পর অটো-রিফ্রেশ
-setInterval(loadModifiedData, 30000);
-
-// পেজ খুললেই ডাটা লোড হবে
+// পেজ খুললেই অটোমেটিক ডাটা রিফ্রেশ করবে
 window.onload = loadModifiedData;
 </script>
 </body>
