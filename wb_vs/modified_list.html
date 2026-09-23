@@ -13,10 +13,63 @@
         h1 { font-size: 20px; margin-bottom: 5px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
         
-        .control-panel { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        input[type="password"] { padding: 9px 12px; border: 1px solid #94a3b8; border-radius: 5px; font-size: 14px; outline: none; }
-        button { padding: 9px 16px; border: none; border-radius: 5px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s ease-in-out, transform 0.1s; display: inline-flex; align-items: center; gap: 6px; width: 100%; justify-content: center; gap: 8px; }
-        
+        /* কন্ট্রোল প্যানেল: বাই-ডিফল্ট (ছোট স্ক্রীন / মোবাইল) */
+.control-panel { 
+    background: #f8fafc; 
+    border: 1px solid #cbd5e1; 
+    padding: 15px; 
+    border-radius: 8px; 
+    margin-bottom: 15px; 
+    display: flex; 
+    flex-direction: column; /* ছোট স্ক্রীনে উপরে-নিচে থাকবে */
+    gap: 10px; 
+    align-items: stretch; 
+}
+
+/* ছোট স্ক্রীনে ইনপুট বক্স পুরো জায়গা নেবে */
+input[type="password"] { 
+    padding: 9px 12px; 
+    border: 1px solid #94a3b8; 
+    border-radius: 5px; 
+    font-size: 14px; 
+    outline: none; 
+    width: 100%; 
+}
+
+/* ছোট স্ক্রীনে বাটন পুরো জায়গা নেবে */
+button { 
+    padding: 9px 16px; 
+    border: none; 
+    border-radius: 5px; 
+    font-size: 14px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: background 0.2s ease-in-out, transform 0.1s; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 8px; 
+    width: 100%; 
+}
+
+/* বড় স্ক্রীন (স্ক্রীন সাইজ 600px বা তার বেশি হলে) */
+@media (min-width: 600px) {
+    .control-panel {
+        flex-direction: row; /* পাশাপাশি থাকবে */
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    input[type="password"] {
+        width: auto;
+        flex: 1; /* ইনপুট বক্স খালি জায়গা নিজে পূরণ করবে */
+    }
+    button {
+        width: auto; /* বাটন প্রয়োজন অনুযায়ী চওড়া হবে */
+    }
+    .btn-print {
+        margin-left: auto; /* প্রিন্ট বাটন ডানদিকে সরে যাবে */
+    }
+}
         .btn-enable { background: #16a34a; color: white; }
         .btn-enable:hover { background: #15803d; }
         .btn-disable { background: #dc2626; color: white; }
