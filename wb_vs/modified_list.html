@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সংশোধিত মার্কশিট তালিকা</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background: #f4f6f9; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #1e3a8a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 0; }
+        .control-panel { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        input[type="password"] { padding: 9px 12px; border: 1px solid #94a3b8; border-radius: 5px; font-size: 14px; outline: none; }
+        button { padding: 9px 16px; border: none; border-radius: 5px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-enable { background: #16a34a; color: white; }
+        .btn-enable:hover { background: #15803d; }
+        .btn-disable { background: #dc2626; color: white; }
+        .btn-disable:hover { background: #b91c1c; }
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; margin-bottom: 15px; display: inline-block; }
+        .status-active { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+        .status-inactive { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
+        th, td { border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; font-size: 14px; }
+        th { background: #f1f5f9; color: #334155; }
+        tr:nth-child(even) { background: #f8fafc; }
+        .badge-col { background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+        @media print { .control-panel, button, input { display: none !important; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>সংশোধিত মার্কশিটের তালিকা (Re-print List)</h2>
+
+    <!-- পাসকি ও বাটন কন্ট্রোল প্যানেল -->
+    <div class="control-panel">
+        <label for="passkey"><strong>পাসকি:</strong></label>
+        <input type="password" id="passkey" placeholder="Enter Passkey">
+        <button class="btn-enable" onclick="toggleMode(true)">ট্র্যাকিং মোড চালু করুন</button>
+        <button class="btn-disable" onclick="toggleMode(false)">বন্ধ ও তালিকা ক্লিয়ার করুন</button>
+    </div>
+
+    <!-- স্ট্যাটাস বার্তা -->
+    <div id="statusMessage">লোডিং...</div>
+
+    <!-- রি-প্রিন্ট তালিকা টেবিল -->
+    <table id="studentTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Section</th>
+                <th>Roll No</th>
+                <th>Student Name</th>
+                <th>Updated Exam/Subject</th>
+                <th>Last Modified Time</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<script>
+const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+const ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // আপনার Supabase Anon Key প্রদান করুন
+
+// ট্র্যাকিং মোড অন/অফ করার কল
+async function toggleMode(enable) {
+    const passkey = document.getElementById('passkey').value.trim();
+    if (!passkey) {
+        alert("অনুগ্রহ করে পাসকি প্রদান করুন!");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/toggle_modified_list_mode`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": ANON_KEY,
+                "Authorization": `Bearer ${ANON_KEY}`
+            },
+            body: JSON.stringify({ p_passkey: passkey, p_enable: enable })
+        });
+
+        const result = await response.json();
+        alert(result.message);
+        loadModifiedData();
+    } catch (err) {
+        alert("Error: " + err.message);
+    }
+}
+
+// সংশোধিত ডাটা লোড করার কাজ
+async function loadModifiedData() {
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_modified_students_list`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": ANON_KEY,
+                "Authorization": `Bearer ${ANON_KEY}`
+            }
+        });
+
+        const result = await response.json();
+        const statusDiv = document.getElementById("statusMessage");
+        const table = document.getElementById("studentTable");
+        const tbody = document.getElementById("tableBody");
+
+        if (!result.is_active) {
+            statusDiv.innerHTML = `<span class="status-badge status-inactive">ট্র্যাকিং মোড বন্ধ রয়েছে। কোনো রেকর্ড দেখা যাবে না।</span>`;
+            table.style.display = "none";
+            return;
+        }
+
+        if (result.data.length === 0) {
+            statusDiv.innerHTML = `<span class="status-badge status-active">ট্র্যাকিং মোড চালু রয়েছে। তবে এখনও কোনো নম্বর সংশোধন করা হয়নি।</span>`;
+            table.style.display = "none";
+            return;
+        }
+
+        statusDiv.innerHTML = `<span class="status-badge status-active">ট্র্যাকিং মোড চালু রয়েছে। মোট ${result.data.length}টি সংশোধন পাওয়া গেছে।</span>`;
+        tbody.innerHTML = "";
+
+        result.data.forEach(row => {
+            const time = new Date(row.modified_at).toLocaleString('bn-IN');
+            const classNameFormatted = row.class_name.replace('result_', '').toUpperCase();
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong>${classNameFormatted}</strong></td>
+                    <td>${row.section || 'A'}</td>
+                    <td>${row.roll_no}</td>
+                    <td>${row.student_name}</td>
+                    <td><span class="badge-col">${row.updated_column}</span></td>
+                    <td>${time}</td>
+                </tr>
+            `;
+        });
+
+        table.style.display = "table";
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// পেজ খুললেই অটোমেটিক ডাটা রিফ্রেশ করবে
+window.onload = loadModifiedData;
+</script>
+</body>
+</html>
