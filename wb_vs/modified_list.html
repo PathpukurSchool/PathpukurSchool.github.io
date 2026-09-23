@@ -137,10 +137,6 @@
             <div class="card-title">
                 <i class="fa-solid fa-lock" style="color: #1e3a8a;"></i> Finalisation Status Tracker
             </div>
-            <button onclick="fetchFinalisationStatus()" id="refreshStatusBtn" class="btn-status-refresh">
-                <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
-                <span>Refresh</span>
-            </button>
         </div>
 
         <div style="overflow-x: auto;">
@@ -180,7 +176,7 @@
         <button id="btnEnable" class="btn-enable" onclick="toggleMode(true)" style="display: none;">ট্র্যাকিং মোড চালু করুন</button>
         <button id="btnDisable" class="btn-disable" onclick="toggleMode(false)" style="display: none;">ট্র্যাকিং মোড বন্ধ ও ক্লিয়ার করুন</button>
         
-        <button class="btn-refresh" id="refreshBtn" onclick="loadModifiedData()"><span id="spinIcon">🔄</span> রিফ্রেশ</button>
+        <button class="btn-refresh" id="refreshBtn" onclick="refreshAllData()"><span id="spinIcon">🔄</span> রিফ্রেশ</button>
         <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
     </div>
     
@@ -223,7 +219,14 @@ document.addEventListener("DOMContentLoaded", function() {
     setInterval(loadModifiedData, 30000);
 });
 
+// 🟢 একসাথে পুরো পেজ রিফ্রেশ করার জন্য নতুন ফাংশন
+async function refreshAllData() {
+    await fetchFinalisationStatus();
+    await loadModifiedData();
+}
+
 async function fetchFinalisationStatus() {
+    // refreshIcon না থাকলেও যাতে কোনো এরর (Error) না আসে
     const icon = document.getElementById('refreshIcon');
     if (icon) icon.classList.add('fa-spin');
 
