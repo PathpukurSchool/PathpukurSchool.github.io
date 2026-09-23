@@ -5,61 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pathpukur High School (H.S.)</title>
     
-    <!-- 🟢১. FontAwesome Icons library (আইকনের জন্য) -->
+    <!-- 🟢 FontAwesome Icons library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- 🟢২. Supabase JS Client CDN -->
+    <!-- 🟢 Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
 
-        body { background-color: #f1f5f9; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
-        .container { width: 100%; max-width: 650px; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #e2e8f0; }
-        .header-area { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #ffffff; padding: 20px 15px; text-align: center; }
-        h1 { font-size: 20px; margin-bottom: 5px; letter-spacing: 0.5px; }
+        body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .container { width: 100%; max-width: 750px; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); overflow: hidden; border: 1px solid #e2e8f0; }
+        
+        .header-area { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #ffffff; padding: 22px 15px; text-align: center; }
+        h1 { font-size: 22px; margin-bottom: 4px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
         
-        /* কাস্টম কার্ড ও স্ট্যাটাস ট্র্যাকার স্টাইল */
-        .card-container { padding: 16px; background: #ffffff; border-bottom: 1px solid #e2e8f0; }
-        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
-        .card-title { font-size: 13px; font-weight: bold; color: #1e293b; display: flex; align-items: center; gap: 8px; }
-        .btn-status-refresh { font-size: 12px; background: #eff6ff; color: #1d4ed8; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid #bfdbfe; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-        .btn-status-refresh:hover { background: #dbeafe; }
+        /* সেকশন কার্ড ডিজাইন (Visual Separation) */
+        .section-card { margin: 16px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); overflow: hidden; }
 
-        /* কন্ট্রোল প্যানেল */
-        .control-panel { 
-            padding: 15px;  
-            margin-bottom: 8px; 
+        .section-header { 
+            background: #f1f5f9; 
+            padding: 12px 16px; 
+            border-bottom: 1px solid #cbd5e1; 
             display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
+            align-items: center; 
+            justify-content: space-between; 
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .passkey-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .section-title { font-size: 15px; font-weight: bold; color: #1e3a8a; display: flex; align-items: center; gap: 8px; }
+
+        /* ফিল্টার বাটনসমূহ */
+        .filter-group { display: flex; gap: 4px; background: #e2e8f0; padding: 3px; border-radius: 6px; }
+        .filter-btn { font-size: 11px; padding: 4px 8px; border: none; background: transparent; cursor: pointer; border-radius: 4px; font-weight: 600; color: #475569; }
+        .filter-btn.active { background: #ffffff; color: #1e3a8a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        /* প্যাসকি ইনপুট গ্রুপ (Eye Icon) */
+        .passkey-wrapper {position: relative; display: flex; align-items: center; width: 100%; }
+
+        .passkey-wrapper input {
+            padding: 9px 35px 9px 12px;
+            border: 1px solid #94a3b8;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
             width: 100%;
         }
 
-        input[type="password"] { 
-            padding: 9px 12px; 
-            border: 1px solid #94a3b8; 
-            border-radius: 5px; 
-            font-size: 14px; 
-            outline: none; 
-            width: 100%; 
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            color: #64748b;
+            font-size: 14px;
         }
 
-        button { 
+        .toggle-password:hover { color: #0f172a; }
+
+        /* কন্ট্রোল প্যানেল */
+        .control-panel { 
+            padding: 16px;  
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+        }
+
+        button.btn-main { 
             padding: 10px 16px; 
             border: none; 
-            border-radius: 5px; 
-            font-size: 14px; 
+            border-radius: 6px; 
+            font-size: 13px; 
             font-weight: bold; 
             cursor: pointer; 
-            transition: background 0.2s ease-in-out, transform 0.1s; 
+            transition: all 0.2s ease; 
             display: inline-flex; 
             align-items: center; 
             justify-content: center; 
@@ -67,18 +87,17 @@
             width: 100%; 
         }
 
-        @media (min-width: 500px) {
+        @media (min-width: 520px) {
             .control-panel {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 12px;
                 align-items: center;
             }
-
-            .passkey-group { grid-column: span 1; }
+            .passkey-wrapper { grid-column: span 1; }
             .btn-enable, .btn-disable { grid-column: span 1; }
             .btn-refresh { grid-column: span 1; }
-            .btn-print { grid-column: span 1; margin-left: 0; }
+            .btn-print { grid-column: span 1; }
         }
 
         .btn-enable { background: #16a34a; color: white; }
@@ -88,38 +107,50 @@
         .btn-refresh { background: #0284c7; color: white; }
         .btn-refresh:hover { background: #0369a1; }
         .btn-print { background: #4f46e5; color: white; }
+        .btn-print:hover { background: #4338ca; }
 
-        .status-badge { padding: 12px 15px; border-radius: 8px; font-weight: bold; font-size: 13px; display: inline-block; gap: 8px; margin-bottom: 10px; width: 100%; }
-        .status-active { background: #dcfce7; color: #15803d; border: 1px solid #86efac; border-left: 4px solid #86efac; }
-        .status-inactive { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; border-left: 4px solid #fca5a5; }
+        .status-badge { padding: 10px 12px; border-radius: 6px; font-weight: bold; font-size: 13px; margin: 0 16px 12px 16px; text-align: center; }
+        .status-active { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+        .status-inactive { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
 
         /* টেবিল স্টাইল */
-        .table-container { max-height: 550px; overflow-y: auto; overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 6px; margin: 10px; }
+        .table-container { max-height: 480px; overflow-y: auto; overflow-x: auto; margin: 0 16px 16px 16px; border: 1px solid #cbd5e1; border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; background: white; white-space: nowrap; font-size: 12px; }
         th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: center; }
-        th { background: #f1f5f9; color: #334155; position: sticky; top: 0; z-index: 10; font-weight: bold; }
+        th { background: #f8fafc; color: #334155; position: sticky; top: 0; z-index: 10; font-weight: bold; }
         tr:nth-child(even) { background: #f8fafc; }
         .badge-col { background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; font-weight: bold; }
         
-        tr.completed-row { background-color: #f1f5f9 !important; color: #94a3b8; opacity: 0.6; }
+        tr.completed-row { background-color: #f1f5f9 !important; color: #94a3b8; }
         tr.completed-row td { text-decoration: line-through; }
         tr.completed-row .badge-col { background: #e2e8f0; color: #64748b; }
         
         .spinning { animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* প্রিন্ট হেডার */
+        .print-only-header { display: none; text-align: center; padding: 10px 0; border-bottom: 2px solid #000; margin-bottom: 15px; }
+
         /* প্রিন্ট CSS */
         @media print {
-            html, body { background: white !important; margin: 0 !important; padding: 0 !important; min-height: 0 !important; height: auto !important; }
+            html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
             .container { box-shadow: none !important; padding: 0 !important; margin: 0 !important; max-width: 100% !important; border: none !important; }
-            .card-container, .control-panel, .header-area button, #statusMessage, .col-check, td:first-child, th:first-child { display: none !important; }
-            .table-container { max-height: none !important; overflow: visible !important; border: none !important; margin-top: 0 !important; }
+            
+            /* অপ্রয়োজনীয় এলিমেন্ট হাইড করা */
+            .section-card:first-child, .control-panel, #statusMessage, .col-check, td:first-child, th:first-child, .filter-group { display: none !important; }
+            
+            .section-card { border: none !important; margin: 0 !important; box-shadow: none !important; }
+            .section-header { background: transparent !important; border: none !important; padding: 0 0 10px 0 !important; }
+            .section-title { font-size: 16px !important; color: #000 !important; font-weight: bold; }
+
+            .table-container { max-height: none !important; overflow: visible !important; border: none !important; margin: 0 !important; }
             table { border: 1px solid #000; width: 100%; page-break-after: auto; }
             tr { page-break-inside: avoid; }
-            th, td { border: 1px solid #000; font-size: 11px; padding: 5px 6px; text-decoration: none !important; color: #000 !important; }
-            th { background-color: #eee !important; }
+            th, td { border: 1px solid #000 !important; font-size: 11px !important; padding: 6px !important; text-decoration: none !important; color: #000 !important; }
+            th { background-color: #f2f2f2 !important; }
             tr.completed-row { opacity: 1; color: #000; }
-            @page { size: A4 portrait; margin: 10mm; }
+            tr.completed-row td { text-decoration: none !important; }
+            @page { size: A4 portrait; margin: 12mm; }
         }
     </style>
 </head>
@@ -128,77 +159,101 @@
 <div class="container">
     <div class="header-area">
         <h1>Pathpukur High School (H.S.)</h1>
-        <h2>সংশোধিত মার্কশিটের তালিকা (Re-print List)</h2>
+        <h2>রেজাল্ট প্যানেল ও ট্র্যাকিং ড্যাশবোর্ড</h2>
     </div>
 
-    <!-- ফাইনালাইজেশন স্ট্যাটাস ট্র্যাকার -->
-    <div class="card-container">
-        <div class="card-header">
-            <div class="card-title">
+    <!-- সেকশন ১: ফাইনালাইজেশন স্ট্যাটাস ট্র্যাকার -->
+    <div class="section-card">
+        <div class="section-header">
+            <div class="section-title">
                 <i class="fa-solid fa-lock" style="color: #1e3a8a;"></i> Finalisation Status Tracker
+            </div>
+            <!-- ফিল্টার বোতাম -->
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filterTracker('all', this)">সব</button>
+                <button class="filter-btn" onclick="filterTracker('active', this)">Active</button>
+                <button class="filter-btn" onclick="filterTracker('finalised', this)">Finalised</button>
             </div>
         </div>
 
-        <div style="overflow-x: auto;">
-            <table>
+        <div style="overflow-x: auto; padding: 12px;">
+            <table id="statusTrackerTable">
                 <thead>
                     <tr>
-                        <th>Class V</th>
-                        <th>Class VI</th>
-                        <th>Class VII</th>
-                        <th>Class VIII</th>
-                        <th>Class IX</th>
-                        <th>Class X</th>
-                        <th>Class XI</th>
+                        <th class="cls-col" data-class="v">Class V</th>
+                        <th class="cls-col" data-class="vi">Class VI</th>
+                        <th class="cls-col" data-class="vii">Class VII</th>
+                        <th class="cls-col" data-class="viii">Class VIII</th>
+                        <th class="cls-col" data-class="ix">Class IX</th>
+                        <th class="cls-col" data-class="x">Class X</th>
+                        <th class="cls-col" data-class="xi">Class XI</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td id="status-v"><i class="fa-solid fa-spinner fa-spin"></i></td>
-                        <td id="status-vi"><i class="fa-solid fa-spinner fa-spin"></i></td>
-                        <td id="status-vii"><i class="fa-solid fa-spinner fa-spin"></i></td>
-                        <td id="status-viii"><i class="fa-solid fa-spinner fa-spin"></i></td>
-                        <td id="status-ix"><i class="fa-solid fa-spinner fa-spin"></i></td>
-                        <td id="status-x"><i class="fa-solid fa-spinner fa-spin"></i></td>
-                        <td id="status-xi"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-v" class="cls-val" data-class="v"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-vi" class="cls-val" data-class="vi"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-vii" class="cls-val" data-class="vii"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-viii" class="cls-val" data-class="viii"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-ix" class="cls-val" data-class="ix"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-x" class="cls-val" data-class="x"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-xi" class="cls-val" data-class="xi"><i class="fa-solid fa-spinner fa-spin"></i></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- স্ট্যাটাস বার্তা -->
-    <div id="statusMessage" style="text-align: center; margin: 10px;">লোডিং...</div>
-    
-    <!-- কন্ট্রোল প্যানেল -->
-    <div class="control-panel">
-        <div class="passkey-group">
-            <input type="password" id="passkey" placeholder="Enter Passkey">
+    <!-- সেকশন ২: সংশোধিত মার্কশিটের তালিকা (Re-print List) -->
+    <div class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fa-solid fa-print" style="color: #4f46e5;"></i> সংশোধিত মার্কশিটের তালিকা (Re-print List)
+            </div>
         </div>
-        
-        <button id="btnEnable" class="btn-enable" onclick="toggleMode(true)" style="display: none;">ট্র্যাকিং মোড চালু করুন</button>
-        <button id="btnDisable" class="btn-disable" onclick="toggleMode(false)" style="display: none;">ট্র্যাকিং মোড বন্ধ ও ক্লিয়ার করুন</button>
-        
-        <button class="btn-refresh" id="refreshBtn" onclick="refreshAllData()"><span id="spinIcon">🔄</span> রিফ্রেশ</button>
-        <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-    </div>
 
-    <!-- স্ক্রলযোগ্য টেবিল কন্টেইনার -->
-    <div class="table-container" id="tableWrapper" style="display: none;">
-        <table id="studentTable">
-            <thead>
-                <tr>
-                    <th class="col-check" style="text-align: center; width: 40px;">প্রিন্ট</th>
-                    <th>Class</th>
-                    <th>Section</th>
-                    <th>Roll No</th>
-                    <th>Student Name</th>
-                    <th>Updated Exam/Subject</th>
-                    <th>Last Modified Time</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
+        <!-- কন্ট্রোল প্যানেল -->
+        <div class="control-panel">
+            <div class="passkey-wrapper">
+                <input type="password" id="passkey" placeholder="Enter Passkey">
+                <i class="fa-solid fa-eye toggle-password" id="togglePasskey" onclick="togglePasskeyVisibility()"></i>
+            </div>
+            
+            <button id="btnEnable" class="btn-main btn-enable" onclick="toggleMode(true)" style="display: none;">
+                <i class="fa-solid fa-power-off"></i> ট্র্যাকিং মোড চালু করুন
+            </button>
+            <button id="btnDisable" class="btn-main btn-disable" onclick="toggleMode(false)" style="display: none;">
+                <i class="fa-solid fa-circle-stop"></i> ট্র্যাকিং মোড বন্ধ ও ক্লিয়ার করুন
+            </button>
+            
+            <button class="btn-main btn-refresh" id="refreshBtn" onclick="refreshAllData()">
+                <i class="fa-solid fa-rotate-right" id="spinIcon"></i> রিফ্রেশ
+            </button>
+            <button class="btn-main btn-print" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> প্রিন্ট করুন
+            </button>
+        </div>
+
+        <!-- স্ট্যাটাস বার্তা -->
+        <div id="statusMessage">লোডিং...</div>
+
+        <!-- স্ক্রলযোগ্য ও প্রিন্টযোগ্য টেবিল -->
+        <div class="table-container" id="tableWrapper" style="display: none;">
+            <table id="studentTable">
+                <thead>
+                    <tr>
+                        <th class="col-check" style="text-align: center; width: 40px;">প্রিন্ট</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Roll No</th>
+                        <th>Student Name</th>
+                        <th>Updated Exam/Subject</th>
+                        <th>Last Modified Time</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -206,30 +261,54 @@
 const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
 const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
-// 🟢৩. Supabase Client সঠিক উপায়ে ইনিশিয়ালাইজ করা হলো
 const supabaseClient = supabase.createClient(SUPABASE_URL, ANON_KEY);
-
-// 🟢৪. Class XI সহ সঠিক অর্ডারিং সেট করা হলো
 const CLASS_ORDER = { 'V': 1, 'VI': 2, 'VII': 3, 'VIII': 4, 'IX': 5, 'X': 6, 'XI': 7 };
+let trackerDataCache = {}; // ফিল্টারিংয়ের জন্য ক্যশ রিকর্ড
 
 document.addEventListener("DOMContentLoaded", function() {
-    fetchFinalisationStatus();
-    loadModifiedData();
-    setInterval(fetchFinalisationStatus, 30000); 
-    setInterval(loadModifiedData, 30000);
+    startAutoRefreshLoop();
 });
 
-// 🟢 একসাথে পুরো পেজ রিফ্রেশ করার জন্য নতুন ফাংশন
-async function refreshAllData() {
-    await fetchFinalisationStatus();
-    await loadModifiedData();
+// 🟢 ১. পাসওয়ার্ড হাইড/শো করার ফাংশন
+function togglePasskeyVisibility() {
+    const input = document.getElementById("passkey");
+    const icon = document.getElementById("togglePasskey");
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
 }
 
-async function fetchFinalisationStatus() {
-    // refreshIcon না থাকলেও যাতে কোনো এরর (Error) না আসে
-    const icon = document.getElementById('refreshIcon');
-    if (icon) icon.classList.add('fa-spin');
+// 🟢 ২. পেজ হ্যাং প্রতিরোধে সেফ লুপ (Auto Refresh Safety Loop)
+let isFetching = false;
+async function startAutoRefreshLoop() {
+    if (!isFetching) {
+        isFetching = true;
+        await refreshAllData();
+        isFetching = false;
+    }
+    setTimeout(startAutoRefreshLoop, 30000); // একটি রিকোয়েস্ট শেষ হলে ৩০ সে. পর আবার রান হবে
+}
 
+async function refreshAllData() {
+    const spinIcon = document.getElementById("spinIcon");
+    if (spinIcon) spinIcon.classList.add("spinning");
+
+    await Promise.all([
+        fetchFinalisationStatus(),
+        loadModifiedData()
+    ]);
+
+    if (spinIcon) setTimeout(() => spinIcon.classList.remove("spinning"), 500);
+}
+
+// 🟢 ৩. ফাইনালাইজেশন স্ট্যাটাস ট্র্যাকার
+async function fetchFinalisationStatus() {
     const classes = ['v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi'];
 
     try {
@@ -247,25 +326,50 @@ async function fetchFinalisationStatus() {
 
             if (pageRecord) {
                 const isEditOn = String(pageRecord.edit_mode).toLowerCase() === 'true';
+                trackerDataCache[c] = isEditOn ? 'active' : 'finalised';
+                
                 if (isEditOn) {
-                    cell.innerHTML = `<span style="color:#b45309; background:#fef3c7; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:bold;"><i class="fa-solid fa-pen-to-square"></i> Active</span>`;
+                    cell.innerHTML = `<span style="color:#b45309; background:#fef3c7; padding:3px 8px; border-radius:10px; font-size:11px; font-weight:bold;"><i class="fa-solid fa-pen-to-square"></i> Active</span>`;
                 } else {
-                    cell.innerHTML = `<span style="color:#047857; background:#d1fae5; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:bold;"><i class="fa-solid fa-circle-check"></i> Finalised</span>`;
+                    cell.innerHTML = `<span style="color:#047857; background:#d1fae5; padding:3px 8px; border-radius:10px; font-size:11px; font-weight:bold;"><i class="fa-solid fa-circle-check"></i> Finalised</span>`;
                 }
             } else {
+                trackerDataCache[c] = 'na';
                 cell.innerHTML = `<span style="color:#94a3b8;">N/A</span>`;
             }
         });
 
     } catch (err) {
         console.error('Finalisation Status Error:', err);
-    } finally {
-        if (icon) {
-            setTimeout(() => { icon.classList.remove('fa-spin'); }, 500);
-        }
     }
 }
 
+// 🟢 ৪. ট্র্যাকার ফিল্টার ফাংশন
+function filterTracker(filterType, btnElement) {
+    // ফিল্টার বাটনের অ্যাক্টিভ ক্লাস স্টেটমেন্ট
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    const classes = ['v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi'];
+    classes.forEach(c => {
+        const headerCell = document.querySelector(`.cls-col[data-class="${c}"]`);
+        const valueCell = document.querySelector(`.cls-val[data-class="${c}"]`);
+        const status = trackerDataCache[c];
+
+        if (filterType === 'all') {
+            headerCell.style.display = '';
+            valueCell.style.display = '';
+        } else if (filterType === status) {
+            headerCell.style.display = '';
+            valueCell.style.display = '';
+        } else {
+            headerCell.style.display = 'none';
+            valueCell.style.display = 'none';
+        }
+    });
+}
+
+// 🟢 ৫. ট্র্যাকিং মোড অন/অফ
 async function toggleMode(enable) {
     const passkey = document.getElementById('passkey').value.trim();
     if (!passkey) {
@@ -285,7 +389,7 @@ async function toggleMode(enable) {
         });
 
         const result = await response.json();
-        alert(result.message || "অপারেশন সম্পন্ন হয়েছে।");
+        alert(result.message || "অপারেশন সম্পন্ন হয়েছে।");
         if (result.success) {
             document.getElementById('passkey').value = "";
         }
@@ -306,10 +410,8 @@ function togglePrintStatus(checkbox, key) {
     }
 }
 
+// 🟢 ৬. সংশোধিত তথ্য লোড করা
 async function loadModifiedData() {
-    const spinIcon = document.getElementById("spinIcon");
-    if (spinIcon) spinIcon.classList.add("spinning");
-
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_modified_students_list`, {
             method: "POST",
@@ -328,7 +430,7 @@ async function loadModifiedData() {
         const btnDisable = document.getElementById("btnDisable");
 
         if (!result || !result.is_active) {
-            statusDiv.innerHTML = `<span class="status-badge status-inactive">ট্র্যাকিং মোড বন্ধ রয়েছে। কোনো রেকর্ড দেখা যাবে না।</span>`;
+            statusDiv.innerHTML = `<div class="status-badge status-inactive"><i class="fa-solid fa-circle-exclamation"></i> ট্র্যাকিং মোড বন্ধ রয়েছে। কোনো রেকর্ড দেখা যাবে না।</div>`;
             tableWrapper.style.display = "none";
             btnEnable.style.display = "inline-flex";
             btnDisable.style.display = "none";
@@ -339,14 +441,15 @@ async function loadModifiedData() {
         btnDisable.style.display = "inline-flex";
 
         if (!result.data || result.data.length === 0) {
-            statusDiv.innerHTML = `<span class="status-badge status-active">ট্র্যাকিং মোড চালু রয়েছে। তবে এখনও কোনো নম্বর সংশোধন করা হয়নি।</span>`;
+            statusDiv.innerHTML = `<div class="status-badge status-active"><i class="fa-solid fa-info-circle"></i> ট্র্যাকিং মোড চালু রয়েছে। তবে এখনও কোনো নম্বর সংশোধন করা হয়নি।</div>`;
             tableWrapper.style.display = "none";
             return;
         }
 
-        statusDiv.innerHTML = `<span class="status-badge status-active">ট্র্যাকিং মোড চালু রয়েছে। মোট ${result.data.length}টি সংশোধন পাওয়া গেছে।</span>`;
+        statusDiv.innerHTML = `<div class="status-badge status-active"><i class="fa-solid fa-check-circle"></i> ট্র্যাকিং মোড চালু রয়েছে। মোট ${result.data.length}টি সংশোধন পাওয়া গেছে।</div>`;
         tbody.innerHTML = "";
 
+        // ক্লাস অনুসারে সাজানো
         result.data.sort((a, b) => {
             const classA = a.class_name.replace('result_', '').toUpperCase();
             const classB = b.class_name.replace('result_', '').toUpperCase();
@@ -361,9 +464,19 @@ async function loadModifiedData() {
         });
 
         result.data.forEach(row => {
-            const time = new Date(row.modified_at).toLocaleString('bn-IN');
+            // 🟢 ইংরেজিতে তারিখ ও সময় ফর্ম্যাট (English Format)
+            const timeObj = new Date(row.modified_at);
+            const time = timeObj.toLocaleString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            }).toUpperCase();
+
             const classNameFormatted = row.class_name.replace('result_', '').toUpperCase();
-            
             const printStorageKey = `print_${row.class_name}_${row.student_id}_${row.updated_column}`;
             const isPrinted = localStorage.getItem(printStorageKey) === 'true';
 
@@ -375,9 +488,9 @@ async function loadModifiedData() {
                     <td><strong>${classNameFormatted}</strong></td>
                     <td>${row.section || 'A'}</td>
                     <td>${row.roll_no}</td>
-                    <td>${row.student_name}</td>
+                    <td style="text-align: left; padding-left: 12px;">${row.student_name}</td>
                     <td><span class="badge-col">${row.updated_column}</span></td>
-                    <td>${time}</td>
+                    <td style="font-family: monospace;">${time}</td>
                 </tr>
             `;
         });
@@ -385,8 +498,6 @@ async function loadModifiedData() {
         tableWrapper.style.display = "block";
     } catch (err) {
         console.error("Error fetching data:", err);
-    } finally {
-        if (spinIcon) setTimeout(() => spinIcon.classList.remove("spinning"), 500);
     }
 }
 </script>
