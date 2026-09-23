@@ -3,6 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+  <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+  <style id="security-shield">
+    body { display: none !important; }
+  </style>
+
+  <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+  <script>
+  (function() {
+      try {
+          var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+
+          var ref = document.referrer;
+          var isValidReferrer = false;
+          if (ref) {
+              var refUrl = new URL(ref);
+              // আপনার ডোমেন চেক
+              if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
+                  isValidReferrer = true;
+              }
+          }
+
+          // সেশন না থাকলে বা অননুমোদিত উপায়ে আসলে হোম পেজে রিডাইরেক্ট
+          if (!isLoggedIn) {
+              sessionStorage.clear();
+              window.location.replace("https://pathpukurschool.github.io/");
+              return;
+          }
+
+          // ভ্যালিড ইউজার হলে পেজ দৃশ্যমান করা
+          document.addEventListener("DOMContentLoaded", function() {
+              var shield = document.getElementById("security-shield");
+              if (shield) shield.remove();
+          });
+
+      } catch (e) {
+          sessionStorage.clear();
+          window.location.replace("https://pathpukurschool.github.io/");
+      }
+  })();
+  </script>
+
+  <!-- ফাইনাল সাবমিট স্ট্যাটাস এবং সংশোধিত মার্কশিট তালিকা -->
     <title>Pathpukur High School (H.S.)</title>
     
     <!-- 🟢 FontAwesome Icons library -->
@@ -18,7 +62,7 @@
         .container { width: 100%; max-width: 750px; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); overflow: hidden; border: 1px solid #e2e8f0; }
         
         .header-area { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #ffffff; padding: 22px 15px; text-align: center; }
-        h1 { font-size: 22px; margin-bottom: 4px; letter-spacing: 0.5px; }
+        h1 { font-size: 20px; margin-bottom: 4px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
         
         /* সেকশন কার্ড ডিজাইন (Visual Separation) */
