@@ -344,79 +344,82 @@
       body { padding: 8px; }
     }
 
-    /* Print Optimization for Pure A4 Paper */
-    @media print {
-      @page {
-        size: A4 portrait;
-        margin: 0mm;
-      }
-
-      html, body {
-        background: white;
-        padding: 0 !important;
-        margin: 0 !important;
-        height: auto !important;
-        overflow: visible !important;
-        -webkit-print-color-adjust: exact;
-      }
-
-      .container {
-        box-shadow: none;
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100%;
-        max-width: 100%;
-        background: white;
-        border: none;
-        border-radius: 0;
-      }
-
-      .header, .notice-box, .filter-section, .action-bar {
-        display: none !important;
-      }
-
-      .pages-wrapper {
-        gap: 0;
-        margin: 0;
-        padding: 0 !important;
-        display: block !important;
-      }
-
-      .a4-wrapper {
-        box-shadow: none;
-        width: 210mm;
-        min-height: 297mm;
-        height: auto !important;
-        padding: 3mm 4mm;
-        margin: 0 auto;
-        page-break-after: always !important;
-        page-break-inside: avoid;
-        box-sizing: border-box;
-        overflow: visible !important;
-      }
-
-      .a4-wrapper:last-child {
-        page-break-after: auto !important;
-      }
-
-      .columns-container {
-        min-width: 100% !important;
-      }
-
-      .marks-table th {
-        background-color: #eee !important;
-        color: #000 !important;
-        border: 1px solid #000 !important;
-      }
-
-      .marks-table td {
-        border: 1px solid #000 !important;
-      }
-
-      .marks-table tr.empty-row td {
-        border: none !important;
-      }
+/* Print Optimization for Pure A4 Paper */
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 0mm;
     }
+
+    html, body {
+      background: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      height: auto !important;
+      overflow: hidden !important;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .container {
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      background: white !important;
+      border: none !important;
+      border-radius: 0 !important;
+    }
+
+    .header, .notice-box, .filter-section, .action-bar {
+      display: none !important;
+    }
+
+    .pages-wrapper {
+      gap: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: block !important;
+    }
+
+    .a4-wrapper {
+      box-shadow: none !important;
+      width: 210mm !important;
+      height: 297mm !important; /* নির্দিষ্ট ২৯৭ মিমি রাখা হয়েছে */
+      max-height: 297mm !important;
+      padding: 3mm 4mm !important;
+      margin: 0 auto !important;
+      page-break-after: always;
+      page-break-inside: avoid;
+      box-sizing: border-box !important;
+      overflow: hidden !important; /* অতিরিক্ত উপাদান বাইরে যাওয়া বন্ধ করবে */
+    }
+
+    /* শেষ পেজের পর যাতে নতুন কোনো পেজ ব্রেক না হয় */
+    .a4-wrapper:last-child,
+    .a4-wrapper:last-of-type {
+      page-break-after: avoid !important;
+      break-after: avoid !important;
+    }
+
+    .columns-container {
+      min-width: 100% !important;
+    }
+
+    .marks-table th {
+      background-color: #eee !important;
+      color: #000 !important;
+      border: 1px solid #000 !important;
+    }
+
+    .marks-table td {
+      border: 1px solid #000 !important;
+    }
+
+    .marks-table tr.empty-row td {
+      border: none !important;
+    }
+  }
   </style>
 </head>
 <body>
