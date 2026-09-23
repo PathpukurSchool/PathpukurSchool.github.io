@@ -13,7 +13,7 @@
         h1 { font-size: 20px; margin-bottom: 5px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
         
-        /* কন্ট্রোল প্যানেল: বাই-ডিফল্ট (ছোট স্ক্রীন / মোবাইল) */
+        /* কন্ট্রোল প্যানেল: বাই-ডিফল্ট / ছোট স্ক্রীন (উপরে-নিচে থাকবে) */
 .control-panel { 
     background: #f8fafc; 
     border: 1px solid #cbd5e1; 
@@ -21,12 +21,18 @@
     border-radius: 8px; 
     margin-bottom: 15px; 
     display: flex; 
-    flex-direction: column; /* ছোট স্ক্রীনে উপরে-নিচে থাকবে */
+    flex-direction: column; 
     gap: 10px; 
-    align-items: stretch; 
 }
 
-/* ছোট স্ক্রীনে ইনপুট বক্স পুরো জায়গা নেবে */
+/* ইনপুট বক্স ও লেবেল স্টাইল */
+.passkey-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
 input[type="password"] { 
     padding: 9px 12px; 
     border: 1px solid #94a3b8; 
@@ -36,9 +42,9 @@ input[type="password"] {
     width: 100%; 
 }
 
-/* ছোট স্ক্রীনে বাটন পুরো জায়গা নেবে */
+/* বোতামগুলোর সাধারণ স্টাইল */
 button { 
-    padding: 9px 16px; 
+    padding: 10px 16px; 
     border: none; 
     border-radius: 5px; 
     font-size: 14px; 
@@ -52,22 +58,32 @@ button {
     width: 100%; 
 }
 
-/* বড় স্ক্রীন (স্ক্রীন সাইজ 600px বা তার বেশি হলে) */
-@media (min-width: 600px) {
+/* বড় স্ক্রীন (স্ক্রীন সাইজ 500px বা তার বেশি হলে ২x২ গ্রিড হবে) */
+@media (min-width: 500px) {
     .control-panel {
-        flex-direction: row; /* পাশাপাশি থাকবে */
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* সমান ২ কলামে বিভক্ত */
+        gap: 12px;
         align-items: center;
     }
-    input[type="password"] {
-        width: auto;
-        flex: 1; /* ইনপুট বক্স খালি জায়গা নিজে পূরণ করবে */
+
+    .passkey-group {
+        grid-column: span 1; /* প্রথম লাইনের ১ নম্বর ঘর */
     }
-    button {
-        width: auto; /* বাটন প্রয়োজন অনুযায়ী চওড়া হবে */
+
+    /* ট্র্যাকিং বোতাম (চালু/বন্ধ) প্রথম লাইনের ২ নম্বর ঘর */
+    .btn-enable, .btn-disable {
+        grid-column: span 1;
     }
+
+    /* রিফ্রেশ ও প্রিন্ট বোতাম দ্বিতীয় লাইনে পাশাপাশি বসবে */
+    .btn-refresh {
+        grid-column: span 1;
+    }
+
     .btn-print {
-        margin-left: auto; /* প্রিন্ট বাটন ডানদিকে সরে যাবে */
+        grid-column: span 1;
+        margin-left: 0; /* গ্রিডের কারণে এক্সট্রা মার্জিনের দরকার নেই */
     }
 }
         .btn-enable { background: #16a34a; color: white; }
@@ -123,10 +139,16 @@ button {
         <h2>সংশোধিত মার্কশিটের তালিকা (Re-print List)</h2>
     </div>
 
+    <!-- পাসকি ও বাটন কন্ট্রোল প্যানেল -->
     <div class="control-panel">
-        <input type="password" id="passkey" placeholder="Enter Passkey...">
-        <button id="btnEnable" class="btn-enable" onclick="toggleMode(true)" style="display: none;"> ট্র্যাকিং মোড চালু করুন</button>
-        <button id="btnDisable" class="btn-disable" onclick="toggleMode(false)" style="display: none;"> ট্র্যাকিং মোড বন্ধ ও তালিকা ক্লিয়ার করুন</button>
+        <!-- পাসকি লেবেল ও ইনপুট বক্স -->
+        <div class="passkey-group"><input type="password" id="passkey" placeholder="Enter Passkey"></div>
+        
+        <!-- ডায়নামিক বোতাম (JS দ্বারা অন/অফ অনুযায়ী ১টিই দৃশ্যমান থাকবে) -->
+        <button id="btnEnable" class="btn-enable" onclick="toggleMode(true)" style="display: none;">ট্র্যাকিং মোড চালু করুন</button>
+        <button id="btnDisable" class="btn-disable" onclick="toggleMode(false)" style="display: none;">ট্র্যাকিং মোড বন্ধ ও ক্লিয়ার করুন</button>
+        
+        <!-- নিচের লাইনের বোতাম দুটো -->
         <button class="btn-refresh" id="refreshBtn" onclick="loadModifiedData()"><span id="spinIcon">🔄</span> রিফ্রেশ</button>
         <button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
     </div>
