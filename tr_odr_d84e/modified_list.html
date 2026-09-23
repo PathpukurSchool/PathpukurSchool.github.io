@@ -302,6 +302,14 @@
 </div>
 
 <script>
+    // ⚡ সাব-পেজে অ্যাক্টিভিটি ট্র্যাকিং আপডেট রাখা (যাতে অহেতুক অটো-লগআউট না হয়)
+    function updateActivityTime() {
+        localStorage.setItem('lastActivityTime', Date.now().toString());
+    }
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+        document.addEventListener(evt, updateActivityTime, { passive: true });
+    });
+    
 const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
 const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
@@ -545,5 +553,8 @@ async function loadModifiedData() {
     }
 }
 </script>
+
+<!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
+ <script src="home.js"></script>
 </body>
 </html>
