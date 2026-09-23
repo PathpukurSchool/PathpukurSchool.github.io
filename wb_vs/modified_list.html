@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pathpukur High School (H.S.)</title>
+    
+    <!-- 🟢১. FontAwesome Icons library (আইকনের জন্য) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 🟢২. Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
 
@@ -13,7 +20,14 @@
         h1 { font-size: 20px; margin-bottom: 5px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
         
-        /* কন্ট্রোল প্যানেল: বাই-ডিফল্ট / ছোট স্ক্রীন (উপরে-নিচে থাকবে) */
+        /* কাস্টম কার্ড ও স্ট্যাটাস ট্র্যাকার স্টাইল */
+        .card-container { padding: 16px; background: #ffffff; border-bottom: 1px solid #e2e8f0; }
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
+        .card-title { font-size: 13px; font-weight: bold; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+        .btn-status-refresh { font-size: 12px; background: #eff6ff; color: #1d4ed8; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid #bfdbfe; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .btn-status-refresh:hover { background: #dbeafe; }
+
+        /* কন্ট্রোল প্যানেল */
         .control-panel { 
             padding: 15px;  
             margin-bottom: 8px; 
@@ -22,7 +36,6 @@
             gap: 10px; 
         }
 
-        /* ইনপুট বক্স ও লেবেল স্টাইল */
         .passkey-group {
             display: flex;
             align-items: center;
@@ -39,7 +52,6 @@
             width: 100%; 
         }
 
-        /* বোতামগুলোর সাধারণ স্টাইল */
         button { 
             padding: 10px 16px; 
             border: none; 
@@ -55,7 +67,6 @@
             width: 100%; 
         }
 
-        /* বড় স্ক্রীন (২x২ গ্রিড) */
         @media (min-width: 500px) {
             .control-panel {
                 display: grid;
@@ -64,22 +75,10 @@
                 align-items: center;
             }
 
-            .passkey-group {
-                grid-column: span 1;
-            }
-
-            .btn-enable, .btn-disable {
-                grid-column: span 1;
-            }
-
-            .btn-refresh {
-                grid-column: span 1;
-            }
-
-            .btn-print {
-                grid-column: span 1;
-                margin-left: 0;
-            }
+            .passkey-group { grid-column: span 1; }
+            .btn-enable, .btn-disable { grid-column: span 1; }
+            .btn-refresh { grid-column: span 1; }
+            .btn-print { grid-column: span 1; margin-left: 0; }
         }
 
         .btn-enable { background: #16a34a; color: white; }
@@ -94,11 +93,11 @@
         .status-active { background: #dcfce7; color: #15803d; border: 1px solid #86efac; border-left: 4px solid #86efac; }
         .status-inactive { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; border-left: 4px solid #fca5a5; }
 
-        /* স্ক্রলযোগ্য টেবিল কন্টেইনার */
-        .table-container { max-height: 550px; overflow-y: auto; overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; background: white; white-space: nowrap; }
-        th, td { border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; font-size: 14px; }
-        th { background: #f1f5f9; color: #334155; position: sticky; top: 0; z-index: 10; }
+        /* টেবিল স্টাইল */
+        .table-container { max-height: 550px; overflow-y: auto; overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 6px; margin: 10px; }
+        table { width: 100%; border-collapse: collapse; background: white; white-space: nowrap; font-size: 12px; }
+        th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: center; }
+        th { background: #f1f5f9; color: #334155; position: sticky; top: 0; z-index: 10; font-weight: bold; }
         tr:nth-child(even) { background: #f8fafc; }
         .badge-col { background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; font-weight: bold; }
         
@@ -106,70 +105,21 @@
         tr.completed-row td { text-decoration: line-through; }
         tr.completed-row .badge-col { background: #e2e8f0; color: #64748b; }
         
-        .spinner { border: 2px solid #f3f3f3; border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 0.8s linear infinite; display: inline-block; }
         .spinning { animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* A4 পেজে সংশোধনকৃত প্রিন্ট স্টাইল (অতিরিক্ত পেজ বন্ধ করার জন্য) */
+        /* প্রিন্ট CSS */
         @media print {
-            html, body { 
-                background: white !important; 
-                margin: 0 !important; 
-                padding: 0 !important; 
-                min-height: 0 !important;
-                height: auto !important;
-            }
-
-            .container { 
-                box-shadow: none !important; 
-                padding: 0 !important; 
-                margin: 0 !important;
-                max-width: 100% !important; 
-                border: none !important;
-            }
-
-            .control-panel, .header-area button, #statusMessage, .col-check, td:first-child, th:first-child { 
-                display: none !important; 
-            }
-
-            .table-container { 
-                max-height: none !important; 
-                overflow: visible !important; 
-                border: none !important; 
-                margin-top: 0 !important;
-            }
-
-            table { 
-                border: 1px solid #000; 
-                width: 100%; 
-                page-break-after: auto;
-            }
-
-            tr {
-                page-break-inside: avoid;
-            }
-
-            th, td { 
-                border: 1px solid #000; 
-                font-size: 11px; 
-                padding: 5px 6px; 
-                text-decoration: none !important; 
-                color: #000 !important; 
-            }
-
-            th { 
-                background-color: #eee !important; 
-            }
-
-            tr.completed-row { 
-                opacity: 1; 
-                color: #000; 
-            }
-
-            @page { 
-                size: A4 portrait; 
-                margin: 10mm; 
-            }
+            html, body { background: white !important; margin: 0 !important; padding: 0 !important; min-height: 0 !important; height: auto !important; }
+            .container { box-shadow: none !important; padding: 0 !important; margin: 0 !important; max-width: 100% !important; border: none !important; }
+            .card-container, .control-panel, .header-area button, #statusMessage, .col-check, td:first-child, th:first-child { display: none !important; }
+            .table-container { max-height: none !important; overflow: visible !important; border: none !important; margin-top: 0 !important; }
+            table { border: 1px solid #000; width: 100%; page-break-after: auto; }
+            tr { page-break-inside: avoid; }
+            th, td { border: 1px solid #000; font-size: 11px; padding: 5px 6px; text-decoration: none !important; color: #000 !important; }
+            th { background-color: #eee !important; }
+            tr.completed-row { opacity: 1; color: #000; }
+            @page { size: A4 portrait; margin: 10mm; }
         }
     </style>
 </head>
@@ -181,9 +131,51 @@
         <h2>সংশোধিত মার্কশিটের তালিকা (Re-print List)</h2>
     </div>
 
-    <!-- পাসকি ও বাটন কন্ট্রোল প্যানেল -->
+    <!-- ফাইনালাইজেশন স্ট্যাটাস ট্র্যাকার -->
+    <div class="card-container">
+        <div class="card-header">
+            <div class="card-title">
+                <i class="fa-solid fa-lock" style="color: #1e3a8a;"></i> Finalisation Status Tracker
+            </div>
+            <button onclick="fetchFinalisationStatus()" id="refreshStatusBtn" class="btn-status-refresh">
+                <i id="refreshIcon" class="fa-solid fa-rotate-right"></i>
+                <span>Refresh</span>
+            </button>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Class V</th>
+                        <th>Class VI</th>
+                        <th>Class VII</th>
+                        <th>Class VIII</th>
+                        <th>Class IX</th>
+                        <th>Class X</th>
+                        <th>Class XI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="status-v"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-vi"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-vii"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-viii"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-ix"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-x"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                        <td id="status-xi"><i class="fa-solid fa-spinner fa-spin"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- কন্ট্রোল প্যানেল -->
     <div class="control-panel">
-        <div class="passkey-group"><input type="password" id="passkey" placeholder="Enter Passkey"></div>
+        <div class="passkey-group">
+            <input type="password" id="passkey" placeholder="Enter Passkey">
+        </div>
         
         <button id="btnEnable" class="btn-enable" onclick="toggleMode(true)" style="display: none;">ট্র্যাকিং মোড চালু করুন</button>
         <button id="btnDisable" class="btn-disable" onclick="toggleMode(false)" style="display: none;">ট্র্যাকিং মোড বন্ধ ও ক্লিয়ার করুন</button>
@@ -193,9 +185,9 @@
     </div>
     
     <!-- স্ট্যাটাস বার্তা -->
-    <div id="statusMessage" style="text-align: center;">লোডিং...</div>
+    <div id="statusMessage" style="text-align: center; margin: 10px;">লোডিং...</div>
 
-    <!-- রি-প্রিন্ট তালিকা স্ক্রলযোগ্য টেবিল কন্টেইনার -->
+    <!-- স্ক্রলযোগ্য টেবিল কন্টেইনার -->
     <div class="table-container" id="tableWrapper" style="display: none;">
         <table id="studentTable">
             <thead>
@@ -217,8 +209,59 @@
 <script>
 const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
 const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-    
-const CLASS_ORDER = { 'V': 1, 'VI': 2, 'VII': 3, 'VIII': 4, 'IX': 5, 'X': 6 };
+
+// 🟢৩. Supabase Client সঠিক উপায়ে ইনিশিয়ালাইজ করা হলো
+const supabaseClient = supabase.createClient(SUPABASE_URL, ANON_KEY);
+
+// 🟢৪. Class XI সহ সঠিক অর্ডারিং সেট করা হলো
+const CLASS_ORDER = { 'V': 1, 'VI': 2, 'VII': 3, 'VIII': 4, 'IX': 5, 'X': 6, 'XI': 7 };
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetchFinalisationStatus();
+    loadModifiedData();
+    setInterval(fetchFinalisationStatus, 30000); 
+    setInterval(loadModifiedData, 30000);
+});
+
+async function fetchFinalisationStatus() {
+    const icon = document.getElementById('refreshIcon');
+    if (icon) icon.classList.add('fa-spin');
+
+    const classes = ['v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi'];
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('page_security')
+            .select('page_name, edit_mode');
+
+        if (error) throw error;
+
+        classes.forEach(c => {
+            const cell = document.getElementById(`status-${c}`);
+            if (!cell) return;
+
+            const pageRecord = data ? data.find(p => p.page_name === `result_${c}`) : null;
+
+            if (pageRecord) {
+                const isEditOn = String(pageRecord.edit_mode).toLowerCase() === 'true';
+                if (isEditOn) {
+                    cell.innerHTML = `<span style="color:#b45309; background:#fef3c7; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:bold;"><i class="fa-solid fa-pen-to-square"></i> Active</span>`;
+                } else {
+                    cell.innerHTML = `<span style="color:#047857; background:#d1fae5; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:bold;"><i class="fa-solid fa-circle-check"></i> Finalised</span>`;
+                }
+            } else {
+                cell.innerHTML = `<span style="color:#94a3b8;">N/A</span>`;
+            }
+        });
+
+    } catch (err) {
+        console.error('Finalisation Status Error:', err);
+    } finally {
+        if (icon) {
+            setTimeout(() => { icon.classList.remove('fa-spin'); }, 500);
+        }
+    }
+}
 
 async function toggleMode(enable) {
     const passkey = document.getElementById('passkey').value.trim();
@@ -239,7 +282,7 @@ async function toggleMode(enable) {
         });
 
         const result = await response.json();
-        alert(result.message);
+        alert(result.message || "অপারেশন সম্পন্ন হয়েছে।");
         if (result.success) {
             document.getElementById('passkey').value = "";
         }
@@ -262,7 +305,7 @@ function togglePrintStatus(checkbox, key) {
 
 async function loadModifiedData() {
     const spinIcon = document.getElementById("spinIcon");
-    spinIcon.classList.add("spinning");
+    if (spinIcon) spinIcon.classList.add("spinning");
 
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_modified_students_list`, {
@@ -281,7 +324,7 @@ async function loadModifiedData() {
         const btnEnable = document.getElementById("btnEnable");
         const btnDisable = document.getElementById("btnDisable");
 
-        if (!result.is_active) {
+        if (!result || !result.is_active) {
             statusDiv.innerHTML = `<span class="status-badge status-inactive">ট্র্যাকিং মোড বন্ধ রয়েছে। কোনো রেকর্ড দেখা যাবে না।</span>`;
             tableWrapper.style.display = "none";
             btnEnable.style.display = "inline-flex";
@@ -340,12 +383,9 @@ async function loadModifiedData() {
     } catch (err) {
         console.error("Error fetching data:", err);
     } finally {
-        setTimeout(() => spinIcon.classList.remove("spinning"), 500);
+        if (spinIcon) setTimeout(() => spinIcon.classList.remove("spinning"), 500);
     }
 }
-
-setInterval(loadModifiedData, 30000);
-window.onload = loadModifiedData;
 </script>
 </body>
 </html>
