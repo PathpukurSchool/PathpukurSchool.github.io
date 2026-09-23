@@ -1,150 +1,688 @@
+
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>সংশোধিত মার্কশিট তালিকা</title>
+    <title>Modified Student List & Page Security Dashboard</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background: #f4f6f9; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { color: #1e3a8a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 0; }
-        .control-panel { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        input[type="password"] { padding: 9px 12px; border: 1px solid #94a3b8; border-radius: 5px; font-size: 14px; outline: none; }
-        button { padding: 9px 16px; border: none; border-radius: 5px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-enable { background: #16a34a; color: white; }
-        .btn-enable:hover { background: #15803d; }
-        .btn-disable { background: #dc2626; color: white; }
-        .btn-disable:hover { background: #b91c1c; }
-        .status-badge { padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; margin-bottom: 15px; display: inline-block; }
-        .status-active { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-        .status-inactive { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
-        th, td { border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; font-size: 14px; }
-        th { background: #f1f5f9; color: #334155; }
-        tr:nth-child(even) { background: #f8fafc; }
-        .badge-col { background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; }
-        @media print { .control-panel, button, input { display: none !important; } }
+        :root {
+            --primary-blue: #1e3a8a;
+            --accent-blue: #2563eb;
+            --light-blue: #eff6ff;
+            --success-green: #16a34a;
+            --danger-red: #dc2626;
+            --border-color: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 1. Header Section with Blue Background */
+        .header-card {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            color: #ffffff;
+            padding: 25px 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
+            margin-bottom: 25px;
+        }
+
+        .header-card h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-card h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #e0f2fe;
+            margin-bottom: 6px;
+        }
+
+        .header-card .session-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        /* Control Panel / Actions Bar */
+        .actions-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            background: #ffffff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-indicator {
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-success { background-color: var(--success-green); color: #fff; }
+        .btn-success:hover { background-color: #15803d; }
+
+        .btn-danger { background-color: var(--danger-red); color: #fff; }
+        .btn-danger:hover { background-color: #b91c1c; }
+
+        .btn-primary { background-color: var(--accent-blue); color: #fff; }
+        .btn-primary:hover { background-color: #1d4ed8; }
+
+        .btn-secondary { background-color: #64748b; color: #fff; }
+        .btn-secondary:hover { background-color: #475569; }
+
+        /* 4. Scrollable Container for Table */
+        .section-card {
+            background: #ffffff;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 8px;
+        }
+
+        .table-scroll-container {
+            max-height: 480px;
+            overflow-x: auto;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            padding: 12px 15px;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* 9. Completed/Printed Row Style */
+        tr.printed-row {
+            background-color: #f1f5f9 !important;
+            opacity: 0.55;
+        }
+
+        tr.printed-row td {
+            text-decoration: line-through;
+        }
+
+        tr.printed-row td:first-child {
+            text-decoration: none; /* Keep checkbox clear */
+        }
+
+        .custom-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--success-green);
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-on { background-color: #dcfce7; color: #15803d; }
+        .badge-off { background-color: #fee2e2; color: #b91c1c; }
+
+        /* Spinner animation */
+        .spin {
+            animation: fa-spin 1s infinite linear;
+        }
+
+        /* Modal / Passkey Prompt */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-card input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        /* 8. Print Stylesheet (A4 Optimization) */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+                color: #000;
+            }
+
+            .actions-bar, .btn-group, .header-card .session-badge, #security-status-section, .modal-overlay {
+                display: none !important;
+            }
+
+            .header-card {
+                background: none !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                border-bottom: 2px solid #000;
+                border-radius: 0;
+                padding: 10px 0;
+                margin-bottom: 15px;
+            }
+
+            .header-card h2, .header-card h1 {
+                color: #000 !important;
+            }
+
+            .section-card {
+                border: none;
+                padding: 0;
+                box-shadow: none;
+            }
+
+            .table-scroll-container {
+                max-height: none !important;
+                overflow: visible !important;
+                border: none !important;
+            }
+
+            table {
+                width: 100% !important;
+                border: 1px solid #000;
+                font-size: 10pt;
+            }
+
+            th, td {
+                border: 1px solid #000 !important;
+                padding: 6px 8px !important;
+                white-space: normal !important;
+            }
+
+            th {
+                background-color: #eee !important;
+                color: #000 !important;
+            }
+
+            tr.printed-row {
+                opacity: 1 !important;
+            }
+
+            /* Hide print checkbox column during print if desired, or keep it */
+            .no-print {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>সংশোধিত মার্কশিটের তালিকা (Re-print List)</h2>
-
-    <!-- পাসকি ও বাটন কন্ট্রোল প্যানেল -->
-    <div class="control-panel">
-        <label for="passkey"><strong>পাসকি:</strong></label>
-        <input type="password" id="passkey" placeholder="Enter Passkey">
-        <button class="btn-enable" onclick="toggleMode(true)">ট্র্যাকিং মোড চালু করুন</button>
-        <button class="btn-disable" onclick="toggleMode(false)">বন্ধ ও তালিকা ক্লিয়ার করুন</button>
+    <!-- 1. Header Section -->
+    <div class="header-card">
+        <h1><i class="fa-solid fa-school"></i> Pathpukur High School (H. S.)</h1>
+        <h2><i class="fa-solid fa-clipboard-list"></i> Result Edit & Modified Student Tracking Dashboard</h2>
+        <div class="session-badge"><i class="fa-regular fa-calendar-days"></i> Academic Session: 2026</div>
     </div>
 
-    <!-- স্ট্যাটাস বার্তা -->
-    <div id="statusMessage">লোডিং...</div>
+    <!-- Actions & Controls Bar -->
+    <div class="actions-bar">
+        <div class="status-indicator" id="tracking-status-text">
+            <i class="fa-solid fa-circle-notch spin"></i> Checking Tracking Mode...
+        </div>
+        <div class="btn-group">
+            <!-- 3. Dynamic Tracking Mode Toggle Button -->
+            <button id="btn-toggle-tracking" class="btn btn-secondary" onclick="openPasskeyModal()">
+                <i class="fa-solid fa-power-off"></i> Loading...
+            </button>
+            <!-- 8. Print Button -->
+            <button class="btn btn-primary" onclick="printReport()">
+                <i class="fa-solid fa-print"></i> Print List (A4)
+            </button>
+            <!-- 11. Refresh Button with Loading Spinner -->
+            <button class="btn btn-secondary" id="btn-refresh" onclick="manualRefresh()">
+                <i class="fa-solid fa-rotate-right" id="refresh-icon"></i> Refresh
+            </button>
+        </div>
+    </div>
 
-    <!-- রি-প্রিন্ট তালিকা টেবিল -->
-    <table id="studentTable" style="display: none;">
-        <thead>
-            <tr>
-                <th>Class</th>
-                <th>Section</th>
-                <th>Roll No</th>
-                <th>Student Name</th>
-                <th>Updated Exam/Subject</th>
-                <th>Last Modified Time</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-    </table>
+    <!-- 4. Modified Students Table Section -->
+    <div class="section-card">
+        <div class="section-title">
+            <i class="fa-solid fa-user-pen"></i> Recently Modified Students List
+        </div>
+        <div class="table-scroll-container">
+            <table id="modified-table">
+                <thead>
+                    <tr>
+                        <th class="no-print" style="width: 40px; text-align: center;"><i class="fa-solid fa-check-double"></i></th>
+                        <th>Class</th>
+                        <th>Sec</th>
+                        <th>Roll</th>
+                        <th>Student Name</th>
+                        <th>Updated Subject / Column</th>
+                        <th>Modified Time</th>
+                    </tr>
+                </thead>
+                <tbody id="modified-table-body">
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: #64748b;">Loading modified students records...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 10. Page Edit Security Status Section -->
+    <div class="section-card" id="security-status-section">
+        <div class="section-title">
+            <i class="fa-solid fa-shield-halved"></i> Class-wise Result Edit Mode Status
+        </div>
+        <div class="table-scroll-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Page Name / Class</th>
+                        <th>Edit Status</th>
+                        <th>Passkey Security</th>
+                    </tr>
+                </thead>
+                <tbody id="security-table-body">
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #64748b;">Loading page security status...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Passkey Input Modal -->
+<div class="modal-overlay" id="passkey-modal">
+    <div class="modal-card">
+        <h3 id="modal-title" style="margin-bottom: 10px; color: var(--primary-blue);">Enter Passkey</h3>
+        <p style="font-size: 0.88rem; color: #64748b;" id="modal-desc">Please enter security passkey to proceed.</p>
+        <input type="password" id="modal-passkey" placeholder="Enter Passkey" onkeyup="if(event.key==='Enter') submitTrackingToggle()">
+        <div style="display: flex; gap: 8px; justify-content: center;">
+            <button class="btn btn-primary" onclick="submitTrackingToggle()"><i class="fa-solid fa-check"></i> Submit</button>
+            <button class="btn btn-secondary" onclick="closePasskeyModal()">Cancel</button>
+        </div>
+    </div>
 </div>
 
 <script>
-const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-    
-// ট্র্যাকিং মোড অন/অফ করার কল
-async function toggleMode(enable) {
-    const passkey = document.getElementById('passkey').value.trim();
-    if (!passkey) {
-        alert("অনুগ্রহ করে পাসকি প্রদান করুন!");
-        return;
-    }
+    // -------------------------------------------------------------------------
+    // Supabase Configuration
+    // -------------------------------------------------------------------------
+    const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT_ID.supabase.co"; 
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; 
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/toggle_modified_list_mode`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "apikey": ANON_KEY,
-                "Authorization": `Bearer ${ANON_KEY}`
-            },
-            body: JSON.stringify({ p_passkey: passkey, p_enable: enable })
+    let isTrackingActive = false;
+
+    // -------------------------------------------------------------------------
+    // Initial Load & Auto Refresh (Every 30 Seconds)
+    // -------------------------------------------------------------------------
+    window.addEventListener('DOMContentLoaded', () => {
+        loadAllData();
+        setInterval(() => {
+            loadAllData(true); // Silent/Auto Refresh
+        }, 30000); // 30 Seconds
+    });
+
+    function manualRefresh() {
+        const icon = document.getElementById('refresh-icon');
+        icon.classList.add('spin');
+        loadAllData().then(() => {
+            setTimeout(() => icon.classList.remove('spin'), 600);
         });
-
-        const result = await response.json();
-        alert(result.message);
-        loadModifiedData();
-    } catch (err) {
-        alert("Error: " + err.message);
     }
-}
 
-// সংশোধিত ডাটা লোড করার কাজ
-async function loadModifiedData() {
-    try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_modified_students_list`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "apikey": ANON_KEY,
-                "Authorization": `Bearer ${ANON_KEY}`
+    async function loadAllData(isAuto = false) {
+        await Promise.all([
+            fetchModifiedStudentsList(),
+            fetchSecurityStatus()
+        ]);
+    }
+
+    // -------------------------------------------------------------------------
+    // Fetch Modified Students List & Render Table
+    // -------------------------------------------------------------------------
+    async function fetchModifiedStudentsList() {
+        const tbody = document.getElementById('modified-table-body');
+        
+        try {
+            const { data, error } = await supabaseClient.rpc('get_modified_students_list');
+
+            if (error) throw error;
+
+            isTrackingActive = data.is_active;
+            updateTrackingButtonUI(isTrackingActive);
+
+            if (!data.is_active) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--danger-red); font-weight: 600;">
+                    <i class="fa-solid fa-circle-xmark"></i> Tracking Mode is currently OFF. Turn on Tracking Mode to view modified list.
+                </td></tr>`;
+                return;
             }
-        });
 
-        const result = await response.json();
-        const statusDiv = document.getElementById("statusMessage");
-        const table = document.getElementById("studentTable");
-        const tbody = document.getElementById("tableBody");
+            let records = data.data || [];
 
-        if (!result.is_active) {
-            statusDiv.innerHTML = `<span class="status-badge status-inactive">ট্র্যাকিং মোড বন্ধ রয়েছে। কোনো রেকর্ড দেখা যাবে না।</span>`;
-            table.style.display = "none";
-            return;
+            if (records.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #64748b;">
+                    <i class="fa-solid fa-info-circle"></i> No records modified yet during this active session.
+                </td></tr>`;
+                return;
+            }
+
+            // 5. Sort Data by Class and Roll Number
+            records.sort((a, b) => {
+                if (a.class_name !== b.class_name) {
+                    return a.class_name.localeCompare(b.class_name);
+                }
+                return (a.roll_no || 0) - (b.roll_no || 0);
+            });
+
+            // Get saved print check states from localStorage
+            const savedChecks = JSON.parse(localStorage.getItem('printed_students_keys') || '[]');
+
+            let html = '';
+            records.forEach((row) => {
+                const rowKey = `${row.class_name}_${row.student_id}_${row.updated_column}`;
+                const isChecked = savedChecks.includes(rowKey);
+
+                // Format Time to English Locale
+                const formattedTime = new Date(row.modified_at).toLocaleString('en-US', {
+                    dateStyle: 'medium',
+                    timeStyle: 'short'
+                });
+
+                // Format Class Name (e.g., result_v -> Class V)
+                const formattedClass = row.class_name.replace('result_', 'Class ').toUpperCase();
+
+                // Format Column/Subject Name to readable English
+                const formattedSubject = formatColumnNameEnglish(row.updated_column);
+
+                html += `
+                    <tr id="row-${rowKey}" class="${isChecked ? 'printed-row' : ''}">
+                        <td class="no-print" style="text-align: center;">
+                            <input type="checkbox" class="custom-checkbox" 
+                                   onchange="togglePrintStatus('${rowKey}', this.checked)" 
+                                   ${isChecked ? 'checked' : ''}>
+                        </td>
+                        <td><strong>${formattedClass}</strong></td>
+                        <td>${row.section || '-'}</td>
+                        <td>${row.roll_no || '-'}</td>
+                        <td><strong>${escapeHtml(row.student_name || 'N/A')}</strong></td>
+                        <td><code>${formattedSubject}</code></td>
+                        <td><small><i class="fa-regular fa-clock"></i> ${formattedTime}</small></td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+
+        } catch (err) {
+            console.error('Error fetching modified students:', err);
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--danger-red);">
+                Error loading data: ${err.message}
+            </td></tr>`;
         }
-
-        if (result.data.length === 0) {
-            statusDiv.innerHTML = `<span class="status-badge status-active">ট্র্যাকিং মোড চালু রয়েছে। তবে এখনও কোনো নম্বর সংশোধন করা হয়নি।</span>`;
-            table.style.display = "none";
-            return;
-        }
-
-        statusDiv.innerHTML = `<span class="status-badge status-active">ট্র্যাকিং মোড চালু রয়েছে। মোট ${result.data.length}টি সংশোধন পাওয়া গেছে।</span>`;
-        tbody.innerHTML = "";
-
-        result.data.forEach(row => {
-            const time = new Date(row.modified_at).toLocaleString('bn-IN');
-            const classNameFormatted = row.class_name.replace('result_', '').toUpperCase();
-            
-            tbody.innerHTML += `
-                <tr>
-                    <td><strong>${classNameFormatted}</strong></td>
-                    <td>${row.section || 'A'}</td>
-                    <td>${row.roll_no}</td>
-                    <td>${row.student_name}</td>
-                    <td><span class="badge-col">${row.updated_column}</span></td>
-                    <td>${time}</td>
-                </tr>
-            `;
-        });
-
-        table.style.display = "table";
-    } catch (err) {
-        console.error(err);
     }
-}
 
-// পেজ খুললেই অটোমেটিক ডাটা রিফ্রেশ করবে
-window.onload = loadModifiedData;
+    // -------------------------------------------------------------------------
+    // 10. Fetch Page Security Status Table
+    // -------------------------------------------------------------------------
+    async function fetchSecurityStatus() {
+        const tbody = document.getElementById('security-table-body');
+        try {
+            const { data, error } = await supabaseClient
+                .from('page_security')
+                .select('page_name, edit_mode')
+                .order('id', { ascending: true });
+
+            if (error) throw error;
+
+            let html = '';
+            data.forEach(row => {
+                const isEditOn = String(row.edit_mode).toLowerCase() === 'true';
+                const pageLabel = row.page_name.replace('result_', 'Class ').toUpperCase();
+
+                html += `
+                    <tr>
+                        <td><strong>${pageLabel}</strong></td>
+                        <td>
+                            <span class="badge ${isEditOn ? 'badge-on' : 'badge-off'}">
+                                <i class="fa-solid ${isEditOn ? 'fa-lock-open' : 'fa-lock'}"></i>
+                                ${isEditOn ? 'EDIT ON' : 'EDIT OFF'}
+                            </span>
+                        </td>
+                        <td><small style="color: #64748b;"><i class="fa-solid fa-key"></i> Protected by Passkey</small></td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+
+        } catch (err) {
+            console.error('Error fetching security status:', err);
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--danger-red);">
+                Error loading security status.
+            </td></tr>`;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // 3. UI Toggle Button Logic
+    // -------------------------------------------------------------------------
+    function updateTrackingButtonUI(active) {
+        const btn = document.getElementById('btn-toggle-tracking');
+        const statusText = document.getElementById('tracking-status-text');
+
+        if (active) {
+            btn.className = "btn btn-danger";
+            btn.innerHTML = `<i class="fa-solid fa-power-off"></i> Turn OFF Tracking & Clear List`;
+            statusText.innerHTML = `<span style="color: var(--success-green);"><i class="fa-solid fa-circle-check"></i> Tracking Mode: ACTIVE</span>`;
+        } else {
+            btn.className = "btn btn-success";
+            btn.innerHTML = `<i class="fa-solid fa-play"></i> Turn ON Tracking Mode`;
+            statusText.innerHTML = `<span style="color: var(--danger-red);"><i class="fa-solid fa-circle-pause"></i> Tracking Mode: INACTIVE</span>`;
+        }
+    }
+
+    function openPasskeyModal() {
+        document.getElementById('modal-passkey').value = '';
+        document.getElementById('modal-title').innerText = isTrackingActive ? "Turn OFF Tracking Mode" : "Turn ON Tracking Mode";
+        document.getElementById('modal-desc').innerText = isTrackingActive ? "Turning off will clear the currently tracked list." : "Start tracking new result edits.";
+        document.getElementById('passkey-modal').style.display = 'flex';
+        document.getElementById('modal-passkey').focus();
+    }
+
+    function closePasskeyModal() {
+        document.getElementById('passkey-modal').style.display = 'none';
+    }
+
+    async function submitTrackingToggle() {
+        const passkey = document.getElementById('modal-passkey').value.trim();
+        if (!passkey) {
+            alert("Please enter the security passkey!");
+            return;
+        }
+
+        const targetState = !isTrackingActive;
+
+        try {
+            const { data, error } = await supabaseClient.rpc('toggle_modified_list_mode', {
+                p_passkey: passkey,
+                p_enable: targetState
+            });
+
+            if (error) throw error;
+
+            if (data.success) {
+                alert(data.message);
+                if (!targetState) {
+                    // Clear local checkbox tracking memory if mode turned off
+                    localStorage.removeItem('printed_students_keys');
+                }
+                closePasskeyModal();
+                loadAllData();
+            } else {
+                alert("Failed: " + data.message);
+            }
+
+        } catch (err) {
+            alert("Error: " + err.message);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // 9. Interactive Checkbox Print Tracker (Saved in localStorage)
+    // -------------------------------------------------------------------------
+    function togglePrintStatus(key, checked) {
+        const row = document.getElementById(`row-${key}`);
+        if (checked) {
+            row.classList.add('printed-row');
+        } else {
+            row.classList.remove('printed-row');
+        }
+
+        let savedKeys = JSON.parse(localStorage.getItem('printed_students_keys') || '[]');
+        if (checked) {
+            if (!savedKeys.includes(key)) savedKeys.push(key);
+        } else {
+            savedKeys = savedKeys.filter(k => k !== key);
+        }
+        localStorage.setItem('printed_students_keys', JSON.stringify(savedKeys));
+    }
+
+    // -------------------------------------------------------------------------
+    // 8. Print Functionality
+    // -------------------------------------------------------------------------
+    function printReport() {
+        window.print();
+    }
+
+    // -------------------------------------------------------------------------
+    // Helper Utilities
+    // -------------------------------------------------------------------------
+    function formatColumnNameEnglish(col) {
+        if (!col) return '';
+        let parts = col.split('_');
+        let exam = parts[0].toUpperCase(); // e1 -> E1, proj -> PROJ
+        let subject = parts.slice(1).join(' ').toUpperCase();
+        return `${exam} - ${subject}`;
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/[&<>"']/g, function(m) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+        });
+    }
 </script>
+
 </body>
 </html>
