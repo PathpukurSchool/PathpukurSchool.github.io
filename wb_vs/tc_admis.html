@@ -240,7 +240,7 @@
         <div class="control-group">
             <button class="btn btn-capture" onclick="captureUDISETab()">স্ক্রিনশট নিন</button>
             <button id="cancelBtn" class="btn btn-cancel" onclick="cancelScreenshot()">ক্যানসেল / পুনরায় নিন</button>
-            <button class="btn btn-print" onclick="window.print()">প্রিন্ট করুন</button>
+            <button class="btn btn-print" onclick="printDocument()">প্রিন্ট করুন</button>
         </div>
     </div>
 
@@ -361,6 +361,20 @@
                 placeholderText.style.display = 'block';
                 cancelBtn.style.display = 'none';
         }
+
+        // প্রিন্ট করার ফাংশন (যাচাইকরণ সহ)
+function printDocument() {
+    const capturedImage = document.getElementById('capturedImage');
+    
+    // ছবি নেওয়া হয়েছে কি না তা পরীক্ষা করা
+    if (!capturedImage.src || capturedImage.style.display === 'none') {
+        alert("ত্রুটি: কোনো স্ক্রিনশট নেওয়া হয়নি! অনুগ্রহ করে প্রথমে স্ক্রিনশট নিন, তারপর প্রিন্ট করুন।");
+        return;
+    }
+    
+    // স্ক্রিনশট থাকলে প্রিন্ট কমান্ড চালু হবে
+    window.print();
+}
     </script>
 </body>
 </html>
