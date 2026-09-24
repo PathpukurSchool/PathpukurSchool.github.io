@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathpukur High School (H.S.) - Student Document Generator</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, 'Kalpurush', sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #000;
+        }
+
+        /* কন্ট্রোল প্যানেল (প্রিন্ট পেজে লুকানো থাকবে) */
+        .no-print {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            padding: 15px 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        select {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-capture { background-color: #007bff; }
+        .btn-capture:hover { background-color: #0056b3; }
+
+        .btn-cancel { background-color: #dc3545; display: none; }
+        .btn-cancel:hover { background-color: #a71d2a; }
+
+        .btn-print { background-color: #28a745; }
+        .btn-print:hover { background-color: #1e7e34; }
+
+        /* প্রিন্ট প্যাড কনটেইনার (A4 সাইজ রেসপন্সিভ) */
+        .print-pad {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 15mm 18mm;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* স্কুল পেড হেডার */
+        .pad-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .school-logo {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+
+        .school-details {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .school-details h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .school-details p {
+            margin: 3px 0 0 0;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+        /* বিষয়বস্তুর সেকশন */
+        .content-section {
+            flex-grow: 1;
+        }
+
+        .document-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .description-text {
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+
+        /* স্ক্রিনশট ডিসপ্লে এরিয়া */
+        .screenshot-container {
+            width: 100%;
+            min-height: 250px;
+            border: 2px dashed #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+            overflow: hidden;
+        }
+
+        .screenshot-container img {
+            max-width: 100%;
+            max-height: 400px;
+            display: block;
+            /* উচ্চ কন্ট্রাস্ট এবং ব্যাকগ্রাউন্ড সাদা রাখার জন্য ইমেজ প্রসেসিং ફિલ્ટર */
+            filter: grayscale(100%) contrast(200%) brightness(120%);
+        }
+
+        .placeholder-text {
+            color: #777;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        /* ফুটার ও সিল/স্বাক্ষর */
+        .pad-footer {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .footer-left {
+            font-size: 12px;
+        }
+
+        .signature-box {
+            text-align: center;
+            width: 220px;
+        }
+
+        .signature-space {
+            height: 60px;
+        }
+
+        .signature-line {
+            border-top: 1px dashed #000;
+            padding-top: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* প্রিন্টিং সিএসএস (শুধুমাত্র পেড প্রিন্ট হবে, বাটন ইত্যাদি হাইড থাকবে) */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .print-pad {
+                border: none;
+                box-shadow: none;
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+            }
+
+            .screenshot-container {
+                border: 1px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- কন্ট্রোল প্যানেল (ওয়েব পেজের ওপরের অপশন) -->
+    <div class="no-print">
+        <div class="control-group">
+            <label for="docType">ডকুমেন্টের ধরন নির্বাচন করুন:</label>
+            <select id="docType" onchange="updateDocumentType()">
+                <option value="tc">Transfer Certificate (TC)</option>
+                <option value="admission">New Admission Record</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <button class="btn btn-capture" onclick="captureUDISETab()">স্ক্রিনশট নিন</button>
+            <button id="cancelBtn" class="btn btn-cancel" onclick="cancelScreenshot()">ক্যানসেল / পুনরায় নিন</button>
+            <button class="btn btn-print" onclick="window.print()">প্রিন্ট করুন</button>
+        </div>
+    </div>
+
+    <!-- প্রিন্ট করার যোগ্য আসল প্যাড -->
+    <div class="print-pad">
+        
+        <!-- হেডার: লোগো ও স্কুলের তথ্য -->
+        <div>
+            <div class="pad-header">
+                <img src="Photo/PHS_Logo.png" alt="School Logo" class="school-logo" onerror="this.src='https://via.placeholder.com/75?text=LOGO'">
+                <div class="school-details">
+                    <h1>Pathpukur High School (H.S.)</h1>
+                    <p>Vill: Pathpukur, P.O.: Bakultala Hat, P.S.: Bakultala, Dist: South 24 Parganas, PIN: 743338</p>
+                    <p>Circle: Jayanagar II | WBBSE Code: ... | WBCHSE Code: ...</p>
+                </div>
+            </div>
+
+            <!-- হেডিং ও ডেসক্রিপশন -->
+            <div class="content-section">
+                <div id="docTitle" class="document-title">TO WHOM IT MAY CONCERN</div>
+                <div id="docDescription" class="description-text">
+                    This is to certify that the student (details as per the attached UDISE+ portal screenshot) was a bonafide student of this institution. The student has been duly released and transferred to the <strong>UDISE+ National Dropbox</strong> to facilitate admission into another school.
+                </div>
+
+                <!-- স্ক্রিনশট প্রিভিউ বক্স -->
+                <div class="screenshot-container" id="screenshotBox">
+                    <span class="placeholder-text" id="placeholderText">UDISE+ পোর্টালে গিয়ে স্ক্রিনশট নেওয়ার পর এখানে প্রদর্শিত হবে...</span>
+                    <img id="capturedImage" src="" alt="UDISE Portal Screenshot" style="display: none;">
+                </div>
+            </div>
+        </div>
+
+        <!-- ফুটার: তারিখ ও সিল/স্বাক্ষর -->
+        <div class="pad-footer">
+            <div class="footer-left">
+                <p><strong>Date:</strong> <span id="currentDate"></span></p>
+                <p><strong>Place:</strong> Pathpukur</p>
+            </div>
+            <div class="signature-box">
+                <div class="signature-space"></div>
+                <div class="signature-line">
+                    Signature of Headmaster / TIC<br>with Official Seal
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // আজকের তারিখ সেট করা
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
+        document.getElementById('currentDate').innerText = `${dd}/${mm}/${yyyy}`;
+
+        // ট্রান্সফার সার্টিফিকেট এবং নিউ এডমিশন সিলেকশন চেইঞ্জ
+        function updateDocumentType() {
+            const docType = document.getElementById('docType').value;
+            const docTitle = document.getElementById('docTitle');
+            const docDescription = document.getElementById('docDescription');
+
+            if (docType === 'tc') {
+                docTitle.innerText = "TO WHOM IT MAY CONCERN";
+                docDescription.innerHTML = "This is to certify that the student (details as per the attached UDISE+ portal screenshot) was a bonafide student of this institution. The student has been duly released and transferred to the <strong>UDISE+ National Dropbox</strong> to facilitate admission into another school.";
+            } else if (docType === 'admission') {
+                docTitle.innerText = "STUDENT PORTAL DATA RECORD SLIP";
+                docDescription.innerHTML = "Dear Parent/Guardian,<br>The student has been successfully imported/enrolled in our institution on the <strong>UDISE+ Portal</strong>. Attached below is the official details snippet from the portal for your record and future reference regarding the registered spelling of student's name, parents' names, date of birth, and other personal particulars as currently maintained in school and portal database.";
+            }
+        }
+
+        // ব্রাউজারের স্ক্রিনশট ফাংশনালিটি
+        async function captureUDISETab() {
+            try {
+                // MediaDevices API দিয়ে ক্রোম ব্রাউজারের UDISE ট্যাব সিলেক্ট করা
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { mediaSource: "tab" }
+                });
+
+                const track = stream.getVideoTracks()[0];
+                const imageCapture = new ImageCapture(track);
+                const bitmap = await imageCapture.grabFrame();
+
+                // ক্যানভাসে ড্র করে স্ক্রিনশট প্রসেস করা
+                const canvas = document.createElement('canvas');
+                canvas.width = bitmap.width;
+                canvas.height = bitmap.height;
+                const context = canvas.getContext('2d');
+                context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height);
+
+                // ট্র্যাকিং স্টপ করা
+                track.stop();
+
+                // ইমেজ সোরে নিয়ে আসা
+                const imgUrl = canvas.toDataURL('image/png');
+                const capturedImage = document.getElementById('capturedImage');
+                const placeholderText = document.getElementById('placeholderText');
+                const cancelBtn = document.getElementById('cancelBtn');
+
+                capturedImage.src = imgUrl;
+                capturedImage.style.display = 'block';
+                placeholderText.style.display = 'none';
+                cancelBtn.style.display = 'inline-block';
+
+            } catch (err) {
+                alert("স্ক্রিনশট গ্রহণ প্রক্রিয়াটি বাতিল করা হয়েছে অথবা সমর্থিত নয়।");
+            }
+        }
+
+        // ক্যানসেল / রিমুভ বোতামের কাজ
+        function cancelScreenshot() {
+            const capturedImage = document.getElementById('capturedImage');
+            const placeholderText = document.getElementById('placeholderText');
+            const cancelBtn = document.getElementById('cancelBtn');
+
+            capturedImage.src = '';
+                capturedImage.style.display = 'none';
+                placeholderText.style.display = 'block';
+                cancelBtn.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
