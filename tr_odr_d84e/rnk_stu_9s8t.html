@@ -448,7 +448,7 @@
         if (refreshIcon) setTimeout(() => { refreshIcon.classList.remove('fa-spin'); }, 500);
     }
 
-    // ছাত্র-ছাত্রীদের নম্বর হিসাব ও র‍্যাঙ্ক নির্ধারণ
+// ছাত্র-ছাত্রীদের নম্বর হিসাব ও র‍্যাঙ্ক নির্ধারণ (আপডেট করা)
     function processAndRankStudents(rawData, config, classKey) {
         if (!rawData || rawData.length === 0) return [];
 
@@ -503,6 +503,7 @@
         let processed = rawData.map(st => {
             let subjectTotals = {};
             let subjectScoresList = [];
+            let examDetails = {}; // 🔹 প্রতিটি পরীক্ষার নম্বর বা "-" ট্র্যাক করার জন্য
             let grandTotal = 0;
             let hasAbsent = false;
             let failedPassRule = false;
@@ -510,15 +511,20 @@
             config.subjects.forEach(sub => {
                 let subSum = 0;
                 let subHasData = false;
+                let examBreakdown = []; // 🔹 প্রতিটি পরীক্ষার ব্রেকডাউন তালিকা
 
                 activeExamIndexes.forEach(exIdx => {
                     const ex = config.exams[exIdx];
                     const key = `${ex.key}${sub.key}`;
-                    if (st[key] !== undefined && st[key] !== null) {
-                        subSum += Number(st[key]);
+
+                    if (st[key] !== undefined && st[key] !== null && st[key] !== "") {
+                        const val = Number(st[key]);
+                        subSum += val;
                         subHasData = true;
-                    } else if (st.hasOwnProperty(key) && st[key] === null) {
+                        examBreakdown.push(val); // নম্বর যুক্ত হবে (০ হলেও ০ থাকবে)
+                    } else {
                         hasAbsent = true;
+                        examBreakdown.push("-"); // অনুপস্থিত বা ফাঁকা থাকলে "-" বসবে
                     }
                 });
 
@@ -526,6 +532,8 @@
                     subjectTotals[sub.key] = subSum;
                     subjectScoresList.push({ key: sub.key, score: subSum, fm: fullMarksPerSubject[sub.key] });
                 }
+
+                examDetails[sub.key] = examBreakdown;
             });
 
             if (config.isBestOfFive) {
@@ -557,15 +565,15 @@
             return {
                 ...st,
                 subjectTotals,
+                examDetails, // 🔹 আপডেটেড ব্রেকডাউন ডাটা অবজেক্টে পাস করা হলো
                 grandTotal,
                 hasAbsent,
-                activeExamIndexes,
                 allPassed: !failedPassRule,
                 percentage: isNaN(pct) ? 0 : pct
             };
         });
 
-        // মেধা তালিকা অনুযায়ী প্রাথমিক সাজানো
+        // মেধা তালিকা অনুযায়ী প্রাথমিক সাজানো
         processed.sort((a, b) => {
             if (b.grandTotal !== a.grandTotal) return b.grandTotal - a.grandTotal;
             if (a.hasAbsent !== b.hasAbsent) return a.hasAbsent ? 1 : -1;
@@ -628,8 +636,7 @@
         renderStudentTable(sortedStudents, currentConfig);
         filterTable(); // কোনো ফিল্টার টেক্সট আগে থেকে ইনপুটে লেখা থাকলে তাও অ্যাপ্লাই হবে
     }
-
-    // বিষয়ভিত্তিক টেবিল হেডার ও ডেটা রেন্ডারিং ফাংশন (আপডেট করা)
+// বিষয়ভিত্তিক টেবিল হেডার ও ডেটা রেন্ডারিং ফাংশন (আপডেট করা)
     function renderStudentTable(students, config) {
         const thead = document.getElementById('rankTableHead');
         const tbody = document.getElementById('rankTableBody');
@@ -667,31 +674,18 @@
 
             tr.className = `${highlightClass} transition-colors border-b border-slate-200`;
 
-            // 🔹 বিষয়ভিত্তিক নম্বর ও পরীক্ষাগুলির প্রাপ্ত নম্বর (বন্ধনীতে) সেল তৈরি
+            // 🔹 বিষয়ভিত্তিক নম্বর এবং বন্ধনীতে ব্রেকডাউন রেন্ডারিং
             let subjectCells = config.subjects.map(sub => {
-                let examMarksList = [];
-                let subSum = st.subjectTotals[sub.key];
+                const subSum = st.subjectTotals[sub.key];
+                const breakdown = st.examDetails ? st.examDetails[sub.key] : [];
 
-                // সক্রিয় পরীক্ষাগুলির নম্বর আলাদাভাবে সংগ্রহ করা
-                if (st.activeExamIndexes) {
-                    st.activeExamIndexes.forEach(exIdx => {
-                        const ex = config.exams[exIdx];
-                        const key = `${ex.key}${sub.key}`;
-                        if (st[key] !== undefined && st[key] !== null) {
-                            examMarksList.push(st[key]);
-                        }
-                    });
-                }
-
-                if (subSum !== undefined && examMarksList.length > 0) {
-                    // যদি একাধিক পরীক্ষা থাকে তবে বন্ধনীতে দেখা যাবে (যেমন: 85 (25+30+30))
-                    // যদি ১টি পরীক্ষা থাকে তবে শুধুই মান বা (মান) দেখা যাবে
-                    const breakdownText = examMarksList.length > 1 
-                        ? `<br><span class="text-[11px] font-normal text-slate-500">(${examMarksList.join(' + ')})</span>` 
-                        : (examMarksList.length === 1 ? `<br><span class="text-[11px] font-normal text-slate-500">(${examMarksList[0]})</span>` : '');
+                if (breakdown && breakdown.length > 0) {
+                    const totalText = subSum !== undefined ? subSum : 0;
+                    // প্লাস চিহ্ন যোগ করে বন্ধনীতে দেখানো: 10 (10 + - + 0)
+                    const breakdownText = `<br><span class="text-[11px] font-normal text-slate-500">(${breakdown.join(' + ')})</span>`;
 
                     return `<td class="py-2.5 px-2 text-center text-slate-800 border">
-                                <span class="font-bold">${subSum}</span>${breakdownText}
+                                <span class="font-bold">${totalText}</span>${breakdownText}
                             </td>`;
                 } else {
                     return `<td class="py-3 px-2 text-center text-slate-400 border">-</td>`;
@@ -712,7 +706,7 @@
             tbody.appendChild(tr);
         });
     }
-    
+
     // রোল এবং র‍্যাঙ্ক অনুযায়ী টেক্সট সার্চ/ফিল্টার
     function filterTable() {
         const filterInput = document.getElementById('tableFilterInput');
