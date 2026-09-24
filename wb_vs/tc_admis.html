@@ -25,13 +25,14 @@
         }
 
         .no-print {
-            max-width: 850px;
+            max-width: 950px;
             margin: 0 auto 20px auto;
             padding: 15px 20px;
             background: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             display: flex;
+            flex-wrap: wrap;
             gap: 15px;
             align-items: center;
             justify-content: space-between;
@@ -40,24 +41,24 @@
         .control-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         label {
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         select {
-            padding: 8px 12px;
-            font-size: 14px;
+            padding: 7px 10px;
+            font-size: 13px;
             border-radius: 4px;
             border: 1px solid #ccc;
         }
 
         .btn {
-            padding: 8px 18px;
-            font-size: 14px;
+            padding: 8px 16px;
+            font-size: 13px;
             font-weight: bold;
             color: white;
             border: none;
@@ -149,16 +150,29 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 15px;
-            background-color: #fafafa;
+            background-color: #ffffff;
             overflow: hidden;
         }
 
+        /* প্রসেস করা ইমেজ রেন্ডারিং (প্রিন্টের জন্য শতভাগ পরিষ্কার ও ব্যাকগ্রাউন্ড ফ্রি) */
         .screenshot-container img {
             max-width: 100%;
-            max-height: 380px;
+            max-height: 400px;
             display: block;
-            /* নাইট মোড ফিল্টার ও বিঅ্যান্ডডব্লিউ ইফেক্ট */
-            filter: grayscale(100%) contrast(200%) brightness(110%);
+            background-color: #ffffff;
+        }
+
+        /* ফিল্টার মোড সমূহের সিএসএস লজিক */
+        .mode-light {
+            filter: grayscale(100%) contrast(300%) brightness(90%);
+        }
+
+        .mode-gray {
+            filter: grayscale(100%) contrast(350%) brightness(100%);
+        }
+
+        .mode-dark {
+            filter: invert(100%) grayscale(100%) contrast(400%) brightness(110%);
         }
 
         .placeholder-text {
@@ -244,6 +258,11 @@
             .screenshot-container {
                 border: 1px solid #000;
             }
+
+            .screenshot-container img {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
     </style>
 </head>
@@ -260,6 +279,15 @@
         </div>
 
         <div class="control-group">
+            <label for="pageMode">ওয়েব পেজ মোড:</label>
+            <select id="pageMode" onchange="applyModeFilter()">
+                <option value="light">Light Mode (সাদা)</option>
+                <option value="gray">Gray Mode (ধূসর)</option>
+                <option value="dark">Dark Mode (নাইট/কালো)</option>
+            </select>
+        </div>
+
+        <div class="control-group">
             <button class="btn btn-capture" onclick="captureUDISETab()">স্ক্রিনশট নিন</button>
             <button id="cancelBtn" class="btn btn-cancel" onclick="cancelScreenshot()">ক্যানসেল / পুনরায় নিন</button>
             <button class="btn btn-print" onclick="printDocument()">প্রিন্ট করুন</button>
@@ -270,8 +298,8 @@
     <div class="print-pad">
         <div>
             <div class="pad-header">
-                <!-- লোগোর ক্ষেত্রে ফোল্ডার ফাইল বা রুট ফাইল দুটোই চেক করার ব্যাকআপ হ্যান্ডলার দেওয়া আছে -->
-                <img src="../PHS-LOGO.png" alt="School Logo" class="school-logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/75?text=LOGO';">
+                <!-- সঠিক রুটের লোগো পাথ দেওয়া হলো -->
+                <img src="../PHS-LOGO.png" alt="School Logo" class="school-logo" onerror="this.onerror=null; this.src='PHS-LOGO.png';">
                 <div class="school-details">
                     <h1>Pathpukur High School (H.S.)</h1>
                     <p>Vill: Pathpukur, P.O.: Bakultala Hat, P.S.: Bakultala, Dist: South 24 Parganas, PIN: 743338</p>
@@ -287,7 +315,7 @@
 
                 <div class="screenshot-container" id="screenshotBox">
                     <span class="placeholder-text" id="placeholderText">UDISE+ পোর্টালে গিয়ে স্ক্রিনশট নেওয়ার পর এখানে ক্রপ করা অংশ প্রদর্শিত হবে...</span>
-                    <img id="capturedImage" src="" alt="UDISE Portal Screenshot" style="display: none;">
+                    <img id="capturedImage" class="mode-light" src="" alt="UDISE Portal Screenshot" style="display: none;">
                 </div>
             </div>
         </div>
@@ -329,7 +357,6 @@
         const yyyy = today.getFullYear();
         document.getElementById('currentDate').innerText = `${dd}/${mm}/${yyyy}`;
 
-        // পেজ লোড হলে বিবরণ ঠিক করা
         window.onload = function() {
             updateDocumentType();
         };
@@ -348,7 +375,22 @@
             }
         }
 
-        // স্ক্রিনশট নেওয়ার মেথড
+        // ক্রোম থিম বা মোড অনুযায়ী কালার ফিল্টার অ্যাপ্লাই করা
+        function applyModeFilter() {
+            const mode = document.getElementById('pageMode').value;
+            const capturedImage = document.getElementById('capturedImage');
+
+            capturedImage.className = ''; // আগের ক্লাস রিমুভ
+
+            if (mode === 'dark') {
+                capturedImage.classList.add('mode-dark');
+            } else if (mode === 'gray') {
+                capturedImage.classList.add('mode-gray');
+            } else {
+                capturedImage.classList.add('mode-light');
+            }
+        }
+
         async function captureUDISETab() {
             try {
                 const stream = await navigator.mediaDevices.getDisplayMedia({
@@ -357,12 +399,9 @@
                 });
 
                 const track = stream.getVideoTracks()[0];
-                
-                // ইমেজ ট্র্যাক থেকে ফ্রেম নেওয়া
                 const imageCapture = new ImageCapture(track);
                 const bitmap = await imageCapture.grabFrame();
 
-                // ভিডিও স্ট্রিম ও লোডার সাথে সাথে বন্ধ করা
                 track.stop();
                 stream.getTracks().forEach(t => t.stop());
 
@@ -374,7 +413,6 @@
 
                 const fullImgUrl = canvas.toDataURL('image/png');
                 
-                // ক্রপার মোডাল চালু করা
                 openCropModal(fullImgUrl);
 
             } catch (err) {
@@ -382,7 +420,6 @@
             }
         }
 
-        // ক্রপার চালু করা
         function openCropModal(imageSrc) {
             const cropModal = document.getElementById('cropModal');
             const cropImage = document.getElementById('cropImage');
@@ -396,12 +433,11 @@
 
             cropper = new Cropper(cropImage, {
                 viewMode: 1,
-                autoCropArea: 0.5,
+                autoCropArea: 0.6,
                 responsive: true
             });
         }
 
-        // ক্রপ অ্যাপ্লাই করা
         function applyCrop() {
             if (!cropper) return;
 
@@ -417,8 +453,15 @@
             placeholderText.style.display = 'none';
             cancelBtn.style.display = 'inline-block';
 
+            // মোড ফিল্টার নিশ্চিত করা
+            applyModeFilter();
+
             closeCropModal();
-            window.focus(); // মূল ট্যাবে ফোকাস ফিরিয়ে আনা
+
+            // প্রসেসিং শেষে সাথে সাথে ইউজারকে এই পেজের ট্যাবে ফোকাস করিয়ে নিয়ে আসা
+            setTimeout(() => {
+                window.focus();
+            }, 100);
         }
 
         function closeCropModal() {
