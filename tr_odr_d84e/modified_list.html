@@ -344,7 +344,7 @@ async function startAutoRefreshLoop() {
         await refreshAllData();
         isFetching = false;
     }
-    setTimeout(startAutoRefreshLoop, 30000); // একটি রিকোয়েস্ট শেষ হলে ৩০ সে. পর আবার রান হবে
+    setTimeout(startAutoRefreshLoop, 100000); // একটি রিকোয়েস্ট শেষ হলে 1 মিনিট পর আবার রান হবে
 }
 
 async function refreshAllData() {
