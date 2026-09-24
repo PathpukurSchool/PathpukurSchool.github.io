@@ -3,6 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="robots" content="noindex, nofollow, noarchive">
+
+  <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+  <style id="security-shield">
+    body { display: none !important; }
+  </style>
+
+  <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+  <script>
+  (function() {
+      try {
+          var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+
+          var ref = document.referrer;
+          var isValidReferrer = false;
+          if (ref) {
+              var refUrl = new URL(ref);
+              // আপনার ডোমেন চেক
+              if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
+                  isValidReferrer = true;
+              }
+          }
+
+          // সেশন না থাকলে বা অননুমোদিত উপায়ে আসলে হোম পেজে রিডাইরেক্ট
+          if (!isLoggedIn) {
+              sessionStorage.clear();
+              window.location.replace("https://pathpukurschool.github.io/");
+              return;
+          }
+
+          // ভ্যালিড ইউজার হলে পেজ দৃশ্যমান করা
+          document.addEventListener("DOMContentLoaded", function() {
+              var shield = document.getElementById("security-shield");
+              if (shield) shield.remove();
+          });
+
+      } catch (e) {
+          sessionStorage.clear();
+          window.location.replace("https://pathpukurschool.github.io/");
+      }
+  })();
+  </script>
+
+  <!-- UDISE + পোরটান থেকে TC ও এডমিশনের সময় স্ক্রিনশট যুক্ত সার্টিফিকেট দেওয়া -->
     <title>Pathpukur High School (H.S.)</title>
     <!-- Cropper.js for image cropping -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
@@ -20,20 +64,20 @@
         body {
             background-color: #f4f6f9;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             color: #000;
         }
 
         .no-print {
             max-width: 950px;
             margin: 0 auto 20px auto;
-            padding: 15px 20px;
+            padding: 15px;
             background: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             align-items: center;
             justify-content: space-between;
         }
@@ -42,6 +86,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         label {
@@ -50,14 +95,54 @@
         }
 
         select {
-            padding: 7px 10px;
+            padding: 8px 12px;
             font-size: 13px;
+            font-weight: bold;
             border-radius: 4px;
             border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* ড্রপডাউনের স্টাইল ও ডায়নামিক কালার */
+        select.doc-admission {
+            background-color: #28a745;
+            color: #ffffff;
+            border-color: #1e7e34;
+        }
+
+        select.doc-tc {
+            background-color: #dc3545;
+            color: #ffffff;
+            border-color: #bd2130;
+        }
+
+        select.mode-light-select {
+            background-color: #ffffff;
+            color: #000000;
+            border-color: #cccccc;
+        }
+
+        select.mode-gray-select {
+            background-color: #6c757d;
+            color: #ffffff;
+            border-color: #545b62;
+        }
+
+        select.mode-dark-select {
+            background-color: #212529;
+            color: #ffffff;
+            border-color: #000000;
+        }
+
+        /* অপশনগুলোর কালার ঠিক রাখা */
+        select option {
+            background-color: #ffffff;
+            color: #000000;
         }
 
         .btn {
-            padding: 8px 16px;
+            padding: 8px 14px;
             font-size: 13px;
             font-weight: bold;
             color: white;
@@ -65,10 +150,16 @@
             border-radius: 4px;
             cursor: pointer;
             transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-capture { background-color: #007bff; }
         .btn-capture:hover { background-color: #0056b3; }
+
+        .btn-upload { background-color: #17a2b8; }
+        .btn-upload:hover { background-color: #117a8b; }
 
         .btn-cancel { background-color: #dc3545; display: none; }
         .btn-cancel:hover { background-color: #a71d2a; }
@@ -76,8 +167,10 @@
         .btn-print { background-color: #28a745; }
         .btn-print:hover { background-color: #1e7e34; }
 
+        /* প্রিন্ট প্যাডের রেসপন্সিভ সেটআপ */
         .print-pad {
             width: 210mm;
+            max-width: 100%;
             min-height: 280mm;
             margin: 0 auto;
             background: #ffffff;
@@ -152,9 +245,9 @@
             margin-bottom: 15px;
             background-color: #ffffff;
             overflow: hidden;
+            padding: 5px;
         }
 
-        /* প্রসেস করা ইমেজ রেন্ডারিং (প্রিন্টের জন্য শতভাগ পরিষ্কার ও ব্যাকগ্রাউন্ড ফ্রি) */
         .screenshot-container img {
             max-width: 100%;
             max-height: 400px;
@@ -179,6 +272,8 @@
             color: #777;
             font-style: italic;
             font-size: 13px;
+            text-align: center;
+            padding: 10px;
         }
 
         .pad-footer {
@@ -221,12 +316,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
         }
 
         .crop-container {
-            max-width: 90%;
-            max-height: 75vh;
+            width: 100%;
+            max-width: 850px;
+            max-height: 70vh;
             background: #fff;
         }
 
@@ -234,6 +330,56 @@
             margin-top: 15px;
             display: flex;
             gap: 15px;
+        }
+
+        /* মোবাইল স্ক্রিনের জন্য মিডিয়া কোয়েরি */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .no-print {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .control-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .control-group label {
+                margin-top: 5px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .print-pad {
+                padding: 8mm 6mm;
+                border: none;
+                box-shadow: none;
+            }
+
+            .school-logo {
+                width: 55px;
+                height: 55px;
+                margin-right: 8px;
+            }
+
+            .school-details h1 {
+                font-size: 15px;
+            }
+
+            .school-details p {
+                font-size: 9.5px;
+            }
+
+            .signature-box {
+                width: 150px;
+            }
         }
 
         @media print {
@@ -288,7 +434,13 @@
         </div>
 
         <div class="control-group">
+            <!-- ডেক্সটপের সরাসরি স্ক্রিনশট বোতাম -->
             <button class="btn btn-capture" onclick="captureUDISETab()">স্ক্রিনশট নিন</button>
+            
+            <!-- ডিভাইস (মোবাইল/কম্পিউটার) থেকে ছবি সিলেক্ট করার বোতাম -->
+            <button class="btn btn-upload" onclick="document.getElementById('fileInput').click()">ছবি আপলোড করুন</button>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
+
             <button id="cancelBtn" class="btn btn-cancel" onclick="cancelScreenshot()">ক্যানসেল / পুনরায় নিন</button>
             <button class="btn btn-print" onclick="printDocument()">প্রিন্ট করুন</button>
         </div>
@@ -298,7 +450,6 @@
     <div class="print-pad">
         <div>
             <div class="pad-header">
-                <!-- সঠিক রুটের লোগো পাথ দেওয়া হলো -->
                 <img src="../PHS-LOGO.png" alt="School Logo" class="school-logo" onerror="this.onerror=null; this.src='PHS-LOGO.png';">
                 <div class="school-details">
                     <h1>Pathpukur High School (H.S.)</h1>
@@ -314,7 +465,7 @@
                 </div>
 
                 <div class="screenshot-container" id="screenshotBox">
-                    <span class="placeholder-text" id="placeholderText">UDISE+ পোর্টালে গিয়ে স্ক্রিনশট নেওয়ার পর এখানে ক্রপ করা অংশ প্রদর্শিত হবে...</span>
+                    <span class="placeholder-text" id="placeholderText">স্ক্রিনশট নিন বা ডিভাইস থেকে ছবি আপলোড করার পর এখানে ক্রপ করা অংশ প্রদর্শিত হবে...</span>
                     <img id="capturedImage" class="mode-light" src="" alt="UDISE Portal Screenshot" style="display: none;">
                 </div>
             </div>
@@ -359,38 +510,65 @@
 
         window.onload = function() {
             updateDocumentType();
+            applyModeFilter();
         };
 
+        // ডকুমেন্টের ধরন আপডেট ও ড্রপডাউনের কালার পরিবর্তন
         function updateDocumentType() {
-            const docType = document.getElementById('docType').value;
+            const docSelect = document.getElementById('docType');
+            const docType = docSelect.value;
             const docTitle = document.getElementById('docTitle');
             const docDescription = document.getElementById('docDescription');
 
-            if (docType === 'tc') {
-                docTitle.innerText = "TO WHOM IT MAY CONCERN";
-                docDescription.innerHTML = "This is to certify that the student (details as per the attached UDISE+ portal screenshot) was a bonafide student of this institution. The student has been duly released and transferred to the <strong>UDISE+ National Dropbox</strong> to facilitate admission into another school.";
-            } else if (docType === 'admission') {
+            // কালার ব্যাকগ্রাউন্ড ক্লাস হ্যান্ডলিং
+            docSelect.className = '';
+            if (docType === 'admission') {
+                docSelect.classList.add('doc-admission');
                 docTitle.innerText = "STUDENT PORTAL DATA RECORD SLIP";
                 docDescription.innerHTML = "Dear Parent/Guardian,<br>The student has been successfully imported/enrolled in our institution on the <strong>UDISE+ Portal</strong>. Attached below is the official details snippet from the portal for your record and future reference regarding the registered spelling of student's name, parents' names, date of birth, and other personal particulars as currently maintained in school and portal database.";
+            } else if (docType === 'tc') {
+                docSelect.classList.add('doc-tc');
+                docTitle.innerText = "TO WHOM IT MAY CONCERN";
+                docDescription.innerHTML = "This is to certify that the student (details as per the attached UDISE+ portal screenshot) was a bonafide student of this institution. The student has been duly released and transferred to the <strong>UDISE+ National Dropbox</strong> to facilitate admission into another school.";
             }
         }
 
-        // ক্রোম থিম বা মোড অনুযায়ী কালার ফিল্টার অ্যাপ্লাই করা
+        // কালার ফিল্টার ও পেজ মোড ড্রপডাউনের কালার পরিবর্তন
         function applyModeFilter() {
-            const mode = document.getElementById('pageMode').value;
+            const modeSelect = document.getElementById('pageMode');
+            const mode = modeSelect.value;
             const capturedImage = document.getElementById('capturedImage');
 
-            capturedImage.className = ''; // আগের ক্লাস রিমুভ
+            capturedImage.className = '';
+            modeSelect.className = '';
 
             if (mode === 'dark') {
                 capturedImage.classList.add('mode-dark');
+                modeSelect.classList.add('mode-dark-select');
             } else if (mode === 'gray') {
                 capturedImage.classList.add('mode-gray');
+                modeSelect.classList.add('mode-gray-select');
             } else {
                 capturedImage.classList.add('mode-light');
+                modeSelect.classList.add('mode-light-select');
             }
         }
 
+        // ডিভাইস থেকে ফাইল আপলোড হ্যান্ডলার (মোবাইল ও পিসির জন্য)
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    openCropModal(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+            // রি-সিলেক্ট সাপোর্ট করতে রিসেট করা
+            event.target.value = '';
+        }
+
+        // ডেক্সটপে সরাসরি স্ক্রিনশট নেওয়া
         async function captureUDISETab() {
             try {
                 const stream = await navigator.mediaDevices.getDisplayMedia({
@@ -453,12 +631,9 @@
             placeholderText.style.display = 'none';
             cancelBtn.style.display = 'inline-block';
 
-            // মোড ফিল্টার নিশ্চিত করা
             applyModeFilter();
-
             closeCropModal();
 
-            // প্রসেসিং শেষে সাথে সাথে ইউজারকে এই পেজের ট্যাবে ফোকাস করিয়ে নিয়ে আসা
             setTimeout(() => {
                 window.focus();
             }, 100);
@@ -488,7 +663,7 @@
             const capturedImage = document.getElementById('capturedImage');
             
             if (!capturedImage.src || capturedImage.style.display === 'none') {
-                alert("ত্রুটি: কোনো স্ক্রিনশট নেওয়া হয়নি! অনুগ্রহ করে প্রথমে স্ক্রিনশট নিন, তারপর প্রিন্ট করুন।");
+                alert("ত্রুটি: কোনো ছবি বা স্ক্রিনশট যুক্ত করা হয়নি! অনুগ্রহ করে ছবি যুক্ত করুন, তারপর প্রিন্ট করুন।");
                 return;
             }
             
