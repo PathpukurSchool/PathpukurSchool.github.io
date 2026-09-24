@@ -559,6 +559,7 @@
                 subjectTotals,
                 grandTotal,
                 hasAbsent,
+                activeExamIndexes,
                 allPassed: !failedPassRule,
                 percentage: isNaN(pct) ? 0 : pct
             };
@@ -628,7 +629,7 @@
         filterTable(); // কোনো ফিল্টার টেক্সট আগে থেকে ইনপুটে লেখা থাকলে তাও অ্যাপ্লাই হবে
     }
 
-    // বিষয়ভিত্তিক টেবিল হেডার ও ডেটা রেন্ডারিং ফাংশন
+    // বিষয়ভিত্তিক টেবিল হেডার ও ডেটা রেন্ডারিং ফাংশন (আপডেট করা)
     function renderStudentTable(students, config) {
         const thead = document.getElementById('rankTableHead');
         const tbody = document.getElementById('rankTableBody');
@@ -666,10 +667,35 @@
 
             tr.className = `${highlightClass} transition-colors border-b border-slate-200`;
 
-            // বিষয়ভিত্তিক নম্বর সেল তৈরি
+            // 🔹 বিষয়ভিত্তিক নম্বর ও পরীক্ষাগুলির প্রাপ্ত নম্বর (বন্ধনীতে) সেল তৈরি
             let subjectCells = config.subjects.map(sub => {
-                const mark = st.subjectTotals[sub.key] !== undefined ? st.subjectTotals[sub.key] : '-';
-                return `<td class="py-3 px-2 text-center text-slate-700 border">${mark}</td>`;
+                let examMarksList = [];
+                let subSum = st.subjectTotals[sub.key];
+
+                // সক্রিয় পরীক্ষাগুলির নম্বর আলাদাভাবে সংগ্রহ করা
+                if (st.activeExamIndexes) {
+                    st.activeExamIndexes.forEach(exIdx => {
+                        const ex = config.exams[exIdx];
+                        const key = `${ex.key}${sub.key}`;
+                        if (st[key] !== undefined && st[key] !== null) {
+                            examMarksList.push(st[key]);
+                        }
+                    });
+                }
+
+                if (subSum !== undefined && examMarksList.length > 0) {
+                    // যদি একাধিক পরীক্ষা থাকে তবে বন্ধনীতে দেখা যাবে (যেমন: 85 (25+30+30))
+                    // যদি ১টি পরীক্ষা থাকে তবে শুধুই মান বা (মান) দেখা যাবে
+                    const breakdownText = examMarksList.length > 1 
+                        ? `<br><span class="text-[11px] font-normal text-slate-500">(${examMarksList.join(' + ')})</span>` 
+                        : (examMarksList.length === 1 ? `<br><span class="text-[11px] font-normal text-slate-500">(${examMarksList[0]})</span>` : '');
+
+                    return `<td class="py-2.5 px-2 text-center text-slate-800 border">
+                                <span class="font-bold">${subSum}</span>${breakdownText}
+                            </td>`;
+                } else {
+                    return `<td class="py-3 px-2 text-center text-slate-400 border">-</td>`;
+                }
             }).join('');
 
             tr.innerHTML = `
@@ -686,7 +712,7 @@
             tbody.appendChild(tr);
         });
     }
-
+    
     // রোল এবং র‍্যাঙ্ক অনুযায়ী টেক্সট সার্চ/ফিল্টার
     function filterTable() {
         const filterInput = document.getElementById('tableFilterInput');
