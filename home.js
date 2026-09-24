@@ -380,12 +380,12 @@ async function submitMasterLogin() {
 // 📌 Helper function to update login attempt counts & block status in English
 function showAttemptStatus(attempts, errorDiv, mainMsg) {
     if (attempts >= 5) {
-        let lockUntil = Date.now() + (10 * 60 * 1000); // 5-minute lock
+        let lockUntil = Date.now() + (30 * 60 * 1000); // 30-minute lock
         localStorage.setItem('lockUntil', lockUntil.toString());
         localStorage.setItem('loginAttempts', '0'); // Reset attempts after lock
 
         if (errorDiv) {
-            errorDiv.innerText = `⛔ Account locked for 10 minutes due to 5 failed attempts!`;
+            errorDiv.innerText = `⛔ Account locked for 30 minutes due to 5 failed attempts!`;
             errorDiv.style.color = "red";
         }
     } else {
