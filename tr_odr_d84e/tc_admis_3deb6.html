@@ -259,7 +259,7 @@
 
         .screenshot-container {
             width: 100%;
-            min-height: 380px; /* আগে ২২০px ছিল, এটি বাড়িয়ে ৩৮০px করা হলো */
+            min-height: 480px; /* আগে ২২০px ছিল, এটি বাড়িয়ে ৪৮০px করা হলো */
             border: 2px dashed #999;
             display: flex;
             align-items: center;
@@ -280,19 +280,19 @@
     }
 
         /* ফিল্টার মোড সমূহের সিএসএস লজিক */
-.mode-light {
-    filter: grayscale(100%) contrast(300%) brightness(90%);
-}
-
-.mode-gray {
-    filter: grayscale(100%) contrast(350%) brightness(100%);
-}
-
-/* ডার্ক মোডের ছবি ইনভার্ট করা */
-.mode-dark {
-    filter: invert(100%) hue-rotate(180deg) contrast(140%) brightness(95%);
-    mix-blend-mode: multiply;
-}
+        .mode-light {
+            filter: grayscale(100%) contrast(300%) brightness(90%);
+        }
+        
+        .mode-gray {
+            filter: grayscale(100%) contrast(350%) brightness(100%);
+        }
+        
+        /* ডার্ক মোডের ছবি ইনভার্ট করা */
+        .mode-dark {
+            filter: invert(100%) hue-rotate(180deg) contrast(140%) brightness(95%);
+            mix-blend-mode: multiply;
+        }
 
         .placeholder-text {
             color: #777;
@@ -319,7 +319,7 @@
         }
 
         .signature-space {
-            height: 45px;
+            height: 60px;
         }
 
         .signature-line {
@@ -409,35 +409,35 @@
         }
 
         @media print {
-    body {
-        background: none;
-        padding: 0;
+        body {
+            background: none;
+            padding: 0;
+        }
+    
+        .no-print, .crop-modal {
+            display: none !important;
+        }
+    
+        .print-pad {
+            border: none;
+            box-shadow: none;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    
+        .screenshot-container {
+            border: 1px solid #000;
+            background-color: #ffffff !important;
+        }
+    
+        .screenshot-container img {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            background-color: transparent !important;
+        }
     }
-
-    .no-print, .crop-modal {
-        display: none !important;
-    }
-
-    .print-pad {
-        border: none;
-        box-shadow: none;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-    }
-
-    .screenshot-container {
-        border: 1px solid #000;
-        background-color: #ffffff !important;
-    }
-
-    .screenshot-container img {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        background-color: transparent !important;
-    }
-}
 
         .description-box {
     background-color: #eef5fc;
