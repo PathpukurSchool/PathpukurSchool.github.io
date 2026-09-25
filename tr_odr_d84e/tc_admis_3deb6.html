@@ -278,22 +278,20 @@
     background-color: #ffffff !important;
 }
 
-        /* ফিল্টার মোড সমূহের সিএসএস লজিক */
-        .mode-light {
-            filter: grayscale(100%) contrast(300%) brightness(90%);
-            background-color: #ffffff !important;
-        }
+        /* ব্যাকগ্রাউন্ড কালার বাদ দিয়ে শুধুমাত্র ছবির কনট্রাস্ট ও ব্রাইটনেস অ্যাডজাস্টমেন্ট */
+.mode-light {
+    filter: grayscale(100%) contrast(250%) brightness(95%);
+}
 
-        .mode-gray {
-            filter: grayscale(100%) contrast(350%) brightness(100%);
-            background-color: #ffffff !important;
-        }
+.mode-gray {
+    filter: grayscale(100%) contrast(300%) brightness(85%);
+}
 
-        .mode-dark {
-            filter: invert(100%) grayscale(100%) contrast(400%) brightness(110%);
-            background-color: #ffffff !important;
-        }
-
+/* ডার্ক মোডের ছবিকে প্রিন্টযোগ্য করার জন্য বিশেষ ইনভার্ট ট্রিক (Background আক্রান্ত হবে না) */
+.mode-dark {
+    filter: grayscale(100%) invert(100%) contrast(300%);
+    mix-blend-mode: multiply; /* এটি ব্যাকগ্রাউন্ডকে সাদা রেখে ছবির কালো অংশ উল্টে দেয় */
+}
         .placeholder-text {
             color: #777;
             font-style: italic;
@@ -434,7 +432,6 @@
             .screenshot-container img {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                background-color: #ffffff !important;
             }
         }
 
@@ -604,24 +601,24 @@
 
         // কালার ফিল্টার ও পেজ মোড ড্রপডাউনের কালার পরিবর্তন
         function applyModeFilter() {
-            const modeSelect = document.getElementById('pageMode');
-            const mode = modeSelect.value;
-            const capturedImage = document.getElementById('capturedImage');
+    const modeSelect = document.getElementById('pageMode');
+    const mode = modeSelect.value;
+    const capturedImage = document.getElementById('capturedImage');
 
-            capturedImage.className = '';
-            modeSelect.className = '';
+    capturedImage.className = '';
+    modeSelect.className = '';
 
-            if (mode === 'dark') {
-                capturedImage.classList.add('mode-dark');
-                modeSelect.classList.add('mode-dark-select');
-            } else if (mode === 'gray') {
-                capturedImage.classList.add('mode-gray');
-                modeSelect.classList.add('mode-gray-select');
-            } else {
-                capturedImage.classList.add('mode-light');
-                modeSelect.classList.add('mode-light-select');
-            }
-        }
+    if (mode === 'dark') {
+        capturedImage.classList.add('mode-dark');
+        modeSelect.classList.add('mode-dark-select');
+    } else if (mode === 'gray') {
+        capturedImage.classList.add('mode-gray');
+        modeSelect.classList.add('mode-gray-select');
+    } else {
+        capturedImage.classList.add('mode-light');
+        modeSelect.classList.add('mode-light-select');
+    }
+}
 
         // ডিভাইস থেকে ফাইল আপলোড হ্যান্ডলার (মোবাইল ও পিসির জন্য)
         function handleFileUpload(event) {
