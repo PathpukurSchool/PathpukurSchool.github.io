@@ -194,7 +194,7 @@
     max-width: 100%;
     height: 280mm; /* min-height বাদ দিয়ে ফিক্সড height দেওয়া হলো যাতে ২য় পেজে না যায় */
     margin: 0 auto;
-    background: #ffffff;
+    background-color: #ffffff !important;
     padding: 10mm 12mm; /* প্যাডিং কিছুটা কমিয়ে স্পেস বাড়ানো হলো */
     border: 1px solid #ddd;
     box-shadow: 0 0 15px rgba(0,0,0,0.05);
@@ -434,6 +434,7 @@
             .screenshot-container img {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+                background-color: #ffffff !important;
             }
         }
 
@@ -446,7 +447,15 @@
     font-size: 12px;
     line-height: 1.6;
     color: #333;
+    }
+    .description-box li {
+    margin-bottom: 5px;
 }
+
+.description-box li:last-child {
+    margin-bottom: 0;
+}
+
 </style>
 </head>
 <body>
@@ -461,10 +470,10 @@
          <!-- পেজের বিবরণ -->
 <div class="description-box">
     <li>
-      <strong>• New Admission:</strong> UDISE+ পোর্টালে শিক্ষার্থীকে Import করার পর তার নাম, বাবা-মায়ের নাম, জন্ম তারিখ ইত্যাদি রেজিস্টার্ড তথ্যের প্রমাণস্বরূপ অভিভাবককে প্রদানের জন্য Record Slip তৈরি করা যাবে।
+      <strong>New Admission:</strong> UDISE+ পোর্টালে শিক্ষার্থীকে Import করার পর তার নাম, বাবা-মায়ের নাম, জন্ম তারিখ ইত্যাদি রেজিস্টার্ড তথ্যের প্রমাণস্বরূপ অভিভাবককে প্রদানের জন্য Record Slip তৈরি করা যাবে।
     </li>
     <li>
-      <strong>• Transfer Certificate:</strong> শিক্ষার্থীকে UDISE+ Dropbox-এ ট্রান্সফার করা হলে, তার জন্য ট্রান্সফার সার্টিফিকেট (To Whom It May Concern) তৈরি করা যাবে।
+      <strong>Transfer Certificate:</strong> শিক্ষার্থীকে UDISE+ Dropbox-এ ট্রান্সফার করা হলে, তার জন্য ট্রান্সফার সার্টিফিকেট (To Whom It May Concern) তৈরি করা যাবে।
     </li>
 </div>
         
