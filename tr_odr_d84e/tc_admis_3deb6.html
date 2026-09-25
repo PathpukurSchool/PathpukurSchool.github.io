@@ -83,26 +83,26 @@
         }
 
         /* Header styling */
-    .header {
-      background: linear-gradient(135deg, #1e3a8a, #0f172a);
-      color: #ffffff;
-      padding: 10px 5px;
-      width: 100%;
-      text-align: center;
-      border-radius: 6px;
-    }
-
-    .header h1 {
-      font-size: 20px;
-      margin-bottom: 5px;
-      letter-spacing: 0.5px;
-    }
-
-    .header h2 {
-      font-size: 14px;
-      font-weight: 400;
-      color: #93c5fd;
-    }
+        .header {
+          background: linear-gradient(135deg, #1e3a8a, #0f172a);
+          color: #ffffff;
+          padding: 10px 5px;
+          width: 100%;
+          text-align: center;
+          border-radius: 6px;
+        }
+    
+        .header h1 {
+          font-size: 20px;
+          margin-bottom: 5px;
+          letter-spacing: 0.5px;
+        }
+    
+        .header h2 {
+          font-size: 14px;
+          font-weight: 400;
+          color: #93c5fd;
+        }
 
         .control-group {
             display: flex;
@@ -191,18 +191,18 @@
 
         /* প্রিন্ট প্যাডের রেসপন্সিভ সেটআপ */
         .print-pad {
-    width: 210mm;
-    max-width: 100%;
-    height: 280mm; /* min-height বাদ দিয়ে ফিক্সড height দেওয়া হলো যাতে ২য় পেজে না যায় */
-    margin: 0 auto;
-    background-color: #ffffff !important;
-    padding: 10mm 12mm; /* প্যাডিং কিছুটা কমিয়ে স্পেস বাড়ানো হলো */
-    border: 1px solid #ddd;
-    box-shadow: 0 0 15px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
+            width: 210mm;
+            max-width: 100%;
+            height: 280mm; /* min-height বাদ দিয়ে ফিক্সড height দেওয়া হলো যাতে ২য় পেজে না যায় */
+            margin: 0 auto;
+            background-color: #ffffff !important;
+            padding: 10mm 12mm; /* প্যাডিং কিছুটা কমিয়ে স্পেস বাড়ানো হলো */
+            border: 1px solid #ddd;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
         .pad-header {
             display: flex;
@@ -258,26 +258,26 @@
         }
 
         .screenshot-container {
-    width: 100%;
-    min-height: 380px; /* আগে ২২০px ছিল, এটি বাড়িয়ে ৩৮০px করা হলো */
-    border: 2px dashed #999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 5px; /* মার্জিন ১৫px থেকে কমিয়ে ৫px করা হলো */
-    background-color: #ffffff !important;
-    overflow: hidden;
-    padding: 0; /* প্যাডিং তুলে দিয়ে সর্বোচ্চ স্পেস দেওয়া হলো */
-}
+            width: 100%;
+            min-height: 380px; /* আগে ২২০px ছিল, এটি বাড়িয়ে ৩৮০px করা হলো */
+            border: 2px dashed #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px; /* মার্জিন ১৫px থেকে কমিয়ে ৫px করা হলো */
+            background-color: #ffffff !important;
+            overflow: hidden;
+            padding: 0; /* প্যাডিং তুলে দিয়ে সর্বোচ্চ স্পেস দেওয়া হলো */
+        }
 
-.screenshot-container img {
-    max-width: 100%;
-    max-height: 520px;
-    width: auto; /* চওড়া ছোট হলে জোর করে ১০০% না করে আসল অনুপাতে রাখবে */
-    object-fit: contain;
-    display: block;
-    background-color: transparent !important; /* কালার ইনভার্ট সমস্যা দূর করতে transparent রাখা হলো */
-}
+    .screenshot-container img {
+        max-width: 100%;
+        max-height: 520px;
+        width: auto; /* চওড়া ছোট হলে জোর করে ১০০% না করে আসল অনুপাতে রাখবে */
+        object-fit: contain;
+        display: block;
+        background-color: transparent !important; /* কালার ইনভার্ট সমস্যা দূর করতে transparent রাখা হলো */
+    }
 
         /* ফিল্টার মোড সমূহের সিএসএস লজিক */
 .mode-light {
@@ -288,9 +288,9 @@
     filter: grayscale(100%) contrast(350%) brightness(100%);
 }
 
-/* ডার্ক মোডের ছবি ইনভার্ট করার সময় ব্যাকগ্রাউন্ড সাদা রাখতে 'mix-blend-mode' যোগ করা হয়েছে */
+/* ডার্ক মোডের ছবি ইনভার্ট করা */
 .mode-dark {
-    filter: invert(100%) grayscale(100%) contrast(400%) brightness(110%);
+    filter: invert(100%) hue-rotate(180deg) contrast(140%) brightness(95%);
     mix-blend-mode: multiply;
 }
 
