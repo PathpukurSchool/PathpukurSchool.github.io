@@ -279,20 +279,19 @@
         background-color: transparent !important; /* কালার ইনভার্ট সমস্যা দূর করতে transparent রাখা হলো */
     }
 
-        /* ফিল্টার মোড সমূহের সিএসএস লজিক */
-        .mode-light {
-            filter: grayscale(100%) contrast(300%) brightness(90%);
-        }
-        
-        .mode-gray {
-            filter: grayscale(100%) contrast(350%) brightness(100%);
-        }
-        
-        /* ডার্ক মোডের ছবি ইনভার্ট করা */
-        .mode-dark {
-            filter: invert(100%) hue-rotate(180deg) contrast(140%) brightness(95%);
-            mix-blend-mode: multiply;
-        }
+        /* ফিল্টার মোড সমূহের আদর্শ সিএসএস লজিক */
+    .mode-light {
+        filter: grayscale(100%) contrast(150%) brightness(100%);
+    }
+    
+    .mode-gray {
+        filter: grayscale(100%) contrast(200%) brightness(95%);
+    }
+    
+    .mode-dark {
+        filter: invert(100%) hue-rotate(180deg) contrast(140%) brightness(95%);
+        mix-blend-mode: multiply;
+    }
 
         .placeholder-text {
             color: #777;
