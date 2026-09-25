@@ -82,6 +82,26 @@
             justify-content: space-between;
         }
 
+        /* Header styling */
+    .header {
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      color: #ffffff;
+      padding: 20px 15px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      margin-bottom: 5px;
+      letter-spacing: 0.5px;
+    }
+
+    .header h2 {
+      font-size: 14px;
+      font-weight: 400;
+      color: #93c5fd;
+    }
+
         .control-group {
             display: flex;
             align-items: center;
@@ -243,7 +263,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 5px; /* মার্জিন ১৫px থেকে কমিয়ে ৫px করা হলো */
-    background-color: #ffffff;
+    background-color: #ffffff !important;
     overflow: hidden;
     padding: 0; /* প্যাডিং তুলে দিয়ে সর্বোচ্চ স্পেস দেওয়া হলো */
 }
@@ -254,20 +274,23 @@
     width: 100%; /* ছবিকে পুরো চওড়া জায়গায় ফিট করার জন্য */
     object-fit: contain;
     display: block;
-    background-color: #ffffff;
+    background-color: #ffffff !important;
 }
 
         /* ফিল্টার মোড সমূহের সিএসএস লজিক */
         .mode-light {
             filter: grayscale(100%) contrast(300%) brightness(90%);
+            background-color: #ffffff !important;
         }
 
         .mode-gray {
             filter: grayscale(100%) contrast(350%) brightness(100%);
+            background-color: #ffffff !important;
         }
 
         .mode-dark {
             filter: invert(100%) grayscale(100%) contrast(400%) brightness(110%);
+            background-color: #ffffff !important;
         }
 
         .placeholder-text {
@@ -412,12 +435,58 @@
                 print-color-adjust: exact;
             }
         }
-    </style>
+
+        .description-box {
+    background-color: #eef5fc;
+    border-left: 4px solid #007bff;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.description-box p {
+    margin: 0 0 8px 0;
+}
+
+.description-box ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.description-box li {
+    margin-bottom: 5px;
+}
+
+.description-box li:last-child {
+    margin-bottom: 0;
+}
+</style>
 </head>
 <body>
 
     <!-- কন্ট্রোল প্যানেল -->
     <div class="no-print">
+        <!-- হেডার -->
+    <div class="header">
+      <h1>Pathpukur High School (H.S.)</h1>
+      <h2>Admission and Transfer Certificate</h2>
+    </div>
+         <!-- পেজের বিবরণ -->
+<div class="description-box">
+  <p><strong>নির্দেশিকা:</strong> এই পোর্টালটির মাধ্যমে UDISE+ সংক্রান্ত নিম্নলিখিত ডকুমেন্ট সুবিধা পাওয়া যাবে:</p>
+  <ul>
+    <li>
+      <strong>New Admission (ভর্তি সংক্রান্ত রসিদ):</strong> UDISE+ পোর্টালে নতুন কোনো শিক্ষার্থীকে এনরোল বা ইমপোর্ট করার পর তার নাম, বাবা-মায়ের নাম, জন্ম তারিখ ইত্যাদি রেজিস্টার্ড তথ্যের প্রমাণস্বরূপ অভিভাবককে প্রদানের জন্য অফিসিয়াল রসিদ (Record Slip) তৈরি করা যাবে।
+    </li>
+    <li>
+      <strong>Transfer Certificate (টিসি প্রত্যয়নপত্র):</strong> কোনো শিক্ষার্থীকে বিদ্যালয় থেকে রিলিজ দিয়ে UDISE+ National Dropbox-এ ট্রান্সফার করা হলে, তার জন্য প্রয়োজনীয় অফিসিয়াল প্রত্যয়নপত্র (To Whom It May Concern) তৈরি করা যাবে।
+    </li>
+  </ul>
+</div>
+        
         <div class="control-group">
             <label for="docType">📝 ডকুমেন্টের ধরন:</label>
             <select id="docType" onchange="updateDocumentType()">
