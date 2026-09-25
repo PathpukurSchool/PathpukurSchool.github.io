@@ -419,7 +419,7 @@
     <!-- কন্ট্রোল প্যানেল -->
     <div class="no-print">
         <div class="control-group">
-            <label for="docType">ডকুমেন্টের ধরন:</label>
+            <label for="docType">📌 ডকুমেন্টের ধরন:</label>
             <select id="docType" onchange="updateDocumentType()">
                 <option value="admission">New Admission Record</option>
                 <option value="tc">Transfer Certificate (TC)</option>
@@ -427,7 +427,7 @@
         </div>
 
         <div class="control-group">
-            <label for="pageMode">ওয়েব পেজ মোড:</label>
+            <label for="pageMode">🌐 ওয়েব পেজ মোড:</label>
             <select id="pageMode" onchange="applyModeFilter()">
                 <option value="light">Light Mode (সাদা)</option>
                 <option value="gray">Gray Mode (ধূসর)</option>
@@ -437,14 +437,14 @@
 
         <div class="control-group">
             <!-- ডেক্সটপের সরাসরি স্ক্রিনশট বোতাম -->
-            <button class="btn btn-capture" onclick="captureUDISETab()">স্ক্রিনশট নিন</button>
+            <button class="btn btn-capture" onclick="captureUDISETab()">🖱️ স্ক্রিনশট নিন</button>
             
             <!-- ডিভাইস (মোবাইল/কম্পিউটার) থেকে ছবি সিলেক্ট করার বোতাম -->
-            <button class="btn btn-upload" onclick="document.getElementById('fileInput').click()">ছবি আপলোড করুন</button>
+            <button class="btn btn-upload" onclick="document.getElementById('fileInput').click()">📤 ছবি আপলোড করুন</button>
             <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
 
-            <button id="cancelBtn" class="btn btn-cancel" onclick="cancelScreenshot()">ক্যানসেল / পুনরায় নিন</button>
-            <button class="btn btn-print" onclick="printDocument()">প্রিন্ট করুন</button>
+            <button id="cancelBtn" class="btn btn-cancel" onclick="cancelScreenshot()">❌ ক্যানসেল / পুনরায় নিন</button>
+            <button class="btn btn-print" onclick="printDocument()">🖨️ প্রিন্ট করুন</button>
         </div>
     </div>
 
@@ -501,6 +501,14 @@
     <!-- Cropper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script>
+         // ⚡ সাব-পেজে অ্যাক্টিভিটি ট্র্যাকিং আপডেট রাখা (যাতে অহেতুক অটো-লগআউট না হয়)
+    function updateActivityTime() {
+        localStorage.setItem('lastActivityTime', Date.now().toString());
+    }
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+        document.addEventListener(evt, updateActivityTime, { passive: true });
+    });
+        
         let cropper = null;
 
         // তারিখ আপডেট
@@ -672,5 +680,7 @@
             window.print();
         }
     </script>
+  <!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
+  <script src="home.js"></script>
 </body>
 </html>
