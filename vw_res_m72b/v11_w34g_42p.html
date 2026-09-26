@@ -625,52 +625,52 @@
       document.getElementById('resSession').innerText = data.session || '2026';
 
       // ২. বিষয়ভিত্তিক নম্বর সেট (Semester 1 - ডাটাবেজের সঠিক কলাম ম্যাপিং)
-      document.getElementById('sem1_ben').innerHTML = formatMark(data.sem1_ben);
-      document.getElementById('sem1_eng').innerHTML = formatMark(data.sem1_eng);
-      document.getElementById('sem1_his').innerHTML = formatMark(data.sem1_his);
-      document.getElementById('sem1_phi').innerHTML = formatMark(data.sem1_phi);
-      document.getElementById('sem1_edu').innerHTML = formatMark(data.sem1_edu);
-      document.getElementById('sem1_geo').innerHTML = formatMark(data.sem1_geo);
-      document.getElementById('sem1_pol').innerHTML = formatMark(data.sem1_pol);
-      document.getElementById('sem1_ara').innerHTML = formatMark(data.sem1_ara);
-      document.getElementById('sem1_san').innerHTML = formatMark(data.sem1_san);
+      document.getElementById('sem1_ben').innerHTML = formatMark(data.sem1_bengali);
+      document.getElementById('sem1_eng').innerHTML = formatMark(data.sem1_english);
+      document.getElementById('sem1_his').innerHTML = formatMark(data.sem1_history);
+      document.getElementById('sem1_phi').innerHTML = formatMark(data.sem1_philosophy);
+      document.getElementById('sem1_edu').innerHTML = formatMark(data.sem1_education);
+      document.getElementById('sem1_geo').innerHTML = formatMark(data.sem1_geography);
+      document.getElementById('sem1_pol').innerHTML = formatMark(data.sem1_political_science);
+      document.getElementById('sem1_ara').innerHTML = formatMark(data.sem1_arabic);
+      document.getElementById('sem1_san').innerHTML = formatMark(data.sem1_sanskrit);
 
       // Semester 2
-      document.getElementById('sem2_ben').innerHTML = formatMark(data.sem2_ben);
-      document.getElementById('sem2_eng').innerHTML = formatMark(data.sem2_eng);
-      document.getElementById('sem2_his').innerHTML = formatMark(data.sem2_his);
-      document.getElementById('sem2_phi').innerHTML = formatMark(data.sem2_phi);
-      document.getElementById('sem2_edu').innerHTML = formatMark(data.sem2_edu);
-      document.getElementById('sem2_geo').innerHTML = formatMark(data.sem2_geo);
-      document.getElementById('sem2_pol').innerHTML = formatMark(data.sem2_pol);
-      document.getElementById('sem2_ara').innerHTML = formatMark(data.sem2_ara);
-      document.getElementById('sem2_san').innerHTML = formatMark(data.sem2_san);
+      document.getElementById('sem2_ben').innerHTML = formatMark(data.sem2_bengali);
+      document.getElementById('sem2_eng').innerHTML = formatMark(data.sem2_english);
+      document.getElementById('sem2_his').innerHTML = formatMark(data.sem2_history);
+      document.getElementById('sem2_phi').innerHTML = formatMark(data.sem2_philosophy);
+      document.getElementById('sem2_edu').innerHTML = formatMark(data.sem2_education);
+      document.getElementById('sem2_geo').innerHTML = formatMark(data.sem2_geography);
+      document.getElementById('sem2_pol').innerHTML = formatMark(data.sem2_political_science);
+      document.getElementById('sem2_ara').innerHTML = formatMark(data.sem2_arabic);
+      document.getElementById('sem2_san').innerHTML = formatMark(data.sem2_sanskrit);
 
       // Project
-      document.getElementById('proj_ben').innerHTML = formatMark(data.proj_ben);
-      document.getElementById('proj_eng').innerHTML = formatMark(data.proj_eng);
-      document.getElementById('proj_his').innerHTML = formatMark(data.proj_his);
-      document.getElementById('proj_phi').innerHTML = formatMark(data.proj_phi);
-      document.getElementById('proj_edu').innerHTML = formatMark(data.proj_edu);
-      document.getElementById('proj_geo').innerHTML = formatMark(data.proj_geo);
-      document.getElementById('proj_pol').innerHTML = formatMark(data.proj_pol);
-      document.getElementById('proj_ara').innerHTML = formatMark(data.proj_ara);
-      document.getElementById('proj_san').innerHTML = formatMark(data.proj_san);
+      document.getElementById('proj_ben').innerHTML = formatMark(data.proj_bengali);
+      document.getElementById('proj_eng').innerHTML = formatMark(data.proj_english);
+      document.getElementById('proj_his').innerHTML = formatMark(data.proj_history);
+      document.getElementById('proj_phi').innerHTML = formatMark(data.proj_philosophy);
+      document.getElementById('proj_edu').innerHTML = formatMark(data.proj_education);
+      document.getElementById('proj_geo').innerHTML = formatMark(data.proj_geography);
+      document.getElementById('proj_pol').innerHTML = formatMark(data.proj_political_science);
+      document.getElementById('proj_ara').innerHTML = formatMark(data.proj_arabic);
+      document.getElementById('proj_san').innerHTML = formatMark(data.proj_sanskrit);
 
       // ৩. পর্যায়ভিত্তিক মোট নম্বর হিসাব (Exam Totals)
       const sem1Total = calculateSum([
-        data.sem1_ben, data.sem1_eng, data.sem1_his, data.sem1_phi,
-        data.sem1_edu, data.sem1_geo, data.sem1_pol, data.sem1_ara, data.sem1_san
+        data.sem1_bengali, data.sem1_english, data.sem1_history, data.sem1_philosophy,
+        data.sem1_education, data.sem1_geography, data.sem1_political_science, data.sem1_arabic, data.sem1_sanskrit
       ]);
 
       const sem2Total = calculateSum([
-        data.sem2_ben, data.sem2_eng, data.sem2_his, data.sem2_phi,
-        data.sem2_edu, data.sem2_geo, data.sem2_pol, data.sem2_ara, data.sem2_san
+        data.sem2_bengali, data.sem2_english, data.sem2_history, data.sem2_philosophy,
+        data.sem2_education, data.sem2_geography, data.sem2_political_science, data.sem2_arabic, data.sem2_sanskrit
       ]);
 
       const projTotal = calculateSum([
-        data.proj_ben, data.proj_eng, data.proj_his, data.proj_phi,
-        data.proj_edu, data.proj_geo, data.proj_pol, data.proj_ara, data.proj_san
+        data.proj_bengali, data.proj_english, data.proj_history, data.proj_philosophy,
+        data.proj_education, data.proj_geography, data.proj_political_science, data.proj_arabic, data.proj_sanskrit
       ]);
 
       document.getElementById('sem1_tot').innerHTML = sem1Total !== null ? sem1Total : '-';
