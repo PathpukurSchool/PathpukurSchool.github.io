@@ -312,8 +312,6 @@
             object-fit: contain;
             display: block;
             background-color: #ffffff !important;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
         }
 
         .placeholder-text {
@@ -441,9 +439,9 @@
             <div class="control-group">
                 <label for="pageMode">🎨 মোড:</label>
                 <select id="pageMode" onchange="applyModeFilter()">
-                    <option value="light">☀️ Light Mode (সাদা)</option>
+                    <option value="light">☀️ Light Mode (স্বাভাবিক/সাদা)</option>
                     <option value="gray">🌦️ Gray Mode (ধূসর)</option>
-                    <option value="dark" selected>🌙 Dark Mode (নাইট/কালো)</option>
+                    <option value="dark" selected>🌙 Dark Mode (ডার্ক ব্যাকগ্রাউন্ড থেকে পরিষ্কার সাদা)</option>
                 </select>
             </div>
         </div>
@@ -557,7 +555,7 @@
             }
         }
 
-        /* 🎯 হাই-কনট্রাস্ট ইনভার্সন এবং শার্প ফিল্টারিং অ্যালগরিদম */
+        /* 🎯 স্পষ্ট ও মসৃণ লেখার ফিল্টারিং অ্যালগরিদম */
         function applyModeFilter() {
             const modeSelect = document.getElementById('pageMode');
             const mode = modeSelect.value;
@@ -589,32 +587,39 @@
                 let b = data[i + 2];
 
                 if (mode === 'dark') {
-                    // ডার্ক মোডের জন্য পিক্সেল উল্টে ডার্ক টেক্সট ও হোয়াইট ব্যাকগ্রাউন্ড তৈরি
+                    // ডার্ক মোড ইনভার্সন
                     r = 255 - r;
                     g = 255 - g;
                     b = 255 - b;
 
-                    let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+                    let avg = (r + g + b) / 3;
 
-                    // টেক্সটকে গাঢ় কালো এবং ব্যাকগ্রাউন্ডকে ১ ১০০% সাদা করার শার্প থ্রেশহোল্ড
-                    if (brightness > 140) {
+                    // ব্যাকগ্রাউন্ডকে পুরোপুরি সাদা করার স্মার্ট কাট-অফ
+                    if (avg > 180) {
                         r = 255; g = 255; b = 255;
                     } else {
-                        r = 0; g = 0; b = 0;
+                        // কন্ট্রাস্ট বুস্ট কিন্তু এজ ভাঙবে না
+                        r = Math.max(0, r - 30);
+                        g = Math.max(0, g - 30);
+                        b = Math.max(0, b - 30);
                     }
                 } else if (mode === 'gray') {
-                    let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
-                    if (brightness < 180) {
-                        r = 0; g = 0; b = 0;
-                    } else {
+                    let avg = (r + g + b) / 3;
+                    if (avg > 200) {
                         r = 255; g = 255; b = 255;
+                    } else {
+                        r = Math.max(0, r - 40);
+                        g = Math.max(0, g - 40);
+                        b = Math.max(0, b - 40);
                     }
-                } else { // Light Mode
-                    let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
-                    if (brightness < 190) {
-                        r = 0; g = 0; b = 0;
-                    } else {
+                } else { // Light Mode (যেকোনো লাইট ব্যাকগ্রাউন্ড ছবি স্পষ্টকরণ)
+                    let avg = (r + g + b) / 3;
+                    if (avg > 220) {
                         r = 255; g = 255; b = 255;
+                    } else {
+                        r = Math.max(0, r - 30);
+                        g = Math.max(0, g - 30);
+                        b = Math.max(0, b - 30);
                     }
                 }
 
@@ -689,7 +694,6 @@
         function applyCrop() {
             if (!cropper) return;
 
-            // হাই-রেজোলিউশন আউটপুটের জন্য ২ গুণ স্কেল রেশিও
             const croppedCanvas = cropper.getCroppedCanvas({
                 fillColor: '#ffffff',
                 imageSmoothingEnabled: true,
