@@ -162,7 +162,6 @@
             color: #000000;
         }
 
-        /* 🔘 বটনের রেসপন্সিভ স্টাইল */
         .btn-action-container {
             display: flex;
             gap: 10px;
@@ -198,7 +197,6 @@
         .btn-print { background-color: #28a745; }
         .btn-print:hover { background-color: #1e7e34; }
 
-        /* 📄 প্রিন্ট প্যাড ও কন্টেইনার */
         .print-pad {
             width: 210mm;
             max-width: 100%;
@@ -266,7 +264,6 @@
             margin-bottom: 12px;
         }
 
-        /* 📝 ম্যানুয়াল ইনফরমেশন গ্রিড (Admission Field) */
         .manual-info-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -295,11 +292,10 @@
             outline: none;
         }
 
-        /* 🖼️ ছবি প্রদর্শন ক্ষেত্র */
         .screenshot-container {
             width: 100%;
             min-height: 450px;
-            border: 1.5px dashed #555;
+            border: 1.5px dashed #333;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -316,6 +312,8 @@
             object-fit: contain;
             display: block;
             background-color: #ffffff !important;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
         }
 
         .placeholder-text {
@@ -395,7 +393,6 @@
         .description-box li { margin-bottom: 3px; }
         .description-box li:last-child { margin-bottom: 0; }
 
-        /* 📱 মোবাইল রেসপন্সিভ স্টাইল */
         @media screen and (max-width: 768px) {
             body { padding: 5px; }
             .control-row { flex-direction: column; align-items: stretch; }
@@ -408,7 +405,6 @@
             .signature-box { width: 140px; }
         }
 
-        /* 🖨️ প্রিন্ট স্টাইল */
         @media print {
             body { background: none; padding: 0; margin: 0; }
             .no-print, .crop-modal { display: none !important; }
@@ -447,7 +443,7 @@
                 <select id="pageMode" onchange="applyModeFilter()">
                     <option value="light">☀️ Light Mode (সাদা)</option>
                     <option value="gray">🌦️ Gray Mode (ধূসর)</option>
-                    <option value="dark">🌙 Dark Mode (নাইট/কালো)</option>
+                    <option value="dark" selected>🌙 Dark Mode (নাইট/কালো)</option>
                 </select>
             </div>
         </div>
@@ -479,7 +475,6 @@
                     Dear Parent/Guardian,<br>The student has been successfully imported/enrolled in our institution on the <strong>UDISE+ Portal</strong>. Attached below is the official details snippet from the portal for your record and future reference regarding the registered spelling of student's name, parents' names, date of birth, and other personal particulars as currently maintained in school and portal database.
                 </div>
 
-                <!-- 📝 ১. ম্যানুয়ালি লেখার ইনফরমেশন ফিল্ড -->
                 <div id="manualInfoSection" class="manual-info-grid">
                     <div class="manual-info-item"><label>Class:</label><input type="text" placeholder="....."></div>
                     <div class="manual-info-item"><label>Sec:</label><input type="text" placeholder="....."></div>
@@ -553,16 +548,16 @@
                 docSelect.classList.add('doc-admission');
                 docTitle.innerText = "STUDENT PORTAL DATA RECORD SLIP";
                 docDescription.innerHTML = "Dear Parent/Guardian,<br>The student has been successfully imported/enrolled in our institution on the <strong>UDISE+ Portal</strong>. Attached below is the official details snippet from the portal for your record and future reference regarding the registered spelling of student's name, parents' names, date of birth, and other personal particulars as currently maintained in school and portal database.";
-                manualInfoSection.style.display = 'grid'; // Admission সিলেক্ট থাকলে ইনফো ফিল্ড দেখাবে
+                manualInfoSection.style.display = 'grid';
             } else if (docType === 'tc') {
                 docSelect.classList.add('doc-tc');
                 docTitle.innerText = "TO WHOM IT MAY CONCERN";
                 docDescription.innerHTML = "This is to certify that the student (details as per the attached UDISE+ portal screenshot) was a bonafide student of this institution. The student has been duly released and transferred to the <strong>UDISE+ National Dropbox</strong> to facilitate admission into another school.";
-                manualInfoSection.style.display = 'none'; // TC সিলেক্ট থাকলে হাইড হয়ে যাবে
+                manualInfoSection.style.display = 'none';
             }
         }
 
-        /* 🎯 অ্যাডাপ্টিভ ডাইনামিক ফিল্টারিং অ্যালগরিদম */
+        /* 🎯 হাই-কনট্রাস্ট ইনভার্সন এবং শার্প ফিল্টারিং অ্যালগরিদম */
         function applyModeFilter() {
             const modeSelect = document.getElementById('pageMode');
             const mode = modeSelect.value;
@@ -594,34 +589,30 @@
                 let b = data[i + 2];
 
                 if (mode === 'dark') {
+                    // ডার্ক মোডের জন্য পিক্সেল উল্টে ডার্ক টেক্সট ও হোয়াইট ব্যাকগ্রাউন্ড তৈরি
                     r = 255 - r;
                     g = 255 - g;
                     b = 255 - b;
-                }
 
-                let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+                    let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
 
-                if (mode === 'dark') {
-                    if (brightness < 180) {
-                        r = Math.max(0, r - 100);
-                        g = Math.max(0, g - 100);
-                        b = Math.max(0, b - 100);
-                    } else {
+                    // টেক্সটকে গাঢ় কালো এবং ব্যাকগ্রাউন্ডকে ১ ১০০% সাদা করার শার্প থ্রেশহোল্ড
+                    if (brightness > 140) {
                         r = 255; g = 255; b = 255;
+                    } else {
+                        r = 0; g = 0; b = 0;
                     }
                 } else if (mode === 'gray') {
-                    if (brightness < 210) {
-                        r = Math.max(0, r - 60);
-                        g = Math.max(0, g - 60);
-                        b = Math.max(0, b - 60);
+                    let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+                    if (brightness < 180) {
+                        r = 0; g = 0; b = 0;
                     } else {
                         r = 255; g = 255; b = 255;
                     }
-                } else {
-                    if (brightness < 200) {
-                        r = Math.max(0, r - 40);
-                        g = Math.max(0, g - 40);
-                        b = Math.max(0, b - 40);
+                } else { // Light Mode
+                    let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+                    if (brightness < 190) {
+                        r = 0; g = 0; b = 0;
                     } else {
                         r = 255; g = 255; b = 255;
                     }
@@ -687,20 +678,22 @@
                 cropper.destroy();
             }
 
-            /* ❷ ড্রাগ করে দ্রুত ক্রপ করার অপশনসহ Cropper ইনিশিয়ালাইজেশন */
             cropper = new Cropper(cropImage, {
                 viewMode: 1,
-                autoCropArea: 0.8,
+                autoCropArea: 0.85,
                 responsive: true,
-                dragMode: 'crop' // মাউসের লেফট ক্লিক করে নতুন ক্রপ বক্স ড্রাগ করার সুযোগ দেবে
+                dragMode: 'crop'
             });
         }
 
         function applyCrop() {
             if (!cropper) return;
 
+            // হাই-রেজোলিউশন আউটপুটের জন্য ২ গুণ স্কেল রেশিও
             const croppedCanvas = cropper.getCroppedCanvas({
-                fillColor: '#ffffff'
+                fillColor: '#ffffff',
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high'
             });
             
             rawCroppedCanvas = croppedCanvas;
