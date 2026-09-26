@@ -162,7 +162,7 @@
             color: #000000;
         }
 
-        /* 🔘 বটনের রেসপন্সিভ স্টাইল (বড় স্ক্রিনে পাশাপাশি ছড়িয়ে থাকবে, ছোট স্ক্রিনে উপর-নিচে) */
+        /* 🔘 বটনের রেসপন্সিভ স্টাইল */
         .btn-action-container {
             display: flex;
             gap: 10px;
@@ -182,7 +182,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            flex: 1 1 200px; /* বড় স্ক্রিনে সমান জায়গা নিবে */
+            flex: 1 1 200px;
             text-align: center;
         }
 
@@ -266,10 +266,39 @@
             margin-bottom: 12px;
         }
 
-        /* 🖼️ ছবি প্রদর্শন ক্ষেত্র - বর্ডার কাটা বন্ধ করার জন্য প্যাডিং ও বর্ডার সমন্বয় */
+        /* 📝 ম্যানুয়াল ইনফরমেশন গ্রিড (Admission Field) */
+        .manual-info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            padding: 8px;
+            border: 1px dashed #bbb;
+            border-radius: 4px;
+        }
+
+        .manual-info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .manual-info-item input {
+            width: 100%;
+            padding: 4px 6px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        /* 🖼️ ছবি প্রদর্শন ক্ষেত্র */
         .screenshot-container {
             width: 100%;
-            min-height: 480px;
+            min-height: 450px;
             border: 1.5px dashed #555;
             display: flex;
             align-items: center;
@@ -282,7 +311,7 @@
 
         .screenshot-container img {
             max-width: 100%;
-            max-height: 520px;
+            max-height: 500px;
             width: auto;
             object-fit: contain;
             display: block;
@@ -370,7 +399,8 @@
         @media screen and (max-width: 768px) {
             body { padding: 5px; }
             .control-row { flex-direction: column; align-items: stretch; }
-            .btn { flex: 1 1 100%; width: 100%; } /* মোবাইলে বটনগুলো উপর-নিচে থাকবে */
+            .btn { flex: 1 1 100%; width: 100%; }
+            .manual-info-grid { grid-template-columns: repeat(2, 1fr); }
             .print-pad { padding: 5mm; border: none; box-shadow: none; }
             .school-logo { width: 50px; height: 50px; margin-right: 8px; }
             .school-details h1 { font-size: 14px; }
@@ -383,6 +413,8 @@
             body { background: none; padding: 0; margin: 0; }
             .no-print, .crop-modal { display: none !important; }
             .print-pad { border: none; box-shadow: none; width: 100%; height: 100%; padding: 0; margin: 0; }
+            .manual-info-grid { border: none; background: transparent; padding: 0; margin-bottom: 10px; }
+            .manual-info-item input { border: none; background: transparent; font-weight: bold; padding: 0; }
             .screenshot-container { border: 1px dashed #000; background-color: #ffffff !important; }
             .screenshot-container img { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: #ffffff !important; }
         }
@@ -420,7 +452,6 @@
             </div>
         </div>
 
-        <!-- 🔘 বোতামগুলোর লেআউট (মোবাইলে উপর-নিচে, কম্পিউটারে পাশাপাশি বিস্তৃত) -->
         <div class="btn-action-container">
             <button class="btn btn-capture" onclick="captureUDISETab()">📸 স্ক্রিনশট নিন</button>
             <button class="btn btn-upload" onclick="document.getElementById('fileInput').click()">📁 ছবি আপলোড করুন</button>
@@ -446,6 +477,14 @@
                 <div id="docTitle" class="document-title">STUDENT PORTAL DATA RECORD SLIP</div>
                 <div id="docDescription" class="description-text">
                     Dear Parent/Guardian,<br>The student has been successfully imported/enrolled in our institution on the <strong>UDISE+ Portal</strong>. Attached below is the official details snippet from the portal for your record and future reference regarding the registered spelling of student's name, parents' names, date of birth, and other personal particulars as currently maintained in school and portal database.
+                </div>
+
+                <!-- 📝 ১. ম্যানুয়ালি লেখার ইনফরমেশন ফিল্ড -->
+                <div id="manualInfoSection" class="manual-info-grid">
+                    <div class="manual-info-item"><label>Class:</label><input type="text" placeholder="....."></div>
+                    <div class="manual-info-item"><label>Sec:</label><input type="text" placeholder="....."></div>
+                    <div class="manual-info-item"><label>Roll:</label><input type="text" placeholder="....."></div>
+                    <div class="manual-info-item"><label>Adm No:</label><input type="text" placeholder="....."></div>
                 </div>
 
                 <div class="screenshot-container" id="screenshotBox">
@@ -507,20 +546,23 @@
             const docType = docSelect.value;
             const docTitle = document.getElementById('docTitle');
             const docDescription = document.getElementById('docDescription');
+            const manualInfoSection = document.getElementById('manualInfoSection');
 
             docSelect.className = '';
             if (docType === 'admission') {
                 docSelect.classList.add('doc-admission');
                 docTitle.innerText = "STUDENT PORTAL DATA RECORD SLIP";
                 docDescription.innerHTML = "Dear Parent/Guardian,<br>The student has been successfully imported/enrolled in our institution on the <strong>UDISE+ Portal</strong>. Attached below is the official details snippet from the portal for your record and future reference regarding the registered spelling of student's name, parents' names, date of birth, and other personal particulars as currently maintained in school and portal database.";
+                manualInfoSection.style.display = 'grid'; // Admission সিলেক্ট থাকলে ইনফো ফিল্ড দেখাবে
             } else if (docType === 'tc') {
                 docSelect.classList.add('doc-tc');
                 docTitle.innerText = "TO WHOM IT MAY CONCERN";
                 docDescription.innerHTML = "This is to certify that the student (details as per the attached UDISE+ portal screenshot) was a bonafide student of this institution. The student has been duly released and transferred to the <strong>UDISE+ National Dropbox</strong> to facilitate admission into another school.";
+                manualInfoSection.style.display = 'none'; // TC সিলেক্ট থাকলে হাইড হয়ে যাবে
             }
         }
 
-        /* 🎯 অ্যাডাপ্টিভ ডাইনামিক ফিল্টারিং অ্যালগরিদম (লেখা গাঢ় ও স্পষ্ট রাখার জন্য) */
+        /* 🎯 অ্যাডাপ্টিভ ডাইনামিক ফিল্টারিং অ্যালগরিদম */
         function applyModeFilter() {
             const modeSelect = document.getElementById('pageMode');
             const mode = modeSelect.value;
@@ -552,7 +594,6 @@
                 let b = data[i + 2];
 
                 if (mode === 'dark') {
-                    // ডার্ক মোডের বিপরীতকরণ (Inversion)
                     r = 255 - r;
                     g = 255 - g;
                     b = 255 - b;
@@ -561,7 +602,6 @@
                 let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
 
                 if (mode === 'dark') {
-                    // ডার্ক মোডে লেখাগুলোকে চরম গাঢ় করা
                     if (brightness < 180) {
                         r = Math.max(0, r - 100);
                         g = Math.max(0, g - 100);
@@ -570,7 +610,6 @@
                         r = 255; g = 255; b = 255;
                     }
                 } else if (mode === 'gray') {
-                    // গ্রে মোডে হালকা লেখা ও বর্ডার স্পষ্ট করা
                     if (brightness < 210) {
                         r = Math.max(0, r - 60);
                         g = Math.max(0, g - 60);
@@ -579,7 +618,6 @@
                         r = 255; g = 255; b = 255;
                     }
                 } else {
-                    // লাইট মোডে কনট্রাস্ট বাড়িয়ে শার্প করা
                     if (brightness < 200) {
                         r = Math.max(0, r - 40);
                         g = Math.max(0, g - 40);
@@ -649,10 +687,12 @@
                 cropper.destroy();
             }
 
+            /* ❷ ড্রাগ করে দ্রুত ক্রপ করার অপশনসহ Cropper ইনিশিয়ালাইজেশন */
             cropper = new Cropper(cropImage, {
                 viewMode: 1,
                 autoCropArea: 0.8,
-                responsive: true
+                responsive: true,
+                dragMode: 'crop' // মাউসের লেফট ক্লিক করে নতুন ক্রপ বক্স ড্রাগ করার সুযোগ দেবে
             });
         }
 
