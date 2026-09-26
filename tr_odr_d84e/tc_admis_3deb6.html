@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. সিকিউরিটি শিল্ড -->
+    <!-- SECURITY SHIELD -->
     <style id="security-shield">
         body { display: none !important; }
     </style>
 
-    <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+    <!-- SESSION VALIDATION -->
     <script>
     (function() {
         try {
@@ -18,16 +18,23 @@
 
             var ref = document.referrer;
             var isValidReferrer = false;
+
             if (ref) {
                 var refUrl = new URL(ref);
-                if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
+
+                if (
+                    refUrl.hostname === "pathpukurschool.github.io" ||
+                    refUrl.hostname === "localhost"
+                ) {
                     isValidReferrer = true;
                 }
             }
 
             if (!isLoggedIn) {
                 sessionStorage.clear();
-                window.location.replace("https://pathpukurschool.github.io/");
+                window.location.replace(
+                    "https://pathpukurschool.github.io/"
+                );
                 return;
             }
 
@@ -38,13 +45,20 @@
 
         } catch (e) {
             sessionStorage.clear();
-            window.location.replace("https://pathpukurschool.github.io/");
+            window.location.replace(
+                "https://pathpukurschool.github.io/"
+            );
         }
     })();
     </script>
 
     <title>Pathpukur High School (H.S.)</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
+    >
+
     <style>
         @page {
             size: A4 portrait;
@@ -54,6 +68,11 @@
         * {
             box-sizing: border-box;
             font-family: Arial, 'Kalpurush', sans-serif;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
 
         body {
@@ -83,13 +102,13 @@
             text-align: center;
             border-radius: 6px;
         }
-    
+
         .header h1 {
             font-size: 20px;
             margin: 0 0 5px 0;
             letter-spacing: 0.5px;
         }
-    
+
         .header h2 {
             font-size: 14px;
             font-weight: 400;
@@ -185,17 +204,42 @@
             text-align: center;
         }
 
-        .btn-capture { background-color: #007bff; }
-        .btn-capture:hover { background-color: #0056b3; }
+        .btn-capture {
+            background-color: #007bff;
+        }
 
-        .btn-upload { background-color: #17a2b8; }
-        .btn-upload:hover { background-color: #117a8b; }
+        .btn-capture:hover {
+            background-color: #0056b3;
+        }
 
-        .btn-cancel { background-color: #dc3545; display: none; }
-        .btn-cancel:hover { background-color: #a71d2a; }
+        .btn-upload {
+            background-color: #17a2b8;
+        }
 
-        .btn-print { background-color: #28a745; }
-        .btn-print:hover { background-color: #1e7e34; }
+        .btn-upload:hover {
+            background-color: #117a8b;
+        }
+
+        .btn-cancel {
+            background-color: #dc3545;
+            display: none;
+        }
+
+        .btn-cancel:hover {
+            background-color: #a71d2a;
+        }
+
+        .btn-print {
+            background-color: #28a745;
+        }
+
+        .btn-print:hover {
+            background-color: #1e7e34;
+        }
+
+        /* ================================
+           A4 PRINT AREA
+        ================================= */
 
         .print-pad {
             width: 210mm;
@@ -292,6 +336,10 @@
             outline: none;
         }
 
+        /* ================================
+           SCREENSHOT
+        ================================= */
+
         .screenshot-container {
             width: 100%;
             min-height: 450px;
@@ -303,15 +351,35 @@
             background-color: #ffffff !important;
             overflow: hidden;
             padding: 4px;
+
+            /*
+             * Prevent browser from applying unnecessary
+             * interpolation to screenshot.
+             */
+            contain: layout paint;
         }
 
         .screenshot-container img {
             max-width: 100%;
             max-height: 500px;
             width: auto;
+            height: auto;
             object-fit: contain;
             display: block;
             background-color: #ffffff !important;
+
+            /*
+             * Important:
+             * Do NOT use pixelated rendering.
+             * It destroys anti-aliased Bengali/English characters.
+             */
+            image-rendering: auto;
+
+            /*
+             * Helps browser preserve original image detail.
+             */
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
 
         .placeholder-text {
@@ -348,6 +416,10 @@
             font-size: 11.5px;
             font-weight: bold;
         }
+
+        /* ================================
+           CROP MODAL
+        ================================= */
 
         .crop-modal {
             display: none;
@@ -388,368 +460,1567 @@
             line-height: 1.5;
             color: #333;
         }
-        .description-box li { margin-bottom: 3px; }
-        .description-box li:last-child { margin-bottom: 0; }
 
-        @media screen and (max-width: 768px) {
-            body { padding: 5px; }
-            .control-row { flex-direction: column; align-items: stretch; }
-            .btn { flex: 1 1 100%; width: 100%; }
-            .manual-info-grid { grid-template-columns: repeat(2, 1fr); }
-            .print-pad { padding: 5mm; border: none; box-shadow: none; }
-            .school-logo { width: 50px; height: 50px; margin-right: 8px; }
-            .school-details h1 { font-size: 14px; }
-            .school-details p { font-size: 9px; }
-            .signature-box { width: 140px; }
+        .description-box li {
+            margin-bottom: 3px;
         }
 
+        .description-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ================================
+           MOBILE
+        ================================= */
+
+        @media screen and (max-width: 768px) {
+
+            body {
+                padding: 5px;
+            }
+
+            .control-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                flex: 1 1 100%;
+                width: 100%;
+            }
+
+            .manual-info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .print-pad {
+                padding: 5mm;
+                border: none;
+                box-shadow: none;
+            }
+
+            .school-logo {
+                width: 50px;
+                height: 50px;
+                margin-right: 8px;
+            }
+
+            .school-details h1 {
+                font-size: 14px;
+            }
+
+            .school-details p {
+                font-size: 9px;
+            }
+
+            .signature-box {
+                width: 140px;
+            }
+        }
+
+        /* ==================================================
+           PRINT QUALITY
+        ================================================== */
+
         @media print {
-            body { background: none; padding: 0; margin: 0; }
-            .no-print, .crop-modal { display: none !important; }
-            .print-pad { border: none; box-shadow: none; width: 100%; height: 100%; padding: 0; margin: 0; }
-            .manual-info-grid { border: none; background: transparent; padding: 0; margin-bottom: 10px; }
-            .manual-info-item input { border: none; background: transparent; font-weight: bold; padding: 0; }
-            .screenshot-container { border: 1px dashed #000; background-color: #ffffff !important; }
-            .screenshot-container img { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: #ffffff !important; }
+
+            /*
+             * Tell browser this document is intended for print.
+             */
+            html,
+            body {
+                width: 100%;
+                height: auto;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #ffffff !important;
+
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            body {
+                color: #000 !important;
+            }
+
+            .no-print,
+            .crop-modal {
+                display: none !important;
+            }
+
+            .print-pad {
+                border: none !important;
+                box-shadow: none !important;
+                width: 100% !important;
+                max-width: none !important;
+                min-height: auto !important;
+                height: auto !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: #ffffff !important;
+
+                /*
+                 * Prevent browser compositing blur.
+                 */
+                transform: none !important;
+                filter: none !important;
+            }
+
+            .pad-header,
+            .content-section,
+            .pad-footer {
+                transform: none !important;
+                filter: none !important;
+            }
+
+            .manual-info-grid {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                margin-bottom: 10px;
+            }
+
+            .manual-info-item input {
+                border: none !important;
+                background: transparent !important;
+                font-weight: bold;
+                padding: 0;
+                color: #000 !important;
+            }
+
+            .screenshot-container {
+                border: 1px dashed #000 !important;
+                background: #ffffff !important;
+
+                /*
+                 * Do not apply opacity/filter.
+                 */
+                opacity: 1 !important;
+                filter: none !important;
+
+                /*
+                 * Avoid clipping important image pixels.
+                 */
+                overflow: visible !important;
+
+                /*
+                 * Keep screenshot at natural aspect ratio.
+                 */
+                width: 100% !important;
+                height: auto !important;
+            }
+
+            .screenshot-container img {
+                display: block !important;
+
+                /*
+                 * IMPORTANT:
+                 * No filter, no opacity, no transform.
+                 */
+                filter: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+
+                /*
+                 * Preserve image quality.
+                 */
+                image-rendering: auto !important;
+
+                /*
+                 * Never enlarge beyond container.
+                 */
+                max-width: 100% !important;
+                width: auto !important;
+                height: auto !important;
+
+                background: #ffffff !important;
+
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .placeholder-text {
+                color: #000 !important;
+            }
+
+            img {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /*
+             * Prevent important sections from splitting
+             * unnecessarily between pages.
+             */
+            .pad-header {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .manual-info-grid {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .screenshot-container {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .pad-footer {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
+
 <body>
 
+    <!-- ================================
+         CONTROL PANEL
+    ================================= -->
+
     <div class="no-print">
+
         <div class="header">
-          <h1>Pathpukur High School (H.S.)</h1>
-          <h2>Admission and Transfer Certificate</h2>
+            <h1>Pathpukur High School (H.S.)</h1>
+            <h2>Admission and Transfer Certificate</h2>
         </div>
-        
+
         <div class="description-box">
-            <li><strong>New Admission:</strong> UDISE+ পোর্টালে শিক্ষার্থীকে Import করার পর তার তথ্য প্রমাণের জন্য Record Slip তৈরি করুন।</li>
-            <li><strong>Transfer Certificate:</strong> UDISE+ Dropbox-এ ট্রান্সফার করা শিক্ষার্থীদের জন্য Transfer Certificate তৈরি করুন।</li>
+
+            <li>
+                <strong>New Admission:</strong>
+                UDISE+ পোর্টালে শিক্ষার্থীকে Import করার পর
+                তার তথ্য প্রমাণের জন্য Record Slip তৈরি করুন।
+            </li>
+
+            <li>
+                <strong>Transfer Certificate:</strong>
+                UDISE+ Dropbox-এ ট্রান্সফার করা শিক্ষার্থীদের জন্য
+                Transfer Certificate তৈরি করুন।
+            </li>
+
         </div>
-        
+
         <div class="control-row">
+
             <div class="control-group">
-                <label for="docType">📝 টাইপ:</label>
-                <select id="docType" onchange="updateDocumentType()">
-                    <option value="admission">New Admission Record</option>
-                    <option value="tc">Transfer Certificate (TC)</option>
+
+                <label for="docType">
+                    📝 টাইপ:
+                </label>
+
+                <select
+                    id="docType"
+                    onchange="updateDocumentType()"
+                >
+                    <option value="admission">
+                        New Admission Record
+                    </option>
+
+                    <option value="tc">
+                        Transfer Certificate (TC)
+                    </option>
                 </select>
+
             </div>
 
             <div class="control-group">
-                <label for="pageMode">🎨 মোড:</label>
-                <select id="pageMode" onchange="applyModeFilter()">
-                    <option value="light">☀️ Light Mode (স্বাভাবিক/সাদা)</option>
-                    <option value="gray">🌦️ Gray Mode (ধূসর)</option>
-                    <option value="dark" selected>🌙 Dark Mode (ডার্ক ব্যাকগ্রাউন্ড থেকে পরিষ্কার সাদা)</option>
+
+                <label for="pageMode">
+                    🎨 মোড:
+                </label>
+
+                <select
+                    id="pageMode"
+                    onchange="applyModeFilter()"
+                >
+                    <option value="light">
+                        ☀️ Light Mode (স্বাভাবিক/সাদা)
+                    </option>
+
+                    <option value="gray">
+                        🌦️ Gray Mode (ধূসর)
+                    </option>
+
+                    <option value="dark" selected>
+                        🌙 Dark Mode (ডার্ক ব্যাকগ্রাউন্ড থেকে পরিষ্কার সাদা)
+                    </option>
                 </select>
+
             </div>
+
         </div>
 
         <div class="btn-action-container">
-            <button class="btn btn-capture" onclick="captureUDISETab()">📸 স্ক্রিনশট নিন</button>
-            <button class="btn btn-upload" onclick="document.getElementById('fileInput').click()">📁 ছবি আপলোড করুন</button>
-            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
 
-            <button id="cancelBtn" class="btn btn-cancel" onclick="cancelScreenshot()">❌ ক্যানসেল / পুনরায় নিন</button>
-            <button class="btn btn-print" onclick="printDocument()">🖨️ প্রিন্ট করুন</button>
+            <button
+                class="btn btn-capture"
+                onclick="captureUDISETab()"
+            >
+                📸 স্ক্রিনশট নিন
+            </button>
+
+            <button
+                class="btn btn-upload"
+                onclick="document.getElementById('fileInput').click()"
+            >
+                📁 ছবি আপলোড করুন
+            </button>
+
+            <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                style="display:none;"
+                onchange="handleFileUpload(event)"
+            >
+
+            <button
+                id="cancelBtn"
+                class="btn btn-cancel"
+                onclick="cancelScreenshot()"
+            >
+                ❌ ক্যানসেল / পুনরায় নিন
+            </button>
+
+            <button
+                class="btn btn-print"
+                onclick="printDocument()"
+            >
+                🖨️ প্রিন্ট করুন
+            </button>
+
         </div>
+
     </div>
+
+
+    <!-- ================================
+         PRINT DOCUMENT
+    ================================= -->
 
     <div class="print-pad">
+
         <div>
+
             <div class="pad-header">
-                <img src="../PHS-LOGO.png" alt="School Logo" class="school-logo" onerror="this.onerror=null; this.src='PHS-LOGO.png';">
+
+                <img
+                    src="../PHS-LOGO.png"
+                    alt="School Logo"
+                    class="school-logo"
+                    onerror="this.onerror=null; this.src='PHS-LOGO.png';"
+                >
+
                 <div class="school-details">
-                    <h1>Pathpukur High School (H.S.)</h1>
-                    <p>Vill: Pathpukur, P.O.: Bakultala Hat, P.S.: Bakultala, Dist: South 24 Parganas, PIN: 743338</p>
-                    <p>Circle: Jayanagar II | WBBSE Code: C1194 | WBCHSE Code: 102376</p>
+
+                    <h1>
+                        Pathpukur High School (H.S.)
+                    </h1>
+
+                    <p>
+                        Vill: Pathpukur, P.O.: Bakultala Hat,
+                        P.S.: Bakultala, Dist: South 24 Parganas,
+                        PIN: 743338
+                    </p>
+
+                    <p>
+                        Circle: Jayanagar II |
+                        WBBSE Code: C1194 |
+                        WBCHSE Code: 102376
+                    </p>
+
                 </div>
+
             </div>
+
 
             <div class="content-section">
-                <div id="docTitle" class="document-title">STUDENT PORTAL DATA RECORD SLIP</div>
-                <div id="docDescription" class="description-text">
-                    Dear Parent/Guardian,<br>The student has been successfully imported/enrolled in our institution on the <strong>UDISE+ Portal</strong>. Attached below is the official details snippet from the portal for your record and future reference regarding the registered spelling of student's name, parents' names, date of birth, and other personal particulars as currently maintained in school and portal database.
+
+                <div
+                    id="docTitle"
+                    class="document-title"
+                >
+                    STUDENT PORTAL DATA RECORD SLIP
                 </div>
 
-                <div id="manualInfoSection" class="manual-info-grid">
-                    <div class="manual-info-item"><label>Class:</label><input type="text" placeholder="....."></div>
-                    <div class="manual-info-item"><label>Sec:</label><input type="text" placeholder="....."></div>
-                    <div class="manual-info-item"><label>Roll:</label><input type="text" placeholder="....."></div>
-                    <div class="manual-info-item"><label>Adm No:</label><input type="text" placeholder="....."></div>
+
+                <div
+                    id="docDescription"
+                    class="description-text"
+                >
+                    Dear Parent/Guardian,<br>
+
+                    The student has been successfully
+                    imported/enrolled in our institution on the
+                    <strong>UDISE+ Portal</strong>.
+
+                    Attached below is the official details snippet
+                    from the portal for your record and future
+                    reference regarding the registered spelling of
+                    student's name, parents' names, date of birth,
+                    and other personal particulars as currently
+                    maintained in school and portal database.
+
                 </div>
 
-                <div class="screenshot-container" id="screenshotBox">
-                    <span class="placeholder-text" id="placeholderText">স্ক্রিনশট নিন বা ডিভাইস থেকে ছবি আপলোড করার পর এখানে ক্রপ করা অংশ প্রদর্শিত হবে...</span>
-                    <img id="capturedImage" src="" alt="UDISE Portal Screenshot" style="display: none;">
+
+                <div
+                    id="manualInfoSection"
+                    class="manual-info-grid"
+                >
+
+                    <div class="manual-info-item">
+                        <label>Class:</label>
+                        <input type="text" placeholder=".....">
+                    </div>
+
+                    <div class="manual-info-item">
+                        <label>Sec:</label>
+                        <input type="text" placeholder=".....">
+                    </div>
+
+                    <div class="manual-info-item">
+                        <label>Roll:</label>
+                        <input type="text" placeholder=".....">
+                    </div>
+
+                    <div class="manual-info-item">
+                        <label>Adm No:</label>
+                        <input type="text" placeholder=".....">
+                    </div>
+
                 </div>
+
+
+                <!-- SCREENSHOT -->
+                <div
+                    class="screenshot-container"
+                    id="screenshotBox"
+                >
+
+                    <span
+                        class="placeholder-text"
+                        id="placeholderText"
+                    >
+                        স্ক্রিনশট নিন বা ডিভাইস থেকে ছবি আপলোড করার পর
+                        এখানে ক্রপ করা অংশ প্রদর্শিত হবে...
+                    </span>
+
+                    <img
+                        id="capturedImage"
+                        src=""
+                        alt="UDISE Portal Screenshot"
+                        style="display:none;"
+                    >
+
+                </div>
+
             </div>
+
         </div>
+
+
+        <!-- FOOTER -->
 
         <div class="pad-footer">
+
             <div class="footer-left">
-                <p><strong>Date:</strong> <span id="currentDate"></span></p>
-                <p><strong>Place:</strong> Pathpukur</p>
+
+                <p>
+                    <strong>Date:</strong>
+                    <span id="currentDate"></span>
+                </p>
+
+                <p>
+                    <strong>Place:</strong>
+                    Pathpukur
+                </p>
+
             </div>
+
             <div class="signature-box">
+
                 <div class="signature-space"></div>
+
                 <div class="signature-line">
-                    Signature of HOI / Clerk<br>with Official Seal
+                    Signature of HOI / Clerk<br>
+                    with Official Seal
                 </div>
+
             </div>
+
         </div>
+
     </div>
 
-    <div id="cropModal" class="crop-modal">
+
+    <!-- ================================
+         CROP MODAL
+    ================================= -->
+
+    <div
+        id="cropModal"
+        class="crop-modal"
+    >
+
         <div class="crop-container">
-            <img id="cropImage" src="" alt="Crop Area">
+
+            <img
+                id="cropImage"
+                src=""
+                alt="Crop Area"
+            >
+
         </div>
+
         <div class="crop-actions">
-            <button class="btn btn-print" onclick="applyCrop()">ক্রপ সম্পূর্ণ করুন</button>
-            <button class="btn btn-cancel" style="display:inline-block;" onclick="closeCropModal()">বাতিল করুন</button>
+
+            <button
+                class="btn btn-print"
+                onclick="applyCrop()"
+            >
+                ক্রপ সম্পূর্ণ করুন
+            </button>
+
+            <button
+                class="btn btn-cancel"
+                style="display:inline-block;"
+                onclick="closeCropModal()"
+            >
+                বাতিল করুন
+            </button>
+
         </div>
+
     </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
     <script>
+
+        /* ==================================================
+           ACTIVITY TRACKING
+        ================================================== */
+
         function updateActivityTime() {
-            localStorage.setItem('lastActivityTime', Date.now().toString());
+            localStorage.setItem(
+                'lastActivityTime',
+                Date.now().toString()
+            );
         }
-        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
-            document.addEventListener(evt, updateActivityTime, { passive: true });
+
+        [
+            'mousemove',
+            'keydown',
+            'click',
+            'scroll',
+            'touchstart'
+        ].forEach(evt => {
+
+            document.addEventListener(
+                evt,
+                updateActivityTime,
+                { passive: true }
+            );
+
         });
-        
+
+
+        /* ==================================================
+           GLOBAL VARIABLES
+        ================================================== */
+
         let cropper = null;
+
+        /*
+         * This keeps the ORIGINAL cropped image.
+         *
+         * Very important:
+         * We never overwrite this with a processed image.
+         * Therefore switching Light / Gray / Dark repeatedly
+         * does not progressively damage the screenshot.
+         */
         let rawCroppedCanvas = null;
 
+
+        /* ==================================================
+           DATE
+        ================================================== */
+
         const today = new Date();
-        const dd = String(today.getDate()).padStart(2, '0');
-        const mm = String(today.getMonth() + 1).padStart(2, '0');
+
+        const dd = String(
+            today.getDate()
+        ).padStart(2, '0');
+
+        const mm = String(
+            today.getMonth() + 1
+        ).padStart(2, '0');
+
         const yyyy = today.getFullYear();
-        document.getElementById('currentDate').innerText = `${dd}/${mm}/${yyyy}`;
+
+        document.getElementById(
+            'currentDate'
+        ).innerText =
+            `${dd}/${mm}/${yyyy}`;
+
+
+        /* ==================================================
+           PAGE LOAD
+        ================================================== */
 
         window.onload = function() {
+
             updateDocumentType();
+
             applyModeFilter();
+
         };
 
+
+        /* ==================================================
+           DOCUMENT TYPE
+        ================================================== */
+
         function updateDocumentType() {
-            const docSelect = document.getElementById('docType');
-            const docType = docSelect.value;
-            const docTitle = document.getElementById('docTitle');
-            const docDescription = document.getElementById('docDescription');
-            const manualInfoSection = document.getElementById('manualInfoSection');
+
+            const docSelect =
+                document.getElementById('docType');
+
+            const docType =
+                docSelect.value;
+
+            const docTitle =
+                document.getElementById('docTitle');
+
+            const docDescription =
+                document.getElementById('docDescription');
+
+            const manualInfoSection =
+                document.getElementById(
+                    'manualInfoSection'
+                );
+
 
             docSelect.className = '';
+
+
             if (docType === 'admission') {
-                docSelect.classList.add('doc-admission');
-                docTitle.innerText = "STUDENT PORTAL DATA RECORD SLIP";
-                docDescription.innerHTML = "Dear Parent/Guardian,<br>The student has been successfully imported/enrolled in our institution on the <strong>UDISE+ Portal</strong>. Attached below is the official details snippet from the portal for your record and future reference regarding the registered spelling of student's name, parents' names, date of birth, and other personal particulars as currently maintained in school and portal database.";
-                manualInfoSection.style.display = 'grid';
-            } else if (docType === 'tc') {
-                docSelect.classList.add('doc-tc');
-                docTitle.innerText = "TO WHOM IT MAY CONCERN";
-                docDescription.innerHTML = "This is to certify that the student (details as per the attached UDISE+ portal screenshot) was a bonafide student of this institution. The student has been duly released and transferred to the <strong>UDISE+ National Dropbox</strong> to facilitate admission into another school.";
-                manualInfoSection.style.display = 'none';
+
+                docSelect.classList.add(
+                    'doc-admission'
+                );
+
+                docTitle.innerText =
+                    "STUDENT PORTAL DATA RECORD SLIP";
+
+                docDescription.innerHTML =
+                    "Dear Parent/Guardian,<br>" +
+                    "The student has been successfully " +
+                    "imported/enrolled in our institution on the " +
+                    "<strong>UDISE+ Portal</strong>. " +
+                    "Attached below is the official details snippet " +
+                    "from the portal for your record and future " +
+                    "reference regarding the registered spelling of " +
+                    "student's name, parents' names, date of birth, " +
+                    "and other personal particulars as currently " +
+                    "maintained in school and portal database.";
+
+                manualInfoSection.style.display =
+                    'grid';
+
             }
+
+            else if (docType === 'tc') {
+
+                docSelect.classList.add(
+                    'doc-tc'
+                );
+
+                docTitle.innerText =
+                    "TO WHOM IT MAY CONCERN";
+
+                docDescription.innerHTML =
+                    "This is to certify that the student " +
+                    "(details as per the attached UDISE+ portal " +
+                    "screenshot) was a bonafide student of this " +
+                    "institution. The student has been duly released " +
+                    "and transferred to the <strong>UDISE+ National " +
+                    "Dropbox</strong> to facilitate admission into " +
+                    "another school.";
+
+                manualInfoSection.style.display =
+                    'none';
+
+            }
+
         }
 
-        /* 🎯 স্পষ্ট ও মসৃণ লেখার ফিল্টারিং অ্যালগরিদম */
+
+        /* ==================================================
+           COLOR / CONTRAST HELPERS
+        ================================================== */
+
+        /*
+         * sRGB luminance.
+         *
+         * This is much better than simple
+         * (r + g + b) / 3 because human eyes do not
+         * perceive RGB channels equally.
+         */
+        function getLuminance(r, g, b) {
+
+            return (
+                0.2126 * r +
+                0.7152 * g +
+                0.0722 * b
+            );
+
+        }
+
+
+        /*
+         * Smooth contrast curve.
+         *
+         * Unlike hard thresholding, this preserves
+         * anti-aliased character edges.
+         */
+        function smoothContrast(value, blackPoint, whitePoint) {
+
+            let v =
+                (value - blackPoint) /
+                (whitePoint - blackPoint);
+
+            v = Math.max(
+                0,
+                Math.min(1, v)
+            );
+
+            /*
+             * Smoothstep.
+             */
+            v =
+                v * v *
+                (3 - 2 * v);
+
+            return Math.round(
+                v * 255
+            );
+
+        }
+
+
+        /* ==================================================
+           MODE FILTER
+        ================================================== */
+
         function applyModeFilter() {
-            const modeSelect = document.getElementById('pageMode');
-            const mode = modeSelect.value;
-            const capturedImage = document.getElementById('capturedImage');
+
+            const modeSelect =
+                document.getElementById(
+                    'pageMode'
+                );
+
+            const mode =
+                modeSelect.value;
+
+            const capturedImage =
+                document.getElementById(
+                    'capturedImage'
+                );
+
+
+            /*
+             * Change dropdown appearance.
+             */
 
             modeSelect.className = '';
+
             if (mode === 'dark') {
-                modeSelect.classList.add('mode-dark-select');
-            } else if (mode === 'gray') {
-                modeSelect.classList.add('mode-gray-select');
-            } else {
-                modeSelect.classList.add('mode-light-select');
+
+                modeSelect.classList.add(
+                    'mode-dark-select'
+                );
+
             }
 
-            if (!rawCroppedCanvas) return;
+            else if (mode === 'gray') {
 
-            const canvas = document.createElement('canvas');
-            canvas.width = rawCroppedCanvas.width;
-            canvas.height = rawCroppedCanvas.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(rawCroppedCanvas, 0, 0);
+                modeSelect.classList.add(
+                    'mode-gray-select'
+                );
 
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imgData.data;
-
-            for (let i = 0; i < data.length; i += 4) {
-                let r = data[i];
-                let g = data[i + 1];
-                let b = data[i + 2];
-
-                if (mode === 'dark') {
-                    // ডার্ক মোড ইনভার্সন
-                    r = 255 - r;
-                    g = 255 - g;
-                    b = 255 - b;
-
-                    let avg = (r + g + b) / 3;
-
-                    // ব্যাকগ্রাউন্ডকে পুরোপুরি সাদা করার স্মার্ট কাট-অফ
-                    if (avg > 180) {
-                        r = 255; g = 255; b = 255;
-                    } else {
-                        // কন্ট্রাস্ট বুস্ট কিন্তু এজ ভাঙবে না
-                        r = Math.max(0, r - 30);
-                        g = Math.max(0, g - 30);
-                        b = Math.max(0, b - 30);
-                    }
-                } else if (mode === 'gray') {
-                    let avg = (r + g + b) / 3;
-                    if (avg > 200) {
-                        r = 255; g = 255; b = 255;
-                    } else {
-                        r = Math.max(0, r - 40);
-                        g = Math.max(0, g - 40);
-                        b = Math.max(0, b - 40);
-                    }
-                } else { // Light Mode (যেকোনো লাইট ব্যাকগ্রাউন্ড ছবি স্পষ্টকরণ)
-                    let avg = (r + g + b) / 3;
-                    if (avg > 220) {
-                        r = 255; g = 255; b = 255;
-                    } else {
-                        r = Math.max(0, r - 30);
-                        g = Math.max(0, g - 30);
-                        b = Math.max(0, b - 30);
-                    }
-                }
-
-                data[i] = r;
-                data[i + 1] = g;
-                data[i + 2] = b;
             }
 
-            ctx.putImageData(imgData, 0, 0);
-            capturedImage.src = canvas.toDataURL('image/png');
-        }
+            else {
 
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    openCropModal(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-            event.target.value = '';
-        }
+                modeSelect.classList.add(
+                    'mode-light-select'
+                );
 
-        async function captureUDISETab() {
-            try {
-                const stream = await navigator.mediaDevices.getDisplayMedia({
-                    video: { displaySurface: "browser" },
-                    audio: false
-                });
-
-                const track = stream.getVideoTracks()[0];
-                const imageCapture = new ImageCapture(track);
-                const bitmap = await imageCapture.grabFrame();
-
-                track.stop();
-                stream.getTracks().forEach(t => t.stop());
-
-                const canvas = document.createElement('canvas');
-                canvas.width = bitmap.width;
-                canvas.height = bitmap.height;
-                const context = canvas.getContext('2d');
-                context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height);
-
-                const fullImgUrl = canvas.toDataURL('image/png');
-                openCropModal(fullImgUrl);
-
-            } catch (err) {
-                alert("স্ক্রিনশট নেওয়ার প্রক্রিয়াটি বাতিল করা হয়েছে।");
-            }
-        }
-
-        function openCropModal(imageSrc) {
-            const cropModal = document.getElementById('cropModal');
-            const cropImage = document.getElementById('cropImage');
-            
-            cropImage.src = imageSrc;
-            cropModal.style.display = 'flex';
-
-            if (cropper) {
-                cropper.destroy();
             }
 
-            cropper = new Cropper(cropImage, {
-                viewMode: 1,
-                autoCropArea: 0.85,
-                responsive: true,
-                dragMode: 'crop'
-            });
-        }
 
-        function applyCrop() {
-            if (!cropper) return;
+            /*
+             * No image yet.
+             */
 
-            const croppedCanvas = cropper.getCroppedCanvas({
-                fillColor: '#ffffff',
-                imageSmoothingEnabled: true,
-                imageSmoothingQuality: 'high'
-            });
-            
-            rawCroppedCanvas = croppedCanvas;
-
-            const capturedImage = document.getElementById('capturedImage');
-            const placeholderText = document.getElementById('placeholderText');
-            const cancelBtn = document.getElementById('cancelBtn');
-
-            capturedImage.style.display = 'block';
-            placeholderText.style.display = 'none';
-            cancelBtn.style.display = 'inline-flex';
-
-            applyModeFilter();
-            closeCropModal();
-
-            setTimeout(() => {
-                window.focus();
-            }, 100);
-        }
-
-        function closeCropModal() {
-            const cropModal = document.getElementById('cropModal');
-            cropModal.style.display = 'none';
-            if (cropper) {
-                cropper.destroy();
-                cropper = null;
-            }
-        }
-
-        function cancelScreenshot() {
-            const capturedImage = document.getElementById('capturedImage');
-            const placeholderText = document.getElementById('placeholderText');
-            const cancelBtn = document.getElementById('cancelBtn');
-
-            capturedImage.src = '';
-            capturedImage.style.display = 'none';
-            placeholderText.style.display = 'block';
-            cancelBtn.style.display = 'none';
-            rawCroppedCanvas = null;
-        }
-
-        function printDocument() {
-            const capturedImage = document.getElementById('capturedImage');
-            
-            if (!capturedImage.src || capturedImage.style.display === 'none') {
-                alert("ত্রুটি: কোনো ছবি বা স্ক্রিনশট যুক্ত করা হয়নি! অনুগ্রহ করে ছবি যুক্ত করুন, তারপর প্রিন্ট করুন।");
+            if (!rawCroppedCanvas) {
                 return;
             }
-            
-            window.print();
+
+
+            /*
+             * ==================================================
+             * IMPORTANT:
+             *
+             * Create a new canvas with EXACTLY the same
+             * dimensions as the original crop.
+             *
+             * No resizing.
+             * No downsampling.
+             * No upsampling.
+             * ==================================================
+             */
+
+            const canvas =
+                document.createElement(
+                    'canvas'
+                );
+
+            canvas.width =
+                rawCroppedCanvas.width;
+
+            canvas.height =
+                rawCroppedCanvas.height;
+
+
+            const ctx =
+                canvas.getContext(
+                    '2d',
+                    {
+                        willReadFrequently: true
+                    }
+                );
+
+
+            /*
+             * Preserve maximum source quality.
+             */
+
+            ctx.imageSmoothingEnabled = false;
+
+            ctx.drawImage(
+                rawCroppedCanvas,
+                0,
+                0
+            );
+
+
+            const imgData =
+                ctx.getImageData(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+            const data =
+                imgData.data;
+
+
+            /* ==================================================
+               PIXEL PROCESSING
+            ================================================== */
+
+            for (
+                let i = 0;
+                i < data.length;
+                i += 4
+            ) {
+
+                const originalR =
+                    data[i];
+
+                const originalG =
+                    data[i + 1];
+
+                const originalB =
+                    data[i + 2];
+
+                const lum =
+                    getLuminance(
+                        originalR,
+                        originalG,
+                        originalB
+                    );
+
+
+                /* ==========================================
+                   DARK MODE
+                   ========================================== */
+
+                if (mode === 'dark') {
+
+                    /*
+                     * For dark UDISE interfaces:
+                     *
+                     * dark background -> white
+                     * light text       -> black
+                     *
+                     * But instead of a hard inversion,
+                     * use luminance-based smooth mapping.
+                     *
+                     * This keeps Bengali and English
+                     * anti-aliased edges.
+                     */
+
+                    let newLum;
+
+                    /*
+                     * Very dark background:
+                     * make pure/near-pure white.
+                     */
+                    if (lum < 35) {
+
+                        newLum = 255;
+
+                    }
+
+                    /*
+                     * Dark-mid pixels:
+                     * smooth transition.
+                     */
+                    else if (lum < 120) {
+
+                        newLum =
+                            smoothContrast(
+                                lum,
+                                20,
+                                130
+                            );
+
+                        newLum =
+                            255 - newLum;
+
+                    }
+
+                    /*
+                     * Light text:
+                     * convert to dark text.
+                     */
+                    else {
+
+                        newLum =
+                            smoothContrast(
+                                lum,
+                                80,
+                                245
+                            );
+
+                        newLum =
+                            255 - newLum;
+
+                    }
+
+
+                    /*
+                     * Final black/white direction.
+                     *
+                     * Keep slight gray levels for
+                     * anti-aliased edges.
+                     */
+
+                    const v =
+                        Math.max(
+                            0,
+                            Math.min(
+                                255,
+                                newLum
+                            )
+                        );
+
+                    data[i] = v;
+                    data[i + 1] = v;
+                    data[i + 2] = v;
+
+                }
+
+
+                /* ==========================================
+                   GRAY MODE
+                   ========================================== */
+
+                else if (mode === 'gray') {
+
+                    /*
+                     * Convert to proper luminance first.
+                     */
+
+                    let v = lum;
+
+                    /*
+                     * Moderate contrast enhancement.
+                     *
+                     * Do NOT crush gray pixels because
+                     * those pixels often contain anti-aliased
+                     * Bengali characters.
+                     */
+
+                    v =
+                        smoothContrast(
+                            v,
+                            35,
+                            235
+                        );
+
+
+                    /*
+                     * Slightly brighten background
+                     * while retaining character detail.
+                     */
+
+                    if (v > 235) {
+                        v = 255;
+                    }
+
+                    data[i] = v;
+                    data[i + 1] = v;
+                    data[i + 2] = v;
+
+                }
+
+
+                /* ==========================================
+                   LIGHT MODE
+                   ========================================== */
+
+                else {
+
+                    /*
+                     * Keep original color information.
+                     *
+                     * Only normalize extreme background
+                     * whites and slightly improve contrast.
+                     */
+
+                    let r = originalR;
+                    let g = originalG;
+                    let b = originalB;
+
+
+                    /*
+                     * Detect almost-white background.
+                     */
+
+                    if (lum > 242) {
+
+                        r = 255;
+                        g = 255;
+                        b = 255;
+
+                    }
+
+                    else {
+
+                        /*
+                         * Gentle contrast.
+                         *
+                         * This is intentionally much weaker
+                         * than the old algorithm.
+                         */
+
+                        r =
+                            smoothContrast(
+                                r,
+                                15,
+                                245
+                            );
+
+                        g =
+                            smoothContrast(
+                                g,
+                                15,
+                                245
+                            );
+
+                        b =
+                            smoothContrast(
+                                b,
+                                15,
+                                245
+                            );
+
+                    }
+
+
+                    data[i] = r;
+                    data[i + 1] = g;
+                    data[i + 2] = b;
+
+                }
+
+            }
+
+
+            /*
+             * Put processed image back.
+             */
+
+            ctx.putImageData(
+                imgData,
+                0,
+                0
+            );
+
+
+            /*
+             * PNG is used intentionally.
+             *
+             * JPEG would introduce compression artifacts
+             * around small text.
+             */
+
+            capturedImage.src =
+                canvas.toDataURL(
+                    'image/png'
+                );
+
         }
+
+
+        /* ==================================================
+           FILE UPLOAD
+        ================================================== */
+
+        function handleFileUpload(event) {
+
+            const file =
+                event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            const reader =
+                new FileReader();
+
+            reader.onload = function(e) {
+
+                openCropModal(
+                    e.target.result
+                );
+
+            };
+
+            reader.readAsDataURL(file);
+
+            /*
+             * Allow same file to be selected again.
+             */
+            event.target.value = '';
+
+        }
+
+
+        /* ==================================================
+           SCREEN CAPTURE
+        ================================================== */
+
+        async function captureUDISETab() {
+
+            try {
+
+                const stream =
+                    await navigator.mediaDevices
+                        .getDisplayMedia({
+
+                            video: {
+                                displaySurface:
+                                    "browser"
+                            },
+
+                            audio: false
+
+                        });
+
+
+                const track =
+                    stream.getVideoTracks()[0];
+
+
+                /*
+                 * ImageCapture gives us the actual
+                 * frame resolution instead of resizing
+                 * it through a screenshot library.
+                 */
+
+                const imageCapture =
+                    new ImageCapture(track);
+
+
+                const bitmap =
+                    await imageCapture.grabFrame();
+
+
+                track.stop();
+
+                stream.getTracks()
+                    .forEach(
+                        t => t.stop()
+                    );
+
+
+                /*
+                 * Keep EXACT capture resolution.
+                 */
+
+                const canvas =
+                    document.createElement(
+                        'canvas'
+                    );
+
+                canvas.width =
+                    bitmap.width;
+
+                canvas.height =
+                    bitmap.height;
+
+
+                const context =
+                    canvas.getContext(
+                        '2d'
+                    );
+
+                context.imageSmoothingEnabled =
+                    false;
+
+                context.drawImage(
+                    bitmap,
+                    0,
+                    0,
+                    bitmap.width,
+                    bitmap.height
+                );
+
+
+                /*
+                 * PNG:
+                 * lossless and best for text.
+                 */
+
+                const fullImgUrl =
+                    canvas.toDataURL(
+                        'image/png'
+                    );
+
+
+                openCropModal(
+                    fullImgUrl
+                );
+
+            }
+
+            catch (err) {
+
+                alert(
+                    "স্ক্রিনশট নেওয়ার প্রক্রিয়াটি বাতিল করা হয়েছে।"
+                );
+
+            }
+
+        }
+
+
+        /* ==================================================
+           CROP MODAL
+        ================================================== */
+
+        function openCropModal(imageSrc) {
+
+            const cropModal =
+                document.getElementById(
+                    'cropModal'
+                );
+
+            const cropImage =
+                document.getElementById(
+                    'cropImage'
+                );
+
+
+            cropImage.src =
+                imageSrc;
+
+            cropModal.style.display =
+                'flex';
+
+
+            if (cropper) {
+
+                cropper.destroy();
+
+                cropper = null;
+
+            }
+
+
+            cropper =
+                new Cropper(
+                    cropImage,
+                    {
+
+                        viewMode: 1,
+
+                        autoCropArea: 0.85,
+
+                        responsive: true,
+
+                        dragMode: 'crop',
+
+                        /*
+                         * Do not unnecessarily
+                         * downscale crop.
+                         */
+                        checkOrientation: true,
+
+                        background: false,
+
+                        guides: true,
+
+                        center: true,
+
+                        highlight: false
+
+                    }
+                );
+
+        }
+
+
+        /* ==================================================
+           APPLY CROP
+        ================================================== */
+
+        function applyCrop() {
+
+            if (!cropper) {
+                return;
+            }
+
+
+            /*
+             * ==================================================
+             * HIGH QUALITY CROP
+             *
+             * We deliberately do NOT specify a small
+             * width/height.
+             *
+             * Therefore CropperJS returns the crop
+             * at source pixel resolution.
+             * ==================================================
+             */
+
+            const croppedCanvas =
+                cropper.getCroppedCanvas({
+
+                    fillColor:
+                        '#ffffff',
+
+                    imageSmoothingEnabled:
+                        true,
+
+                    imageSmoothingQuality:
+                        'high',
+
+                    /*
+                     * No forced width/height.
+                     */
+
+                });
+
+
+            /*
+             * IMPORTANT:
+             *
+             * Store ORIGINAL crop.
+             *
+             * Mode processing will always start from
+             * this original image.
+             */
+
+            rawCroppedCanvas =
+                croppedCanvas;
+
+
+            const capturedImage =
+                document.getElementById(
+                    'capturedImage'
+                );
+
+            const placeholderText =
+                document.getElementById(
+                    'placeholderText'
+                );
+
+            const cancelBtn =
+                document.getElementById(
+                    'cancelBtn'
+                );
+
+
+            capturedImage.style.display =
+                'block';
+
+            placeholderText.style.display =
+                'none';
+
+            cancelBtn.style.display =
+                'inline-flex';
+
+
+            /*
+             * Apply selected mode.
+             */
+
+            applyModeFilter();
+
+
+            closeCropModal();
+
+
+            setTimeout(
+                function() {
+                    window.focus();
+                },
+                100
+            );
+
+        }
+
+
+        /* ==================================================
+           CLOSE CROP MODAL
+        ================================================== */
+
+        function closeCropModal() {
+
+            const cropModal =
+                document.getElementById(
+                    'cropModal'
+                );
+
+            cropModal.style.display =
+                'none';
+
+
+            if (cropper) {
+
+                cropper.destroy();
+
+                cropper = null;
+
+            }
+
+        }
+
+
+        /* ==================================================
+           CANCEL / RESET SCREENSHOT
+        ================================================== */
+
+        function cancelScreenshot() {
+
+            const capturedImage =
+                document.getElementById(
+                    'capturedImage'
+                );
+
+            const placeholderText =
+                document.getElementById(
+                    'placeholderText'
+                );
+
+            const cancelBtn =
+                document.getElementById(
+                    'cancelBtn'
+                );
+
+
+            capturedImage.src = '';
+
+            capturedImage.style.display =
+                'none';
+
+            placeholderText.style.display =
+                'block';
+
+            cancelBtn.style.display =
+                'none';
+
+
+            rawCroppedCanvas =
+                null;
+
+        }
+
+
+        /* ==================================================
+           PRINT
+        ================================================== */
+
+        function printDocument() {
+
+            const capturedImage =
+                document.getElementById(
+                    'capturedImage'
+                );
+
+
+            if (
+                !capturedImage.src ||
+                capturedImage.style.display === 'none'
+            ) {
+
+                alert(
+                    "ত্রুটি: কোনো ছবি বা স্ক্রিনশট যুক্ত করা হয়নি! " +
+                    "অনুগ্রহ করে ছবি যুক্ত করুন, তারপর প্রিন্ট করুন।"
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Give browser a moment to finish rendering
+             * the PNG before opening print dialog.
+             */
+
+            requestAnimationFrame(
+                function() {
+
+                    requestAnimationFrame(
+                        function() {
+
+                            window.print();
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
     </script>
+
     <script src="home.js"></script>
+
 </body>
 </html>
