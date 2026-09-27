@@ -46,7 +46,7 @@
   })();
   </script>
 
-  <!-- ফাইনাল সাবমিট স্ট্যাটাস এবং সংশোধিত মার্কশিট তালিকা -->
+    <!-- ফাইনাল সাবমিট স্ট্যাটাস এবং সংশোধিত মার্কশিট তালিকা -->
     <title>Pathpukur High School (H.S.)</title>
     
     <!-- 🟢 FontAwesome Icons library -->
@@ -65,6 +65,28 @@
         h1 { font-size: 20px; margin-bottom: 4px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
         
+        /* 📊 লাইভ প্রিন্ট ট্র্যাকার সামারি বক্স */
+        .summary-tracker-box {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 16px 16px 0 16px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .summary-item { display: flex; align-items: center; gap: 6px; }
+        .summary-val { background: #ffffff; padding: 2px 8px; border-radius: 4px; border: 1px solid #cbd5e1; }
+        .text-total { color: #1e3a8a; }
+        .text-printed { color: #16a34a; }
+        .text-pending { color: #dc2626; }
+
         /* সেকশন কার্ড ডিজাইন (Visual Separation) */
         .section-card { margin: 16px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); overflow: hidden; }
 
@@ -172,16 +194,15 @@
         .spinning { animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* প্রিন্ট হেডার */
-        .print-only-header { display: none; text-align: center; padding: 10px 0; border-bottom: 2px solid #000; margin-bottom: 15px; }
-
-        /* প্রিন্ট CSS */
+        /* 🖨️ স্মার্ট প্রিন্ট CSS */
         @media print {
             html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
             .container { box-shadow: none !important; padding: 0 !important; margin: 0 !important; max-width: 100% !important; border: none !important; }
             
-            /* অপ্রয়োজনীয় এলিমেন্ট হাইড করা */
-            .section-card:first-child, .control-panel, #statusMessage, .col-check, td:first-child, th:first-child, .filter-group { display: none !important; }
+            /* যেসকল এলিমেন্ট প্রিন্ট পেজে দেখাবে না */
+            .section-card:first-child, .control-panel, #statusMessage, .summary-tracker-box, .col-check, td.col-check, th.col-check, .filter-group { 
+                display: none !important; 
+            }
             
             .section-card { border: none !important; margin: 0 !important; box-shadow: none !important; }
             .section-header { background: transparent !important; border: none !important; padding: 0 0 10px 0 !important; }
@@ -190,10 +211,12 @@
             .table-container { max-height: none !important; overflow: visible !important; border: none !important; margin: 0 !important; }
             table { border: 1px solid #000; width: 100%; page-break-after: auto; }
             tr { page-break-inside: avoid; }
+            
+            /* টিক চিহ্ন দেওয়া (completed-row) সকল সারি প্রিন্ট পেজ থেকে হাইড করা হবে */
+            tr.completed-row { display: none !important; }
+
             th, td { border: 1px solid #000 !important; font-size: 11px !important; padding: 6px !important; text-decoration: none !important; color: #000 !important; }
             th { background-color: #f2f2f2 !important; }
-            tr.completed-row { opacity: 1; color: #000; }
-            tr.completed-row td { text-decoration: none !important; }
             @page { size: A4 portrait; margin: 12mm; }
         }
     </style>
@@ -256,6 +279,19 @@
             </div>
         </div>
 
+        <!-- 📊 লাইভ প্রিন্ট স্ট্যাটাস ট্র্যাকার বক্স -->
+        <div class="summary-tracker-box" id="summaryTrackerBox" style="display: none;">
+            <div class="summary-item text-total">
+                <i class="fa-solid fa-list-check"></i> মোট সংশোধন: <span class="summary-val" id="cntTotal">0</span> জন
+            </div>
+            <div class="summary-item text-printed">
+                <i class="fa-solid fa-circle-check"></i> প্রিন্ট সম্পন্ন: <span class="summary-val" id="cntPrinted">0</span> জন
+            </div>
+            <div class="summary-item text-pending">
+                <i class="fa-solid fa-clock"></i> নতুন বাকি: <span class="summary-val" id="cntPending">0</span> জন
+            </div>
+        </div>
+
         <!-- কন্ট্রোল প্যানেল -->
         <div class="control-panel">
             <div class="passkey-wrapper">
@@ -273,7 +309,7 @@
             <button class="btn-main btn-refresh" id="refreshBtn" onclick="refreshAllData()">
                 <i class="fa-solid fa-rotate-right" id="spinIcon"></i> রিফ্রেশ
             </button>
-            <button class="btn-main btn-print" onclick="window.print()">
+            <button class="btn-main btn-print" onclick="triggerSmartPrint()">
                 <i class="fa-solid fa-print"></i> প্রিন্ট করুন
             </button>
         </div>
@@ -286,7 +322,9 @@
             <table id="studentTable">
                 <thead>
                     <tr>
-                        <th class="col-check" style="text-align: center; width: 40px;">প্রিন্ট</th>
+                        <th class="col-check" style="text-align: center; width: 40px;">
+                            <input type="checkbox" id="selectAllCheckbox" onclick="toggleSelectAll(this)" style="cursor: pointer; width: 16px; height: 16px;" title="সিলেক্ট / আনসিলেক্ট অল">
+                        </th>
                         <th>Class</th>
                         <th>Section</th>
                         <th>Roll No</th>
@@ -315,13 +353,13 @@ const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, ANON_KEY);
 const CLASS_ORDER = { 'V': 1, 'VI': 2, 'VII': 3, 'VIII': 4, 'IX': 5, 'X': 6, 'XI': 7 };
-let trackerDataCache = {}; // ফিল্টারিংয়ের জন্য ক্যশ রিকর্ড
+let trackerDataCache = {}; // ফিল্টারিংয়ের জন্য ক্যশ রিকর্ড
 
 document.addEventListener("DOMContentLoaded", function() {
     startAutoRefreshLoop();
 });
 
-// 🟢 ১. পাসওয়ার্ড হাইড/শো করার ফাংশন
+// 🟢 ১. পাসওয়ার্ড হাইড/শো করার ফাংশন
 function togglePasskeyVisibility() {
     const input = document.getElementById("passkey");
     const icon = document.getElementById("togglePasskey");
@@ -344,7 +382,7 @@ async function startAutoRefreshLoop() {
         await refreshAllData();
         isFetching = false;
     }
-    setTimeout(startAutoRefreshLoop, 100000); // একটি রিকোয়েস্ট শেষ হলে 1 মিনিট পর আবার রান হবে
+    setTimeout(startAutoRefreshLoop, 100000); // একটি রিকোয়েস্ট শেষ হলে 1 মিনিট পর আবার রান হবে
 }
 
 async function refreshAllData() {
@@ -398,7 +436,6 @@ async function fetchFinalisationStatus() {
 
 // 🟢 ৪. ট্র্যাকার ফিল্টার ফাংশন
 function filterTracker(filterType, btnElement) {
-    // ফিল্টার বাটনের অ্যাক্টিভ ক্লাস স্টেটমেন্ট
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btnElement.classList.add('active');
 
@@ -451,6 +488,7 @@ async function toggleMode(enable) {
     }
 }
 
+// 🟢 ৬. একক প্রিন্ট স্ট্যাটাস টগল ও ট্র্যাকার কাউন্ট আপডেট
 function togglePrintStatus(checkbox, key) {
     const row = checkbox.closest('tr');
     if (checkbox.checked) {
@@ -460,9 +498,69 @@ function togglePrintStatus(checkbox, key) {
         row.classList.remove('completed-row');
         localStorage.removeItem(key);
     }
+    updateSummaryTracker();
 }
 
-// 🟢 ৬. সংশোধিত তথ্য লোড করা
+// 🟢 ৭. সিলেক্ট অল / আনসিলেক্ট অল টগল ফাংশন
+function toggleSelectAll(masterCheckbox) {
+    const checkboxes = document.querySelectorAll('#tableBody .row-checkbox');
+    checkboxes.forEach(cb => {
+        cb.checked = masterCheckbox.checked;
+        const key = cb.getAttribute('data-key');
+        const row = cb.closest('tr');
+        if (masterCheckbox.checked) {
+            row.classList.add('completed-row');
+            localStorage.setItem(key, 'true');
+        } else {
+            row.classList.remove('completed-row');
+            localStorage.removeItem(key);
+        }
+    });
+    updateSummaryTracker();
+}
+
+// 🟢 ৮. ট্র্যাকার সামারি বক্স আপডেট (মোট / প্রিন্ট সম্পন্ন / নতুন বাকি)
+function updateSummaryTracker() {
+    const totalRows = document.querySelectorAll('#tableBody tr').length;
+    const printedRows = document.querySelectorAll('#tableBody tr.completed-row').length;
+    const pendingRows = totalRows - printedRows;
+
+    document.getElementById('cntTotal').innerText = totalRows;
+    document.getElementById('cntPrinted').innerText = printedRows;
+    document.getElementById('cntPending').innerText = pendingRows;
+
+    const selectAllCb = document.getElementById('selectAllCheckbox');
+    if (selectAllCb && totalRows > 0) {
+        selectAllCb.checked = (totalRows === printedRows);
+    }
+}
+
+// 🟢 ৯. স্মার্ট প্রিন্ট লজিক (প্রিন্ট কমান্ড ও সাথে সাথে টিক চিহ্ন আপডেট)
+function triggerSmartPrint() {
+    const pendingCheckboxes = document.querySelectorAll('#tableBody tr:not(.completed-row) .row-checkbox');
+    
+    if (pendingCheckboxes.length === 0) {
+        if (!confirm("প্রিন্ট করার জন্য নতুন কোনো স্টুডেন্ট বাকি নেই! আপনি কি সকল ডাটা পুনরায় প্রিন্ট করতে চান?")) {
+            return;
+        }
+    }
+
+    // প্রিন্ট ডায়ালগ ওপেন করা
+    window.print();
+
+    // প্রিন্ট অ্যাকশনের পরপরই যেসকল স্টুডেন্টের টিক ছিল না, তাদের টিক চিহ্ন যুক্ত ও লোকালস্টোরেজে সেভ করা
+    pendingCheckboxes.forEach(cb => {
+        cb.checked = true;
+        const key = cb.getAttribute('data-key');
+        const row = cb.closest('tr');
+        row.classList.add('completed-row');
+        localStorage.setItem(key, 'true');
+    });
+
+    updateSummaryTracker();
+}
+
+// 🟢 ১০. সংশোধিত তথ্য লোড করা
 async function loadModifiedData() {
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_modified_students_list`, {
@@ -477,6 +575,7 @@ async function loadModifiedData() {
         const result = await response.json();
         const statusDiv = document.getElementById("statusMessage");
         const tableWrapper = document.getElementById("tableWrapper");
+        const summaryTrackerBox = document.getElementById("summaryTrackerBox");
         const tbody = document.getElementById("tableBody");
         const btnEnable = document.getElementById("btnEnable");
         const btnDisable = document.getElementById("btnDisable");
@@ -484,6 +583,7 @@ async function loadModifiedData() {
         if (!result || !result.is_active) {
             statusDiv.innerHTML = `<div class="status-badge status-inactive"><i class="fa-solid fa-circle-exclamation"></i> ট্র্যাকিং মোড বন্ধ রয়েছে। কোনো রেকর্ড দেখা যাবে না।</div>`;
             tableWrapper.style.display = "none";
+            summaryTrackerBox.style.display = "none";
             btnEnable.style.display = "inline-flex";
             btnDisable.style.display = "none";
             return;
@@ -495,13 +595,14 @@ async function loadModifiedData() {
         if (!result.data || result.data.length === 0) {
             statusDiv.innerHTML = `<div class="status-badge status-active"><i class="fa-solid fa-info-circle"></i> ট্র্যাকিং মোড চালু রয়েছে। তবে এখনও কোনো নম্বর সংশোধন করা হয়নি।</div>`;
             tableWrapper.style.display = "none";
+            summaryTrackerBox.style.display = "none";
             return;
         }
 
         statusDiv.innerHTML = `<div class="status-badge status-active"><i class="fa-solid fa-check-circle"></i> ট্র্যাকিং মোড চালু রয়েছে। মোট ${result.data.length}টি সংশোধন পাওয়া গেছে।</div>`;
         tbody.innerHTML = "";
 
-        // ক্লাস অনুসারে সাজানো
+        // ক্লাস ও রোল অনুসারে সাজানো (প্রিন্ট ও পেজ ভিউ দুই জায়গাতেই নিখুঁত দেখাবে)
         result.data.sort((a, b) => {
             const classA = a.class_name.replace('result_', '').toUpperCase();
             const classB = b.class_name.replace('result_', '').toUpperCase();
@@ -516,7 +617,6 @@ async function loadModifiedData() {
         });
 
         result.data.forEach(row => {
-            // 🟢 ইংরেজিতে তারিখ ও সময় ফর্ম্যাট (English Format)
             const timeObj = new Date(row.modified_at);
             const time = timeObj.toLocaleString('en-GB', {
                 day: '2-digit',
@@ -535,7 +635,7 @@ async function loadModifiedData() {
             tbody.innerHTML += `
                 <tr class="${isPrinted ? 'completed-row' : ''}">
                     <td class="col-check" style="text-align: center;">
-                        <input type="checkbox" ${isPrinted ? 'checked' : ''} onchange="togglePrintStatus(this, '${printStorageKey}')" style="cursor: pointer; width: 16px; height: 16px;">
+                        <input type="checkbox" class="row-checkbox" data-key="${printStorageKey}" ${isPrinted ? 'checked' : ''} onchange="togglePrintStatus(this, '${printStorageKey}')" style="cursor: pointer; width: 16px; height: 16px;">
                     </td>
                     <td><strong>${classNameFormatted}</strong></td>
                     <td>${row.section || 'A'}</td>
@@ -548,6 +648,9 @@ async function loadModifiedData() {
         });
 
         tableWrapper.style.display = "block";
+        summaryTrackerBox.style.display = "flex";
+        updateSummaryTracker();
+
     } catch (err) {
         console.error("Error fetching data:", err);
     }
@@ -555,6 +658,6 @@ async function loadModifiedData() {
 </script>
 
 <!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
- <script src="home.js"></script>
+<script src="home.js"></script>
 </body>
 </html>
