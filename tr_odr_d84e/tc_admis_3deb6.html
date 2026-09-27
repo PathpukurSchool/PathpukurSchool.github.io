@@ -429,7 +429,7 @@
         
         <div class="control-row">
             <div class="control-group">
-                <label for="docType">📝 টাইপ:</label>
+                <label for="docType">📝 ডকুমেন্ট টাইপ:</label>
                 <select id="docType" onchange="updateDocumentType()">
                     <option value="admission">New Admission Record</option>
                     <option value="tc">Transfer Certificate (TC)</option>
@@ -437,18 +437,18 @@
             </div>
 
             <div class="control-group">
-                <label for="pageMode">🎨 মোড:</label>
+                <label for="pageMode">🎨 ওয়েব ব্যাকগ্রাউন্ড:</label>
                 <select id="pageMode" onchange="applyModeFilter()">
-                    <option value="light">☀️ Light Mode (স্বাভাবিক/সাদা)</option>
+                    <option value="light">☀️ Light Mode (সাদা)</option>
                     <option value="gray">🌦️ Gray Mode (ধূসর)</option>
-                    <option value="dark" selected>🌙 Dark Mode (ডার্ক ব্যাকগ্রাউন্ড থেকে পরিষ্কার সাদা)</option>
+                    <option value="dark" selected>🌙 Dark Mode (কালো)</option>
                 </select>
             </div>
         </div>
 
         <div class="btn-action-container">
-            <button class="btn btn-capture" onclick="captureUDISETab()">📸 স্ক্রিনশট নিন</button>
-            <button class="btn btn-upload" onclick="document.getElementById('fileInput').click()">📁 ছবি আপলোড করুন</button>
+            <button class="btn btn-capture" onclick="captureUDISETab()">💻 স্ক্রিনশট নিন</button>
+            <button class="btn btn-upload" onclick="document.getElementById('fileInput').click()">📱 ছবি আপলোড করুন</button>
             <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
 
             <button id="cancelBtn" class="btn btn-cancel" onclick="cancelScreenshot()">❌ ক্যানসেল / পুনরায় নিন</button>
