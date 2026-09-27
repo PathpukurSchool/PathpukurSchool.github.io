@@ -555,7 +555,7 @@
             }
         }
 
-        /* 🎯 স্পষ্ট ও মসৃণ লেখার ফিল্টারিং অ্যালগরিদম */
+        /* 🎯 স্পষ্ট ও মসৃণ লেখার ফিল্টারিং অ্যালগরিদম (হাই রেজোলিউশন ক্যানভাস) */
         function applyModeFilter() {
             const modeSelect = document.getElementById('pageMode');
             const mode = modeSelect.value;
@@ -576,6 +576,10 @@
             canvas.width = rawCroppedCanvas.width;
             canvas.height = rawCroppedCanvas.height;
             const ctx = canvas.getContext('2d');
+            
+            // ক্যানভাস রেন্ডারিং কোয়ালিটি স্মুথ করা
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
             ctx.drawImage(rawCroppedCanvas, 0, 0);
 
             const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -587,18 +591,15 @@
                 let b = data[i + 2];
 
                 if (mode === 'dark') {
-                    // ডার্ক মোড ইনভার্সন
                     r = 255 - r;
                     g = 255 - g;
                     b = 255 - b;
 
                     let avg = (r + g + b) / 3;
 
-                    // ব্যাকগ্রাউন্ডকে পুরোপুরি সাদা করার স্মার্ট কাট-অফ
                     if (avg > 180) {
                         r = 255; g = 255; b = 255;
                     } else {
-                        // কন্ট্রাস্ট বুস্ট কিন্তু এজ ভাঙবে না
                         r = Math.max(0, r - 30);
                         g = Math.max(0, g - 30);
                         b = Math.max(0, b - 30);
@@ -612,7 +613,7 @@
                         g = Math.max(0, g - 40);
                         b = Math.max(0, b - 40);
                     }
-                } else { // Light Mode (যেকোনো লাইট ব্যাকগ্রাউন্ড ছবি স্পষ্টকরণ)
+                } else {
                     let avg = (r + g + b) / 3;
                     if (avg > 220) {
                         r = 255; g = 255; b = 255;
@@ -629,7 +630,7 @@
             }
 
             ctx.putImageData(imgData, 0, 0);
-            capturedImage.src = canvas.toDataURL('image/png');
+            capturedImage.src = canvas.toDataURL('image/png', 1.0);
         }
 
         function handleFileUpload(event) {
@@ -644,10 +645,16 @@
             event.target.value = '';
         }
 
+        /* 🚀 ১. হাই-রেজোলিউশন (4K/HD) স্ট্রিম ক্যাপচার */
         async function captureUDISETab() {
             try {
                 const stream = await navigator.mediaDevices.getDisplayMedia({
-                    video: { displaySurface: "browser" },
+                    video: { 
+                        displaySurface: "browser",
+                        width: { ideal: 3840, max: 3840 },
+                        height: { ideal: 2160, max: 2160 },
+                        frameRate: { ideal: 30 }
+                    },
                     audio: false
                 });
 
@@ -662,9 +669,11 @@
                 canvas.width = bitmap.width;
                 canvas.height = bitmap.height;
                 const context = canvas.getContext('2d');
+                context.imageSmoothingEnabled = true;
+                context.imageSmoothingQuality = 'high';
                 context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height);
 
-                const fullImgUrl = canvas.toDataURL('image/png');
+                const fullImgUrl = canvas.toDataURL('image/png', 1.0);
                 openCropModal(fullImgUrl);
 
             } catch (err) {
@@ -691,16 +700,29 @@
             });
         }
 
+        /* 🚀 ২. ক্রপ ক্যানভাস স্কেলিং ও পিসিপিআই (DPR Boost) */
         function applyCrop() {
             if (!cropper) return;
 
+            // উচ্চ পিক্সেল ডেনসিটি নিশ্চিত করতে স্কেল ২.৫ গুণ বাড়ানো হয়েছে
             const croppedCanvas = cropper.getCroppedCanvas({
                 fillColor: '#ffffff',
                 imageSmoothingEnabled: true,
                 imageSmoothingQuality: 'high'
             });
+
+            // HD Quality Canvas তৈরি
+            const scaleFactor = 2.5;
+            const hdCanvas = document.createElement('canvas');
+            hdCanvas.width = croppedCanvas.width * scaleFactor;
+            hdCanvas.height = croppedCanvas.height * scaleFactor;
             
-            rawCroppedCanvas = croppedCanvas;
+            const hdCtx = hdCanvas.getContext('2d');
+            hdCtx.imageSmoothingEnabled = true;
+            hdCtx.imageSmoothingQuality = 'high';
+            hdCtx.drawImage(croppedCanvas, 0, 0, hdCanvas.width, hdCanvas.height);
+            
+            rawCroppedCanvas = hdCanvas;
 
             const capturedImage = document.getElementById('capturedImage');
             const placeholderText = document.getElementById('placeholderText');
