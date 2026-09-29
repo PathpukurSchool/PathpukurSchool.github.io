@@ -328,12 +328,12 @@
       .info-grid { grid-template-columns: repeat(3, 1fr); }
       .room-highlight { grid-column: span 3; }
     }
-
-    /* Print View */
+    
+/* Print View - কোড */
 @media print {
   @page { 
     size: A4 portrait; 
-    margin: 8mm; /* মার্জিন কিছুটা কমিয়ে ৮মিমি করা হলো */
+    margin: 8mm; 
   }
   
   html, body { 
@@ -341,7 +341,7 @@
     padding: 0 !important; 
     margin: 0 !important; 
     color: #000 !important; 
-    min-height: auto !important; /* 100vh বাদ দেওয়া হলো */
+    min-height: auto !important; 
     height: auto !important;
   }
   
@@ -353,6 +353,34 @@
     max-width: 100% !important;
     border: none !important; 
   }
+
+  /* ------------------ হেডার অংশের পরিবর্তন ------------------ */
+  .header {
+    border-bottom: 2px solid #000 !important; /* বর্ডার স্পষ্ট কালো করা হলো */
+    padding-bottom: 8px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .school-name {
+    color: #000 !important; /* বিদ্যালয়ের নাম স্পষ্ট কালো */
+    text-shadow: none !important; /* শ্যাডো তুলে দেওয়া হলো */
+    font-size: 24px !important;
+  }
+
+  .page-title {
+    color: #000 !important; /* টাইটেল স্পষ্ট কালো */
+    font-size: 18px !important;
+  }
+
+  .exam-badge {
+    background: none !important; /* রঙিন ব্যাকগ্রাউন্ড বাদ */
+    color: #000 !important; /* লেখা পুরো গাঢ় কালো */
+    box-shadow: none !important;
+    border: 1px solid #000 !important; /* হালকা বর্ডার যাতে সুন্দর দেখায় */
+    padding: 2px 8px !important;
+    font-weight: bold !important;
+  }
+  /* --------------------------------------------------------- */
   
   /* যেসব জিনিস প্রিন্টে বাদ যাবে */
   .filter-section, 
@@ -380,13 +408,14 @@
   th, td { 
     border: 1px solid #000 !important; 
     color: #000 !important; 
-    padding: 6px 4px !important; /* প্রিন্টের জন্য প্যাডিং কিছুটা কমানো হলো */
+    padding: 6px 4px !important; 
   }
   
   th { 
     background-color: #eee !important; 
   }
 }
+
   </style>
 </head>
 <body>
@@ -562,7 +591,7 @@ async function loadClassSeatPlan(cls) {
     // ১. সিলেক্ট করা ক্লাসের প্রথম রেকর্ড থেকে Exam Name ডাইনামিকালি সেট করা
     examBadge.innerText = "Exam: " + (plans[0].exam_name || 'N/A');
 
-    statusBadge.innerHTML = `Class: <b>${cls}</b> - এর সিট প্ল্যান দেখাচ্ছে`;
+    statusBadge.innerHTML = `Class: <b>${cls}</b> - এর পরীক্ষার সিট প্ল্যান`;
     
     // ২. টেবিলে Section (Start & End Roll মিলিয়ে) সহ ডাটা রেন্ডার করা
     let html = '';
