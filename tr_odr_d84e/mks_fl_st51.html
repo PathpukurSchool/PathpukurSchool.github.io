@@ -68,7 +68,7 @@
       background-color: #f1f5f9; 
       color: #0f172a;
       display: flex;
-      min-height: 160vh;
+      min-height: 100vh;
       flex-direction: column;
       align-items: center;
       padding: 15px; 
@@ -76,7 +76,7 @@
     
     .container { 
       width: 100%;
-      max-width: 650px; 
+      max-width: 800px;
       background: #ffffff; 
       border-radius: 12px; 
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
@@ -226,6 +226,7 @@
       align-items: center;
       padding: 0 15px 20px 15px;
       width: 100%;
+      overflow-x: auto; /* রেসপন্সিভ স্ক্রোলবার যুক্ত করা হলো */
     }
 
     .a4-wrapper {
@@ -331,12 +332,9 @@
     @media screen and (max-width: 800px) {
       .a4-wrapper {
         width: 100%;
+        min-width: 210mm;
         height: auto;
         padding: 6px;
-        overflow-x: auto;
-      }
-      .columns-container {
-        min-width: 650px;
       }
       .school-name { font-size: 18px; }
       .page-title { font-size: 13px; }
@@ -344,7 +342,7 @@
       body { padding: 8px; }
     }
 
-/* Print Optimization for Pure A4 Paper */
+  /* Print Optimization for Pure A4 Paper */
   @media print {
     @page {
       size: A4 portrait;
@@ -380,22 +378,22 @@
       margin: 0 !important;
       padding: 0 !important;
       display: block !important;
+      overflow: visible !important;
     }
 
     .a4-wrapper {
       box-shadow: none !important;
       width: 210mm !important;
-      height: 297mm !important; /* নির্দিষ্ট ২৯৭ মিমি রাখা হয়েছে */
+      height: 297mm !important;
       max-height: 297mm !important;
       padding: 3mm 4mm !important;
       margin: 0 auto !important;
       page-break-after: always;
       page-break-inside: avoid;
       box-sizing: border-box !important;
-      overflow: hidden !important; /* অতিরিক্ত উপাদান বাইরে যাওয়া বন্ধ করবে */
+      overflow: hidden !important;
     }
 
-    /* শেষ পেজের পর যাতে নতুন কোনো পেজ ব্রেক না হয় */
     .a4-wrapper:last-child,
     .a4-wrapper:last-of-type {
       page-break-after: avoid !important;
