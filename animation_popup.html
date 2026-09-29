@@ -2,8 +2,46 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>বিশেষ দিবসের অ্যানিমেশন পপ-আপ</title>
+    <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড -->
+    <style id="security-shield">
+        body { display: none !important; }
+    </style>
+
+    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+    <script>
+    (function() {
+        try {
+            var ref = document.referrer;
+            var isValidReferrer = false;
+
+            if (ref) {
+                var refUrl = new URL(ref);
+                if (refUrl.hostname === "pathpukurschool.github.io") {
+                    isValidReferrer = true;
+                }
+            }
+
+            if (!isValidReferrer) {
+                window.location.replace("https://pathpukurschool.github.io/");
+                return;
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
+
+        } catch (e) {
+            window.location.replace("https://pathpukurschool.github.io/");
+        }
+    })();
+    </script>
+    
+    <title>Pathpukur High School (HS)</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
