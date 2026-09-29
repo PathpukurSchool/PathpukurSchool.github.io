@@ -330,16 +330,63 @@
     }
 
     /* Print View */
-    @media print {
-      @page { size: A4 portrait; margin: 10mm; }
-      body { background: white; padding: 0; color: #000; }
-      .container { box-shadow: none; padding: 0; width: 100%; border: none; }
-      .filter-section, .btn-download, .notice-box, .btn-search { display: none !important; }
-      .result-card { display: none !important; }
-      table { border: 2px solid #000; width: 100%; }
-      th, td { border: 1px solid #000 !important; color: #000 !important; }
-      th { background-color: #eee !important; }
-    }
+@media print {
+  @page { 
+    size: A4 portrait; 
+    margin: 8mm; /* মার্জিন কিছুটা কমিয়ে ৮মিমি করা হলো */
+  }
+  
+  html, body { 
+    background: white !important; 
+    padding: 0 !important; 
+    margin: 0 !important; 
+    color: #000 !important; 
+    min-height: auto !important; /* 100vh বাদ দেওয়া হলো */
+    height: auto !important;
+  }
+  
+  .container { 
+    box-shadow: none !important; 
+    padding: 0 !important; 
+    margin: 0 !important;
+    width: 100% !important; 
+    max-width: 100% !important;
+    border: none !important; 
+  }
+  
+  /* যেসব জিনিস প্রিন্টে বাদ যাবে */
+  .filter-section, 
+  .btn-download, 
+  .notice-box, 
+  .btn-search, 
+  .result-card,
+  #security-shield { 
+    display: none !important; 
+  }
+  
+  .table-responsive {
+    overflow: visible !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  table { 
+    border: 1px solid #000 !important; 
+    width: 100% !important; 
+    page-break-after: avoid !important;
+  }
+  
+  th, td { 
+    border: 1px solid #000 !important; 
+    color: #000 !important; 
+    padding: 6px 4px !important; /* প্রিন্টের জন্য প্যাডিং কিছুটা কমানো হলো */
+  }
+  
+  th { 
+    background-color: #eee !important; 
+  }
+}
   </style>
 </head>
 <body>
