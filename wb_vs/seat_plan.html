@@ -405,7 +405,7 @@
         border: 1px solid #000 !important; 
         color: #000 !important; 
         padding: 10px 8px !important; 
-        font-size: 17px !important; /* Larger text size for print */
+        font-size: 17px !important;
         font-weight: bold !important;
       }
       th { background-color: #eee !important; font-size: 18px !important; }
@@ -690,8 +690,9 @@
       tbody.innerHTML = html;
     }
 
-    /* Dynamic & Precise Section Matcher per Specific Row/Range */
+    /* New Logic: Start Roll & End Roll Based Exact Section Matcher */
     function getAccurateSections(plan) {
+      // 1. Direct database section priority (If explicitly provided)
       if (plan.section && plan.section.trim() !== '' && plan.section.trim().toUpperCase() !== 'ALL') {
         return plan.section.trim();
       }
@@ -701,21 +702,32 @@
       const startRoll = parseInt(plan.start_roll);
       const endRoll = parseInt(plan.end_roll);
 
-      // Strictly match students who belong to THIS SPECIFIC ROLL RANGE
-      const matchedStudents = rawStudents.filter(s => {
-        const sClass = String(s.class_name).trim().toUpperCase();
-        const sRoll = parseInt(s.roll_no);
-        const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
+      // Helper function to find a student's section by Roll Number
+      const getSectionByRoll = (roll) => {
+        const found = rawStudents.find(s => {
+          const matchClass = String(s.class_name).trim().toUpperCase() === pClass;
+          const matchRoll = parseInt(s.roll_no) === roll;
+          const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
+          const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === sGen);
+          return matchClass && matchRoll && matchGen;
+        });
+        return found && found.section ? String(found.section).trim().toUpperCase() : null;
+      };
 
-        const matchClass = (sClass === pClass);
-        const matchRoll = (sRoll >= startRoll && sRoll <= endRoll);
-        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === sGen);
+      const startSection = getSectionByRoll(startRoll);
+      const endSection = getSectionByRoll(endRoll);
 
-        return matchClass && matchRoll && matchGen;
-      });
+      // 2. If both Start Roll and End Roll share the exact same section
+      if (startSection && endSection && startSection === endSection) {
+        return startSection;
+      }
 
-      const secs = [...new Set(matchedStudents.map(s => String(s.section || '').trim()).filter(Boolean))].sort();
-      return secs.length > 0 ? secs.join(', ') : 'ALL';
+      // If only one section is found (e.g., single-student range)
+      if (startSection && !endSection) return startSection;
+      if (!startSection && endSection) return endSection;
+
+      // 3. Fallback: If Start and End sections are different (or unmapped)
+      return 'ALL';
     }
 
     async function searchSeat() {
@@ -870,7 +882,6 @@
         const roomPlans = activePlans.filter(p => String(p.room_no).trim() === roomNo);
         let totalRoomStudents = 0;
 
-        // Get unique Exam Names for this room
         const roomExams = [...new Set(roomPlans.map(p => p.exam_name || 'N/A'))].join(', ');
 
         let tableRowsHtml = '';
