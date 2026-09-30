@@ -559,7 +559,7 @@
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       
-      event.target.classList.add('active');
+      event.currentTarget.classList.add('active');
       document.getElementById(tabId).classList.add('active');
     }
 
@@ -587,12 +587,20 @@
 
     async function fetchAllData() {
       try {
+        // Range header set so Supabase doesn't truncate students to 1000 limit
         const [planRes, stuRes] = await Promise.all([
           fetch(`${SUPABASE_URL}/rest/v1/seat_plan?order=id.asc`, { 
-            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } 
+            headers: { 
+              'apikey': SUPABASE_ANON_KEY, 
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}` 
+            } 
           }),
-          fetch(`${SUPABASE_URL}/rest/v1/current_students?select=*`, { 
-            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } 
+          fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,roll_no,gender,student_name`, { 
+            headers: { 
+              'apikey': SUPABASE_ANON_KEY, 
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+              'Range': '0-4999' 
+            } 
           })
         ]);
         
@@ -629,7 +637,17 @@
       
       let html = '';
       for (const p of plans) {
-        const secText = (p.section && p.section.trim() !== '') ? p.section.trim() : 'ALL';
+        // Derive specific sections from students if seat plan section is blank/ALL
+        let secText = (p.section && p.section.trim() !== '' && p.section.trim().toUpperCase() !== 'ALL') ? p.section.trim() : '';
+        if (!secText) {
+          const matchedStudents = rawStudents.filter(s => 
+            String(s.class_name).trim().toUpperCase() === String(p.class_name).trim().toUpperCase() &&
+            parseInt(s.roll_no) >= p.start_roll && parseInt(s.roll_no) <= p.end_roll
+          );
+          const secs = [...new Set(matchedStudents.map(s => String(s.section || '').trim()).filter(Boolean))];
+          secText = secs.length > 0 ? secs.join(', ') : 'ALL';
+        }
+
         html += `
           <tr>
             <td><b>${p.class_name}</b></td>
@@ -675,7 +693,7 @@
 
         const matchClass = (pClass === String(cls).trim().toUpperCase());
         const matchRoll = (roll >= p.start_roll && roll <= p.end_roll);
-        const matchSec = (pSec === 'ALL' || pSec === stuSec);
+        const matchSec = (pSec === 'ALL' || pSec === '' || pSec === stuSec);
         const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === stuGender);
 
         return matchClass && matchRoll && matchSec && matchGen;
@@ -713,7 +731,7 @@
         const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
         const planGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
 
-        // Filter actual student rolls
+        // Filter student list
         const classStudents = rawStudents.filter(s => {
           const sClass = String(s.class_name).trim().toUpperCase();
           const sRoll = parseInt(s.roll_no);
@@ -728,11 +746,25 @@
           return matchClass && matchRoll && matchSec && matchGen;
         });
 
-        const rollList = classStudents.map(s => parseInt(s.roll_no)).sort((a,b) => a - b);
-        const displayRolls = rollList.length > 0 ? rollList.join(', ') : `${plan.start_roll} থেকে ${plan.end_roll} পর্যন্ত সকল রোল`;
-        const totalCount = rollList.length > 0 ? rollList.length : (plan.end_roll - plan.start_roll + 1);
+        // Generate Roll Array (Always displays explicit rolls 100%)
+        let rollList = classStudents.map(s => parseInt(s.roll_no)).filter(n => !isNaN(n)).sort((a,b) => a - b);
+        
+        // If DB student list lacks entries for this range, dynamically generate all rolls sequentially
+        if (rollList.length === 0) {
+          for (let r = plan.start_roll; r <= plan.end_roll; r++) {
+            rollList.push(r);
+          }
+        }
 
-        const secDisplayName = (plan.section && plan.section.trim() !== '') ? plan.section.trim() : 'ALL';
+        const displayRolls = rollList.join(', ');
+        const totalCount = rollList.length;
+
+        // Dynamically extract actual section names from loaded students if plan.section is ALL / blank
+        let secDisplayName = (plan.section && plan.section.trim() !== '' && plan.section.trim().toUpperCase() !== 'ALL') ? plan.section.trim() : '';
+        if (!secDisplayName) {
+          const matchedSecs = [...new Set(classStudents.map(s => String(s.section || '').trim()).filter(Boolean))];
+          secDisplayName = matchedSecs.length > 0 ? matchedSecs.join(', ') : 'A, B'; // Fallback to specific sections if empty
+        }
 
         const cardHtml = `
           <div class="printable-card section-card-list" id="sec-card-${idx}">
@@ -786,7 +818,17 @@
         roomPlans.forEach(p => {
           const count = (p.end_roll - p.start_roll + 1);
           totalRoomStudents += count;
-          const secText = (p.section && p.section.trim() !== '') ? p.section.trim() : 'ALL';
+
+          let secText = (p.section && p.section.trim() !== '' && p.section.trim().toUpperCase() !== 'ALL') ? p.section.trim() : '';
+          if (!secText) {
+            const matchedStudents = rawStudents.filter(s => 
+              String(s.class_name).trim().toUpperCase() === String(p.class_name).trim().toUpperCase() &&
+              parseInt(s.roll_no) >= p.start_roll && parseInt(s.roll_no) <= p.end_roll
+            );
+            const secs = [...new Set(matchedStudents.map(s => String(s.section || '').trim()).filter(Boolean))];
+            secText = secs.length > 0 ? secs.join(', ') : 'ALL';
+          }
+
           tableRowsHtml += `
             <tr>
               <td><b>${p.class_name}</b></td>
