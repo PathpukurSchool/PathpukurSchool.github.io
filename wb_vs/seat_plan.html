@@ -685,7 +685,6 @@
               'Authorization': `Bearer ${SUPABASE_ANON_KEY}` 
             } 
           }),
-          // Range Header 0-4999 (5000 Students Fetching to bypass Supabase 1000 limit)
           fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,roll_no,gender,student_name,session`, { 
             headers: { 
               'apikey': SUPABASE_ANON_KEY, 
@@ -753,6 +752,30 @@
       return rawSeatPlans.filter(p => String(p.exam_name || '').trim().toUpperCase() === selectedExam.trim().toUpperCase());
     }
 
+    /* Helper Function: Normalize Gender String */
+    function normalizeGender(g) {
+      if (!g) return 'ALL';
+      const str = String(g).trim().toUpperCase();
+      if (str.includes('BOY') || str === 'M' || str === 'MALE') return 'BOYS';
+      if (str.includes('GIRL') || str === 'F' || str === 'FEMALE') return 'GIRLS';
+      return 'ALL';
+    }
+
+    /* Helper Function: Map Seat Plan Exam Name to Exam Routine Exam Name */
+    function mapExamNameForRoutine(seatExamName) {
+      if (!seatExamName) return '';
+      const name = seatExamName.trim().toUpperCase();
+
+      if (name.includes('SEMESTER I') || name.includes('SEME I') || name.includes('SEM 1')) return ['SEME I', 'SEMESTER I', '1ST SEMESTER'];
+      if (name.includes('SEMESTER II') || name.includes('SEME II') || name.includes('SEM 2')) return ['SEME II', 'SEMESTER II', '2ND SEMESTER'];
+      if (name.includes('1ST SUMMATIVE') || name.includes('1ST EXAM')) return ['1ST EXAM', '1ST SUMMATIVE EVALUATION'];
+      if (name.includes('2ND SUMMATIVE') || name.includes('2ND EXAM')) return ['2ND EXAM', '2ND SUMMATIVE EVALUATION'];
+      if (name.includes('3RD SUMMATIVE') || name.includes('3RD EXAM')) return ['3RD EXAM', '3RD SUMMATIVE EVALUATION'];
+      if (name.includes('TEST')) return ['TEST EXAM', 'TEST EXAMINATION'];
+
+      return [seatExamName];
+    }
+
     document.getElementById('selectClass').addEventListener('change', function() {
       const cls = this.value;
       document.getElementById('resultCard').style.display = 'none';
@@ -799,18 +822,18 @@
       }
 
       const pClass = String(plan.class_name).trim().toUpperCase();
-      const pGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
+      const planGenNorm = normalizeGender(plan.gender);
       const startRoll = parseInt(plan.start_roll);
       const endRoll = parseInt(plan.end_roll);
 
       const matchedStudents = rawStudents.filter(s => {
         const sClass = String(s.class_name).trim().toUpperCase();
         const sRoll = parseInt(s.roll_no);
-        const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
+        const sGenNorm = normalizeGender(s.gender);
 
         const matchClass = (sClass === pClass);
         const matchRoll = (sRoll >= startRoll && sRoll <= endRoll);
-        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === sGen);
+        const matchGen = (planGenNorm === 'ALL' || planGenNorm === sGenNorm);
 
         return matchClass && matchRoll && matchGen;
       });
@@ -843,18 +866,18 @@
         return;
       }
 
-      const stuGender = (student.gender || '').trim().toUpperCase();
+      const stuGenderNorm = normalizeGender(student.gender);
       const stuSec = (student.section || '').trim().toUpperCase();
 
       const matchingPlan = activePlans.find(p => {
         const pClass = String(p.class_name).trim().toUpperCase();
         const pSec = p.section ? String(p.section).trim().toUpperCase() : 'ALL';
-        const pGen = p.gender ? String(p.gender).trim().toUpperCase() : 'ALL';
+        const pGenNorm = normalizeGender(p.gender);
 
         const matchClass = (pClass === String(cls).trim().toUpperCase());
         const matchRoll = (roll >= p.start_roll && roll <= p.end_roll);
         const matchSec = (pSec === 'ALL' || pSec === '' || pSec === stuSec);
-        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === stuGender);
+        const matchGen = (pGenNorm === 'ALL' || pGenNorm === stuGenderNorm);
 
         return matchClass && matchRoll && matchSec && matchGen;
       });
@@ -891,16 +914,14 @@
 
         const genders = ["BOYS", "GIRLS"];
 
-        genders.forEach((gen, gIdx) => {
+        genders.forEach((targetGen, gIdx) => {
           const genPlans = clsPlans.filter(p => {
-            const pGen = p.gender ? String(p.gender).trim().toUpperCase() : 'ALL';
-            return pGen === gen || pGen === 'ALL' || pGen === 'BOYS & GIRLS';
+            const pGenNorm = normalizeGender(p.gender);
+            return pGenNorm === targetGen || pGenNorm === 'ALL';
           });
 
           if (genPlans.length === 0) return;
-          hasData = true;
 
-          const exams = [...new Set(genPlans.map(p => p.exam_name || 'N/A'))].join(', ');
           let rowsHtml = '';
           let totalGenderCount = 0;
 
@@ -908,44 +929,52 @@
             const planClass = String(plan.class_name).trim().toUpperCase();
             const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
 
-            const classStudents = rawStudents.filter(s => {
+            // Filter Students strictly by Class AND Target Gender AND Roll Range
+            const matchedStudents = rawStudents.filter(s => {
               const sClass = String(s.class_name).trim().toUpperCase();
               const sRoll = parseInt(s.roll_no);
               const sSec = s.section ? String(s.section).trim().toUpperCase() : '';
-              const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
+              const sGenNorm = normalizeGender(s.gender);
 
               const matchClass = (sClass === planClass);
               const matchRoll = (sRoll >= plan.start_roll && sRoll <= plan.end_roll);
               const matchSec = (planSec === 'ALL' || planSec === '' || planSec === sSec);
-              const matchGen = (gen === sGen || !sGen);
+              const matchGen = (sGenNorm === targetGen);
 
               return matchClass && matchRoll && matchSec && matchGen;
             });
 
-            let rollList = classStudents.map(s => parseInt(s.roll_no)).filter(n => !isNaN(n)).sort((a,b) => a - b);
+            let rollList = matchedStudents.map(s => parseInt(s.roll_no)).filter(n => !isNaN(n)).sort((a,b) => a - b);
             
-            if (rollList.length === 0) {
-              for (let r = plan.start_roll; r <= plan.end_roll; r++) {
-                rollList.push(r);
-              }
-            }
+            if (rollList.length === 0) return; // Skip if no student matches gender in this range
+
+            hasData = true;
 
             const displayRolls = rollList.join(', ');
             const count = rollList.length;
             totalGenderCount += count;
+            
+            // Generate Roll Range string dynamically for this specific Gender
+            const minRoll = Math.min(...rollList);
+            const maxRoll = Math.max(...rollList);
+            const genderRollRange = (minRoll === maxRoll) ? `${minRoll}` : `${minRoll}-${maxRoll}`;
+
             const secDisplayName = getAccurateSections(plan);
 
             rowsHtml += `
               <tr>
                 <td><b style="color: #0284c7;">${plan.room_no}</b></td>
                 <td><b>${secDisplayName}</b></td>
-                <td><b>${plan.start_roll}-${plan.end_roll}</b></td>
+                <td><b>${genderRollRange}</b></td>
                 <td><b>${count} জন</b></td>
                 <td class="roll-cell">${displayRolls}</td>
               </tr>
             `;
           });
 
+          if (rowsHtml === '') return;
+
+          const exams = [...new Set(genPlans.map(p => p.exam_name || 'N/A'))].join(', ');
           const cardId = `sec-card-${cIdx}-${gIdx}`;
           const cardHtml = `
             <div class="printable-card section-card-list" id="${cardId}">
@@ -955,12 +984,12 @@
               </div>
 
               <div class="card-header-title">
-                <span>🏫 Class: ${clsName} (${gen})</span>
+                <span>🏫 Class: ${clsName} (${targetGen})</span>
                 <button class="btn-single-print" onclick="printSingleCard('${cardId}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
               </div>
               <div class="card-meta-grid">
                 <div class="card-meta-item">Exam: <strong>${exams}</strong></div>
-                <div class="card-meta-item">Class & Gender: <strong>Class ${clsName} (${gen})</strong></div>
+                <div class="card-meta-item">Class & Gender: <strong>Class ${clsName} (${targetGen})</strong></div>
                 <div class="card-meta-item">মোট পরীক্ষার্থী: <strong>${totalGenderCount} জন</strong></div>
               </div>
               <div class="table-responsive">
@@ -1088,6 +1117,7 @@
     function renderAttendanceView() {
       const container = document.getElementById('attendanceCardsContainer');
       const selectedRoom = document.getElementById('selectAttnRoom').value;
+      const selectedUniversalExam = document.getElementById('selectUniversalExam').value;
       container.innerHTML = '';
 
       const activePlans = getFilteredSeatPlans();
@@ -1110,26 +1140,36 @@
         classesInRoom.forEach(clsName => {
           const clsPlansInRoom = roomPlans.filter(p => String(p.class_name).trim().toUpperCase() === clsName);
 
-          // Get Routine for this Class
+          // Get Routine for this Class & Filter by Selected Exam
           const classRoutineCol = `class_${clsName.toLowerCase()}`;
-          const matchedRoutines = rawStudents ? rawRoutines.filter(r => r[classRoutineCol] && String(r[classRoutineCol]).trim() !== '') : [];
+          
+          let matchedRoutines = rawRoutines.filter(r => r[classRoutineCol] && String(r[classRoutineCol]).trim() !== '');
+
+          // Filter Routine by Exam Selector
+          if (selectedUniversalExam !== 'ALL' && selectedUniversalExam) {
+            const possibleRoutineExamNames = mapExamNameForRoutine(selectedUniversalExam);
+            matchedRoutines = matchedRoutines.filter(r => {
+              const rExam = String(r.exam_name || '').trim().toUpperCase();
+              return possibleRoutineExamNames.some(pName => pName.toUpperCase() === rExam);
+            });
+          }
 
           // Collect Students for this Class & Room
           let roomStudents = [];
           clsPlansInRoom.forEach(plan => {
-            const pGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
+            const pGenNorm = normalizeGender(plan.gender);
             const pSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
 
             const filtered = rawStudents.filter(s => {
               const sClass = String(s.class_name).trim().toUpperCase();
               const sRoll = parseInt(s.roll_no);
               const sSec = s.section ? String(s.section).trim().toUpperCase() : '';
-              const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
+              const sGenNorm = normalizeGender(s.gender);
 
               const matchClass = (sClass === clsName);
               const matchRoll = (sRoll >= plan.start_roll && sRoll <= plan.end_roll);
               const matchSec = (pSec === 'ALL' || pSec === '' || pSec === sSec);
-              const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === sGen);
+              const matchGen = (pGenNorm === 'ALL' || pGenNorm === sGenNorm);
 
               return matchClass && matchRoll && matchSec && matchGen;
             });
@@ -1146,19 +1186,27 @@
 
           // Build Dynamic Header Columns from Exam Routine
           let headerColsHtml = '';
-          matchedRoutines.forEach(r => {
-            const subject = r[classRoutineCol];
-            const dateStr = r.exam_date || 'N/A';
-            headerColsHtml += `<th>${dateStr}<br><span style="font-size:12px; font-weight:normal;">${subject}</span></th>`;
-          });
+          if (matchedRoutines.length > 0) {
+            matchedRoutines.forEach(r => {
+              const subject = r[classRoutineCol];
+              const dateStr = r.exam_date || 'N/A';
+              headerColsHtml += `<th>${dateStr}<br><span style="font-size:12px; font-weight:normal;">${subject}</span></th>`;
+            });
+          } else {
+            headerColsHtml = `<th style="width: 70%;">পরীক্ষার বিষয় ও তারিখ</th>`;
+          }
 
           // Build Rows
           let bodyRowsHtml = '';
           sortedStudents.forEach(stu => {
             let sigCells = '';
-            matchedRoutines.forEach(() => {
-              sigCells += `<td class="attn-cell"></td>`;
-            });
+            if (matchedRoutines.length > 0) {
+              matchedRoutines.forEach(() => {
+                sigCells += `<td class="attn-cell"></td>`;
+              });
+            } else {
+              sigCells = `<td class="attn-cell"></td>`;
+            }
 
             bodyRowsHtml += `
               <tr>
@@ -1171,11 +1219,13 @@
 
           // Footer Summary Rows
           let presentCells = '', absentCells = '', signCells = '';
-          matchedRoutines.forEach(() => {
+          const colCount = matchedRoutines.length > 0 ? matchedRoutines.length : 1;
+          
+          for (let i = 0; i < colCount; i++) {
             presentCells += `<td></td>`;
             absentCells += `<td></td>`;
             signCells += `<td></td>`;
-          });
+          }
 
           const summaryFooterHtml = `
             <tr class="footer-row">
