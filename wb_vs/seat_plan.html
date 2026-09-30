@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>Pathpukur High School (H.S.) - Seat Plan</title>
+  <title>Pathpukur High School (H.S.) - Seat Plan & Attendance</title>
 
   <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
     }
     
     .container { 
-      max-width: 950px; 
+      max-width: 1000px; 
       margin: 0 auto; 
       background: rgba(255, 255, 255, 0.95); 
       padding: 16px; 
@@ -115,10 +115,12 @@
       background: #e2e8f0;
       padding: 5px;
       border-radius: 12px;
+      flex-wrap: wrap;
     }
 
     .tab-btn {
       flex: 1;
+      min-width: 130px;
       padding: 10px 6px;
       border: none;
       background: transparent;
@@ -201,37 +203,6 @@
       box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);
     }
 
-    /* Result Card */
-    .result-card {
-      display: none;
-      background: linear-gradient(135deg, #ffffff, #f0fdf4);
-      border: 2px solid #22c55e;
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 16px;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px 12px;
-      font-size: 14.5px;
-    }
-
-    .info-item span { color: #64748b; font-size: 13px; display: block; }
-    .info-item strong { color: #0f172a; font-size: 15px; }
-
-    .room-highlight {
-      grid-column: span 2;
-      background: #dcfce7;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      border: 1.5px dashed #16a34a;
-    }
-
-    .room-highlight strong { font-size: 22px; color: #15803d; }
-
     /* Printable Card Structure */
     .printable-card {
       background: #ffffff;
@@ -241,7 +212,6 @@
       margin-bottom: 25px;
     }
 
-    /* Embedded Print Header Inside Each Card */
     .card-print-header {
       display: none;
       text-align: center;
@@ -304,38 +274,58 @@
       cursor: pointer;
     }
 
-    /* Table Styles */
+    /* Table Column Sizing Adjustments (Screen View - auto) */
     .table-responsive { 
       overflow-x: auto; 
       border-radius: 10px;
-      border: 2px solid #0284c7;
+      border: 1px solid #0284c7;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     table { 
       width: 100%; 
       border-collapse: collapse; 
       background: #fff;
-      white-space: nowrap;
+      table-layout: auto; 
     }
 
     th, td { 
-      padding: 10px 8px; 
+      padding: 8px 6px; 
       text-align: center; 
       border: 1px solid #cbd5e1; 
-      font-size: 15px; 
+      font-size: 14px; 
+      word-wrap: break-word;
     }
 
-    th { background-color: #0284c7; color: white; font-size: 16px; }
+    th { background-color: #0284c7; color: white; font-size: 14px; }
+
+    /* Screen View Column Widths */
+    .col-room { width: 12%; min-width: 90px; }
+    .col-sec { width: 10%; min-width: 70px; }
+    .col-range { width: 15%; min-width: 100px; }
+    .col-total { width: 12%; min-width: 70px; }
+    .col-rolls { width: 51%; min-width: 250px; }
 
     .roll-cell {
       white-space: normal;
       word-break: break-word;
-      max-width: 250px;
       text-align: left;
-      font-size: 14px;
-      line-height: 1.4;
+      font-size: 15px !important; 
+      font-weight: 600;
+      line-height: 1.5;
+      padding: 8px 10px !important;
+    }
+
+    /* Attendance Table Styles */
+    .sig-col {
+      min-width: 110px;
+      height: 38px;
+    }
+
+    .atten-col {
+      width: 45px;
+      font-size: 11px;
     }
 
     @media (min-width: 600px) {
@@ -350,9 +340,18 @@
 
     /* STRICT PRINT STYLES */
     @media print {
+      /* Default Portrait for Seat Plan */
       @page { 
         size: A4 portrait; 
-        margin: 8mm 10mm; 
+        margin: 8mm 8mm; 
+      }
+
+      /* Horizontal A4 Landscape for Attendance Sheet */
+      body.print-landscape {
+        @page {
+          size: A4 landscape;
+          margin: 6mm 8mm;
+        }
       }
       
       html, body { 
@@ -373,7 +372,6 @@
         border: none !important; 
       }
 
-      /* Hide non-printable elements */
       .header, .filter-section, .btn-action, .notice-box, .result-card,
       .tab-container, .btn-single-print, .exam-selector-box { 
         display: none !important; 
@@ -382,21 +380,18 @@
       .tab-content:not(.active) { display: none !important; }
       .printable-card.print-hide { display: none !important; }
 
-      /* Page Break for Boys/Girls in Section View */
-      .section-card-list {
+      .section-card-list, .attendance-card-list {
         page-break-before: always !important;
         break-before: page !important;
         page-break-inside: auto !important;
         break-inside: auto !important;
       }
 
-      /* First card shouldn't trigger unnecessary blank page at the start */
-      .section-card-list:first-child {
+      .section-card-list:first-child, .attendance-card-list:first-child {
         page-break-before: avoid !important;
         break-before: avoid !important;
       }
 
-      /* Show individual Header in each printed card */
       .card-print-header {
         display: block !important;
       }
@@ -404,28 +399,30 @@
       .printable-card {
         border: 2px solid #000 !important;
         margin-bottom: 0 !important;
-        padding: 10px !important;
+        padding: 8px !important;
         box-shadow: none !important;
       }
 
       .card-header-title {
-        font-size: 18px !important;
+        font-size: 17px !important;
         border-bottom: 1.5px solid #000 !important;
         color: #000 !important;
         margin-bottom: 6px !important;
       }
 
       .card-meta-grid { 
-        font-size: 13px !important; 
-        margin-bottom: 8px !important;
+        font-size: 12px !important; 
+        margin-bottom: 6px !important;
         gap: 6px !important;
       }
+
       .card-meta-item {
         border: 1px solid #000 !important;
         background: #fff !important;
-        padding: 4px 8px !important;
+        padding: 3px 6px !important;
       }
-      .card-meta-item strong { font-size: 15px !important; color: #000 !important; }
+
+      .card-meta-item strong { font-size: 13px !important; color: #000 !important; }
 
       .table-responsive { 
         border: none !important; 
@@ -447,14 +444,13 @@
       th, td { 
         border: 1px solid #000 !important; 
         color: #000 !important; 
-        padding: 6px 4px !important; 
-        font-size: 13px !important;
+        padding: 5px 4px !important; 
+        font-size: 12px !important;
         font-weight: bold !important;
       }
       
-      th { background-color: #f1f5f9 !important; font-size: 14px !important; }
+      th { background-color: #f1f5f9 !important; font-size: 12px !important; }
 
-      /* Width Control in Print */
       .col-room { width: 12% !important; }
       .col-sec { width: 10% !important; }
       .col-range { width: 15% !important; }
@@ -462,22 +458,27 @@
       .col-rolls { width: 51% !important; }
 
       .roll-cell { 
-        font-size: 15px !important; 
+        font-size: 14px !important; 
         line-height: 1.4 !important;
         font-weight: bold !important;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.2px;
         text-align: left !important;
       }
+
+      /* Attendance Column Width Adjustment for Landscape Print */
+      .atten-col-roll { width: 5% !important; }
+      .atten-col-name { width: 22% !important; text-align: left !important; }
+      .atten-col-sig { min-width: 90px !important; height: 35px !important; }
+      .atten-col-pres { width: 5% !important; }
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- Main Top Header (Screen Only) -->
     <div class="header">
       <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
-      <h2 class="page-title">📌 পরীক্ষার সিট প্ল্যান: <span id="sessionYear">....</span></h2>
+      <h2 class="page-title">📌 পরীক্ষার সিট প্ল্যান ও অ্যাটেনডেন্স: <span id="sessionYear">....</span></h2>
     </div>
 
     <!-- Universal Exam Dropdown -->
@@ -488,9 +489,8 @@
       </select>
     </div>
 
-    <!-- Notice Box -->
     <div class="notice-box">
-      <i class="fa-solid fa-bullhorn"></i> পরীক্ষার সিট প্ল্যান দেখার ও প্রিন্ট করার অফিসিয়াল পোর্টাল।
+      <i class="fa-solid fa-bullhorn"></i> সিট প্ল্যান ও শিক্ষার্থীদের উপস্থিতি খাতা প্রিন্ট করার অফিসিয়াল পোর্টাল।
     </div>
 
     <!-- Navigation Tabs -->
@@ -498,6 +498,7 @@
       <button class="tab-btn active" onclick="switchTab('tabOverview')">📋 ওভারভিউ ও সার্চ</button>
       <button class="tab-btn" onclick="switchTab('tabSection')">🏫 সেকশন ভিত্তিক সিট প্ল্যান</button>
       <button class="tab-btn" onclick="switchTab('tabRoom')">🚪 রুম ভিত্তিক সিট প্ল্যান</button>
+      <button class="tab-btn" onclick="switchTab('tabAttendance')">✍️ শিক্ষার্থীর স্বাক্ষর</button>
     </div>
 
     <!-- TAB 1: OVERVIEW & SEARCH -->
@@ -528,20 +529,18 @@
         </button>
       </div>
 
-      <!-- Result Card -->
-      <div id="resultCard" class="result-card">
+      <div id="resultCard" class="result-card" style="display:none; background:#f0fdf4; border:2px solid #22c55e; padding:15px; border-radius:12px; margin-bottom:15px;">
         <h3><i class="fa-solid fa-user-graduate"></i> পরীক্ষার্থীর তথ্য 🎉</h3>
-        <div class="info-grid">
-          <div class="info-item"><span>Exam:</span><strong id="resExam">-</strong></div>
-          <div class="info-item"><span>Student Name:</span><strong id="resName">-</strong></div>
-          <div class="info-item"><span>Class:</span><strong id="resClass">-</strong></div>
-          <div class="info-item"><span>Section:</span><strong id="resSection">-</strong></div>
-          <div class="info-item"><span>Roll No:</span><strong id="resRoll">-</strong></div>
-          <div class="info-item"><span>Gender:</span><strong id="resGender">-</strong></div>
-          <div class="room-highlight">
-            <span>পরীক্ষার রুম নম্বর 🚪</span>
-            <strong id="resRoom">ROOM NO: --</strong>
-          </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div>Exam: <strong id="resExam">-</strong></div>
+          <div>Student Name: <strong id="resName">-</strong></div>
+          <div>Class: <strong id="resClass">-</strong></div>
+          <div>Section: <strong id="resSection">-</strong></div>
+          <div>Roll No: <strong id="resRoll">-</strong></div>
+          <div>Gender: <strong id="resGender">-</strong></div>
+        </div>
+        <div style="margin-top:10px; background:#dcfce7; padding:10px; text-align:center; border-radius:8px; border:1px dashed #16a34a;">
+          <strong id="resRoom" style="font-size:20px; color:#15803d;">ROOM NO: --</strong>
         </div>
       </div>
 
@@ -594,9 +593,7 @@
         </button>
       </div>
 
-      <div id="sectionCardsContainer">
-        <!-- Dynamic Class & Gender Tables -->
-      </div>
+      <div id="sectionCardsContainer"></div>
     </div>
 
     <!-- TAB 3: ROOM BASED LIST -->
@@ -614,9 +611,25 @@
         </button>
       </div>
 
-      <div id="roomCardsContainer">
-        <!-- Dynamic Room Cards -->
+      <div id="roomCardsContainer"></div>
+    </div>
+
+    <!-- TAB 4: ATTENDANCE / SIGNATURE SHEET TAB -->
+    <div id="tabAttendance" class="tab-content">
+      <div class="filter-section">
+        <div class="input-group">
+          <label><i class="fa-solid fa-door-open"></i> পরীক্ষার রুম ফিল্টার করুন:</label>
+          <select id="selectAttenRoom" onchange="renderAttendanceView()">
+            <option value="">-- সকল রুম --</option>
+          </select>
+        </div>
+
+        <button class="btn-action btn-batch-print" onclick="printAttendanceLandscape()">
+          <i class="fa-solid fa-print"></i> সকল পেজ প্রিন্ট (Landscape)
+        </button>
       </div>
+
+      <div id="attendanceContainer"></div>
     </div>
 
   </div>
@@ -627,6 +640,7 @@
 
     let rawSeatPlans = [];
     let rawStudents = [];
+    let rawRoutines = [];
     let availableExams = [];
     let currentSessionYear = "2026";
 
@@ -644,7 +658,8 @@
 
     async function fetchAllData() {
       try {
-        const [planRes, stuRes] = await Promise.all([
+        /* FIX 1: Fetching up to 5000 records using Range header to avoid Supabase 1000 limit */
+        const [planRes, stuRes, routRes] = await Promise.all([
           fetch(`${SUPABASE_URL}/rest/v1/seat_plan?order=id.asc`, { 
             headers: { 
               'apikey': SUPABASE_ANON_KEY, 
@@ -657,11 +672,18 @@
               'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
               'Range': '0-4999' 
             } 
+          }),
+          fetch(`${SUPABASE_URL}/rest/v1/exam_routine?order=id.asc`, { 
+            headers: { 
+              'apikey': SUPABASE_ANON_KEY, 
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}` 
+            } 
           })
         ]);
         
         rawSeatPlans = await planRes.json();
         rawStudents = await stuRes.json();
+        rawRoutines = await routRes.json();
 
         if (rawStudents && rawStudents.length > 0 && rawStudents[0].session) {
           currentSessionYear = rawStudents[0].session;
@@ -671,13 +693,14 @@
         document.getElementById('sessionYear').innerText = currentSessionYear;
 
         populateExamDropdown();
-        populateRoomDropdown();
+        populateRoomDropdowns();
         
         const currentCls = document.getElementById('selectClass').value;
         if(currentCls) loadClassSeatPlan(currentCls);
         
         renderSectionView();
         renderRoomView();
+        renderAttendanceView();
       } catch(e) { console.error("Data loading error:", e); }
     }
 
@@ -696,9 +719,10 @@
       const currentCls = document.getElementById('selectClass').value;
       if (currentCls) loadClassSeatPlan(currentCls);
       
-      populateRoomDropdown();
+      populateRoomDropdowns();
       renderSectionView();
       renderRoomView();
+      renderAttendanceView();
     }
 
     function getFilteredSeatPlans() {
@@ -749,6 +773,7 @@
       tbody.innerHTML = html;
     }
 
+    /* FIX 2: Dynamic section calculation with Range 0-4999 */
     function getAccurateSections(plan) {
       if (plan.section && plan.section.trim() !== '' && plan.section.trim().toUpperCase() !== 'ALL') {
         return plan.section.trim();
@@ -766,7 +791,7 @@
 
         const matchClass = (sClass === pClass);
         const matchRoll = (sRoll >= startRoll && sRoll <= endRoll);
-        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === sGen);
+        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen.includes('BOYS') && sGen.includes('BOY') || pGen.includes('GIRLS') && sGen.includes('GIRL'));
 
         return matchClass && matchRoll && matchGen;
       });
@@ -810,7 +835,7 @@
         const matchClass = (pClass === String(cls).trim().toUpperCase());
         const matchRoll = (roll >= p.start_roll && roll <= p.end_roll);
         const matchSec = (pSec === 'ALL' || pSec === '' || pSec === stuSec);
-        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === stuGender);
+        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen.includes(stuGender));
 
         return matchClass && matchRoll && matchSec && matchGen;
       });
@@ -827,22 +852,19 @@
       resultCard.scrollIntoView({ behavior: 'smooth' });
     }
 
-    /* ----------------- TAB 2: SECTION & GENDER BASED VIEW ----------------- */
+    /* TAB 2: SECTION & GENDER BASED VIEW */
     function renderSectionView() {
       const container = document.getElementById('sectionCardsContainer');
       const selectedCls = document.getElementById('selectSectionClass').value;
       container.innerHTML = '';
 
       let filteredPlans = getFilteredSeatPlans();
-      
       const classOrder = ["V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
       let classesToRender = selectedCls ? [selectedCls] : classOrder;
-
       let hasData = false;
 
       classesToRender.forEach((clsName, cIdx) => {
         const clsPlans = filteredPlans.filter(p => String(p.class_name).trim().toUpperCase() === clsName.toUpperCase());
-        
         if (clsPlans.length === 0) return;
 
         const genders = ["BOYS", "GIRLS"];
@@ -850,7 +872,7 @@
         genders.forEach((gen, gIdx) => {
           const genPlans = clsPlans.filter(p => {
             const pGen = p.gender ? String(p.gender).trim().toUpperCase() : 'ALL';
-            return pGen === gen || pGen === 'ALL' || pGen === 'BOYS & GIRLS';
+            return pGen.includes(gen) || pGen === 'ALL' || pGen === 'BOYS & GIRLS';
           });
 
           if (genPlans.length === 0) return;
@@ -864,6 +886,7 @@
             const planClass = String(plan.class_name).trim().toUpperCase();
             const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
 
+            /* Filter students strictly matching Class, Gender, and Roll Range */
             const classStudents = rawStudents.filter(s => {
               const sClass = String(s.class_name).trim().toUpperCase();
               const sRoll = parseInt(s.roll_no);
@@ -873,17 +896,16 @@
               const matchClass = (sClass === planClass);
               const matchRoll = (sRoll >= plan.start_roll && sRoll <= plan.end_roll);
               const matchSec = (planSec === 'ALL' || planSec === '' || planSec === sSec);
-              const matchGen = (gen === sGen || !sGen);
+              const matchGen = (sGen.includes(gen) || sGen.includes(gen.slice(0, -1)) || !sGen);
 
               return matchClass && matchRoll && matchSec && matchGen;
             });
 
             let rollList = classStudents.map(s => parseInt(s.roll_no)).filter(n => !isNaN(n)).sort((a,b) => a - b);
             
+            // Fallback if rawStudents has empty entries
             if (rollList.length === 0) {
-              for (let r = plan.start_roll; r <= plan.end_roll; r++) {
-                rollList.push(r);
-              }
+              for (let r = plan.start_roll; r <= plan.end_roll; r++) rollList.push(r);
             }
 
             const displayRolls = rollList.join(', ');
@@ -905,7 +927,6 @@
           const cardId = `sec-card-${cIdx}-${gIdx}`;
           const cardHtml = `
             <div class="printable-card section-card-list" id="${cardId}">
-              <!-- Print Header Included inside each Page/Card -->
               <div class="card-print-header">
                 <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
                 <h3>পরীক্ষার সিট প্ল্যান: ${currentSessionYear}</h3>
@@ -947,15 +968,20 @@
       }
     }
 
-    /* ----------------- TAB 3: ROOM BASED VIEW ----------------- */
-    function populateRoomDropdown() {
-      const select = document.getElementById('selectRoomNo');
+    /* TAB 3: ROOM BASED VIEW */
+    function populateRoomDropdowns() {
       const activePlans = getFilteredSeatPlans();
       const rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
       
-      select.innerHTML = '<option value="">-- সকল রুম --</option>';
+      const selectRoom = document.getElementById('selectRoomNo');
+      const selectAtten = document.getElementById('selectAttenRoom');
+
+      selectRoom.innerHTML = '<option value="">-- সকল রুম --</option>';
+      selectAtten.innerHTML = '<option value="">-- সকল রুম --</option>';
+
       rooms.forEach(r => {
-        select.innerHTML += `<option value="${r}">Room No: ${r}</option>`;
+        selectRoom.innerHTML += `<option value="${r}">Room No: ${r}</option>`;
+        selectAtten.innerHTML += `<option value="${r}">Room No: ${r}</option>`;
       });
     }
 
@@ -966,7 +992,6 @@
 
       const activePlans = getFilteredSeatPlans();
       let rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
-      
       if (selectedRoom) rooms = [selectedRoom];
 
       if (rooms.length === 0) {
@@ -977,14 +1002,12 @@
       rooms.forEach((roomNo, idx) => {
         const roomPlans = activePlans.filter(p => String(p.room_no).trim() === roomNo);
         let totalRoomStudents = 0;
-
         const roomExams = [...new Set(roomPlans.map(p => p.exam_name || 'N/A'))].join(', ');
 
         let tableRowsHtml = '';
         roomPlans.forEach(p => {
           const count = (p.end_roll - p.start_roll + 1);
           totalRoomStudents += count;
-
           const secText = getAccurateSections(p);
 
           tableRowsHtml += `
@@ -1036,20 +1059,185 @@
       });
     }
 
+    /* ----------------- TAB 4: ATTENDANCE & SIGNATURE SHEET ----------------- */
+    function renderAttendanceView() {
+      const container = document.getElementById('attendanceContainer');
+      const selectedRoom = document.getElementById('selectAttenRoom').value;
+      container.innerHTML = '';
+
+      const activePlans = getFilteredSeatPlans();
+      let rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
+      if (selectedRoom) rooms = [selectedRoom];
+
+      if (rooms.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">কোনো রেকর্ড পাওয়া যায়নি!</div>';
+        return;
+      }
+
+      rooms.forEach((roomNo, rIdx) => {
+        const roomPlans = activePlans.filter(p => String(p.room_no).trim() === roomNo);
+
+        // Group students inside room by Class
+        const classesInRoom = [...new Set(roomPlans.map(p => String(p.class_name).trim().toUpperCase()))];
+
+        classesInRoom.forEach((clsName, cIdx) => {
+          const clsPlans = roomPlans.filter(p => String(p.class_name).trim().toUpperCase() === clsName);
+          const examName = clsPlans[0]?.exam_name || 'Examination';
+
+          /* Get Exam Routine subjects for this class from exam_routine table */
+          const classKey = `class_${clsName.toLowerCase()}`;
+          const routinesForClass = rawRoutines.filter(r => 
+            String(r.exam_name || '').trim().toUpperCase() === examName.trim().toUpperCase() &&
+            r[classKey] && String(r[classKey]).trim() !== ''
+          );
+
+          /* Get all students belonging to this Room and Class */
+          let roomStudents = [];
+
+          clsPlans.forEach(plan => {
+            const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
+            const planGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
+
+            const matched = rawStudents.filter(s => {
+              const sClass = String(s.class_name).trim().toUpperCase();
+              const sRoll = parseInt(s.roll_no);
+              const sSec = s.section ? String(s.section).trim().toUpperCase() : '';
+              const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
+
+              const mClass = (sClass === clsName);
+              const mRoll = (sRoll >= plan.start_roll && sRoll <= plan.end_roll);
+              const mSec = (planSec === 'ALL' || planSec === '' || planSec === sSec);
+              const mGen = (planGen === 'ALL' || planGen === 'BOYS & GIRLS' || planGen.includes(sGen));
+
+              return mClass && mRoll && mSec && mGen;
+            });
+
+            roomStudents.push(...matched);
+          });
+
+          // Unique & Sort Students by Roll
+          const uniqueStudents = [];
+          const map = new Map();
+          for (const item of roomStudents) {
+            if(!map.has(item.roll_no)){
+              map.set(item.roll_no, true);
+              uniqueStudents.push(item);
+            }
+          }
+          uniqueStudents.sort((a,b) => parseInt(a.roll_no) - parseInt(b.roll_no));
+
+          if (uniqueStudents.length === 0) return;
+
+          /* Table Header Generation based on Routine */
+          let subHeaderHtml = '';
+          if (routinesForClass.length > 0) {
+            routinesForClass.forEach(r => {
+              subHeaderHtml += `
+                <th class="sig-col">
+                  ${r.exam_date || ''}<br>
+                  <span style="font-size:11px; font-weight:normal;">${r[classKey]}</span>
+                </th>
+              `;
+            });
+          } else {
+            subHeaderHtml = '<th class="sig-col">স্বাক্ষর ১</th><th class="sig-col">স্বাক্ষর ২</th><th class="sig-col">স্বাক্ষর ৩</th>';
+          }
+
+          /* Rows Generation */
+          let rowsHtml = '';
+          uniqueStudents.forEach(stu => {
+            let sigCells = '';
+            const colCount = routinesForClass.length > 0 ? routinesForClass.length : 3;
+            for(let i=0; i < colCount; i++) {
+              sigCells += '<td class="sig-col"></td>';
+            }
+
+            rowsHtml += `
+              <tr>
+                <td class="atten-col-roll"><b>${stu.roll_no}</b></td>
+                <td class="atten-col-name"><b>${stu.student_name || ''}</b></td>
+                ${sigCells}
+                <td class="atten-col atten-col-pres"></td>
+                <td class="atten-col atten-col-pres"></td>
+              </tr>
+            `;
+          });
+
+          const cardId = `atten-card-${rIdx}-${cIdx}`;
+          const cardHtml = `
+            <div class="printable-card attendance-card-list" id="${cardId}">
+              <div class="card-print-header">
+                <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
+                <h3>পরীক্ষার্থীর উপস্থিতি ও স্বাক্ষর তালিকা: ${currentSessionYear}</h3>
+              </div>
+
+              <div class="card-header-title">
+                <span>✍️ রুম নম্বর: ${roomNo} | Class: ${clsName}</span>
+                <button class="btn-single-print" onclick="printSingleAttendance('${cardId}')"><i class="fa-solid fa-print"></i> প্রিন্ট (Landscape)</button>
+              </div>
+
+              <div class="card-meta-grid">
+                <div class="card-meta-item">Exam: <strong>${examName}</strong></div>
+                <div class="card-meta-item">রুম নম্বর: <strong>${roomNo}</strong></div>
+                <div class="card-meta-item">Class: <strong>Class ${clsName}</strong></div>
+                <div class="card-meta-item">মোট শিক্ষার্থী: <strong>${uniqueStudents.length} জন</strong></div>
+              </div>
+
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="atten-col-roll">রোল</th>
+                      <th class="atten-col-name">শিক্ষার্থীর নাম</th>
+                      ${subHeaderHtml}
+                      <th class="atten-col atten-col-pres">P</th>
+                      <th class="atten-col atten-col-pres">A</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rowsHtml}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+          container.innerHTML += cardHtml;
+        });
+      });
+    }
+
     /* PRINT FUNCTIONS */
     function printSingleCard(cardId) {
+      document.body.classList.remove('print-landscape');
       document.querySelectorAll('.printable-card').forEach(c => c.classList.add('print-hide'));
       const target = document.getElementById(cardId);
       if (target) target.classList.remove('print-hide');
-      
       window.print();
-
       document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
     }
 
     function printBatch(className) {
+      document.body.classList.remove('print-landscape');
       document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
       window.print();
+    }
+
+    /* Print Landscape specifically for Attendance Sheet */
+    function printSingleAttendance(cardId) {
+      document.body.classList.add('print-landscape');
+      document.querySelectorAll('.printable-card').forEach(c => c.classList.add('print-hide'));
+      const target = document.getElementById(cardId);
+      if (target) target.classList.remove('print-hide');
+      window.print();
+      document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
+      document.body.classList.remove('print-landscape');
+    }
+
+    function printAttendanceLandscape() {
+      document.body.classList.add('print-landscape');
+      document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
+      window.print();
+      document.body.classList.remove('print-landscape');
     }
   </script>
 </body>
