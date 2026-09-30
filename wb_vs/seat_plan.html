@@ -404,10 +404,11 @@
       th, td { 
         border: 1px solid #000 !important; 
         color: #000 !important; 
-        padding: 8px 6px !important; 
-        font-size: 15px !important;
+        padding: 10px 8px !important; 
+        font-size: 17px !important; /* Larger text size for print */
+        font-weight: bold !important;
       }
-      th { background-color: #eee !important; }
+      th { background-color: #eee !important; font-size: 18px !important; }
     }
   </style>
 </head>
@@ -689,24 +690,25 @@
       tbody.innerHTML = html;
     }
 
-    /* Dynamic & Accurate Section Matcher */
+    /* Dynamic & Precise Section Matcher per Specific Row/Range */
     function getAccurateSections(plan) {
-      // Direct Database Section Priority
       if (plan.section && plan.section.trim() !== '' && plan.section.trim().toUpperCase() !== 'ALL') {
         return plan.section.trim();
       }
 
       const pClass = String(plan.class_name).trim().toUpperCase();
       const pGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
+      const startRoll = parseInt(plan.start_roll);
+      const endRoll = parseInt(plan.end_roll);
 
-      // Cross-match students with exact Class, Gender & Roll Range
+      // Strictly match students who belong to THIS SPECIFIC ROLL RANGE
       const matchedStudents = rawStudents.filter(s => {
         const sClass = String(s.class_name).trim().toUpperCase();
         const sRoll = parseInt(s.roll_no);
         const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
 
         const matchClass = (sClass === pClass);
-        const matchRoll = (sRoll >= plan.start_roll && sRoll <= plan.end_roll);
+        const matchRoll = (sRoll >= startRoll && sRoll <= endRoll);
         const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === sGen);
 
         return matchClass && matchRoll && matchGen;
@@ -789,7 +791,6 @@
         const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
         const planGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
 
-        // Matching logic
         const classStudents = rawStudents.filter(s => {
           const sClass = String(s.class_name).trim().toUpperCase();
           const sRoll = parseInt(s.roll_no);
@@ -806,7 +807,6 @@
 
         let rollList = classStudents.map(s => parseInt(s.roll_no)).filter(n => !isNaN(n)).sort((a,b) => a - b);
         
-        // Dynamic roll sequence generator fallback
         if (rollList.length === 0) {
           for (let r = plan.start_roll; r <= plan.end_roll; r++) {
             rollList.push(r);
@@ -870,6 +870,9 @@
         const roomPlans = activePlans.filter(p => String(p.room_no).trim() === roomNo);
         let totalRoomStudents = 0;
 
+        // Get unique Exam Names for this room
+        const roomExams = [...new Set(roomPlans.map(p => p.exam_name || 'N/A'))].join(', ');
+
         let tableRowsHtml = '';
         roomPlans.forEach(p => {
           const count = (p.end_roll - p.start_roll + 1);
@@ -879,7 +882,6 @@
 
           tableRowsHtml += `
             <tr>
-              <td><b style="color: #7e22ce;">${p.exam_name || 'N/A'}</b></td>
               <td><b>${p.class_name}</b></td>
               <td><b>${secText}</b></td>
               <td>${p.gender || 'BOYS & GIRLS'}</td>
@@ -896,6 +898,7 @@
               <button class="btn-single-print" onclick="printSingleCard('room-card-${idx}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
             </div>
             <div class="card-meta-grid">
+              <div class="card-meta-item">Exam: <strong>${roomExams}</strong></div>
               <div class="card-meta-item">রুম নম্বর: <strong>${roomNo}</strong></div>
               <div class="card-meta-item">মোট সিট/পরীক্ষার্থী: <strong>${totalRoomStudents} জন</strong></div>
             </div>
@@ -903,7 +906,6 @@
               <table>
                 <thead>
                   <tr>
-                    <th>Exam</th>
                     <th>Class</th>
                     <th>Section</th>
                     <th>Category / Gender</th>
