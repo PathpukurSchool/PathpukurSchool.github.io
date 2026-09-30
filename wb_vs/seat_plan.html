@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-
   <title>Pathpukur High School (H.S.)</title>
 
   <!-- Google Fonts & Font Awesome -->
@@ -38,7 +37,7 @@
       border: 2px solid #ffffff;
     }
     
-    /* Vibrant Header */
+    /* Header */
     .header { 
       text-align: center; 
       border-bottom: 3px dashed #0284c7; 
@@ -179,7 +178,7 @@
       box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);
     }
 
-    /* Result Card (For Single Student) */
+    /* Result Card */
     .result-card {
       display: none;
       background: linear-gradient(135deg, #ffffff, #f0fdf4);
@@ -210,7 +209,7 @@
 
     .room-highlight strong { font-size: 22px; color: #15803d; }
 
-    /* Print Specific Display Cards (Large Text) */
+    /* Printable Card */
     .printable-card {
       background: #ffffff;
       border: 2px solid #0f172a;
@@ -278,12 +277,15 @@
       overflow-x: auto; 
       border-radius: 10px;
       border: 2px solid #0284c7;
+      width: 100%;
+      margin-top: 10px;
     }
 
     table { 
       width: 100%; 
       border-collapse: collapse; 
       background: #fff;
+      white-space: nowrap;
     }
 
     th, td { 
@@ -304,7 +306,7 @@
       .input-group { flex: 1; }
     }
 
-    /* ------------------ PRINT STYLES ------------------ */
+    /* PRINT STYLES */
     @media print {
       @page { size: A4 portrait; margin: 10mm; }
       
@@ -324,13 +326,11 @@
         border: none !important; 
       }
 
-      /* Hide interactive elements */
       .filter-section, .btn-action, .notice-box, .result-card,
       .tab-container, .btn-single-print, #security-shield, .action-bar { 
         display: none !important; 
       }
 
-      /* Hide non-selected print sections */
       .tab-content:not(.active) {
         display: none !important;
       }
@@ -355,7 +355,6 @@
         padding: 2px 8px !important;
       }
 
-      /* Large text layout for Notice Boards */
       .printable-card {
         border: 2px solid #000 !important;
         margin-bottom: 20px !important;
@@ -383,7 +382,16 @@
         font-weight: bold !important;
       }
 
-      table { border: 2px solid #000 !important; width: 100% !important; }
+      .table-responsive {
+        border: none !important;
+        overflow: visible !important;
+      }
+
+      table { 
+        border: 2px solid #000 !important; 
+        width: 100% !important; 
+        white-space: normal !important;
+      }
       th, td { 
         border: 1px solid #000 !important; 
         color: #000 !important; 
@@ -485,7 +493,7 @@
       </div>
     </div>
 
-    <!-- TAB 2: SECTION & GENDER BASED LIST (NEW FEATURE 1) -->
+    <!-- TAB 2: SECTION & GENDER BASED LIST -->
     <div id="tabSection" class="tab-content">
       <div class="filter-section">
         <div class="input-group">
@@ -509,11 +517,11 @@
       </div>
 
       <div id="sectionCardsContainer">
-        <!-- Dynamic Cards Load Here -->
+        <!-- Dynamic Cards -->
       </div>
     </div>
 
-    <!-- TAB 3: ROOM BASED LIST (NEW FEATURE 2) -->
+    <!-- TAB 3: ROOM BASED LIST -->
     <div id="tabRoom" class="tab-content">
       <div class="filter-section">
         <div class="input-group">
@@ -529,7 +537,7 @@
       </div>
 
       <div id="roomCardsContainer">
-        <!-- Dynamic Cards Load Here -->
+        <!-- Dynamic Cards -->
       </div>
     </div>
 
@@ -551,7 +559,7 @@
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       
-      event.currentTarget.classList.add('active');
+      event.target.classList.add('active');
       document.getElementById(tabId).classList.add('active');
     }
 
@@ -562,7 +570,7 @@
         });
         const data = await response.json();
         if (data && data.length > 0) {
-          document.getElementById('examBadge').innerText = "Exam: " + data[0].exam_name;
+          document.getElementById('examBadge').innerText = "Exam: " + (data[0].exam_name || 'N/A');
         }
 
         const stuResponse = await fetch(`${SUPABASE_URL}/rest/v1/current_students?limit=1`, {
@@ -580,8 +588,12 @@
     async function fetchAllData() {
       try {
         const [planRes, stuRes] = await Promise.all([
-          fetch(`${SUPABASE_URL}/rest/v1/seat_plan?order=id.asc`, { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }),
-          fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,roll_no,gender,student_name`, { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } })
+          fetch(`${SUPABASE_URL}/rest/v1/seat_plan?order=id.asc`, { 
+            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } 
+          }),
+          fetch(`${SUPABASE_URL}/rest/v1/current_students?select=*`, { 
+            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } 
+          })
         ]);
         
         rawSeatPlans = await planRes.json();
@@ -605,7 +617,7 @@
       
       tbody.innerHTML = '<tr><td colspan="5"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>';
 
-      const plans = rawSeatPlans.filter(p => p.class_name === cls);
+      const plans = rawSeatPlans.filter(p => String(p.class_name).trim().toUpperCase() === String(cls).trim().toUpperCase());
 
       if (!plans || plans.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
@@ -617,10 +629,11 @@
       
       let html = '';
       for (const p of plans) {
+        const secText = (p.section && p.section.trim() !== '') ? p.section.trim() : 'ALL';
         html += `
           <tr>
             <td><b>${p.class_name}</b></td>
-            <td><b>${p.section || 'All'}</b></td>
+            <td><b>${secText}</b></td>
             <td>${p.gender || 'BOYS & GIRLS'}</td>
             <td>${p.start_roll} - ${p.end_roll}</td>
             <td><b style="color: #0284c7;">${p.room_no}</b></td>
@@ -641,7 +654,10 @@
       }
 
       const roll = parseInt(rollInput);
-      const student = rawStudents.find(s => s.class_name === cls && parseInt(s.roll_no) === roll);
+      const student = rawStudents.find(s => 
+        String(s.class_name).trim().toUpperCase() === String(cls).trim().toUpperCase() && 
+        parseInt(s.roll_no) === roll
+      );
 
       if (!student) {
         alert(`Class: ${cls}, Roll: ${roll} - এর কোনো ছাত্র-ছাত্রীর তথ্য পাওয়া যায়নি!`);
@@ -649,12 +665,21 @@
         return;
       }
 
-      const matchingPlan = rawSeatPlans.find(p => 
-        p.class_name === cls && 
-        roll >= p.start_roll && 
-        roll <= p.end_roll &&
-        (!p.gender || p.gender === 'ALL' || p.gender.toUpperCase() === (student.gender || '').toUpperCase())
-      );
+      const stuGender = (student.gender || '').trim().toUpperCase();
+      const stuSec = (student.section || '').trim().toUpperCase();
+
+      const matchingPlan = rawSeatPlans.find(p => {
+        const pClass = String(p.class_name).trim().toUpperCase();
+        const pSec = p.section ? String(p.section).trim().toUpperCase() : 'ALL';
+        const pGen = p.gender ? String(p.gender).trim().toUpperCase() : 'ALL';
+
+        const matchClass = (pClass === String(cls).trim().toUpperCase());
+        const matchRoll = (roll >= p.start_roll && roll <= p.end_roll);
+        const matchSec = (pSec === 'ALL' || pSec === stuSec);
+        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === stuGender);
+
+        return matchClass && matchRoll && matchSec && matchGen;
+      });
 
       document.getElementById('resName').innerText = student.student_name || 'N/A';
       document.getElementById('resClass').innerText = student.class_name || cls;
@@ -675,7 +700,7 @@
 
       let filteredPlans = rawSeatPlans;
       if (selectedCls) {
-        filteredPlans = rawSeatPlans.filter(p => p.class_name === selectedCls);
+        filteredPlans = rawSeatPlans.filter(p => String(p.class_name).trim().toUpperCase() === String(selectedCls).trim().toUpperCase());
       }
 
       if (filteredPlans.length === 0) {
@@ -684,22 +709,35 @@
       }
 
       filteredPlans.forEach((plan, idx) => {
-        // Specific rolls array calculation
-        const classStudents = rawStudents.filter(s => 
-          s.class_name === plan.class_name && 
-          parseInt(s.roll_no) >= plan.start_roll && 
-          parseInt(s.roll_no) <= plan.end_roll &&
-          (!plan.gender || plan.gender === 'ALL' || (s.gender && s.gender.toUpperCase() === plan.gender.toUpperCase()))
-        );
+        const planClass = String(plan.class_name).trim().toUpperCase();
+        const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
+        const planGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
 
-        const rollList = classStudents.map(s => s.roll_no).sort((a,b) => a-b);
+        // Filter actual student rolls
+        const classStudents = rawStudents.filter(s => {
+          const sClass = String(s.class_name).trim().toUpperCase();
+          const sRoll = parseInt(s.roll_no);
+          const sSec = s.section ? String(s.section).trim().toUpperCase() : '';
+          const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
+
+          const matchClass = (sClass === planClass);
+          const matchRoll = (sRoll >= plan.start_roll && sRoll <= plan.end_roll);
+          const matchSec = (planSec === 'ALL' || planSec === '' || planSec === sSec);
+          const matchGen = (planGen === 'ALL' || planGen === 'BOYS & GIRLS' || planGen === sGen);
+
+          return matchClass && matchRoll && matchSec && matchGen;
+        });
+
+        const rollList = classStudents.map(s => parseInt(s.roll_no)).sort((a,b) => a - b);
         const displayRolls = rollList.length > 0 ? rollList.join(', ') : `${plan.start_roll} থেকে ${plan.end_roll} পর্যন্ত সকল রোল`;
         const totalCount = rollList.length > 0 ? rollList.length : (plan.end_roll - plan.start_roll + 1);
+
+        const secDisplayName = (plan.section && plan.section.trim() !== '') ? plan.section.trim() : 'ALL';
 
         const cardHtml = `
           <div class="printable-card section-card-list" id="sec-card-${idx}">
             <div class="card-header-title">
-              <span>🏫 Class: ${plan.class_name} | Section: ${plan.section || 'ALL'} (${plan.gender || 'BOYS & GIRLS'})</span>
+              <span>🏫 Class: ${plan.class_name} | Section: ${secDisplayName} (${plan.gender || 'BOYS & GIRLS'})</span>
               <button class="btn-single-print" onclick="printSingleCard('sec-card-${idx}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
             </div>
             <div class="card-meta-grid">
@@ -720,7 +758,7 @@
     /* ----------------- 2. ROOM BASED VIEW ----------------- */
     function populateRoomDropdown() {
       const select = document.getElementById('selectRoomNo');
-      const rooms = [...new Set(rawSeatPlans.map(p => p.room_no))].sort();
+      const rooms = [...new Set(rawSeatPlans.map(p => String(p.room_no).trim()))].sort();
       select.innerHTML = '<option value="">-- সকল রুম --</option>';
       rooms.forEach(r => {
         select.innerHTML += `<option value="${r}">Room No: ${r}</option>`;
@@ -732,7 +770,7 @@
       const selectedRoom = document.getElementById('selectRoomNo').value;
       container.innerHTML = '';
 
-      let rooms = [...new Set(rawSeatPlans.map(p => p.room_no))].sort();
+      let rooms = [...new Set(rawSeatPlans.map(p => String(p.room_no).trim()))].sort();
       if (selectedRoom) rooms = [selectedRoom];
 
       if (rooms.length === 0) {
@@ -741,17 +779,18 @@
       }
 
       rooms.forEach((roomNo, idx) => {
-        const roomPlans = rawSeatPlans.filter(p => p.room_no === roomNo);
+        const roomPlans = rawSeatPlans.filter(p => String(p.room_no).trim() === roomNo);
         let totalRoomStudents = 0;
 
         let tableRowsHtml = '';
         roomPlans.forEach(p => {
           const count = (p.end_roll - p.start_roll + 1);
           totalRoomStudents += count;
+          const secText = (p.section && p.section.trim() !== '') ? p.section.trim() : 'ALL';
           tableRowsHtml += `
             <tr>
               <td><b>${p.class_name}</b></td>
-              <td><b>${p.section || 'ALL'}</b></td>
+              <td><b>${secText}</b></td>
               <td>${p.gender || 'BOYS & GIRLS'}</td>
               <td><b>${p.start_roll} - ${p.end_roll}</b></td>
               <td><b>${count} জন</b></td>
@@ -769,20 +808,22 @@
               <div class="card-meta-item">রুম নম্বর: <strong>${roomNo}</strong></div>
               <div class="card-meta-item">মোট সিট/পরীক্ষার্থী: <strong>${totalRoomStudents} জন</strong></div>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Class</th>
-                  <th>Section</th>
-                  <th>Category / Gender</th>
-                  <th>Roll Range</th>
-                  <th>Student Count</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${tableRowsHtml}
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Category / Gender</th>
+                    <th>Roll Range</th>
+                    <th>Student Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRowsHtml}
+                </tbody>
+              </table>
+            </div>
           </div>
         `;
         container.innerHTML += cardHtml;
