@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>Pathpukur High School (H.S.)</title>
+  <title>Pathpukur High School (H.S.) - Seat Plan</title>
 
   <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,15 +60,38 @@
       font-weight: bold;
     }
 
-    .exam-badge {
-      display: inline-block;
-      background: linear-gradient(45deg, #ff5722, #ff9800);
+    /* Universal Exam Selector Box */
+    .exam-selector-box {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-      margin-top: 6px;
-      box-shadow: 0 3px 8px rgba(255, 87, 34, 0.3);
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .exam-selector-box label {
+      font-size: 15px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .exam-selector-box select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      border: 2px solid #38bdf8;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #0f172a;
+      outline: none;
+      cursor: pointer;
     }
 
     /* Notice Box */
@@ -220,7 +243,7 @@
     }
 
     .card-header-title {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: bold;
       color: #0f172a;
       border-bottom: 2px solid #0f172a;
@@ -236,7 +259,7 @@
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 10px;
       margin-bottom: 12px;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     .card-meta-item {
@@ -247,7 +270,7 @@
     }
 
     .card-meta-item strong {
-      font-size: 18px;
+      font-size: 17px;
       color: #0f172a;
     }
 
@@ -257,7 +280,7 @@
       padding: 10px;
       border-radius: 8px;
       margin-top: 10px;
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1.6;
       word-break: break-word;
     }
@@ -297,13 +320,14 @@
 
     th { background-color: #0284c7; color: white; font-size: 16px; }
 
-    /* Responsive Tweaks */
     @media (min-width: 600px) {
       body { padding: 20px; }
       .container { padding: 22px; }
       .school-name { font-size: 28px; }
       .filter-section { flex-direction: row; align-items: flex-end; }
       .input-group { flex: 1; }
+      .exam-selector-box { flex-direction: row; align-items: center; }
+      .exam-selector-box label { min-width: 200px; }
     }
 
     /* PRINT STYLES */
@@ -327,17 +351,12 @@
       }
 
       .filter-section, .btn-action, .notice-box, .result-card,
-      .tab-container, .btn-single-print, #security-shield, .action-bar { 
+      .tab-container, .btn-single-print, .exam-selector-box { 
         display: none !important; 
       }
 
-      .tab-content:not(.active) {
-        display: none !important;
-      }
-
-      .printable-card.print-hide {
-        display: none !important;
-      }
+      .tab-content:not(.active) { display: none !important; }
+      .printable-card.print-hide { display: none !important; }
 
       .header {
         border-bottom: 2px solid #000 !important;
@@ -347,13 +366,6 @@
 
       .school-name { color: #000 !important; font-size: 26px !important; }
       .page-title { color: #000 !important; font-size: 20px !important; }
-      .exam-badge {
-        background: none !important;
-        color: #000 !important;
-        box-shadow: none !important;
-        border: 1px solid #000 !important;
-        padding: 2px 8px !important;
-      }
 
       .printable-card {
         border: 2px solid #000 !important;
@@ -362,30 +374,27 @@
       }
 
       .card-header-title {
-        font-size: 22px !important;
+        font-size: 20px !important;
         border-bottom: 2px solid #000 !important;
         color: #000 !important;
       }
 
-      .card-meta-grid { font-size: 18px !important; }
+      .card-meta-grid { font-size: 16px !important; }
       .card-meta-item {
         border: 1px solid #000 !important;
         background: #fff !important;
       }
-      .card-meta-item strong { font-size: 20px !important; color: #000 !important; }
+      .card-meta-item strong { font-size: 18px !important; color: #000 !important; }
 
       .roll-list-box {
         border: 1.5px solid #000 !important;
         background: #fff !important;
-        font-size: 18px !important;
+        font-size: 16px !important;
         line-height: 1.8 !important;
         font-weight: bold !important;
       }
 
-      .table-responsive {
-        border: none !important;
-        overflow: visible !important;
-      }
+      .table-responsive { border: none !important; overflow: visible !important; }
 
       table { 
         border: 2px solid #000 !important; 
@@ -396,7 +405,7 @@
         border: 1px solid #000 !important; 
         color: #000 !important; 
         padding: 8px 6px !important; 
-        font-size: 16px !important;
+        font-size: 15px !important;
       }
       th { background-color: #eee !important; }
     }
@@ -408,8 +417,15 @@
     <!-- Header -->
     <div class="header">
       <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
-      <h2 class="page-title">📌 পরীক্ষার সিট প্ল্যান : <span id="sessionYear">....</span></h2>
-      <div class="exam-badge" id="examBadge">📝 Exam: Loading... </div>
+      <h2 class="page-title">📌 পরীক্ষার সিট প্ল্যান: <span id="sessionYear">....</span></h2>
+    </div>
+
+    <!-- Universal Exam Dropdown -->
+    <div class="exam-selector-box">
+      <label for="selectUniversalExam"><i class="fa-solid fa-file-pen"></i> পরীক্ষা নির্বাচন করুন:</label>
+      <select id="selectUniversalExam" onchange="onExamChange()">
+        <option value="ALL">-- All Exams (সকল পরীক্ষা) --</option>
+      </select>
     </div>
 
     <!-- Notice Box -->
@@ -444,7 +460,7 @@
 
         <div class="input-group">
           <label for="inputRoll"><i class="fa-solid fa-id-card"></i> রোল নম্বর:</label>
-          <input type="number" id="inputRoll" min="1" max="700" inputmode="numeric" placeholder="রোল নম্বর লিখুন...">
+          <input type="number" id="inputRoll" min="1" max="1000" inputmode="numeric" placeholder="রোল নম্বর লিখুন...">
         </div>
 
         <button class="btn-action" onclick="searchSeat()">
@@ -456,6 +472,7 @@
       <div id="resultCard" class="result-card">
         <h3><i class="fa-solid fa-user-graduate"></i> পরীক্ষার্থীর তথ্য 🎉</h3>
         <div class="info-grid">
+          <div class="info-item"><span>Exam:</span><strong id="resExam">-</strong></div>
           <div class="info-item"><span>Student Name:</span><strong id="resName">-</strong></div>
           <div class="info-item"><span>Class:</span><strong id="resClass">-</strong></div>
           <div class="info-item"><span>Section:</span><strong id="resSection">-</strong></div>
@@ -479,6 +496,7 @@
         <table>
           <thead>
             <tr>
+              <th>Exam Name</th>
               <th>Class</th>
               <th>Section</th>
               <th>Gender</th>
@@ -487,7 +505,7 @@
             </tr>
           </thead>
           <tbody id="seatTableBody">
-            <tr><td colspan="5">শ্রেণী নির্বাচন করুন...</td></tr>
+            <tr><td colspan="6">শ্রেণী নির্বাচন করুন...</td></tr>
           </tbody>
         </table>
       </div>
@@ -549,9 +567,9 @@
 
     let rawSeatPlans = [];
     let rawStudents = [];
+    let availableExams = [];
 
     window.onload = async function() {
-      await fetchGeneralDetails();
       await fetchAllData();
     };
 
@@ -563,31 +581,8 @@
       document.getElementById(tabId).classList.add('active');
     }
 
-    async function fetchGeneralDetails() {
-      try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/seat_plan?limit=1`, {
-          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-        });
-        const data = await response.json();
-        if (data && data.length > 0) {
-          document.getElementById('examBadge').innerText = "Exam: " + (data[0].exam_name || 'N/A');
-        }
-
-        const stuResponse = await fetch(`${SUPABASE_URL}/rest/v1/current_students?limit=1`, {
-          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-        });
-        const stuData = await stuResponse.json();
-        if (stuData && stuData.length > 0 && stuData[0].session) {
-          document.getElementById('sessionYear').innerText = stuData[0].session;
-        } else {
-          document.getElementById('sessionYear').innerText = new Date().getFullYear();
-        }
-      } catch (err) { console.error(err); }
-    }
-
     async function fetchAllData() {
       try {
-        // Range header set so Supabase doesn't truncate students to 1000 limit
         const [planRes, stuRes] = await Promise.all([
           fetch(`${SUPABASE_URL}/rest/v1/seat_plan?order=id.asc`, { 
             headers: { 
@@ -595,7 +590,7 @@
               'Authorization': `Bearer ${SUPABASE_ANON_KEY}` 
             } 
           }),
-          fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,roll_no,gender,student_name`, { 
+          fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,roll_no,gender,student_name,session`, { 
             headers: { 
               'apikey': SUPABASE_ANON_KEY, 
               'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
@@ -607,10 +602,51 @@
         rawSeatPlans = await planRes.json();
         rawStudents = await stuRes.json();
 
+        if (rawStudents && rawStudents.length > 0 && rawStudents[0].session) {
+          document.getElementById('sessionYear').innerText = rawStudents[0].session;
+        } else {
+          document.getElementById('sessionYear').innerText = new Date().getFullYear();
+        }
+
+        populateExamDropdown();
         populateRoomDropdown();
+        
+        const currentCls = document.getElementById('selectClass').value;
+        if(currentCls) loadClassSeatPlan(currentCls);
+        
         renderSectionView();
         renderRoomView();
       } catch(e) { console.error("Data loading error:", e); }
+    }
+
+    /* Universal Exam Dropdown Population */
+    function populateExamDropdown() {
+      const select = document.getElementById('selectUniversalExam');
+      availableExams = [...new Set(rawSeatPlans.map(p => String(p.exam_name || '').trim()).filter(Boolean))];
+      
+      select.innerHTML = '<option value="ALL">-- All Exams (সকল পরীক্ষা) --</option>';
+      availableExams.forEach(exam => {
+        select.innerHTML += `<option value="${exam}">${exam}</option>`;
+      });
+    }
+
+    function onExamChange() {
+      document.getElementById('resultCard').style.display = 'none';
+      const currentCls = document.getElementById('selectClass').value;
+      if (currentCls) loadClassSeatPlan(currentCls);
+      
+      populateRoomDropdown();
+      renderSectionView();
+      renderRoomView();
+    }
+
+    /* Helper: Filter Seat Plans by Universal Exam Selector */
+    function getFilteredSeatPlans() {
+      const selectedExam = document.getElementById('selectUniversalExam').value;
+      if (selectedExam === 'ALL' || !selectedExam) {
+        return rawSeatPlans;
+      }
+      return rawSeatPlans.filter(p => String(p.exam_name || '').trim().toUpperCase() === selectedExam.trim().toUpperCase());
     }
 
     document.getElementById('selectClass').addEventListener('change', function() {
@@ -623,12 +659,13 @@
       const tbody = document.getElementById('seatTableBody');
       const statusBadge = document.getElementById('statusBadge');
       
-      tbody.innerHTML = '<tr><td colspan="5"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>';
 
-      const plans = rawSeatPlans.filter(p => String(p.class_name).trim().toUpperCase() === String(cls).trim().toUpperCase());
+      const activePlans = getFilteredSeatPlans();
+      const plans = activePlans.filter(p => String(p.class_name).trim().toUpperCase() === String(cls).trim().toUpperCase());
 
       if (!plans || plans.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
         statusBadge.innerText = `Class: ${cls} | কোনো রেকর্ড নেই`;
         return;
       }
@@ -637,19 +674,10 @@
       
       let html = '';
       for (const p of plans) {
-        // Derive specific sections from students if seat plan section is blank/ALL
-        let secText = (p.section && p.section.trim() !== '' && p.section.trim().toUpperCase() !== 'ALL') ? p.section.trim() : '';
-        if (!secText) {
-          const matchedStudents = rawStudents.filter(s => 
-            String(s.class_name).trim().toUpperCase() === String(p.class_name).trim().toUpperCase() &&
-            parseInt(s.roll_no) >= p.start_roll && parseInt(s.roll_no) <= p.end_roll
-          );
-          const secs = [...new Set(matchedStudents.map(s => String(s.section || '').trim()).filter(Boolean))];
-          secText = secs.length > 0 ? secs.join(', ') : 'ALL';
-        }
-
+        const secText = getAccurateSections(p);
         html += `
           <tr>
+            <td><b style="color: #7e22ce;">${p.exam_name || 'N/A'}</b></td>
             <td><b>${p.class_name}</b></td>
             <td><b>${secText}</b></td>
             <td>${p.gender || 'BOYS & GIRLS'}</td>
@@ -659,6 +687,33 @@
         `;
       }
       tbody.innerHTML = html;
+    }
+
+    /* Dynamic & Accurate Section Matcher */
+    function getAccurateSections(plan) {
+      // Direct Database Section Priority
+      if (plan.section && plan.section.trim() !== '' && plan.section.trim().toUpperCase() !== 'ALL') {
+        return plan.section.trim();
+      }
+
+      const pClass = String(plan.class_name).trim().toUpperCase();
+      const pGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
+
+      // Cross-match students with exact Class, Gender & Roll Range
+      const matchedStudents = rawStudents.filter(s => {
+        const sClass = String(s.class_name).trim().toUpperCase();
+        const sRoll = parseInt(s.roll_no);
+        const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
+
+        const matchClass = (sClass === pClass);
+        const matchRoll = (sRoll >= plan.start_roll && sRoll <= plan.end_roll);
+        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === sGen);
+
+        return matchClass && matchRoll && matchGen;
+      });
+
+      const secs = [...new Set(matchedStudents.map(s => String(s.section || '').trim()).filter(Boolean))].sort();
+      return secs.length > 0 ? secs.join(', ') : 'ALL';
     }
 
     async function searchSeat() {
@@ -672,6 +727,8 @@
       }
 
       const roll = parseInt(rollInput);
+      const activePlans = getFilteredSeatPlans();
+
       const student = rawStudents.find(s => 
         String(s.class_name).trim().toUpperCase() === String(cls).trim().toUpperCase() && 
         parseInt(s.roll_no) === roll
@@ -686,7 +743,7 @@
       const stuGender = (student.gender || '').trim().toUpperCase();
       const stuSec = (student.section || '').trim().toUpperCase();
 
-      const matchingPlan = rawSeatPlans.find(p => {
+      const matchingPlan = activePlans.find(p => {
         const pClass = String(p.class_name).trim().toUpperCase();
         const pSec = p.section ? String(p.section).trim().toUpperCase() : 'ALL';
         const pGen = p.gender ? String(p.gender).trim().toUpperCase() : 'ALL';
@@ -699,6 +756,7 @@
         return matchClass && matchRoll && matchSec && matchGen;
       });
 
+      document.getElementById('resExam').innerText = matchingPlan ? (matchingPlan.exam_name || 'N/A') : 'N/A';
       document.getElementById('resName').innerText = student.student_name || 'N/A';
       document.getElementById('resClass').innerText = student.class_name || cls;
       document.getElementById('resSection').innerText = student.section || 'N/A';
@@ -710,19 +768,19 @@
       resultCard.scrollIntoView({ behavior: 'smooth' });
     }
 
-    /* ----------------- 1. SECTION & GENDER BASED VIEW ----------------- */
+    /* ----------------- TAB 2: SECTION BASED VIEW ----------------- */
     function renderSectionView() {
       const container = document.getElementById('sectionCardsContainer');
       const selectedCls = document.getElementById('selectSectionClass').value;
       container.innerHTML = '';
 
-      let filteredPlans = rawSeatPlans;
+      let filteredPlans = getFilteredSeatPlans();
       if (selectedCls) {
-        filteredPlans = rawSeatPlans.filter(p => String(p.class_name).trim().toUpperCase() === String(selectedCls).trim().toUpperCase());
+        filteredPlans = filteredPlans.filter(p => String(p.class_name).trim().toUpperCase() === String(selectedCls).trim().toUpperCase());
       }
 
       if (filteredPlans.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:20px;">কোনো তথ্য পাওয়া যায়নি!</div>';
+        container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">কোনো সিট প্ল্যান পাওয়া যায়নি!</div>';
         return;
       }
 
@@ -731,7 +789,7 @@
         const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
         const planGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
 
-        // Filter student list
+        // Matching logic
         const classStudents = rawStudents.filter(s => {
           const sClass = String(s.class_name).trim().toUpperCase();
           const sRoll = parseInt(s.roll_no);
@@ -746,10 +804,9 @@
           return matchClass && matchRoll && matchSec && matchGen;
         });
 
-        // Generate Roll Array (Always displays explicit rolls 100%)
         let rollList = classStudents.map(s => parseInt(s.roll_no)).filter(n => !isNaN(n)).sort((a,b) => a - b);
         
-        // If DB student list lacks entries for this range, dynamically generate all rolls sequentially
+        // Dynamic roll sequence generator fallback
         if (rollList.length === 0) {
           for (let r = plan.start_roll; r <= plan.end_roll; r++) {
             rollList.push(r);
@@ -758,13 +815,7 @@
 
         const displayRolls = rollList.join(', ');
         const totalCount = rollList.length;
-
-        // Dynamically extract actual section names from loaded students if plan.section is ALL / blank
-        let secDisplayName = (plan.section && plan.section.trim() !== '' && plan.section.trim().toUpperCase() !== 'ALL') ? plan.section.trim() : '';
-        if (!secDisplayName) {
-          const matchedSecs = [...new Set(classStudents.map(s => String(s.section || '').trim()).filter(Boolean))];
-          secDisplayName = matchedSecs.length > 0 ? matchedSecs.join(', ') : 'A, B'; // Fallback to specific sections if empty
-        }
+        const secDisplayName = getAccurateSections(plan);
 
         const cardHtml = `
           <div class="printable-card section-card-list" id="sec-card-${idx}">
@@ -773,11 +824,12 @@
               <button class="btn-single-print" onclick="printSingleCard('sec-card-${idx}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
             </div>
             <div class="card-meta-grid">
+              <div class="card-meta-item">Exam: <strong>${plan.exam_name || 'N/A'}</strong></div>
               <div class="card-meta-item">পরীক্ষার রুম নম্বর: <strong>${plan.room_no}</strong></div>
               <div class="card-meta-item">রোল রেঞ্জ: <strong>${plan.start_roll} - ${plan.end_roll}</strong></div>
               <div class="card-meta-item">মোট পরীক্ষার্থী: <strong>${totalCount} জন</strong></div>
             </div>
-            <div style="font-weight:bold; font-size:16px;">পরীক্ষার্থীদের নির্দিষ্ট রোল নম্বরসমূহ:</div>
+            <div style="font-weight:bold; font-size:15px;">পরীক্ষার্থীদের নির্দিষ্ট রোল নম্বরসমূহ:</div>
             <div class="roll-list-box">
               ${displayRolls}
             </div>
@@ -787,10 +839,12 @@
       });
     }
 
-    /* ----------------- 2. ROOM BASED VIEW ----------------- */
+    /* ----------------- TAB 3: ROOM BASED VIEW ----------------- */
     function populateRoomDropdown() {
       const select = document.getElementById('selectRoomNo');
-      const rooms = [...new Set(rawSeatPlans.map(p => String(p.room_no).trim()))].sort();
+      const activePlans = getFilteredSeatPlans();
+      const rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
+      
       select.innerHTML = '<option value="">-- সকল রুম --</option>';
       rooms.forEach(r => {
         select.innerHTML += `<option value="${r}">Room No: ${r}</option>`;
@@ -802,16 +856,18 @@
       const selectedRoom = document.getElementById('selectRoomNo').value;
       container.innerHTML = '';
 
-      let rooms = [...new Set(rawSeatPlans.map(p => String(p.room_no).trim()))].sort();
+      const activePlans = getFilteredSeatPlans();
+      let rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
+      
       if (selectedRoom) rooms = [selectedRoom];
 
       if (rooms.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:20px;">কোনো রুমের তথ্য পাওয়া যায়নি!</div>';
+        container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">কোনো রুমের তথ্য পাওয়া যায়নি!</div>';
         return;
       }
 
       rooms.forEach((roomNo, idx) => {
-        const roomPlans = rawSeatPlans.filter(p => String(p.room_no).trim() === roomNo);
+        const roomPlans = activePlans.filter(p => String(p.room_no).trim() === roomNo);
         let totalRoomStudents = 0;
 
         let tableRowsHtml = '';
@@ -819,18 +875,11 @@
           const count = (p.end_roll - p.start_roll + 1);
           totalRoomStudents += count;
 
-          let secText = (p.section && p.section.trim() !== '' && p.section.trim().toUpperCase() !== 'ALL') ? p.section.trim() : '';
-          if (!secText) {
-            const matchedStudents = rawStudents.filter(s => 
-              String(s.class_name).trim().toUpperCase() === String(p.class_name).trim().toUpperCase() &&
-              parseInt(s.roll_no) >= p.start_roll && parseInt(s.roll_no) <= p.end_roll
-            );
-            const secs = [...new Set(matchedStudents.map(s => String(s.section || '').trim()).filter(Boolean))];
-            secText = secs.length > 0 ? secs.join(', ') : 'ALL';
-          }
+          const secText = getAccurateSections(p);
 
           tableRowsHtml += `
             <tr>
+              <td><b style="color: #7e22ce;">${p.exam_name || 'N/A'}</b></td>
               <td><b>${p.class_name}</b></td>
               <td><b>${secText}</b></td>
               <td>${p.gender || 'BOYS & GIRLS'}</td>
@@ -854,6 +903,7 @@
               <table>
                 <thead>
                   <tr>
+                    <th>Exam</th>
                     <th>Class</th>
                     <th>Section</th>
                     <th>Category / Gender</th>
@@ -872,7 +922,7 @@
       });
     }
 
-    /* ----------------- PRINT FUNCTIONS ----------------- */
+    /* PRINT FUNCTIONS */
     function printSingleCard(cardId) {
       document.querySelectorAll('.printable-card').forEach(c => c.classList.add('print-hide'));
       const target = document.getElementById(cardId);
