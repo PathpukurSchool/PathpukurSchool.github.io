@@ -304,47 +304,38 @@
       cursor: pointer;
     }
 
-    /* Table Column Sizing Adjustments */
+    /* Table Styles */
     .table-responsive { 
       overflow-x: auto; 
       border-radius: 10px;
-      border: 1px solid #0284c7;
+      border: 2px solid #0284c7;
       width: 100%;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     table { 
       width: 100%; 
       border-collapse: collapse; 
       background: #fff;
-      table-layout: fixed; /* Column width control */
+      white-space: nowrap;
     }
 
     th, td { 
-      padding: 8px 6px; 
+      padding: 10px 8px; 
       text-align: center; 
       border: 1px solid #cbd5e1; 
-      font-size: 14px; 
-      word-wrap: break-word;
+      font-size: 15px; 
     }
 
-    th { background-color: #0284c7; color: white; font-size: 15px; }
-
-    /* Custom Column Width Allocation */
-    .col-room { width: 12%; }
-    .col-sec { width: 10%; }
-    .col-range { width: 15%; }
-    .col-total { width: 13%; }
-    .col-rolls { width: 50%; }
+    th { background-color: #0284c7; color: white; font-size: 16px; }
 
     .roll-cell {
       white-space: normal;
       word-break: break-word;
+      max-width: 250px;
       text-align: left;
-      font-size: 15px !important; /* Larger roll text */
-      font-weight: 600;
-      line-height: 1.5;
-      padding: 8px 10px !important;
+      font-size: 14px;
+      line-height: 1.4;
     }
 
     @media (min-width: 600px) {
