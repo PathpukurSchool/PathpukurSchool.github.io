@@ -486,7 +486,7 @@
           <strong id="resGender">-</strong>
         </div>
         <div class="room-highlight">
-          <span>পরীক্ষার রুম নম্বর 🚪</span>
+          <span>পরীক্ষার রুম নম্বর</span>
           <strong id="resRoom">ROOM NO: --</strong>
         </div>
       </div>
@@ -495,7 +495,7 @@
     <!-- Action Bar -->
     <div class="action-bar">
       <div class="total-badge" id="statusBadge">
-        শ্রেণী নির্বাচন করে তথ্য দেখুন 📋
+        শ্রেণী নির্বাচন করে তথ্য দেখুন
       </div>
       <button class="btn-download" onclick="window.print()">
         <i class="fa-solid fa-print"></i> প্রিন্ট
@@ -584,14 +584,14 @@ async function loadClassSeatPlan(cls) {
     if (!plans || plans.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
       statusBadge.innerText = `Class: ${cls} | কোনো রেকর্ড নেই`;
-      examBadge.innerText = "Exam Name: তথ্য পাওয়া যায়নি 📝";
+      examBadge.innerText = "Exam Name: তথ্য পাওয়া যায়নি";
       return;
     }
 
     // ১. সিলেক্ট করা ক্লাসের প্রথম রেকর্ড থেকে Exam Name ডাইনামিকালি সেট করা
     examBadge.innerText = "Exam: " + (plans[0].exam_name || 'N/A');
 
-    statusBadge.innerHTML = `Class: <b>${cls}</b> - এর পরীক্ষার সিট প্ল্যান`;
+    statusBadge.innerHTML = `Class: <b>${cls}</b> - এর সিট প্ল্যান`;
     
     // ২. টেবিলে Section (Start & End Roll মিলিয়ে) সহ ডাটা রেন্ডার করা
     let html = '';
