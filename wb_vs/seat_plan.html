@@ -791,28 +791,17 @@
       return 'ALL';
     }
 
+    /* Helper Function: Map Seat Plan Exam Name to Exam Routine Exam Name */
     function mapExamNameForRoutine(seatExamName) {
-      if (!seatExamName) return [];
+      if (!seatExamName) return '';
       const name = seatExamName.trim().toUpperCase();
 
-      if (name.includes('SEMESTER I') || name.includes('SEME I') || name.includes('SEM 1')) {
-        return ['SEME I', 'SEMESTER I', '1ST SEMESTER'];
-      }
-      if (name.includes('SEMESTER II') || name.includes('SEME II') || name.includes('SEM 2')) {
-        return ['SEME II', 'SEMESTER II', '2ND SEMESTER'];
-      }
-      if (name.includes('1ST SUMMATIVE') || name.includes('1ST EXAM')) {
-        return ['1ST EXAM', '1ST SUMMATIVE EVALUATION'];
-      }
-      if (name.includes('2ND SUMMATIVE') || name.includes('2ND EXAM')) {
-        return ['2ND EXAM', '2ND SUMMATIVE EVALUATION'];
-      }
-      if (name.includes('3RD SUMMATIVE') || name.includes('3RD EXAM')) {
-        return ['3RD EXAM', '3RD SUMMATIVE EVALUATION'];
-      }
-      if (name.includes('TEST')) {
-        return ['TEST EXAM', 'TEST EXAMINATION'];
-      }
+      if (name.includes('SEMESTER I') || name.includes('SEME I') || name.includes('SEM 1')) return ['SEME I', 'SEMESTER I', '1ST SEMESTER'];
+      if (name.includes('SEMESTER II') || name.includes('SEME II') || name.includes('SEM 2')) return ['SEME II', 'SEMESTER II', '2ND SEMESTER'];
+      if (name.includes('1ST SUMMATIVE') || name.includes('1ST EXAM')) return ['1ST EXAM', '1ST SUMMATIVE EVALUATION'];
+      if (name.includes('2ND SUMMATIVE') || name.includes('2ND EXAM')) return ['2ND EXAM', '2ND SUMMATIVE EVALUATION'];
+      if (name.includes('3RD SUMMATIVE') || name.includes('3RD EXAM')) return ['3RD EXAM', '3RD SUMMATIVE EVALUATION'];
+      if (name.includes('TEST')) return ['TEST EXAM', 'TEST EXAMINATION'];
 
       return [seatExamName];
     }
