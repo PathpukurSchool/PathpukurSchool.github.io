@@ -274,17 +274,6 @@
       color: #0f172a;
     }
 
-    .roll-list-box {
-      background: #f1f5f9;
-      border: 1.5px dashed #475569;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 10px;
-      font-size: 15px;
-      line-height: 1.6;
-      word-break: break-word;
-    }
-
     .btn-single-print {
       background: #0f172a;
       color: #fff;
@@ -319,6 +308,15 @@
     }
 
     th { background-color: #0284c7; color: white; font-size: 16px; }
+
+    .roll-cell {
+      white-space: normal;
+      word-break: break-word;
+      max-width: 250px;
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.4;
+    }
 
     @media (min-width: 600px) {
       body { padding: 20px; }
@@ -386,14 +384,6 @@
       }
       .card-meta-item strong { font-size: 18px !important; color: #000 !important; }
 
-      .roll-list-box {
-        border: 1.5px solid #000 !important;
-        background: #fff !important;
-        font-size: 16px !important;
-        line-height: 1.8 !important;
-        font-weight: bold !important;
-      }
-
       .table-responsive { border: none !important; overflow: visible !important; }
 
       table { 
@@ -404,11 +394,12 @@
       th, td { 
         border: 1px solid #000 !important; 
         color: #000 !important; 
-        padding: 10px 8px !important; 
-        font-size: 17px !important;
+        padding: 8px 6px !important; 
+        font-size: 15px !important;
         font-weight: bold !important;
       }
-      th { background-color: #eee !important; font-size: 18px !important; }
+      th { background-color: #eee !important; font-size: 16px !important; }
+      .roll-cell { font-size: 14px !important; }
     }
   </style>
 </head>
@@ -536,7 +527,7 @@
       </div>
 
       <div id="sectionCardsContainer">
-        <!-- Dynamic Cards -->
+        <!-- Dynamic Class & Gender Tables -->
       </div>
     </div>
 
@@ -556,7 +547,7 @@
       </div>
 
       <div id="roomCardsContainer">
-        <!-- Dynamic Cards -->
+        <!-- Dynamic Room Cards -->
       </div>
     </div>
 
@@ -690,50 +681,31 @@
       tbody.innerHTML = html;
     }
 
-    /* 
-      নিখুঁত সেকশন ফিল্টারিং লজিক:
-      start_roll থেকে end_roll-এর মধ্যে থাকা শিক্ষার্থীদের খুঁজবে।
-      - যদি সকলে একই সেকশনের হয় -> সেই সেকশনটি দেখাবে (যেমন: A)।
-      - যদি ভিন্ন সেকশনের শিক্ষার্থী পাওয়া যায় -> "ALL" দেখাবে।
-    */
+    /* Dynamic & Precise Section Matcher per Specific Row/Range */
     function getAccurateSections(plan) {
+      if (plan.section && plan.section.trim() !== '' && plan.section.trim().toUpperCase() !== 'ALL') {
+        return plan.section.trim();
+      }
+
       const pClass = String(plan.class_name).trim().toUpperCase();
       const pGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
       const startRoll = parseInt(plan.start_roll);
       const endRoll = parseInt(plan.end_roll);
 
-      // current_students থেকে ওই নির্দিষ্ট ক্লাসের, জেন্ডারের এবং রোল সীমানার মাঝের ছাত্রদের ফিল্টার করা
       const matchedStudents = rawStudents.filter(s => {
         const sClass = String(s.class_name).trim().toUpperCase();
         const sRoll = parseInt(s.roll_no);
         const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
 
         const matchClass = (sClass === pClass);
-        const matchRoll = (!isNaN(sRoll) && sRoll >= startRoll && sRoll <= endRoll);
-        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === '' || pGen === sGen);
+        const matchRoll = (sRoll >= startRoll && sRoll <= endRoll);
+        const matchGen = (pGen === 'ALL' || pGen === 'BOYS & GIRLS' || pGen === sGen);
 
         return matchClass && matchRoll && matchGen;
       });
 
-      // ইউনিক সেকশনের তালিকা তৈরি
-      const foundSections = [...new Set(matchedStudents.map(s => String(s.section || '').trim().toUpperCase()).filter(Boolean))];
-
-      // ১. যদি একই সেকশনের সব শিক্ষার্থী হয়
-      if (foundSections.length === 1) {
-        return foundSections[0];
-      }
-      
-      // ২. যদি একের অধিক সেকশন পাওয়া যায়
-      if (foundSections.length > 1) {
-        return "ALL";
-      }
-
-      // ৩. ডাটাবেসে যদি পূর্বে ম্যানুয়ালি সেকশন সেট করা থাকে বা ম্যাচ না পাওয়া যায়
-      if (plan.section && plan.section.trim() !== '') {
-        return plan.section.trim().toUpperCase();
-      }
-
-      return "ALL";
+      const secs = [...new Set(matchedStudents.map(s => String(s.section || '').trim()).filter(Boolean))].sort();
+      return secs.length > 0 ? secs.join(', ') : 'ALL';
     }
 
     async function searchSeat() {
@@ -788,73 +760,121 @@
       resultCard.scrollIntoView({ behavior: 'smooth' });
     }
 
-    /* ----------------- TAB 2: SECTION BASED VIEW ----------------- */
+    /* ----------------- TAB 2: SECTION & GENDER BASED VIEW ----------------- */
     function renderSectionView() {
       const container = document.getElementById('sectionCardsContainer');
       const selectedCls = document.getElementById('selectSectionClass').value;
       container.innerHTML = '';
 
       let filteredPlans = getFilteredSeatPlans();
-      if (selectedCls) {
-        filteredPlans = filteredPlans.filter(p => String(p.class_name).trim().toUpperCase() === String(selectedCls).trim().toUpperCase());
-      }
+      
+      // Class Filtering
+      const classOrder = ["V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+      let classesToRender = selectedCls ? [selectedCls] : classOrder;
 
-      if (filteredPlans.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">কোনো সিট প্ল্যান পাওয়া যায়নি!</div>';
-        return;
-      }
+      let hasData = false;
 
-      filteredPlans.forEach((plan, idx) => {
-        const planClass = String(plan.class_name).trim().toUpperCase();
-        const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
-        const planGen = plan.gender ? String(plan.gender).trim().toUpperCase() : 'ALL';
-
-        const classStudents = rawStudents.filter(s => {
-          const sClass = String(s.class_name).trim().toUpperCase();
-          const sRoll = parseInt(s.roll_no);
-          const sSec = s.section ? String(s.section).trim().toUpperCase() : '';
-          const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
-
-          const matchClass = (sClass === planClass);
-          const matchRoll = (sRoll >= plan.start_roll && sRoll <= plan.end_roll);
-          const matchSec = (planSec === 'ALL' || planSec === '' || planSec === sSec);
-          const matchGen = (planGen === 'ALL' || planGen === 'BOYS & GIRLS' || planGen === sGen);
-
-          return matchClass && matchRoll && matchSec && matchGen;
-        });
-
-        let rollList = classStudents.map(s => parseInt(s.roll_no)).filter(n => !isNaN(n)).sort((a,b) => a - b);
+      classesToRender.forEach((clsName, cIdx) => {
+        const clsPlans = filteredPlans.filter(p => String(p.class_name).trim().toUpperCase() === clsName.toUpperCase());
         
-        if (rollList.length === 0) {
-          for (let r = plan.start_roll; r <= plan.end_roll; r++) {
-            rollList.push(r);
-          }
-        }
+        if (clsPlans.length === 0) return;
+        hasData = true;
 
-        const displayRolls = rollList.join(', ');
-        const totalCount = rollList.length;
-        const secDisplayName = getAccurateSections(plan);
+        const exams = [...new Set(clsPlans.map(p => p.exam_name || 'N/A'))].join(', ');
 
-        const cardHtml = `
-          <div class="printable-card section-card-list" id="sec-card-${idx}">
-            <div class="card-header-title">
-              <span>🏫 Class: ${plan.class_name} | Section: ${secDisplayName} (${plan.gender || 'BOYS & GIRLS'})</span>
-              <button class="btn-single-print" onclick="printSingleCard('sec-card-${idx}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
+        const genders = ["BOYS", "GIRLS"];
+
+        genders.forEach((gen, gIdx) => {
+          // Filter plans for this gender
+          const genPlans = clsPlans.filter(p => {
+            const pGen = p.gender ? String(p.gender).trim().toUpperCase() : 'ALL';
+            return pGen === gen || pGen === 'ALL' || pGen === 'BOYS & GIRLS';
+          });
+
+          if (genPlans.length === 0) return;
+
+          let rowsHtml = '';
+          let totalGenderCount = 0;
+
+          genPlans.forEach(plan => {
+            const planClass = String(plan.class_name).trim().toUpperCase();
+            const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
+
+            const classStudents = rawStudents.filter(s => {
+              const sClass = String(s.class_name).trim().toUpperCase();
+              const sRoll = parseInt(s.roll_no);
+              const sSec = s.section ? String(s.section).trim().toUpperCase() : '';
+              const sGen = s.gender ? String(s.gender).trim().toUpperCase() : '';
+
+              const matchClass = (sClass === planClass);
+              const matchRoll = (sRoll >= plan.start_roll && sRoll <= plan.end_roll);
+              const matchSec = (planSec === 'ALL' || planSec === '' || planSec === sSec);
+              const matchGen = (gen === sGen || !sGen);
+
+              return matchClass && matchRoll && matchSec && matchGen;
+            });
+
+            let rollList = classStudents.map(s => parseInt(s.roll_no)).filter(n => !isNaN(n)).sort((a,b) => a - b);
+            
+            if (rollList.length === 0) {
+              for (let r = plan.start_roll; r <= plan.end_roll; r++) {
+                rollList.push(r);
+              }
+            }
+
+            const displayRolls = rollList.join(', ');
+            const count = rollList.length;
+            totalGenderCount += count;
+            const secDisplayName = getAccurateSections(plan);
+
+            rowsHtml += `
+              <tr>
+                <td><b style="color: #0284c7;">${plan.room_no}</b></td>
+                <td><b>${secDisplayName}</b></td>
+                <td><b>${plan.start_roll} - ${plan.end_roll}</b></td>
+                <td><b>${count} জন</b></td>
+                <td class="roll-cell">${displayRolls}</td>
+              </tr>
+            `;
+          });
+
+          const cardId = `sec-card-${cIdx}-${gIdx}`;
+          const cardHtml = `
+            <div class="printable-card section-card-list" id="${cardId}">
+              <div class="card-header-title">
+                <span>🏫 Class: ${clsName} (${gen})</span>
+                <button class="btn-single-print" onclick="printSingleCard('${cardId}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
+              </div>
+              <div class="card-meta-grid">
+                <div class="card-meta-item">Exam: <strong>${exams}</strong></div>
+                <div class="card-meta-item">Class & Gender: <strong>Class ${clsName} (${gen})</strong></div>
+                <div class="card-meta-item">মোট পরীক্ষার্থী: <strong>${totalGenderCount} জন</strong></div>
+              </div>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>পরীক্ষার রুম নম্বর</th>
+                      <th>সেকশন</th>
+                      <th>রোল রেঞ্জ</th>
+                      <th>মোট পরীক্ষার্থী</th>
+                      <th>পরীক্ষার্থীদের নির্দিষ্ট রোল নম্বরসমূহ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rowsHtml}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="card-meta-grid">
-              <div class="card-meta-item">Exam: <strong>${plan.exam_name || 'N/A'}</strong></div>
-              <div class="card-meta-item">পরীক্ষার রুম নম্বর: <strong>${plan.room_no}</strong></div>
-              <div class="card-meta-item">রোল রেঞ্জ: <strong>${plan.start_roll} - ${plan.end_roll}</strong></div>
-              <div class="card-meta-item">মোট পরীক্ষার্থী: <strong>${totalCount} জন</strong></div>
-            </div>
-            <div style="font-weight:bold; font-size:15px;">পরীক্ষার্থীদের নির্দিষ্ট রোল নম্বরসমূহ:</div>
-            <div class="roll-list-box">
-              ${displayRolls}
-            </div>
-          </div>
-        `;
-        container.innerHTML += cardHtml;
+          `;
+          container.innerHTML += cardHtml;
+        });
       });
+
+      if (!hasData) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">কোনো সিট প্ল্যান পাওয়া যায়নি!</div>';
+      }
     }
 
     /* ----------------- TAB 3: ROOM BASED VIEW ----------------- */
