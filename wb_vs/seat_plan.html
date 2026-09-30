@@ -37,7 +37,7 @@
       border: 2px solid #ffffff;
     }
     
-    /* Header */
+    /* Global Header */
     .header { 
       text-align: center; 
       border-bottom: 3px dashed #0284c7; 
@@ -232,23 +232,43 @@
 
     .room-highlight strong { font-size: 22px; color: #15803d; }
 
-    /* Printable Card */
+    /* Printable Card Structure */
     .printable-card {
       background: #ffffff;
       border: 2px solid #0f172a;
       border-radius: 12px;
       padding: 16px;
-      margin-bottom: 20px;
-      page-break-inside: avoid;
+      margin-bottom: 25px;
+    }
+
+    /* Embedded Print Header Inside Each Card */
+    .card-print-header {
+      display: none;
+      text-align: center;
+      border-bottom: 2px solid #000;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }
+
+    .card-print-header h2 {
+      margin: 0;
+      font-size: 22px;
+      color: #000;
+    }
+
+    .card-print-header h3 {
+      margin: 3px 0 0 0;
+      font-size: 16px;
+      color: #000;
     }
 
     .card-header-title {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: bold;
       color: #0f172a;
       border-bottom: 2px solid #0f172a;
       padding-bottom: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -256,21 +276,21 @@
 
     .card-meta-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
-      margin-bottom: 12px;
-      font-size: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
     }
 
     .card-meta-item {
       background: #f8fafc;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 6px;
       border: 1px solid #cbd5e1;
     }
 
     .card-meta-item strong {
-      font-size: 17px;
+      font-size: 15px;
       color: #0f172a;
     }
 
@@ -284,38 +304,47 @@
       cursor: pointer;
     }
 
-    /* Table Styles */
+    /* Table Column Sizing Adjustments */
     .table-responsive { 
       overflow-x: auto; 
       border-radius: 10px;
-      border: 2px solid #0284c7;
+      border: 1px solid #0284c7;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     table { 
       width: 100%; 
       border-collapse: collapse; 
       background: #fff;
-      white-space: nowrap;
+      table-layout: fixed; /* Column width control */
     }
 
     th, td { 
-      padding: 10px 8px; 
+      padding: 8px 6px; 
       text-align: center; 
       border: 1px solid #cbd5e1; 
-      font-size: 15px; 
+      font-size: 14px; 
+      word-wrap: break-word;
     }
 
-    th { background-color: #0284c7; color: white; font-size: 16px; }
+    th { background-color: #0284c7; color: white; font-size: 15px; }
+
+    /* Custom Column Width Allocation */
+    .col-room { width: 12%; }
+    .col-sec { width: 10%; }
+    .col-range { width: 15%; }
+    .col-total { width: 13%; }
+    .col-rolls { width: 50%; }
 
     .roll-cell {
       white-space: normal;
       word-break: break-word;
-      max-width: 250px;
       text-align: left;
-      font-size: 14px;
-      line-height: 1.4;
+      font-size: 15px !important; /* Larger roll text */
+      font-weight: 600;
+      line-height: 1.5;
+      padding: 8px 10px !important;
     }
 
     @media (min-width: 600px) {
@@ -328,9 +357,12 @@
       .exam-selector-box label { min-width: 200px; }
     }
 
-    /* PRINT STYLES */
+    /* STRICT PRINT STYLES */
     @media print {
-      @page { size: A4 portrait; margin: 10mm; }
+      @page { 
+        size: A4 portrait; 
+        margin: 8mm 10mm; 
+      }
       
       html, body { 
         background: white !important; 
@@ -338,6 +370,7 @@
         margin: 0 !important; 
         color: #000 !important; 
         min-height: auto !important;
+        height: auto !important;
       }
       
       .container { 
@@ -345,10 +378,12 @@
         padding: 0 !important; 
         margin: 0 !important;
         width: 100% !important; 
+        max-width: 100% !important;
         border: none !important; 
       }
 
-      .filter-section, .btn-action, .notice-box, .result-card,
+      /* Hide non-printable elements */
+      .header, .filter-section, .btn-action, .notice-box, .result-card,
       .tab-container, .btn-single-print, .exam-selector-box { 
         display: none !important; 
       }
@@ -356,57 +391,99 @@
       .tab-content:not(.active) { display: none !important; }
       .printable-card.print-hide { display: none !important; }
 
-      .header {
-        border-bottom: 2px solid #000 !important;
-        padding-bottom: 8px !important;
-        margin-bottom: 14px !important;
+      /* Page Break for Boys/Girls in Section View */
+      .section-card-list {
+        page-break-before: always !important;
+        break-before: page !important;
+        page-break-inside: auto !important;
+        break-inside: auto !important;
       }
 
-      .school-name { color: #000 !important; font-size: 26px !important; }
-      .page-title { color: #000 !important; font-size: 20px !important; }
+      /* First card shouldn't trigger unnecessary blank page at the start */
+      .section-card-list:first-child {
+        page-break-before: avoid !important;
+        break-before: avoid !important;
+      }
+
+      /* Show individual Header in each printed card */
+      .card-print-header {
+        display: block !important;
+      }
 
       .printable-card {
         border: 2px solid #000 !important;
-        margin-bottom: 20px !important;
-        page-break-inside: avoid !important;
+        margin-bottom: 0 !important;
+        padding: 10px !important;
+        box-shadow: none !important;
       }
 
       .card-header-title {
-        font-size: 20px !important;
-        border-bottom: 2px solid #000 !important;
+        font-size: 18px !important;
+        border-bottom: 1.5px solid #000 !important;
         color: #000 !important;
+        margin-bottom: 6px !important;
       }
 
-      .card-meta-grid { font-size: 16px !important; }
+      .card-meta-grid { 
+        font-size: 13px !important; 
+        margin-bottom: 8px !important;
+        gap: 6px !important;
+      }
       .card-meta-item {
         border: 1px solid #000 !important;
         background: #fff !important;
+        padding: 4px 8px !important;
       }
-      .card-meta-item strong { font-size: 18px !important; color: #000 !important; }
+      .card-meta-item strong { font-size: 15px !important; color: #000 !important; }
 
-      .table-responsive { border: none !important; overflow: visible !important; }
+      .table-responsive { 
+        border: none !important; 
+        overflow: visible !important; 
+        margin-top: 4px !important;
+      }
 
       table { 
         border: 2px solid #000 !important; 
         width: 100% !important; 
-        white-space: normal !important;
+        table-layout: fixed !important;
       }
+
+      tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
       th, td { 
         border: 1px solid #000 !important; 
         color: #000 !important; 
-        padding: 8px 6px !important; 
-        font-size: 15px !important;
+        padding: 6px 4px !important; 
+        font-size: 13px !important;
         font-weight: bold !important;
       }
-      th { background-color: #eee !important; font-size: 16px !important; }
-      .roll-cell { font-size: 14px !important; }
+      
+      th { background-color: #f1f5f9 !important; font-size: 14px !important; }
+
+      /* Width Control in Print */
+      .col-room { width: 12% !important; }
+      .col-sec { width: 10% !important; }
+      .col-range { width: 15% !important; }
+      .col-total { width: 12% !important; }
+      .col-rolls { width: 51% !important; }
+
+      .roll-cell { 
+        font-size: 15px !important; 
+        line-height: 1.4 !important;
+        font-weight: bold !important;
+        letter-spacing: 0.3px;
+        text-align: left !important;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- Header -->
+    <!-- Main Top Header (Screen Only) -->
     <div class="header">
       <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
       <h2 class="page-title">📌 পরীক্ষার সিট প্ল্যান: <span id="sessionYear">....</span></h2>
@@ -488,12 +565,12 @@
         <table>
           <thead>
             <tr>
-              <th>Exam Name</th>
-              <th>Class</th>
-              <th>Section</th>
-              <th>Gender</th>
-              <th>Roll Range</th>
-              <th>Exam Room</th>
+              <th style="width:20%;">Exam Name</th>
+              <th style="width:12%;">Class</th>
+              <th style="width:12%;">Section</th>
+              <th style="width:18%;">Gender</th>
+              <th style="width:20%;">Roll Range</th>
+              <th style="width:18%;">Exam Room</th>
             </tr>
           </thead>
           <tbody id="seatTableBody">
@@ -560,6 +637,7 @@
     let rawSeatPlans = [];
     let rawStudents = [];
     let availableExams = [];
+    let currentSessionYear = "2026";
 
     window.onload = async function() {
       await fetchAllData();
@@ -595,10 +673,11 @@
         rawStudents = await stuRes.json();
 
         if (rawStudents && rawStudents.length > 0 && rawStudents[0].session) {
-          document.getElementById('sessionYear').innerText = rawStudents[0].session;
+          currentSessionYear = rawStudents[0].session;
         } else {
-          document.getElementById('sessionYear').innerText = new Date().getFullYear();
+          currentSessionYear = new Date().getFullYear().toString();
         }
+        document.getElementById('sessionYear').innerText = currentSessionYear;
 
         populateExamDropdown();
         populateRoomDropdown();
@@ -611,7 +690,6 @@
       } catch(e) { console.error("Data loading error:", e); }
     }
 
-    /* Universal Exam Dropdown Population */
     function populateExamDropdown() {
       const select = document.getElementById('selectUniversalExam');
       availableExams = [...new Set(rawSeatPlans.map(p => String(p.exam_name || '').trim()).filter(Boolean))];
@@ -632,7 +710,6 @@
       renderRoomView();
     }
 
-    /* Helper: Filter Seat Plans by Universal Exam Selector */
     function getFilteredSeatPlans() {
       const selectedExam = document.getElementById('selectUniversalExam').value;
       if (selectedExam === 'ALL' || !selectedExam) {
@@ -681,7 +758,6 @@
       tbody.innerHTML = html;
     }
 
-    /* Dynamic & Precise Section Matcher per Specific Row/Range */
     function getAccurateSections(plan) {
       if (plan.section && plan.section.trim() !== '' && plan.section.trim().toUpperCase() !== 'ALL') {
         return plan.section.trim();
@@ -768,7 +844,6 @@
 
       let filteredPlans = getFilteredSeatPlans();
       
-      // Class Filtering
       const classOrder = ["V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
       let classesToRender = selectedCls ? [selectedCls] : classOrder;
 
@@ -778,21 +853,19 @@
         const clsPlans = filteredPlans.filter(p => String(p.class_name).trim().toUpperCase() === clsName.toUpperCase());
         
         if (clsPlans.length === 0) return;
-        hasData = true;
-
-        const exams = [...new Set(clsPlans.map(p => p.exam_name || 'N/A'))].join(', ');
 
         const genders = ["BOYS", "GIRLS"];
 
         genders.forEach((gen, gIdx) => {
-          // Filter plans for this gender
           const genPlans = clsPlans.filter(p => {
             const pGen = p.gender ? String(p.gender).trim().toUpperCase() : 'ALL';
             return pGen === gen || pGen === 'ALL' || pGen === 'BOYS & GIRLS';
           });
 
           if (genPlans.length === 0) return;
+          hasData = true;
 
+          const exams = [...new Set(genPlans.map(p => p.exam_name || 'N/A'))].join(', ');
           let rowsHtml = '';
           let totalGenderCount = 0;
 
@@ -831,7 +904,7 @@
               <tr>
                 <td><b style="color: #0284c7;">${plan.room_no}</b></td>
                 <td><b>${secDisplayName}</b></td>
-                <td><b>${plan.start_roll} - ${plan.end_roll}</b></td>
+                <td><b>${plan.start_roll}-${plan.end_roll}</b></td>
                 <td><b>${count} জন</b></td>
                 <td class="roll-cell">${displayRolls}</td>
               </tr>
@@ -841,6 +914,12 @@
           const cardId = `sec-card-${cIdx}-${gIdx}`;
           const cardHtml = `
             <div class="printable-card section-card-list" id="${cardId}">
+              <!-- Print Header Included inside each Page/Card -->
+              <div class="card-print-header">
+                <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
+                <h3>পরীক্ষার সিট প্ল্যান: ${currentSessionYear}</h3>
+              </div>
+
               <div class="card-header-title">
                 <span>🏫 Class: ${clsName} (${gen})</span>
                 <button class="btn-single-print" onclick="printSingleCard('${cardId}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
@@ -854,11 +933,11 @@
                 <table>
                   <thead>
                     <tr>
-                      <th>পরীক্ষার রুম নম্বর</th>
-                      <th>সেকশন</th>
-                      <th>রোল রেঞ্জ</th>
-                      <th>মোট পরীক্ষার্থী</th>
-                      <th>পরীক্ষার্থীদের নির্দিষ্ট রোল নম্বরসমূহ</th>
+                      <th class="col-room">পরীক্ষার রুম নম্বর</th>
+                      <th class="col-sec">সেকশন</th>
+                      <th class="col-range">রোল রেঞ্জ</th>
+                      <th class="col-total">মোট</th>
+                      <th class="col-rolls">পরীক্ষার্থীদের নির্দিষ্ট রোল নম্বরসমূহ</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -930,6 +1009,11 @@
 
         const cardHtml = `
           <div class="printable-card room-card-list" id="room-card-${idx}">
+            <div class="card-print-header">
+              <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
+              <h3>পরীক্ষার সিট প্ল্যান: ${currentSessionYear}</h3>
+            </div>
+
             <div class="card-header-title">
               <span>🚪 পরীক্ষার রুম নম্বর: ${roomNo}</span>
               <button class="btn-single-print" onclick="printSingleCard('room-card-${idx}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
