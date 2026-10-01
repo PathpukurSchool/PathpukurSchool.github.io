@@ -575,7 +575,6 @@
         <table>
           <thead>
             <tr>
-              <th style="width:20%;">Exam Name</th>
               <th style="width:12%;">Class</th>
               <th style="width:12%;">Section</th>
               <th style="width:18%;">Gender</th>
@@ -584,7 +583,7 @@
             </tr>
           </thead>
           <tbody id="seatTableBody">
-            <tr><td colspan="6">শ্রেণী নির্বাচন করুন...</td></tr>
+            <tr><td colspan="5">শ্রেণী নির্বাচন করুন...</td></tr>
           </tbody>
         </table>
       </div>
@@ -746,7 +745,7 @@
         populateRoomDropdowns();
         
         const currentCls = document.getElementById('selectClass').value;
-        if(currentCls) loadClassSeatPlan(currentCls);
+        loadClassSeatPlan(currentCls);
         
         renderSectionView();
         renderRoomView();
@@ -767,7 +766,7 @@
     function onExamChange() {
       document.getElementById('resultCard').style.display = 'none';
       const currentCls = document.getElementById('selectClass').value;
-      if (currentCls) loadClassSeatPlan(currentCls);
+      loadClassSeatPlan(currentCls);
       
       populateRoomDropdowns();
       renderSectionView();
@@ -809,34 +808,39 @@
     document.getElementById('selectClass').addEventListener('change', function() {
       const cls = this.value;
       document.getElementById('resultCard').style.display = 'none';
-      if(cls) loadClassSeatPlan(cls);
+      loadClassSeatPlan(cls);
     });
 
     async function loadClassSeatPlan(cls) {
       const tbody = document.getElementById('seatTableBody');
       const statusBadge = document.getElementById('statusBadge');
       
-      tbody.innerHTML = '<tr><td colspan="6"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>';
 
       const activePlans = getFilteredSeatPlans();
-      const targetClsNorm = normalizeClassName(cls);
+      const selectedExam = document.getElementById('selectUniversalExam').value;
+      const examTitle = (selectedExam && selectedExam !== 'ALL') ? selectedExam : 'সকল পরীক্ষা';
 
-      const plans = activePlans.filter(p => normalizeClassName(p.class_name) === targetClsNorm);
+      let plans = activePlans;
+
+      if (cls) {
+        const targetClsNorm = normalizeClassName(cls);
+        plans = activePlans.filter(p => normalizeClassName(p.class_name) === targetClsNorm);
+      }
 
       if (!plans || plans.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
-        statusBadge.innerText = `Class: ${cls} | কোনো রেকর্ড নেই`;
+        tbody.innerHTML = '<tr><td colspan="5">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
+        statusBadge.innerText = `Exam: ${examTitle} | Class: ${cls || 'All'} | কোনো রেকর্ড নেই`;
         return;
       }
 
-      statusBadge.innerHTML = `Class: <b>${cls}</b> - এর সিট প্ল্যান`;
+      statusBadge.innerHTML = `Exam: <b style="color:#7e22ce;">${examTitle}</b> | Class: <b>${cls ? cls : 'সকল ক্লাস'}</b> - এর সিট প্ল্যান`;
       
       let html = '';
       for (const p of plans) {
         const secText = getAccurateSections(p);
         html += `
           <tr>
-            <td><b style="color: #7e22ce;">${p.exam_name || 'N/A'}</b></td>
             <td><b>${normalizeClassName(p.class_name)}</b></td>
             <td><b>${secText}</b></td>
             <td>${p.gender || 'BOYS & GIRLS'}</td>
