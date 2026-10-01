@@ -374,10 +374,10 @@
       }
 
       /* Attendance Tab Printed as Landscape */
-      body.print-landscape @page {
-        size: A4 landscape;
-        margin: 6mm 8mm;
-      }
+    body.print-landscape @page {
+     size: A4 landscape !important;
+     margin: 6mm 8mm !important;
+   }
       
       html, body { 
         background: white !important; 
@@ -1352,28 +1352,36 @@
     }
 
     function printSingleLandscapeCard(cardId) {
-      document.body.classList.add('print-landscape');
-      document.querySelectorAll('.printable-card').forEach(c => c.classList.add('print-hide'));
-      const target = document.getElementById(cardId);
-      if (target) target.classList.remove('print-hide');
-      
-      window.print();
-      
+  document.body.classList.add('print-landscape');
+  document.querySelectorAll('.printable-card').forEach(c => c.classList.add('print-hide'));
+  const target = document.getElementById(cardId);
+  if (target) target.classList.remove('print-hide');
+  
+  setTimeout(() => {
+    window.print();
+    setTimeout(() => {
       document.body.classList.remove('print-landscape');
       document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
-    }
+    }, 500);
+  }, 100);
+}
+
+function printLandscapeBatch() {
+  document.body.classList.add('print-landscape');
+  document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
+  
+  setTimeout(() => {
+    window.print();
+    setTimeout(() => {
+      document.body.classList.remove('print-landscape');
+    }, 500);
+  }, 100);
+}
 
     function printBatch() {
       document.body.classList.remove('print-landscape');
       document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
       window.print();
-    }
-
-    function printLandscapeBatch() {
-      document.body.classList.add('print-landscape');
-      document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
-      window.print();
-      document.body.classList.remove('print-landscape');
     }
   </script>
 </body>
