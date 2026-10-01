@@ -571,22 +571,43 @@
         </button>
       </div>
 
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th style="width:12%;">Class</th>
-              <th style="width:12%;">Section</th>
-              <th style="width:18%;">Gender</th>
-              <th style="width:20%;">Roll Range</th>
-              <th style="width:18%;">Exam Room</th>
-            </tr>
-          </thead>
-          <tbody id="seatTableBody">
-            <tr><td colspan="5">শ্রেণী নির্বাচন করুন...</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="printable-card">
+  <!-- এই প্রিন্ট হেডারটি শুধু প্রিন্ট করার সময় দৃশ্যমান হবে -->
+  <div class="card-print-header">
+    <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
+    <h3>পরীক্ষার সিট প্ল্যান ওভারভিউ (<span class="print-session-year"></span>)</h3>
+  </div>
+
+  <div class="card-header-title">
+    <span>📋 ওভারভিউ ও সার্চ তালিকা</span>
+  </div>
+
+  <div class="card-meta-grid">
+    <div class="card-meta-item">
+      সেশন: <strong class="print-session-year">...</strong>
+    </div>
+    <div class="card-meta-item">
+      পরীক্ষা: <strong id="printOverviewExam">সকল পরীক্ষা</strong>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:12%;">Class</th>
+          <th style="width:12%;">Section</th>
+          <th style="width:18%;">Gender</th>
+          <th style="width:20%;">Roll Range</th>
+          <th style="width:18%;">Exam Room</th>
+        </tr>
+      </thead>
+      <tbody id="seatTableBody">
+        <tr><td colspan="5">শ্রেণী নির্বাচন করুন...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
     </div>
 
     <!-- TAB 2: SECTION & GENDER BASED LIST -->
@@ -740,6 +761,7 @@
           currentSessionYear = new Date().getFullYear().toString();
         }
         document.getElementById('sessionYear').innerText = currentSessionYear;
+        document.querySelectorAll('.print-session-year').forEach(el => el.innerText = currentSessionYear);
 
         populateExamDropdown();
         populateRoomDropdowns();
@@ -835,6 +857,11 @@
       }
 
       statusBadge.innerHTML = `Exam: <b style="color:#7e22ce;">${examTitle}</b> | Class: <b>${cls ? cls : 'সকল ক্লাস'}</b> - এর সিট প্ল্যান`;
+      // প্রিন্ট কার্ডের পরীক্ষার নাম আপডেট করার জন্য
+      const overviewExamEl = document.getElementById('printOverviewExam');
+       if (overviewExamEl) {
+         overviewExamEl.innerText = examTitle;
+      }
       
       let html = '';
       for (const p of plans) {
