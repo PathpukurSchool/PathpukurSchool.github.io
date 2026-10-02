@@ -195,9 +195,7 @@
             color: var(--secondary-color);
         }
 
-        /* ===================================================
-           PRINT STYLES (A4 Page Optimization & Large Text)
-           =================================================== */
+        /* PRINT STYLES */
         @media print {
             @page {
                 size: A4 portrait;
@@ -246,7 +244,7 @@
             }
 
             th, td {
-                border: 2px solid #000 !important; /* স্পষ্ট দেওয়াল বা ওয়ালে লাগানোর জন্য মোটা বর্ডার */
+                border: 2px solid #000 !important;
                 color: #000;
             }
 
@@ -256,15 +254,12 @@
                 color-adjust: exact;
             }
 
-            /* ফন্ট সাইজ অ্যাডজাস্টমেন্ট (ওয়াল আপ বা দূর থেকে পড়ার সুবিধার জন্য) */
-            /* ডিফল্ট/সব ডাটা থাকলে মাঝারি ফন্ট */
             .print-size-normal th, .print-size-normal td {
                 font-size: 14pt;
                 padding: 10px;
                 font-weight: 600;
             }
 
-            /* নির্দিষ্ট ফিল্টার করা থাকলে কম ডাটার জন্য বড় ফন্ট */
             .print-size-large th, .print-size-large td {
                 font-size: 18pt;
                 padding: 16px;
@@ -272,7 +267,6 @@
             }
         }
 
-        /* Responsive Layout for Small Screens */
         @media (max-width: 600px) {
             .school-name { font-size: 1.4rem; }
             .page-heading { font-size: 1.1rem; }
@@ -283,21 +277,21 @@
 <body>
 
 <div class="container">
-    <!-- 1 & 2. Header -->
+    <!-- Header -->
     <header>
         <div class="school-name"><i class="fa-solid fa-school"></i> Pathpukur High School (HS)</div>
         <div class="page-heading" id="dynamicHeader">Exam Seat Plan: Session <span id="sessionYear">2026</span></div>
     </header>
 
-    <!-- 3. Instructions Box -->
+    <!-- Instructions Box -->
     <div class="instructions-box">
         <h3><i class="fa-solid fa-circle-info"></i> নির্দেশিকা (Instructions):</h3>
         <p>১. ফিল্টার অংশ থেকে <strong>Exam Name</strong>, <strong>Room No</strong>, অথবা <strong>Class</strong> নির্বাচন করে নির্দিষ্ট পরীক্ষার সিট প্ল্যান দেখা যাবে।</p>
-        <p>২. নির্বাচিত ফিল্টার অনুযায়ী নিচের টেবিলের ফিল্টার করা কলামটি গোপন (Hide) হয়ে যাবে এবং পেজ হেডিং পরিবর্তিত হবে।</p>
-        <p>৩. দূর থেকে দেখার উপযোগী বড় লেখা এবং ফন্ট সাইজ সহ সম্পূর্ণ টেবিলটি প্রিন্ট করতে <strong>Print Seat Plan</strong> বোতামে ক্লিক করুন।</p>
+        <p>২. নির্বাচিত ফিল্টার অনুযায়ী নিচের টেবিলের ফিল্টার করা কলামটি গোপন (Hide) হয়ে যাবে এবং পেজ হেডিং পরিবর্তিত হবে।</p>
+        <p>৩. দূর থেকে দেখার উপযোগী বড় লেখা এবং ফন্ট সাইজ সহ সম্পূর্ণ টেবিলটি প্রিন্ট করতে <strong>Print Seat Plan</strong> বোতামে ক্লিক করুন।</p>
     </div>
 
-    <!-- 4, 5, 6. Dropdowns -->
+    <!-- Dropdowns -->
     <div class="filter-section">
         <div class="form-group">
             <label for="examSelect"><i class="fa-solid fa-file-pen"></i> Exam:</label>
@@ -321,14 +315,14 @@
         </div>
     </div>
 
-    <!-- 7. Print Button -->
+    <!-- Print Button -->
     <div class="actions-bar">
         <button class="btn-print" onclick="window.print()">
             <i class="fa-solid fa-print"></i> Print Seat Plan
         </button>
     </div>
 
-    <!-- 8. Table -->
+    <!-- Table -->
     <div class="table-responsive">
         <table id="seatPlanTable">
             <thead>
@@ -352,13 +346,13 @@
 
 <script>
     // ==========================================
-    // 1. SUPABASE CONFIGURATION
+    // 1. SUPABASE CONFIGURATION (CORRECTED)
     // ==========================================
-    // আপনার Supabase Project URL এবং Anon Key দিয়ে নিচে পরিবর্তন করুন
-    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+    const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+    
+    // ভ্যারিয়েবলের নাম পরিবর্তন করা হয়েছে যেন গ্লোবাল supabase অবজেক্টের সাথে কনফ্লিক্ট না করে
+    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
     // Global State
     let rawSeatPlanData = [];
@@ -366,6 +360,17 @@
 
     // Initialize Page
     document.addEventListener('DOMContentLoaded', () => {
+        if (!supabaseClient) {
+            console.error('Supabase library loaded incorrectly.');
+            document.getElementById('tableBody').innerHTML = `
+                <tr>
+                    <td colspan="6" class="no-data">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Supabase লাইব্রেরি সঠিকভাবে লোড হয়নি!
+                    </td>
+                </tr>`;
+            return;
+        }
+
         fetchData();
         
         // Add Event Listeners to Dropdowns
@@ -380,14 +385,14 @@
     async function fetchData() {
         try {
             // Fetch seat_plan table data
-            const { data: seatPlan, error: spError } = await supabase
+            const { data: seatPlan, error: spError } = await supabaseClient
                 .from('seat_plan')
                 .select('*');
 
             if (spError) throw spError;
 
             // Fetch current_students table data
-            const { data: students, error: stError } = await supabase
+            const { data: students, error: stError } = await supabaseClient
                 .from('current_students')
                 .select('*');
 
@@ -416,17 +421,22 @@
     }
 
     // ==========================================
-    // 3. POPULATE DROPDOWNS (Preserving Order)
+    // 3. POPULATE DROPDOWNS
     // ==========================================
     function populateDropdowns(data) {
         const examSelect = document.getElementById('examSelect');
         const roomSelect = document.getElementById('roomSelect');
         const classSelect = document.getElementById('classSelect');
 
-        // Extract unique values while preserving original sequence in table
+        // Extract unique values while preserving sequence
         const uniqueExams = [...new Set(data.map(item => item.exam_name).filter(Boolean))];
         const uniqueRooms = [...new Set(data.map(item => item.room_no).filter(Boolean))];
         const uniqueClasses = [...new Set(data.map(item => item.class_name).filter(Boolean))];
+
+        // Reset Options
+        examSelect.innerHTML = '<option value="ALL">সকল পরীক্ষা (All Exams)</option>';
+        roomSelect.innerHTML = '<option value="ALL">সকল রুম (All Rooms)</option>';
+        classSelect.innerHTML = '<option value="ALL">সকল ক্লাস (All Classes)</option>';
 
         // Populate Exam Dropdown
         uniqueExams.forEach(exam => {
@@ -461,7 +471,7 @@
         const selectedRoom = document.getElementById('roomSelect').value;
         const selectedClass = document.getElementById('classSelect').value;
 
-        // Filter seat_plan preserving original order
+        // Filter seat_plan
         let filteredData = rawSeatPlanData.filter(item => {
             const matchExam = (selectedExam === 'ALL' || item.exam_name === selectedExam);
             const matchRoom = (selectedRoom === 'ALL' || String(item.room_no) === selectedRoom);
@@ -469,16 +479,9 @@
             return matchExam && matchRoom && matchClass;
         });
 
-        // Update Page Heading Dynamically
         updateHeader(selectedExam, selectedRoom, selectedClass);
-
-        // Hide/Show Table Columns based on filter selection
         toggleTableColumns(selectedRoom, selectedClass);
-
-        // Adjust Font Sizes for Printing
         adjustPrintFontSize(filteredData.length);
-
-        // Render Table Body
         renderTable(filteredData);
     }
 
@@ -508,7 +511,6 @@
         const table = document.getElementById('seatPlanTable');
         table.classList.remove('print-size-normal', 'print-size-large');
 
-        // Specific room selected or fewer rows -> Large Font for Wall Display
         if (dataCount <= 6) {
             table.classList.add('print-size-large');
         } else {
@@ -527,7 +529,7 @@
             tbody.innerHTML = `
                 <tr>
                     <td colspan="6" class="no-data">
-                        <i class="fa-solid fa-circle-exclamation"></i> নির্বাচিত ফিল্টার অনুযায়ী কোনো সিট প্ল্যান তথ্য পাওয়া যায়নি!
+                        <i class="fa-solid fa-circle-exclamation"></i> নির্বাচিত ফিল্টার অনুযায়ী কোনো সিট প্ল্যান তথ্য পাওয়া যায়নি!
                     </td>
                 </tr>`;
             return;
@@ -537,15 +539,15 @@
         const selectedClass = document.getElementById('classSelect').value;
 
         data.forEach(item => {
-            // Process Student Details using `current_students` table
+            // Match with current_students table
             const matchedStudents = studentsData.filter(st => 
                 st.class_name === item.class_name &&
                 st.gender?.toLowerCase() === item.gender?.toLowerCase() &&
-                st.roll_no >= item.start_roll &&
-                st.roll_no <= item.end_roll
+                Number(st.roll_no) >= Number(item.start_roll) &&
+                Number(st.roll_no) <= Number(item.end_roll)
             );
 
-            // Extract Unique Sections from matched students
+            // Extract Unique Sections
             const sections = [...new Set(matchedStudents.map(s => s.section).filter(Boolean))].join(', ') || 'N/A';
             const totalStudents = matchedStudents.length > 0 ? matchedStudents.length : (item.end_roll - item.start_roll + 1);
 
