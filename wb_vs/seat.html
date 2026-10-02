@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    /* Global & Reset Styles */
+    /* Global Styles */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -74,7 +74,7 @@
       gap: 8px;
     }
 
-    /* Controls / Dropdowns Area */
+    /* Controls Panel */
     .controls-panel {
       display: flex;
       flex-wrap: wrap;
@@ -89,7 +89,7 @@
 
     .control-group {
       flex: 1;
-      min-width: 200px;
+      min-width: 180px;
     }
 
     .control-group label {
@@ -108,32 +108,41 @@
       font-size: 15px;
       background-color: #fff;
       outline: none;
-      transition: border-color 0.2s;
     }
 
     .control-group select:focus {
       border-color: #0056b3;
     }
 
-    .btn-print {
-      background-color: #28a745;
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
       color: white;
       border: none;
-      padding: 11px 22px;
+      padding: 10px 16px;
       border-radius: 5px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: background-color 0.2s;
       height: 42px;
     }
 
-    .btn-print:hover {
-      background-color: #218838;
-    }
+    .btn-print { background-color: #28a745; }
+    .btn-print:hover { background-color: #218838; }
+
+    .btn-batch-room { background-color: #17a2b8; }
+    .btn-batch-room:hover { background-color: #138496; }
+
+    .btn-batch-class { background-color: #6f42c1; }
+    .btn-batch-class:hover { background-color: #5a32a3; }
 
     /* Table Styles */
     .table-responsive {
@@ -164,22 +173,26 @@
       background-color: #f9f9f9;
     }
 
-    .no-data {
+    .message-box {
       text-align: center;
       padding: 30px;
-      color: #d9534f;
       font-weight: bold;
       font-size: 16px;
     }
 
-    /* Hidden Utility Classes */
+    .msg-warning { color: #d9534f; }
+    .msg-info { color: #0056b3; }
+
     .hide-column {
       display: none !important;
     }
 
-    /* ===================================================
-       PRINT STYLES (A4 Optimizations & Dynamic Display)
-       =================================================== */
+    /* Batch Print View Container (Hidden in Web View) */
+    #batchPrintContainer {
+      display: none;
+    }
+
+    /* PRINT STYLES */
     @media print {
       @page {
         size: A4 portrait;
@@ -201,12 +214,10 @@
         margin: 0;
       }
 
-      /* Hide non-printable elements */
       .instruction-box, .controls-panel {
         display: none !important;
       }
 
-      /* Printable Header */
       .header {
         margin-bottom: 15px;
         border-bottom: 3px solid #000;
@@ -242,34 +253,32 @@
         font-weight: 900;
       }
 
-      /* High Visibility for Wall Display */
       td {
         font-weight: 700;
       }
 
-      /* DYNAMIC FONT SIZING BASED ON FILTER DENSITY */
-      /* Full/Default view (Smaller Font) */
-      body.print-density-high table {
-        font-size: 11pt;
-      }
-      body.print-density-high th, body.print-density-high td {
-        padding: 6px 4px;
+      /* Font Density Adjustments */
+      body.print-density-high table { font-size: 11pt; }
+      body.print-density-high th, body.print-density-high td { padding: 6px 4px; }
+
+      body.print-density-medium table { font-size: 15pt; }
+      body.print-density-medium th, body.print-density-medium td { padding: 12px 8px; }
+
+      body.print-density-low table { font-size: 20pt; }
+      body.print-density-low th, body.print-density-low td { padding: 18px 10px; }
+
+      /* Page Break for Batch Print */
+      .page-break {
+        page-break-after: always;
+        break-after: page;
       }
 
-      /* Single/Double Filter view (Medium Font) */
-      body.print-density-medium table {
-        font-size: 15pt;
-      }
-      body.print-density-medium th, body.print-density-medium td {
-        padding: 12px 8px;
+      body.batch-printing .container {
+        display: none !important;
       }
 
-      /* Specific Room/Class Filtered view (Very Large Font for Wall Reading) */
-      body.print-density-low table {
-        font-size: 20pt;
-      }
-      body.print-density-low th, body.print-density-low td {
-        padding: 18px 10px;
+      body.batch-printing #batchPrintContainer {
+        display: block !important;
       }
     }
   </style>
@@ -277,85 +286,100 @@
 <body>
 
   <div class="container">
-    <!-- Header Section -->
+    <!-- Header -->
     <header class="header">
-      <h1><i class="fa-solid => fa-school"></i> Pathpukur High School (HS)</h1>
-      <h2 id="pageHeading"><i class="fa-solid fa-clipboard-list"></i> Exam Seat Plan: <span id="sessionYear">Loading...</span></h2>
+      <h1>Pathpukur High School (HS)</h1>
+      <h2 id="pageHeading">Exam Seat Plan: <span id="sessionYear">Loading...</span></h2>
     </header>
 
     <!-- Instruction Box -->
     <div class="instruction-box">
       <h3><i class="fa-solid fa-circle-info"></i> নির্দেশিকা (Instructions):</h3>
-      <p>১. নিচের ড্রপডাউন থেকে নির্দিষ্ট <b>Exam</b>, <b>Room No</b>, অথবা <b>Class</b> সিলেক্ট করে আসন বিন্যাস ফিল্টার করতে পারেন।</p>
-      <p>২. ড্রপডাউন সিলেক্ট করলে সংশ্লিষ্ট কলামটি টেবিল থেকে আড়াল হয়ে যাবে এবং পেজ হেডিং আপডেট হবে (যাতে প্রিন্টের সময় জায়গা সাশ্রয় হয়)।</p>
-      <p>৩. টেবিলটি দেয়াল বা নোটিশ বোর্ডে টাঙানোর উপযুক্ত (Wall Up) করতে <b>"Print Seat Plan"</b> বাটনে ক্লিক করে A4 পেজে প্রিন্ট নিন।</p>
+      <p>১. টেবিলের তথ্য দেখতে প্রথমে <b>Select Exam</b> ড্রপডাউন থেকে একটি পরীক্ষা নির্বাচন করুন।</p>
+      <p>২. প্রয়োজনানুসারে <b>Room No</b> অথবা <b>Class</b> ড্রপডাউন থেকে ফিল্টার করতে পারেন।</p>
+      <p>৩. নির্বাচিত ফিল্টার কলামটি টেবিল থেকে আড়াল হবে এবং দূর থেকে স্পষ্টভাবে দেখার মতো ফন্ট সাইজ স্বয়ংক্রিয়ভাবে বড় হয়ে যাবে।</p>
+      <p>৪. <b>Batch Print</b> অপশনের মাধ্যমে সিলেক্ট করা পরীক্ষার সমস্ত রুম অথবা ক্লাসের আলাদা আলাদা A4 পেজে প্রিন্ট নেওয়া যাবে।</p>
     </div>
 
-    <!-- Controls Panel (Filters & Print) -->
+    <!-- Controls Panel -->
     <div class="controls-panel">
       <div class="control-group">
         <label for="filterExam"><i class="fa-solid fa-file-pen"></i> Select Exam:</label>
         <select id="filterExam">
-          <option value="">-- All Exams --</option>
+          <option value="">-- Select Exam --</option>
         </select>
       </div>
 
       <div class="control-group">
         <label for="filterRoom"><i class="fa-solid fa-door-open"></i> Select Room No:</label>
-        <select id="filterRoom">
+        <select id="filterRoom" disabled>
           <option value="">-- All Rooms --</option>
         </select>
       </div>
 
       <div class="control-group">
         <label for="filterClass"><i class="fa-solid fa-graduation-cap"></i> Select Class:</label>
-        <select id="filterClass">
+        <select id="filterClass" disabled>
           <option value="">-- All Classes --</option>
         </select>
       </div>
 
-      <button class="btn-print" onclick="window.print()">
-        <i class="fa-solid fa-print"></i> Print Seat Plan
-      </button>
+      <div class="button-group">
+        <button class="btn btn-print" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> Print
+        </button>
+        <button class="btn btn-batch-room" onclick="triggerBatchPrint('room')">
+          <i class="fa-solid fa-print"></i> Batch Print (Rooms)
+        </button>
+        <button class="btn btn-batch-class" onclick="triggerBatchPrint('class')">
+          <i class="fa-solid fa-print"></i> Batch Print (Classes)
+        </button>
+      </div>
     </div>
 
-    <!-- Seat Plan Data Table -->
+    <!-- Main Table -->
     <div class="table-responsive">
       <table id="seatPlanTable">
         <thead>
           <tr>
-            <th class="col-room"><i class="fa-solid fa-door-closed"></i> Room No</th>
-            <th class="col-gender"><i class="fa-solid fa-venus-mars"></i> Gender</th>
-            <th class="col-class"><i class="fa-solid fa-users"></i> Class</th>
-            <th class="col-section"><i class="fa-solid fa-layer-group"></i> Section</th>
-            <th class="col-roll"><i class="fa-solid fa-list-ol"></i> Roll Range</th>
-            <th class="col-total"><i class="fa-solid fa-calculator"></i> Total</th>
+            <th class="col-room">Room No</th>
+            <th class="col-gender">Gender</th>
+            <th class="col-class">Class</th>
+            <th class="col-section">Section</th>
+            <th class="col-roll">Roll Range</th>
+            <th class="col-total">Total</th>
           </tr>
         </thead>
         <tbody id="tableBody">
           <tr>
-            <td colspan="6"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td>
+            <td colspan="6" class="message-box msg-warning">
+              <i class="fa-solid fa-hand-point-up"></i> পরীক্ষার নাম সিলেক্ট করুন!
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
+  <!-- Batch Print Container -->
+  <div id="batchPrintContainer"></div>
+
   <script>
     // ==========================================
     // SUPABASE CONFIGURATION
-    // =====================================
-    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-
+    // ==========================================
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase Anon Key
 
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Global Data Holders
+    // Global State
     let rawSeatData = [];
+    let studentsData = [];
+    let processedSeatPlan = [];
     let currentSession = '';
 
-    // Elements
+    // DOM Elements
     const filterExam = document.getElementById('filterExam');
     const filterRoom = document.getElementById('filterRoom');
     const filterClass = document.getElementById('filterClass');
@@ -363,138 +387,203 @@
     const pageHeading = document.getElementById('pageHeading');
     const sessionYearSpan = document.getElementById('sessionYear');
 
-    // Initial Load
     window.addEventListener('DOMContentLoaded', async () => {
-      await fetchSessionYear();
-      await fetchSeatPlanData();
+      await fetchSessionAndExams();
     });
 
-    // 1. Fetch Current Session Year from current_students table
-    async function fetchSessionYear() {
+    // 1. Initial Load: Fetch Session Year and Unique Exam Names
+    async function fetchSessionAndExams() {
       try {
-        const { data, error } = await db
-          .from('current_students')
-          .select('session')
-          .not('session', 'is', null)
-          .limit(1);
-
-        if (error) throw error;
-        if (data && data.length > 0) {
-          currentSession = data[0].session;
+        // Fetch Session
+        const { data: stData } = await db.from('current_students').select('session').not('session', 'is', null).limit(1);
+        if (stData && stData.length > 0) {
+          currentSession = stData[0].session;
           sessionYearSpan.textContent = currentSession;
         } else {
-          sessionYearSpan.textContent = new Date().getFullYear();
+          currentSession = new Date().getFullYear().toString();
+          sessionYearSpan.textContent = currentSession;
         }
+
+        // Fetch Exam List
+        const { data: examData, error } = await db.from('seat_plan').select('exam_name').not('exam_name', 'is', null);
+        if (error) throw error;
+
+        const uniqueExams = [...new Set(examData.map(item => item.exam_name))];
+        uniqueExams.forEach(exam => {
+          filterExam.add(new Option(exam, exam));
+        });
+
       } catch (err) {
-        console.error('Session fetch error:', err);
-        sessionYearSpan.textContent = new Date().getFullYear();
+        console.error('Initial Fetch Error:', err);
       }
     }
 
-    // 2. Fetch Seat Plan Data maintaining default DB order
-    async function fetchSeatPlanData() {
+    // Event Listener for Exam Selection
+    filterExam.addEventListener('change', async () => {
+      const selectedExam = filterExam.value;
+
+      if (!selectedExam) {
+        // Reset Controls and Message
+        filterRoom.innerHTML = '<option value="">-- All Rooms --</option>';
+        filterClass.innerHTML = '<option value="">-- All Classes --</option>';
+        filterRoom.disabled = true;
+        filterClass.disabled = true;
+
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="message-box msg-warning">
+              <i class="fa-solid fa-hand-point-up"></i> পরীক্ষার নাম সিলেক্ট করুন!
+            </td>
+          </tr>`;
+        return;
+      }
+
+      // Show Loading State
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="6" class="message-box msg-info">
+            <i class="fa-solid fa-spinner fa-spin"></i> ডাটা প্রসেসিং হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...
+          </td>
+        </tr>`;
+
+      await loadExamData(selectedExam);
+    });
+
+    // 2. Fetch and Process Seat Plan + Current Students for Selected Exam
+    async function loadExamData(examName) {
       try {
-        const { data, error } = await db
+        // Fetch Seat Plan rows for selected exam (maintains DB order)
+        const { data: seatRows, error: seatErr } = await db
           .from('seat_plan')
           .select('*')
-          .order('id', { ascending: true }); // Maintain DB default sequence
+          .eq('exam_name', examName)
+          .order('id', { ascending: true });
 
-        if (error) throw error;
+        if (seatErr) throw seatErr;
+        rawSeatData = seatRows || [];
 
-        rawSeatData = data || [];
+        // Fetch all current students for verification
+        const { data: studentRows, error: stErr } = await db.from('current_students').select('*');
+        if (stErr) throw stErr;
+        studentsData = studentRows || [];
 
-        if (rawSeatData.length === 0) {
-          tableBody.innerHTML = `<tr><td colspan="6" class="no-data"><i class="fa-solid fa-triangle-exclamation"></i> কোনো সিট প্লান ডাটা পাওয়া যায়নি!</td></tr>`;
-          return;
-        }
+        // Process Section and Total dynamically
+        processedSeatPlan = rawSeatData.map(row => {
+          const matchingStudents = studentsData.filter(st => {
+            const classMatch = st.class_name.toString().trim().toLowerCase() === row.class_name.toString().trim().toLowerCase();
+            const rollMatch = st.roll_no >= row.start_roll && st.roll_no <= row.end_roll;
+            
+            let genderMatch = true;
+            if (row.gender && row.gender.toUpperCase() !== 'ALL') {
+              genderMatch = st.gender && st.gender.trim().toUpperCase() === row.gender.trim().toUpperCase();
+            }
 
-        populateDropdowns(rawSeatData);
+            return classMatch && rollMatch && genderMatch;
+          });
+
+          // Calculate Total
+          const totalStudents = matchingStudents.length;
+
+          // Determine Section
+          let sectionText = '-';
+          if (totalStudents > 0) {
+            const uniqueSections = [...new Set(matchingStudents.map(s => s.section ? s.section.trim() : '').filter(Boolean))];
+            if (uniqueSections.length === 1) {
+              sectionText = uniqueSections[0];
+            } else if (uniqueSections.length > 1) {
+              sectionText = 'ALL';
+            }
+          }
+
+          return {
+            ...row,
+            calculated_section: sectionText,
+            calculated_total: totalStudents
+          };
+        });
+
+        // Populate Room and Class Dropdowns
+        populateSubDropdowns();
         renderTable();
 
       } catch (err) {
-        console.error('Data fetch error:', err);
-        tableBody.innerHTML = `<tr><td colspan="6" class="no-data"><i class="fa-solid fa-circle-xmark"></i> ডাটা লোড করতে ব্যর্থ হয়েছে!</td></tr>`;
+        console.error('Data Loading Error:', err);
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="message-box msg-warning">
+              <i class="fa-solid fa-circle-xmark"></i> ডাটা লোড করতে ব্যর্থ হয়েছে!
+            </td>
+          </tr>`;
       }
     }
 
-    // 3. Populate Unique Dropdown Options
-    function populateDropdowns(data) {
-      const exams = [...new Set(data.map(item => item.exam_name).filter(Boolean))];
-      const rooms = [...new Set(data.map(item => item.room_no).filter(Boolean))];
-      const classes = [...new Set(data.map(item => item.class_name).filter(Boolean))];
+    // Populate Room and Class Dropdowns
+    function populateSubDropdowns() {
+      filterRoom.innerHTML = '<option value="">-- All Rooms --</option>';
+      filterClass.innerHTML = '<option value="">-- All Classes --</option>';
 
-      exams.forEach(exam => {
-        filterExam.add(new Option(exam, exam));
-      });
+      const rooms = [...new Set(processedSeatPlan.map(item => item.room_no).filter(Boolean))];
+      const classes = [...new Set(processedSeatPlan.map(item => item.class_name).filter(Boolean))];
 
-      rooms.forEach(room => {
-        filterRoom.add(new Option(room, room));
-      });
+      rooms.forEach(r => filterRoom.add(new Option(r, r)));
+      classes.forEach(c => filterClass.add(new Option(c, c)));
 
-      classes.forEach(cls => {
-        filterClass.add(new Option(cls, cls));
-      });
+      filterRoom.disabled = false;
+      filterClass.disabled = false;
 
-      // Attach Event Listeners
-      filterExam.addEventListener('change', renderTable);
-      filterRoom.addEventListener('change', renderTable);
-      filterClass.addEventListener('change', renderTable);
+      filterRoom.onchange = renderTable;
+      filterClass.onchange = renderTable;
     }
 
-    // 4. Render Table and Manage Headers/Columns based on Filters
+    // 3. Render Main Table View
     function renderTable() {
       const selectedExam = filterExam.value;
       const selectedRoom = filterRoom.value;
       const selectedClass = filterClass.value;
 
-      // Filter keeping original array order
-      const filteredData = rawSeatData.filter(item => {
-        const matchExam = selectedExam ? item.exam_name === selectedExam : true;
+      const filteredData = processedSeatPlan.filter(item => {
         const matchRoom = selectedRoom ? item.room_no === selectedRoom : true;
         const matchClass = selectedClass ? item.class_name === selectedClass : true;
-        return matchExam && matchRoom && matchClass;
+        return matchRoom && matchClass;
       });
 
-      // Update Page Heading Dynamically
+      // Update Page Heading
       let headingText = `Exam Seat Plan: ${currentSession}`;
-      let subDetails = [];
+      let subDetails = [`Exam: ${selectedExam}`];
 
-      if (selectedExam) subDetails.push(`Exam: ${selectedExam}`);
       if (selectedRoom) subDetails.push(`Room: ${selectedRoom}`);
       if (selectedClass) subDetails.push(`Class: ${selectedClass}`);
 
-      if (subDetails.length > 0) {
-        headingText += ` (${subDetails.join(' | ')})`;
-      }
-      pageHeading.innerHTML = `<i class="fa-solid fa-clipboard-list"></i> ${headingText}`;
+      pageHeading.textContent = `${headingText} (${subDetails.join(' | ')})`;
 
-      // Manage Hidden Columns (Column Hiding Requirement)
-      toggleColumnVisibility('.col-exam', selectedExam !== '');
+      // Toggle Hidden Columns
       toggleColumnVisibility('.col-room', selectedRoom !== '');
       toggleColumnVisibility('.col-class', selectedClass !== '');
 
-      // Adjust Font Density Class for Print Output
+      // Adjust Font Scale Class for Print
       updatePrintDensityClass(filteredData.length, !!selectedRoom || !!selectedClass);
 
       // Render Rows
       if (filteredData.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="6" class="no-data"><i class="fa-solid fa-circle-info"></i> নির্বাচিত ফিল্টারের জন্য কোনো ডাটা পাওয়া যায়নি।</td></tr>`;
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="message-box msg-warning">
+              কোনো তথ্য পাওয়া যায়নি!
+            </td>
+          </tr>`;
         return;
       }
 
       let html = '';
       filteredData.forEach(row => {
-        const total = (row.end_roll - row.start_roll) + 1;
-        const rollRange = `${row.start_roll} - ${row.end_roll}`;
-
         html += `
           <tr>
             <td class="col-room ${selectedRoom ? 'hide-column' : ''}">${row.room_no || '-'}</td>
             <td class="col-gender">${row.gender || 'ALL'}</td>
             <td class="col-class ${selectedClass ? 'hide-column' : ''}">${row.class_name || '-'}</td>
-            <td class="col-section">${row.section || '-'}</td>
-            <td class="col-roll">${rollRange}</td>
-            <td class="col-total">${total > 0 ? total : 0}</td>
+            <td class="col-section">${row.calculated_section}</td>
+            <td class="col-roll">${row.start_roll} - ${row.end_roll}</td>
+            <td class="col-total">${row.calculated_total}</td>
           </tr>
         `;
       });
@@ -502,28 +591,117 @@
       tableBody.innerHTML = html;
     }
 
-    // Helper to Hide/Show Column Headings and Cells
+    // Utility: Column Visibility
     function toggleColumnVisibility(selector, hide) {
       document.querySelectorAll(selector).forEach(el => {
-        if (hide) {
-          el.classList.add('hide-column');
-        } else {
-          el.classList.remove('hide-column');
-        }
+        if (hide) el.classList.add('hide-column');
+        else el.classList.remove('hide-column');
       });
     }
 
-    // Helper to dynamically scale print fonts based on record density
-    function updatePrintDensityClass(recordCount, isSpecificFilter) {
+    // Utility: Print Density Sizing
+    function updatePrintDensityClass(recordCount, isFiltered) {
       document.body.classList.remove('print-density-high', 'print-density-medium', 'print-density-low');
 
-      if (recordCount <= 6 || isSpecificFilter) {
-        document.body.classList.add('print-density-low'); // Extra Large font for wall displays
-      } else if (recordCount <= 15) {
-        document.body.classList.add('print-density-medium'); // Medium Large font
+      if (recordCount <= 6 || isFiltered) {
+        document.body.classList.add('print-density-low'); // Very Large Font
+      } else if (recordCount <= 14) {
+        document.body.classList.add('print-density-medium'); // Medium Font
       } else {
-        document.body.classList.add('print-density-high'); // Standard compact print font
+        document.body.classList.add('print-density-high'); // Standard Font
       }
+    }
+
+    // 4. BATCH PRINT LOGIC (Page-wise Print for Rooms/Classes)
+    function triggerBatchPrint(type) {
+      const selectedExam = filterExam.value;
+      if (!selectedExam) {
+        alert('অনুগ্রহ করে প্রথমে একটি পরীক্ষা নির্বাচন করুন!');
+        return;
+      }
+
+      const container = document.getElementById('batchPrintContainer');
+      container.innerHTML = '';
+
+      let groups = {};
+
+      if (type === 'room') {
+        // Group by Room
+        processedSeatPlan.forEach(row => {
+          const room = row.room_no || 'Unassigned';
+          if (!groups[room]) groups[room] = [];
+          groups[room].push(row);
+        });
+      } else if (type === 'class') {
+        // Group by Class
+        processedSeatPlan.forEach(row => {
+          const cls = row.class_name || 'Unassigned';
+          if (!groups[cls]) groups[cls] = [];
+          groups[cls].push(row);
+        });
+      }
+
+      const keys = Object.keys(groups);
+      if (keys.length === 0) {
+        alert('প্রিন্ট করার মতো পর্যাপ্ত ডাটা পাওয়া যায়নি!');
+        return;
+      }
+
+      // Generate HTML Pages
+      keys.forEach((key, index) => {
+        const rows = groups[key];
+        const pageDiv = document.createElement('div');
+        pageDiv.className = 'page-break';
+
+        let densityClass = rows.length <= 6 ? 'print-density-low' : (rows.length <= 14 ? 'print-density-medium' : 'print-density-high');
+
+        let pageHtml = `
+          <div class="${densityClass}">
+            <div class="header">
+              <h1>Pathpukur High School (HS)</h1>
+              <h2>Exam Seat Plan: ${currentSession} (Exam: ${selectedExam} | ${type === 'room' ? 'Room' : 'Class'}: ${key})</h2>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  ${type !== 'room' ? '<th>Room No</th>' : ''}
+                  <th>Gender</th>
+                  ${type !== 'class' ? '<th>Class</th>' : ''}
+                  <th>Section</th>
+                  <th>Roll Range</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        rows.forEach(r => {
+          pageHtml += `
+            <tr>
+              ${type !== 'room' ? `<td>${r.room_no}</td>` : ''}
+              <td>${r.gender || 'ALL'}</td>
+              ${type !== 'class' ? `<td>${r.class_name}</td>` : ''}
+              <td>${r.calculated_section}</td>
+              <td>${r.start_roll} - ${r.end_roll}</td>
+              <td>${r.calculated_total}</td>
+            </tr>
+          `;
+        });
+
+        pageHtml += `
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        pageDiv.innerHTML = pageHtml;
+        container.appendChild(pageDiv);
+      });
+
+      // Apply batch printing mode and invoke print
+      document.body.classList.add('batch-printing');
+      window.print();
+      document.body.classList.remove('batch-printing');
     }
   </script>
 </body>
