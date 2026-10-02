@@ -166,7 +166,7 @@
     }
 
     .print-header {
-      display: none; /* Only visible on print */
+      display: none;
       text-align: center;
       margin-bottom: 15px;
     }
@@ -202,13 +202,11 @@
       color: var(--primary);
     }
 
-    /* ===================================================
-       PRINT STYLESHEET (A4 Wall Display Optimized)
-       =================================================== */
+    /* Print Styles */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 12mm; /* Clean margins, eliminates extra empty pages */
+        margin: 12mm;
       }
 
       body {
@@ -217,7 +215,6 @@
         padding: 0;
       }
 
-      /* Hide UI Controls during print */
       .instruction-card, 
       .filter-card, 
       .header-card,
@@ -234,7 +231,6 @@
         border: none !important;
       }
 
-      /* Display Print Specific Header */
       .print-header {
         display: block !important;
         border-bottom: 2px solid #000;
@@ -272,7 +268,7 @@
       }
 
       th, td {
-        border: 2px solid #000 !important; /* Thick lines for clear wall display */
+        border: 2px solid #000 !important;
         color: #000 !important;
       }
 
@@ -282,8 +278,6 @@
         print-color-adjust: exact;
       }
 
-      /* Dynamic Font Adjustments for Wall Notice Readability */
-      /* Full View (Small Font to fit content) */
       .print-size-small th, 
       .print-size-small td {
         font-size: 11pt !important;
@@ -291,7 +285,6 @@
         font-weight: 600 !important;
       }
 
-      /* Filtered View (Large bold font for distant wall reading) */
       .print-size-large th, 
       .print-size-large td {
         font-size: 16pt !important;
@@ -350,7 +343,7 @@
     <!-- Data Display Area -->
     <div class="data-card" id="data-card">
       
-      <!-- Print Specific Header (Triggers on Print) -->
+      <!-- Print Specific Header -->
       <div class="print-header">
         <h1>Pathpukur High School (HS)</h1>
         <h2 id="print-exam-heading">Exam Seat Plan</h2>
@@ -373,7 +366,6 @@
     // ===================================================
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -407,7 +399,10 @@
           .from('seat_plan')
           .select('*');
 
-        if (seatError) throw seatError;
+        if (seatError) {
+          console.error("seat_plan Fetch Error:", seatError);
+          throw new Error("seat_plan টেবিল থেকে ডাটা আনতে সমস্যা হয়েছে: " + seatError.message);
+        }
         seatPlanData = seatData || [];
 
         // 2. Fetch current_students data
@@ -415,7 +410,10 @@
           .from('current_students')
           .select('*');
 
-        if (studentError) throw studentError;
+        if (studentError) {
+          console.error("current_students Fetch Error:", studentError);
+          throw new Error("current_students টেবিল থেকে ডাটা আনতে সমস্যা হয়েছে: " + studentError.message);
+        }
         currentStudentsData = studentData || [];
 
         populateDropdowns();
@@ -426,7 +424,9 @@
         tableContainer.innerHTML = `
           <div class="no-data" style="color: #ef4444;">
             <i class="fa-solid fa-triangle-exclamation fa-2x"></i>
-            <p style="margin-top:10px;">ডাটাবেস কানেকশনে সমস্যা হয়েছে। অনুগ্রহ করে সুপাবেজ সেটিংস ঠিক করুন।</p>
+            <p style="margin-top:10px; font-weight: bold;">ডাটা লোড করতে সমস্যা হয়েছে!</p>
+            <p style="font-size:0.85rem; margin-top:5px; color:#64748b;">বিবরণ: ${err.message}</p>
+            <p style="font-size:0.85rem; margin-top:5px; color:#64748b;">(Supabase-এ RLS Policy বা Table Permissions ঠিক আছে কি না নিশ্চিত করুন।)</p>
           </div>`;
       }
     }
@@ -456,11 +456,10 @@
       const selectedRoom = filterRoom.value;
       const selectedClass = filterClass.value;
 
-      // Filter array maintaining original record order
       let filtered = seatPlanData.filter(item => {
-        const matchesExam = !selectedExam || item.exam_name === selectedExam;
+        const matchesExam = !selectedExam || String(item.exam_name) === String(selectedExam);
         const matchesRoom = !selectedRoom || String(item.room_no) === String(selectedRoom);
-        const matchesClass = !selectedClass || item.class_name === selectedClass;
+        const matchesClass = !selectedClass || String(item.class_name) === String(selectedClass);
         return matchesExam && matchesRoom && matchesClass;
       });
 
@@ -497,10 +496,9 @@
       data.forEach(row => {
         // Query matching student records from current_students
         const matchingStudents = currentStudentsData.filter(student => {
-          const matchGender = student.gender === row.gender;
-          const matchClass = student.class_name === row.class_name;
+          const matchGender = String(student.gender).toUpperCase() === String(row.gender).toUpperCase();
+          const matchClass = String(student.class_name).toUpperCase() === String(row.class_name).toUpperCase();
           
-          // Numeric Roll Check
           const roll = Number(student.roll_no);
           const start = Number(row.start_roll);
           const end = Number(row.end_roll);
@@ -511,11 +509,10 @@
           return matchGender && matchClass && matchRoll;
         });
 
-        // Extract Sections
-        const sectionsSet = new Set(matchingStudents.map(s => s.Section).filter(Boolean));
+        // Safe check for Section column (handles both Section / section)
+        const sectionsSet = new Set(matchingStudents.map(s => s.Section || s.section).filter(Boolean));
         const sectionDisplay = sectionsSet.size > 0 ? Array.from(sectionsSet).join(', ') : 'All';
 
-        // Total Count Calculation
         const totalCount = matchingStudents.length > 0 
           ? matchingStudents.length 
           : (Number(row.end_roll) - Number(row.start_roll) + 1);
@@ -547,13 +544,10 @@
 
       printFilterInfo.innerText = filterTexts.join(' | ');
 
-      // Adjust print text size dynamically for clear visibility from distance
       if (room || (dataCard.querySelectorAll('tbody tr').length <= 6)) {
-        // Room selected or small data set -> Large Font Size for Wall Paste
         dataCard.classList.remove('print-size-small');
         dataCard.classList.add('print-size-large');
       } else {
-        // Full sheet -> Medium/Compact Font Size
         dataCard.classList.remove('print-size-large');
         dataCard.classList.add('print-size-small');
       }
