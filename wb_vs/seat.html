@@ -1,569 +1,530 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exam Seat Plan | Pathpukur High School (HS)</title>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root {
-            --primary-color: #1e3a8a;
-            --secondary-color: #2563eb;
-            --accent-color: #f59e0b;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --border-color: #cbd5e1;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exam Seat Plan - Pathpukur High School (HS)</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <style>
+    /* Global & Reset Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    body {
+      background-color: #f4f7f6;
+      color: #333;
+      padding: 20px;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
 
-        /* Header Styling */
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 15px;
-        }
+    /* Header Styles */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #0056b3;
+      padding-bottom: 15px;
+    }
 
-        .school-name {
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
+    .header h1 {
+      font-size: 28px;
+      color: #0056b3;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
 
-        .page-heading {
-            font-size: 1.3rem;
-            color: #475569;
-            font-weight: 600;
-        }
+    .header h2 {
+      font-size: 20px;
+      color: #444;
+    }
 
-        /* Notice Box */
-        .instructions-box {
-            background-color: #eff6ff;
-            border-left: 5px solid var(--secondary-color);
-            padding: 15px;
-            margin-bottom: 25px;
-            border-radius: 0 8px 8px 0;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
+    /* Instruction Box */
+    .instruction-box {
+      background-color: #eef7ff;
+      border-left: 5px solid #0056b3;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
 
-        .instructions-box h3 {
-            color: var(--secondary-color);
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    .instruction-box h3 {
+      color: #0056b3;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        /* Filter Controls */
-        .filter-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-            background: #f1f5f9;
-            padding: 18px;
-            border-radius: 8px;
-        }
+    /* Controls / Dropdowns Area */
+    .controls-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: flex-end;
+      background: #f8f9fa;
+      padding: 18px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      border: 1px solid #e0e0e0;
+    }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+    .control-group {
+      flex: 1;
+      min-width: 200px;
+    }
 
-        .form-group label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #334155;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+    .control-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #555;
+    }
 
-        select {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.95rem;
-            background-color: white;
-            outline: none;
-            transition: border-color 0.2s;
-        }
+    .control-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 15px;
+      background-color: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
 
-        select:focus {
-            border-color: var(--secondary-color);
-        }
+    .control-group select:focus {
+      border-color: #0056b3;
+    }
 
-        /* Actions Bar */
-        .actions-bar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 15px;
-        }
+    .btn-print {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 5px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+      height: 42px;
+    }
 
-        .btn-print {
-            background-color: #059669;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
-        }
+    .btn-print:hover {
+      background-color: #218838;
+    }
 
-        .btn-print:hover {
-            background-color: #047857;
-        }
+    /* Table Styles */
+    .table-responsive {
+      overflow-x: auto;
+    }
 
-        /* Table Styling */
-        .table-responsive {
-            overflow-x: auto;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background-color: #fff;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            background: white;
-        }
+    th, td {
+      border: 1px solid #c0c0c0;
+      padding: 12px;
+      text-align: center;
+      font-size: 15px;
+    }
 
-        th, td {
-            border: 1px solid var(--border-color);
-            padding: 12px 15px;
-            text-align: center;
-            font-size: 1rem;
-        }
+    th {
+      background-color: #0056b3;
+      color: #ffffff;
+      font-weight: 600;
+    }
 
-        th {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: 600;
-        }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
 
-        tr:nth-child(even) {
-            background-color: #f8fafc;
-        }
+    .no-data {
+      text-align: center;
+      padding: 30px;
+      color: #d9534f;
+      font-weight: bold;
+      font-size: 16px;
+    }
 
-        .no-data {
-            text-align: center;
-            padding: 30px;
-            color: #ef4444;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
+    /* Hidden Utility Classes */
+    .hide-column {
+      display: none !important;
+    }
 
-        /* Loading Spinner */
-        .loading {
-            text-align: center;
-            padding: 20px;
-            font-size: 1.1rem;
-            color: var(--secondary-color);
-        }
+    /* ===================================================
+       PRINT STYLES (A4 Optimizations & Dynamic Display)
+       =================================================== */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
 
-        /* PRINT STYLES */
-        @media print {
-            @page {
-                size: A4 portrait;
-                margin: 10mm;
-            }
+      body {
+        background-color: #fff;
+        padding: 0;
+        margin: 0;
+        color: #000;
+      }
 
-            body {
-                background: white;
-                padding: 0;
-                margin: 0;
-            }
+      .container {
+        width: 100%;
+        max-width: 100%;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+      }
 
-            .container {
-                box-shadow: none;
-                padding: 0;
-                width: 100%;
-                max-width: 100%;
-            }
+      /* Hide non-printable elements */
+      .instruction-box, .controls-panel {
+        display: none !important;
+      }
 
-            .instructions-box, .filter-section, .actions-bar {
-                display: none !important;
-            }
+      /* Printable Header */
+      .header {
+        margin-bottom: 15px;
+        border-bottom: 3px solid #000;
+        padding-bottom: 10px;
+      }
 
-            header {
-                border-bottom: 2px solid #000;
-                padding-bottom: 8px;
-                margin-bottom: 15px;
-            }
+      .header h1 {
+        color: #000;
+        font-size: 26pt;
+        font-weight: 900;
+      }
 
-            .school-name {
-                color: #000;
-                font-size: 24pt;
-                font-weight: bold;
-            }
+      .header h2 {
+        color: #000;
+        font-size: 18pt;
+        font-weight: bold;
+      }
 
-            .page-heading {
-                color: #000;
-                font-size: 16pt;
-                font-weight: bold;
-                margin-top: 5px;
-            }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
+      th, td {
+        border: 2px solid #000 !important;
+        padding: 10px 6px;
+        color: #000;
+      }
 
-            th, td {
-                border: 2px solid #000 !important;
-                color: #000;
-            }
+      th {
+        background-color: #f0f0f0 !important;
+        -webkit-print-color-adjust: exact;
+        font-weight: 900;
+      }
 
-            th {
-                background-color: #f0f0f0 !important;
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
-            }
+      /* High Visibility for Wall Display */
+      td {
+        font-weight: 700;
+      }
 
-            .print-size-normal th, .print-size-normal td {
-                font-size: 14pt;
-                padding: 10px;
-                font-weight: 600;
-            }
+      /* DYNAMIC FONT SIZING BASED ON FILTER DENSITY */
+      /* Full/Default view (Smaller Font) */
+      body.print-density-high table {
+        font-size: 11pt;
+      }
+      body.print-density-high th, body.print-density-high td {
+        padding: 6px 4px;
+      }
 
-            .print-size-large th, .print-size-large td {
-                font-size: 18pt;
-                padding: 16px;
-                font-weight: bold;
-            }
-        }
+      /* Single/Double Filter view (Medium Font) */
+      body.print-density-medium table {
+        font-size: 15pt;
+      }
+      body.print-density-medium th, body.print-density-medium td {
+        padding: 12px 8px;
+      }
 
-        @media (max-width: 600px) {
-            .school-name { font-size: 1.4rem; }
-            .page-heading { font-size: 1.1rem; }
-            .filter-section { grid-template-columns: 1fr; }
-        }
-    </style>
+      /* Specific Room/Class Filtered view (Very Large Font for Wall Reading) */
+      body.print-density-low table {
+        font-size: 20pt;
+      }
+      body.print-density-low th, body.print-density-low td {
+        padding: 18px 10px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Header -->
-    <header>
-        <div class="school-name"><i class="fa-solid fa-school"></i> Pathpukur High School (HS)</div>
-        <div class="page-heading" id="dynamicHeader">Exam Seat Plan: Session <span id="sessionYear">2026</span></div>
+  <div class="container">
+    <!-- Header Section -->
+    <header class="header">
+      <h1><i class="fa-solid => fa-school"></i> Pathpukur High School (HS)</h1>
+      <h2 id="pageHeading"><i class="fa-solid fa-clipboard-list"></i> Exam Seat Plan: <span id="sessionYear">Loading...</span></h2>
     </header>
 
-    <!-- Instructions Box -->
-    <div class="instructions-box">
-        <h3><i class="fa-solid fa-circle-info"></i> নির্দেশিকা (Instructions):</h3>
-        <p>১. ফিল্টার অংশ থেকে <strong>Exam Name</strong>, <strong>Room No</strong>, অথবা <strong>Class</strong> নির্বাচন করে নির্দিষ্ট পরীক্ষার সিট প্ল্যান দেখা যাবে।</p>
-        <p>২. নির্বাচিত ফিল্টার অনুযায়ী নিচের টেবিলের ফিল্টার করা কলামটি গোপন (Hide) হয়ে যাবে এবং পেজ হেডিং পরিবর্তিত হবে।</p>
-        <p>৩. দূর থেকে দেখার উপযোগী বড় লেখা এবং ফন্ট সাইজ সহ সম্পূর্ণ টেবিলটি প্রিন্ট করতে <strong>Print Seat Plan</strong> বোতামে ক্লিক করুন।</p>
+    <!-- Instruction Box -->
+    <div class="instruction-box">
+      <h3><i class="fa-solid fa-circle-info"></i> নির্দেশিকা (Instructions):</h3>
+      <p>১. নিচের ড্রপডাউন থেকে নির্দিষ্ট <b>Exam</b>, <b>Room No</b>, অথবা <b>Class</b> সিলেক্ট করে আসন বিন্যাস ফিল্টার করতে পারেন।</p>
+      <p>২. ড্রপডাউন সিলেক্ট করলে সংশ্লিষ্ট কলামটি টেবিল থেকে আড়াল হয়ে যাবে এবং পেজ হেডিং আপডেট হবে (যাতে প্রিন্টের সময় জায়গা সাশ্রয় হয়)।</p>
+      <p>৩. টেবিলটি দেয়াল বা নোটিশ বোর্ডে টাঙানোর উপযুক্ত (Wall Up) করতে <b>"Print Seat Plan"</b> বাটনে ক্লিক করে A4 পেজে প্রিন্ট নিন।</p>
     </div>
 
-    <!-- Dropdowns -->
-    <div class="filter-section">
-        <div class="form-group">
-            <label for="examSelect"><i class="fa-solid fa-file-pen"></i> Exam:</label>
-            <select id="examSelect">
-                <option value="ALL">সকল পরীক্ষা (All Exams)</option>
-            </select>
-        </div>
+    <!-- Controls Panel (Filters & Print) -->
+    <div class="controls-panel">
+      <div class="control-group">
+        <label for="filterExam"><i class="fa-solid fa-file-pen"></i> Select Exam:</label>
+        <select id="filterExam">
+          <option value="">-- All Exams --</option>
+        </select>
+      </div>
 
-        <div class="form-group">
-            <label for="roomSelect"><i class="fa-solid fa-door-open"></i> Room No:</label>
-            <select id="roomSelect">
-                <option value="ALL">সকল রুম (All Rooms)</option>
-            </select>
-        </div>
+      <div class="control-group">
+        <label for="filterRoom"><i class="fa-solid fa-door-open"></i> Select Room No:</label>
+        <select id="filterRoom">
+          <option value="">-- All Rooms --</option>
+        </select>
+      </div>
 
-        <div class="form-group">
-            <label for="classSelect"><i class="fa-solid fa-graduation-cap"></i> Class:</label>
-            <select id="classSelect">
-                <option value="ALL">সকল ক্লাস (All Classes)</option>
-            </select>
-        </div>
+      <div class="control-group">
+        <label for="filterClass"><i class="fa-solid fa-graduation-cap"></i> Select Class:</label>
+        <select id="filterClass">
+          <option value="">-- All Classes --</option>
+        </select>
+      </div>
+
+      <button class="btn-print" onclick="window.print()">
+        <i class="fa-solid fa-print"></i> Print Seat Plan
+      </button>
     </div>
 
-    <!-- Print Button -->
-    <div class="actions-bar">
-        <button class="btn-print" onclick="window.print()">
-            <i class="fa-solid fa-print"></i> Print Seat Plan
-        </button>
-    </div>
-
-    <!-- Table -->
+    <!-- Seat Plan Data Table -->
     <div class="table-responsive">
-        <table id="seatPlanTable">
-            <thead>
-                <tr>
-                    <th class="col-room"><i class="fa-solid fa-door-closed"></i> Room No</th>
-                    <th class="col-gender"><i class="fa-solid fa-venus-mars"></i> Gender</th>
-                    <th class="col-class"><i class="fa-solid fa-book-bookmark"></i> Class</th>
-                    <th class="col-section"><i class="fa-solid fa-layer-group"></i> Section</th>
-                    <th class="col-roll"><i class="fa-solid fa-list-ol"></i> Roll Range</th>
-                    <th class="col-total"><i class="fa-solid fa-users"></i> Total</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <tr>
-                    <td colspan="6" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td>
-                </tr>
-            </tbody>
-        </table>
+      <table id="seatPlanTable">
+        <thead>
+          <tr>
+            <th class="col-room"><i class="fa-solid fa-door-closed"></i> Room No</th>
+            <th class="col-gender"><i class="fa-solid fa-venus-mars"></i> Gender</th>
+            <th class="col-class"><i class="fa-solid fa-users"></i> Class</th>
+            <th class="col-section"><i class="fa-solid fa-layer-group"></i> Section</th>
+            <th class="col-roll"><i class="fa-solid fa-list-ol"></i> Roll Range</th>
+            <th class="col-total"><i class="fa-solid fa-calculator"></i> Total</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td colspan="6"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-</div>
+  </div>
 
-<script>
+  <script>
     // ==========================================
-    // 1. SUPABASE CONFIGURATION (CORRECTED)
-    // ==========================================
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
-    const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
-    
-    // ভ্যারিয়েবলের নাম পরিবর্তন করা হয়েছে যেন গ্লোবাল supabase অবজেক্টের সাথে কনফ্লিক্ট না করে
-    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+    // SUPABASE CONFIGURATION
+    // =====================================
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
-    // Global State
-    let rawSeatPlanData = [];
-    let studentsData = [];
 
-    // Initialize Page
-    document.addEventListener('DOMContentLoaded', () => {
-        if (!supabaseClient) {
-            console.error('Supabase library loaded incorrectly.');
-            document.getElementById('tableBody').innerHTML = `
-                <tr>
-                    <td colspan="6" class="no-data">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Supabase লাইব্রেরি সঠিকভাবে লোড হয়নি!
-                    </td>
-                </tr>`;
-            return;
-        }
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        fetchData();
-        
-        // Add Event Listeners to Dropdowns
-        document.getElementById('examSelect').addEventListener('change', applyFilters);
-        document.getElementById('roomSelect').addEventListener('change', applyFilters);
-        document.getElementById('classSelect').addEventListener('change', applyFilters);
+    // Global Data Holders
+    let rawSeatData = [];
+    let currentSession = '';
+
+    // Elements
+    const filterExam = document.getElementById('filterExam');
+    const filterRoom = document.getElementById('filterRoom');
+    const filterClass = document.getElementById('filterClass');
+    const tableBody = document.getElementById('tableBody');
+    const pageHeading = document.getElementById('pageHeading');
+    const sessionYearSpan = document.getElementById('sessionYear');
+
+    // Initial Load
+    window.addEventListener('DOMContentLoaded', async () => {
+      await fetchSessionYear();
+      await fetchSeatPlanData();
     });
 
-    // ==========================================
-    // 2. FETCH DATA FROM SUPABASE
-    // ==========================================
-    async function fetchData() {
-        try {
-            // Fetch seat_plan table data
-            const { data: seatPlan, error: spError } = await supabaseClient
-                .from('seat_plan')
-                .select('*');
+    // 1. Fetch Current Session Year from current_students table
+    async function fetchSessionYear() {
+      try {
+        const { data, error } = await db
+          .from('current_students')
+          .select('session')
+          .not('session', 'is', null)
+          .limit(1);
 
-            if (spError) throw spError;
-
-            // Fetch current_students table data
-            const { data: students, error: stError } = await supabaseClient
-                .from('current_students')
-                .select('*');
-
-            if (stError) throw stError;
-
-            rawSeatPlanData = seatPlan || [];
-            studentsData = students || [];
-
-            // Update Session Year dynamically from student data if available
-            if (studentsData.length > 0 && studentsData[0].session) {
-                document.getElementById('sessionYear').innerText = studentsData[0].session;
-            }
-
-            populateDropdowns(rawSeatPlanData);
-            applyFilters();
-
-        } catch (error) {
-            console.error('Data loading error:', error);
-            document.getElementById('tableBody').innerHTML = `
-                <tr>
-                    <td colspan="6" class="no-data">
-                        <i class="fa-solid fa-triangle-exclamation"></i> ডাটা লোড করতে সমস্যা হয়েছে! Supabase কনফিগারেশন পরীক্ষা করুন।
-                    </td>
-                </tr>`;
-        }
-    }
-
-    // ==========================================
-    // 3. POPULATE DROPDOWNS
-    // ==========================================
-    function populateDropdowns(data) {
-        const examSelect = document.getElementById('examSelect');
-        const roomSelect = document.getElementById('roomSelect');
-        const classSelect = document.getElementById('classSelect');
-
-        // Extract unique values while preserving sequence
-        const uniqueExams = [...new Set(data.map(item => item.exam_name).filter(Boolean))];
-        const uniqueRooms = [...new Set(data.map(item => item.room_no).filter(Boolean))];
-        const uniqueClasses = [...new Set(data.map(item => item.class_name).filter(Boolean))];
-
-        // Reset Options
-        examSelect.innerHTML = '<option value="ALL">সকল পরীক্ষা (All Exams)</option>';
-        roomSelect.innerHTML = '<option value="ALL">সকল রুম (All Rooms)</option>';
-        classSelect.innerHTML = '<option value="ALL">সকল ক্লাস (All Classes)</option>';
-
-        // Populate Exam Dropdown
-        uniqueExams.forEach(exam => {
-            const opt = document.createElement('option');
-            opt.value = exam;
-            opt.textContent = exam;
-            examSelect.appendChild(opt);
-        });
-
-        // Populate Room Dropdown
-        uniqueRooms.forEach(room => {
-            const opt = document.createElement('option');
-            opt.value = room;
-            opt.textContent = `Room ${room}`;
-            roomSelect.appendChild(opt);
-        });
-
-        // Populate Class Dropdown
-        uniqueClasses.forEach(cls => {
-            const opt = document.createElement('option');
-            opt.value = cls;
-            opt.textContent = `Class ${cls}`;
-            classSelect.appendChild(opt);
-        });
-    }
-
-    // ==========================================
-    // 4. FILTER & PROCESS DATA
-    // ==========================================
-    function applyFilters() {
-        const selectedExam = document.getElementById('examSelect').value;
-        const selectedRoom = document.getElementById('roomSelect').value;
-        const selectedClass = document.getElementById('classSelect').value;
-
-        // Filter seat_plan
-        let filteredData = rawSeatPlanData.filter(item => {
-            const matchExam = (selectedExam === 'ALL' || item.exam_name === selectedExam);
-            const matchRoom = (selectedRoom === 'ALL' || String(item.room_no) === selectedRoom);
-            const matchClass = (selectedClass === 'ALL' || item.class_name === selectedClass);
-            return matchExam && matchRoom && matchClass;
-        });
-
-        updateHeader(selectedExam, selectedRoom, selectedClass);
-        toggleTableColumns(selectedRoom, selectedClass);
-        adjustPrintFontSize(filteredData.length);
-        renderTable(filteredData);
-    }
-
-    // ==========================================
-    // 5. UPDATE HEADER & COLUMNS VISIBILITY
-    // ==========================================
-    function updateHeader(exam, room, className) {
-        let session = document.getElementById('sessionYear').innerText;
-        let titleParts = [`Exam Seat Plan: Session ${session}`];
-
-        if (exam !== 'ALL') titleParts.push(`Exam: ${exam}`);
-        if (room !== 'ALL') titleParts.push(`Room: ${room}`);
-        if (className !== 'ALL') titleParts.push(`Class: ${className}`);
-
-        document.getElementById('dynamicHeader').innerText = titleParts.join(' | ');
-    }
-
-    function toggleTableColumns(selectedRoom, selectedClass) {
-        const roomCols = document.querySelectorAll('.col-room');
-        const classCols = document.querySelectorAll('.col-class');
-
-        roomCols.forEach(col => col.style.display = (selectedRoom !== 'ALL') ? 'none' : '');
-        classCols.forEach(col => col.style.display = (selectedClass !== 'ALL') ? 'none' : '');
-    }
-
-    function adjustPrintFontSize(dataCount) {
-        const table = document.getElementById('seatPlanTable');
-        table.classList.remove('print-size-normal', 'print-size-large');
-
-        if (dataCount <= 6) {
-            table.classList.add('print-size-large');
+        if (error) throw error;
+        if (data && data.length > 0) {
+          currentSession = data[0].session;
+          sessionYearSpan.textContent = currentSession;
         } else {
-            table.classList.add('print-size-normal');
+          sessionYearSpan.textContent = new Date().getFullYear();
         }
+      } catch (err) {
+        console.error('Session fetch error:', err);
+        sessionYearSpan.textContent = new Date().getFullYear();
+      }
     }
 
-    // ==========================================
-    // 6. RENDER TABLE WITH VERIFIED DATA
-    // ==========================================
-    function renderTable(data) {
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '';
+    // 2. Fetch Seat Plan Data maintaining default DB order
+    async function fetchSeatPlanData() {
+      try {
+        const { data, error } = await db
+          .from('seat_plan')
+          .select('*')
+          .order('id', { ascending: true }); // Maintain DB default sequence
 
-        if (data.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="6" class="no-data">
-                        <i class="fa-solid fa-circle-exclamation"></i> নির্বাচিত ফিল্টার অনুযায়ী কোনো সিট প্ল্যান তথ্য পাওয়া যায়নি!
-                    </td>
-                </tr>`;
-            return;
+        if (error) throw error;
+
+        rawSeatData = data || [];
+
+        if (rawSeatData.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="6" class="no-data"><i class="fa-solid fa-triangle-exclamation"></i> কোনো সিট প্লান ডাটা পাওয়া যায়নি!</td></tr>`;
+          return;
         }
 
-        const selectedRoom = document.getElementById('roomSelect').value;
-        const selectedClass = document.getElementById('classSelect').value;
+        populateDropdowns(rawSeatData);
+        renderTable();
 
-        data.forEach(item => {
-            // Match with current_students table
-            const matchedStudents = studentsData.filter(st => 
-                st.class_name === item.class_name &&
-                st.gender?.toLowerCase() === item.gender?.toLowerCase() &&
-                Number(st.roll_no) >= Number(item.start_roll) &&
-                Number(st.roll_no) <= Number(item.end_roll)
-            );
-
-            // Extract Unique Sections
-            const sections = [...new Set(matchedStudents.map(s => s.section).filter(Boolean))].join(', ') || 'N/A';
-            const totalStudents = matchedStudents.length > 0 ? matchedStudents.length : (item.end_roll - item.start_roll + 1);
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="col-room" style="${selectedRoom !== 'ALL' ? 'display:none;' : ''}">${item.room_no}</td>
-                <td class="col-gender">${item.gender}</td>
-                <td class="col-class" style="${selectedClass !== 'ALL' ? 'display:none;' : ''}">${item.class_name}</td>
-                <td class="col-section">${sections}</td>
-                <td class="col-roll">${item.start_roll} - ${item.end_roll}</td>
-                <td class="col-total"><strong>${totalStudents}</strong></td>
-            `;
-            tbody.appendChild(tr);
-        });
+      } catch (err) {
+        console.error('Data fetch error:', err);
+        tableBody.innerHTML = `<tr><td colspan="6" class="no-data"><i class="fa-solid fa-circle-xmark"></i> ডাটা লোড করতে ব্যর্থ হয়েছে!</td></tr>`;
+      }
     }
-</script>
 
+    // 3. Populate Unique Dropdown Options
+    function populateDropdowns(data) {
+      const exams = [...new Set(data.map(item => item.exam_name).filter(Boolean))];
+      const rooms = [...new Set(data.map(item => item.room_no).filter(Boolean))];
+      const classes = [...new Set(data.map(item => item.class_name).filter(Boolean))];
+
+      exams.forEach(exam => {
+        filterExam.add(new Option(exam, exam));
+      });
+
+      rooms.forEach(room => {
+        filterRoom.add(new Option(room, room));
+      });
+
+      classes.forEach(cls => {
+        filterClass.add(new Option(cls, cls));
+      });
+
+      // Attach Event Listeners
+      filterExam.addEventListener('change', renderTable);
+      filterRoom.addEventListener('change', renderTable);
+      filterClass.addEventListener('change', renderTable);
+    }
+
+    // 4. Render Table and Manage Headers/Columns based on Filters
+    function renderTable() {
+      const selectedExam = filterExam.value;
+      const selectedRoom = filterRoom.value;
+      const selectedClass = filterClass.value;
+
+      // Filter keeping original array order
+      const filteredData = rawSeatData.filter(item => {
+        const matchExam = selectedExam ? item.exam_name === selectedExam : true;
+        const matchRoom = selectedRoom ? item.room_no === selectedRoom : true;
+        const matchClass = selectedClass ? item.class_name === selectedClass : true;
+        return matchExam && matchRoom && matchClass;
+      });
+
+      // Update Page Heading Dynamically
+      let headingText = `Exam Seat Plan: ${currentSession}`;
+      let subDetails = [];
+
+      if (selectedExam) subDetails.push(`Exam: ${selectedExam}`);
+      if (selectedRoom) subDetails.push(`Room: ${selectedRoom}`);
+      if (selectedClass) subDetails.push(`Class: ${selectedClass}`);
+
+      if (subDetails.length > 0) {
+        headingText += ` (${subDetails.join(' | ')})`;
+      }
+      pageHeading.innerHTML = `<i class="fa-solid fa-clipboard-list"></i> ${headingText}`;
+
+      // Manage Hidden Columns (Column Hiding Requirement)
+      toggleColumnVisibility('.col-exam', selectedExam !== '');
+      toggleColumnVisibility('.col-room', selectedRoom !== '');
+      toggleColumnVisibility('.col-class', selectedClass !== '');
+
+      // Adjust Font Density Class for Print Output
+      updatePrintDensityClass(filteredData.length, !!selectedRoom || !!selectedClass);
+
+      // Render Rows
+      if (filteredData.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="no-data"><i class="fa-solid fa-circle-info"></i> নির্বাচিত ফিল্টারের জন্য কোনো ডাটা পাওয়া যায়নি।</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      filteredData.forEach(row => {
+        const total = (row.end_roll - row.start_roll) + 1;
+        const rollRange = `${row.start_roll} - ${row.end_roll}`;
+
+        html += `
+          <tr>
+            <td class="col-room ${selectedRoom ? 'hide-column' : ''}">${row.room_no || '-'}</td>
+            <td class="col-gender">${row.gender || 'ALL'}</td>
+            <td class="col-class ${selectedClass ? 'hide-column' : ''}">${row.class_name || '-'}</td>
+            <td class="col-section">${row.section || '-'}</td>
+            <td class="col-roll">${rollRange}</td>
+            <td class="col-total">${total > 0 ? total : 0}</td>
+          </tr>
+        `;
+      });
+
+      tableBody.innerHTML = html;
+    }
+
+    // Helper to Hide/Show Column Headings and Cells
+    function toggleColumnVisibility(selector, hide) {
+      document.querySelectorAll(selector).forEach(el => {
+        if (hide) {
+          el.classList.add('hide-column');
+        } else {
+          el.classList.remove('hide-column');
+        }
+      });
+    }
+
+    // Helper to dynamically scale print fonts based on record density
+    function updatePrintDensityClass(recordCount, isSpecificFilter) {
+      document.body.classList.remove('print-density-high', 'print-density-medium', 'print-density-low');
+
+      if (recordCount <= 6 || isSpecificFilter) {
+        document.body.classList.add('print-density-low'); // Extra Large font for wall displays
+      } else if (recordCount <= 15) {
+        document.body.classList.add('print-density-medium'); // Medium Large font
+      } else {
+        document.body.classList.add('print-density-high'); // Standard compact print font
+      }
+    }
+  </script>
 </body>
 </html>
