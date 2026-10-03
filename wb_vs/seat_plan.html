@@ -74,10 +74,10 @@
 
     /* Instructions Box */
     .instruction-card {
-      background: #e0f2fe;
+      background: linear-gradient(135deg, #f8fbff, #eef7ff);
       border: 1px solid #bae6fd;
-      border-left: 5px solid #0284c7;
-      padding: 14px 18px;
+      border-left: 5px solid var(--primary-dark);
+      padding: 18px 20px;
       margin-bottom: 20px;
       border-radius: 0 0 8px 8px;
       color: #0369a1;
@@ -86,17 +86,26 @@
     }
 
     .instruction-card h4 {
-      margin: 0 0 6px 0;
-      font-size: 15px;
-      color: #0284c7;
+      color: var(--primary-dark);
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
     }
 
-    .instruction-card ul {
+    .instruction p {
       margin: 0;
-      padding-left: 20px;
+      color: #475467;
+      font-size: .94rem;
+    }
+    
+    .instruction-card ul {
+      margin: 9px 0 0 20px;
+      padding: 0;
+      color: #475467;
+      font-size: .92rem;
     }
 
     .instruction-card li {
@@ -359,11 +368,15 @@
   <!-- Instruction Box (Web Only) -->
   <div class="instruction-card no-print">
     <h4><i class="fa-solid fa-circle-info"></i> নির্দেশিকা:</h4>
+    
+       <p>
+          পরীক্ষায় শিক্ষার্থীর স্বাক্ষর ও উপস্থিতি রেজিস্টার দেখার জন্য ড্রপ ডাউন থেকে <b>পরীক্ষার নাম</b> সিলেক্ট করুন।
+          প্রয়োজন অনুযায়ী <b>Class</b> অথবা <b>Room No</b> সিলেক্ট করলে সংশ্লিষ্ট ডাটা দেখা যাবে।
+        </p>
+    
     <ul>
-      <li>ডাটা লোড হওয়া পর্যন্ত অপেক্ষা করুন। লোড সম্পন্ন হলে <b>"Exam"</b> ড্রপ-ডাউনটি সক্রিয় হবে।</li>
-      <li>প্রথমে <b>"Exam"</b> ড্রপ-ডাউন থেকে নির্দিষ্ট পরীক্ষা সিলেক্ট করুন। পরীক্ষা সিলেক্ট করার সাথে সাথেই ডাটা ফিল্টার হবে এবং পরবর্তী ফিল্টারসমূহ সক্রিয় হবে।</li>
-      <li>প্রয়োজনে নির্দিষ্ট <b>Class</b> বা <b>Room No</b> ফিল্টার করে ডাটা দেখতে পারেন।</li>
-      <li>একসাথে সকল স্বাক্ষর পাতা প্রিন্ট করতে <b>"Batch Print — All Student"</b> বোতামে এবং একক কোনো রুম বা ক্লাসের পাতা প্রিন্ট করতে ঐ কার্ডের <b>"প্রিন্ট"</b> বোতামে ক্লিক করুন।</li>
+      <li>একসাথে সকল শিক্ষার্থীর স্বাক্ষর পাতা প্রিন্ট করতে <b>"Batch Print — All Student"</b> বোতামে ক্লিক করুন।<li>
+      <li>একক কোনো রুম বা ক্লাসের পাতা প্রিন্ট করতে ঐ কার্ডের <b>"প্রিন্ট"</b> বোতামে ক্লিক করুন।</li>
     </ul>
   </div>
 
