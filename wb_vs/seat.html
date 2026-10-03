@@ -651,6 +651,7 @@
         <span id="sessionDisplay">Session</span>
       </h2>
 
+
       <!-- =========================
            INSTRUCTION
       ========================== -->
@@ -849,33 +850,11 @@
        APPLICATION CONFIGURATION
     ============================================================ */
 
-    const CONFIG = {
-
-      /*
-       * current_students-এর session কোনটি ব্যবহার হবে।
-       *
-       * উদাহরণ:
-       * "2026-27"
-       *
-       * আপনার database-এ যে session আছে সেটি লিখুন।
-       */
-      SESSION: "2026",
-
-      /*
-       * যদি SESSION খালি ("") রাখা হয়,
-       * তাহলে current_students-এর session filter করা হবে না।
-       *
-       * Seat plan-এর সঙ্গে current_students session মেলানোর জন্য
-       * নির্দিষ্ট SESSION দেওয়াই নিরাপদ।
-       */
-
-      PAGE_SIZE: 1000,
-
-      SCHOOL_NAME: "Pathpukur High School (HS)",
-
-      MAIN_TITLE: "Exam Seat Plan"
-    };
-
+  const CONFIG = {
+    PAGE_SIZE: 1000,
+    SCHOOL_NAME: "Pathpukur High School (HS)",
+    MAIN_TITLE: "Exam Seat Plan"
+  };
 
     /* ============================================================
        SUPABASE CLIENT
@@ -959,30 +938,91 @@
 
     async function init() {
 
-      sessionDisplay.textContent =
-        CONFIG.SESSION || "Current Session";
+  sessionDisplay.textContent = "Loading...";
 
-      setStatus("loading", "পরীক্ষার তালিকা লোড হচ্ছে...");
+  setStatus(
+    "loading",
+    "পরীক্ষার তালিকা লোড হচ্ছে..."
+  );
 
-      try {
+  try {
 
-        await loadExamNames();
+    await loadExamNames();
 
-        setStatus(
-          "normal",
-          "পরীক্ষার নাম সিলেক্ট করুন!"
-        );
+    await loadAndDisplaySession();
 
-      } catch (error) {
+    setStatus(
+      "normal",
+      "পরীক্ষার নাম সিলেক্ট করুন!"
+    );
 
-        console.error(error);
+  } catch (error) {
 
-        setStatus(
-          "error",
-          "পরীক্ষার তালিকা লোড করা যায়নি। Supabase configuration পরীক্ষা করুন।"
-        );
-      }
-    }
+    console.error(error);
+
+    setStatus(
+      "error",
+      "ডাটা লোড করা যায়নি: " +
+      (error.message || "Unknown error")
+    );
+  }
+}
+
+    async function loadAndDisplaySession() {
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("current_students")
+    .select("session")
+    .not("session", "is", null)
+    .neq("session", "")
+    .order("id", {
+      ascending: true
+    })
+    .limit(1000);
+
+  if (error) {
+    throw error;
+  }
+
+  const sessions =
+    uniquePreserveOrder(
+      (data || []).map(
+        row => row.session
+      )
+    );
+
+  if (sessions.length === 0) {
+
+    sessionDisplay.textContent =
+      "Session পাওয়া যায়নি";
+
+    return;
+  }
+
+  /*
+   * যদি একটি মাত্র session থাকে,
+   * সেটিই সরাসরি দেখানো হবে।
+   */
+  if (sessions.length === 1) {
+
+    sessionDisplay.textContent =
+      sessions[0];
+
+    return;
+  }
+
+  /*
+   * একাধিক session থাকলে সবগুলো দেখাবে।
+   *
+   * যেমন:
+   * 2026 / 2026-27
+   */
+  sessionDisplay.textContent =
+    sessions.join(" / ");
+}
 
 
     /* ============================================================
