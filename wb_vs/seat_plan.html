@@ -56,7 +56,15 @@
       opacity: 0.95;
       font-weight: 500;
     }
-
+    
+   .page-title {
+      text-align: center;
+      margin: 0 0 20px;
+      color: var(--primary-dark);
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 800;
+    }
+    
     .header-card p {
       font-size: 13px;
       opacity: 0.85;
@@ -340,13 +348,14 @@
 <div class="container">
   <!-- Header -->
   <div class="header-card">
-    <div>
       <h1>Pathpukur High School (HS)</h1>
       <h2><i class="fa-solid fa-file-signature"></i> Student Attendance and Signature Register for Exam</h2>
-      <p>Session: <span id="sessionYear">2026</span></p>
-    </div>
   </div>
-
+  
+<div class="page-title">
+  Student Attendance Sheet: <span id="sessionYear">2026</span>
+</div>
+  
   <!-- Instruction Box (Web Only) -->
   <div class="instruction-card no-print">
     <h4><i class="fa-solid fa-circle-info"></i> নির্দেশিকা:</h4>
