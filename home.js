@@ -123,13 +123,29 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔢 ক্যাপচা ফাংশনালিটি (Cryptographically Secure & Timeout)
+// 🔢 ক্যাপচা ফাংশনালিটি (Secure with Fallback)
 // =================================
 let currentCaptchaCode = "";
 let captchaTimer = null;
 const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // ২ মিনিট
 
-// 💡 clearError প্যারামিটার যোগ করা হয়েছে (Default = true)
+// 💡 window.crypto না থাকলে Safe Math.random Fallbacks
+function getRandomValuesFallback(array) {
+    if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+        try {
+            window.crypto.getRandomValues(array);
+            return;
+        } catch (e) {
+            console.warn("Crypto API failed, falling back to Math.random");
+        }
+    }
+    // Fallback logic
+    for (let i = 0; i < array.length; i++) {
+        array[i] = Math.floor(Math.random() * 4294967296);
+    }
+}
+
+// 💡 ক্যাপচা জেনারেটর
 function generateCaptcha(clearError = true) {
     const canvas = document.getElementById('captchaCanvas');
     const userInput = document.getElementById('userCaptcha');
@@ -137,79 +153,93 @@ function generateCaptcha(clearError = true) {
     
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return; // Canvas 2D context না পেলে সেফ এক্সিট
 
     // ১. আগের টাইমার বন্ধ করা
     if (captchaTimer) clearTimeout(captchaTimer);
 
-    // 💡 ২. প্রয়োজন অনুয়াযী আগের এরর মেসেজ মোছা (ভুল ইনপুটের সময় মোছা হবে না)
+    // ২. আগের এরর মেসেজ মোছা (যদি প্রযোজ্য হয়)
     if (clearError && errorDiv) {
         errorDiv.innerText = "";
     }
 
-    // ক্যানভাস রিসেট ও ব্যাকগ্রাউন্ড প্রস্তুত করা
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#f2f2f2";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // ক্যাপচা কোড তৈরি
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    const length = 5;
-    let captcha = "";
-    const randomValues = new Uint32Array(length);
-    window.crypto.getRandomValues(randomValues);
-
-    for (let i = 0; i < length; i++) {
-        captcha += chars.charAt(randomValues[i] % chars.length);
-    }
-    currentCaptchaCode = captcha;
-
-    // 🎨 ৩. ব্যাকগ্রাউন্ডে এলোমেলো দাগ (Noise Lines) আঁকা
-    for (let i = 0; i < 6; i++) {
-        ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
-        ctx.beginPath();
-        ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
-        ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
-        ctx.lineWidth = 1 + Math.random();
-        ctx.stroke();
-    }
-
-    // 🎨 ৪. ক্যাপচার প্রতিটি অক্ষর কিছুটা বাঁকা ও রঙ বেরঙের করে আঁকা
-    ctx.font = "bold 22px Arial";
-    for (let i = 0; i < length; i++) {
-        ctx.fillStyle = `rgb(${Math.random() * 150}, ${Math.random() * 150}, ${Math.random() * 150})`;
-        ctx.save();
-        ctx.translate(20 + i * 22, 28);
-        ctx.rotate((Math.random() - 0.5) * 0.4);
-        ctx.fillText(captcha[i], 0, 0);
-        ctx.restore();
-    }
-
-    // 🎨 ৫. অক্ষরের ওপর দিয়ে অতিরিক্ত ১-২টি নয়েজ রেখা
-    ctx.strokeStyle = "rgba(255, 0, 0, 0.6)";
-    ctx.beginPath();
-    ctx.moveTo(10, Math.random() * canvas.height);
-    ctx.lineTo(canvas.width - 10, Math.random() * canvas.height);
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
-
-    // ৬. নির্দিষ্ট সময় পর Expired হওয়ার টাইমার
-    captchaTimer = setTimeout(() => {
-        currentCaptchaCode = ""; // ক্যাপচা বাতিল করা
-        
+    try {
+        // ক্যানভাস রিসেট ও ব্যাকগ্রাউন্ড প্রস্তুত করা
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#ffe6e6";
+        ctx.fillStyle = "#f2f2f2";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.font = "bold 18px Arial";
-        ctx.fillStyle = "red";
-        ctx.fillText("EXPIRED", 28, 26);
 
+        // ক্যাপচা কোড তৈরি
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        const length = 5;
+        let captcha = "";
+        const randomValues = new Uint32Array(length);
+        
+        // 💡 সুরক্ষিতভাবে র‍‍্যান্ডম ভ্যালু জেনারেট
+        getRandomValuesFallback(randomValues);
+
+        for (let i = 0; i < length; i++) {
+            captcha += chars.charAt(randomValues[i] % chars.length);
+        }
+        currentCaptchaCode = captcha;
+
+        // 🎨 ৩. ব্যাকগ্রাউন্ডে এলোমেলো দাগ (Noise Lines) আঁকা
+        for (let i = 0; i < 6; i++) {
+            ctx.strokeStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+            ctx.beginPath();
+            ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.lineWidth = 1 + Math.random();
+            ctx.stroke();
+        }
+
+        // 🎨 ৪. ফন্ট ইউনিভার্সাল (sans-serif) করা হয়েছে এবং টেক্সট আঁকা হচ্ছে
+        ctx.font = "bold 22px sans-serif";
+        ctx.textBaseline = "middle";
+        
+        for (let i = 0; i < length; i++) {
+            ctx.fillStyle = `rgb(${Math.random() * 150}, ${Math.random() * 150}, ${Math.random() * 150})`;
+            ctx.save();
+            ctx.translate(20 + i * 22, 28);
+            ctx.rotate((Math.random() - 0.5) * 0.4);
+            ctx.fillText(captcha[i], 0, 0);
+            ctx.restore();
+        }
+
+        // 🎨 ৫. অক্ষরের ওপর দিয়ে অতিরিক্ত ১-২টি নয়েজ রেখা
+        ctx.strokeStyle = "rgba(255, 0, 0, 0.6)";
+        ctx.beginPath();
+        ctx.moveTo(10, Math.random() * canvas.height);
+        ctx.lineTo(canvas.width - 10, Math.random() * canvas.height);
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        if (userInput) userInput.value = ""; // ইনপুট ফিল্ড রিসেট
+
+        // ৬. নির্দিষ্ট সময় পর Expired হওয়ার টাইমার
+        captchaTimer = setTimeout(() => {
+            currentCaptchaCode = ""; // ক্যাপচা বাতিল করা
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#ffe6e6";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "bold 18px sans-serif";
+            ctx.fillStyle = "red";
+            ctx.fillText("EXPIRED", 28, 26);
+
+            if (errorDiv) {
+                errorDiv.innerText = "⏳ CAPTCHA expired! Please refresh CAPTCHA.";
+                errorDiv.style.color = "red";
+            }
+        }, CAPTCHA_EXPIRE_TIME);
+
+    } catch (err) {
+        console.error("CAPTCHA Generation Error:", err);
         if (errorDiv) {
-            errorDiv.innerText = "⏳ CAPTCHA expired! Please refresh CAPTCHA.";
+            errorDiv.innerText = "⚠️ Failed to render CAPTCHA. Click refresh.";
             errorDiv.style.color = "red";
         }
-    }, CAPTCHA_EXPIRE_TIME);
+    }
 }
 
 // =================================
