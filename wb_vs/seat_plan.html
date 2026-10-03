@@ -10,10 +10,10 @@
     :root {
       --primary-color: #0f4c81;
       --primary-dark: #09365d;
-      --bg-color: #f8fafc;
+      --bg-color: #f1f5f9;
       --card-bg: #ffffff;
       --text-color: #1e293b;
-      --border-color: #e2e8f0;
+      --border-color: #cbd5e1;
     }
 
     * {
@@ -24,57 +24,90 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
-      background: #eef3f8;
-      font-family: "Noto Sans Bengali", "Roboto", sans-serif;
+      font-family: "Noto Sans Bengali", "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
     }
 
     .container {
       width: min(1200px, calc(100% - 24px));
-      margin: 0 auto;
+      margin: 20px auto;
     }
 
+    /* Header Styling */
     .header-card {
-      background:
-        linear-gradient(
-          135deg,
-          #083b66 0%,
-          #0f4c81 50%,
-          #12649d 100%
-        );
+      background: linear-gradient(135deg, #083b66 0%, #0f4c81 50%, #12649d 100%);
       color: white;
       text-align: center;
-      padding: 26px 15px 22px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.15);
+      padding: 24px 15px;
+      border-radius: 10px 10px 0 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .header-card h1 {
       margin: 0;
-      font-size: clamp(1.55rem, 4vw, 2.35rem);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
       font-weight: 800;
-      letter-spacing: .2px;
+      letter-spacing: 0.5px;
     }
 
     .header-card h2 {
-      margin-top: 5px;
-      font-size: clamp(.85rem, 2vw, 1rem);
-      opacity: .92;
+      margin-top: 6px;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      opacity: 0.95;
+      font-weight: 500;
     }
 
     .header-card p {
       font-size: 13px;
       opacity: 0.85;
       margin-top: 4px;
+      margin-bottom: 0;
     }
 
+    /* Instructions Box */
+    .instruction-card {
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      border-left: 5px solid #0284c7;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      border-radius: 0 0 8px 8px;
+      color: #0369a1;
+      font-size: 13.5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .instruction-card h4 {
+      margin: 0 0 6px 0;
+      font-size: 15px;
+      color: #0284c7;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .instruction-card ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .instruction-card li {
+      margin-bottom: 4px;
+    }
+
+    /* Filter Card */
     .filter-card {
+      background: var(--card-bg);
+      border-radius: 10px;
       padding: 20px;
       margin-bottom: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid var(--border-color);
     }
 
     .filter-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
       align-items: flex-end;
     }
@@ -93,18 +126,26 @@
 
     .form-control {
       padding: 10px 12px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       font-size: 14px;
       outline: none;
       transition: all 0.2s;
+      background-color: #fff;
     }
 
     .form-control:focus {
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+      box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.15);
     }
 
+    .form-control:disabled {
+      background-color: #f1f5f9;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    /* Buttons */
     .btn {
       padding: 10px 18px;
       border: none;
@@ -117,6 +158,13 @@
       justify-content: center;
       gap: 8px;
       transition: all 0.2s;
+      height: 41px;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      filter: grayscale(40%);
     }
 
     .btn-primary {
@@ -124,7 +172,7 @@
       color: white;
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       background-color: var(--primary-dark);
     }
 
@@ -133,16 +181,17 @@
       color: white;
     }
 
-    .btn-success:hover {
+    .btn-success:hover:not(:disabled) {
       background-color: #15803d;
     }
 
+    /* Printable Card */
     .printable-card {
       background: var(--card-bg);
       border-radius: 10px;
-      padding: 20px;
+      padding: 24px;
       margin-bottom: 25px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       border: 1px solid var(--border-color);
       page-break-after: always;
     }
@@ -157,13 +206,14 @@
       font-size: 20px;
       color: #000;
       font-weight: bold;
+      margin: 0;
     }
 
     .card-print-header h3 {
       font-size: 15px;
       color: #333;
       font-weight: 600;
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     .card-header-title {
@@ -172,7 +222,7 @@
       align-items: center;
       padding-bottom: 12px;
       border-bottom: 2px solid var(--border-color);
-      margin-bottom: 12px;
+      margin-bottom: 15px;
       font-size: 18px;
       font-weight: 700;
       color: var(--primary-dark);
@@ -181,12 +231,13 @@
     .card-meta-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
-      background: #f1f5f9;
-      padding: 10px 15px;
+      gap: 12px;
+      background: #f8fafc;
+      padding: 12px 16px;
       border-radius: 6px;
       margin-bottom: 15px;
-      font-size: 13px;
+      font-size: 13.5px;
+      border: 1px solid #e2e8f0;
     }
 
     .table-responsive {
@@ -202,18 +253,18 @@
 
     th, td {
       border: 1px solid #cbd5e1;
-      padding: 6px 8px;
+      padding: 7px 10px;
       text-align: center;
     }
 
     th {
-      background-color: #f8fafc;
+      background-color: #f1f5f9;
       color: #334155;
       font-weight: 700;
     }
 
     .attn-cell {
-      height: 32px;
+      height: 34px;
       min-width: 90px;
     }
 
@@ -233,38 +284,45 @@
       body {
         background-color: #fff;
         padding: 0;
+        margin: 0;
         color: #000;
       }
 
-      .no-print, .filter-card, .header-card, .btn-single-print {
+      .container {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .no-print, .filter-card, .header-card, .instruction-card, .btn-single-print {
         display: none !important;
       }
 
       .printable-card {
-        box-shadow: none;
-        border: none;
-        padding: 0;
-        margin: 0;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
       }
 
       .card-print-header {
-        display: block;
+        display: block !important;
       }
 
       .card-header-title {
-        display: none;
+        display: none !important;
       }
 
       .card-meta-grid {
-        background: none;
-        border: 1px solid #000;
-        padding: 6px 10px;
-        margin-bottom: 10px;
+        background: none !important;
+        border: 1px solid #000 !important;
+        padding: 6px 10px !important;
+        margin-bottom: 10px !important;
       }
 
       th, td {
         border: 1px solid #000 !important;
-        color: #000;
+        color: #000 !important;
       }
 
       th {
@@ -289,13 +347,24 @@
     </div>
   </div>
 
+  <!-- Instruction Box (Web Only) -->
+  <div class="instruction-card no-print">
+    <h4><i class="fa-solid fa-circle-info"></i> নির্দেশিকা:</h4>
+    <ul>
+      <li>ডাটা লোড হওয়া পর্যন্ত অপেক্ষা করুন। লোড সম্পন্ন হলে <b>"Exam"</b> ড্রপ-ডাউনটি সক্রিয় হবে।</li>
+      <li>প্রথমে <b>"Exam"</b> ড্রপ-ডাউন থেকে নির্দিষ্ট পরীক্ষা সিলেক্ট করুন। পরীক্ষা সিলেক্ট করার সাথে সাথেই ডাটা ফিল্টার হবে এবং পরবর্তী ফিল্টারসমূহ সক্রিয় হবে।</li>
+      <li>প্রয়োজনে নির্দিষ্ট <b>Class</b> বা <b>Room No</b> ফিল্টার করে ডাটা দেখতে পারেন।</li>
+      <li>একসাথে সকল স্বাক্ষর পাতা প্রিন্ট করতে <b>"Batch Print — All Student"</b> বোতামে এবং একক কোনো রুম বা ক্লাসের পাতা প্রিন্ট করতে ঐ কার্ডের <b>"প্রিন্ট"</b> বোতামে ক্লিক করুন।</li>
+    </ul>
+  </div>
+
   <!-- Filters -->
   <div class="filter-card no-print">
     <div class="filter-grid">
       <div class="form-group">
         <label for="selectUniversalExam"><i class="fa-solid fa-book-open"></i> Exam</label>
-        <select id="selectUniversalExam" class="form-control" onchange="onExamChange()">
-          <option value="">-- পরীক্ষা নির্বাচন করুন --</option>
+        <select id="selectUniversalExam" class="form-control" onchange="onExamChange()" disabled>
+          <option value="">-- পরীক্ষা লোড হচ্ছে... --</option>
         </select>
       </div>
 
@@ -314,16 +383,19 @@
       </div>
       
       <div class="no-print">
-      <button class="btn btn-success" onclick="printLandscapeBatch()"><i class="fa-solid fa-print"></i> Batch Print — All Student</button>
-    </div>
+        <button id="btnPrintBatch" class="btn btn-success" onclick="printLandscapeBatch()" disabled>
+          <i class="fa-solid fa-print"></i> Batch Print — All Student
+        </button>
+      </div>
       
     </div>
   </div>
 
   <!-- Container for Attendance Cards -->
   <div id="attendanceCardsContainer">
-    <div style="text-align:center; padding:30px; font-size:16px; color:#64748b;">
-      <i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...
+    <div style="text-align:center; padding:40px; font-size:16px; color:#64748b;">
+      <i class="fa-solid fa-spinner fa-spin" style="font-size:24px; margin-bottom:10px; color:#0f4c81;"></i><br>
+      ডাটা লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...
     </div>
   </div>
 </div>
@@ -454,6 +526,9 @@
     availableExams.forEach(exam => {
       select.innerHTML += `<option value="${exam}">${exam}</option>`;
     });
+
+    // Enable Exam Dropdown after data fetch
+    select.disabled = false;
   }
 
   function populateClassDropdown() {
@@ -500,12 +575,15 @@
     const selectedExam = document.getElementById('selectUniversalExam').value;
     const classSelect = document.getElementById('selectAttnClass');
     const roomSelect = document.getElementById('selectAttnRoom');
+    const batchBtn = document.getElementById('btnPrintBatch');
 
     if (!selectedExam) {
       classSelect.innerHTML = '<option value="">-- সকল ক্লাস --</option>';
       roomSelect.innerHTML = '<option value="">-- সকল রুম --</option>';
       classSelect.disabled = true;
       roomSelect.disabled = true;
+      batchBtn.disabled = true;
+      
       document.getElementById('attendanceCardsContainer').innerHTML = 
         '<div style="text-align:center; padding:40px; font-size:16px; color:#475569;">' +
         '<i class="fa-solid fa-arrow-up" style="font-size:24px; margin-bottom:10px; color:#0284c7;"></i><br>' +
@@ -515,6 +593,7 @@
 
     populateClassDropdown();
     populateRoomDropdown();
+    batchBtn.disabled = false;
     renderAttendanceView();
   }
 
