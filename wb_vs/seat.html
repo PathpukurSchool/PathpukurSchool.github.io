@@ -841,20 +841,11 @@
   <script>
     /* ============================================================
        SUPABASE CONFIGURATION
-       ============================================================
+       ============================================================ */
 
-       এখানে আপনার Supabase Project URL এবং anon/publishable key দিন।
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
-       Supabase Dashboard:
-       Project Settings -> API
-
-       কখনোই service_role key এখানে ব্যবহার করবেন না।
-    ============================================================ */
-
-    const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-
-    const SUPABASE_ANON_KEY =
-      "YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY";
 
 
     /* ============================================================
@@ -871,7 +862,7 @@
        *
        * আপনার database-এ যে session আছে সেটি লিখুন।
        */
-      SESSION: "2026-27",
+      SESSION: "2026",
 
       /*
        * যদি SESSION খালি ("") রাখা হয়,
