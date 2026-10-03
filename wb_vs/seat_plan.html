@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>শিক্ষার্থীর স্বাক্ষর ও উপস্থিতি রেজিস্টার - পাতপুকুর হাই স্কুল (উঃ মাঃ)</title>
+  
+  <title>Pathpukur High School (HS)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary-color: #0284c7;
-      --primary-dark: #0369a1;
+      --primary-color: #0f4c81;
+      --primary-dark: #09365d;
       --bg-color: #f8fafc;
       --card-bg: #ffffff;
       --text-color: #1e293b;
@@ -29,34 +30,35 @@
     }
 
     .container {
-      max-width: 1200px;
+      width: min(1200px, calc(100% - 24px));
       margin: 0 auto;
     }
 
     .header-card {
-      background: linear-gradient(135deg, #0284c7, #0369a1);
+      background:
+        linear-gradient(
+          135deg,
+          #083b66 0%,
+          #0f4c81 50%,
+          #12649d 100%
+        );
       color: white;
-      padding: 20px 25px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
+      text-align: center;
+      padding: 26px 15px 22px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.15);
     }
 
     .header-card h1 {
-      font-size: 22px;
-      font-weight: 700;
+      margin: 0;
+      font-size: clamp(1.55rem, 4vw, 2.35rem);
+      font-weight: 800;
+      letter-spacing: .2px;
     }
 
     .header-card h2 {
-      font-size: 16px;
-      font-weight: 500;
-      opacity: 0.95;
-      margin-top: 4px;
+      margin-top: 5px;
+      font-size: clamp(.85rem, 2vw, 1rem);
+      opacity: .92;
     }
 
     .header-card p {
@@ -64,6 +66,44 @@
       opacity: 0.85;
       margin-top: 4px;
     }
+
+    /* =========================
+       INSTRUCTION
+    ========================== */
+
+    .instruction {
+      padding: 18px 20px;
+      background: linear-gradient(135deg, #f8fbff, #eef7ff);
+      border-left: 5px solid var(--primary-color);
+    }
+
+    .instruction-title {
+      color: var(--primary-dark);
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .instruction p {
+      margin: 0;
+      color: #475467;
+      font-size: .94rem;
+    }
+
+    .instruction ul {
+      margin: 9px 0 0 20px;
+      padding: 0;
+      color: #475467;
+      font-size: .92rem;
+    }
+
+    .instruction li {
+      margin-bottom: 4px;
+    }
+
 
     .filter-card {
       background: var(--card-bg);
@@ -285,38 +325,65 @@
   <!-- Header -->
   <div class="header-card">
     <div>
-      <h1>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
-      <h2><i class="fa-solid fa-file-signature"></i> শিক্ষার্থীদের উপস্থিতি ও স্বাক্ষর রেজিস্টার</h2>
-      <p>Session Year: <span id="sessionYear">2026</span></p>
-    </div>
-    <div class="no-print">
-      <button class="btn btn-success" onclick="printLandscapeBatch()"><i class="fa-solid fa-print"></i> ব্যাচ প্রিন্ট (সকল দৃশ্যমান পাতা)</button>
+      <h1>Pathpukur High School (HS)</h1>
+      <h2><i class="fa-solid fa-file-signature"></i> Student Attendance and Signature Register for Exam</h2>
+      <p>Session: <span id="sessionYear">2026</span></p>
     </div>
   </div>
+
+  <!-- =========================
+           INSTRUCTION
+      ========================== -->
+
+      <section class="card instruction">
+        <div class="instruction-title">
+          <i class="fa-solid fa-circle-info"></i>
+          নির্দেশিকা:
+        </div>
+
+        <p>
+          পরীক্ষার সিট প্ল্যান দেখার জন্য ড্রপ ডাউন থেকে <b>পরীক্ষার নাম</b> সিলেক্ট করুন।
+          প্রয়োজন অনুযায়ী Room No অথবা Class সিলেক্ট করলে সংশ্লিষ্ট ডাটা দেখা যাবে।
+        </p>
+
+        <ul>
+          <li>
+            Print দিয়ে বর্তমান ফলাফল A4 পেজে প্রিন্ট করা যাবে।
+          </li>
+          <li>
+            Batch Print দিয়ে নির্বাচিত পরীক্ষার প্রতিটি Room অথবা Class আলাদা A4 পেজে প্রিন্ট করা যাবে।
+          </li>
+        </ul>
+      </section>
 
   <!-- Filters -->
   <div class="filter-card no-print">
     <div class="filter-grid">
       <div class="form-group">
-        <label for="selectUniversalExam"><i class="fa-solid fa-book-open"></i> পরীক্ষা নির্বাচন করুন:</label>
+        <label for="selectUniversalExam"><i class="fa-solid fa-book-open"></i> Exam</label>
         <select id="selectUniversalExam" class="form-control" onchange="onExamChange()">
           <option value="">-- পরীক্ষা নির্বাচন করুন --</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label for="selectAttnClass"><i class="fa-solid fa-graduation-cap"></i> ক্লাস নির্বাচন করুন:</label>
+        <label for="selectAttnClass"><i class="fa-solid fa-graduation-cap"></i> Class</label>
         <select id="selectAttnClass" class="form-control" onchange="onFilterChange()" disabled>
           <option value="">-- সকল ক্লাস --</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label for="selectAttnRoom"><i class="fa-solid fa-door-open"></i> রুম নম্বর নির্বাচন করুন:</label>
+        <label for="selectAttnRoom"><i class="fa-solid fa-door-open"></i> Room No</label>
         <select id="selectAttnRoom" class="form-control" onchange="onFilterChange()" disabled>
           <option value="">-- সকল রুম --</option>
         </select>
       </div>
+      
+      <div class="no-print">
+      <button class="btn btn-success" onclick="printLandscapeBatch()"><i class="fa-solid fa-print"></i> Batch Print — All Student</button>
+    </div>
+      
     </div>
   </div>
 
