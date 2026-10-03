@@ -2,3662 +2,1352 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <title>Pathpukur High School (H.S.)</title>
 
-  <title>Exam Seat Plan | Pathpukur High School (HS)</title>
-
-  <!-- Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Google Font -->
+  <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Roboto:wght@400;500;700;800&display=swap"
-    rel="stylesheet"
-  >
-
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-
-    :root {
-      --primary: #0f4c81;
-      --primary-dark: #09365d;
-      --secondary: #198754;
-      --danger: #dc3545;
-      --warning: #ff9800;
-      --light: #f5f8fc;
-      --border: #d9e2ec;
-      --text: #1f2937;
-      --muted: #667085;
-      --white: #ffffff;
-      --shadow: 0 8px 30px rgba(15, 76, 129, 0.10);
+    * { 
+      box-sizing: border-box; 
+      font-family: 'Tiro Bangla', 'Poppins', serif, Arial, sans-serif; 
+      -webkit-tap-highlight-color: transparent; 
+    }
+    
+    body { 
+      background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%); 
+      margin: 0; 
+      padding: 10px; 
+      color: #1e293b; 
+      min-height: 100vh;
+    }
+    
+    .container { 
+      max-width: 1050px; 
+      margin: 0 auto; 
+      background: rgba(255, 255, 255, 0.95); 
+      padding: 16px; 
+      border-radius: 18px; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+      border: 2px solid #ffffff;
+    }
+    
+    /* Header */
+    .header { 
+      text-align: center; 
+      border-bottom: 3px dashed #0284c7; 
+      padding-bottom: 12px; 
+      margin-bottom: 14px; 
+    }
+    
+    .school-name { 
+      font-size: 26px; 
+      color: #0369a1; 
+      margin: 0; 
+      font-weight: bold; 
+      line-height: 1.3;
+    }
+    
+    .page-title { 
+      font-size: 19px; 
+      color: #7e22ce; 
+      margin: 6px 0 0 0; 
+      font-weight: bold;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      background: #eef3f8;
-      color: var(--text);
-      font-family: "Noto Sans Bengali", "Roboto", sans-serif;
-      line-height: 1.5;
-    }
-
-    button,
-    select {
-      font: inherit;
-    }
-
-    .container {
-      width: min(1200px, calc(100% - 24px));
-      margin: 0 auto;
-    }
-
-    /* HEADER */
-
-    .school-header {
-      background:
-        linear-gradient(
-          135deg,
-          #083b66 0%,
-          #0f4c81 50%,
-          #12649d 100%
-        );
-
+    /* Universal Exam Selector Box */
+    .exam-selector-box {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
-      text-align: center;
-      padding: 26px 15px 22px;
-
-      box-shadow: 0 4px 18px rgba(0,0,0,.15);
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
     }
 
-    .school-header h1 {
-      margin: 0;
-      font-size: clamp(1.55rem, 4vw, 2.35rem);
-      font-weight: 800;
-    }
-
-    .school-header .subtitle {
-      margin-top: 5px;
-      font-size: clamp(.85rem, 2vw, 1rem);
-      opacity: .92;
-    }
-
-    /* MAIN */
-
-    main {
-      padding: 24px 0 45px;
-    }
-
-    .page-title {
-      text-align: center;
-      margin: 0 0 20px;
-      color: var(--primary-dark);
-      font-size: clamp(1.35rem, 3vw, 1.85rem);
-      font-weight: 800;
-    }
-
-    .card {
-      background: var(--white);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      margin-bottom: 18px;
-      overflow: hidden;
-    }
-
-    /* INSTRUCTION */
-
-    .instruction {
-      padding: 18px 20px;
-      background: linear-gradient(135deg, #f8fbff, #eef7ff);
-      border-left: 5px solid var(--primary);
-    }
-
-    .instruction-title {
-      color: var(--primary-dark);
-      font-size: 1.05rem;
-      font-weight: 800;
-      margin-bottom: 8px;
+    .exam-selector-box label {
+      font-size: 15px;
+      font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
     }
 
-    .instruction p {
-      margin: 0;
-      color: #475467;
-      font-size: .94rem;
-    }
-
-    .instruction ul {
-      margin: 9px 0 0 20px;
-      padding: 0;
-      color: #475467;
-      font-size: .92rem;
-    }
-
-    .instruction li {
-      margin-bottom: 4px;
-    }
-
-    /* FILTER */
-
-    .filter-card {
-      padding: 20px;
-    }
-
-    .filter-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .filter-group label {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      margin-bottom: 7px;
-      color: #344054;
-      font-size: .9rem;
-      font-weight: 700;
-    }
-
-    .filter-group select {
+    .exam-selector-box select {
       width: 100%;
-      height: 46px;
-      padding: 0 40px 0 13px;
-      border: 1px solid #cbd5e1;
-      border-radius: 9px;
-      background-color: white;
-      color: #1f2937;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      border: 2px solid #38bdf8;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #0f172a;
       outline: none;
       cursor: pointer;
     }
 
-    .filter-group select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(15, 76, 129, .10);
+    /* Notice Box */
+    .notice-box {
+      background: #fef3c7; 
+      color: #92400e; 
+      padding: 10px; 
+      border: 1.5px solid #fde68a;
+      border-left: 5px solid #f59e0b; 
+      border-radius: 10px; 
+      font-size: 14px; 
+      margin-bottom: 14px; 
+      text-align: center;
     }
 
-    .filter-group select:disabled {
-      background: #f2f4f7;
-      color: #98a2b3;
-      cursor: not-allowed;
-    }
-
-    /* BUTTONS */
-
-    .action-bar {
+    /* Navigation Tabs */
+    .tab-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
+      gap: 6px;
+      margin-bottom: 16px;
+      background: #e2e8f0;
+      padding: 5px;
+      border-radius: 12px;
     }
 
-    .btn {
-      min-height: 44px;
-      border: 0;
-      border-radius: 9px;
-      padding: 9px 15px;
+    .tab-btn {
+      flex: 1 1 20%;
+      padding: 10px 6px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: bold;
+      color: #475569;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Filters Section */
+    .filter-section { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      margin-bottom: 14px; 
+      background: #f1f5f9;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-group label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #334155;
+    }
+
+    .filter-section input, .filter-section select {
+      width: 100%; 
+      padding: 10px; 
+      font-size: 15px; 
+      border: 2px solid #cbd5e1;
+      border-radius: 10px; 
+      outline: none; 
+      background: #fff; 
+      font-weight: bold;
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 15px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: .15s;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
+    .btn-batch-print {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);
     }
 
-    .btn:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-      transform: none;
+    /* Result Card */
+    .result-card {
+      display: none;
+      background: linear-gradient(135deg, #ffffff, #f0fdf4);
+      border: 2px solid #22c55e;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
     }
 
-    .btn-primary {
-      background: var(--primary);
-      color: white;
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 12px;
+      font-size: 14.5px;
     }
 
-    .btn-green {
-      background: var(--secondary);
-      color: white;
-    }
+    .info-item span { color: #64748b; font-size: 13px; display: block; }
+    .info-item strong { color: #0f172a; font-size: 15px; }
 
-    .btn-purple {
-      background: #6f42c1;
-      color: white;
-    }
-
-    /* STATUS */
-
-    .status-box {
-      min-height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .room-highlight {
+      grid-column: span 2;
+      background: #dcfce7;
+      padding: 10px;
+      border-radius: 10px;
       text-align: center;
-      padding: 25px;
-      color: #667085;
-      font-size: 1rem;
+      border: 1.5px dashed #16a34a;
     }
 
-    .status-box.error {
-      color: var(--danger);
+    .room-highlight strong { font-size: 22px; color: #15803d; }
+
+    /* Printable Card Structure */
+    .printable-card {
+      background: #ffffff;
+      border: 2px solid #0f172a;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 25px;
     }
 
-    .status-box.success {
-      color: var(--secondary);
+    .card-print-header {
+      display: none;
+      text-align: center;
+      border-bottom: 2px solid #000;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
     }
 
-    .loading-content {
+    .card-print-header h2 {
+      margin: 0;
+      font-size: 22px;
+      color: #000;
+    }
+
+    .card-print-header h3 {
+      margin: 3px 0 0 0;
+      font-size: 16px;
+      color: #000;
+    }
+
+    .card-header-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #0f172a;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .spinner {
-      width: 38px;
-      height: 38px;
-      border: 4px solid #dce8f5;
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* TABLE */
-
-    .table-header {
-      padding: 15px 18px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
+      align-items: center;
     }
 
-    .table-header-title {
-      font-weight: 800;
-      color: var(--primary-dark);
+    .card-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
     }
 
-    .selection-info {
-      color: var(--muted);
-      font-size: .85rem;
-    }
-
-    .table-wrapper {
-      width: 100%;
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 750px;
-    }
-
-    th,
-    td {
-      border: 1px solid #b8c4d0;
-      padding: 10px 9px;
-      text-align: center;
-      vertical-align: middle;
-    }
-
-    th {
-      background: var(--primary);
-      color: white;
-      font-weight: 800;
-      white-space: nowrap;
-      font-size: .88rem;
-    }
-
-    td {
-      font-size: .92rem;
-      font-weight: 600;
-      color: #27364a;
-      background: white;
-    }
-
-    tbody tr:nth-child(even) td {
+    .card-meta-item {
       background: #f8fafc;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
     }
 
-    tbody tr:hover td {
-      background: #edf6ff;
+    .card-meta-item strong {
+      font-size: 15px;
+      color: #0f172a;
     }
 
-    .roll-range {
-      white-space: nowrap;
-      font-weight: 800;
+    .btn-single-print {
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      font-size: 13px;
+      border-radius: 6px;
+      cursor: pointer;
     }
 
-    .specific-rolls {
-      font-weight: 800;
+    /* Table Responsiveness & Column Setup */
+    .table-responsive { 
+      overflow-x: auto; 
+      border-radius: 10px;
+      border: 1px solid #0284c7;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      background: #fff;
+      table-layout: auto; 
+    }
+
+    th, td { 
+      padding: 8px 6px; 
+      text-align: center; 
+      border: 1px solid #cbd5e1; 
+      font-size: 14px; 
+      word-wrap: break-word;
+    }
+
+    th { background-color: #0284c7; color: white; font-size: 15px; }
+
+    /* Screen Friendly Columns */
+    .col-room { width: 12%; min-width: 90px; }
+    .col-sec { width: 10%; min-width: 70px; }
+    .col-range { width: 15%; min-width: 100px; }
+    .col-total { width: 10%; min-width: 70px; }
+    .col-rolls { width: 53%; min-width: 250px; }
+
+    .roll-cell {
       white-space: normal;
+      word-break: break-word;
+      text-align: left;
+      font-size: 15px !important; 
+      font-weight: 600;
+      line-height: 1.5;
+      padding: 8px 10px !important;
     }
 
-    .total-cell {
-      font-weight: 900;
-      color: #0b6b3a;
+    /* Attendance Specific Styling */
+    .attn-cell {
+      height: 38px;
+    }
+    .footer-row td {
+      font-weight: bold;
+      background-color: #f8fafc;
     }
 
-    /* FOOTER */
-
-    footer {
-      text-align: center;
-      color: #667085;
-      font-size: .8rem;
-      padding: 15px;
+    @media (min-width: 600px) {
+      body { padding: 20px; }
+      .container { padding: 22px; }
+      .school-name { font-size: 28px; }
+      .filter-section { flex-direction: row; align-items: flex-end; }
+      .input-group { flex: 1; }
+      .exam-selector-box { flex-direction: row; align-items: center; }
+      .exam-selector-box label { min-width: 200px; }
     }
 
-    /* RESPONSIVE */
-
-    @media (max-width: 800px) {
-
-      .filter-grid {
-        grid-template-columns: 1fr;
+    /* STRICT PRINT STYLES */
+    @media print {
+      @page { 
+        size: A4 portrait; 
+        margin: 8mm 10mm; 
       }
 
-      .action-bar .btn {
-        flex: 1 1 calc(50% - 10px);
+      /* Attendance Tab Printed as Landscape */
+      body.print-landscape @page {
+        size: A4 landscape;
+        margin: 6mm 8mm;
+      }
+      
+      html, body { 
+        background: white !important; 
+        padding: 0 !important; 
+        margin: 0 !important; 
+        color: #000 !important; 
+        min-height: auto !important;
+        height: auto !important;
+      }
+      
+      .container { 
+        box-shadow: none !important; 
+        padding: 0 !important; 
+        margin: 0 !important;
+        width: 100% !important; 
+        max-width: 100% !important;
+        border: none !important; 
       }
 
-      .filter-card {
-        padding: 15px;
+      .header, .filter-section, .btn-action, .notice-box, .result-card,
+      .tab-container, .btn-single-print, .exam-selector-box { 
+        display: none !important; 
       }
 
-      th,
-      td {
-        padding: 8px 6px;
+      .tab-content:not(.active) { display: none !important; }
+      .printable-card.print-hide { display: none !important; }
+
+      .section-card-list, .attn-card-list {
+        page-break-before: always !important;
+        break-before: page !important;
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+      }
+
+      .section-card-list:first-child, .attn-card-list:first-child {
+        page-break-before: avoid !important;
+        break-before: avoid !important;
+      }
+
+      .card-print-header {
+        display: block !important;
+      }
+
+      .printable-card {
+        border: 2px solid #000 !important;
+        margin-bottom: 0 !important;
+        padding: 8px !important;
+        box-shadow: none !important;
+      }
+
+      .card-header-title {
+        font-size: 16px !important;
+        border-bottom: 1.5px solid #000 !important;
+        color: #000 !important;
+        margin-bottom: 6px !important;
+      }
+
+      .card-meta-grid { 
+        font-size: 12px !important; 
+        margin-bottom: 6px !important;
+        gap: 4px !important;
+      }
+      .card-meta-item {
+        border: 1px solid #000 !important;
+        background: #fff !important;
+        padding: 3px 6px !important;
+      }
+      .card-meta-item strong { font-size: 13px !important; color: #000 !important; }
+
+      .table-responsive { 
+        border: none !important; 
+        overflow: visible !important; 
+        margin-top: 4px !important;
+      }
+
+      table { 
+        border: 2px solid #000 !important; 
+        width: 100% !important; 
+        table-layout: fixed !important;
+      }
+
+      tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      th, td { 
+        border: 1px solid #000 !important; 
+        color: #000 !important; 
+        padding: 5px 3px !important; 
+        font-size: 12px !important;
+        font-weight: bold !important;
+      }
+      
+      th { background-color: #f1f5f9 !important; font-size: 13px !important; }
+
+      .col-room { width: 12% !important; }
+      .col-sec { width: 10% !important; }
+      .col-range { width: 15% !important; }
+      .col-total { width: 12% !important; }
+      .col-rolls { width: 51% !important; }
+
+      .roll-cell { 
+        font-size: 14px !important; 
+        line-height: 1.4 !important;
+        font-weight: bold !important;
+        text-align: left !important;
+      }
+
+      .attn-cell {
+        height: 32px !important;
       }
     }
-
-    @media (max-width: 480px) {
-
-      .container {
-        width: min(100% - 14px, 1200px);
-      }
-
-      main {
-        padding-top: 15px;
-      }
-
-      .action-bar .btn {
-        width: 100%;
-        flex: 1 1 100%;
-      }
-
-      .school-header {
-        padding: 20px 10px;
-      }
-
-      .instruction {
-        padding: 15px;
-      }
-    }
-
   </style>
 </head>
-
 <body>
 
-<header class="school-header">
-
-  <h1>Pathpukur High School (HS)</h1>
-
-  <div class="subtitle">
-    Examination Seat Plan Management System
-  </div>
-
-</header>
-
-
-<main>
-
   <div class="container">
+    <div class="header">
+      <h1 class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
+      <h2 class="page-title">📌 পরীক্ষার সিট প্ল্যান ও স্টুডেন্ট অ্যাটেনডেন্স: <span id="sessionYear">....</span></h2>
+    </div>
 
-    <h2 class="page-title">
+    <div class="exam-selector-box">
+      <label for="selectUniversalExam"><i class="fa-solid fa-file-pen"></i> পরীক্ষা নির্বাচন করুন:</label>
+      <select id="selectUniversalExam" onchange="onExamChange()">
+        <option value="ALL">-- All Exams (সকল পরীক্ষা) --</option>
+      </select>
+    </div>
 
-      Exam Seat Plan:
-      <span id="sessionDisplay">Session</span>
+    <div class="notice-box">
+      <i class="fa-solid fa-bullhorn"></i> সিট প্ল্যান দেখার ও পরীক্ষার Attendance Sheet প্রিন্ট করার অফিসিয়াল পোর্টাল।
+    </div>
 
-    </h2>
+    <!-- Navigation Tabs -->
+    <div class="tab-container">
+      <button class="tab-btn active" onclick="switchTab('tabOverview')">📋 ওভারভিউ ও সার্চ</button>
+      <button class="tab-btn" onclick="switchTab('tabSection')">🏫 সেকশন ভিত্তিক সিট প্ল্যান</button>
+      <button class="tab-btn" onclick="switchTab('tabRoom')">🚪 রুম ভিত্তিক সিট প্ল্যান</button>
+      <button class="tab-btn" onclick="switchTab('tabAttendance')">✍️ শিক্ষার্থীর স্বাক্ষর</button>
+    </div>
 
-
-    <!-- INSTRUCTION -->
-
-    <section class="card instruction">
-
-      <div class="instruction-title">
-
-        <i class="fa-solid fa-circle-info"></i>
-
-        নির্দেশিকা
-
-      </div>
-
-      <p>
-
-        পরীক্ষার সিট প্ল্যান দেখার জন্য প্রথমে
-        <b>Exam</b> নির্বাচন করুন।
-
-        এরপর প্রয়োজন অনুযায়ী Room No অথবা Class
-        নির্বাচন করলে সংশ্লিষ্ট ডাটা দেখানো হবে।
-
-      </p>
-
-      <ul>
-
-        <li>
-          Exam নির্বাচন না করা পর্যন্ত কোনো seat plan
-          দেখানো হবে না।
-        </li>
-
-        <li>
-          Room No / Class নির্বাচন করলে সংশ্লিষ্ট
-          কলামটি টেবিল থেকে লুকিয়ে যাবে।
-        </li>
-
-        <li>
-          Class নির্বাচন করলে Roll Range-এর পরে
-          <b>Specific Rolls</b> দেখা যাবে।
-        </li>
-
-        <li>
-          Specific Rolls শুধুমাত্র সংশ্লিষ্ট
-          Class + Gender + Roll Range অনুযায়ী
-          current_students থেকে নেওয়া হবে।
-        </li>
-
-        <li>
-          Print দিয়ে বর্তমান ফলাফল A4 পেজে প্রিন্ট করা যাবে।
-        </li>
-
-        <li>
-          Batch Print — All Rooms-এ Specific Rolls থাকবে না।
-        </li>
-
-        <li>
-          Batch Print — All Classes-এ Specific Rolls থাকবে।
-        </li>
-
-      </ul>
-
-    </section>
-
-
-    <!-- FILTER CARD -->
-
-    <section class="card filter-card">
-
-      <div class="filter-grid">
-
-        <!-- Exam -->
-
-        <div class="filter-group">
-
-          <label for="examSelect">
-
-            <i class="fa-solid fa-file-pen"></i>
-
-            Exam
-
-          </label>
-
-          <select id="examSelect">
-
-            <option value="">
-              পরীক্ষার নাম সিলেক্ট করুন!
-            </option>
-
+    <!-- TAB 1: OVERVIEW & SEARCH -->
+    <div id="tabOverview" class="tab-content active">
+      <div class="filter-section">
+        <div class="input-group">
+          <label for="selectClass"><i class="fa-solid fa-graduation-cap"></i> শ্রেণী (Class):</label>
+          <select id="selectClass">
+            <option value="">-- ক্লাস বেছে নিন --</option>
+            <option value="V">Class V</option>
+            <option value="VI">Class VI</option>
+            <option value="VII">Class VII</option>
+            <option value="VIII">Class VIII</option>
+            <option value="IX">Class IX</option>
+            <option value="X">Class X</option>
+            <option value="XI">Class XI</option>
+            <option value="XII">Class XII</option>
           </select>
-
         </div>
 
-
-        <!-- Room -->
-
-        <div class="filter-group">
-
-          <label for="roomSelect">
-
-            <i class="fa-solid fa-door-open"></i>
-
-            Room No
-
-          </label>
-
-          <select id="roomSelect" disabled>
-
-            <option value="">
-              প্রথমে Exam নির্বাচন করুন
-            </option>
-
-          </select>
-
+        <div class="input-group">
+          <label for="inputRoll"><i class="fa-solid fa-id-card"></i> রোল নম্বর:</label>
+          <input type="number" id="inputRoll" min="1" max="1000" inputmode="numeric" placeholder="রোল নম্বর লিখুন...">
         </div>
 
-
-        <!-- Class -->
-
-        <div class="filter-group">
-
-          <label for="classSelect">
-
-            <i class="fa-solid fa-graduation-cap"></i>
-
-            Class
-
-          </label>
-
-          <select id="classSelect" disabled>
-
-            <option value="">
-              প্রথমে Exam নির্বাচন করুন
-            </option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-
-      <!-- BUTTONS -->
-
-      <div class="action-bar">
-
-        <button
-          id="printBtn"
-          class="btn btn-primary"
-          disabled
-        >
-
-          <i class="fa-solid fa-print"></i>
-
-          Print
-
+        <button class="btn-action" onclick="searchSeat()">
+          <i class="fa-solid fa-magnifying-glass"></i> Search
         </button>
-
-
-        <button
-          id="printRoomsBtn"
-          class="btn btn-green"
-          disabled
-        >
-
-          <i class="fa-solid fa-door-open"></i>
-
-          Batch Print — All Rooms
-
-        </button>
-
-
-        <button
-          id="printClassesBtn"
-          class="btn btn-purple"
-          disabled
-        >
-
-          <i class="fa-solid fa-graduation-cap"></i>
-
-          Batch Print — All Classes
-
-        </button>
-
       </div>
 
-    </section>
-
-
-    <!-- TABLE -->
-
-    <section class="card table-card">
-
-      <div class="table-header">
-
-        <div class="table-header-title">
-
-          <i class="fa-solid fa-table"></i>
-
-          Seat Plan
-
+      <div id="resultCard" class="result-card">
+        <h3><i class="fa-solid fa-user-graduate"></i> পরীক্ষার্থীর তথ্য 🎉</h3>
+        <div class="info-grid">
+          <div class="info-item"><span>Exam:</span><strong id="resExam">-</strong></div>
+          <div class="info-item"><span>Student Name:</span><strong id="resName">-</strong></div>
+          <div class="info-item"><span>Class:</span><strong id="resClass">-</strong></div>
+          <div class="info-item"><span>Section:</span><strong id="resSection">-</strong></div>
+          <div class="info-item"><span>Roll No:</span><strong id="resRoll">-</strong></div>
+          <div class="info-item"><span>Gender:</span><strong id="resGender">-</strong></div>
+          <div class="room-highlight">
+            <span>পরীক্ষার রুম নম্বর 🚪</span>
+            <strong id="resRoom">ROOM NO: --</strong>
+          </div>
         </div>
-
-        <div
-          id="selectionInfo"
-          class="selection-info"
-        >
-          কোনো পরীক্ষা নির্বাচন করা হয়নি
-        </div>
-
       </div>
 
-
-      <div
-        id="statusBox"
-        class="status-box"
-      >
-        পরীক্ষার নাম সিলেক্ট করুন!
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span id="statusBadge" style="font-weight: bold; color: #0369a1;">শ্রেণী নির্বাচন করে তথ্য দেখুন 📋</span>
+        <button class="btn-action btn-batch-print" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> প্রিন্ট ওভারভিউ
+        </button>
       </div>
 
-
-      <div
-        id="tableContainer"
-        class="table-wrapper"
-        style="display:none;"
-      >
-
-        <table id="seatTable">
-
+      <div class="table-responsive">
+        <table>
           <thead>
-
             <tr>
-
-              <th data-column="room_no">
-                Room No
-              </th>
-
-              <th data-column="gender">
-                Gender
-              </th>
-
-              <th data-column="class_name">
-                Class
-              </th>
-
-              <th data-column="section">
-                Section
-              </th>
-
-              <th data-column="roll_range">
-                Roll Range (Start roll - end roll)
-              </th>
-
-              <th data-column="specific_rolls">
-                Specific Rolls
-              </th>
-
-              <th data-column="total">
-                Total
-              </th>
-
+              <th style="width:12%;">Class</th>
+              <th style="width:12%;">Section</th>
+              <th style="width:18%;">Gender</th>
+              <th style="width:20%;">Roll Range</th>
+              <th style="width:18%;">Exam Room</th>
             </tr>
-
           </thead>
-
-          <tbody id="seatTableBody"></tbody>
-
+          <tbody id="seatTableBody">
+            <tr><td colspan="5">শ্রেণী নির্বাচন করুন...</td></tr>
+          </tbody>
         </table>
+      </div>
+    </div>
 
+    <!-- TAB 2: SECTION & GENDER BASED LIST -->
+    <div id="tabSection" class="tab-content">
+      <div class="filter-section">
+        <div class="input-group">
+          <label><i class="fa-solid fa-filter"></i> ক্লাস ফিল্টার করুন:</label>
+          <select id="selectSectionClass" onchange="renderSectionView()">
+            <option value="">-- সকল ক্লাস --</option>
+            <option value="V">Class V</option>
+            <option value="VI">Class VI</option>
+            <option value="VII">Class VII</option>
+            <option value="VIII">Class VIII</option>
+            <option value="IX">Class IX</option>
+            <option value="X">Class X</option>
+            <option value="XI">Class XI</option>
+            <option value="XII">Class XII</option>
+          </select>
+        </div>
+
+        <button class="btn-action btn-batch-print" onclick="printBatch()">
+          <i class="fa-solid fa-print"></i> সকল সেকশন ব্যাচ প্রিন্ট
+        </button>
       </div>
 
-    </section>
+      <div id="sectionCardsContainer"></div>
+    </div>
+
+    <!-- TAB 3: ROOM BASED LIST -->
+    <div id="tabRoom" class="tab-content">
+      <div class="filter-section">
+        <div class="input-group">
+          <label><i class="fa-solid fa-door-open"></i> রুম ফিল্টার করুন:</label>
+          <select id="selectRoomNo" onchange="renderRoomView()">
+            <option value="">-- সকল রুম --</option>
+          </select>
+        </div>
+
+        <button class="btn-action btn-batch-print" onclick="printBatch()">
+          <i class="fa-solid fa-print"></i> সকল রুম ব্যাচ প্রিন্ট
+        </button>
+      </div>
+
+      <div id="roomCardsContainer"></div>
+    </div>
+
+    <!-- TAB 4: STUDENT ATTENDANCE & SIGNATURE SHEET -->
+    <div id="tabAttendance" class="tab-content">
+      <div class="filter-section">
+        <div class="input-group">
+          <label><i class="fa-solid fa-door-closed"></i> রুম ফিল্টার করুন:</label>
+          <select id="selectAttnRoom" onchange="renderAttendanceView()">
+            <option value="">-- সকল রুম --</option>
+          </select>
+        </div>
+
+        <button class="btn-action btn-batch-print" onclick="printLandscapeBatch()">
+          <i class="fa-solid fa-print"></i> স্বাক্ষর পাতা ব্যাচ প্রিন্ট (Landscape)
+        </button>
+      </div>
+
+      <div id="attendanceCardsContainer"></div>
+    </div>
 
   </div>
 
-</main>
-
-
-<footer>
-
-  Pathpukur High School (HS) — Exam Seat Plan
-
-</footer>
-
-
-<script>
-
-/* ============================================================
-   SUPABASE CONFIGURATION
-============================================================ */
-
-const SUPABASE_URL =
-  "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwic2Vzc2lvbiI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-
-
-/* ============================================================
-   CONFIGURATION
-============================================================ */
-
-const CONFIG = {
-
-  PAGE_SIZE: 1000,
-
-  SCHOOL_NAME:
-    "Pathpukur High School (HS)",
-
-  MAIN_TITLE:
-    "Exam Seat Plan"
-
-};
-
-
-/* ============================================================
-   SUPABASE CLIENT
-============================================================ */
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
-
-
-/* ============================================================
-   DOM
-============================================================ */
-
-const examSelect =
-  document.getElementById("examSelect");
-
-const roomSelect =
-  document.getElementById("roomSelect");
-
-const classSelect =
-  document.getElementById("classSelect");
-
-const printBtn =
-  document.getElementById("printBtn");
-
-const printRoomsBtn =
-  document.getElementById("printRoomsBtn");
-
-const printClassesBtn =
-  document.getElementById("printClassesBtn");
-
-const statusBox =
-  document.getElementById("statusBox");
-
-const tableContainer =
-  document.getElementById("tableContainer");
-
-const tableBody =
-  document.getElementById("seatTableBody");
-
-const selectionInfo =
-  document.getElementById("selectionInfo");
-
-const sessionDisplay =
-  document.getElementById("sessionDisplay");
-
-
-/* ============================================================
-   APPLICATION STATE
-============================================================ */
-
-let allSeatRows = [];
-
-let filteredRows = [];
-
-/*
- * current_students-এর Session এখানে filter হিসেবে
- * ব্যবহার করা হচ্ছে না।
- *
- * এটি শুধুমাত্র web page-এ display হওয়া Session
- * print page-এ নেওয়ার জন্য ব্যবহার হচ্ছে না।
- *
- * Print সরাসরি sessionDisplay থেকে value নেয়।
- */
-
-const studentCache = new Map();
-
-
-/* ============================================================
-   INITIALIZATION
-============================================================ */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  init
-);
-
-
-async function init() {
-
-  sessionDisplay.textContent =
-    "Loading...";
-
-  setStatus(
-    "loading",
-    "পরীক্ষার তালিকা লোড হচ্ছে..."
-  );
-
-  try {
-
-    await loadExamNames();
-
-    await loadAndDisplaySession();
-
-    setStatus(
-      "normal",
-      "পরীক্ষার নাম সিলেক্ট করুন!"
-    );
-
-  } catch (error) {
-
-    console.error(error);
-
-    setStatus(
-      "error",
-      "ডাটা লোড করা যায়নি: " +
-      (error.message || "Unknown error")
-    );
-  }
-}
-
-
-/* ============================================================
-   LOAD SESSION
-============================================================ */
-
-async function loadAndDisplaySession() {
-
-  /*
-   * গুরুত্বপূর্ণ:
-   *
-   * এখানে আগের মতোই current_students থেকে
-   * session নেওয়া হচ্ছে।
-   *
-   * কোনো CONFIG.SESSION ব্যবহার করা হচ্ছে না।
-   */
-
-  const {
-    data,
-    error
-  } = await supabaseClient
-
-    .from("current_students")
-
-    .select("session")
-
-    .not(
-      "session",
-      "is",
-      null
-    )
-
-    .neq(
-      "session",
-      ""
-    )
-
-    .order(
-      "id",
-      {
-        ascending: true
-      }
-    )
-
-    .limit(1000);
-
-
-  if (error) {
-
-    throw error;
-
-  }
-
-
-  const sessions =
-    uniquePreserveOrder(
-      (data || []).map(
-        row => row.session
-      )
-    );
-
-
-  if (sessions.length === 0) {
-
-    sessionDisplay.textContent =
-      "Session পাওয়া যায়নি";
-
-    return;
-  }
-
-
-  /*
-   * একটি Session হলে সেটিই দেখাবে।
-   *
-   * যেমন:
-   * 2026-27
-   */
-
-  if (sessions.length === 1) {
-
-    sessionDisplay.textContent =
-      sessions[0];
-
-    return;
-  }
-
-
-  /*
-   * একাধিক Session থাকলে
-   * existing behaviour বজায় থাকবে।
-   *
-   * যেমন:
-   * 2026 / 2026-27
-   */
-
-  sessionDisplay.textContent =
-    sessions.join(" / ");
-
-}
-
-
-/* ============================================================
-   UTILITY
-============================================================ */
-
-function escapeHtml(value) {
-
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return "";
-
-  }
-
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-}
-
-
-function normalizeText(value) {
-
-  return String(
-    value ?? ""
-  )
-    .trim()
-    .toUpperCase();
-}
-
-
-function uniquePreserveOrder(array) {
-
-  const result = [];
-
-  const seen = new Set();
-
-
-  for (const item of array) {
-
-    const key =
-      String(
-        item ?? ""
-      ).trim();
-
-
-    if (!key) {
-
-      continue;
-
-    }
-
-
-    if (!seen.has(key)) {
-
-      seen.add(key);
-
-      result.push(key);
-
-    }
-
-  }
-
-
-  return result;
-}
-
-
-function sortNatural(a, b) {
-
-  return String(a).localeCompare(
-    String(b),
-    undefined,
-    {
-      numeric: true,
-      sensitivity: "base"
-    }
-  );
-}
-
-
-/* ============================================================
-   STATUS
-============================================================ */
-
-function setStatus(
-  type,
-  message
-) {
-
-  tableContainer.style.display =
-    "none";
-
-  statusBox.style.display =
-    "flex";
-
-  statusBox.className =
-    "status-box";
-
-
-  if (type === "error") {
-
-    statusBox.classList.add(
-      "error"
-    );
-
-  }
-
-
-  if (type === "success") {
-
-    statusBox.classList.add(
-      "success"
-    );
-
-  }
-
-
-  if (type === "loading") {
-
-    statusBox.innerHTML = `
-
-      <div class="loading-content">
-
-        <div class="spinner"></div>
-
-        <div>
-          ${escapeHtml(message)}
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-
-  statusBox.textContent =
-    message;
-
-}
-
-
-function setTableVisible() {
-
-  statusBox.style.display =
-    "none";
-
-  tableContainer.style.display =
-    "block";
-
-}
-
-
-function resetSelect(
-  select,
-  placeholder
-) {
-
-  select.innerHTML = "";
-
-  const option =
-    document.createElement(
-      "option"
-    );
-
-  option.value = "";
-
-  option.textContent =
-    placeholder;
-
-  select.appendChild(option);
-
-}
-
-
-/* ============================================================
-   SUPABASE PAGINATION
-============================================================ */
-
-async function fetchAllPaginated(
-  tableName,
-  selectColumns,
-  buildQuery = null
-) {
-
-  const result = [];
-
-  let from = 0;
-
-  const pageSize =
-    CONFIG.PAGE_SIZE;
-
-
-  while (true) {
-
-    let query =
-      supabaseClient
-
-        .from(tableName)
-
-        .select(selectColumns)
-
-        .order(
-          "id",
-          {
-            ascending: true
-          }
-        )
-
-        .range(
-          from,
-          from + pageSize - 1
-        );
-
-
-    if (
-      typeof buildQuery ===
-      "function"
-    ) {
-
-      query =
-        buildQuery(query);
-
-    }
-
-
-    const {
-      data,
-      error
-    } =
-      await query;
-
-
-    if (error) {
-
-      throw error;
-
-    }
-
-
-    const rows =
-      data || [];
-
-
-    result.push(
-      ...rows
-    );
-
-
-    if (
-      rows.length <
-      pageSize
-    ) {
-
-      break;
-
-    }
-
-
-    from +=
-      pageSize;
-
-  }
-
-
-  return result;
-}
-
-
-/* ============================================================
-   LOAD EXAMS
-============================================================ */
-
-async function loadExamNames() {
-
-  const rows =
-    await fetchAllPaginated(
-      "seat_plan",
-      "id,exam_name"
-    );
-
-
-  const exams =
-    uniquePreserveOrder(
-      rows.map(
-        row => row.exam_name
-      )
-    );
-
-
-  resetSelect(
-    examSelect,
-    "পরীক্ষার নাম সিলেক্ট করুন!"
-  );
-
-
-  for (const exam of exams) {
-
-    const option =
-      document.createElement(
-        "option"
-      );
-
-    option.value =
-      exam;
-
-    option.textContent =
-      exam;
-
-    examSelect.appendChild(
-      option
-    );
-
-  }
-
-
-  if (
-    exams.length === 0
-  ) {
-
-    setStatus(
-      "error",
-      "seat_plan টেবিলে কোনো পরীক্ষার নাম পাওয়া যায়নি।"
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   LOAD SEAT PLAN
-============================================================ */
-
-async function loadSeatPlanForExam(
-  examName
-) {
-
-  const rows =
-    await fetchAllPaginated(
-
-      "seat_plan",
-
-      `
-        id,
-        class_name,
-        start_roll,
-        end_roll,
-        room_no,
-        exam_name,
-        gender
-      `,
-
-      query =>
-        query.eq(
-          "exam_name",
-          examName
-        )
-    );
-
-
-  return rows;
-
-}
-
-
-/* ============================================================
-   POPULATE ROOM + CLASS
-============================================================ */
-
-function populateRoomAndClass(
-  rows
-) {
-
-  const rooms =
-    uniquePreserveOrder(
-      rows.map(
-        row => row.room_no
-      )
-    );
-
-
-  const classes =
-    uniquePreserveOrder(
-      rows.map(
-        row => row.class_name
-      )
-    );
-
-
-  resetSelect(
-    roomSelect,
-    "সব Room No"
-  );
-
-
-  resetSelect(
-    classSelect,
-    "সব Class"
-  );
-
-
-  for (const room of rooms) {
-
-    const option =
-      document.createElement(
-        "option"
-      );
-
-    option.value =
-      room;
-
-    option.textContent =
-      room;
-
-    roomSelect.appendChild(
-      option
-    );
-
-  }
-
-
-  for (const className of classes) {
-
-    const option =
-      document.createElement(
-        "option"
-      );
-
-    option.value =
-      className;
-
-    option.textContent =
-      className;
-
-    classSelect.appendChild(
-      option
-    );
-
-  }
-
-
-  roomSelect.disabled =
-    false;
-
-  classSelect.disabled =
-    false;
-
-}
-
-
-/* ============================================================
-   FILTER SEAT PLAN
-============================================================ */
-
-async function refreshTable() {
-
-  if (!examSelect.value) {
-
-    setStatus(
-      "normal",
-      "পরীক্ষার নাম সিলেক্ট করুন!"
-    );
-
-    printBtn.disabled =
-      true;
-
-    printRoomsBtn.disabled =
-      true;
-
-    printClassesBtn.disabled =
-      true;
-
-    return;
-  }
-
-
-  setStatus(
-    "loading",
-    "সিট প্ল্যান ডাটা লোড হচ্ছে..."
-  );
-
-
-  try {
-
-    let rows =
-      [...allSeatRows];
-
-
-    const selectedRoom =
-      roomSelect.value;
-
-
-    const selectedClass =
-      classSelect.value;
-
-
-    if (selectedRoom) {
-
-      rows =
-        rows.filter(
-          row =>
-            String(row.room_no) ===
-            String(selectedRoom)
-        );
-
-    }
-
-
-    if (selectedClass) {
-
-      rows =
-        rows.filter(
-          row =>
-            String(row.class_name) ===
-            String(selectedClass)
-        );
-
-    }
-
-
-    rows.sort(
-      (a, b) =>
-        Number(a.id) -
-        Number(b.id)
-    );
-
-
-    filteredRows =
-      rows;
-
-
-    if (
-      rows.length === 0
-    ) {
-
-      selectionInfo.textContent =
-        "কোনো matching data নেই";
-
-
-      setStatus(
-        "error",
-        "নির্বাচিত বিষয় অনুযায়ী কোনো ডাটা পাওয়া যায়নি।"
-      );
-
-
-      printBtn.disabled =
-        true;
-
-      return;
-
-    }
-
-
-    setTableVisible();
-
-
-    await renderTable(
-      rows
-    );
-
-
-    updateSelectionInfo();
-
-
-    printBtn.disabled =
-      false;
-
-    printRoomsBtn.disabled =
-      false;
-
-    printClassesBtn.disabled =
-      false;
-
-
-  } catch (error) {
-
-    console.error(error);
-
-
-    setStatus(
-      "error",
-      "ডাটা লোড করতে সমস্যা হয়েছে: " +
-      (error.message ||
-       "Unknown error")
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   STUDENT QUERY
-============================================================ */
-
-async function getStudentsForClassGender(
-  className,
-  gender
-) {
-
-  const normalizedClass =
-    normalizeText(
-      className
-    );
-
-
-  const normalizedGender =
-    normalizeText(
-      gender
-    );
-
-
-  /*
-   * Session এখানে cache key-তে নেই।
-   *
-   * কারণ current_students-এর existing
-   * Section/Student logic পরিবর্তন করা যাবে না।
-   */
-
-  const cacheKey =
-    `${normalizedClass}|${normalizedGender}`;
-
-
-  if (
-    studentCache.has(cacheKey)
-  ) {
-
-    return studentCache.get(
-      cacheKey
-    );
-
-  }
-
-
-  const shouldFilterGender =
-    normalizedGender !== "" &&
-    normalizedGender !== "ALL";
-
-
-  const rows =
-    await fetchAllPaginated(
-
-      "current_students",
-
-      `
-        id,
-        class_name,
-        section,
-        roll_no,
-        gender,
-        session
-      `,
-
-      query => {
-
-        /*
-         * শুধুমাত্র Class filter।
-         *
-         * Session filter এখানে যোগ করা হচ্ছে না।
-         */
-
-        query =
-          query.eq(
-            "class_name",
-            className
-          );
-
-
-        if (shouldFilterGender) {
-
-          query =
-            query.eq(
-              "gender",
-              gender
-            );
-
-        }
-
-
-        return query;
-
-      }
-
-    );
-
-
-  studentCache.set(
-    cacheKey,
-    rows
-  );
-
-
-  return rows;
-
-}
-
-
-/* ============================================================
-   CALCULATE SECTION + SPECIFIC ROLLS + TOTAL
-============================================================ */
-
-async function calculateStudentInfo(
-  seatRow
-) {
-
-  const className =
-    seatRow.class_name;
-
-
-  const startRoll =
-    Number(
-      seatRow.start_roll
-    );
-
-
-  const endRoll =
-    Number(
-      seatRow.end_roll
-    );
-
-
-  const gender =
-    seatRow.gender ||
-    "ALL";
-
-
-  const students =
-    await getStudentsForClassGender(
-      className,
-      gender
-    );
-
-
-  /*
-   * Roll Range অনুযায়ী matching students
-   */
-
-  const matchingStudents =
-    students.filter(
-      student => {
-
-        const roll =
-          Number(
-            student.roll_no
-          );
-
-
-        return (
-          roll >= startRoll &&
-          roll <= endRoll
-        );
-
-      }
-    );
-
-
-  /*
-   * Section
-   */
-
-  const sections =
-    uniquePreserveOrder(
-      matchingStudents
-        .map(
-          student =>
-            student.section
-        )
-    );
-
-
-  /*
-   * Specific Rolls
-   *
-   * roll_no numeric order-এ সাজানো হচ্ছে।
-   */
-
-  const specificRolls =
-    matchingStudents
-
-      .map(
-        student =>
-          student.roll_no
-      )
-
-      .filter(
-        roll =>
-          roll !== null &&
-          roll !== undefined &&
-          String(roll).trim() !== ""
-      )
-
-      .sort(
-        (a, b) =>
-          Number(a) -
-          Number(b)
-      )
-
-      .map(
-        roll =>
-          String(roll)
-      )
-
-      .join(", ");
-
-
-  return {
-
-    section:
-      sections.length
-        ? sections.join(", ")
-        : "—",
-
-
-    specificRolls:
-      specificRolls || "—",
-
-
-    total:
-      matchingStudents.length
-
-  };
-
-}
-
-
-/* ============================================================
-   RENDER MAIN TABLE
-============================================================ */
-
-async function renderTable(
-  rows
-) {
-
-  tableBody.innerHTML = "";
-
-
-  /*
-   * Class selected হলে Specific Rolls
-   * web table-এ দেখানো হবে।
-   *
-   * Room / সাধারণ selection-এ hide হবে।
-   */
-
-  const showSpecificRolls =
-    Boolean(
-      classSelect.value
-    );
-
-
-  const specificHeader =
-    document.querySelector(
-      '#seatTable th[data-column="specific_rolls"]'
-    );
-
-
-  if (specificHeader) {
-
-    specificHeader.style.display =
-      showSpecificRolls
-        ? ""
-        : "none";
-
-  }
-
-
-  for (
-    const row of rows
-  ) {
-
-    const studentInfo =
-      await calculateStudentInfo(
-        row
-      );
-
-
-    const tr =
-      document.createElement(
-        "tr"
-      );
-
-
-    tr.innerHTML = `
-
-      <td data-column="room_no">
-
-        ${escapeHtml(
-          row.room_no
-        )}
-
-      </td>
-
-
-      <td data-column="gender">
-
-        ${escapeHtml(
-          row.gender || "ALL"
-        )}
-
-      </td>
-
-
-      <td data-column="class_name">
-
-        ${escapeHtml(
-          row.class_name
-        )}
-
-      </td>
-
-
-      <td data-column="section">
-
-        ${escapeHtml(
-          studentInfo.section
-        )}
-
-      </td>
-
-
-      <td
-        data-column="roll_range"
-        class="roll-range"
-      >
-
-        ${escapeHtml(
-          row.start_roll
-        )}
-
-        -
-
-        ${escapeHtml(
-          row.end_roll
-        )}
-
-      </td>
-
-
-      <td
-        data-column="specific_rolls"
-        class="specific-rolls"
-        style="display:${
-          showSpecificRolls
-            ? ""
-            : "none"
-        };"
-      >
-
-        ${escapeHtml(
-          studentInfo.specificRolls
-        )}
-
-      </td>
-
-
-      <td
-        data-column="total"
-        class="total-cell"
-      >
-
-        ${studentInfo.total}
-
-      </td>
-
-    `;
-
-
-    tableBody.appendChild(
-      tr
-    );
-
-  }
-
-
-  applyColumnVisibility();
-
-}
-
-
-/* ============================================================
-   COLUMN VISIBILITY
-============================================================ */
-
-function applyColumnVisibility() {
-
-  const selectedRoom =
-    roomSelect.value;
-
-
-  const selectedClass =
-    classSelect.value;
-
-
-  const hideColumns =
-    new Set();
-
-
-  if (selectedRoom) {
-
-    hideColumns.add(
-      "room_no"
-    );
-
-  }
-
-
-  if (selectedClass) {
-
-    hideColumns.add(
-      "class_name"
-    );
-
-  }
-
-
-  /*
-   * Main web table:
-   *
-   * Specific Rolls শুধুমাত্র
-   * Class selection হলে থাকবে।
-   */
-
-  if (!selectedClass) {
-
-    hideColumns.add(
-      "specific_rolls"
-    );
-
-  }
-
-
-  document
-
-    .querySelectorAll(
-      "#seatTable th, #seatTable td"
-    )
-
-    .forEach(
-      cell => {
-
-        const column =
-          cell.dataset.column;
-
-
-        cell.style.display =
-          hideColumns.has(column)
-            ? "none"
-            : "";
-
-      }
-    );
-
-}
-
-
-/* ============================================================
-   SELECTION INFO
-============================================================ */
-
-function updateSelectionInfo() {
-
-  const parts = [];
-
-
-  parts.push(
-    `Exam: ${examSelect.value}`
-  );
-
-
-  if (roomSelect.value) {
-
-    parts.push(
-      `Room: ${roomSelect.value}`
-    );
-
-  }
-
-
-  if (classSelect.value) {
-
-    parts.push(
-      `Class: ${classSelect.value}`
-    );
-
-  }
-
-
-  selectionInfo.textContent =
-    parts.join(" | ");
-
-}
-
-
-/* ============================================================
-   VISIBLE PRINT COLUMNS
-============================================================ */
-
-function getVisibleColumns(
-  selection = {}
-) {
-
-  const columns = [
-
-    {
-      key: "room_no",
-      label: "Room No"
-    },
-
-    {
-      key: "gender",
-      label: "Gender"
-    },
-
-    {
-      key: "class_name",
-      label: "Class"
-    },
-
-    {
-      key: "section",
-      label: "Section"
-    },
-
-    {
-      key: "roll_range",
-      label:
-        "Roll Range (Start roll - end roll)"
-    },
-
-    {
-      key: "specific_rolls",
-      label:
-        "Specific Rolls"
-    },
-
-    {
-      key: "total",
-      label: "Total"
-    }
-
-  ];
-
-
-  /*
-   * ========================================================
-   * CLASS SELECTED
-   *
-   * Specific Rolls থাকবে।
-   * Class column hide হবে।
-   * ========================================================
-   */
-
-  if (selection.className) {
-
-    return columns.filter(
-      col =>
-        col.key !==
-        "class_name"
-    );
-
-  }
-
-
-  /*
-   * ========================================================
-   * ROOM SELECTED
-   *
-   * Specific Rolls থাকবে না।
-   * Room column hide হবে।
-   * ========================================================
-   */
-
-  if (selection.room) {
-
-    return columns.filter(
-      col =>
-        col.key !== "room_no" &&
-        col.key !== "specific_rolls"
-    );
-
-  }
-
-
-  /*
-   * ========================================================
-   * সাধারণ Print
-   *
-   * Room/Class কিছুই selected নয়।
-   * Specific Rolls থাকবে না।
-   * ========================================================
-   */
-
-  return columns.filter(
-    col =>
-      col.key !==
-      "specific_rolls"
-  );
-
-}
-
-
-/* ============================================================
-   PRINT SIZE
-============================================================ */
-
-function calculatePrintSize(
-  rowCount,
-  visibleColumnCount = 6
-) {
-
-  let score =
-    rowCount;
-
-
-  if (
-    visibleColumnCount <= 4
-  ) {
-
-    score -= 3;
-
-  }
-
-
-  if (
-    visibleColumnCount <= 3
-  ) {
-
-    score -= 2;
-
-  }
-
-
-  if (score <= 5) {
-
-    return "size-large";
-
-  }
-
-
-  if (score <= 12) {
-
-    return "size-medium";
-
-  }
-
-
-  return "size-small";
-
-}
-
-
-/* ============================================================
-   MAKE PRINT PAGE
-============================================================ */
-
-function makePrintPage(
-  rows,
-  studentInfos,
-  selection,
-  pageNumber = null
-) {
-
-  const visibleColumns =
-    getVisibleColumns(
-      selection
-    );
-
-
-  const sizeClass =
-    calculatePrintSize(
-      rows.length,
-      visibleColumns.length
-    );
-
-
-  let selectionText = "";
-
-
-  if (selection.room) {
-
-    selectionText =
-      `Exam: ${
-        escapeHtml(
-          selection.exam
-        )
-      }
-      | Room No: ${
-        escapeHtml(
-          selection.room
-        )
-      }`;
-
-  }
-
-  else if (
-    selection.className
-  ) {
-
-    selectionText =
-      `Exam: ${
-        escapeHtml(
-          selection.exam
-        )
-      }
-      | Class: ${
-        escapeHtml(
-          selection.className
-        )
-      }`;
-
-  }
-
-  else {
-
-    selectionText =
-      `Exam: ${
-        escapeHtml(
-          selection.exam
-        )
-      }`;
-
-  }
-
-
-  if (pageNumber) {
-
-    selectionText +=
-      ` | Page: ${pageNumber}`;
-
-  }
-
-
-  /*
-   * ========================================================
-   * IMPORTANT SESSION
-   *
-   * ওয়েব পেজে যে Session display হচ্ছে
-   * ঠিক সেটিই Print-এ নেওয়া হচ্ছে।
-   *
-   * current_students-এ আবার query করা হচ্ছে না।
-   * CONFIG.SESSION-ও ব্যবহার করা হচ্ছে না।
-   * ========================================================
-   */
-
-  const displayedSession =
-    sessionDisplay.textContent.trim();
-
-
-  const headerHtml =
-    visibleColumns
-
-      .map(
-        col =>
-          `<th>
-            ${escapeHtml(
-              col.label
-            )}
-          </th>`
-      )
-
-      .join("");
-
-
-  const bodyHtml =
-    rows
-
-      .map(
-        (row, index) => {
-
-          const info =
-            studentInfos[index];
-
-
-          const cells = {
-
-            room_no:
-              escapeHtml(
-                row.room_no
-              ),
-
-            gender:
-              escapeHtml(
-                row.gender ||
-                "ALL"
-              ),
-
-            class_name:
-              escapeHtml(
-                row.class_name
-              ),
-
-            section:
-              escapeHtml(
-                info.section
-              ),
-
-            roll_range:
-              `${escapeHtml(
-                row.start_roll
-              )} - ${escapeHtml(
-                row.end_roll
-              )}`,
-
-            specific_rolls:
-              escapeHtml(
-                info.specificRolls
-              ),
-
-            total:
-              escapeHtml(
-                info.total
-              )
-
-          };
-
-
-          return `
-
-            <tr>
-
-              ${visibleColumns
-
-                .map(
-                  col =>
-                    `<td>
-                      ${cells[col.key]}
-                    </td>`
-                )
-
-                .join("")
-              }
-
-            </tr>
-
-          `;
-
-        }
-      )
-
-      .join("");
-
-
-  return `
-
-    <section
-      class="print-page ${sizeClass}"
-    >
-
-      <h1 class="print-school">
-
-        ${escapeHtml(
-          CONFIG.SCHOOL_NAME
-        )}
-
-      </h1>
-
-
-      <h2 class="print-main-title">
-
-        ${escapeHtml(
-          CONFIG.MAIN_TITLE
-        )}:
-
-        ${escapeHtml(
-          displayedSession
-        )}
-
-      </h2>
-
-
-      <div class="print-selection">
-
-        ${selectionText}
-
-      </div>
-
-
-      <div class="print-table-wrap">
-
-        <table class="print-table">
-
-          <thead>
-
-            <tr>
-
-              ${headerHtml}
-
-            </tr>
-
-          </thead>
-
-
-          <tbody>
-
-            ${bodyHtml}
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-  `;
-
-}
-
-
-/* ============================================================
-   PREPARE CURRENT PRINT
-============================================================ */
-
-async function prepareCurrentPrint() {
-
-  if (!examSelect.value) {
-
-    alert(
-      "প্রথমে Exam নির্বাচন করুন।"
-    );
-
-    return;
-  }
-
-
-  if (!filteredRows.length) {
-
-    alert(
-      "প্রিন্ট করার মতো কোনো ডাটা নেই।"
-    );
-
-    return;
-  }
-
-
-  const printWindow =
-    window.open(
-      "",
-      "_blank",
-      "width=1000,height=800"
-    );
-
-
-  if (!printWindow) {
-
-    alert(
-      "Print window খোলা যায়নি। Browser-এর popup permission দিন।"
-    );
-
-    return;
-  }
-
-
-  printWindow.document.open();
-
-
-  printWindow.document.write(`
-
-    <!DOCTYPE html>
-
-    <html>
-
-    <head>
-
-      <title>
-        Preparing Print...
-      </title>
-
-      <style>
-
-        body {
-          font-family: sans-serif;
-          padding: 30px;
-          text-align: center;
-        }
-
-      </style>
-
-    </head>
-
-
-    <body>
-
-      <h2>
-        Print data প্রস্তুত হচ্ছে...
-      </h2>
-
-    </body>
-
-    </html>
-
-  `);
-
-
-  printWindow.document.close();
-
-
-  try {
-
-    const studentInfos = [];
-
-
-    for (
-      const row of filteredRows
-    ) {
-
-      const info =
-        await calculateStudentInfo(
-          row
-        );
-
-
-      studentInfos.push(
-        info
-      );
-
-    }
-
-
-    const selection = {
-
-      exam:
-        examSelect.value,
-
-      room:
-        roomSelect.value,
-
-      className:
-        classSelect.value
-
+  <script>
+    const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+
+    let rawSeatPlans = [];
+    let rawStudents = [];
+    let rawRoutines = [];
+    let availableExams = [];
+    let currentSessionYear = "2026";
+
+    window.onload = async function() {
+      await fetchAllData();
     };
 
-
-    const html =
-      createFullPrintDocument(
-        [
-          {
-            rows:
-              filteredRows,
-
-            studentInfos:
-              studentInfos,
-
-            selection:
-              selection
-          }
-        ]
-      );
-
-
-    printWindow.document.open();
-
-    printWindow.document.write(
-      html
-    );
-
-    printWindow.document.close();
-
-
-    setTimeout(
-      () => {
-
-        printWindow.focus();
-
-        printWindow.print();
-
-      },
-      700
-    );
-
-
-  } catch (error) {
-
-    console.error(error);
-
-
-    printWindow.close();
-
-
-    alert(
-      "Print data তৈরি করতে সমস্যা হয়েছে: " +
-      (
-        error.message ||
-        "Unknown error"
-      )
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   BATCH PRINT
-============================================================ */
-
-async function prepareBatchPrint(
-  mode
-) {
-
-  if (!examSelect.value) {
-
-    alert(
-      "প্রথমে Exam নির্বাচন করুন।"
-    );
-
-    return;
-  }
-
-
-  const printWindow =
-    window.open(
-      "",
-      "_blank",
-      "width=1000,height=800"
-    );
-
-
-  if (!printWindow) {
-
-    alert(
-      "Print window খোলা যায়নি। Browser-এর popup permission দিন।"
-    );
-
-    return;
-  }
-
-
-  printWindow.document.open();
-
-
-  printWindow.document.write(`
-
-    <!DOCTYPE html>
-
-    <html>
-
-    <head>
-
-      <title>
-        Preparing Batch Print...
-      </title>
-
-      <style>
-
-        body {
-          font-family: sans-serif;
-          padding: 30px;
-          text-align: center;
-        }
-
-      </style>
-
-    </head>
-
-
-    <body>
-
-      <h2>
-        Batch Print data প্রস্তুত হচ্ছে...
-      </h2>
-
-      <p>
-        দয়া করে অপেক্ষা করুন...
-      </p>
-
-    </body>
-
-    </html>
-
-  `);
-
-
-  printWindow.document.close();
-
-
-  try {
-
-    let groups = [];
-
-
-    /* ========================================================
-       BATCH ROOM
-    ======================================================== */
-
-    if (mode === "room") {
-
-      const roomMap =
-        new Map();
-
-
-      for (
-        const row of allSeatRows
-      ) {
-
-        const key =
-          String(
-            row.room_no
-          );
-
-
-        if (
-          !roomMap.has(key)
-        ) {
-
-          roomMap.set(
-            key,
-            []
-          );
-
-        }
-
-
-        roomMap
-          .get(key)
-          .push(row);
-
-      }
-
-
-      groups =
-        Array.from(
-          roomMap.entries()
-        )
-        .map(
-          ([room, rows]) => ({
-
-            room:
-              room,
-
-            rows:
-              rows
-
-          })
-        );
-
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      event.currentTarget.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
     }
 
+    /* Standardize Class Names (e.g. 8 -> VIII, CLASS IX -> IX) */
+    function normalizeClassName(cls) {
+      if (!cls) return '';
+      let str = String(cls).trim().toUpperCase();
+      str = str.replace(/^CLASS\s+/i, '').replace(/[-_]/g, '').trim();
 
-    /* ========================================================
-       BATCH CLASS
-    ======================================================== */
-
-    if (mode === "class") {
-
-      const classMap =
-        new Map();
-
-
-      for (
-        const row of allSeatRows
-      ) {
-
-        const key =
-          String(
-            row.class_name
-          );
-
-
-        if (
-          !classMap.has(key)
-        ) {
-
-          classMap.set(
-            key,
-            []
-          );
-
-        }
-
-
-        classMap
-          .get(key)
-          .push(row);
-
-      }
-
-
-      groups =
-        Array.from(
-          classMap.entries()
-        )
-        .map(
-          ([className, rows]) => ({
-
-            className:
-              className,
-
-            rows:
-              rows
-
-          })
-        );
-
-    }
-
-
-    if (
-      groups.length === 0
-    ) {
-
-      throw new Error(
-        "Batch print-এর জন্য কোনো group পাওয়া যায়নি।"
-      );
-
-    }
-
-
-    const pages = [];
-
-
-    for (
-      let groupIndex = 0;
-
-      groupIndex <
-      groups.length;
-
-      groupIndex++
-    ) {
-
-      const group =
-        groups[groupIndex];
-
-
-      const studentInfos = [];
-
-
-      for (
-        const row of group.rows
-      ) {
-
-        const info =
-          await calculateStudentInfo(
-            row
-          );
-
-
-        studentInfos.push(
-          info
-        );
-
-      }
-
-
-      const selection = {
-
-        exam:
-          examSelect.value,
-
-        /*
-         * Batch Room:
-         * Specific Rolls থাকবে না
-         */
-
-        room:
-          mode === "room"
-            ? group.room
-            : "",
-
-
-        /*
-         * Batch Class:
-         * Specific Rolls থাকবে
-         */
-
-        className:
-          mode === "class"
-            ? group.className
-            : ""
-
+      const romanMap = {
+        '5': 'V', '6': 'VI', '7': 'VII', '8': 'VIII', '9': 'IX', '10': 'X', '11': 'XI', '12': 'XII',
+        'V': 'V', 'VI': 'VI', 'VII': 'VII', 'VIII': 'VIII', 'IX': 'IX', 'X': 'X', 'XI': 'XI', 'XII': 'XII'
       };
 
+      return romanMap[str] || str;
+    }
 
-      pages.push({
+    /* Fetch All Records with Pagination Loop to avoid 1000 Limit */
+    async function fetchAllStudentsPaginated() {
+      let allStudents = [];
+      let offset = 0;
+      const limit = 1000;
+      let hasMore = true;
 
-        rows:
-          group.rows,
+      while (hasMore) {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,roll_no,gender,student_name,session`, {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Range-Unit': 'items',
+            'Range': `${offset}-${offset + limit - 1}`
+          }
+        });
 
-        studentInfos:
-          studentInfos,
+        const data = await response.json();
+        if (data && data.length > 0) {
+          allStudents = allStudents.concat(data);
+          offset += limit;
+          if (data.length < limit) hasMore = false;
+        } else {
+          hasMore = false;
+        }
+      }
+      return allStudents;
+    }
 
-        selection:
-          selection
+    async function fetchAllData() {
+      try {
+        const [planRes, stuResArray, routineRes] = await Promise.all([
+          fetch(`${SUPABASE_URL}/rest/v1/seat_plan?order=id.asc`, { 
+            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } 
+          }),
+          fetchAllStudentsPaginated(),
+          fetch(`${SUPABASE_URL}/rest/v1/exam_routine?order=id.asc`, { 
+            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } 
+          })
+        ]);
+        
+        rawSeatPlans = await planRes.json();
+        rawStudents = stuResArray;
+        rawRoutines = await routineRes.json();
 
+        if (rawStudents && rawStudents.length > 0 && rawStudents[0].session) {
+          currentSessionYear = rawStudents[0].session;
+        } else {
+          currentSessionYear = new Date().getFullYear().toString();
+        }
+        document.getElementById('sessionYear').innerText = currentSessionYear;
+
+        populateExamDropdown();
+        populateRoomDropdowns();
+        
+        const currentCls = document.getElementById('selectClass').value;
+        loadClassSeatPlan(currentCls);
+        
+        renderSectionView();
+        renderRoomView();
+        renderAttendanceView();
+      } catch(e) { console.error("Data loading error:", e); }
+    }
+
+    function populateExamDropdown() {
+      const select = document.getElementById('selectUniversalExam');
+      availableExams = [...new Set(rawSeatPlans.map(p => String(p.exam_name || '').trim()).filter(Boolean))];
+      
+      select.innerHTML = '<option value="ALL">-- All Exams (সকল পরীক্ষা) --</option>';
+      availableExams.forEach(exam => {
+        select.innerHTML += `<option value="${exam}">${exam}</option>`;
       });
-
     }
 
-
-    const html =
-      createFullPrintDocument(
-        pages
-      );
-
-
-    printWindow.document.open();
-
-    printWindow.document.write(
-      html
-    );
-
-    printWindow.document.close();
-
-
-    setTimeout(
-      () => {
-
-        printWindow.focus();
-
-        printWindow.print();
-
-      },
-      1000
-    );
-
-
-  } catch (error) {
-
-    console.error(error);
-
-
-    printWindow.close();
-
-
-    alert(
-      "Batch Print তৈরি করতে সমস্যা হয়েছে: " +
-      (
-        error.message ||
-        "Unknown error"
-      )
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   FULL PRINT DOCUMENT
-============================================================ */
-
-function createFullPrintDocument(
-  pages
-) {
-
-  const pagesHtml =
-    pages
-
-      .map(
-        (page, index) =>
-
-          makePrintPage(
-
-            page.rows,
-
-            page.studentInfos,
-
-            page.selection,
-
-            pages.length > 1
-              ? index + 1
-              : null
-
-          )
-      )
-
-      .join("");
-
-
-  return `
-
-    <!DOCTYPE html>
-
-    <html lang="bn">
-
-    <head>
-
-      <meta charset="UTF-8">
-
-
-      <title>
-
-        ${escapeHtml(
-          CONFIG.MAIN_TITLE
-        )}
-
-      </title>
-
-
-      <style>
-
-        @page {
-
-          size: A4 portrait;
-
-          margin: 8mm;
-
-        }
-
-
-        * {
-
-          box-sizing: border-box;
-
-        }
-
-
-        html,
-        body {
-
-          margin: 0;
-
-          padding: 0;
-
-          background: white;
-
-          color: black;
-
-          font-family:
-            "Noto Sans Bengali",
-            "Roboto",
-            Arial,
-            sans-serif;
-
-        }
-
-
-        .print-page {
-
-          width: 100%;
-
-          min-height: 281mm;
-
-          box-sizing: border-box;
-
-          position: relative;
-
-          page-break-after: always;
-
-          break-after: page;
-
-          display: flex;
-
-          flex-direction: column;
-
-        }
-
-
-        .print-page:last-child {
-
-          page-break-after: auto;
-
-          break-after: auto;
-
-        }
-
-
-        .print-school {
-
-          text-align: center;
-
-          font-weight: 900;
-
-          color: black;
-
-          line-height: 1.15;
-
-          margin: 0;
-
-        }
-
-
-        .print-main-title {
-
-          text-align: center;
-
-          font-weight: 900;
-
-          color: black;
-
-          margin: 2mm 0 0;
-
-          line-height: 1.15;
-
-        }
-
-
-        .print-selection {
-
-          text-align: center;
-
-          color: black;
-
-          font-weight: 800;
-
-          margin: 2mm 0 5mm;
-
-          line-height: 1.2;
-
-        }
-
-
-        .print-table-wrap {
-
-          width: 100%;
-
-        }
-
-
-        .print-table {
-
-          width: 100%;
-
-          border-collapse: collapse;
-
-          table-layout: fixed;
-
-        }
-
-
-        .print-table th,
-        .print-table td {
-
-          border:
-            1.2px solid black;
-
-          color: black;
-
-          background: white;
-
-          text-align: center;
-
-          vertical-align: middle;
-
-          line-height: 1.12;
-
-          word-wrap: break-word;
-
-        }
-
-
-        .print-table th {
-
-          font-weight: 900;
-
-        }
-
-
-        .print-table td {
-
-          font-weight: 700;
-
-        }
-
-
-        .print-table tr {
-
-          page-break-inside: avoid;
-
-          break-inside: avoid;
-
-        }
-
-
-        /* LARGE */
-
-        .size-large .print-school {
-
-          font-size: 20pt;
-
-        }
-
-
-        .size-large .print-main-title {
-
-          font-size: 16pt;
-
-        }
-
-
-        .size-large .print-selection {
-
-          font-size: 13pt;
-
-        }
-
-
-        .size-large .print-table th {
-
-          font-size: 11.5pt;
-
-          padding: 6px 5px;
-
-        }
-
-
-        .size-large .print-table td {
-
-          font-size: 12pt;
-
-          padding: 7px 5px;
-
-        }
-
-
-        /* MEDIUM */
-
-        .size-medium .print-school {
-
-          font-size: 17pt;
-
-        }
-
-
-        .size-medium .print-main-title {
-
-          font-size: 14pt;
-
-        }
-
-
-        .size-medium .print-selection {
-
-          font-size: 11.5pt;
-
-        }
-
-
-        .size-medium .print-table th {
-
-          font-size: 9.5pt;
-
-          padding: 5px 4px;
-
-        }
-
-
-        .size-medium .print-table td {
-
-          font-size: 10pt;
-
-          padding: 5px 4px;
-
-        }
-
-
-        /* SMALL */
-
-        .size-small .print-school {
-
-          font-size: 14pt;
-
-        }
-
-
-        .size-small .print-main-title {
-
-          font-size: 12pt;
-
-        }
-
-
-        .size-small .print-selection {
-
-          font-size: 10pt;
-
-        }
-
-
-        .size-small .print-table th {
-
-          font-size: 8pt;
-
-          padding: 4px 3px;
-
-        }
-
-
-        .size-small .print-table td {
-
-          font-size: 8.5pt;
-
-          padding: 4px 3px;
-
-        }
-
-      </style>
-
-
-      <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-      >
-
-
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-      >
-
-
-      <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Roboto:wght@400;500;700;800&display=swap"
-        rel="stylesheet"
-      >
-
-    </head>
-
-
-    <body>
-
-      ${pagesHtml}
-
-    </body>
-
-    </html>
-
-  `;
-
-}
-
-
-/* ============================================================
-   EXAM CHANGE
-============================================================ */
-
-examSelect.addEventListener(
-  "change",
-  async () => {
-
-    const examName =
-      examSelect.value;
-
-
-    roomSelect.disabled =
-      true;
-
-    classSelect.disabled =
-      true;
-
-
-    resetSelect(
-      roomSelect,
-      "Room No"
-    );
-
-
-    resetSelect(
-      classSelect,
-      "Class"
-    );
-
-
-    if (!examName) {
-
-      allSeatRows = [];
-
-      filteredRows = [];
-
-      studentCache.clear();
-
-
-      selectionInfo.textContent =
-        "কোনো পরীক্ষা নির্বাচন করা হয়নি";
-
-
-      setStatus(
-        "normal",
-        "পরীক্ষার নাম সিলেক্ট করুন!"
-      );
-
-
-      printBtn.disabled =
-        true;
-
-      printRoomsBtn.disabled =
-        true;
-
-      printClassesBtn.disabled =
-        true;
-
-
-      return;
-
+    function onExamChange() {
+      document.getElementById('resultCard').style.display = 'none';
+      const currentCls = document.getElementById('selectClass').value;
+      loadClassSeatPlan(currentCls);
+      
+      populateRoomDropdowns();
+      renderSectionView();
+      renderRoomView();
+      renderAttendanceView();
     }
 
+    function getFilteredSeatPlans() {
+      const selectedExam = document.getElementById('selectUniversalExam').value;
+      if (selectedExam === 'ALL' || !selectedExam) {
+        return rawSeatPlans;
+      }
+      return rawSeatPlans.filter(p => String(p.exam_name || '').trim().toUpperCase() === selectedExam.trim().toUpperCase());
+    }
 
-    setStatus(
-      "loading",
-      "নির্বাচিত পরীক্ষার seat plan লোড হচ্ছে..."
-    );
+    function normalizeGender(g) {
+      if (!g) return 'ALL';
+      const str = String(g).trim().toUpperCase();
+      if (str.includes('BOY') || str === 'M' || str === 'MALE') return 'BOYS';
+      if (str.includes('GIRL') || str === 'F' || str === 'FEMALE') return 'GIRLS';
+      return 'ALL';
+    }
 
+    /* Helper Function: Map Seat Plan Exam Name to Exam Routine Exam Name */
+    function mapExamNameForRoutine(seatExamName) {
+      if (!seatExamName) return '';
+      const name = seatExamName.trim().toUpperCase();
 
-    try {
+      if (name.includes('SEMESTER I') || name.includes('SEME I') || name.includes('SEM 1')) return ['SEME I', 'SEMESTER I', '1ST SEMESTER'];
+      if (name.includes('SEMESTER II') || name.includes('SEME II') || name.includes('SEM 2')) return ['SEME II', 'SEMESTER II', '2ND SEMESTER'];
+      if (name.includes('1ST SUMMATIVE') || name.includes('1ST EXAM')) return ['1ST EXAM', '1ST SUMMATIVE EVALUATION'];
+      if (name.includes('2ND SUMMATIVE') || name.includes('2ND EXAM')) return ['2ND EXAM', '2ND SUMMATIVE EVALUATION'];
+      if (name.includes('3RD SUMMATIVE') || name.includes('3RD EXAM')) return ['3RD EXAM', '3RD SUMMATIVE EVALUATION'];
+      if (name.includes('TEST')) return ['TEST EXAM', 'TEST EXAMINATION'];
 
-      allSeatRows =
-        await loadSeatPlanForExam(
-          examName
-        );
+      return [seatExamName];
+    }
 
+    document.getElementById('selectClass').addEventListener('change', function() {
+      const cls = this.value;
+      document.getElementById('resultCard').style.display = 'none';
+      loadClassSeatPlan(cls);
+    });
 
-      /*
-       * শুধুমাত্র নতুন Exam-এর জন্য cache clear।
-       *
-       * Session filter এখানে নেই।
-       */
+    async function loadClassSeatPlan(cls) {
+      const tbody = document.getElementById('seatTableBody');
+      const statusBadge = document.getElementById('statusBadge');
+      
+      tbody.innerHTML = '<tr><td colspan="5"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>';
 
-      studentCache.clear();
+      const activePlans = getFilteredSeatPlans();
+      const selectedExam = document.getElementById('selectUniversalExam').value;
+      const examTitle = (selectedExam && selectedExam !== 'ALL') ? selectedExam : 'সকল পরীক্ষা';
 
+      let plans = activePlans;
 
-      if (
-        allSeatRows.length === 0
-      ) {
-
-        setStatus(
-          "error",
-          "এই পরীক্ষার জন্য কোনো seat plan পাওয়া যায়নি।"
-        );
-
-
-        printBtn.disabled =
-          true;
-
-        printRoomsBtn.disabled =
-          true;
-
-        printClassesBtn.disabled =
-          true;
-
-
-        return;
-
+      if (cls) {
+        const targetClsNorm = normalizeClassName(cls);
+        plans = activePlans.filter(p => normalizeClassName(p.class_name) === targetClsNorm);
       }
 
+      if (!plans || plans.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">কোনো সিট প্ল্যান পাওয়া যায়নি!</td></tr>';
+        statusBadge.innerText = `Exam: ${examTitle} | Class: ${cls || 'All'} | কোনো রেকর্ড নেই`;
+        return;
+      }
 
-      populateRoomAndClass(
-        allSeatRows
+      statusBadge.innerHTML = `Exam: <b style="color:#7e22ce;">${examTitle}</b> | Class: <b>${cls ? cls : 'সকল ক্লাস'}</b> - এর সিট প্ল্যান`;
+      
+      let html = '';
+      for (const p of plans) {
+        const secText = getAccurateSections(p);
+        html += `
+          <tr>
+            <td><b>${normalizeClassName(p.class_name)}</b></td>
+            <td><b>${secText}</b></td>
+            <td>${p.gender || 'BOYS & GIRLS'}</td>
+            <td>${p.start_roll} - ${p.end_roll}</td>
+            <td><b style="color: #0284c7;">${p.room_no}</b></td>
+          </tr>
+        `;
+      }
+      tbody.innerHTML = html;
+    }
+
+    function getAccurateSections(plan) {
+      if (plan.section && plan.section.trim() !== '' && plan.section.trim().toUpperCase() !== 'ALL') {
+        return plan.section.trim();
+      }
+
+      const pClassNorm = normalizeClassName(plan.class_name);
+      const planGenNorm = normalizeGender(plan.gender);
+      const startRoll = parseInt(plan.start_roll);
+      const endRoll = parseInt(plan.end_roll);
+
+      const matchedStudents = rawStudents.filter(s => {
+        const sClassNorm = normalizeClassName(s.class_name);
+        const sRoll = parseInt(s.roll_no);
+        const sGenNorm = normalizeGender(s.gender);
+
+        const matchClass = (sClassNorm === pClassNorm);
+        const matchRoll = (sRoll >= startRoll && sRoll <= endRoll);
+        const matchGen = (planGenNorm === 'ALL' || planGenNorm === sGenNorm);
+
+        return matchClass && matchRoll && matchGen;
+      });
+
+      const secs = [...new Set(matchedStudents.map(s => String(s.section || '').trim()).filter(Boolean))].sort();
+      return secs.length > 0 ? secs.join(', ') : 'ALL';
+    }
+
+    async function searchSeat() {
+      const cls = document.getElementById('selectClass').value;
+      const rollInput = document.getElementById('inputRoll').value;
+      const resultCard = document.getElementById('resultCard');
+
+      if (!cls || !rollInput) {
+        alert("অনুগ্রহ করে ক্লাস ও সঠিক রোল নম্বর দিন!");
+        return;
+      }
+
+      const roll = parseInt(rollInput);
+      const targetClsNorm = normalizeClassName(cls);
+      const activePlans = getFilteredSeatPlans();
+
+      const student = rawStudents.find(s => 
+        normalizeClassName(s.class_name) === targetClsNorm && 
+        parseInt(s.roll_no) === roll
       );
 
+      if (!student) {
+        alert(`Class: ${cls}, Roll: ${roll} - এর কোনো ছাত্র-ছাত্রীর তথ্য পাওয়া যায়নি!`);
+        resultCard.style.display = 'none';
+        return;
+      }
 
-      roomSelect.value =
-        "";
+      const stuGenderNorm = normalizeGender(student.gender);
+      const stuSec = (student.section || '').trim().toUpperCase();
 
-      classSelect.value =
-        "";
+      const matchingPlan = activePlans.find(p => {
+        const pClassNorm = normalizeClassName(p.class_name);
+        const pSec = p.section ? String(p.section).trim().toUpperCase() : 'ALL';
+        const pGenNorm = normalizeGender(p.gender);
 
+        const matchClass = (pClassNorm === targetClsNorm);
+        const matchRoll = (roll >= parseInt(p.start_roll) && roll <= parseInt(p.end_roll));
+        const matchSec = (pSec === 'ALL' || pSec === '' || pSec === stuSec);
+        const matchGen = (pGenNorm === 'ALL' || pGenNorm === stuGenderNorm);
 
-      await refreshTable();
+        return matchClass && matchRoll && matchSec && matchGen;
+      });
 
+      document.getElementById('resExam').innerText = matchingPlan ? (matchingPlan.exam_name || 'N/A') : 'N/A';
+      document.getElementById('resName').innerText = student.student_name || 'N/A';
+      document.getElementById('resClass').innerText = normalizeClassName(student.class_name) || cls;
+      document.getElementById('resSection').innerText = student.section || 'N/A';
+      document.getElementById('resRoll').innerText = student.roll_no;
+      document.getElementById('resGender').innerText = student.gender || 'N/A';
+      document.getElementById('resRoom').innerText = matchingPlan ? matchingPlan.room_no : "Allocated Soon";
 
-    } catch (error) {
-
-      console.error(error);
-
-
-      setStatus(
-        "error",
-        "Seat plan লোড করতে সমস্যা হয়েছে: " +
-        (
-          error.message ||
-          "Unknown error"
-        )
-      );
-
+      resultCard.style.display = 'block';
+      resultCard.scrollIntoView({ behavior: 'smooth' });
     }
 
-  }
-);
+    /* TAB 2: SECTION & GENDER BASED VIEW */
+    function renderSectionView() {
+      const container = document.getElementById('sectionCardsContainer');
+      const selectedCls = document.getElementById('selectSectionClass').value;
+      container.innerHTML = '';
 
+      let filteredPlans = getFilteredSeatPlans();
+      
+      const classOrder = ["V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+      let classesToRender = selectedCls ? [selectedCls] : classOrder;
 
-/* ============================================================
-   ROOM CHANGE
-============================================================ */
+      let hasData = false;
 
-roomSelect.addEventListener(
-  "change",
-  async () => {
+      classesToRender.forEach((clsName, cIdx) => {
+        const clsNorm = normalizeClassName(clsName);
+        const clsPlans = filteredPlans.filter(p => normalizeClassName(p.class_name) === clsNorm);
+        
+        if (clsPlans.length === 0) return;
 
-    if (roomSelect.value) {
+        const genders = ["BOYS", "GIRLS"];
 
-      classSelect.value =
-        "";
+        genders.forEach((targetGen, gIdx) => {
+          const genPlans = clsPlans.filter(p => {
+            const pGenNorm = normalizeGender(p.gender);
+            return pGenNorm === targetGen || pGenNorm === 'ALL';
+          });
 
+          if (genPlans.length === 0) return;
+
+          let rowsHtml = '';
+          let totalGenderCount = 0;
+
+          genPlans.forEach(plan => {
+            const planClassNorm = normalizeClassName(plan.class_name);
+            const planSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
+
+            const matchedStudents = rawStudents.filter(s => {
+              const sClassNorm = normalizeClassName(s.class_name);
+              const sRoll = parseInt(s.roll_no);
+              const sSec = s.section ? String(s.section).trim().toUpperCase() : '';
+              const sGenNorm = normalizeGender(s.gender);
+
+              const matchClass = (sClassNorm === planClassNorm);
+              const matchRoll = (sRoll >= parseInt(plan.start_roll) && sRoll <= parseInt(plan.end_roll));
+              const matchSec = (planSec === 'ALL' || planSec === '' || planSec === sSec);
+              const matchGen = (sGenNorm === targetGen);
+
+              return matchClass && matchRoll && matchSec && matchGen;
+            });
+
+            let rollList = matchedStudents.map(s => parseInt(s.roll_no)).filter(n => !isNaN(n)).sort((a,b) => a - b);
+            
+            if (rollList.length === 0) return;
+
+            hasData = true;
+
+            const displayRolls = rollList.join(', ');
+            const count = rollList.length;
+            totalGenderCount += count;
+
+            const minRoll = Math.min(...rollList);
+            const maxRoll = Math.max(...rollList);
+            const genderRollRange = (minRoll === maxRoll) ? `${minRoll}` : `${minRoll}-${maxRoll}`;
+
+            const secDisplayName = getAccurateSections(plan);
+
+            rowsHtml += `
+              <tr>
+                <td><b style="color: #0284c7;">${plan.room_no}</b></td>
+                <td><b>${secDisplayName}</b></td>
+                <td><b>${genderRollRange}</b></td>
+                <td><b>${count} জন</b></td>
+                <td class="roll-cell">${displayRolls}</td>
+              </tr>
+            `;
+          });
+
+          if (rowsHtml === '') return;
+
+          const exams = [...new Set(genPlans.map(p => p.exam_name || 'N/A'))].join(', ');
+          const cardId = `sec-card-${cIdx}-${gIdx}`;
+          const cardHtml = `
+            <div class="printable-card section-card-list" id="${cardId}">
+              <div class="card-print-header">
+                <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
+                <h3>পরীক্ষার সিট প্ল্যান: ${currentSessionYear}</h3>
+              </div>
+
+              <div class="card-header-title">
+                <span>🏫 Class: ${clsName} (${targetGen})</span>
+                <button class="btn-single-print" onclick="printSingleCard('${cardId}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
+              </div>
+              <div class="card-meta-grid">
+                <div class="card-meta-item">Exam: <strong>${exams}</strong></div>
+                <div class="card-meta-item">Class & Gender: <strong>Class ${clsName} (${targetGen})</strong></div>
+                <div class="card-meta-item">মোট পরীক্ষার্থী: <strong>${totalGenderCount} জন</strong></div>
+              </div>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="col-room">পরীক্ষার রুম নম্বর</th>
+                      <th class="col-sec">সেকশন</th>
+                      <th class="col-range">রোল রেঞ্জ</th>
+                      <th class="col-total">মোট</th>
+                      <th class="col-rolls">পরীক্ষার্থীদের নির্দিষ্ট রোল নম্বরসমূহ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rowsHtml}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+          container.innerHTML += cardHtml;
+        });
+      });
+
+      if (!hasData) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">কোনো সিট প্ল্যান পাওয়া যায়নি!</div>';
+      }
     }
 
+    /* TAB 3: ROOM BASED VIEW */
+    function populateRoomDropdowns() {
+      const selectRoom = document.getElementById('selectRoomNo');
+      const selectAttn = document.getElementById('selectAttnRoom');
 
-    await refreshTable();
+      const activePlans = getFilteredSeatPlans();
+      const rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
+      
+      let optionsHtml = '<option value="">-- সকল রুম --</option>';
+      rooms.forEach(r => {
+        optionsHtml += `<option value="${r}">Room No: ${r}</option>`;
+      });
 
-  }
-);
-
-
-/* ============================================================
-   CLASS CHANGE
-============================================================ */
-
-classSelect.addEventListener(
-  "change",
-  async () => {
-
-    if (classSelect.value) {
-
-      roomSelect.value =
-        "";
-
+      selectRoom.innerHTML = optionsHtml;
+      selectAttn.innerHTML = optionsHtml;
     }
 
+    function renderRoomView() {
+      const container = document.getElementById('roomCardsContainer');
+      const selectedRoom = document.getElementById('selectRoomNo').value;
+      container.innerHTML = '';
 
-    await refreshTable();
+      const activePlans = getFilteredSeatPlans();
+      let rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
+      
+      if (selectedRoom) rooms = [selectedRoom];
 
-  }
-);
+      if (rooms.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">কোনো রুমের তথ্য পাওয়া যায়নি!</div>';
+        return;
+      }
 
+      rooms.forEach((roomNo, idx) => {
+        const roomPlans = activePlans.filter(p => String(p.room_no).trim() === roomNo);
+        let totalRoomStudents = 0;
 
-/* ============================================================
-   PRINT
-============================================================ */
+        const roomExams = [...new Set(roomPlans.map(p => p.exam_name || 'N/A'))].join(', ');
 
-printBtn.addEventListener(
-  "click",
-  prepareCurrentPrint
-);
+        let tableRowsHtml = '';
+        roomPlans.forEach(p => {
+          const count = (parseInt(p.end_roll) - parseInt(p.start_roll) + 1);
+          totalRoomStudents += count;
 
+          const secText = getAccurateSections(p);
 
-/* ============================================================
-   BATCH PRINT ROOMS
-============================================================ */
+          tableRowsHtml += `
+            <tr>
+              <td><b>${normalizeClassName(p.class_name)}</b></td>
+              <td><b>${secText}</b></td>
+              <td>${p.gender || 'BOYS & GIRLS'}</td>
+              <td><b>${p.start_roll} - ${p.end_roll}</b></td>
+              <td><b>${count} জন</b></td>
+            </tr>
+          `;
+        });
 
-printRoomsBtn.addEventListener(
-  "click",
-  () =>
-    prepareBatchPrint(
-      "room"
-    )
-);
+        const cardHtml = `
+          <div class="printable-card room-card-list" id="room-card-${idx}">
+            <div class="card-print-header">
+              <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
+              <h3>পরীক্ষার সিট প্ল্যান: ${currentSessionYear}</h3>
+            </div>
 
+            <div class="card-header-title">
+              <span>🚪 পরীক্ষার রুম নম্বর: ${roomNo}</span>
+              <button class="btn-single-print" onclick="printSingleCard('room-card-${idx}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
+            </div>
+            <div class="card-meta-grid">
+              <div class="card-meta-item">Exam: <strong>${roomExams}</strong></div>
+              <div class="card-meta-item">রুম নম্বর: <strong>${roomNo}</strong></div>
+              <div class="card-meta-item">মোট সিট/পরীক্ষার্থী: <strong>${totalRoomStudents} জন</strong></div>
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Category / Gender</th>
+                    <th>Roll Range</th>
+                    <th>Student Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRowsHtml}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+        container.innerHTML += cardHtml;
+      });
+    }
 
-/* ============================================================
-   BATCH PRINT CLASSES
-============================================================ */
+    /* TAB 4: ATTENDANCE & SIGNATURE SHEET */
+    function renderAttendanceView() {
+      const container = document.getElementById('attendanceCardsContainer');
+      const selectedRoom = document.getElementById('selectAttnRoom').value;
+      const selectedUniversalExam = document.getElementById('selectUniversalExam').value;
+      container.innerHTML = '';
 
-printClassesBtn.addEventListener(
-  "click",
-  () =>
-    prepareBatchPrint(
-      "class"
-    )
-);
+      const activePlans = getFilteredSeatPlans();
+      let rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
+      if (selectedRoom) rooms = [selectedRoom];
 
-</script>
+      if (rooms.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">স্বাক্ষর পাতার কোনো তথ্য পাওয়া যায়নি!</div>';
+        return;
+      }
 
+      let globalCardIdx = 0;
+
+      rooms.forEach(roomNo => {
+        const roomPlans = activePlans.filter(p => String(p.room_no).trim() === roomNo);
+        
+        const classesInRoom = [...new Set(roomPlans.map(p => normalizeClassName(p.class_name)))];
+
+        classesInRoom.forEach(clsName => {
+          const clsPlansInRoom = roomPlans.filter(p => normalizeClassName(p.class_name) === clsName);
+
+          const classRoutineCol = `class_${clsName.toLowerCase()}`;
+          
+          let matchedRoutines = rawRoutines.filter(r => r[classRoutineCol] && String(r[classRoutineCol]).trim() !== '');
+
+          if (selectedUniversalExam !== 'ALL' && selectedUniversalExam) {
+            const possibleRoutineExamNames = mapExamNameForRoutine(selectedUniversalExam);
+            matchedRoutines = matchedRoutines.filter(r => {
+              const rExam = String(r.exam_name || '').trim().toUpperCase();
+              return possibleRoutineExamNames.some(pName => pName.toUpperCase() === rExam);
+            });
+          }
+
+          let roomStudents = [];
+          clsPlansInRoom.forEach(plan => {
+            const pGenNorm = normalizeGender(plan.gender);
+            const pSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
+
+            const filtered = rawStudents.filter(s => {
+              const sClassNorm = normalizeClassName(s.class_name);
+              const sRoll = parseInt(s.roll_no);
+              const sSec = s.section ? String(s.section).trim().toUpperCase() : '';
+              const sGenNorm = normalizeGender(s.gender);
+
+              const matchClass = (sClassNorm === clsName);
+              const matchRoll = (sRoll >= parseInt(plan.start_roll) && sRoll <= parseInt(plan.end_roll));
+              const matchSec = (pSec === 'ALL' || pSec === '' || pSec === sSec);
+              const matchGen = (pGenNorm === 'ALL' || pGenNorm === sGenNorm);
+
+              return matchClass && matchRoll && matchSec && matchGen;
+            });
+
+            roomStudents.push(...filtered);
+          });
+
+          const studentMap = new Map();
+          roomStudents.forEach(s => studentMap.set(`${normalizeClassName(s.class_name)}-${s.roll_no}`, s));
+          const sortedStudents = Array.from(studentMap.values()).sort((a,b) => parseInt(a.roll_no) - parseInt(b.roll_no));
+
+          if (sortedStudents.length === 0) return;
+
+          let headerColsHtml = '';
+          if (matchedRoutines.length > 0) {
+            matchedRoutines.forEach(r => {
+              const subject = r[classRoutineCol];
+              const dateStr = r.exam_date || 'N/A';
+              headerColsHtml += `<th>${dateStr}<br><span style="font-size:12px; font-weight:normal;">${subject}</span></th>`;
+            });
+          } else {
+            headerColsHtml = `<th style="width: 70%;">পরীক্ষার বিষয় ও তারিখ</th>`;
+          }
+
+          let bodyRowsHtml = '';
+          sortedStudents.forEach(stu => {
+            let sigCells = '';
+            if (matchedRoutines.length > 0) {
+              matchedRoutines.forEach(() => {
+                sigCells += `<td class="attn-cell"></td>`;
+              });
+            } else {
+              sigCells = `<td class="attn-cell"></td>`;
+            }
+
+            bodyRowsHtml += `
+              <tr>
+                <td><b>${stu.roll_no}</b></td>
+                <td style="text-align: left; padding-left: 8px;"><b>${stu.student_name || 'N/A'}</b></td>
+                ${sigCells}
+              </tr>
+            `;
+          });
+
+          let presentCells = '', absentCells = '', signCells = '';
+          const colCount = matchedRoutines.length > 0 ? matchedRoutines.length : 1;
+          
+          for (let i = 0; i < colCount; i++) {
+            presentCells += `<td></td>`;
+            absentCells += `<td></td>`;
+            signCells += `<td></td>`;
+          }
+
+          const summaryFooterHtml = `
+            <tr class="footer-row">
+              <td colspan="2" style="text-align: right;"><b>Present:</b></td>
+              ${presentCells}
+            </tr>
+            <tr class="footer-row">
+              <td colspan="2" style="text-align: right;"><b>Absent:</b></td>
+              ${absentCells}
+            </tr>
+            <tr class="footer-row">
+              <td colspan="2" style="text-align: right;"><b>Invigilator Sign:</b></td>
+              ${signCells}
+            </tr>
+          `;
+
+          const cardId = `attn-card-${globalCardIdx++}`;
+          const examTitle = clsPlansInRoom[0].exam_name || 'Exam';
+
+          const cardHtml = `
+            <div class="printable-card attn-card-list" id="${cardId}">
+              <div class="card-print-header">
+                <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
+                <h3>শিক্ষার্থীর স্বাক্ষর ও উপস্থিতি রেজিস্টার: ${currentSessionYear}</h3>
+              </div>
+
+              <div class="card-header-title">
+                <span>✍️ Room No: ${roomNo} | Class: ${clsName}</span>
+                <button class="btn-single-print" onclick="printSingleLandscapeCard('${cardId}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
+              </div>
+              <div class="card-meta-grid">
+                <div class="card-meta-item">Exam: <strong>${examTitle}</strong></div>
+                <div class="card-meta-item">Class: <strong>Class ${clsName}</strong></div>
+                <div class="card-meta-item">Room No: <strong>${roomNo}</strong></div>
+                <div class="card-meta-item">মোট ছাত্র-ছাত্রী: <strong>${sortedStudents.length} জন</strong></div>
+              </div>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 8%;">রোল</th>
+                      <th style="width: 22%;">শিক্ষার্থীর নাম</th>
+                      ${headerColsHtml}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${bodyRowsHtml}
+                    ${summaryFooterHtml}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+
+          container.innerHTML += cardHtml;
+        });
+      });
+    }
+
+    /* PRINT FUNCTIONS */
+    function printSingleCard(cardId) {
+      document.body.classList.remove('print-landscape');
+      document.querySelectorAll('.printable-card').forEach(c => c.classList.add('print-hide'));
+      const target = document.getElementById(cardId);
+      if (target) target.classList.remove('print-hide');
+      
+      window.print();
+      document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
+    }
+
+    function printSingleLandscapeCard(cardId) {
+      document.body.classList.add('print-landscape');
+      document.querySelectorAll('.printable-card').forEach(c => c.classList.add('print-hide'));
+      const target = document.getElementById(cardId);
+      if (target) target.classList.remove('print-hide');
+      
+      window.print();
+      
+      document.body.classList.remove('print-landscape');
+      document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
+    }
+
+    function printBatch() {
+      document.body.classList.remove('print-landscape');
+      document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
+      window.print();
+    }
+
+    function printLandscapeBatch() {
+      document.body.classList.add('print-landscape');
+      document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
+      window.print();
+      document.body.classList.remove('print-landscape');
+    }
+  </script>
 </body>
 </html>
