@@ -1922,15 +1922,14 @@ const specificRolls =
    * 2. Room selected
    * =========================================================
    *
-   * Specific Rolls থাকবে না
+   * Specific Rolls থাকবে
    * Room column hide হবে
    */
   if (selection.room) {
 
     return columns.filter(
       col =>
-        col.key !== "room_no" &&
-        col.key !== "specific_rolls"
+        col.key !== "room_no"
     );
   }
 
