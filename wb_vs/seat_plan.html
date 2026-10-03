@@ -1,686 +1,4084 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>শিক্ষার্থীর স্বাক্ষর ও উপস্থিতি রেজিস্টার</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary-color: #0284c7;
-      --primary-dark: #0369a1;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-color: #1e293b;
-      --border-color: #e2e8f0;
-    }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+<meta charset="UTF-8">
 
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      padding: 20px;
-    }
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+<title>Exam Seat Plan | Pathpukur High School (HS)</title>
 
-    .header-card {
-      background: linear-gradient(135deg, #0284c7, #0369a1);
-      color: white;
-      padding: 20px 25px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    .header-card h1 {
-      font-size: 24px;
-      font-weight: 700;
-    }
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
 
-    .header-card p {
-      font-size: 14px;
-      opacity: 0.9;
-      margin-top: 5px;
-    }
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
 
-    .filter-card {
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      border: 1px solid var(--border-color);
-    }
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Roboto:wght@400;500;700;800&display=swap"
+      rel="stylesheet">
 
-    .filter-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      align-items: flex-end;
-    }
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
 
-    .form-group label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #475569;
-    }
+<style>
 
-    .form-control {
-      padding: 10px 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      font-size: 14px;
-      outline: none;
-      transition: all 0.2s;
-    }
+/* =========================================================
+   ROOT
+========================================================= */
 
-    .form-control:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-    }
+:root {
 
-    .btn {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s;
-    }
+  --primary:#0f4c81;
+  --primary-dark:#09365d;
+  --secondary:#198754;
+  --purple:#6f42c1;
+  --danger:#dc3545;
 
-    .btn-primary {
-      background-color: var(--primary-color);
-      color: white;
-    }
+  --light:#f5f8fc;
+  --border:#d9e2ec;
+  --text:#1f2937;
+  --muted:#667085;
+  --white:#ffffff;
 
-    .btn-primary:hover {
-      background-color: var(--primary-dark);
-    }
+  --shadow:
+    0 8px 30px rgba(15,76,129,.10);
+}
 
-    .btn-success {
-      background-color: #16a34a;
-      color: white;
-    }
 
-    .btn-success:hover {
-      background-color: #15803d;
-    }
+* {
+  box-sizing:border-box;
+}
 
-    .printable-card {
-      background: var(--card-bg);
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 25px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      border: 1px solid var(--border-color);
-      page-break-after: always;
-    }
 
-    .card-print-header {
-      display: none;
-      text-align: center;
-      margin-bottom: 15px;
-    }
+html {
+  scroll-behavior:smooth;
+}
 
-    .card-print-header h2 {
-      font-size: 20px;
-      color: #000;
-    }
 
-    .card-print-header h3 {
-      font-size: 15px;
-      color: #333;
-      font-weight: 600;
-    }
+body {
 
-    .card-header-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 12px;
-      border-bottom: 2px solid var(--border-color);
-      margin-bottom: 12px;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary-dark);
-    }
+  margin:0;
 
-    .card-meta-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
-      background: #f1f5f9;
-      padding: 10px 15px;
-      border-radius: 6px;
-      margin-bottom: 15px;
-      font-size: 13px;
-    }
+  background:#eef3f8;
 
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-    }
+  color:var(--text);
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
+  font-family:
+    "Noto Sans Bengali",
+    "Roboto",
+    sans-serif;
 
-    th, td {
-      border: 1px solid #cbd5e1;
-      padding: 8px 10px;
-      text-align: center;
-    }
+  line-height:1.5;
+}
 
-    th {
-      background-color: #f8fafc;
-      color: #334155;
-      font-weight: 700;
-    }
 
-    .attn-cell {
-      height: 35px;
-      min-width: 100px;
-    }
+button,
+select {
+  font:inherit;
+}
 
-    .footer-row td {
-      font-size: 12px;
-      height: 30px;
-      background-color: #fafafa;
-    }
 
-    /* Print Styles */
-    @media print {
-      @page {
-        size: A4 landscape;
-        margin: 10mm;
-      }
+/* =========================================================
+   CONTAINER
+========================================================= */
 
-      body {
-        background-color: #fff;
-        padding: 0;
-        color: #000;
-      }
+.container {
 
-      .no-print, .filter-card, .header-card, .btn-single-print {
-        display: none !important;
-      }
+  width:min(1200px,calc(100% - 24px));
 
-      .printable-card {
-        box-shadow: none;
-        border: none;
-        padding: 0;
-        margin: 0;
-      }
+  margin:0 auto;
+}
 
-      .card-print-header {
-        display: block;
-      }
 
-      .card-header-title {
-        display: none;
-      }
+/* =========================================================
+   SCHOOL HEADER
+========================================================= */
 
-      .card-meta-grid {
-        background: none;
-        border: 1px solid #000;
-        padding: 6px 10px;
-        margin-bottom: 10px;
-      }
+.school-header {
 
-      th, td {
-        border: 1px solid #000 !important;
-        color: #000;
-      }
+  background:
+    linear-gradient(
+      135deg,
+      #083b66 0%,
+      #0f4c81 50%,
+      #12649d 100%
+    );
 
-      th {
-        background-color: #eee !important;
-      }
+  color:white;
 
-      .print-hide {
-        display: none !important;
-      }
-    }
-  </style>
+  text-align:center;
+
+  padding:25px 15px 22px;
+
+  box-shadow:
+    0 4px 18px rgba(0,0,0,.15);
+}
+
+
+.school-header h1 {
+
+  margin:0;
+
+  font-size:
+    clamp(1.55rem,4vw,2.35rem);
+
+  font-weight:800;
+}
+
+
+.school-header .subtitle {
+
+  margin-top:5px;
+
+  font-size:
+    clamp(.85rem,2vw,1rem);
+
+  opacity:.92;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main {
+
+  padding:24px 0 45px;
+}
+
+
+.page-title {
+
+  text-align:center;
+
+  margin:0 0 20px;
+
+  color:var(--primary-dark);
+
+  font-size:
+    clamp(1.35rem,3vw,1.85rem);
+
+  font-weight:800;
+}
+
+
+.card {
+
+  background:white;
+
+  border-radius:14px;
+
+  box-shadow:var(--shadow);
+
+  border:1px solid var(--border);
+
+  margin-bottom:18px;
+
+  overflow:hidden;
+}
+
+
+/* =========================================================
+   INSTRUCTION
+========================================================= */
+
+.instruction {
+
+  padding:18px 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff,
+      #eef7ff
+    );
+
+  border-left:5px solid var(--primary);
+}
+
+
+.instruction-title {
+
+  color:var(--primary-dark);
+
+  font-size:1.05rem;
+
+  font-weight:800;
+
+  margin-bottom:8px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:9px;
+}
+
+
+.instruction p {
+
+  margin:0;
+
+  color:#475467;
+
+  font-size:.94rem;
+}
+
+
+.instruction ul {
+
+  margin:9px 0 0 20px;
+
+  padding:0;
+
+  color:#475467;
+
+  font-size:.92rem;
+}
+
+
+.instruction li {
+
+  margin-bottom:4px;
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.filter-card {
+
+  padding:20px;
+}
+
+
+.filter-grid {
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:16px;
+}
+
+
+.filter-group label {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  margin-bottom:7px;
+
+  color:#344054;
+
+  font-size:.9rem;
+
+  font-weight:700;
+}
+
+
+.filter-group select {
+
+  width:100%;
+
+  height:46px;
+
+  padding:
+    0 40px 0 13px;
+
+  border:
+    1px solid #cbd5e1;
+
+  border-radius:9px;
+
+  background:white;
+
+  color:#1f2937;
+
+  outline:none;
+
+  cursor:pointer;
+}
+
+
+.filter-group select:disabled {
+
+  background:#f2f4f7;
+
+  color:#98a2b3;
+
+  cursor:not-allowed;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.action-bar {
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:10px;
+
+  margin-top:18px;
+}
+
+
+.btn {
+
+  min-height:44px;
+
+  border:0;
+
+  border-radius:9px;
+
+  padding:9px 15px;
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:8px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:.15s;
+}
+
+
+.btn:hover {
+
+  transform:translateY(-1px);
+}
+
+
+.btn:disabled {
+
+  opacity:.5;
+
+  cursor:not-allowed;
+
+  transform:none;
+}
+
+
+.btn-primary {
+
+  background:var(--primary);
+
+  color:white;
+}
+
+
+.btn-green {
+
+  background:var(--secondary);
+
+  color:white;
+}
+
+
+.btn-purple {
+
+  background:var(--purple);
+
+  color:white;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-box {
+
+  min-height:120px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+
+  padding:25px;
+
+  color:#667085;
+}
+
+
+.status-box.error {
+
+  color:var(--danger);
+}
+
+
+.status-box.success {
+
+  color:var(--secondary);
+}
+
+
+.loading-content {
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  gap:10px;
+}
+
+
+.spinner {
+
+  width:38px;
+
+  height:38px;
+
+  border:
+    4px solid #dce8f5;
+
+  border-top-color:
+    var(--primary);
+
+  border-radius:50%;
+
+  animation:
+    spin .8s linear infinite;
+}
+
+
+@keyframes spin {
+
+  to {
+    transform:rotate(360deg);
+  }
+
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper {
+
+  width:100%;
+
+  overflow-x:auto;
+}
+
+
+table {
+
+  width:100%;
+
+  border-collapse:collapse;
+
+  min-width:750px;
+}
+
+
+th,
+td {
+
+  border:
+    1px solid #b8c4d0;
+
+  padding:10px 9px;
+
+  text-align:center;
+
+  vertical-align:middle;
+}
+
+
+th {
+
+  background:var(--primary);
+
+  color:white;
+
+  font-weight:800;
+
+  white-space:nowrap;
+}
+
+
+td {
+
+  font-size:.92rem;
+
+  font-weight:600;
+
+  color:#27364a;
+
+  background:white;
+}
+
+
+tbody tr:nth-child(even) td {
+
+  background:#f8fafc;
+}
+
+
+.roll-range {
+
+  white-space:nowrap;
+
+  font-weight:800;
+}
+
+
+.total-cell {
+
+  font-weight:900;
+
+  color:#0b6b3a;
+}
+
+
+.specific-rolls {
+
+  font-weight:800;
+
+  white-space:normal;
+
+  line-height:1.35;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+
+  text-align:center;
+
+  color:#667085;
+
+  font-size:.8rem;
+
+  padding:15px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:800px) {
+
+  .filter-grid {
+
+    grid-template-columns:1fr;
+  }
+
+
+  .action-bar .btn {
+
+    flex:
+      1 1 calc(50% - 10px);
+  }
+
+
+  th,
+  td {
+
+    padding:8px 6px;
+  }
+
+}
+
+
+@media(max-width:480px) {
+
+  .container {
+
+    width:
+      min(100% - 14px,1200px);
+  }
+
+
+  .action-bar .btn {
+
+    width:100%;
+
+    flex:1 1 100%;
+  }
+
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+@media print {
+
+  @page {
+
+    size:A4 landscape;
+
+    margin:7mm;
+  }
+
+  html,
+  body {
+
+    margin:0 !important;
+
+    padding:0 !important;
+
+    background:white !important;
+  }
+
+
+  body > * {
+
+    display:none !important;
+  }
+
+
+  #printStaging {
+
+    display:block !important;
+
+    width:100%;
+  }
+
+
+  .print-page {
+
+    width:100%;
+
+    min-height:194mm;
+
+    position:relative;
+
+    page-break-after:always;
+
+    break-after:page;
+
+    display:flex;
+
+    flex-direction:column;
+  }
+
+
+  .print-page:last-child {
+
+    page-break-after:auto;
+
+    break-after:auto;
+  }
+
+
+  .print-school {
+
+    text-align:center;
+
+    font-size:20pt;
+
+    font-weight:900;
+
+    color:#000;
+
+    margin:0;
+
+    line-height:1.15;
+  }
+
+
+  .print-main-title {
+
+    text-align:center;
+
+    font-size:15pt;
+
+    font-weight:900;
+
+    color:#000;
+
+    margin:2mm 0 0;
+
+    line-height:1.15;
+  }
+
+
+  .print-selection {
+
+    text-align:center;
+
+    font-size:11pt;
+
+    color:#000;
+
+    font-weight:800;
+
+    margin:2mm 0 4mm;
+
+    line-height:1.2;
+  }
+
+
+  .print-table {
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    table-layout:fixed;
+  }
+
+
+  .print-table th,
+  .print-table td {
+
+    border:
+      1.2px solid #000 !important;
+
+    color:#000 !important;
+
+    background:#fff !important;
+
+    text-align:center;
+
+    vertical-align:middle;
+
+    line-height:1.12;
+
+    word-wrap:break-word;
+  }
+
+
+  .print-table th {
+
+    font-size:9.5pt;
+
+    font-weight:900;
+
+    padding:5px 4px;
+  }
+
+
+  .print-table td {
+
+    font-size:9.5pt;
+
+    font-weight:700;
+
+    padding:5px 4px;
+  }
+
+
+  .print-table tr {
+
+    page-break-inside:avoid;
+
+    break-inside:avoid;
+  }
+
+
+  .print-note {
+
+    text-align:center;
+
+    color:#000;
+
+    margin-top:3mm;
+
+    font-weight:700;
+  }
+
+}
+
+
+/* =========================================================
+   SCREEN TABLE SPECIFIC ROLLS
+========================================================= */
+
+#seatTable th[data-column="specific_rolls"],
+#seatTable td[data-column="specific_rolls"] {
+
+  min-width:150px;
+}
+
+</style>
+
 </head>
+
+
 <body>
 
+
+<!-- =========================================================
+     SCHOOL HEADER
+========================================================= -->
+
+<header class="school-header">
+
+  <h1>
+    Pathpukur High School (HS)
+  </h1>
+
+  <div class="subtitle">
+    Examination Seat Plan Management System
+  </div>
+
+</header>
+
+
+<main>
+
 <div class="container">
-  <!-- Header -->
-  <div class="header-card">
-    <div>
-      <h1><i class="fa-solid fa-file-signature"></i> শিক্ষার্থীদের উপস্থিতি ও স্বাক্ষর রেজিস্টার</h1>
-      <p>Session Year: <span id="sessionYear">2026</span></p>
-    </div>
-    <div class="no-print">
-      <button class="btn btn-success" onclick="printLandscapeBatch()"><i class="fa-solid fa-print"></i> ব্যাচ প্রিন্ট (সকল দৃশ্যমান পাতা)</button>
-    </div>
+
+
+<h2 class="page-title">
+
+  Exam Seat Plan:
+  <span id="sessionDisplay">
+    Loading...
+  </span>
+
+</h2>
+
+
+<!-- =========================================================
+     INSTRUCTION
+========================================================= -->
+
+<section class="card instruction">
+
+  <div class="instruction-title">
+
+    <i class="fa-solid fa-circle-info"></i>
+
+    নির্দেশিকা
+
   </div>
 
-  <!-- Filters -->
-  <div class="filter-card no-print">
-    <div class="filter-grid">
-      <div class="form-group">
-        <label for="selectUniversalExam"><i class="fa-solid fa-book-open"></i> পরীক্ষা নির্বাচন করুন:</label>
-        <select id="selectUniversalExam" class="form-control" onchange="onFilterChange()">
-          <option value="ALL">-- সকল পরীক্ষা --</option>
-        </select>
-      </div>
 
-      <div class="form-group">
-        <label for="selectAttnClass"><i class="fa-solid fa-graduation-cap"></i> ক্লাস নির্বাচন করুন:</label>
-        <select id="selectAttnClass" class="form-control" onchange="onFilterChange()">
-          <option value="">-- সকল ক্লাস --</option>
-          <option value="V">Class V</option>
-          <option value="VI">Class VI</option>
-          <option value="VII">Class VII</option>
-          <option value="VIII">Class VIII</option>
-          <option value="IX">Class IX</option>
-          <option value="X">Class X</option>
-          <option value="XI">Class XI</option>
-          <option value="XII">Class XII</option>
-        </select>
-      </div>
+  <p>
 
-      <div class="form-group">
-        <label for="selectAttnRoom"><i class="fa-solid fa-door-open"></i> রুম নম্বর নির্বাচন করুন:</label>
-        <select id="selectAttnRoom" class="form-control" onchange="onFilterChange()">
-          <option value="">-- সকল রুম --</option>
-        </select>
-      </div>
-    </div>
-  </div>
+    প্রথমে Exam নির্বাচন করুন।
+    এরপর Room No অথবা Class নির্বাচন করলে
+    সংশ্লিষ্ট Seat Plan দেখা যাবে।
 
-  <!-- Container for Attendance Cards -->
-  <div id="attendanceCardsContainer">
-    <div style="text-align:center; padding:30px; font-size:16px; color:#64748b;">
-      <i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...
-    </div>
-  </div>
+  </p>
+
+
+  <ul>
+
+    <li>
+      Exam নির্বাচন না করা পর্যন্ত Seat Plan লোড হবে না।
+    </li>
+
+    <li>
+      Class নির্বাচন করে Print করলে
+      <b>Specific Rolls</b> কলাম থাকবে।
+    </li>
+
+    <li>
+      Batch Print — All Classes-এ
+      <b>Specific Rolls</b> কলাম থাকবে।
+    </li>
+
+    <li>
+      সাধারণ Print এবং Batch Print — All Rooms-এ
+      Specific Rolls কলাম থাকবে না।
+    </li>
+
+    <li>
+      Section, Total এবং Specific Rolls
+      <b>current_students</b> টেবিলের তথ্য থেকে তৈরি হবে।
+    </li>
+
+  </ul>
+
+</section>
+
+
+<!-- =========================================================
+     FILTER
+========================================================= -->
+
+<section class="card filter-card">
+
+<div class="filter-grid">
+
+
+<!-- Exam -->
+
+<div class="filter-group">
+
+<label for="examSelect">
+
+  <i class="fa-solid fa-file-pen"></i>
+
+  Exam
+
+</label>
+
+
+<select id="examSelect">
+
+<option value="">
+  পরীক্ষার নাম সিলেক্ট করুন!
+</option>
+
+</select>
+
 </div>
 
+
+<!-- Room -->
+
+<div class="filter-group">
+
+<label for="roomSelect">
+
+  <i class="fa-solid fa-door-open"></i>
+
+  Room No
+
+</label>
+
+
+<select id="roomSelect" disabled>
+
+<option value="">
+  প্রথমে Exam নির্বাচন করুন
+</option>
+
+</select>
+
+</div>
+
+
+<!-- Class -->
+
+<div class="filter-group">
+
+<label for="classSelect">
+
+  <i class="fa-solid fa-graduation-cap"></i>
+
+  Class
+
+</label>
+
+
+<select id="classSelect" disabled>
+
+<option value="">
+  প্রথমে Exam নির্বাচন করুন
+</option>
+
+</select>
+
+</div>
+
+
+</div>
+
+
+<div class="action-bar">
+
+
+<button
+  id="printBtn"
+  class="btn btn-primary"
+  disabled
+>
+
+<i class="fa-solid fa-print"></i>
+
+Print
+
+</button>
+
+
+<button
+  id="printRoomsBtn"
+  class="btn btn-green"
+  disabled
+>
+
+<i class="fa-solid fa-door-open"></i>
+
+Batch Print — All Rooms
+
+</button>
+
+
+<button
+  id="printClassesBtn"
+  class="btn btn-purple"
+  disabled
+>
+
+<i class="fa-solid fa-graduation-cap"></i>
+
+Batch Print — All Classes
+
+</button>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     TABLE
+========================================================= -->
+
+<section class="card">
+
+
+<div class="table-header"
+     style="
+       padding:15px 18px;
+       border-bottom:1px solid var(--border);
+       display:flex;
+       justify-content:space-between;
+       gap:10px;
+       flex-wrap:wrap;
+     ">
+
+
+<div
+  style="
+    font-weight:800;
+    color:var(--primary-dark);
+  "
+>
+
+<i class="fa-solid fa-table"></i>
+
+Seat Plan
+
+</div>
+
+
+<div
+  id="selectionInfo"
+  style="
+    color:var(--muted);
+    font-size:.85rem;
+  "
+>
+
+কোনো পরীক্ষা নির্বাচন করা হয়নি
+
+</div>
+
+
+</div>
+
+
+<div
+  id="statusBox"
+  class="status-box"
+>
+
+পরীক্ষার নাম সিলেক্ট করুন!
+
+</div>
+
+
+<div
+  id="tableContainer"
+  class="table-wrapper"
+  style="display:none;"
+>
+
+
+<table id="seatTable">
+
+<thead>
+
+<tr>
+
+<th data-column="room_no">
+Room No
+</th>
+
+<th data-column="gender">
+Gender
+</th>
+
+<th data-column="class_name">
+Class
+</th>
+
+<th data-column="section">
+Section
+</th>
+
+<th data-column="roll_range">
+Roll Range<br>
+(Start roll - end roll)
+</th>
+
+<th data-column="specific_rolls">
+Specific Rolls
+</th>
+
+<th data-column="total">
+Total
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="seatTableBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+</div>
+
+</main>
+
+
+<footer>
+
+Pathpukur High School (HS)
+— Exam Seat Plan
+
+</footer>
+
+
+<div id="printStaging"></div>
+
+
 <script>
-  const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
 
-  let rawSeatPlans = [];
-  let rawStudents = [];
-  let rawRoutines = [];
-  let availableExams = [];
-  let currentSessionYear = "2026";
+/* ============================================================
+   SUPABASE
+============================================================ */
 
-  window.onload = async function() {
-    await fetchAllData();
+const SUPABASE_URL =
+"https://bjjwzgzjjcpnndbuelkh.supabase.co";
+
+
+const SUPABASE_ANON_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwiaWF0IjoxNzg2ODE5NTQzLCJleHAiOjIxMDIzOTU1NDM.fQ";
+
+
+/*
+ * IMPORTANT:
+ * উপরের ANON KEY-টি আপনার বর্তমান working code-এর
+ * সঠিক ANON KEY দিয়ে রাখবেন।
+ *
+ * আপনার দেওয়া code-এ যে key ছিল সেটি যদি আলাদা হয়,
+ * তাহলে সেটিই ব্যবহার করুন।
+ */
+
+
+const CONFIG = {
+
+  PAGE_SIZE:1000,
+
+  SCHOOL_NAME:
+    "Pathpukur High School (HS)",
+
+  MAIN_TITLE:
+    "Exam Seat Plan"
+
+};
+
+
+/* ============================================================
+   SUPABASE CLIENT
+============================================================ */
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* ============================================================
+   DOM
+============================================================ */
+
+const examSelect =
+  document.getElementById(
+    "examSelect"
+  );
+
+
+const roomSelect =
+  document.getElementById(
+    "roomSelect"
+  );
+
+
+const classSelect =
+  document.getElementById(
+    "classSelect"
+  );
+
+
+const printBtn =
+  document.getElementById(
+    "printBtn"
+  );
+
+
+const printRoomsBtn =
+  document.getElementById(
+    "printRoomsBtn"
+  );
+
+
+const printClassesBtn =
+  document.getElementById(
+    "printClassesBtn"
+  );
+
+
+const statusBox =
+  document.getElementById(
+    "statusBox"
+  );
+
+
+const tableContainer =
+  document.getElementById(
+    "tableContainer"
+  );
+
+
+const tableBody =
+  document.getElementById(
+    "seatTableBody"
+  );
+
+
+const selectionInfo =
+  document.getElementById(
+    "selectionInfo"
+  );
+
+
+const sessionDisplay =
+  document.getElementById(
+    "sessionDisplay"
+  );
+
+
+const printStaging =
+  document.getElementById(
+    "printStaging"
+  );
+
+
+/* ============================================================
+   APPLICATION DATA
+============================================================ */
+
+let allSeatRows = [];
+
+let filteredRows = [];
+
+
+/*
+ * current_students একবার load করে
+ * browser memory-তে রাখা হবে।
+ *
+ * এটাই performance-এর প্রধান উন্নতি।
+ */
+
+let allStudents = [];
+
+
+/*
+ * Web page-এ যে session দেখানো হবে,
+ * সেটিই print page-এ ব্যবহার হবে।
+ */
+
+let currentSessionText = "";
+
+
+/* ============================================================
+   INIT
+============================================================ */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  init
+);
+
+
+async function init() {
+
+  try {
+
+    setStatus(
+      "loading",
+      "পরীক্ষার তালিকা লোড হচ্ছে..."
+    );
+
+
+    /*
+     * প্রথমে session এবং exam name
+     * parallel ভাবে load করা হচ্ছে।
+     */
+
+    await Promise.all([
+
+      loadSession(),
+
+      loadExamNames()
+
+    ]);
+
+
+    setStatus(
+      "normal",
+      "পরীক্ষার নাম সিলেক্ট করুন!"
+    );
+
+
+  } catch(error) {
+
+    console.error(error);
+
+    setStatus(
+      "error",
+      "ডাটা লোড করা যায়নি: " +
+      (error.message || "Unknown error")
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   LOAD SESSION
+============================================================ */
+
+async function loadSession() {
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+
+    .from("current_students")
+
+    .select("session")
+
+    .not(
+      "session",
+      "is",
+      null
+    )
+
+    .neq(
+      "session",
+      ""
+    )
+
+    .order(
+      "id",
+      {
+        ascending:true
+      }
+    )
+
+    .limit(1000);
+
+
+  if(error) {
+
+    throw error;
+
+  }
+
+
+  const sessions =
+    uniquePreserveOrder(
+
+      (data || []).map(
+        row => row.session
+      )
+
+    );
+
+
+  if(sessions.length === 0) {
+
+    currentSessionText =
+      "Session পাওয়া যায়নি";
+
+  } else {
+
+    /*
+     * যেমন:
+     *
+     * 2026 / 2026-27
+     */
+
+    currentSessionText =
+      sessions.join(" / ");
+
+  }
+
+
+  /*
+   * Web page-এ প্রদর্শিত text
+   */
+
+  sessionDisplay.textContent =
+    currentSessionText;
+
+}
+
+
+/* ============================================================
+   LOAD EXAM NAMES
+============================================================ */
+
+async function loadExamNames() {
+
+  const rows =
+    await fetchAllPaginated(
+      "seat_plan",
+      "id,exam_name"
+    );
+
+
+  const exams =
+    uniquePreserveOrder(
+
+      rows.map(
+        row => row.exam_name
+      )
+
+    );
+
+
+  resetSelect(
+    examSelect,
+    "পরীক্ষার নাম সিলেক্ট করুন!"
+  );
+
+
+  for(
+    const exam of exams
+  ) {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      exam;
+
+    option.textContent =
+      exam;
+
+    examSelect.appendChild(
+      option
+    );
+
+  }
+
+
+  if(exams.length === 0) {
+
+    setStatus(
+      "error",
+      "seat_plan টেবিলে কোনো Exam পাওয়া যায়নি।"
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   PAGINATED FETCH
+============================================================ */
+
+async function fetchAllPaginated(
+  tableName,
+  selectColumns,
+  buildQuery = null
+) {
+
+  const result = [];
+
+  let from = 0;
+
+  const pageSize =
+    CONFIG.PAGE_SIZE;
+
+
+  while(true) {
+
+    let query =
+      supabaseClient
+
+        .from(tableName)
+
+        .select(selectColumns)
+
+        .order(
+          "id",
+          {
+            ascending:true
+          }
+        )
+
+        .range(
+          from,
+          from + pageSize - 1
+        );
+
+
+    if(
+      typeof buildQuery ===
+      "function"
+    ) {
+
+      query =
+        buildQuery(query);
+
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await query;
+
+
+    if(error) {
+
+      throw error;
+
+    }
+
+
+    const rows =
+      data || [];
+
+
+    result.push(
+      ...rows
+    );
+
+
+    if(
+      rows.length <
+      pageSize
+    ) {
+
+      break;
+
+    }
+
+
+    from +=
+      pageSize;
+
+  }
+
+
+  return result;
+
+}
+
+
+/* ============================================================
+   LOAD SEAT PLAN
+============================================================ */
+
+async function loadSeatPlanForExam(
+  examName
+) {
+
+  return await fetchAllPaginated(
+
+    "seat_plan",
+
+    `
+      id,
+      class_name,
+      start_roll,
+      end_roll,
+      room_no,
+      exam_name,
+      gender
+    `,
+
+    query =>
+
+      query.eq(
+        "exam_name",
+        examName
+      )
+
+  );
+
+}
+
+
+/* ============================================================
+   LOAD CURRENT STUDENTS
+============================================================ */
+
+async function loadCurrentStudents() {
+
+  /*
+   * এখানে session filter করা হচ্ছে না।
+   *
+   * কারণ Supabase table-এ
+   * 2026 এবং 2026-27 উভয় থাকতে পারে।
+   *
+   * Web page-এ যেসব session দেখানো হচ্ছে,
+   * সব relevant student রাখা হবে।
+   */
+
+  return await fetchAllPaginated(
+
+    "current_students",
+
+    `
+      id,
+      class_name,
+      section,
+      roll_no,
+      gender,
+      session
+    `
+
+  );
+
+}
+
+
+/* ============================================================
+   NORMALIZE
+============================================================ */
+
+function normalizeText(value) {
+
+  return String(
+    value ?? ""
+  )
+  .trim()
+  .toUpperCase();
+
+}
+
+
+/* ============================================================
+   UNIQUE
+============================================================ */
+
+function uniquePreserveOrder(
+  array
+) {
+
+  const result = [];
+
+  const seen =
+    new Set();
+
+
+  for(
+    const item of array
+  ) {
+
+    const key =
+      String(
+        item ?? ""
+      ).trim();
+
+
+    if(!key) {
+
+      continue;
+
+    }
+
+
+    if(
+      !seen.has(key)
+    ) {
+
+      seen.add(key);
+
+      result.push(key);
+
+    }
+
+  }
+
+
+  return result;
+
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
+
+function escapeHtml(value) {
+
+  if(
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+function setStatus(
+  type,
+  message
+) {
+
+  tableContainer.style.display =
+    "none";
+
+
+  statusBox.style.display =
+    "flex";
+
+
+  statusBox.className =
+    "status-box";
+
+
+  if(type === "error") {
+
+    statusBox.classList.add(
+      "error"
+    );
+
+  }
+
+
+  if(type === "success") {
+
+    statusBox.classList.add(
+      "success"
+    );
+
+  }
+
+
+  if(type === "loading") {
+
+    statusBox.innerHTML = `
+
+      <div class="loading-content">
+
+        <div class="spinner"></div>
+
+        <div>
+          ${escapeHtml(message)}
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  statusBox.textContent =
+    message;
+
+}
+
+
+/* ============================================================
+   RESET SELECT
+============================================================ */
+
+function resetSelect(
+  select,
+  placeholder
+) {
+
+  select.innerHTML = "";
+
+
+  const option =
+    document.createElement(
+      "option"
+    );
+
+
+  option.value = "";
+
+  option.textContent =
+    placeholder;
+
+
+  select.appendChild(
+    option
+  );
+
+}
+
+
+/* ============================================================
+   POPULATE ROOM / CLASS
+============================================================ */
+
+function populateRoomAndClass(
+  rows
+) {
+
+  const rooms =
+    uniquePreserveOrder(
+
+      rows.map(
+        row => row.room_no
+      )
+
+    );
+
+
+  const classes =
+    uniquePreserveOrder(
+
+      rows.map(
+        row => row.class_name
+      )
+
+    );
+
+
+  resetSelect(
+    roomSelect,
+    "সব Room No"
+  );
+
+
+  resetSelect(
+    classSelect,
+    "সব Class"
+  );
+
+
+  for(
+    const room of rooms
+  ) {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+
+    option.value =
+      room;
+
+
+    option.textContent =
+      room;
+
+
+    roomSelect.appendChild(
+      option
+    );
+
+  }
+
+
+  for(
+    const className of classes
+  ) {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+
+    option.value =
+      className;
+
+
+    option.textContent =
+      className;
+
+
+    classSelect.appendChild(
+      option
+    );
+
+  }
+
+
+  roomSelect.disabled =
+    false;
+
+
+  classSelect.disabled =
+    false;
+
+}
+
+
+/* ============================================================
+   BUILD STUDENT INDEX
+============================================================ */
+
+function buildStudentIndex() {
+
+  /*
+   * Key:
+   *
+   * CLASS|GENDER
+   *
+   * Example:
+   *
+   * VII|BOYS
+   *
+   * VII|GIRLS
+   *
+   * VII|ALL
+   */
+
+  const index =
+    new Map();
+
+
+  for(
+    const student of allStudents
+  ) {
+
+    const classKey =
+      normalizeText(
+        student.class_name
+      );
+
+
+    const genderKey =
+      normalizeText(
+        student.gender
+      );
+
+
+    const key =
+      `${classKey}|${genderKey}`;
+
+
+    if(
+      !index.has(key)
+    ) {
+
+      index.set(
+        key,
+        []
+      );
+
+    }
+
+
+    index.get(key).push(
+      student
+    );
+
+  }
+
+
+  return index;
+
+}
+
+
+/*
+ * এই index exam নির্বাচন করার পরে
+ * তৈরি হবে।
+ */
+
+let studentIndex =
+  new Map();
+
+
+/* ============================================================
+   GET STUDENTS FOR CLASS/GENDER
+============================================================ */
+
+function getStudentsForClassGender(
+  className,
+  gender
+) {
+
+  const classKey =
+    normalizeText(
+      className
+    );
+
+
+  const genderKey =
+    normalizeText(
+      gender
+    );
+
+
+  /*
+   * Gender ALL হলে
+   * class-এর সমস্ত gender নেওয়া হবে।
+   */
+
+  if(
+    !genderKey ||
+    genderKey === "ALL"
+  ) {
+
+    const result = [];
+
+    for(
+      const [
+        key,
+        rows
+      ] of studentIndex
+    ) {
+
+      if(
+        key.startsWith(
+          classKey + "|"
+        )
+      ) {
+
+        result.push(
+          ...rows
+        );
+
+      }
+
+    }
+
+    return result;
+
+  }
+
+
+  const key =
+    `${classKey}|${genderKey}`;
+
+
+  return (
+    studentIndex.get(key)
+    || []
+  );
+
+}
+
+
+/* ============================================================
+   CALCULATE STUDENT INFO
+============================================================ */
+
+function calculateStudentInfo(
+  seatRow
+) {
+
+  const className =
+    seatRow.class_name;
+
+
+  const startRoll =
+    Number(
+      seatRow.start_roll
+    );
+
+
+  const endRoll =
+    Number(
+      seatRow.end_roll
+    );
+
+
+  const gender =
+    seatRow.gender ||
+    "ALL";
+
+
+  const students =
+    getStudentsForClassGender(
+      className,
+      gender
+    );
+
+
+  const matchingStudents =
+    students.filter(
+      student => {
+
+        const roll =
+          Number(
+            student.roll_no
+          );
+
+
+        return (
+          roll >= startRoll &&
+          roll <= endRoll
+        );
+
+      }
+    );
+
+
+  const sections =
+    uniquePreserveOrder(
+
+      matchingStudents.map(
+        student =>
+          student.section
+      )
+
+    );
+
+
+  /*
+   * Specific Rolls
+   *
+   * roll number ascending order
+   */
+
+  const specificRolls =
+    matchingStudents
+
+      .map(
+        student =>
+          Number(
+            student.roll_no
+          )
+      )
+
+      .filter(
+        roll =>
+          !Number.isNaN(roll)
+      )
+
+      .sort(
+        (a,b) => a - b
+      )
+
+      .join(", ");
+
+
+  return {
+
+    section:
+      sections.length
+        ? sections.join(", ")
+        : "—",
+
+    total:
+      matchingStudents.length,
+
+    specificRolls:
+      specificRolls || "—"
+
   };
 
-  /* Standardize Class Names */
-  function normalizeClassName(cls) {
-    if (!cls) return '';
-    let str = String(cls).trim().toUpperCase();
-    str = str.replace(/^CLASS\s+/i, '').replace(/[-_]/g, '').trim();
+}
 
-    const romanMap = {
-      '5': 'V', '6': 'VI', '7': 'VII', '8': 'VIII', '9': 'IX', '10': 'X', '11': 'XI', '12': 'XII',
-      'V': 'V', 'VI': 'VI', 'VII': 'VII', 'VIII': 'VIII', 'IX': 'IX', 'X': 'X', 'XI': 'XI', 'XII': 'XII'
+
+/* ============================================================
+   RENDER TABLE
+============================================================ */
+
+function renderTable(
+  rows
+) {
+
+  tableBody.innerHTML = "";
+
+
+  for(
+    const row of rows
+  ) {
+
+    const info =
+      calculateStudentInfo(
+        row
+      );
+
+
+    const tr =
+      document.createElement(
+        "tr"
+      );
+
+
+    tr.innerHTML = `
+
+      <td data-column="room_no">
+        ${escapeHtml(
+          row.room_no
+        )}
+      </td>
+
+
+      <td data-column="gender">
+        ${escapeHtml(
+          row.gender || "ALL"
+        )}
+      </td>
+
+
+      <td data-column="class_name">
+        ${escapeHtml(
+          row.class_name
+        )}
+      </td>
+
+
+      <td data-column="section">
+        ${escapeHtml(
+          info.section
+        )}
+      </td>
+
+
+      <td
+        data-column="roll_range"
+        class="roll-range"
+      >
+
+        ${escapeHtml(
+          row.start_roll
+        )}
+
+        -
+
+        ${escapeHtml(
+          row.end_roll
+        )}
+
+      </td>
+
+
+      <td
+        data-column="specific_rolls"
+        class="specific-rolls"
+      >
+
+        ${escapeHtml(
+          info.specificRolls
+        )}
+
+      </td>
+
+
+      <td
+        data-column="total"
+        class="total-cell"
+      >
+
+        ${info.total}
+
+      </td>
+
+    `;
+
+
+    tableBody.appendChild(
+      tr
+    );
+
+  }
+
+
+  applyColumnVisibility();
+
+}
+
+
+/* ============================================================
+   COLUMN VISIBILITY
+============================================================ */
+
+function applyColumnVisibility() {
+
+  const selectedRoom =
+    roomSelect.value;
+
+
+  const selectedClass =
+    classSelect.value;
+
+
+  const hideColumns =
+    new Set();
+
+
+  if(selectedRoom) {
+
+    hideColumns.add(
+      "room_no"
+    );
+
+  }
+
+
+  if(selectedClass) {
+
+    hideColumns.add(
+      "class_name"
+    );
+
+  }
+
+
+  /*
+   * Web table-এ Specific Rolls
+   * সব সময় দেখাতে হবে এমন নয়।
+   *
+   * Requirement অনুযায়ী:
+   * Class selected হলে দেখাবে।
+   *
+   * Web table-এর সাধারণ view-তে
+   * এটিও hide করা হচ্ছে।
+   */
+
+  if(!selectedClass) {
+
+    hideColumns.add(
+      "specific_rolls"
+    );
+
+  }
+
+
+  document
+    .querySelectorAll(
+      "#seatTable th,#seatTable td"
+    )
+    .forEach(
+      cell => {
+
+        const column =
+          cell.dataset.column;
+
+
+        cell.style.display =
+          hideColumns.has(column)
+            ? "none"
+            : "";
+
+      }
+    );
+
+}
+
+
+/* ============================================================
+   REFRESH TABLE
+============================================================ */
+
+async function refreshTable() {
+
+  if(!examSelect.value) {
+
+    setStatus(
+      "normal",
+      "পরীক্ষার নাম সিলেক্ট করুন!"
+    );
+
+    return;
+
+  }
+
+
+  let rows =
+    [...allSeatRows];
+
+
+  const selectedRoom =
+    roomSelect.value;
+
+
+  const selectedClass =
+    classSelect.value;
+
+
+  if(selectedRoom) {
+
+    rows =
+      rows.filter(
+        row =>
+          String(
+            row.room_no
+          ) ===
+          String(
+            selectedRoom
+          )
+      );
+
+  }
+
+
+  if(selectedClass) {
+
+    rows =
+      rows.filter(
+        row =>
+          String(
+            row.class_name
+          ) ===
+          String(
+            selectedClass
+          )
+      );
+
+  }
+
+
+  filteredRows =
+    rows;
+
+
+  if(rows.length === 0) {
+
+    selectionInfo.textContent =
+      "কোনো matching data নেই";
+
+
+    setStatus(
+      "error",
+      "নির্বাচিত বিষয় অনুযায়ী কোনো ডাটা পাওয়া যায়নি।"
+    );
+
+
+    return;
+
+  }
+
+
+  setStatus(
+    "normal",
+    ""
+  );
+
+
+  statusBox.style.display =
+    "none";
+
+
+  tableContainer.style.display =
+    "block";
+
+
+  renderTable(rows);
+
+
+  updateSelectionInfo();
+
+
+  printBtn.disabled =
+    false;
+
+
+  printRoomsBtn.disabled =
+    false;
+
+
+  printClassesBtn.disabled =
+    false;
+
+}
+
+
+/* ============================================================
+   SELECTION INFO
+============================================================ */
+
+function updateSelectionInfo() {
+
+  const parts = [];
+
+
+  parts.push(
+    `Exam: ${examSelect.value}`
+  );
+
+
+  if(roomSelect.value) {
+
+    parts.push(
+      `Room: ${roomSelect.value}`
+    );
+
+  }
+
+
+  if(classSelect.value) {
+
+    parts.push(
+      `Class: ${classSelect.value}`
+    );
+
+  }
+
+
+  selectionInfo.textContent =
+    parts.join(" | ");
+
+}
+
+
+/* ============================================================
+   PRINT COLUMNS
+============================================================ */
+
+function getVisibleColumns(
+  selection
+) {
+
+  const columns = [
+
+    {
+      key:"room_no",
+      label:"Room No"
+    },
+
+    {
+      key:"gender",
+      label:"Gender"
+    },
+
+    {
+      key:"class_name",
+      label:"Class"
+    },
+
+    {
+      key:"section",
+      label:"Section"
+    },
+
+    {
+      key:"roll_range",
+      label:
+        "Roll Range<br>(Start roll - end roll)"
+    },
+
+    {
+      key:"total",
+      label:"Total"
+    }
+
+  ];
+
+
+  /*
+   * Class selected অথবা
+   * Batch Print All Classes হলে
+   * Specific Rolls যুক্ত হবে।
+   */
+
+  if(
+    selection.includeSpecificRolls
+  ) {
+
+    const index =
+      columns.findIndex(
+        col =>
+          col.key ===
+          "roll_range"
+      );
+
+
+    columns.splice(
+      index + 1,
+      0,
+      {
+        key:"specific_rolls",
+        label:"Specific Rolls"
+      }
+    );
+
+  }
+
+
+  /*
+   * Selected Room হলে Room column hide
+   */
+
+  if(selection.room) {
+
+    return columns.filter(
+      col =>
+        col.key !==
+        "room_no"
+    );
+
+  }
+
+
+  /*
+   * Selected Class হলে Class column hide
+   */
+
+  if(selection.className) {
+
+    return columns.filter(
+      col =>
+        col.key !==
+        "class_name"
+    );
+
+  }
+
+
+  return columns;
+
+}
+
+
+/* ============================================================
+   PRINT SIZE
+============================================================ */
+
+function calculatePrintSize(
+  rowCount,
+  columnCount
+) {
+
+  /*
+   * Landscape A4 হওয়ায়
+   * বেশি column থাকলে font ছোট করা হবে।
+   */
+
+  let score =
+    rowCount;
+
+
+  if(columnCount >= 7) {
+
+    score += 2;
+
+  }
+
+
+  if(score <= 7) {
+
+    return "large";
+
+  }
+
+
+  if(score <= 15) {
+
+    return "medium";
+
+  }
+
+
+  return "small";
+
+}
+
+
+/* ============================================================
+   MAKE PRINT PAGE
+============================================================ */
+
+function makePrintPage(
+  rows,
+  studentInfos,
+  selection,
+  pageNumber
+) {
+
+  const columns =
+    getVisibleColumns(
+      selection
+    );
+
+
+  const size =
+    calculatePrintSize(
+      rows.length,
+      columns.length
+    );
+
+
+  let selectionText =
+    `Exam: ${escapeHtml(
+      selection.exam
+    )}`;
+
+
+  if(selection.room) {
+
+    selectionText +=
+      ` | Room No: ${escapeHtml(
+        selection.room
+      )}`;
+
+  }
+
+
+  if(selection.className) {
+
+    selectionText +=
+      ` | Class: ${escapeHtml(
+        selection.className
+      )}`;
+
+  }
+
+
+  /*
+   * গুরুত্বপূর্ণ:
+   *
+   * এখানে currentSessionText ব্যবহার হচ্ছে।
+   *
+   * তাই CONFIG.SESSION-এর উপর
+   * কোনো dependency নেই।
+   */
+
+  selectionText +=
+    ` | Session: ${escapeHtml(
+      currentSessionText
+    )}`;
+
+
+  if(pageNumber) {
+
+    selectionText +=
+      ` | Page: ${pageNumber}`;
+
+  }
+
+
+  const headerHtml =
+    columns.map(
+      col =>
+        `<th>${col.label}</th>`
+    ).join("");
+
+
+  const bodyHtml =
+    rows.map(
+      (row,index) => {
+
+        const info =
+          studentInfos[index];
+
+
+        const cells = {
+
+          room_no:
+            escapeHtml(
+              row.room_no
+            ),
+
+          gender:
+            escapeHtml(
+              row.gender || "ALL"
+            ),
+
+          class_name:
+            escapeHtml(
+              row.class_name
+            ),
+
+          section:
+            escapeHtml(
+              info.section
+            ),
+
+          roll_range:
+            `${escapeHtml(
+              row.start_roll
+            )} - ${escapeHtml(
+              row.end_roll
+            )}`,
+
+          specific_rolls:
+            escapeHtml(
+              info.specificRolls
+            ),
+
+          total:
+            escapeHtml(
+              info.total
+            )
+
+        };
+
+
+        return `
+
+          <tr>
+
+            ${columns.map(
+              col =>
+                `<td>
+                  ${cells[col.key]}
+                </td>`
+            ).join("")}
+
+          </tr>
+
+        `;
+
+      }
+    ).join("");
+
+
+  return `
+
+<section
+  class="print-page size-${size}"
+>
+
+
+<h1 class="print-school">
+
+  ${escapeHtml(
+    CONFIG.SCHOOL_NAME
+  )}
+
+</h1>
+
+
+<h2 class="print-main-title">
+
+  ${escapeHtml(
+    CONFIG.MAIN_TITLE
+  )}
+
+</h2>
+
+
+<div class="print-selection">
+
+  ${selectionText}
+
+</div>
+
+
+<table class="print-table">
+
+<thead>
+
+<tr>
+
+${headerHtml}
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+${bodyHtml}
+
+</tbody>
+
+</table>
+
+
+</section>
+
+`;
+
+}
+
+
+/* ============================================================
+   CREATE FULL PRINT DOCUMENT
+============================================================ */
+
+function createFullPrintDocument(
+  pages
+) {
+
+  const pagesHtml =
+    pages.map(
+      (page,index) =>
+        makePrintPage(
+          page.rows,
+          page.studentInfos,
+          page.selection,
+
+          pages.length > 1
+            ? index + 1
+            : null
+
+        )
+    ).join("");
+
+
+  return `
+
+<!DOCTYPE html>
+
+<html lang="bn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+  ${escapeHtml(
+    CONFIG.MAIN_TITLE
+  )}
+</title>
+
+
+<style>
+
+@page {
+
+  size:A4 landscape;
+
+  margin:7mm;
+}
+
+
+* {
+
+  box-sizing:border-box;
+
+}
+
+
+html,
+body {
+
+  margin:0;
+
+  padding:0;
+
+  background:white;
+
+  color:black;
+
+  font-family:
+    "Noto Sans Bengali",
+    "Roboto",
+    Arial,
+    sans-serif;
+
+}
+
+
+.print-page {
+
+  width:100%;
+
+  min-height:194mm;
+
+  page-break-after:always;
+
+  break-after:page;
+
+}
+
+
+.print-page:last-child {
+
+  page-break-after:auto;
+
+  break-after:auto;
+
+}
+
+
+.print-school {
+
+  text-align:center;
+
+  font-weight:900;
+
+  color:#000;
+
+  margin:0;
+
+  line-height:1.15;
+
+}
+
+
+.print-main-title {
+
+  text-align:center;
+
+  font-weight:900;
+
+  color:#000;
+
+  margin:2mm 0 0;
+
+  line-height:1.15;
+
+}
+
+
+.print-selection {
+
+  text-align:center;
+
+  color:#000;
+
+  font-weight:800;
+
+  margin:2mm 0 4mm;
+
+  line-height:1.2;
+
+}
+
+
+.print-table {
+
+  width:100%;
+
+  border-collapse:collapse;
+
+  table-layout:fixed;
+
+}
+
+
+.print-table th,
+.print-table td {
+
+  border:
+    1.2px solid #000;
+
+  color:#000;
+
+  background:#fff;
+
+  text-align:center;
+
+  vertical-align:middle;
+
+  line-height:1.12;
+
+  word-wrap:break-word;
+
+}
+
+
+.print-table th {
+
+  font-weight:900;
+
+}
+
+
+.print-table td {
+
+  font-weight:700;
+
+}
+
+
+.print-table tr {
+
+  page-break-inside:avoid;
+
+  break-inside:avoid;
+
+}
+
+
+/* =====================================================
+   LARGE
+===================================================== */
+
+.size-large .print-school {
+
+  font-size:20pt;
+
+}
+
+
+.size-large .print-main-title {
+
+  font-size:15pt;
+
+}
+
+
+.size-large .print-selection {
+
+  font-size:11pt;
+
+}
+
+
+.size-large .print-table th {
+
+  font-size:10pt;
+
+  padding:6px 5px;
+
+}
+
+
+.size-large .print-table td {
+
+  font-size:10pt;
+
+  padding:6px 5px;
+
+}
+
+
+/* =====================================================
+   MEDIUM
+===================================================== */
+
+.size-medium .print-school {
+
+  font-size:18pt;
+
+}
+
+
+.size-medium .print-main-title {
+
+  font-size:14pt;
+
+}
+
+
+.size-medium .print-selection {
+
+  font-size:10pt;
+
+}
+
+
+.size-medium .print-table th {
+
+  font-size:9pt;
+
+  padding:5px 4px;
+
+}
+
+
+.size-medium .print-table td {
+
+  font-size:9pt;
+
+  padding:5px 4px;
+
+}
+
+
+/* =====================================================
+   SMALL
+===================================================== */
+
+.size-small .print-school {
+
+  font-size:16pt;
+
+}
+
+
+.size-small .print-main-title {
+
+  font-size:13pt;
+
+}
+
+
+.size-small .print-selection {
+
+  font-size:9pt;
+
+}
+
+
+.size-small .print-table th {
+
+  font-size:8pt;
+
+  padding:4px 3px;
+
+}
+
+
+.size-small .print-table td {
+
+  font-size:8pt;
+
+  padding:4px 3px;
+
+}
+
+</style>
+
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Roboto:wght@400;500;700;800&display=swap"
+  rel="stylesheet"
+>
+
+
+</head>
+
+
+<body>
+
+${pagesHtml}
+
+</body>
+
+</html>
+
+`;
+
+}
+
+
+/* ============================================================
+   CURRENT PRINT
+============================================================ */
+
+async function prepareCurrentPrint() {
+
+  if(!examSelect.value) {
+
+    alert(
+      "প্রথমে Exam নির্বাচন করুন।"
+    );
+
+    return;
+
+  }
+
+
+  if(!filteredRows.length) {
+
+    alert(
+      "প্রিন্ট করার মতো কোনো ডাটা নেই।"
+    );
+
+    return;
+
+  }
+
+
+  const printWindow =
+    window.open(
+      "",
+      "_blank",
+      "width=1200,height=800"
+    );
+
+
+  if(!printWindow) {
+
+    alert(
+      "Print window খোলা যায়নি। Browser popup permission দিন।"
+    );
+
+    return;
+
+  }
+
+
+  printWindow.document.write(`
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <body
+      style="
+        font-family:sans-serif;
+        text-align:center;
+        padding:40px;
+      "
+    >
+
+      <h2>
+        Print data প্রস্তুত হচ্ছে...
+      </h2>
+
+    </body>
+
+    </html>
+
+  `);
+
+
+  try {
+
+    const studentInfos =
+      filteredRows.map(
+        row =>
+          calculateStudentInfo(
+            row
+          )
+      );
+
+
+    /*
+     * Specific Rolls শুধুমাত্র
+     * Class dropdown selected হলে।
+     *
+     * Room selected হলে নয়।
+     */
+
+    const selection = {
+
+      exam:
+        examSelect.value,
+
+      room:
+        roomSelect.value,
+
+      className:
+        classSelect.value,
+
+      includeSpecificRolls:
+        Boolean(
+          classSelect.value
+        )
+
     };
 
-    return romanMap[str] || str;
-  }
 
-  function normalizeGender(g) {
-    if (!g) return 'ALL';
-    const str = String(g).trim().toUpperCase();
-    if (str.includes('BOY') || str === 'M' || str === 'MALE') return 'BOYS';
-    if (str.includes('GIRL') || str === 'F' || str === 'FEMALE') return 'GIRLS';
-    return 'ALL';
-  }
+    const html =
+      createFullPrintDocument([
 
-  /* Fetch Students with Pagination */
-  async function fetchAllStudentsPaginated() {
-    let allStudents = [];
-    let offset = 0;
-    const limit = 1000;
-    let hasMore = true;
+        {
 
-    while (hasMore) {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,roll_no,gender,student_name,session`, {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Range-Unit': 'items',
-          'Range': `${offset}-${offset + limit - 1}`
+          rows:
+            filteredRows,
+
+          studentInfos,
+
+          selection
+
         }
-      });
 
-      const data = await response.json();
-      if (data && data.length > 0) {
-        allStudents = allStudents.concat(data);
-        offset += limit;
-        if (data.length < limit) hasMore = false;
-      } else {
-        hasMore = false;
-      }
-    }
-    return allStudents;
-  }
-
-  /* Fetch All Data */
-  async function fetchAllData() {
-    try {
-      const [planRes, stuResArray, routineRes] = await Promise.all([
-        fetch(`${SUPABASE_URL}/rest/v1/seat_plan?order=id.asc`, { 
-          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } 
-        }),
-        fetchAllStudentsPaginated(),
-        fetch(`${SUPABASE_URL}/rest/v1/exam_routine?order=id.asc`, { 
-          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } 
-        })
       ]);
-      
-      rawSeatPlans = await planRes.json();
-      rawStudents = stuResArray;
-      rawRoutines = await routineRes.json();
 
-      if (rawStudents && rawStudents.length > 0 && rawStudents[0].session) {
-        currentSessionYear = rawStudents[0].session;
-      } else {
-        currentSessionYear = new Date().getFullYear().toString();
-      }
-      document.getElementById('sessionYear').innerText = currentSessionYear;
 
-      populateExamDropdown();
-      populateRoomDropdown();
-      renderAttendanceView();
+    printWindow.document.open();
 
-    } catch(e) { 
-      console.error("Data loading error:", e); 
-      document.getElementById('attendanceCardsContainer').innerHTML = '<div style="text-align:center; color:red; padding:20px;">ডাটা লোড করতে সমস্যা হয়েছে! কনসোল চেক করুন।</div>';
-    }
+    printWindow.document.write(
+      html
+    );
+
+    printWindow.document.close();
+
+
+    setTimeout(
+      () => {
+
+        printWindow.focus();
+
+        printWindow.print();
+
+      },
+      800
+    );
+
+
+  } catch(error) {
+
+    console.error(error);
+
+    printWindow.close();
+
+
+    alert(
+      "Print তৈরি করতে সমস্যা হয়েছে: " +
+      (
+        error.message ||
+        "Unknown error"
+      )
+    );
+
   }
 
-  function populateExamDropdown() {
-    const select = document.getElementById('selectUniversalExam');
-    availableExams = [...new Set(rawSeatPlans.map(p => String(p.exam_name || '').trim()).filter(Boolean))];
-    
-    select.innerHTML = '<option value="ALL">-- সকল পরীক্ষা --</option>';
-    availableExams.forEach(exam => {
-      select.innerHTML += `<option value="${exam}">${exam}</option>`;
-    });
+}
+
+
+/* ============================================================
+   BATCH PRINT
+============================================================ */
+
+async function prepareBatchPrint(
+  mode
+) {
+
+  if(!examSelect.value) {
+
+    alert(
+      "প্রথমে Exam নির্বাচন করুন।"
+    );
+
+    return;
+
   }
 
-  function populateRoomDropdown() {
-    const selectAttn = document.getElementById('selectAttnRoom');
-    const activePlans = getFilteredSeatPlans();
-    const rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
-    
-    let optionsHtml = '<option value="">-- সকল রুম --</option>';
-    rooms.forEach(r => {
-      optionsHtml += `<option value="${r}">Room No: ${r}</option>`;
-    });
 
-    selectAttn.innerHTML = optionsHtml;
+  const printWindow =
+    window.open(
+      "",
+      "_blank",
+      "width=1200,height=800"
+    );
+
+
+  if(!printWindow) {
+
+    alert(
+      "Print window খোলা যায়নি।"
+    );
+
+    return;
+
   }
 
-  function getFilteredSeatPlans() {
-    const selectedExam = document.getElementById('selectUniversalExam').value;
-    if (selectedExam === 'ALL' || !selectedExam) {
-      return rawSeatPlans;
-    }
-    return rawSeatPlans.filter(p => String(p.exam_name || '').trim().toUpperCase() === selectedExam.trim().toUpperCase());
-  }
 
-  function onFilterChange() {
-    populateRoomDropdown();
-    renderAttendanceView();
-  }
+  printWindow.document.write(`
 
-  /* Map Seat Plan Exam Name to Routine Exam Name */
-  function mapExamNameForRoutine(seatExamName) {
-    if (!seatExamName) return [];
-    const name = seatExamName.trim().toUpperCase();
+    <!DOCTYPE html>
 
-    if (name.includes('SEMESTER I') || name.includes('SEME I') || name.includes('SEM 1')) {
-      return ['SEME I', 'SEMESTER I', '1ST SEMESTER'];
-    }
-    if (name.includes('SEMESTER II') || name.includes('SEME II') || name.includes('SEM 2')) {
-      return ['SEME II', 'SEMESTER II', '2ND SEMESTER'];
-    }
-    if (name.includes('1ST SUMMATIVE') || name.includes('1ST EXAM')) {
-      return ['1ST EXAM', '1ST SUMMATIVE EVALUATION'];
-    }
-    if (name.includes('2ND SUMMATIVE') || name.includes('2ND EXAM')) {
-      return ['2ND EXAM', '2ND SUMMATIVE EVALUATION'];
-    }
-    if (name.includes('3RD SUMMATIVE') || name.includes('3RD EXAM')) {
-      return ['3RD EXAM', '3RD SUMMATIVE EVALUATION'];
-    }
-    if (name.includes('TEST')) {
-      return ['TEST EXAM', 'TEST EXAMINATION'];
-    }
+    <html>
 
-    return [seatExamName];
-  }
+    <body
+      style="
+        font-family:sans-serif;
+        text-align:center;
+        padding:40px;
+      "
+    >
 
-  /* MAIN ATTENDANCE VIEW RENDER */
-  function renderAttendanceView() {
-    const container = document.getElementById('attendanceCardsContainer');
-    const selectedRoom = document.getElementById('selectAttnRoom').value;
-    const selectedClass = document.getElementById('selectAttnClass').value;
-    const selectedUniversalExam = document.getElementById('selectUniversalExam').value;
-    container.innerHTML = '';
+      <h2>
+        Batch Print data প্রস্তুত হচ্ছে...
+      </h2>
 
-    const activePlans = getFilteredSeatPlans();
-    let rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
-    
-    if (selectedRoom) rooms = [selectedRoom];
+      <p>
+        দয়া করে অপেক্ষা করুন...
+      </p>
 
-    if (rooms.length === 0) {
-      container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">স্বাক্ষর পাতার কোনো তথ্য পাওয়া যায়নি!</div>';
-      return;
-    }
+    </body>
 
-    let globalCardIdx = 0;
-    let cardCount = 0;
+    </html>
 
-    rooms.forEach(roomNo => {
-      const roomPlans = activePlans.filter(p => String(p.room_no).trim() === roomNo);
-      
-      let classesInRoom = [...new Set(roomPlans.map(p => normalizeClassName(p.class_name)))];
+  `);
 
-      // Filter by selected class if chosen
-      if (selectedClass) {
-        const normSelectedClass = normalizeClassName(selectedClass);
-        classesInRoom = classesInRoom.filter(c => c === normSelectedClass);
-      }
 
-      classesInRoom.forEach(clsName => {
-        const clsPlansInRoom = roomPlans.filter(p => normalizeClassName(p.class_name) === clsName);
-        const classRoutineCol = `class_${clsName.toLowerCase()}`;
-        
-        let matchedRoutines = rawRoutines.filter(r => r[classRoutineCol] && String(r[classRoutineCol]).trim() !== '');
+  try {
 
-        if (selectedUniversalExam !== 'ALL' && selectedUniversalExam) {
-          const possibleRoutineExamNames = mapExamNameForRoutine(selectedUniversalExam);
-          matchedRoutines = matchedRoutines.filter(r => {
-            const rExam = String(r.exam_name || '').trim().toUpperCase();
-            return possibleRoutineExamNames.some(pName => pName.toUpperCase() === rExam);
-          });
+    const groups = [];
+
+
+    /* =====================================================
+       ALL ROOMS
+    ===================================================== */
+
+    if(mode === "room") {
+
+      const roomMap =
+        new Map();
+
+
+      for(
+        const row of allSeatRows
+      ) {
+
+        const key =
+          String(
+            row.room_no
+          );
+
+
+        if(
+          !roomMap.has(key)
+        ) {
+
+          roomMap.set(
+            key,
+            []
+          );
+
         }
 
-        let roomStudents = [];
-        clsPlansInRoom.forEach(plan => {
-          const pGenNorm = normalizeGender(plan.gender);
-          const pSec = plan.section ? String(plan.section).trim().toUpperCase() : 'ALL';
 
-          const filtered = rawStudents.filter(s => {
-            const sClassNorm = normalizeClassName(s.class_name);
-            const sRoll = parseInt(s.roll_no);
-            const sSec = s.section ? String(s.section).trim().toUpperCase() : '';
-            const sGenNorm = normalizeGender(s.gender);
+        roomMap.get(key)
+          .push(row);
 
-            const matchClass = (sClassNorm === clsName);
-            const matchRoll = (sRoll >= parseInt(plan.start_roll) && sRoll <= parseInt(plan.end_roll));
-            const matchSec = (pSec === 'ALL' || pSec === '' || pSec === sSec);
-            const matchGen = (pGenNorm === 'ALL' || pGenNorm === sGenNorm);
+      }
 
-            return matchClass && matchRoll && matchSec && matchGen;
-          });
 
-          roomStudents.push(...filtered);
+      for(
+        const [
+          room,
+          rows
+        ]
+        of roomMap
+      ) {
+
+        groups.push({
+
+          room,
+
+          rows
+
         });
 
-        const studentMap = new Map();
-        roomStudents.forEach(s => studentMap.set(`${normalizeClassName(s.class_name)}-${s.roll_no}`, s));
-        const sortedStudents = Array.from(studentMap.values()).sort((a,b) => parseInt(a.roll_no) - parseInt(b.roll_no));
+      }
 
-        if (sortedStudents.length === 0) return;
+    }
 
-        cardCount++;
 
-        let headerColsHtml = '';
-        if (matchedRoutines.length > 0) {
-          matchedRoutines.forEach(r => {
-            const subject = r[classRoutineCol];
-            const dateStr = r.exam_date || 'N/A';
-            headerColsHtml += `<th>${dateStr}<br><span style="font-size:12px; font-weight:normal;">${subject}</span></th>`;
-          });
-        } else {
-          headerColsHtml = `<th style="width: 70%;">পরীক্ষার বিষয় ও তারিখ</th>`;
+    /* =====================================================
+       ALL CLASSES
+    ===================================================== */
+
+    if(mode === "class") {
+
+      const classMap =
+        new Map();
+
+
+      for(
+        const row of allSeatRows
+      ) {
+
+        const key =
+          String(
+            row.class_name
+          );
+
+
+        if(
+          !classMap.has(key)
+        ) {
+
+          classMap.set(
+            key,
+            []
+          );
+
         }
 
-        let bodyRowsHtml = '';
-        sortedStudents.forEach(stu => {
-          let sigCells = '';
-          if (matchedRoutines.length > 0) {
-            matchedRoutines.forEach(() => {
-              sigCells += `<td class="attn-cell"></td>`;
-            });
-          } else {
-            sigCells = `<td class="attn-cell"></td>`;
-          }
 
-          bodyRowsHtml += `
-            <tr>
-              <td><b>${stu.roll_no}</b></td>
-              <td style="text-align: left; padding-left: 8px;"><b>${stu.student_name || 'N/A'}</b></td>
-              ${sigCells}
-            </tr>
-          `;
+        classMap.get(key)
+          .push(row);
+
+      }
+
+
+      for(
+        const [
+          className,
+          rows
+        ]
+        of classMap
+      ) {
+
+        groups.push({
+
+          className,
+
+          rows
+
         });
 
-        let presentCells = '', absentCells = '', signCells = '';
-        const colCount = matchedRoutines.length > 0 ? matchedRoutines.length : 1;
-        
-        for (let i = 0; i < colCount; i++) {
-          presentCells += `<td></td>`;
-          absentCells += `<td></td>`;
-          signCells += `<td></td>`;
-        }
+      }
 
-        const summaryFooterHtml = `
-          <tr class="footer-row">
-            <td colspan="2" style="text-align: right;"><b>Present:</b></td>
-            ${presentCells}
-          </tr>
-          <tr class="footer-row">
-            <td colspan="2" style="text-align: right;"><b>Absent:</b></td>
-            ${absentCells}
-          </tr>
-          <tr class="footer-row">
-            <td colspan="2" style="text-align: right;"><b>Invigilator Sign:</b></td>
-            ${signCells}
-          </tr>
-        `;
+    }
 
-        const cardId = `attn-card-${globalCardIdx++}`;
-        const examTitle = clsPlansInRoom[0].exam_name || (selectedUniversalExam !== 'ALL' ? selectedUniversalExam : 'Exam');
 
-        const cardHtml = `
-          <div class="printable-card" id="${cardId}">
-            <div class="card-print-header">
-              <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
-              <h3>শিক্ষার্থীর স্বাক্ষর ও উপস্থিতি রেজিস্টার: ${currentSessionYear}</h3>
-            </div>
+    if(groups.length === 0) {
 
-            <div class="card-header-title">
-              <span>✍️ Room No: ${roomNo} | Class: ${clsName}</span>
-              <button class="btn btn-primary btn-single-print" onclick="printSingleLandscapeCard('${cardId}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
-            </div>
-            <div class="card-meta-grid">
-              <div class="card-meta-item">Exam: <strong>${examTitle}</strong></div>
-              <div class="card-meta-item">Class: <strong>Class ${clsName}</strong></div>
-              <div class="card-meta-item">Room No: <strong>${roomNo}</strong></div>
-              <div class="card-meta-item">মোট ছাত্র-ছাত্রী: <strong>${sortedStudents.length} জন</strong></div>
-            </div>
-            <div class="table-responsive">
-              <table>
-                <thead>
-                  <tr>
-                    <th style="width: 8%;">রোল</th>
-                    <th style="width: 22%;">শিক্ষার্থীর নাম</th>
-                    ${headerColsHtml}
-                  </tr>
-                </thead>
-                <tbody>
-                  ${bodyRowsHtml}
-                  ${summaryFooterHtml}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
+      throw new Error(
+        "Batch print-এর জন্য কোনো data পাওয়া যায়নি।"
+      );
 
-        container.innerHTML += cardHtml;
+    }
+
+
+    const pages = [];
+
+
+    for(
+      const group of groups
+    ) {
+
+      const studentInfos =
+        group.rows.map(
+          row =>
+            calculateStudentInfo(
+              row
+            )
+        );
+
+
+      const selection = {
+
+        exam:
+          examSelect.value,
+
+        room:
+          mode === "room"
+            ? group.room
+            : "",
+
+        className:
+          mode === "class"
+            ? group.className
+            : "",
+
+
+        /*
+         * গুরুত্বপূর্ণ:
+         *
+         * Batch All Classes =
+         * Specific Rolls YES
+         *
+         * Batch All Rooms =
+         * Specific Rolls NO
+         */
+
+        includeSpecificRolls:
+          mode === "class"
+
+      };
+
+
+      pages.push({
+
+        rows:
+          group.rows,
+
+        studentInfos,
+
+        selection
+
       });
-    });
 
-    if (cardCount === 0) {
-      container.innerHTML = '<div style="text-align:center; padding:20px; font-size:16px;">নির্বাচিত ফিল্টার অনুযায়ী কোনো স্বাক্ষর পাতা পাওয়া যায়নি!</div>';
     }
+
+
+    const html =
+      createFullPrintDocument(
+        pages
+      );
+
+
+    printWindow.document.open();
+
+    printWindow.document.write(
+      html
+    );
+
+    printWindow.document.close();
+
+
+    setTimeout(
+      () => {
+
+        printWindow.focus();
+
+        printWindow.print();
+
+      },
+      1000
+    );
+
+
+  } catch(error) {
+
+    console.error(error);
+
+    printWindow.close();
+
+
+    alert(
+      "Batch Print তৈরি করতে সমস্যা হয়েছে: " +
+      (
+        error.message ||
+        "Unknown error"
+      )
+    );
+
   }
 
-  /* PRINT FUNCTIONS */
-  function printSingleLandscapeCard(cardId) {
-    document.querySelectorAll('.printable-card').forEach(c => c.classList.add('print-hide'));
-    const target = document.getElementById(cardId);
-    if (target) target.classList.remove('print-hide');
-    
-    window.print();
-    
-    document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
-  }
+}
 
-  function printLandscapeBatch() {
-    document.querySelectorAll('.printable-card').forEach(c => c.classList.remove('print-hide'));
-    window.print();
+
+/* ============================================================
+   EXAM CHANGE
+============================================================ */
+
+examSelect.addEventListener(
+  "change",
+  async () => {
+
+    const examName =
+      examSelect.value;
+
+
+    roomSelect.disabled =
+      true;
+
+
+    classSelect.disabled =
+      true;
+
+
+    resetSelect(
+      roomSelect,
+      "প্রথমে Exam নির্বাচন করুন"
+    );
+
+
+    resetSelect(
+      classSelect,
+      "প্রথমে Exam নির্বাচন করুন"
+    );
+
+
+    allSeatRows = [];
+
+    filteredRows = [];
+
+    allStudents = [];
+
+    studentIndex =
+      new Map();
+
+
+    if(!examName) {
+
+      selectionInfo.textContent =
+        "কোনো পরীক্ষা নির্বাচন করা হয়নি";
+
+
+      setStatus(
+        "normal",
+        "পরীক্ষার নাম সিলেক্ট করুন!"
+      );
+
+
+      printBtn.disabled =
+        true;
+
+
+      printRoomsBtn.disabled =
+        true;
+
+
+      printClassesBtn.disabled =
+        true;
+
+
+      return;
+
+    }
+
+
+    setStatus(
+      "loading",
+      "নির্বাচিত পরীক্ষার Seat Plan লোড হচ্ছে..."
+    );
+
+
+    try {
+
+      /*
+       * Seat plan এবং current students
+       * parallel ভাবে fetch হচ্ছে।
+       *
+       * এতে loading time কমবে।
+       */
+
+      const [
+        seatRows,
+        students
+      ] =
+        await Promise.all([
+
+          loadSeatPlanForExam(
+            examName
+          ),
+
+          loadCurrentStudents()
+
+        ]);
+
+
+      allSeatRows =
+        seatRows;
+
+
+      allStudents =
+        students;
+
+
+      /*
+       * একবার index তৈরি।
+       */
+
+      studentIndex =
+        buildStudentIndex();
+
+
+      if(
+        allSeatRows.length === 0
+      ) {
+
+        setStatus(
+          "error",
+          "এই পরীক্ষার জন্য কোনো Seat Plan পাওয়া যায়নি।"
+        );
+
+
+        printBtn.disabled =
+          true;
+
+
+        printRoomsBtn.disabled =
+          true;
+
+
+        printClassesBtn.disabled =
+          true;
+
+
+        return;
+
+      }
+
+
+      /*
+       * Class dropdown:
+       * শুধুমাত্র seat_plan থেকে।
+       */
+
+      populateRoomAndClass(
+        allSeatRows
+      );
+
+
+      roomSelect.value =
+        "";
+
+
+      classSelect.value =
+        "";
+
+
+      await refreshTable();
+
+
+    } catch(error) {
+
+      console.error(error);
+
+
+      setStatus(
+        "error",
+        "Seat Plan লোড করতে সমস্যা হয়েছে: " +
+        (
+          error.message ||
+          "Unknown error"
+        )
+      );
+
+
+      printBtn.disabled =
+        true;
+
+
+      printRoomsBtn.disabled =
+        true;
+
+
+      printClassesBtn.disabled =
+        true;
+
+    }
+
   }
+);
+
+
+/* ============================================================
+   ROOM CHANGE
+============================================================ */
+
+roomSelect.addEventListener(
+  "change",
+  async () => {
+
+    if(roomSelect.value) {
+
+      classSelect.value =
+        "";
+
+    }
+
+
+    await refreshTable();
+
+  }
+);
+
+
+/* ============================================================
+   CLASS CHANGE
+============================================================ */
+
+classSelect.addEventListener(
+  "change",
+  async () => {
+
+    if(classSelect.value) {
+
+      roomSelect.value =
+        "";
+
+    }
+
+
+    await refreshTable();
+
+  }
+);
+
+
+/* ============================================================
+   PRINT BUTTON
+============================================================ */
+
+printBtn.addEventListener(
+  "click",
+  prepareCurrentPrint
+);
+
+
+/* ============================================================
+   BATCH ALL ROOMS
+============================================================ */
+
+printRoomsBtn.addEventListener(
+  "click",
+  () =>
+    prepareBatchPrint(
+      "room"
+    )
+);
+
+
+/* ============================================================
+   BATCH ALL CLASSES
+============================================================ */
+
+printClassesBtn.addEventListener(
+  "click",
+  () =>
+    prepareBatchPrint(
+      "class"
+    )
+);
+
 </script>
+
 </body>
+
 </html>
