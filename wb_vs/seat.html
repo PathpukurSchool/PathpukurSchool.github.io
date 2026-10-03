@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exam Seat Plan - Pathpukur High School (HS)</title>
+  <title>Pathpukur High School (HS)</title>
   
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -47,7 +47,6 @@
       font-size: 28px;
       color: #0056b3;
       margin-bottom: 5px;
-      text-transform: uppercase;
     }
 
     .header h2 {
@@ -187,7 +186,7 @@
       display: none !important;
     }
 
-    /* Batch Print View Container (Hidden in Web View) */
+    /* Batch Print Container */
     #batchPrintContainer {
       display: none;
     }
@@ -257,7 +256,7 @@
         font-weight: 700;
       }
 
-      /* Font Density Adjustments */
+      /* Dynamic Print Font Sizing */
       body.print-density-high table { font-size: 11pt; }
       body.print-density-high th, body.print-density-high td { padding: 6px 4px; }
 
@@ -267,7 +266,6 @@
       body.print-density-low table { font-size: 20pt; }
       body.print-density-low th, body.print-density-low td { padding: 18px 10px; }
 
-      /* Page Break for Batch Print */
       .page-break {
         page-break-after: always;
         break-after: page;
@@ -297,7 +295,7 @@
       <h3><i class="fa-solid fa-circle-info"></i> নির্দেশিকা (Instructions):</h3>
       <p>১. টেবিলের তথ্য দেখতে প্রথমে <b>Select Exam</b> ড্রপডাউন থেকে একটি পরীক্ষা নির্বাচন করুন।</p>
       <p>২. প্রয়োজনানুসারে <b>Room No</b> অথবা <b>Class</b> ড্রপডাউন থেকে ফিল্টার করতে পারেন।</p>
-      <p>৩. নির্বাচিত ফিল্টার কলামটি টেবিল থেকে আড়াল হবে এবং দূর থেকে স্পষ্টভাবে দেখার মতো ফন্ট সাইজ স্বয়ংক্রিয়ভাবে বড় হয়ে যাবে।</p>
+      <p>৩. নির্বাচিত ফিল্টার কলামটি টেবিল থেকে আড়াল হবে এবং ফন্ট সাইজ দূর থেকে স্পষ্ট পড়ার উপযোগী করে স্বয়ংক্রিয়ভাবে বড় হবে।</p>
       <p>৪. <b>Batch Print</b> অপশনের মাধ্যমে সিলেক্ট করা পরীক্ষার সমস্ত রুম অথবা ক্লাসের আলাদা আলাদা A4 পেজে প্রিন্ট নেওয়া যাবে।</p>
     </div>
 
@@ -373,7 +371,7 @@
 
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Global State
+    // Global States
     let rawSeatData = [];
     let studentsData = [];
     let processedSeatPlan = [];
@@ -391,45 +389,34 @@
       await fetchSessionAndExams();
     });
 
-    // 1. Fetch Session and Unique Exams List
+    // 1. Initial Load: Fetch Session Year & Exam Names
     async function fetchSessionAndExams() {
       try {
         // Fetch Session
-        const { data: stData } = await db
-          .from('current_students')
-          .select('session')
-          .not('session', 'is', null)
-          .limit(1);
-
-        if (stData && stData.length > 0 && stData[0].session) {
+        const { data: stData } = await db.from('current_students').select('session').not('session', 'is', null).limit(1);
+        if (stData && stData.length > 0) {
           currentSession = stData[0].session;
+          sessionYearSpan.textContent = currentSession;
         } else {
           currentSession = new Date().getFullYear().toString();
+          sessionYearSpan.textContent = currentSession;
         }
-        sessionYearSpan.textContent = currentSession;
 
-        // Fetch Exam List from seat_plan
-        const { data: examData, error } = await db
-          .from('seat_plan')
-          .select('exam_name')
-          .not('exam_name', 'is', null);
-
+        // Fetch Exam List
+        const { data: examData, error } = await db.from('seat_plan').select('exam_name').not('exam_name', 'is', null);
         if (error) throw error;
 
-        const uniqueExams = [...new Set(examData.map(item => item.exam_name).filter(Boolean))];
-        
-        filterExam.innerHTML = '<option value="">-- Select Exam --</option>';
+        const uniqueExams = [...new Set(examData.map(item => item.exam_name))];
         uniqueExams.forEach(exam => {
           filterExam.add(new Option(exam, exam));
         });
 
       } catch (err) {
         console.error('Initial Fetch Error:', err);
-        sessionYearSpan.textContent = new Date().getFullYear().toString();
       }
     }
 
-    // Event Listener for Exam Selection
+    // Exam Dropdown Change Event
     filterExam.addEventListener('change', async () => {
       const selectedExam = filterExam.value;
 
@@ -448,21 +435,52 @@
         return;
       }
 
-      // Show Loading Message with Spinner
+      // Show Loading Spinner
       tableBody.innerHTML = `
         <tr>
           <td colspan="6" class="message-box msg-info">
-            <i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড ও প্রসেস করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...
+            <i class="fa-solid fa-spinner fa-spin"></i> ডাটা প্রসেসিং হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...
           </td>
         </tr>`;
 
       await loadExamData(selectedExam);
     });
 
-    // 2. Load Seat Plan & Match with current_students
+    // 2. Optimized Fetching function handling Supabase 1000 limit
+    async function fetchAllMatchingStudents(targetClasses) {
+      let allStudents = [];
+      let page = 0;
+      const pageSize = 1000;
+      let keepFetching = true;
+
+      while (keepFetching) {
+        const { data, error } = await db
+          .from('current_students')
+          .select('class_name, section, roll_no, gender')
+          .in('class_name', targetClasses)
+          .range(page * pageSize, (page + 1) * pageSize - 1);
+
+        if (error) {
+          console.error("Student Fetch Error:", error);
+          break;
+        }
+
+        if (data && data.length > 0) {
+          allStudents = allStudents.concat(data);
+          if (data.length < pageSize) keepFetching = false;
+          else page++;
+        } else {
+          keepFetching = false;
+        }
+      }
+
+      return allStudents;
+    }
+
+    // 3. Load & Process Exam Data
     async function loadExamData(examName) {
       try {
-        // Step A: Fetch seat_plan for selected exam maintaining default order
+        // Fetch seat_plan for selected exam
         const { data: seatRows, error: seatErr } = await db
           .from('seat_plan')
           .select('*')
@@ -473,69 +491,51 @@
         rawSeatData = seatRows || [];
 
         if (rawSeatData.length === 0) {
-          tableBody.innerHTML = `
-            <tr>
-              <td colspan="6" class="message-box msg-warning">
-                এই পরীক্ষার জন্য কোনো সিট প্লান ডাটা পাওয়া যায়নি!
-              </td>
-            </tr>`;
+          tableBody.innerHTML = `<tr><td colspan="6" class="message-box msg-warning">এই পরীক্ষার জন্য কোনো তথ্য পাওয়া যায়নি!</td></tr>`;
           return;
         }
 
-        // Step B: Fetch current_students (Only necessary columns to prevent 1000 row limit issues)
-        const { data: studentRows, error: stErr } = await db
-          .from('current_students')
-          .select('class_name, section, roll_no, gender')
-          .range(0, 5000); // Expanded range for larger school data
+        // Get unique classes in seat_plan to fetch only needed students
+        const uniqueClasses = [...new Set(rawSeatData.map(r => r.class_name.trim()))];
 
-        if (stErr) throw stErr;
-        studentsData = studentRows || [];
+        // Fetch matching students with pagination bypass
+        studentsData = await fetchAllMatchingStudents(uniqueClasses);
 
-        // Step C: Match & Calculate Section and Total Students
+        // Process Section and Total
         processedSeatPlan = rawSeatData.map(row => {
-          const targetClass = (row.class_name || '').toString().trim().toUpperCase();
-          const targetGender = (row.gender || 'ALL').toString().trim().toUpperCase();
-          const startRoll = parseInt(row.start_roll, 10);
-          const endRoll = parseInt(row.end_roll, 10);
+          const rowClass = row.class_name ? row.class_name.toString().trim().toLowerCase() : '';
+          const rowGender = row.gender ? row.gender.toString().trim().toUpperCase() : 'ALL';
 
-          // Filter matching students
           const matchingStudents = studentsData.filter(st => {
-            const stClass = (st.class_name || '').toString().trim().toUpperCase();
-            const stRoll = parseInt(st.roll_no, 10);
-            const stGender = (st.gender || '').toString().trim().toUpperCase();
-
-            const isClassMatch = (stClass === targetClass);
-            const isRollMatch = (!isNaN(stRoll) && stRoll >= startRoll && stRoll <= endRoll);
-
-            let isGenderMatch = true;
-            if (targetGender !== 'ALL' && targetGender !== 'BOTH' && targetGender !== '') {
-              isGenderMatch = (stGender === targetGender || (targetGender === 'GIRLS' && (stGender === 'FEMALE' || stGender === 'GIRL')) || (targetGender === 'BOYS' && (stGender === 'MALE' || stGender === 'BOY')));
+            const classMatch = st.class_name && st.class_name.toString().trim().toLowerCase() === rowClass;
+            const rollMatch = st.roll_no >= row.start_roll && st.roll_no <= row.end_roll;
+            
+            let genderMatch = true;
+            if (rowGender !== 'ALL') {
+              genderMatch = st.gender && st.gender.toString().trim().toUpperCase() === rowGender;
             }
 
-            return isClassMatch && isRollMatch && isGenderMatch;
+            return classMatch && rollMatch && genderMatch;
           });
 
-          // Calculate Total
-          const totalCount = matchingStudents.length;
+          // Calculate Total Students
+          const totalStudents = matchingStudents.length;
 
           // Determine Section
-          let calculatedSection = row.section || '-';
-          if (totalCount > 0) {
-            const sections = [...new Set(matchingStudents.map(s => (s.section || '').toString().trim().toUpperCase()).filter(Boolean))];
-            if (sections.length === 1) {
-              calculatedSection = sections[0];
-            } else if (sections.length > 1) {
-              calculatedSection = 'ALL';
+          let sectionText = '-';
+          if (totalStudents > 0) {
+            const uniqueSections = [...new Set(matchingStudents.map(s => s.section ? s.section.toString().trim() : '').filter(Boolean))];
+            if (uniqueSections.length === 1) {
+              sectionText = uniqueSections[0];
+            } else if (uniqueSections.length > 1) {
+              sectionText = 'ALL';
             }
-          } else {
-            // Fallback if current_students table lacks specific roll range
-            calculatedSection = row.section || 'ALL';
           }
 
           return {
             ...row,
-            calculated_section: calculatedSection,
-            calculated_total: totalCount > 0 ? totalCount : (endRoll - startRoll + 1)
+            calculated_section: sectionText,
+            calculated_total: totalStudents
           };
         });
 
@@ -543,17 +543,17 @@
         renderTable();
 
       } catch (err) {
-        console.error('Data Load Error:', err);
+        console.error('Data Processing Error:', err);
         tableBody.innerHTML = `
           <tr>
             <td colspan="6" class="message-box msg-warning">
-              <i class="fa-solid fa-circle-xmark"></i> ডাটা লোড করতে ব্যর্থ হয়েছে! Supabase সংযোগ বা টেবিল চেক করুন।
+              <i class="fa-solid fa-circle-xmark"></i> ডাটা লোড করতে ব্যর্থ হয়েছে!
             </td>
           </tr>`;
       }
     }
 
-    // 3. Populate Room and Class Filters
+    // Populate Room and Class Filters
     function populateSubDropdowns() {
       filterRoom.innerHTML = '<option value="">-- All Rooms --</option>';
       filterClass.innerHTML = '<option value="">-- All Classes --</option>';
@@ -571,7 +571,7 @@
       filterClass.onchange = renderTable;
     }
 
-    // 4. Render Table View
+    // 4. Render Main Table
     function renderTable() {
       const selectedExam = filterExam.value;
       const selectedRoom = filterRoom.value;
@@ -584,24 +584,26 @@
       });
 
       // Update Page Heading
+      let headingText = `Exam Seat Plan: ${currentSession}`;
       let subDetails = [`Exam: ${selectedExam}`];
+
       if (selectedRoom) subDetails.push(`Room: ${selectedRoom}`);
       if (selectedClass) subDetails.push(`Class: ${selectedClass}`);
 
-      pageHeading.textContent = `Exam Seat Plan: ${currentSession} (${subDetails.join(' | ')})`;
+      pageHeading.textContent = `${headingText} (${subDetails.join(' | ')})`;
 
-      // Hide Columns when dropdown is selected
+      // Toggle Hidden Columns
       toggleColumnVisibility('.col-room', selectedRoom !== '');
       toggleColumnVisibility('.col-class', selectedClass !== '');
 
-      // Dynamic Font Scaling for Print
+      // Dynamic Font Adjustment
       updatePrintDensityClass(filteredData.length, !!selectedRoom || !!selectedClass);
 
       if (filteredData.length === 0) {
         tableBody.innerHTML = `
           <tr>
             <td colspan="6" class="message-box msg-warning">
-              নির্বাচনের ওপর ভিত্তি করে কোনো ডাটা পাওয়া যায়নি।
+              কোনো তথ্য পাওয়া যায়নি!
             </td>
           </tr>`;
         return;
@@ -624,7 +626,7 @@
       tableBody.innerHTML = html;
     }
 
-    // Column Visibility Toggle Helper
+    // Helper Column Visibility
     function toggleColumnVisibility(selector, hide) {
       document.querySelectorAll(selector).forEach(el => {
         if (hide) el.classList.add('hide-column');
@@ -632,7 +634,7 @@
       });
     }
 
-    // Font Scaling Helper
+    // Helper Font Scale
     function updatePrintDensityClass(recordCount, isFiltered) {
       document.body.classList.remove('print-density-high', 'print-density-medium', 'print-density-low');
 
@@ -674,11 +676,11 @@
 
       const keys = Object.keys(groups);
       if (keys.length === 0) {
-        alert('প্রিন্ট করার মতো কোনো ডাটা পাওয়া যায়নি!');
+        alert('প্রিন্ট করার মতো পর্যাপ্ত ডাটা পাওয়া যায়নি!');
         return;
       }
 
-      keys.forEach((key) => {
+      keys.forEach(key => {
         const rows = groups[key];
         const pageDiv = document.createElement('div');
         pageDiv.className = 'page-break';
