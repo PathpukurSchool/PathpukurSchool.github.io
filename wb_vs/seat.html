@@ -853,7 +853,8 @@
   const CONFIG = {
     PAGE_SIZE: 1000,
     SCHOOL_NAME: "Pathpukur High School (HS)",
-    MAIN_TITLE: "Exam Seat Plan"
+    MAIN_TITLE: "Exam Seat Plan",
+    SESSION: ""
   };
 
     /* ============================================================
@@ -996,32 +997,29 @@
 
   if (sessions.length === 0) {
 
+    CONFIG.SESSION = "";
+
     sessionDisplay.textContent =
       "Session পাওয়া যায়নি";
 
     return;
   }
 
-  /*
-   * যদি একটি মাত্র session থাকে,
-   * সেটিই সরাসরি দেখানো হবে।
-   */
   if (sessions.length === 1) {
 
+    CONFIG.SESSION = sessions[0];
+
     sessionDisplay.textContent =
-      sessions[0];
+      CONFIG.SESSION;
 
     return;
   }
 
-  /*
-   * একাধিক session থাকলে সবগুলো দেখাবে।
-   *
-   * যেমন:
-   * 2026 / 2026-27
-   */
-  sessionDisplay.textContent =
+  CONFIG.SESSION =
     sessions.join(" / ");
+
+  sessionDisplay.textContent =
+    CONFIG.SESSION;
 }
 
 
