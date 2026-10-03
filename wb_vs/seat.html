@@ -813,6 +813,9 @@
                 <th data-column="roll_range">
                   Roll Range (Start roll - end roll)
                 </th>
+                <th data-column="specific_rolls">
+                 Specific Rolls
+                </th>
                 <th data-column="total">Total</th>
               </tr>
             </thead>
@@ -1560,6 +1563,18 @@
           );
         });
 
+      /*
+ * নির্দিষ্ট Roll নম্বরগুলির তালিকা
+ *
+ * যেমন:
+ * 1, 3, 5, 8, 12
+ */
+const specificRolls =
+  matchingStudents
+    .map(student => Number(student.roll_no))
+    .filter(roll => !isNaN(roll))
+    .sort((a, b) => a - b);
+
 
       /*
        * Section unique list.
@@ -1582,6 +1597,11 @@
           sections.length
             ? sections.join(", ")
             : "—",
+
+        specificRolls:
+          specificRolls.length
+          ? specificRolls.join(", ")
+          : "—",
 
         total:
           matchingStudents.length
@@ -1630,14 +1650,18 @@
           </td>
 
           <td data-column="roll_range" class="roll-range">
-            ${escapeHtml(row.start_roll)}
-            -
-            ${escapeHtml(row.end_roll)}
-          </td>
+           ${escapeHtml(row.start_roll)}
+             -
+          ${escapeHtml(row.end_roll)}
+         </td>
 
-          <td data-column="total" class="total-cell">
-            ${studentInfo.total}
-          </td>
+         <td data-column="specific_rolls">
+         ${escapeHtml(studentInfo.specificRolls)}
+        </td>
+
+        <td data-column="total" class="total-cell">
+         ${studentInfo.total}
+        </td>
         `;
 
         tableBody.appendChild(tr);
@@ -1774,30 +1798,30 @@
     ============================================================ */
 
     function calculatePrintSize(
-      rowCount,
-      visibleColumnCount = 6
-    ) {
+  rowCount,
+  visibleColumnCount = 7
+) {
 
-      let score = rowCount;
+  let score = rowCount;
 
-      if (visibleColumnCount <= 4) {
-        score -= 3;
-      }
+  if (visibleColumnCount <= 5) {
+    score -= 3;
+  }
 
-      if (visibleColumnCount <= 3) {
-        score -= 2;
-      }
+  if (visibleColumnCount <= 4) {
+    score -= 2;
+  }
 
-      if (score <= 5) {
-        return "size-large";
-      }
+  if (score <= 5) {
+    return "size-large";
+  }
 
-      if (score <= 12) {
-        return "size-medium";
-      }
+  if (score <= 12) {
+    return "size-medium";
+  }
 
-      return "size-small";
-    }
+  return "size-small";
+}
 
 
     /* ============================================================
@@ -1829,6 +1853,10 @@
           key: "roll_range",
           label: "Roll Range (Start roll - end roll)"
         },
+        {
+        key: "specific_rolls",
+        label: "Specific Rolls"
+       },
         {
           key: "total",
           label: "Total"
@@ -1933,7 +1961,10 @@
 
             roll_range:
               `${escapeHtml(row.start_roll)} - ${escapeHtml(row.end_roll)}`,
-
+            
+           specific_rolls:
+               escapeHtml(info.specificRolls),
+            
             total:
               escapeHtml(info.total)
           };
