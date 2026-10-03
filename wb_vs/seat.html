@@ -1828,57 +1828,88 @@ const specificRolls =
        GET VISIBLE COLUMNS
     ============================================================ */
 
-    function getVisibleColumns(
-      selection = {}
-    ) {
+    function getVisibleColumns(selection = {}) {
 
-      const columns = [
-        {
-          key: "room_no",
-          label: "Room No"
-        },
-        {
-          key: "gender",
-          label: "Gender"
-        },
-        {
-          key: "class_name",
-          label: "Class"
-        },
-        {
-          key: "section",
-          label: "Section"
-        },
-        {
-          key: "roll_range",
-          label: "Roll Range (Start roll - end roll)"
-        },
-        {
-        key: "specific_rolls",
-        label: "Specific Rolls"
-       },
-        {
-          key: "total",
-          label: "Total"
-        }
-      ];
-
-      if (selection.room) {
-
-        return columns.filter(
-          col => col.key !== "room_no"
-        );
-      }
-
-      if (selection.className) {
-
-        return columns.filter(
-          col => col.key !== "class_name"
-        );
-      }
-
-      return columns;
+  const columns = [
+    {
+      key: "room_no",
+      label: "Room No"
+    },
+    {
+      key: "gender",
+      label: "Gender"
+    },
+    {
+      key: "class_name",
+      label: "Class"
+    },
+    {
+      key: "section",
+      label: "Section"
+    },
+    {
+      key: "roll_range",
+      label: "Roll Range (Start roll - end roll)"
+    },
+    {
+      key: "specific_rolls",
+      label: "Specific Rolls"
+    },
+    {
+      key: "total",
+      label: "Total"
     }
+  ];
+
+  /*
+   * =========================================================
+   * 1. Class selected
+   * =========================================================
+   *
+   * Specific Rolls থাকবে
+   * Class column hide হবে
+   */
+  if (selection.className) {
+
+    return columns.filter(
+      col =>
+        col.key !== "class_name"
+    );
+  }
+
+
+  /*
+   * =========================================================
+   * 2. Room selected
+   * =========================================================
+   *
+   * Specific Rolls থাকবে না
+   * Room column hide হবে
+   */
+  if (selection.room) {
+
+    return columns.filter(
+      col =>
+        col.key !== "room_no" &&
+        col.key !== "specific_rolls"
+    );
+  }
+
+
+  /*
+   * =========================================================
+   * 3. সাধারণ Print
+   * =========================================================
+   *
+   * Room/Class কিছুই selected নয়।
+   *
+   * Specific Rolls থাকবে না।
+   */
+  return columns.filter(
+    col =>
+      col.key !== "specific_rolls"
+  );
+}
 
 
     /* ============================================================
