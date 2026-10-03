@@ -702,29 +702,16 @@
         </div>
 
         <p>
-          পরীক্ষার সিট প্ল্যান দেখার জন্য প্রথমে <b>Exam</b> নির্বাচন করুন।
-          এরপর প্রয়োজন অনুযায়ী Room No অথবা Class নির্বাচন করলে সংশ্লিষ্ট
-          ডাটা দেখানো হবে।
+          পরীক্ষার সিট প্ল্যান দেখার জন্য ড্রপ ডাউন থেকে <b>Exam</b> নির্বাচন করুন।
+          প্রয়োজন অনুযায়ী Room No অথবা Class নির্বাচন করলে সংশ্লিষ্ট ডাটা দেখা যাবে।
         </p>
 
         <ul>
           <li>
-            Exam নির্বাচন না করা পর্যন্ত কোনো seat plan দেখানো হবে না।
-          </li>
-          <li>
-            Room No / Class নির্বাচন করলে সংশ্লিষ্ট কলামটি টেবিল থেকে
-            লুকিয়ে যাবে এবং প্রিন্টের জন্য বেশি জায়গা পাওয়া যাবে।
-          </li>
-          <li>
             Print দিয়ে বর্তমান ফলাফল A4 পেজে প্রিন্ট করা যাবে।
           </li>
           <li>
-            Batch Print দিয়ে নির্বাচিত পরীক্ষার প্রতিটি Room অথবা Class
-            আলাদা A4 পেজে প্রিন্ট করা যাবে।
-          </li>
-          <li>
-            Total ও Section তথ্য <b>current_students</b> টেবিল থেকে
-            Class, Roll এবং Gender অনুযায়ী যাচাই করা হয়।
+            Batch Print দিয়ে নির্বাচিত পরীক্ষার প্রতিটি Room অথবা Class আলাদা A4 পেজে প্রিন্ট করা যাবে।
           </li>
         </ul>
       </section>
@@ -955,22 +942,8 @@
     ============================================================ */
 
     let allSeatRows = [];
-
     let filteredRows = [];
-
-    /*
-     * Student cache:
-     *
-     * key:
-     * class|gender
-     *
-     * Example:
-     * VII|GIRLS
-     *
-     * এতে একই class-এর জন্য বারবার Supabase request করতে হবে না।
-     */
     const studentCache = new Map();
-
 
     /* ============================================================
        INITIALIZATION
@@ -1044,10 +1017,6 @@
     return;
   }
 
-  /*
-   * যদি একটি মাত্র session থাকে,
-   * সেটিই সরাসরি দেখানো হবে।
-   */
   if (sessions.length === 1) {
 
     sessionDisplay.textContent =
@@ -1056,12 +1025,7 @@
     return;
   }
 
-  /*
-   * একাধিক session থাকলে সবগুলো দেখাবে।
-   *
-   * যেমন:
-   * 2026 / 2026-27
-   */
+
   sessionDisplay.textContent =
     sessions.join(" / ");
 }
@@ -1184,13 +1148,7 @@
 
     /* ============================================================
        SUPABASE PAGINATION
-       ============================================================
-
-       Supabase hosted projects default to max 1000 rows.
-       তাই range() ব্যবহার করে একাধিক page fetch করা হচ্ছে।
-
-       Explicit order('id') থাকার কারণে database-এর ক্রম বজায় থাকে।
-    ============================================================ */
+       ============================================================ */
 
     async function fetchAllPaginated(
       tableName,
@@ -1426,10 +1384,6 @@
             );
         }
 
-        /*
-         * এখানে database-এর original id order
-         * বজায় রাখা হচ্ছে।
-         */
         rows.sort(
           (a, b) =>
             Number(a.id) -
@@ -1498,9 +1452,6 @@
         return studentCache.get(cacheKey);
       }
 
-      /*
-       * Gender = ALL হলে gender filter দেব না।
-       */
       const shouldFilterGender =
         normalizedGender !== "" &&
         normalizedGender !== "ALL";
@@ -1585,11 +1536,6 @@
         );
 
 
-      /*
-       * Roll range filter
-       *
-       * start_roll <= roll_no <= end_roll
-       */
       const matchingStudents =
         students.filter(student => {
 
@@ -1602,27 +1548,12 @@
           );
         });
 
-      /*
- * নির্দিষ্ট Roll নম্বরগুলির তালিকা
- *
- * যেমন:
- * 1, 3, 5, 8, 12
- */
 const specificRolls =
   matchingStudents
     .map(student => Number(student.roll_no))
     .filter(roll => !isNaN(roll))
     .sort((a, b) => a - b);
 
-
-      /*
-       * Section unique list.
-       *
-       * যেমন:
-       * A,A,A => A
-       * A,B,A => A, B
-       * A,B,C => A, B, C
-       */
       const sections =
         uniquePreserveOrder(
           matchingStudents
@@ -1655,13 +1586,6 @@ const specificRolls =
     async function renderTable(rows) {
 
       tableBody.innerHTML = "";
-
-      /*
-       * Row-by-row processing.
-       *
-       * Student data cache থাকার কারণে একই
-       * class/gender-এর জন্য repeated query হবে না।
-       */
 
       for (const row of rows) {
 
@@ -1721,16 +1645,6 @@ const specificRolls =
 
       const selectedClass =
         classSelect.value;
-
-      /*
-       * Requirement অনুযায়ী:
-       *
-       * Room selected -> Room column hide
-       * Class selected -> Class column hide
-       *
-       * Exam selected -> Exam table column নেই,
-       * কারণ Exam table-এ এমন column রাখা হয়নি।
-       */
 
       const hideColumns = new Set();
 
@@ -1826,14 +1740,6 @@ const specificRolls =
 
     /* ============================================================
        PRINT SIZE
-    ============================================================
-
-       Row বেশি হলে small
-       মাঝারি হলে medium
-       কম হলে large
-
-       Selected Room/Class হলে visible data কমে যায়,
-       তাই font বড় করার সুযোগ হয়।
     ============================================================ */
 
     function calculatePrintSize(
@@ -1903,11 +1809,7 @@ const specificRolls =
   /*
    * =========================================================
    * 1. Class selected
-   * =========================================================
-   *
-   * Specific Rolls থাকবে
-   * Class column hide হবে
-   */
+   * ========================================================= */
   if (selection.className) {
 
     return columns.filter(
@@ -2118,9 +2020,6 @@ const specificRolls =
           "width=1000,height=800"
         );
 
-      /*
-       * Popup blocker-এর ক্ষেত্রে:
-       */
       if (!printWindow) {
 
         alert(
@@ -2234,11 +2133,6 @@ const specificRolls =
         return;
       }
 
-
-      /*
-       * Browser popup blocker এড়ানোর জন্য
-       * click event-এর মধ্যেই window open করা হচ্ছে।
-       */
       const printWindow =
         window.open(
           "",
@@ -2292,11 +2186,6 @@ const specificRolls =
           const roomMap =
             new Map();
 
-          /*
-           * seat_plan-এর original order অনুযায়ী
-           * room group তৈরি করা হচ্ছে।
-           */
-
           for (const row of allSeatRows) {
 
             const key =
@@ -2329,11 +2218,6 @@ const specificRolls =
 
           const classMap =
             new Map();
-
-          /*
-           * seat_plan-এর original order অনুযায়ী
-           * class group তৈরি করা হচ্ছে।
-           */
 
           for (const row of allSeatRows) {
 
@@ -2373,10 +2257,6 @@ const specificRolls =
 
         const pages = [];
 
-
-        /*
-         * প্রতিটি room/class আলাদা A4 page।
-         */
         for (
           let groupIndex = 0;
           groupIndex < groups.length;
@@ -2784,17 +2664,6 @@ const specificRolls =
               examName
             );
 
-
-          /*
-           * Cache clear করলে নতুন exam-এর
-           * calculation পুরনো result-এর সঙ্গে
-           * মিশবে না।
-           *
-           * তবে একই session-এর একই class হলে
-           * cache পুনরায় ব্যবহার করলেও সমস্যা নেই।
-           *
-           * নিরাপত্তার জন্য clear করা হচ্ছে।
-           */
           studentCache.clear();
 
 
@@ -2847,13 +2716,6 @@ const specificRolls =
       "change",
       async () => {
 
-        /*
-         * Room select করলে Class filter reset করা হচ্ছে।
-         *
-         * কারণ একই সঙ্গে Room + Class filter করলে
-         * user-এর চাহিদা অনুযায়ী column hiding
-         * ambiguous হয়ে যেতে পারে।
-         */
         if (roomSelect.value) {
 
           classSelect.value = "";
@@ -2914,6 +2776,5 @@ const specificRolls =
     );
 
   </script>
-
 </body>
 </html>
