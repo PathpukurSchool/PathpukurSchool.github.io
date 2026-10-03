@@ -2024,7 +2024,7 @@ const specificRolls =
 
           <h2 class="print-main-title">
             ${escapeHtml(CONFIG.MAIN_TITLE)}:
-            ${escapeHtml(CONFIG.SESSION)}
+            ${escapeHtml(document.getElementById("sessionDisplay")?.textContent || "")}
           </h2>
 
           <div class="print-selection">
