@@ -503,25 +503,42 @@
         box-shadow: none !important;
         border-collapse: collapse !important;
         width: 100% !important;
+        table-layout: fixed;
       }
+
+      /* ২. ১ম কলাম (Roll): প্রয়োজন অনুযায়ী সাইজ দিন (যেমন: 60px বা 8%) */
+th:nth-child(1), td:nth-child(1) {
+  width: 8%; 
+  text-align: center;
+}
+
+/* ৩. ২য় কলাম (Student Name): নাম রাখার জন্য একটু বড় সাইজ (যেমন: 25%) */
+th:nth-child(2), td:nth-child(2) {
+  width: 25%;
+  text-align: left;
+}
 
       tbody tr:nth-child(even) {
         background: #fff !important;
       }
 
       /* Clear and crisp table borders for print */
-      th,
       td {
-        border: 1px solid #000 !important;
         color: #000 !important;
       }
 
-      th {
-        background-color: #f0f0f0 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        border: 1px solid #000 !important;
+      table, td {
+        border: 1px solid #000000 !important;
+        border-collapse: collapse; /* বর্ডার যাতে ডাবল না হয়ে একসাথে যুক্ত থাকে */
       }
+
+      th {
+        border: 2px solid #000000 !important; /* সম্পূর্ণ স্পষ্ট কালো বর্ডার */
+        color: #000000 !important;            /* লেখার রঙ গাড় কালো */
+        background-color: #ffffff !important; /* প্রিন্টে ব্যাকগ্রাউন্ড পরিষ্কার ও স্পষ্ট রাখার জন্য (প্রয়োজনে) */
+        -webkit-print-color-adjust: exact;    /* প্রিন্টারে কালার সামঞ্জস্য নিশ্চিত করতে */
+        print-color-adjust: exact;
+     }
     }
 
     /* ==========================================
