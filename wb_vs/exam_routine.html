@@ -284,74 +284,90 @@ td {
       }
 
       /* =========================================================
-   LARGE PRINT – SINGLE CLASS / BATCH CLASS
-   Balanced Typography
+   SINGLE CLASS / BATCH PRINT
+   Large + Balanced Subject & Time
    ========================================================= */
 
+.single-class-print .subject-time-wrap,
+.batch-page .subject-time-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  width: auto !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+/* Subject */
 .single-class-print .subject-title,
 .batch-page .subject-title {
   display: inline-block !important;
-  font-size: 19pt !important;
-  line-height: 1.35 !important;
+  flex: 0 1 auto !important;
+  font-size: 21pt !important;
+  line-height: 1.3 !important;
   font-weight: 900 !important;
   color: #000 !important;
-  margin-right: 10px !important;
+  margin: 0 !important;
+  white-space: normal !important;
   vertical-align: middle !important;
+  min-width: 0 !important;
+  overflow-wrap: break-word !important;
 }
 
+/* Time */
 .single-class-print .exam-time,
 .batch-page .exam-time {
-  display: inline-block !important;
-  float: right !important;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  gap: 4px !important;
+  
   background: transparent !important;
   color: #000 !important;
-  font-size: 15pt !important;
-  line-height: 1.25 !important;
-  font-weight: 700 !important;
+
+  font-size: 17pt !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+
   border: 1.2px solid #333 !important;
+  border-radius: 4px !important;
+
   padding: 2px 7px !important;
-  margin-top: 0 !important;
-  vertical-align: middle !important;
+  margin: 0 !important;
+
+  white-space: nowrap !important;
 }
 
-/* Single Class Print-এর Table */
+/* Single Class / Batch table */
 .single-class-print th,
-.single-class-print td {
-  font-size: 15pt !important;
+.single-class-print td,
+.batch-page th,
+.batch-page td {
+  font-size: 16pt !important;
   line-height: 1.35 !important;
-  padding: 7px 6px !important;
+  padding: 8px 7px !important;
 }
 
-/* Single Class-এর Header */
-.single-class-print th {
-  font-size: 16pt !important;
+/* Table Heading */
+.single-class-print th,
+.batch-page th {
+  font-size: 17pt !important;
   font-weight: 900 !important;
 }
 
-/* Single Class-এর Date & Day */
+/* Date */
 .single-class-print td:first-child,
-.single-class-print td:nth-child(2) {
-  font-size: 16pt !important;
+.batch-page td:first-child {
+  font-size: 17pt !important;
   font-weight: 800 !important;
 }
 
-/* Batch Print */
-.batch-page th,
-.batch-page td {
-  font-size: 15pt !important;
-  line-height: 1.35 !important;
-  padding: 7px 6px !important;
-}
-
-.batch-page th {
-  font-size: 16pt !important;
-  font-weight: 900 !important;
-}
-
-/* Batch-এর Date ও Day */
-.batch-page td:first-child,
+/* Day */
+.single-class-print td:nth-child(2),
 .batch-page td:nth-child(2) {
-  font-size: 16pt !important;
+  font-size: 17pt !important;
   font-weight: 800 !important;
 }
 
@@ -619,25 +635,25 @@ td {
   }
 
   function formatCellData(cellText) {
-    if (!cellText || cellText.trim() === '') return '-';
-    
-    let parts = cellText.split('|');
-    let subject = parts[0] ? parts[0].trim() : '';
-    let time = parts[1] ? parts[1].trim() : '';
+  if (!cellText || cellText.trim() === '') return '-';
 
-    if (time !== '') {
-  return `
-    <div class="subject-time-wrap">
-      <span class="subject-title">${subject}</span>
-      <span class="exam-time">
-        <i class="fa-regular fa-clock"></i> ${time}
-      </span>
-    </div>
-  `;
-} else {
-      return `<span class="subject-title">${subject}</span>`;
-    }
+  let parts = cellText.split('|');
+  let subject = parts[0] ? parts[0].trim() : '';
+  let time = parts[1] ? parts[1].trim() : '';
+
+  if (time !== '') {
+    return `
+      <div class="subject-time-wrap">
+        <span class="subject-title">${subject}</span>
+        <span class="exam-time">
+          <i class="fa-regular fa-clock"></i> ${time}
+        </span>
+      </div>
+    `;
+  } else {
+    return `<span class="subject-title">${subject}</span>`;
   }
+}
 
   function renderHeaderAndBody(data, activeClasses) {
     const thead = document.getElementById('tableHead');
