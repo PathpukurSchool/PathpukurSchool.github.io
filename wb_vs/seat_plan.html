@@ -7,30 +7,33 @@
   <title>Pathpukur High School (HS)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* ==========================================
+       1. VARIABLES & GLOBAL STYLES
+       ========================================== */
     :root {
-  --primary-color: #0f4c81;
-  --primary-dark: #083b66;
-  --primary-light: #12649d;
+      --primary-color: #0f4c81;
+      --primary-dark: #083b66;
+      --primary-light: #12649d;
 
-  --accent-color: #0ea5e9;
-  --success-color: #16a34a;
+      --accent-color: #0ea5e9;
+      --success-color: #16a34a;
 
-  --bg-color: #f3f7fb;
-  --card-bg: #ffffff;
-  --text-color: #1e293b;
-  --muted-text: #64748b;
+      --bg-color: #f3f7fb;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --muted-text: #64748b;
 
-  --border-color: #dbe3ec;
-  --soft-border: #e7eef5;
+      --border-color: #dbe3ec;
+      --soft-border: #e7eef5;
 
-  --shadow-sm: 0 2px 8px rgba(15, 76, 129, .06);
-  --shadow-md: 0 8px 24px rgba(15, 76, 129, .10);
-  --shadow-lg: 0 14px 35px rgba(15, 76, 129, .13);
+      --shadow-sm: 0 2px 8px rgba(15, 76, 129, 0.06);
+      --shadow-md: 0 8px 24px rgba(15, 76, 129, 0.10);
+      --shadow-lg: 0 14px 35px rgba(15, 76, 129, 0.13);
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-}
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
 
     * {
       box-sizing: border-box;
@@ -53,37 +56,30 @@
       margin: 0 auto;
     }
 
-    /* Header Styling */
+    /* ==========================================
+       2. HEADER & PAGE TITLE
+       ========================================== */
     .header-card {
-  position: relative;
-  overflow: hidden;
-
-  background:
-    radial-gradient(circle at 10% 20%, rgba(255,255,255,.12), transparent 25%),
-    radial-gradient(circle at 90% 80%, rgba(255,255,255,.10), transparent 25%),
-    linear-gradient(135deg, #073763 0%, #0f4c81 50%, #12649d 100%);
-
-  color: #fff;
-  text-align: center;
-
-  padding: 30px 18px 26px;
-
-  border-radius: 0 0 18px 18px;
-
-  box-shadow:
-    0 8px 25px rgba(8,59,102,.22);
-}
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.12), transparent 25%),
+        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.10), transparent 25%),
+        linear-gradient(135deg, #073763 0%, #0f4c81 50%, #12649d 100%);
+      color: #fff;
+      text-align: center;
+      padding: 30px 18px 26px;
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 8px 25px rgba(8, 59, 102, 0.22);
+    }
 
     .header-card h1 {
-  margin: 0;
-
-  font-size: clamp(1.35rem, 4vw, 2.15rem);
-
-  font-weight: 800;
-  letter-spacing: .3px;
-
-  text-shadow: 0 2px 4px rgba(0,0,0,.15);
-}
+      margin: 0;
+      font-size: clamp(1.35rem, 4vw, 2.15rem);
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
 
     .header-card h2 {
       margin-top: 6px;
@@ -91,39 +87,7 @@
       opacity: 0.95;
       font-weight: 500;
     }
-    
-   .page-title {
-  position: relative;
 
-  margin: 22px 10px 18px;
-
-  text-align: center;
-
-  color: var(--primary-dark);
-
-  font-size: clamp(1.15rem, 3vw, 1.45rem);
-
-  font-weight: 800;
-}
-
-.page-title::after {
-  content: "";
-  display: block;
-
-  width: 70px;
-  height: 3px;
-
-  margin: 8px auto 0;
-
-  border-radius: 10px;
-
-  background: linear-gradient(
-    90deg,
-    var(--primary-color),
-    var(--accent-color)
-  );
-}
-    
     .header-card p {
       font-size: 13px;
       opacity: 0.85;
@@ -131,80 +95,84 @@
       margin-bottom: 0;
     }
 
-    /* Instructions Box */
+    .page-title {
+      position: relative;
+      margin: 22px 10px 18px;
+      text-align: center;
+      color: var(--primary-dark);
+      font-size: clamp(1.15rem, 3vw, 1.45rem);
+      font-weight: 800;
+    }
+
+    .page-title::after {
+      content: "";
+      display: block;
+      width: 70px;
+      height: 3px;
+      margin: 8px auto 0;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    }
+
+    /* ==========================================
+       3. INSTRUCTION CARD
+       ========================================== */
     .instruction-card {
-  background:
-    linear-gradient(
-      135deg,
-      #f8fbff,
-      #eef7ff
-    );
-
-  border: 1px solid #cfe8f7;
-  border-left: 5px solid var(--primary-color);
-
-  padding: 18px 20px;
-  margin-bottom: 20px;
-
-  border-radius: var(--radius-md);
-
-  box-shadow: var(--shadow-sm);
-}
+      background: linear-gradient(135deg, #f8fbff, #eef7ff);
+      border: 1px solid #cfe8f7;
+      border-left: 5px solid var(--primary-color);
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
 
     .instruction-title {
-  color: var(--primary-dark);
-
-  font-size: 1.05rem;
-  font-weight: 800;
-
-  margin-bottom: 9px;
-
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
+      color: var(--primary-dark);
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 9px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
 
     .instruction p {
       margin: 0;
       color: #475467;
-      font-size: .94rem;
+      font-size: 0.94rem;
     }
-    
+
     .instruction-card ul {
-  margin: 10px 0 0 8px;
-  padding-left: 20px;
+      margin: 10px 0 0 8px;
+      padding-left: 20px;
+      color: #475569;
+    }
 
-  color: #475569;
-}
+    .instruction-card li {
+      margin-bottom: 6px;
+    }
 
-.instruction-card li {
-  margin-bottom: 6px;
-}
+    .instruction-card li::marker {
+      color: var(--accent-color);
+    }
 
-.instruction-card li::marker {
-  color: var(--accent-color);
-}
-
-    /* Filter Card */
+    /* ==========================================
+       4. FILTER CARD & FORM CONTROLS
+       ========================================== */
     .filter-card {
-  background: rgba(255,255,255,.96);
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid var(--soft-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-md);
+      transition: box-shadow 0.25s ease;
+    }
 
-  border: 1px solid var(--soft-border);
-
-  border-radius: var(--radius-lg);
-
-  padding: 20px;
-
-  margin-bottom: 25px;
-
-  box-shadow: var(--shadow-md);
-
-  transition: box-shadow .25s ease;
-}
-
-.filter-card:hover {
-  box-shadow: var(--shadow-lg);
-}
+    .filter-card:hover {
+      box-shadow: var(--shadow-lg);
+    }
 
     .filter-grid {
       display: grid;
@@ -220,93 +188,64 @@
     }
 
     .form-group label {
-  font-size: 13px;
-  font-weight: 700;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
 
-  color: #475569;
-
-  display: flex;
-  align-items: center;
-
-  gap: 7px;
-}
-
-.form-group label i {
-  color: var(--primary-color);
-  font-size: 13px;
-}
+    .form-group label i {
+      color: var(--primary-color);
+      font-size: 13px;
+    }
 
     .form-control {
-  width: 100%;
-
-  padding: 11px 13px;
-
-  min-height: 44px;
-
-  border: 1px solid var(--border-color);
-
-  border-radius: 9px;
-
-  background-color: #fff;
-
-  color: var(--text-color);
-
-  font-size: 14px;
-  font-weight: 500;
-
-  outline: none;
-
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease,
-    transform .15s ease;
-
-  cursor: pointer;
-}
+      width: 100%;
+      padding: 11px 13px;
+      min-height: 44px;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background-color: #fff;
+      color: var(--text-color);
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+      cursor: pointer;
+    }
 
     .form-control:focus {
-  border-color: var(--accent-color);
-
-  box-shadow:
-    0 0 0 3px rgba(14,165,233,.14);
-
-  transform: translateY(-1px);
-}
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.14);
+      transform: translateY(-1px);
+    }
 
     .form-control:disabled {
-  background: #f1f5f9;
-  color: #94a3b8;
+      background: #f1f5f9;
+      color: #94a3b8;
+      cursor: not-allowed;
+      border-color: #e2e8f0;
+    }
 
-  cursor: not-allowed;
-
-  border-color: #e2e8f0;
-}
-
-    /* Buttons */
+    /* ==========================================
+       5. BUTTONS
+       ========================================== */
     .btn {
-  min-height: 44px;
-
-  padding: 10px 18px;
-
-  border: none;
-  border-radius: 9px;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    background .18s ease;
-}
+      min-height: 44px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
 
     .btn:disabled {
       opacity: 0.55;
@@ -315,191 +254,130 @@
     }
 
     .btn-primary {
-  background: linear-gradient(
-    135deg,
-    #0f4c81,
-    #12649d
-  );
+      background: linear-gradient(135deg, #0f4c81, #12649d);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(15, 76, 129, 0.18);
+    }
 
-  color: #fff;
-
-  box-shadow: 0 4px 10px rgba(15,76,129,.18);
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: linear-gradient(
-    135deg,
-    #09365d,
-    #0f4c81
-  );
-
-  transform: translateY(-2px);
-
-  box-shadow: 0 7px 15px rgba(15,76,129,.25);
-}
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #09365d, #0f4c81);
+      transform: translateY(-2px);
+      box-shadow: 0 7px 15px rgba(15, 76, 129, 0.25);
+    }
 
     .btn-success {
-  background: linear-gradient(
-    135deg,
-    #16a34a,
-    #15803d
-  );
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: white;
+      min-height: 44px;
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.18);
+    }
 
-  color: white;
+    .btn-success:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 15px rgba(22, 163, 74, 0.25);
+    }
 
-  min-height: 44px;
-
-  box-shadow: 0 4px 10px rgba(22,163,74,.18);
-}
-
-.btn-success:hover:not(:disabled) {
-  transform: translateY(-2px);
-
-  box-shadow: 0 7px 15px rgba(22,163,74,.25);
-}
-
-    /* Printable Card */
+    /* ==========================================
+       6. PRINTABLE CARD & TABLE STYLES
+       ========================================== */
     .printable-card {
-  background: #fff;
+      background: #fff;
+      border: 1px solid var(--soft-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-md);
+      page-break-after: always;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-  border: 1px solid var(--soft-border);
+    .printable-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
 
-  border-radius: var(--radius-lg);
-
-  padding: 24px;
-
-  margin-bottom: 25px;
-
-  box-shadow: var(--shadow-md);
-
-  page-break-after: always;
-
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease;
-}
-
-.printable-card:hover {
-  transform: translateY(-2px);
-
-  box-shadow: var(--shadow-lg);
-}
+    .card-print-header {
+      display: none;
+    }
 
     .card-print-header h2 {
-      font-size: 20px;
+      font-size: 18px;
       color: #000;
       font-weight: bold;
       margin: 0;
     }
 
     .card-print-header h3 {
-      font-size: 15px;
-      color: #333;
+      font-size: 14px;
+      color: #000;
       font-weight: 600;
-      margin-top: 3px;
+      margin: 0;
     }
 
     .card-header-title {
-  display: flex;
-
-  justify-content: space-between;
-  align-items: center;
-
-  gap: 12px;
-
-  padding: 0 0 13px;
-
-  border-bottom: 2px solid #e5edf5;
-
-  margin-bottom: 15px;
-
-  font-size: 17px;
-  font-weight: 800;
-
-  color: var(--primary-dark);
-}
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 0 0 13px;
+      border-bottom: 2px solid #e5edf5;
+      margin-bottom: 15px;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
 
     .card-meta-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(180px, 1fr));
-
-  gap: 10px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f8fafc,
-      #f1f7fc
-    );
-
-  padding: 13px 15px;
-
-  border-radius: 10px;
-
-  margin-bottom: 16px;
-
-  font-size: 13.5px;
-
-  border: 1px solid #e2e8f0;
-}
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      background: linear-gradient(135deg, #f8fafc, #f1f7fc);
+      padding: 13px 15px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 13.5px;
+      border: 1px solid #e2e8f0;
+    }
 
     .table-responsive {
-  width: 100%;
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid #dbe3ec;
+    }
 
-  overflow-x: auto;
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+      background: #fff;
+    }
 
-  border-radius: 10px;
+    th,
+    td {
+      border-right: 1px solid #dbe3ec;
+      border-bottom: 1px solid #dbe3ec;
+      padding: 8px 10px;
+      text-align: center;
+    }
 
-  border: 1px solid #dbe3ec;
-}
+    th {
+      background: linear-gradient(135deg, #eaf3fa, #dfeef8);
+      color: #163b5c;
+      font-weight: 800;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
 
-table {
-  width: 100%;
+    tbody tr:nth-child(even) {
+      background: #f8fbfd;
+    }
 
-  border-collapse: separate;
-  border-spacing: 0;
-
-  font-size: 13px;
-
-  background: #fff;
-}
-
-th,
-td {
-  border-right: 1px solid #dbe3ec;
-  border-bottom: 1px solid #dbe3ec;
-
-  padding: 8px 10px;
-
-  text-align: center;
-}
-
-th {
-  background:
-    linear-gradient(
-      135deg,
-      #eaf3fa,
-      #dfeef8
-    );
-
-  color: #163b5c;
-
-  font-weight: 800;
-
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-tbody tr:nth-child(even) {
-  background: #f8fbfd;
-}
-
-tbody tr:hover {
-  background: #eef7ff;
-}
+    tbody tr:hover {
+      background: #eef7ff;
+    }
 
     .attn-cell {
       height: 34px;
@@ -512,59 +390,46 @@ tbody tr:hover {
       background-color: #fafafa;
     }
 
+    /* ==========================================
+       7. UI STATES (EMPTY / LOADING)
+       ========================================== */
     .empty-state {
-  text-align: center;
+      text-align: center;
+      padding: 45px 20px;
+      color: #64748b;
+      background: #fff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      margin: 15px 0;
+    }
 
-  padding: 45px 20px;
-
-  color: #64748b;
-
-  background: #fff;
-
-  border: 1px dashed #cbd5e1;
-
-  border-radius: 14px;
-
-  margin: 15px 0;
-}
-
-.empty-state i {
-  display: block;
-
-  font-size: 38px;
-
-  color: #94a3b8;
-
-  margin-bottom: 12px;
-}
+    .empty-state i {
+      display: block;
+      font-size: 38px;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
 
     .loading-state {
-  text-align: center;
+      text-align: center;
+      padding: 50px 20px;
+      color: #64748b;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: var(--shadow-sm);
+    }
 
-  padding: 50px 20px;
+    .loading-state i {
+      display: block;
+      font-size: 30px;
+      color: var(--primary-color);
+      margin-bottom: 12px;
+    }
 
-  color: #64748b;
-
-  background: #fff;
-
-  border-radius: 14px;
-
-  border: 1px solid #e2e8f0;
-
-  box-shadow: var(--shadow-sm);
-}
-
-.loading-state i {
-  display: block;
-
-  font-size: 30px;
-
-  color: var(--primary-color);
-
-  margin-bottom: 12px;
-}
-
-    /* Print Styles */
+    /* ==========================================
+       8. PRINT MEDIA STYLES (A4 LANDSCAPE)
+       ========================================== */
     @media print {
       @page {
         size: A4 landscape;
@@ -572,10 +437,10 @@ tbody tr:hover {
       }
 
       body {
-        background-color: #fff;
-        padding: 0;
-        margin: 0;
-        color: #000;
+        background-color: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        color: #000 !important;
       }
 
       .container {
@@ -584,7 +449,15 @@ tbody tr:hover {
         padding: 0 !important;
       }
 
-      .no-print, .filter-card, .header-card, .instruction-card, .btn-single-print {
+      /* Hide web elements and unwanted text on print */
+      .no-print,
+      .filter-card,
+      .header-card,
+      .page-title,
+      .instruction-card,
+      .btn-single-print,
+      .card-header-title,
+      .print-hide {
         display: none !important;
       }
 
@@ -597,20 +470,21 @@ tbody tr:hover {
         margin: 0 !important;
       }
 
-      table {
-    box-shadow: none !important;
-  }
-
-  tbody tr:nth-child(even) {
-    background: #fff !important;
-  }
-
+      /* Header alignment in print: School Name (Left) & Page Title (Right) */
       .card-print-header {
-        display: block !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        border-bottom: 2px solid #000 !important;
+        padding-bottom: 6px !important;
+        margin-bottom: 10px !important;
       }
 
-      .card-header-title {
-        display: none !important;
+      .card-print-header h2,
+      .card-print-header h3 {
+        font-size: 15px !important;
+        font-weight: bold !important;
+        color: #000 !important;
       }
 
       .card-meta-grid {
@@ -620,100 +494,117 @@ tbody tr:hover {
         margin-bottom: 10px !important;
       }
 
-      th, td {
+      .table-responsive {
+        border: none !important;
+        overflow: visible !important;
+      }
+
+      table {
+        box-shadow: none !important;
+        border-collapse: collapse !important;
+        width: 100% !important;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #fff !important;
+      }
+
+      /* Clear and crisp table borders for print */
+      th,
+      td {
         border: 1px solid #000 !important;
         color: #000 !important;
       }
 
       th {
-        background-color: #eee !important;
-      }
-
-      .print-hide {
-        display: none !important;
+        background-color: #f0f0f0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
     }
-    
+
+    /* ==========================================
+       9. RESPONSIVE DESIGN
+       ========================================== */
     @media (max-width: 700px) {
+      .container {
+        width: min(100% - 14px, 1200px);
+      }
 
-  .container {
-    width: min(100% - 14px, 1200px);
-  }
+      .header-card {
+        padding: 22px 12px 20px;
+        border-radius: 0 0 14px 14px;
+      }
 
-  .header-card {
-    padding: 22px 12px 20px;
-    border-radius: 0 0 14px 14px;
-  }
+      .header-card h1 {
+        font-size: 1.35rem;
+      }
 
-  .header-card h1 {
-    font-size: 1.35rem;
-  }
+      .header-card h2 {
+        font-size: 0.88rem;
+        line-height: 1.45;
+      }
 
-  .header-card h2 {
-    font-size: .88rem;
-    line-height: 1.45;
-  }
+      .page-title {
+        margin: 17px 5px;
+        font-size: 1.08rem;
+      }
 
-  .page-title {
-    margin: 17px 5px;
-    font-size: 1.08rem;
-  }
+      .instruction-card {
+        padding: 15px;
+        font-size: 13px;
+      }
 
-  .instruction-card {
-    padding: 15px;
-    font-size: 13px;
-  }
+      .filter-card {
+        padding: 15px;
+        border-radius: 13px;
+      }
 
-  .filter-card {
-    padding: 15px;
-    border-radius: 13px;
-  }
+      .filter-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
 
-  .filter-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+      .form-control {
+        min-height: 46px;
+        font-size: 14px;
+      }
 
-  .form-control {
-    min-height: 46px;
-    font-size: 14px;
-  }
+      .btn {
+        width: 100%;
+      }
 
-  .btn {
-    width: 100%;
-  }
+      .printable-card {
+        padding: 15px;
+        border-radius: 13px;
+      }
 
-  .printable-card {
-    padding: 15px;
-    border-radius: 13px;
-  }
+      .card-header-title {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
 
-  .card-header-title {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
+      .card-header-title .btn {
+        width: 100%;
+      }
 
-  .card-header-title .btn {
-    width: 100%;
-  }
+      .card-meta-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 10px;
+        font-size: 12px;
+      }
 
-  .card-meta-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 10px;
-    font-size: 12px;
-  }
+      table {
+        min-width: 600px;
+      }
 
-  table {
-    min-width: 600px;
-  }
-
-  th,
-  td {
-    padding: 7px 8px;
-  }
-}
+      th,
+      td {
+        padding: 7px 8px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -733,10 +624,10 @@ tbody tr:hover {
   <div class="instruction-card no-print">
     <div class="instruction-title">
        <i class="fa-solid fa-circle-info"></i>
-         নির্দেশিকা:
+          নির্দেশিকা:
     </div>
     
-       <p>
+        <p>
           পরীক্ষায় শিক্ষার্থীর স্বাক্ষর ও উপস্থিতি রেজিস্টার দেখার জন্য ড্রপ ডাউন থেকে <b>পরীক্ষার নাম</b> সিলেক্ট করুন।
           প্রয়োজন অনুযায়ী <b>Class</b> অথবা <b>Room No</b> সিলেক্ট করলে সংশ্লিষ্ট ডাটা দেখা যাবে।
         </p>
@@ -1191,10 +1082,7 @@ tbody tr:hover {
     });
 
     if (cardCount === 0) {
-      container.innerHTML = '<div class="empty-state">
-  <i class="fa-solid fa-folder-open"></i>
-  <div>নির্বাচিত ফিল্টার অনুযায়ী কোনো স্বাক্ষর পাতা পাওয়া যায়নি!</div>
-</div>';
+      container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-folder-open"></i><div>নির্বাচিত ফিল্টার অনুযায়ী কোনো স্বাক্ষর পাতা পাওয়া যায়নি!</div></div>';
     } else {
       container.innerHTML = htmlBuilder;
     }
