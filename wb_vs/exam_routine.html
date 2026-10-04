@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noarchive">
 
-  <title>Pathpukur High School (H.S.)</title>
+  <title>Pathpukur High School (H.S.) - Exam Routine</title>
 
   <!-- Google Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,402 +14,235 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-  /* Base Reset & Variables */
-  :root {
-    --primary-color: #0f4c81;
-    --primary-dark: #073763;
-    --primary-light: #e3f2fd;
-    --accent-color: #2e7d32;
-    --accent-light: #e8f5e9;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border-color: #cbd5e1;
-    --bg-main: #f8fafc;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-    --radius-md: 8px;
-    --radius-lg: 12px;
-  }
-
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    background-color: var(--bg-main);
-    color: var(--text-main);
-    font-family: "Noto Sans Bengali", "Tiro Bangla", "Segoe UI", Roboto, sans-serif;
-    line-height: 1.6;
-    padding: 12px;
-  }
-
-  /* Main Card Container */
-  .container {
-    margin: 0 auto;
-    background: #ffffff;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    width: min(1200px, 100%);
-    padding: 24px;
-    border: 1px solid #e2e8f0;
-  }
-
-  /* Header Design */
-  .header {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
-    color: #ffffff;
-    text-align: center;
-    padding: 28px 20px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 20px;
-  }
-
-  .school-name {
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin: 0;
-  }
-
-  .web-only-title {
-    margin-top: 6px;
-    font-size: clamp(0.95rem, 2vw, 1.15rem);
-    opacity: 0.9;
-    font-weight: 500;
-  }
-
-  /* Sub Heading Badge */
-  .sub-heading-badge {
-    background: var(--accent-light);
-    color: var(--accent-color);
-    padding: 12px 18px;
-    border: 1px solid #a5d6a7;
-    border-left: 5px solid var(--accent-color);
-    border-radius: var(--radius-md);
-    font-size: 1rem;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: 600;
-  }
-
-  /* Controls Section (Filters & Action Buttons) */
-  .filter-section {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .filter-section select {
-    width: 100%;
-    padding: 10px 14px;
-    font-size: 0.95rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    outline: none;
-    background-color: #ffffff;
-    color: var(--text-main);
-    font-weight: 500;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .filter-section select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.15);
-  }
-
-  .filter-section select:disabled {
-    background-color: #f1f5f9;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-
-  /* Action Buttons */
-  .action-bar {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .btn-action {
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 0.95rem;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .btn-print {
-    background-color: var(--accent-color);
-  }
-
-  .btn-batch {
-    background-color: #0288d1;
-  }
-
-  .btn-action:hover:not(:disabled) {
-    opacity: 0.95;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
-  }
-
-  .btn-action:disabled {
-    background-color: #94a3b8 !important;
-    cursor: not-allowed;
-    opacity: 0.7;
-    box-shadow: none;
-  }
-
-  /* Table Layout & Styling */
-  .table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #ffffff;
-  }
-
-  th, td {
-    padding: 12px 10px;
-    text-align: center;
-    border: 1px solid var(--border-color);
-    font-size: 0.95rem;
-    vertical-align: middle;
-  }
-
-  th {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-  }
-
-  /* Subject & Time Badge */
-  .subject-title {
-    font-weight: 700;
-    display: block;
-    color: var(--text-main);
-    font-size: 0.95rem;
-  }
-
-  .exam-time {
-    display: inline-block;
-    font-size: 0.8rem;
-    color: var(--primary-dark);
-    background-color: var(--primary-light);
-    padding: 3px 8px;
-    border-radius: 4px;
-    margin-top: 5px;
-    font-weight: 600;
-    border: 1px solid #bfdbfe;
-  }
-
-  /* Table Interactions */
-  tbody tr:nth-child(even) {
-    background-color: #f8fafc;
-  }
-
-  tbody tr:hover {
-    background-color: #f1f5f9;
-  }
-
-  tbody tr.selected-row {
-    background-color: #e2e8f0 !important;
-    font-weight: 600;
-  }
-
-  #batchPrintContainer {
-    display: none;
-  }
-
-  /* Desktop View Adjustments */
-  @media (min-width: 640px) {
-    body {
-      padding: 24px;
+    * { box-sizing: border-box; font-family: 'Tiro Bangla', serif, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: #f4f6f9; margin: 0; padding: 12px; color: #111; }
+    
+    .container { 
+      max-width: 1100px; 
+      margin: 0 auto; 
+      background: #ffffff; 
+      padding: 20px 24px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
     }
-    .filter-section {
-      flex-direction: row;
+    
+    /* Header Container */
+    .header { 
+      text-align: center; 
+      border-bottom: 3px double #1a5f7a; 
+      padding-bottom: 10px; 
+      margin-bottom: 16px; 
     }
-  }
-
-  /* 🖨️ PRINT STYLING (A4 Landscape Clean Layout) */
-  @media print {
-    @page {
-      size: A4 landscape;
-      margin: 8mm;
+    .school-name { 
+      font-size: 28px; 
+      color: #1a5f7a; 
+      margin: 0; 
+      font-weight: bold; 
+      letter-spacing: 0.3px;
     }
-
-    html, body {
-      background: #ffffff !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      color: #000000 !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
+    
+    /* Web-only Sub Title */
+    .web-only-title {
+      font-size: 20px;
+      color: #333;
+      margin: 4px 0 0 0;
+      font-weight: bold;
     }
-
-    .container {
-      box-shadow: none !important;
-      padding: 0 !important;
-      border: none !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      margin: 0 !important;
-    }
-
-    /* সাইটের নেভিগেশন ও ইনপুট হাইড রাখা */
-    .filter-section, .action-bar, .web-only-title {
-      display: none !important;
-    }
-
-    .header {
-      background: none !important;
-      color: #000000 !important;
-      padding: 0 0 6px 0 !important;
-      margin-bottom: 8px !important;
-      box-shadow: none !important;
-      border-bottom: 2px solid #000000 !important;
-      border-radius: 0 !important;
-    }
-
-    .school-name {
-      font-size: 22pt !important;
-      color: #000000 !important;
-      font-weight: 800 !important;
-      text-align: center;
-    }
-
+    
+    /* Sub-Heading Badge Area */
     .sub-heading-badge {
-      border: 1px solid #000000 !important;
-      background: #f1f5f9 !important;
-      color: #000000 !important;
-      font-size: 13pt !important;
-      margin-bottom: 12px !important;
-      padding: 6px 12px !important;
-      font-weight: 700 !important;
-      box-shadow: none !important;
-      border-radius: 0 !important;
-      text-align: center;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      color: #1b5e20; 
+      padding: 10px 16px; 
+      border: 1px solid #a5d6a7;
+      border-left: 5px solid #2e7d32; 
+      border-radius: 8px; 
+      font-size: 16px; 
+      margin-bottom: 18px;
+      text-align: center; 
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
     }
 
-    .table-responsive {
-      border: none !important;
-      overflow: visible !important;
+    /* Filters Section */
+    .filter-section { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+    .filter-section select {
+      width: 100%; padding: 10px 14px; font-size: 15px; border: 1.5px solid #1a5f7a;
+      border-radius: 8px; outline: none; background: #fff; color: #222; font-weight: 500;
+    }
+    .filter-section select:disabled {
+      background-color: #f1f3f5; cursor: not-allowed; opacity: 0.65; border-color: #ccc;
+    }
+    .filter-section select:focus { border-color: #0d47a1; box-shadow: 0 0 0 3px rgba(13,71,161,0.15); }
+
+    /* Action Bar */
+    .action-bar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
+    .btn-action {
+      color: white; border: none; padding: 10px 18px; font-size: 15px;
+      border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+    .btn-print { background-color: #2e7d32; }
+    .btn-batch { background-color: #0288d1; }
+    .btn-action:hover:not(:disabled) { opacity: 0.92; transform: translateY(-1px); }
+    .btn-action:disabled { background-color: #b0bec5 !important; cursor: not-allowed; opacity: 0.7; box-shadow: none; }
+
+    /* Responsive Table */
+    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1.5px solid #1a5f7a; }
+    table { width: 100%; border-collapse: collapse; background: #fff; }
+    th, td { padding: 10px 8px; text-align: center; border: 1px solid #1a5f7a; font-size: 15px; vertical-align: middle; }
+    th { background-color: #1a5f7a; color: #ffffff; font-size: 16px; font-weight: bold; letter-spacing: 0.2px; }
+    
+    /* Custom Styling for Subject & Time */
+    .subject-title { font-weight: bold; display: block; color: #111; font-size: 15px; }
+    .exam-time { 
+      display: inline-block; 
+      font-size: 12.5px; 
+      color: #0d47a1; 
+      background-color: #e3f2fd; 
+      padding: 3px 8px; 
+      border-radius: 4px; 
+      margin-top: 4px; 
+      font-weight: 600;
+      border: 1px solid #bbdefb;
     }
 
-    table {
-      border: 1.5px solid #000000 !important;
-      width: 100% !important;
-      margin: 0 !important;
+    /* Row Hover & Selection */
+    tbody tr:nth-child(even) { background-color: #f8fafc; }
+    tbody tr:hover { background-color: #eef6fc; }
+    tbody tr.selected-row { background-color: #d1e7dd !important; font-weight: bold; }
+
+    #batchPrintContainer { display: none; }
+
+    /* Desktop Adjustments */
+    @media (min-width: 600px) {
+      body { padding: 20px; }
+      .filter-section { flex-direction: row; }
     }
 
-    tr {
-      page-break-inside: avoid !important;
-    }
+    /* 🖨️ PRINT STYLING (A4 Landscape Fit) */
+    @media print {
+      @page { 
+        size: A4 landscape; 
+        margin: 6mm 8mm; 
+      }
+      
+      html, body {
+        background: #fff !important; 
+        padding: 0 !important; 
+        margin: 0 !important;
+        color: #000 !important; 
+        -webkit-print-color-adjust: exact !important; 
+        print-color-adjust: exact !important;
+      }
 
-    th, td {
-      border: 1px solid #000000 !important;
-      padding: 6px 8px !important;
-      font-size: 11pt !important;
-      color: #000000 !important;
-    }
+      .container { 
+        box-shadow: none !important; 
+        padding: 0 !important; 
+        width: 100% !important; 
+        max-width: 100% !important; 
+        margin: 0 !important;
+      }
 
-    th {
-      background-color: #e2e8f0 !important;
-      color: #000000 !important;
-      font-size: 12pt !important;
-      font-weight: 700 !important;
-    }
+      .filter-section, .action-bar { display: none !important; }
+      
+      /* ওয়েব পেজের হেডিং টাইটেল প্রিন্টে হাইড থাকবে */
+      .web-only-title { display: none !important; }
 
-    /* Single Class & Batch Print Style Adjustments */
-    .single-class-print .subject-title,
-    .batch-page .subject-title {
-      display: inline-block !important;
-      font-size: 14pt !important;
-      font-weight: 800 !important;
-      color: #000000 !important;
-      margin-right: 8px !important;
-    }
+      .header { 
+        border-bottom: 2px solid #000 !important; 
+        margin-bottom: 6px !important; 
+        padding-bottom: 4px !important; 
+      }
+      .school-name { 
+        font-size: 24pt !important; 
+        color: #000 !important; 
+        font-weight: 900 !important; 
+      }
+      
+      .sub-heading-badge { 
+        border: 2px solid #000 !important; 
+        background: #f0f0f0 !important; 
+        color: #000 !important; 
+        font-size: 15pt !important; 
+        margin-bottom: 10px !important; 
+        padding: 6px 10px !important; 
+        font-weight: bold !important; 
+        box-shadow: none !important;
+      }
+      
+      .table-responsive { border: none !important; overflow: visible !important; }
+      table { border: 2px solid #000 !important; width: 100% !important; margin: 0 !important; }
+      tr { page-break-inside: avoid !important; }
+      
+      th, td { 
+        border: 1.5px solid #000 !important; 
+        padding: 8px 6px !important; 
+        font-size: 14pt !important; 
+        font-weight: bold !important; 
+      }
+      th { 
+        background-color: #e0e0e0 !important; 
+        color: #000 !important; 
+        font-size: 16pt !important; 
+        font-weight: 900 !important; 
+      }
 
-    .single-class-print .exam-time,
-    .batch-page .exam-time {
-      display: inline-block !important;
-      background-color: transparent !important;
-      color: #000000 !important;
-      font-size: 11pt !important;
-      font-weight: 700 !important;
-      border: 1px solid #000000 !important;
-      padding: 1px 6px !important;
-      margin-top: 0 !important;
-      float: right !important;
-      border-radius: 2px !important;
-    }
+      /* ১. নির্দিষ্ট ক্লাস বা ব্যাচ প্রিন্টের সময় ফন্ট বড় ও সাইড-বাই-সাইড করার স্টাইল */
+      .single-class-print .subject-title,
+      .batch-page .subject-title {
+        display: inline-block !important;
+        font-size: 16pt !important;
+        font-weight: 900 !important;
+        color: #000 !important;
+        margin-right: 12px !important;
+      }
 
-    .all-class-print .subject-title {
-      font-size: 11pt !important;
-      font-weight: 700 !important;
-    }
+      .single-class-print .exam-time,
+      .batch-page .exam-time {
+        display: inline-block !important;
+        background-color: transparent !important;
+        color: #000 !important;
+        font-size: 13pt !important;
+        font-weight: bold !important;
+        border: 1.5px solid #333 !important;
+        padding: 2px 8px !important;
+        margin-top: 0 !important;
+        float: right !important;
+      }
 
-    .all-class-print .exam-time {
-      font-size: 9.5pt !important;
-      border: 1px solid #000000 !important;
-      padding: 1px 4px !important;
-      margin-top: 3px !important;
-      border-radius: 2px !important;
-    }
+      /* সমস্ত ক্লাস প্রিন্টের সময় ডিফল্ট ছোট ও নিচে রাখার স্টাইল */
+      .all-class-print .subject-title {
+        font-size: 13pt !important;
+        font-weight: 900 !important;
+      }
+      .all-class-print .exam-time {
+        font-size: 10.5pt !important;
+        border: 1px solid #333 !important;
+        padding: 1px 4px !important;
+        margin-top: 2px !important;
+      }
 
-    /* Batch Print Layout Control */
-    .single-print-area {
-      display: block;
-    }
+      /* Mode Control */
+      .single-print-area { display: block; }
+      #batchPrintContainer { display: none; }
 
-    #batchPrintContainer {
-      display: none;
+      body.batch-print-active .single-print-area { display: none !important; }
+      body.batch-print-active #batchPrintContainer { display: block !important; }
+      
+      .batch-page { 
+        page-break-after: always; 
+        page-break-inside: avoid;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .batch-page:last-child { 
+        page-break-after: avoid !important; 
+      }
     }
-
-    body.batch-print-active .single-print-area {
-      display: none !important;
-    }
-
-    body.batch-print-active #batchPrintContainer {
-      display: block !important;
-    }
-
-    .batch-page {
-      page-break-after: always;
-      page-break-inside: avoid;
-      margin: 0;
-      padding: 0;
-    }
-
-    .batch-page:last-child {
-      page-break-after: avoid !important;
-    }
-  }
-</style>
+  </style>
 </head>
 <body>
 
