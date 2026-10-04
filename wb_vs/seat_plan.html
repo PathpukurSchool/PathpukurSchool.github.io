@@ -432,8 +432,8 @@
        ========================================== */
     @media print {
       @page {
-        size: A4 landscape;
-        margin: 8mm;
+        size: A4 landscape !important;
+        margin: 4mm;
       }
 
       body {
@@ -470,14 +470,13 @@
         margin: 0 !important;
       }
 
-      /* Header alignment in print with side margin/padding for gaps */
+      /* Header alignment in print: School Name (Left) & Page Title (Right) */
       .card-print-header {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        border-bottom: 2px solid #000 !important;
-        padding: 0 15px 6px 15px !important;
         margin-bottom: 10px !important;
+        padding: 0 15px 6px 15px !important;
       }
 
       .card-print-header h2,
@@ -504,7 +503,6 @@
         box-shadow: none !important;
         border-collapse: collapse !important;
         width: 100% !important;
-        table-layout: auto !important;
       }
 
       tbody tr:nth-child(even) {
@@ -516,14 +514,13 @@
       td {
         border: 1px solid #000 !important;
         color: #000 !important;
-        box-sizing: border-box !important;
       }
 
       th {
         background-color: #f0f0f0 !important;
-        font-weight: bold !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
+        border: 1px solid #000 !important;
       }
     }
 
@@ -998,7 +995,7 @@
             headerColsHtml += `<th>${dateStr}<br><span style="font-size:12px; font-weight:normal;">${subject}</span></th>`;
           });
         } else {
-          headerColsHtml = `<th style="width: 80%;">পরীক্ষার বিষয় ও তারিখ</th>`;
+          headerColsHtml = `<th style="width: 70%;">পরীক্ষার বিষয় ও তারিখ</th>`;
         }
 
         let bodyRowsHtml = '';
@@ -1069,8 +1066,8 @@
               <table>
                 <thead>
                   <tr>
-                    <th style="width: 5%;">রোল</th>
-                    <th style="width: 15%;">শিক্ষার্থীর নাম</th>
+                    <th style="width: 8%;">রোল</th>
+                    <th style="width: 22%;">শিক্ষার্থীর নাম</th>
                     ${headerColsHtml}
                   </tr>
                 </thead>
