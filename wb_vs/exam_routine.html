@@ -41,6 +41,14 @@
       letter-spacing: 0.3px;
     }
     
+    /* Web-only Sub Title */
+    .web-only-title {
+      font-size: 20px;
+      color: #333;
+      margin: 4px 0 0 0;
+      font-weight: bold;
+    }
+    
     /* Sub-Heading Badge Area */
     .sub-heading-badge {
       background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
@@ -113,7 +121,7 @@
       .filter-section { flex-direction: row; }
     }
 
-    /* 🖨️ PRINT STYLING (Single A4 Landscape Fit, No Extra Blank Pages) */
+    /* 🖨️ PRINT STYLING (A4 Landscape Fit) */
     @media print {
       @page { 
         size: A4 landscape; 
@@ -139,6 +147,9 @@
 
       .filter-section, .action-bar { display: none !important; }
       
+      /* ওয়েব পেজের হেডিং টাইটেল প্রিন্টে হাইড থাকবে */
+      .web-only-title { display: none !important; }
+
       .header { 
         border-bottom: 2px solid #000 !important; 
         margin-bottom: 6px !important; 
@@ -167,27 +178,50 @@
       
       th, td { 
         border: 1.5px solid #000 !important; 
-        padding: 6px 4px !important; 
-        font-size: 13.5pt !important; 
+        padding: 8px 6px !important; 
+        font-size: 14pt !important; 
         font-weight: bold !important; 
       }
       th { 
         background-color: #e0e0e0 !important; 
         color: #000 !important; 
-        font-size: 15pt !important; 
+        font-size: 16pt !important; 
         font-weight: 900 !important; 
       }
-      
-      .subject-title { font-size: 13.5pt !important; font-weight: 900 !important; color: #000 !important; }
-      .exam-time { 
-        background-color: transparent !important; 
-        color: #000 !important; 
-        font-size: 11pt !important; 
-        font-weight: bold !important; 
-        border: 1px solid #333 !important;
-        padding: 1px 4px !important; 
-        margin-top: 2px !important; 
+
+      /* ১. নির্দিষ্ট ক্লাস বা ব্যাচ প্রিন্টের সময় ফন্ট বড় ও সাইড-বাই-সাইড করার স্টাইল */
+      .single-class-print .subject-title,
+      .batch-page .subject-title {
         display: inline-block !important;
+        font-size: 16pt !important;
+        font-weight: 900 !important;
+        color: #000 !important;
+        margin-right: 12px !important;
+      }
+
+      .single-class-print .exam-time,
+      .batch-page .exam-time {
+        display: inline-block !important;
+        background-color: transparent !important;
+        color: #000 !important;
+        font-size: 13pt !important;
+        font-weight: bold !important;
+        border: 1.5px solid #333 !important;
+        padding: 2px 8px !important;
+        margin-top: 0 !important;
+        float: right !important;
+      }
+
+      /* সমস্ত ক্লাস প্রিন্টের সময় ডিফল্ট ছোট ও নিচে রাখার স্টাইল */
+      .all-class-print .subject-title {
+        font-size: 13pt !important;
+        font-weight: 900 !important;
+      }
+      .all-class-print .exam-time {
+        font-size: 10.5pt !important;
+        border: 1px solid #333 !important;
+        padding: 1px 4px !important;
+        margin-top: 2px !important;
       }
 
       /* Mode Control */
@@ -212,10 +246,12 @@
 </head>
 <body>
 
-<div class="container single-print-area">
+<div class="container single-print-area" id="singlePrintArea">
   <!-- Header -->
   <div class="header">
     <div class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</div>
+    <!-- ২. ওয়েবসাইটে দেখানোর জন্য পরীক্ষার রুটিন ও সেশন হেডিং -->
+    <div class="web-only-title" id="webPageTitle">পরীক্ষার রুটিন</div>
   </div>
 
   <!-- Dynamic Sub Heading -->
@@ -345,6 +381,7 @@
       document.getElementById('tableBody').innerHTML = `
         <tr><td colspan="10" style="padding: 25px; color: #666; font-size: 16px;">পরীক্ষা সিলেক্ট করার পর রুটিন এখানে দেখা যাবে।</td></tr>`;
       document.getElementById('subHeading').innerText = "অনুগ্রহ করে ড্রপ ডাউন থেকে পরীক্ষা নির্বাচন করুন";
+      document.getElementById('webPageTitle').innerText = "পরীক্ষার রুটিন";
       return;
     }
 
@@ -358,6 +395,7 @@
   function applyFilters() {
     const selectedExam = document.getElementById('examSelect').value;
     const selectedClass = document.getElementById('classSelect').value;
+    const printArea = document.getElementById('singlePrintArea');
 
     if (selectedExam === 'NONE') return;
 
@@ -366,6 +404,14 @@
     if (selectedClass !== 'ALL') {
       const classKey = 'class_' + selectedClass.toLowerCase();
       filtered = filtered.filter(item => item[classKey] && item[classKey].trim() !== '');
+      
+      // সিঙ্গল ক্লাসের ক্ষেত্রে প্রিন্ট লেআউট ক্লাস পরিবর্তন
+      printArea.classList.remove('all-class-print');
+      printArea.classList.add('single-class-print');
+    } else {
+      // সমস্ত ক্লাসের ক্ষেত্রে প্রিন্ট লেআউট ক্লাস পরিবর্তন
+      printArea.classList.remove('single-class-print');
+      printArea.classList.add('all-class-print');
     }
 
     filtered.sort((a, b) => parseDateString(a.exam_date) - parseDateString(b.exam_date));
@@ -373,7 +419,10 @@
     let sessionText = (filtered.length > 0 && filtered[0].session) ? filtered[0].session : "";
     let fullExamHeading = `${selectedExam} ${sessionText}`.trim();
 
-    // 4. ব্যাজ টেক্সটে ডিফল্ট ক্লাস আসার সমস্যা সমাধান
+    // ওয়েবে সাব-টাইটেল প্রদর্শন
+    document.getElementById('webPageTitle').innerText = `${fullExamHeading} - রুটিন`;
+
+    // সাব-হেডিং ব্যাজ টেক্সট
     let subText = `পরীক্ষা: ${fullExamHeading}`;
     if (selectedClass !== 'ALL') {
       const clsObj = classMap.find(c => c.code === selectedClass);
@@ -451,7 +500,7 @@
     });
   }
 
-  // 🖨️ Batch Print Lopic (No Blank Pages)
+  // 🖨️ Batch Print Logic
   function printBatch() {
     const selectedExam = document.getElementById('examSelect').value;
     if (selectedExam === 'NONE') return;
@@ -485,9 +534,9 @@
         <table>
           <thead>
             <tr>
-              <th style="width: 22%;">তারিখ</th>
-              <th style="width: 18%;">বার</th>
-              <th style="width: 60%;">বিষয় ও সময়</th>
+              <th style="width: 20%;">তারিখ</th>
+              <th style="width: 16%;">বার</th>
+              <th style="width: 64%;">বিষয় ও সময়</th>
             </tr>
           </thead>
           <tbody>
@@ -498,7 +547,7 @@
           <tr>
             <td>${r.exam_date || ''}</td>
             <td>${getBengaliDayName(r.exam_date)}</td>
-            <td>${formatCellData(r[c.key])}</td>
+            <td style="text-align: left; padding-left: 12px; padding-right: 12px;">${formatCellData(r[c.key])}</td>
           </tr>
         `;
       });
