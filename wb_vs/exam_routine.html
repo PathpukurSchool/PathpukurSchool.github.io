@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noarchive">
 
-  <title>Pathpukur High School (H: S:)</title>
+  <title>Pathpukur High School (H.S.) - Exam Routine</title>
 
   <!-- Google Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,130 +15,198 @@
 
   <style>
     * { box-sizing: border-box; font-family: 'Tiro Bangla', serif, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: #f0f2f5; margin: 0; padding: 10px; color: #111; }
+    body { background-color: #f4f6f9; margin: 0; padding: 12px; color: #111; }
     
     .container { 
       max-width: 1100px; 
       margin: 0 auto; 
-      background: #fff; 
-      padding: 20px; 
+      background: #ffffff; 
+      padding: 20px 24px; 
       border-radius: 12px; 
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08); 
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
     }
     
-    /* Header */
-    .header { text-align: center; border-bottom: 2px solid #1a5f7a; padding-bottom: 8px; margin-bottom: 12px; }
-    .school-name { font-size: 26px; color: #1a5f7a; margin: 0; font-weight: bold; line-height: 1.3; }
-    .page-title { font-size: 20px; color: #333; margin: 4px 0 0 0; font-weight: bold; }
+    /* Header Container */
+    .header { 
+      text-align: center; 
+      border-bottom: 3px double #1a5f7a; 
+      padding-bottom: 10px; 
+      margin-bottom: 16px; 
+    }
+    .school-name { 
+      font-size: 28px; 
+      color: #1a5f7a; 
+      margin: 0; 
+      font-weight: bold; 
+      letter-spacing: 0.3px;
+    }
     
-    /* Dynamic Sub-Heading Badge */
+    /* Sub-Heading Badge Area */
     .sub-heading-badge {
-      background-color: #e8f5e9; color: #2e7d32; padding: 8px 12px; border: 1px solid #a5d6a7;
-      border-left: 4px solid #2e7d32; border-radius: 6px; font-size: 15px; margin-bottom: 15px;
-      text-align: center; font-weight: bold;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      color: #1b5e20; 
+      padding: 10px 16px; 
+      border: 1px solid #a5d6a7;
+      border-left: 5px solid #2e7d32; 
+      border-radius: 8px; 
+      font-size: 16px; 
+      margin-bottom: 18px;
+      text-align: center; 
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
     }
 
     /* Filters Section */
-    .filter-section { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+    .filter-section { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
     .filter-section select {
-      width: 100%; padding: 10px 12px; font-size: 15px; border: 1.5px solid #444;
-      border-radius: 8px; outline: none; background: #fff; -webkit-appearance: none;
+      width: 100%; padding: 10px 14px; font-size: 15px; border: 1.5px solid #1a5f7a;
+      border-radius: 8px; outline: none; background: #fff; color: #222; font-weight: 500;
     }
     .filter-section select:disabled {
-      background-color: #e9ecef; cursor: not-allowed; opacity: 0.6; border-color: #ccc;
+      background-color: #f1f3f5; cursor: not-allowed; opacity: 0.65; border-color: #ccc;
     }
-    .filter-section select:focus { border-color: #1a5f7a; }
+    .filter-section select:focus { border-color: #0d47a1; box-shadow: 0 0 0 3px rgba(13,71,161,0.15); }
 
     /* Action Bar */
-    .action-bar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 15px; }
+    .action-bar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
     .btn-action {
-      color: white; border: none; padding: 9px 16px; font-size: 14px;
-      border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 6px;
+      color: white; border: none; padding: 10px 18px; font-size: 15px;
+      border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px;
       transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
     }
     .btn-print { background-color: #2e7d32; }
     .btn-batch { background-color: #0288d1; }
-    .btn-action:disabled { background-color: #cccccc !important; cursor: not-allowed; opacity: 0.7; }
-    .btn-action:not(:disabled):active { transform: scale(0.98); }
+    .btn-action:hover:not(:disabled) { opacity: 0.92; transform: translateY(-1px); }
+    .btn-action:disabled { background-color: #b0bec5 !important; cursor: not-allowed; opacity: 0.7; box-shadow: none; }
 
     /* Responsive Table */
-    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 6px; }
-    table { width: 100%; border-collapse: collapse; border: 2px solid #222; min-width: 600px; }
-    th, td { padding: 10px 8px; text-align: center; border: 1.5px solid #333; font-size: 15px; vertical-align: middle; }
-    th { background-color: #1a5f7a; color: white; font-size: 16px; }
+    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1.5px solid #1a5f7a; }
+    table { width: 100%; border-collapse: collapse; background: #fff; }
+    th, td { padding: 10px 8px; text-align: center; border: 1px solid #1a5f7a; font-size: 15px; vertical-align: middle; }
+    th { background-color: #1a5f7a; color: #ffffff; font-size: 16px; font-weight: bold; letter-spacing: 0.2px; }
     
     /* Custom Styling for Subject & Time */
-    .subject-title { font-weight: bold; display: block; color: #000; font-size: 15px; }
+    .subject-title { font-weight: bold; display: block; color: #111; font-size: 15px; }
     .exam-time { 
       display: inline-block; 
-      font-size: 12px; 
+      font-size: 12.5px; 
       color: #0d47a1; 
       background-color: #e3f2fd; 
-      padding: 2px 6px; 
+      padding: 3px 8px; 
       border-radius: 4px; 
       margin-top: 4px; 
       font-weight: 600;
+      border: 1px solid #bbdefb;
     }
 
-    /* Interactive Row Select */
-    tbody tr { cursor: pointer; }
-    tbody tr:nth-child(even) { background-color: #f9f9f9; }
-    tbody tr:active { background-color: #d0ebff; }
-    tbody tr.selected-row { background-color: #c8e6c9 !important; font-weight: bold; }
+    /* Row Hover & Selection */
+    tbody tr:nth-child(even) { background-color: #f8fafc; }
+    tbody tr:hover { background-color: #eef6fc; }
+    tbody tr.selected-row { background-color: #d1e7dd !important; font-weight: bold; }
 
     #batchPrintContainer { display: none; }
 
-    /* Desktop View */
+    /* Desktop Adjustments */
     @media (min-width: 600px) {
       body { padding: 20px; }
       .filter-section { flex-direction: row; }
     }
 
-    /* 🖨️ PRINT OPTIMIZATION (Horizontal A4, Large & Bold Text) */
+    /* 🖨️ PRINT STYLING (Single A4 Landscape Fit, No Extra Blank Pages) */
     @media print {
-      @page { size: A4 landscape; margin: 8mm; }
-      body { background: white; padding: 0; color: #000; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .container { box-shadow: none; padding: 0; width: 100%; max-width: 100%; }
-      .filter-section, .action-bar { display: none !important; }
-      
-      .header { border-bottom: 2px solid #000; margin-bottom: 8px; padding-bottom: 4px; }
-      .school-name { font-size: 28pt !important; color: #000 !important; font-weight: 900; }
-      .page-title { font-size: 22pt !important; color: #000 !important; font-weight: bold; }
-      
-      .sub-heading-badge { 
-        border: 2px solid #000; background: #fff !important; color: #000 !important; 
-        font-size: 18pt !important; margin-bottom: 12px; padding: 6px; font-weight: bold; 
+      @page { 
+        size: A4 landscape; 
+        margin: 6mm 8mm; 
       }
       
-      table { border: 2px solid #000 !important; width: 100% !important; margin-bottom: 0; }
-      tr { page-break-inside: avoid; }
-      th, td { border: 2px solid #000 !important; padding: 10px 6px !important; font-size: 16pt !important; font-weight: bold; }
-      th { background-color: #ddd !important; color: #000 !important; font-size: 18pt !important; font-weight: 900; }
-      
-      .subject-title { font-size: 16pt !important; font-weight: 900 !important; color: #000 !important; }
-      .exam-time { 
-        background-color: transparent !important; color: #000 !important; 
-        font-size: 13pt !important; font-weight: bold !important; border: 1px solid #555;
-        padding: 1px 4px; margin-top: 3px; display: inline-block;
+      html, body {
+        background: #fff !important; 
+        padding: 0 !important; 
+        margin: 0 !important;
+        color: #000 !important; 
+        -webkit-print-color-adjust: exact !important; 
+        print-color-adjust: exact !important;
       }
 
-      /* Single Print Hide Batch */
+      .container { 
+        box-shadow: none !important; 
+        padding: 0 !important; 
+        width: 100% !important; 
+        max-width: 100% !important; 
+        margin: 0 !important;
+      }
+
+      .filter-section, .action-bar { display: none !important; }
+      
+      .header { 
+        border-bottom: 2px solid #000 !important; 
+        margin-bottom: 6px !important; 
+        padding-bottom: 4px !important; 
+      }
+      .school-name { 
+        font-size: 24pt !important; 
+        color: #000 !important; 
+        font-weight: 900 !important; 
+      }
+      
+      .sub-heading-badge { 
+        border: 2px solid #000 !important; 
+        background: #f0f0f0 !important; 
+        color: #000 !important; 
+        font-size: 15pt !important; 
+        margin-bottom: 10px !important; 
+        padding: 6px 10px !important; 
+        font-weight: bold !important; 
+        box-shadow: none !important;
+      }
+      
+      .table-responsive { border: none !important; overflow: visible !important; }
+      table { border: 2px solid #000 !important; width: 100% !important; margin: 0 !important; }
+      tr { page-break-inside: avoid !important; }
+      
+      th, td { 
+        border: 1.5px solid #000 !important; 
+        padding: 6px 4px !important; 
+        font-size: 13.5pt !important; 
+        font-weight: bold !important; 
+      }
+      th { 
+        background-color: #e0e0e0 !important; 
+        color: #000 !important; 
+        font-size: 15pt !important; 
+        font-weight: 900 !important; 
+      }
+      
+      .subject-title { font-size: 13.5pt !important; font-weight: 900 !important; color: #000 !important; }
+      .exam-time { 
+        background-color: transparent !important; 
+        color: #000 !important; 
+        font-size: 11pt !important; 
+        font-weight: bold !important; 
+        border: 1px solid #333 !important;
+        padding: 1px 4px !important; 
+        margin-top: 2px !important; 
+        display: inline-block !important;
+      }
+
+      /* Mode Control */
       .single-print-area { display: block; }
       #batchPrintContainer { display: none; }
 
-      /* Batch Print Mode */
       body.batch-print-active .single-print-area { display: none !important; }
       body.batch-print-active #batchPrintContainer { display: block !important; }
       
       .batch-page { 
         page-break-after: always; 
         page-break-inside: avoid;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
-      .batch-page:last-child { page-break-after: auto; }
+      .batch-page:last-child { 
+        page-break-after: avoid !important; 
+      }
     }
   </style>
 </head>
@@ -148,7 +216,6 @@
   <!-- Header -->
   <div class="header">
     <div class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</div>
-    <div class="page-title" id="mainPageTitle">পরীক্ষার রুটিন</div>
   </div>
 
   <!-- Dynamic Sub Heading -->
@@ -278,7 +345,6 @@
       document.getElementById('tableBody').innerHTML = `
         <tr><td colspan="10" style="padding: 25px; color: #666; font-size: 16px;">পরীক্ষা সিলেক্ট করার পর রুটিন এখানে দেখা যাবে।</td></tr>`;
       document.getElementById('subHeading').innerText = "অনুগ্রহ করে ড্রপ ডাউন থেকে পরীক্ষা নির্বাচন করুন";
-      document.getElementById('mainPageTitle').innerText = "পরীক্ষার রুটিন";
       return;
     }
 
@@ -305,12 +371,9 @@
     filtered.sort((a, b) => parseDateString(a.exam_date) - parseDateString(b.exam_date));
 
     let sessionText = (filtered.length > 0 && filtered[0].session) ? filtered[0].session : "";
-
-    // Page Title Update with Selected Exam Name
     let fullExamHeading = `${selectedExam} ${sessionText}`.trim();
-    document.getElementById('mainPageTitle').innerText = fullExamHeading + " - রুটিন";
 
-    // Sub Heading Badge Update
+    // 4. ব্যাজ টেক্সটে ডিফল্ট ক্লাস আসার সমস্যা সমাধান
     let subText = `পরীক্ষা: ${fullExamHeading}`;
     if (selectedClass !== 'ALL') {
       const clsObj = classMap.find(c => c.code === selectedClass);
@@ -350,11 +413,14 @@
     const thead = document.getElementById('tableHead');
     const tbody = document.getElementById('tableBody');
 
-    // 'ক্রম' এবং 'পরীক্ষা' কলাম দুটি বাদ দেওয়া হয়েছে
     let headHtml = `<tr>
-      <th>তারিখ</th>
-      <th>বার</th>`;
-    activeClasses.forEach(c => { headHtml += `<th>${c.label}</th>`; });
+      <th style="width: 18%;">তারিখ</th>
+      <th style="width: 15%;">বার</th>`;
+    
+    let colWidth = Math.floor(67 / activeClasses.length);
+    activeClasses.forEach(c => { 
+      headHtml += `<th style="width: ${colWidth}%;">${c.label}</th>`; 
+    });
     headHtml += `</tr>`;
     thead.innerHTML = headHtml;
 
@@ -385,7 +451,7 @@
     });
   }
 
-  // 🖨️ Batch Print (এক ক্লিকে সমস্ত ক্লাসের আলাদা পাতায় পিন্ট)
+  // 🖨️ Batch Print Lopic (No Blank Pages)
   function printBatch() {
     const selectedExam = document.getElementById('examSelect').value;
     if (selectedExam === 'NONE') return;
@@ -412,17 +478,16 @@
       let html = `
         <div class="header">
           <div class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</div>
-          <div class="page-title">${fullExamHeading} - রুটিন</div>
         </div>
         <div class="sub-heading-badge">
-          শ্রেণি: ${c.label} (${c.code})
+          পরীক্ষা: ${fullExamHeading} | শ্রেণি: ${c.label} (${c.code})
         </div>
         <table>
           <thead>
             <tr>
-              <th style="width: 25%;">তারিখ</th>
-              <th style="width: 20%;">বার</th>
-              <th style="width: 55%;">বিষয় ও সময়</th>
+              <th style="width: 22%;">তারিখ</th>
+              <th style="width: 18%;">বার</th>
+              <th style="width: 60%;">বিষয় ও সময়</th>
             </tr>
           </thead>
           <tbody>
