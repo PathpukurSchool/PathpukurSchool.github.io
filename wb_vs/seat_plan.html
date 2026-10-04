@@ -94,13 +94,14 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
 
-    .instruction-card h4 {
+    .instruction-title {
       color: var(--primary-dark);
-      margin: 0;
       font-size: 1.05rem;
       font-weight: 800;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
+      gap: 9px;
     }
 
     .instruction p {
@@ -377,7 +378,10 @@
   
   <!-- Instruction Box (Web Only) -->
   <div class="instruction-card no-print">
-    <h4><i class="fa-solid fa-circle-info"></i> নির্দেশিকা:</h4>
+    <div class="instruction-title">
+       <i class="fa-solid fa-circle-info"></i>
+         নির্দেশিকা:
+    </div>
     
        <p>
           পরীক্ষায় শিক্ষার্থীর স্বাক্ষর ও উপস্থিতি রেজিস্টার দেখার জন্য ড্রপ ডাউন থেকে <b>পরীক্ষার নাম</b> সিলেক্ট করুন।
