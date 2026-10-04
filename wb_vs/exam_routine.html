@@ -14,253 +14,392 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+/* ==========================================
+   Global & Reset Styles
+   ========================================== */
+* {
+  box-sizing: border-box;
+}
 
-    html {
-      scroll-behavior: smooth;
-    }
+html {
+  scroll-behavior: smooth;
+}
 
-    body {
-      background-color: #f3f7fb;
-      color: #1e293b;
-      margin: 0;
-      font-family: "Noto Sans Bengali", "Segoe UI", Roboto, sans-serif;
-      line-height: 1.5;
-    }
-    
-    .container {
-      margin: 0 auto; 
-      background: #ffffff; 
-      border-radius: 12px; 
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
-      width: min(1200px, calc(100% - 24px));
-    }
-    
-    /* Header Container */
-    .header { 
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.12), transparent 25%),
-        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.10), transparent 25%),
-        linear-gradient(135deg, #073763 0%, #0f4c81 50%, #12649d 100%);
-      color: #fff;
-      text-align: center;
-      padding: 30px 18px 26px;
-      border-radius: 0 0 18px 18px;
-      box-shadow: 0 8px 25px rgba(8, 59, 102, 0.22);
-    }
-    
-    .school-name { 
-      margin: 0;
-      font-size: clamp(1.35rem, 4vw, 2.15rem);
-      font-weight: 800;
-      letter-spacing: 0.3px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-    }
-    
-    /* Web-only Sub Title */
-    .web-only-title {
-      margin-top: 6px;
-      font-size: clamp(0.9rem, 2vw, 1.1rem);
-      opacity: 0.95;
-      font-weight: 500;
-    }
-    
-    /* Sub-Heading Badge Area */
-    .sub-heading-badge {
-      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-      color: #1b5e20; 
-      padding: 10px 16px; 
-      border: 1px solid #a5d6a7;
-      border-left: 5px solid #2e7d32; 
-      border-radius: 8px; 
-      font-size: 16px; 
-      margin-bottom: 18px;
-      text-align: center; 
-      font-weight: bold;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-    }
+body {
+  background-color: #f3f7fb;
+  color: #1e293b;
+  margin: 0;
+  font-family: "Noto Sans Bengali", "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
 
-    /* Filters Section */
-    .filter-section { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
-    .filter-section select {
-      width: 100%; padding: 10px 14px; font-size: 15px; border: 1.5px solid #1a5f7a;
-      border-radius: 8px; outline: none; background: #fff; color: #222; font-weight: 500;
-    }
-    .filter-section select:disabled {
-      background-color: #f1f3f5; cursor: not-allowed; opacity: 0.65; border-color: #ccc;
-    }
-    .filter-section select:focus { border-color: #0d47a1; box-shadow: 0 0 0 3px rgba(13,71,161,0.15); }
+.container {
+  margin: 0 auto; 
+  background: #ffffff; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
+  width: min(1200px, calc(100% - 24px));
+}
 
-    /* Action Bar */
-    .action-bar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
-    .btn-action {
-      color: white; border: none; padding: 10px 18px; font-size: 15px;
-      border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-    }
-    .btn-print { background-color: #2e7d32; }
-    .btn-batch { background-color: #0288d1; }
-    .btn-action:hover:not(:disabled) { opacity: 0.92; transform: translateY(-1px); }
-    .btn-action:disabled { background-color: #b0bec5 !important; cursor: not-allowed; opacity: 0.7; box-shadow: none; }
+/* ==========================================
+   Header Section
+   ========================================== */
+.header { 
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.12), transparent 25%),
+    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.10), transparent 25%),
+    linear-gradient(135deg, #073763 0%, #0f4c81 50%, #12649d 100%);
+  color: #fff;
+  text-align: center;
+  padding: 30px 18px 26px;
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 8px 25px rgba(8, 59, 102, 0.22);
+}
 
-    /* Responsive Table */
-    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1.5px solid #1a5f7a; }
-    table { width: 100%; border-collapse: collapse; background: #fff; }
-    th, td { padding: 10px 8px; text-align: center; border: 1px solid #1a5f7a; font-size: 15px; vertical-align: middle; }
-    th { background-color: #1a5f7a; color: #ffffff; font-size: 16px; font-weight: bold; letter-spacing: 0.2px; }
-    
-    /* Custom Styling for Subject & Time */
-    .subject-title { font-weight: bold; display: block; color: #111; font-size: 15px; }
-    .exam-time { 
-      display: inline-block; 
-      font-size: 12.5px; 
-      color: #0d47a1; 
-      background-color: #e3f2fd; 
-      padding: 3px 8px; 
-      border-radius: 4px; 
-      margin-top: 4px; 
-      font-weight: 600;
-      border: 1px solid #bbdefb;
-    }
+.school-name { 
+  margin: 0;
+  font-size: clamp(1.35rem, 4vw, 2.15rem);
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
 
-    /* Row Hover & Selection */
-    tbody tr:nth-child(even) { background-color: #f8fafc; }
-    tbody tr:hover { background-color: #eef6fc; }
-    tbody tr.selected-row { background-color: #d1e7dd !important; font-weight: bold; }
+/* Web-only Sub Title */
+.web-only-title {
+  margin-top: 6px;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  opacity: 0.95;
+  font-weight: 500;
+}
 
-    #batchPrintContainer { display: none; }
+/* Sub-Heading Badge Area */
+.sub-heading-badge {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  color: #1b5e20; 
+  padding: 10px 16px; 
+  border: 1px solid #a5d6a7;
+  border-left: 5px solid #2e7d32; 
+  border-radius: 8px; 
+  font-size: 16px; 
+  margin-bottom: 18px;
+  text-align: center; 
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
 
-    /* Desktop Adjustments */
-    @media (min-width: 600px) {
-      body { padding: 20px; }
-      .filter-section { flex-direction: row; }
-    }
+/* ==========================================
+   Form Controls & Filters Section
+   ========================================== */
+.filter-section { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+  margin-bottom: 16px; 
+}
 
-    /* 🖨️ PRINT STYLING (A4 Landscape Fit) */
-    @media print {
-      @page { 
-        size: A4 landscape; 
-        margin: 6mm; 
-      }
-      
-      html, body {
-        background: #fff !important; 
-        padding: 0 !important; 
-        margin: 0 !important;
-        color: #000000 !important; 
-        -webkit-print-color-adjust: exact !important; 
-        print-color-adjust: exact !important;
-      }
+.filter-section select {
+  width: 100%; 
+  padding: 10px 14px; 
+  font-size: 15px; 
+  border: 1.5px solid #1a5f7a;
+  border-radius: 8px; 
+  outline: none; 
+  background: #fff; 
+  color: #222; 
+  font-weight: 500;
+}
 
-      .container { 
-        box-shadow: none !important; 
-        padding: 0 !important; 
-        width: 100% !important; 
-        max-width: 100% !important; 
-        margin: 0 !important;
-      }
+.filter-section select:disabled {
+  background-color: #f1f3f5; 
+  cursor: not-allowed; 
+  opacity: 0.65; 
+  border-color: #ccc;
+}
 
-      .filter-section, .action-bar { display: none !important; }
-      
-      /* ওয়েব পেজের হেডিং টাইটেল প্রিন্টে হাইড থাকবে */
-      .web-only-title { display: none !important; }
+.filter-section select:focus { 
+  border-color: #0d47a1; 
+  box-shadow: 0 0 0 3px rgba(13,71,161,0.15); 
+}
 
-      .header {
-        margin-bottom: 6px !important; 
-        padding-bottom: 4px !important; 
-      }
-      .school-name { 
-        font-size: 24pt !important; 
-        color: #000 !important; 
-        font-weight: 900 !important; 
-      }
-      
-      .sub-heading-badge { 
-        border: 2px solid #000 !important; 
-        background: #f0f0f0 !important; 
-        color: #000 !important; 
-        font-size: 15pt !important; 
-        margin-bottom: 10px !important; 
-        padding: 6px 10px !important; 
-        font-weight: bold !important; 
-        box-shadow: none !important;
-      }
-      
-      .table-responsive { border: none !important; overflow: visible !important; }
-      table { border: 2px solid #000 !important; width: 100% !important; margin: 0 !important; }
-      tr { page-break-inside: avoid !important; }
-      
-      th, td { 
-        border: 1.5px solid #000 !important; 
-        padding: 8px 6px !important; 
-        font-size: 14pt !important; 
-        font-weight: bold !important; 
-      }
-      th { 
-        background-color: #e0e0e0 !important; 
-        color: #000 !important; 
-        font-size: 16pt !important; 
-        font-weight: 900 !important; 
-      }
+/* ==========================================
+   Buttons & Action Bar
+   ========================================== */
+.action-bar { 
+  display: flex; 
+  justify-content: flex-end; 
+  gap: 10px; 
+  margin-bottom: 16px; 
+}
 
-      /* ১. নির্দিষ্ট ক্লাস বা ব্যাচ প্রিন্টের সময় ফন্ট বড় ও সাইড-বাই-সাইড করার স্টাইল */
-      .single-class-print .subject-title,
-      .batch-page .subject-title {
-        display: inline-block !important;
-        font-size: 20pt !important;
-        font-weight: 900 !important;
-        color: #000 !important;
-        margin-right: 12px !important;
-      }
+.btn-action {
+  color: white; 
+  border: none; 
+  padding: 10px 18px; 
+  font-size: 15px;
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-weight: bold; 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
 
-      .single-class-print .exam-time,
-      .batch-page .exam-time {
-        display: inline-block !important;
-        background-color: transparent !important;
-        color: #000 !important;
-        font-size: 18pt !important;
-        font-weight: bold !important;
-        border: 1.5px solid #333 !important;
-        padding: 2px 8px !important;
-        margin-top: 0 !important;
-        float: right !important;
-      }
+.btn-print { 
+  background-color: #2e7d32; 
+}
 
-      /* সমস্ত ক্লাস প্রিন্টের সময় ডিফল্ট ছোট ও নিচে রাখার স্টাইল */
-      .all-class-print .subject-title {
-        font-size: 13pt !important;
-        font-weight: 900 !important;
-      }
-      .all-class-print .exam-time {
-        font-size: 10.5pt !important;
-        border: 1px solid #333 !important;
-        padding: 1px 4px !important;
-        margin-top: 2px !important;
-      }
+.btn-batch { 
+  background-color: #0288d1; 
+}
 
-      /* Mode Control */
-      .single-print-area { display: block; }
-      #batchPrintContainer { display: none; }
+.btn-action:hover:not(:disabled) { 
+  opacity: 0.92; 
+  transform: translateY(-1px); 
+}
 
-      body.batch-print-active .single-print-area { display: none !important; }
-      body.batch-print-active #batchPrintContainer { display: block !important; }
-      
-      .batch-page { 
-        page-break-after: always; 
-        page-break-inside: avoid;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      .batch-page:last-child { 
-        page-break-after: avoid !important; 
-      }
-    }
+.btn-action:disabled { 
+  background-color: #b0bec5 !important; 
+  cursor: not-allowed; 
+  opacity: 0.7; 
+  box-shadow: none; 
+}
+
+/* ==========================================
+   Table & Content Area
+   ========================================== */
+.table-responsive { 
+  overflow-x: auto; 
+  -webkit-overflow-scrolling: touch; 
+  border-radius: 8px; 
+  border: 1.5px solid #1a5f7a; 
+}
+
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  background: #fff; 
+}
+
+th, td { 
+  padding: 10px 8px; 
+  text-align: center; 
+  border: 1px solid #1a5f7a; 
+  font-size: 15px; 
+  vertical-align: middle; 
+}
+
+th { 
+  background-color: #1a5f7a; 
+  color: #ffffff; 
+  font-size: 16px; 
+  font-weight: bold; 
+  letter-spacing: 0.2px; 
+}
+
+/* Subject & Exam Time Badge Styling */
+.subject-title { 
+  font-weight: bold; 
+  display: block; 
+  color: #111; 
+  font-size: 15px; 
+}
+
+.exam-time { 
+  display: inline-block; 
+  font-size: 12.5px; 
+  color: #0d47a1; 
+  background-color: #e3f2fd; 
+  padding: 3px 8px; 
+  border-radius: 4px; 
+  margin-top: 4px; 
+  font-weight: 600;
+  border: 1px solid #bbdefb;
+}
+
+/* Row Hover & Selection */
+tbody tr:nth-child(even) { 
+  background-color: #f8fafc; 
+}
+
+tbody tr:hover { 
+  background-color: #eef6fc; 
+}
+
+tbody tr.selected-row { 
+  background-color: #d1e7dd !important; 
+  font-weight: bold; 
+}
+
+#batchPrintContainer { 
+  display: none; 
+}
+
+/* ==========================================
+   Desktop Adjustments
+   ========================================== */
+@media (min-width: 600px) {
+  body { 
+    padding: 20px; 
+  }
+  .filter-section { 
+    flex-direction: row; 
+  }
+}
+
+/* ==========================================
+   🖨️ PRINT STYLING (A4 Landscape Fit)
+   ========================================== */
+@media print {
+  @page { 
+    size: A4 landscape; 
+    margin: 6mm; 
+  }
+  
+  html, body {
+    background: #fff !important; 
+    padding: 0 !important; 
+    margin: 0 !important;
+    color: #000000 !important; 
+    -webkit-print-color-adjust: exact !important; 
+    print-color-adjust: exact !important;
+  }
+
+  .container { 
+    box-shadow: none !important; 
+    padding: 0 !important; 
+    width: 100% !important; 
+    max-width: 100% !important; 
+    margin: 0 !important;
+  }
+
+  .filter-section, .action-bar { 
+    display: none !important; 
+  }
+  
+  .web-only-title { 
+    display: none !important; 
+  }
+
+  .header {
+    margin-bottom: 6px !important; 
+    padding-bottom: 4px !important; 
+  }
+
+  .school-name { 
+    font-size: 24pt !important; 
+    color: #000 !important; 
+    font-weight: 900 !important; 
+  }
+  
+  .sub-heading-badge { 
+    border: 2px solid #000 !important; 
+    background: #f0f0f0 !important; 
+    color: #000 !important; 
+    font-size: 15pt !important; 
+    margin-bottom: 10px !important; 
+    padding: 6px 10px !important; 
+    font-weight: bold !important; 
+    box-shadow: none !important;
+  }
+  
+  .table-responsive { 
+    border: none !important; 
+    overflow: visible !important; 
+  }
+
+  table { 
+    border: 2px solid #000 !important; 
+    width: 100% !important; 
+    margin: 0 !important; 
+  }
+
+  tr { 
+    page-break-inside: avoid !important; 
+  }
+  
+  th, td { 
+    border: 1.5px solid #000 !important; 
+    padding: 8px 6px !important; 
+    font-size: 14pt !important; 
+    font-weight: bold !important; 
+  }
+
+  th { 
+    background-color: #e0e0e0 !important; 
+    color: #000 !important; 
+    font-size: 16pt !important; 
+    font-weight: 900 !important; 
+  }
+
+  /* Single Class & Batch Print Style */
+  .single-class-print .subject-title,
+  .batch-page .subject-title {
+    display: inline-block !important;
+    font-size: 20pt !important;
+    font-weight: 900 !important;
+    color: #000 !important;
+    margin-right: 12px !important;
+  }
+
+  .single-class-print .exam-time,
+  .batch-page .exam-time {
+    display: inline-block !important;
+    background-color: transparent !important;
+    color: #000 !important;
+    font-size: 18pt !important;
+    font-weight: bold !important;
+    border: 1.5px solid #333 !important;
+    padding: 2px 8px !important;
+    margin-top: 0 !important;
+    float: right !important;
+  }
+
+  /* All Class Print Style */
+  .all-class-print .subject-title {
+    font-size: 13pt !important;
+    font-weight: 900 !important;
+  }
+
+  .all-class-print .exam-time {
+    font-size: 10.5pt !important;
+    border: 1px solid #333 !important;
+    padding: 1px 4px !important;
+    margin-top: 2px !important;
+  }
+
+  /* Mode Control */
+  .single-print-area { 
+    display: block; 
+  }
+
+  #batchPrintContainer { 
+    display: none; 
+  }
+
+  body.batch-print-active .single-print-area { 
+    display: none !important; 
+  }
+
+  body.batch-print-active #batchPrintContainer { 
+    display: block !important; 
+  }
+  
+  .batch-page { 
+    page-break-after: always; 
+    page-break-inside: avoid;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .batch-page:last-child { 
+    page-break-after: avoid !important; 
+  }
+}
   </style>
 </head>
 <body>
