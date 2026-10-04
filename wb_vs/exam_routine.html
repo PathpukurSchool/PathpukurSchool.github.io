@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noarchive">
 
-  <title>Pathpukur High School (H.S.) - Exam Routine</title>
+  <title>Pathpukur High School (H.S.)</title>
 
   <!-- Google Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,39 +14,59 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * { box-sizing: border-box; font-family: 'Tiro Bangla', serif, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: #f4f6f9; margin: 0; padding: 12px; color: #111; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f3f7fb;
+      color: #1e293b;
+      margin: 0;
+      font-family: "Noto Sans Bengali", "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+    }
     
-    .container { 
-      max-width: 1100px; 
+    .container {
       margin: 0 auto; 
       background: #ffffff; 
-      padding: 20px 24px; 
       border-radius: 12px; 
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
+      width: min(1200px, calc(100% - 24px));
     }
     
     /* Header Container */
     .header { 
-      text-align: center; 
-      border-bottom: 3px double #1a5f7a; 
-      padding-bottom: 10px; 
-      margin-bottom: 16px; 
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.12), transparent 25%),
+        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.10), transparent 25%),
+        linear-gradient(135deg, #073763 0%, #0f4c81 50%, #12649d 100%);
+      color: #fff;
+      text-align: center;
+      padding: 30px 18px 26px;
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 8px 25px rgba(8, 59, 102, 0.22);
     }
+    
     .school-name { 
-      font-size: 28px; 
-      color: #1a5f7a; 
-      margin: 0; 
-      font-weight: bold; 
+      margin: 0;
+      font-size: clamp(1.35rem, 4vw, 2.15rem);
+      font-weight: 800;
       letter-spacing: 0.3px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
     
     /* Web-only Sub Title */
     .web-only-title {
-      font-size: 20px;
-      color: #333;
-      margin: 4px 0 0 0;
-      font-weight: bold;
+      margin-top: 6px;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      opacity: 0.95;
+      font-weight: 500;
     }
     
     /* Sub-Heading Badge Area */
@@ -125,14 +145,14 @@
     @media print {
       @page { 
         size: A4 landscape; 
-        margin: 6mm 8mm; 
+        margin: 6mm; 
       }
       
       html, body {
         background: #fff !important; 
         padding: 0 !important; 
         margin: 0 !important;
-        color: #000 !important; 
+        color: #000000 !important; 
         -webkit-print-color-adjust: exact !important; 
         print-color-adjust: exact !important;
       }
@@ -150,8 +170,7 @@
       /* ওয়েব পেজের হেডিং টাইটেল প্রিন্টে হাইড থাকবে */
       .web-only-title { display: none !important; }
 
-      .header { 
-        border-bottom: 2px solid #000 !important; 
+      .header {
         margin-bottom: 6px !important; 
         padding-bottom: 4px !important; 
       }
@@ -193,7 +212,7 @@
       .single-class-print .subject-title,
       .batch-page .subject-title {
         display: inline-block !important;
-        font-size: 16pt !important;
+        font-size: 20pt !important;
         font-weight: 900 !important;
         color: #000 !important;
         margin-right: 12px !important;
@@ -204,7 +223,7 @@
         display: inline-block !important;
         background-color: transparent !important;
         color: #000 !important;
-        font-size: 13pt !important;
+        font-size: 18pt !important;
         font-weight: bold !important;
         border: 1.5px solid #333 !important;
         padding: 2px 8px !important;
