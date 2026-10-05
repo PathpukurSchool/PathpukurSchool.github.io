@@ -61,17 +61,17 @@
       --accent-color: #0ea5e9;
       --success-color: #16a34a;
 
-      --bg-color: #f3f7fb;
+      --bg-color: #f8fafc;
       --card-bg: #ffffff;
       --text-color: #1e293b;
       --muted-text: #64748b;
 
-      --border-color: #dbe3ec;
-      --soft-border: #e7eef5;
+      --border-color: #cbd5e1;
+      --soft-border: #e2e8f0;
 
-      --shadow-sm: 0 2px 8px rgba(15, 76, 129, 0.06);
-      --shadow-md: 0 8px 24px rgba(15, 76, 129, 0.10);
-      --shadow-lg: 0 14px 35px rgba(15, 76, 129, 0.13);
+      --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.12);
 
       --radius-sm: 8px;
       --radius-md: 12px;
@@ -92,10 +92,11 @@
       margin: 0;
       font-family: "Noto Sans Bengali", "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
-      width: min(1200px, calc(100% - 24px));
+      width: min(1200px, calc(100% - 32px));
       margin: 0 auto;
     }
 
@@ -105,50 +106,52 @@
     .header-card {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, #1e3a8a, #0f172a);
-      color: #fff;
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      color: #ffffff;
       text-align: center;
-      padding: 30px 18px 26px;
-      box-shadow: 0 8px 25px rgba(8, 59, 102, 0.22);
+      padding: 36px 20px 30px;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
     }
 
     .header-card h1 {
       margin: 0;
-      font-size: clamp(1.35rem, 4vw, 2.15rem);
+      font-size: clamp(1.4rem, 4vw, 2.25rem);
       font-weight: 800;
-      letter-spacing: 0.3px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .header-card h2 {
-      margin-top: 6px;
-      font-size: clamp(0.9rem, 2vw, 1.1rem);
-      opacity: 0.95;
+      margin-top: 8px;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      opacity: 0.9;
       font-weight: 500;
     }
 
     .header-card p {
       font-size: 13px;
-      opacity: 0.85;
-      margin-top: 4px;
+      opacity: 0.8;
+      margin-top: 6px;
       margin-bottom: 0;
     }
 
     .page-title {
       position: relative;
-      margin: 22px 10px 18px;
+      margin: 28px 10px 20px;
       text-align: center;
       color: var(--primary-dark);
-      font-size: clamp(1.15rem, 3vw, 1.45rem);
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
       font-weight: 800;
+      letter-spacing: -0.01em;
     }
 
     .page-title::after {
       content: "";
       display: block;
-      width: 70px;
-      height: 3px;
-      margin: 8px auto 0;
+      width: 60px;
+      height: 4px;
+      margin: 10px auto 0;
       border-radius: 10px;
       background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
     }
@@ -157,11 +160,11 @@
        3. INSTRUCTION CARD
        ========================================== */
     .instruction-card {
-      background: linear-gradient(135deg, #f8fbff, #eef7ff);
-      border: 1px solid #cfe8f7;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border: 1px solid #bae6fd;
       border-left: 5px solid var(--primary-color);
-      padding: 18px 20px;
-      margin-bottom: 20px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-sm);
     }
@@ -170,22 +173,22 @@
       color: var(--primary-dark);
       font-size: 1.05rem;
       font-weight: 800;
-      margin-bottom: 9px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
     }
 
     .instruction p {
       margin: 0;
-      color: #475467;
-      font-size: 0.94rem;
+      color: #334155;
+      font-size: 0.95rem;
     }
 
     .instruction-card ul {
       margin: 10px 0 0 8px;
       padding-left: 20px;
-      color: #475569;
+      color: #334155;
     }
 
     .instruction-card li {
@@ -200,65 +203,69 @@
        4. FILTER CARD & FORM CONTROLS
        ========================================== */
     .filter-card {
-      background: rgba(255, 255, 255, 0.96);
+      background: var(--card-bg);
       border: 1px solid var(--soft-border);
       border-radius: var(--radius-lg);
-      padding: 20px;
-      margin-bottom: 25px;
+      padding: 24px;
+      margin-bottom: 28px;
       box-shadow: var(--shadow-md);
-      transition: box-shadow 0.25s ease;
+      transition: box-shadow 0.25s ease, border-color 0.25s ease;
     }
 
     .filter-card:hover {
       box-shadow: var(--shadow-lg);
+      border-color: var(--border-color);
     }
 
     .filter-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
       align-items: flex-end;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .form-group label {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 700;
-      color: #475569;
+      color: #334155;
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
     }
 
     .form-group label i {
       color: var(--primary-color);
-      font-size: 13px;
+      font-size: 14px;
     }
 
     .form-control {
       width: 100%;
-      padding: 11px 13px;
+      padding: 10px 14px;
       min-height: 44px;
-      border: 1px solid var(--border-color);
-      border-radius: 9px;
-      background-color: #fff;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background-color: #ffffff;
       color: var(--text-color);
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+      transition: all 0.2s ease;
       cursor: pointer;
+    }
+
+    .form-control:hover:not(:disabled) {
+      border-color: var(--primary-light);
     }
 
     .form-control:focus {
       border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.14);
-      transform: translateY(-1px);
+      box-shadow: 0 0 0 3.5px rgba(14, 165, 233, 0.15);
     }
 
     .form-control:disabled {
@@ -273,9 +280,9 @@
        ========================================== */
     .btn {
       min-height: 44px;
-      padding: 10px 18px;
+      padding: 10px 20px;
       border: none;
-      border-radius: 9px;
+      border-radius: var(--radius-sm);
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
@@ -283,55 +290,59 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .btn:disabled {
       opacity: 0.55;
       cursor: not-allowed;
       filter: grayscale(40%);
+      box-shadow: none !important;
     }
 
     .btn-primary {
       background: linear-gradient(135deg, #0f4c81, #12649d);
-      color: #fff;
-      box-shadow: 0 4px 10px rgba(15, 76, 129, 0.18);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(15, 76, 129, 0.2);
     }
 
     .btn-primary:hover:not(:disabled) {
       background: linear-gradient(135deg, #09365d, #0f4c81);
       transform: translateY(-2px);
-      box-shadow: 0 7px 15px rgba(15, 76, 129, 0.25);
+      box-shadow: 0 6px 16px rgba(15, 76, 129, 0.28);
     }
 
     .btn-success {
       background: linear-gradient(135deg, #16a34a, #15803d);
-      color: white;
-      min-height: 44px;
-      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.18);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
     }
 
     .btn-success:hover:not(:disabled) {
+      background: linear-gradient(135deg, #15803d, #166534);
       transform: translateY(-2px);
-      box-shadow: 0 7px 15px rgba(22, 163, 74, 0.25);
+      box-shadow: 0 6px 16px rgba(22, 163, 74, 0.28);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(0);
     }
 
     /* ==========================================
        6. PRINTABLE CARD & TABLE STYLES
        ========================================== */
     .printable-card {
-      background: #fff;
+      background: #ffffff;
       border: 1px solid var(--soft-border);
       border-radius: var(--radius-lg);
-      padding: 24px;
-      margin-bottom: 25px;
+      padding: 28px;
+      margin-bottom: 28px;
       box-shadow: var(--shadow-md);
       page-break-after: always;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .printable-card:hover {
-      transform: translateY(-2px);
       box-shadow: var(--shadow-lg);
     }
 
@@ -341,15 +352,15 @@
 
     .card-print-header h2 {
       font-size: 18px;
-      color: #000;
-      font-weight: bold;
+      color: #000000;
+      font-weight: 800;
       margin: 0;
     }
 
     .card-print-header h3 {
       font-size: 14px;
-      color: #000;
-      font-weight: 600;
+      color: #000000;
+      font-weight: 700;
       margin: 0;
     }
 
@@ -358,10 +369,10 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      padding: 0 0 13px;
-      border-bottom: 2px solid #e5edf5;
-      margin-bottom: 15px;
-      font-size: 17px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 18px;
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--primary-dark);
     }
@@ -369,64 +380,65 @@
     .card-meta-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
-      background: linear-gradient(135deg, #f8fafc, #f1f7fc);
-      padding: 13px 15px;
-      border-radius: 10px;
-      margin-bottom: 16px;
-      font-size: 13.5px;
-      border: 1px solid #e2e8f0;
+      gap: 12px;
+      background: #f8fafc;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      font-size: 14px;
+      border: 1px solid var(--soft-border);
     }
 
     .table-responsive {
       width: 100%;
       overflow-x: auto;
-      border-radius: 10px;
-      border: 1px solid #dbe3ec;
+      border-radius: var(--radius-md);
+      border: 1.5px solid #0f4c81;
     }
 
     table {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      font-size: 13px;
-      background: #fff;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      background: #ffffff;
     }
 
     th,
     td {
-      border-right: 1px solid #dbe3ec;
-      border-bottom: 1px solid #dbe3ec;
-      padding: 8px 10px;
+      border: 1px solid #dbe3ec;
+      padding: 10px 12px;
       text-align: center;
+      vertical-align: middle;
     }
 
     th {
-      background: linear-gradient(135deg, #eaf3fa, #dfeef8);
-      color: #163b5c;
-      font-weight: 800;
+      background-color: var(--primary-color);
+      color: #ffffff;
+      font-weight: 700;
+      letter-spacing: 0.2px;
       position: sticky;
       top: 0;
       z-index: 1;
     }
 
     tbody tr:nth-child(even) {
-      background: #f8fbfd;
+      background: #f8fafc;
     }
 
     tbody tr:hover {
-      background: #eef7ff;
+      background: #eef6fc;
     }
 
     .attn-cell {
-      height: 34px;
+      height: 36px;
       min-width: 90px;
     }
 
     .footer-row td {
-      font-size: 12px;
-      height: 28px;
-      background-color: #fafafa;
+      font-size: 12.5px;
+      height: 30px;
+      background-color: #f1f5f9;
+      font-weight: 600;
     }
 
     /* ==========================================
@@ -434,36 +446,36 @@
        ========================================== */
     .empty-state {
       text-align: center;
-      padding: 45px 20px;
-      color: #64748b;
-      background: #fff;
-      border: 1px dashed #cbd5e1;
-      border-radius: 14px;
-      margin: 15px 0;
+      padding: 50px 20px;
+      color: var(--muted-text);
+      background: #ffffff;
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius-lg);
+      margin: 20px 0;
     }
 
     .empty-state i {
       display: block;
-      font-size: 38px;
+      font-size: 42px;
       color: #94a3b8;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .loading-state {
       text-align: center;
       padding: 50px 20px;
-      color: #64748b;
-      background: #fff;
-      border-radius: 14px;
-      border: 1px solid #e2e8f0;
+      color: var(--muted-text);
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--soft-border);
       box-shadow: var(--shadow-sm);
     }
 
     .loading-state i {
       display: block;
-      font-size: 30px;
+      font-size: 32px;
       color: var(--primary-color);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     /* ==========================================
@@ -472,23 +484,25 @@
     @media print {
       @page {
         size: A4 landscape !important;
-        margin: 4mm;
+        margin: 5mm 6mm !important;
       }
 
-      body {
-        background-color: #fff !important;
+      html, body {
+        background: #ffffff !important;
         padding: 0 !important;
         margin: 0 !important;
-        color: #000 !important;
+        color: #000000 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
 
       .container {
         width: 100% !important;
+        max-width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
       }
 
-      /* Hide web elements and unwanted text on print */
       .no-print,
       .filter-card,
       .header-card,
@@ -507,77 +521,80 @@
         border: none !important;
         padding: 0 !important;
         margin: 0 !important;
+        background: transparent !important;
       }
 
-      /* Header alignment in print: School Name (Left) & Page Title (Right) */
       .card-print-header {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
         margin-bottom: 10px !important;
-        padding: 0 15px 6px 15px !important;
+        padding: 0 4px 6px 4px !important;
+        border-bottom: 1.5px solid #000000 !important;
       }
 
       .card-print-header h2,
       .card-print-header h3 {
-        font-size: 15px !important;
-        font-weight: bold !important;
-        color: #000 !important;
+        font-size: 15pt !important;
+        font-weight: 800 !important;
+        color: #000000 !important;
       }
 
       .card-meta-grid {
-        background: none !important;
-        border: 1px solid #000 !important;
+        background: #f8f8f8 !important;
+        border: 1.5px solid #000000 !important;
         padding: 6px 10px !important;
-        margin-bottom: 10px !important;
+        margin-bottom: 12px !important;
+        border-radius: 0 !important;
+        font-size: 11pt !important;
       }
 
       .table-responsive {
         border: none !important;
         overflow: visible !important;
         width: 100% !important;
+        margin: 0 !important;
       }
 
       table {
         box-shadow: none !important;
         border-collapse: collapse !important;
         width: 100% !important;
-        table-layout: fixed;
+        table-layout: fixed !important;
+        border: 2px solid #000000 !important;
       }
 
-      /* ২. ১ম কলাম (Roll): প্রয়োজন অনুযায়ী সাইজ দিন (যেমন: 60px বা 8%) */
-th:nth-child(1), td:nth-child(1) {
-  width: 8%; 
-  text-align: center;
-}
+      th:nth-child(1), td:nth-child(1) {
+        width: 8% !important; 
+        text-align: center !important;
+      }
 
-/* ৩. ২য় কলাম (Student Name): নাম রাখার জন্য একটু বড় সাইজ (যেমন: 25%) */
-th:nth-child(2), td:nth-child(2) {
-  width: 25%;
-  text-align: left;
-}
+      th:nth-child(2), td:nth-child(2) {
+        width: 25% !important;
+        text-align: left !important;
+      }
 
       tbody tr:nth-child(even) {
-        background: #fff !important;
+        background: #ffffff !important;
       }
 
-      /* Clear and crisp table borders for print */
+      table, th, td {
+        border: 1.5px solid #000000 !important;
+      }
+
       td {
-        color: #000 !important;
-      }
-
-      table, td {
-        border: 1px solid #000000 !important;
-        border-collapse: collapse; /* বর্ডার যাতে ডাবল না হয়ে একসাথে যুক্ত থাকে */
+        color: #000000 !important;
+        padding: 6px 8px !important;
+        font-weight: 600 !important;
       }
 
       th {
-        border: 2px solid #000000 !important; /* সম্পূর্ণ স্পষ্ট কালো বর্ডার */
-        color: #000000 !important;            /* লেখার রঙ গাড় কালো */
-        background-color: #ffffff !important; /* প্রিন্টে ব্যাকগ্রাউন্ড পরিষ্কার ও স্পষ্ট রাখার জন্য (প্রয়োজনে) */
-        -webkit-print-color-adjust: exact;    /* প্রিন্টারে কালার সামঞ্জস্য নিশ্চিত করতে */
-        print-color-adjust: exact;
-     }
+        border: 2px solid #000000 !important;
+        color: #000000 !important;            
+        background-color: #e0e0e0 !important;
+        font-weight: 800 !important;
+        font-size: 12pt !important;
+      }
     }
 
     /* ==========================================
@@ -585,45 +602,34 @@ th:nth-child(2), td:nth-child(2) {
        ========================================== */
     @media (max-width: 700px) {
       .container {
-        width: min(100% - 14px, 1200px);
+        width: calc(100% - 20px);
       }
 
       .header-card {
-        border-radius: 0 0 14px 14px;
-      }
-
-      .header-card h1 {
-        font-size: 1.35rem;
-      }
-
-      .header-card h2 {
-        font-size: 0.88rem;
-        line-height: 1.45;
+        border-radius: 0 0 var(--radius-md) var(--radius-md);
+        padding: 26px 16px 20px;
       }
 
       .page-title {
-        margin: 17px 5px;
-        font-size: 1.08rem;
+        margin: 20px 5px 14px;
       }
 
       .instruction-card {
-        padding: 15px;
-        font-size: 13px;
+        padding: 16px;
       }
 
       .filter-card {
-        padding: 15px;
-        border-radius: 13px;
+        padding: 18px;
+        border-radius: var(--radius-md);
       }
 
       .filter-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 14px;
       }
 
       .form-control {
-        min-height: 46px;
-        font-size: 14px;
+        min-height: 44px;
       }
 
       .btn {
@@ -631,8 +637,8 @@ th:nth-child(2), td:nth-child(2) {
       }
 
       .printable-card {
-        padding: 15px;
-        border-radius: 13px;
+        padding: 18px;
+        border-radius: var(--radius-md);
       }
 
       .card-header-title {
@@ -641,15 +647,10 @@ th:nth-child(2), td:nth-child(2) {
         text-align: center;
       }
 
-      .card-header-title .btn {
-        width: 100%;
-      }
-
       .card-meta-grid {
         grid-template-columns: 1fr 1fr;
         gap: 8px;
-        padding: 10px;
-        font-size: 12px;
+        padding: 12px;
       }
 
       table {
@@ -658,10 +659,10 @@ th:nth-child(2), td:nth-child(2) {
 
       th,
       td {
-        padding: 7px 8px;
+        padding: 8px;
       }
     }
-  </style>
+</style>
 </head>
 <body>
 
