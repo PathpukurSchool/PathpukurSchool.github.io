@@ -67,39 +67,45 @@
        ========================================================= */
     .container {
       width: min(1200px, calc(100% - 24px));
-      margin: 0 auto;
+      margin: 20px auto;
       background: #ffffff;
-      border-radius: 0 16px 0 16px;
+      border-radius: 12px;
+      overflow: hidden; /* হেডার এবং কন্টেইনারের কর্নার সামঞ্জস্যের জন্য */
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(26, 95, 122, 0.08);
+      border: 1px solid rgba(26, 95, 122, 0.15);
     }
 
-    /* Header */
+    /* Header Styles */
     .header {
       background: linear-gradient(135deg, #1e3a8a, #0f172a);
-      color: #fff;
-      padding: 14px 10px;
+      color: #ffffff;
+      padding: 18px 16px;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      border: none;
     }
 
     .school-name {
       margin: 0;
-      font-size: 18px;
+      font-size: 22px;
       letter-spacing: 0.5px;
       font-weight: 900;
       line-height: 1.2;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
     }
 
     .web-only-title {
       font-size: 13px;
       font-weight: 400;
       color: #93c5fd;
-      margin: 4px 0 0 0;
+      margin: 6px 0 0 0;
     }
 
     .sub-heading-badge {
-      background: linear-gradient(135deg,  #93c5fd, #eef7ff);
+      background: linear-gradient(135deg, #93c5fd, #eef7ff);
       color: #0f4c81;
       padding: 11px 16px;
       border: 1px solid #0f4c81;
@@ -107,7 +113,7 @@
       border-radius: 10px;
       font-size: 16px;
       line-height: 1.5;
-      margin-bottom: 18px;
+      margin: 0 16px 18px 16px;
       text-align: center;
       font-weight: 700;
       box-shadow: 0 3px 10px rgba(46, 125, 50, 0.08);
@@ -120,7 +126,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-bottom: 16px;
+      margin: 0 16px 16px 16px;
     }
 
     .filter-section select {
@@ -157,7 +163,7 @@
       display: flex;
       justify-content: flex-end;
       gap: 10px;
-      margin-bottom: 16px;
+      margin: 0 16px 16px 16px;
     }
 
     .btn-action {
@@ -201,6 +207,7 @@
     .table-responsive {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      margin: 0 16px 16px 16px;
       border-radius: 8px;
       border: 1.5px solid #1a5f7a;
     }
@@ -269,7 +276,7 @@
        5. DESKTOP & MOBILE RESPONSIVE
        ========================================================= */
     @media (min-width: 600px) {
-      body { padding: 20px; }
+      body { padding: 20px 0; }
       .filter-section { flex-direction: row; align-items: center; }
       .filter-section select { flex: 1; min-width: 0; }
     }
@@ -278,11 +285,14 @@
       .container {
         width: calc(100% - 12px);
         margin: 6px auto;
-        padding: 12px;
-        border-radius: 12px;
+        border-radius: 10px;
       }
       .action-bar { flex-direction: column; }
       .btn-action { width: 100%; }
+      .sub-heading-badge, .filter-section, .action-bar, .table-responsive {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
     }
 
     /* =========================================================
@@ -310,6 +320,7 @@
         max-width: 100% !important;
         margin: 0 !important;
         border: none !important;
+        border-radius: 0 !important;
       }
 
       .filter-section, .action-bar, .web-only-title {
@@ -317,15 +328,22 @@
       }
 
       .header {
-        margin-bottom: 4px !important;
-        padding-bottom: 4px !important;
+        background: transparent !important;
+        margin-bottom: 6px !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
       }
 
       .school-name {
         font-size: 26pt !important;
-        background: #fff !important;
+        background: transparent !important;
         color: #000 !important;
         font-weight: 900 !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
       }
 
       .sub-heading-badge {
@@ -333,17 +351,21 @@
         background: #f0f0f0 !important;
         color: #000 !important;
         font-size: 14pt !important;
-        margin-bottom: 10px !important;
+        margin: 0 0 10px 0 !important;
         padding: 5px 10px !important;
         font-weight: bold !important;
         box-shadow: none !important;
       }
 
-      .table-responsive { border: none !important; overflow: visible !important; }
+      .table-responsive {
+        border: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+      }
+
       table { border: 2px solid #000 !important; width: 100% !important; margin: 0 !important; }
       tr { page-break-inside: avoid !important; }
 
-       
       th, td {
         border: 1.5px solid #000 !important;
         padding: 6px 5px !important;
@@ -359,11 +381,7 @@
         font-weight: 900 !important; 
       }
 
-      /* ---------------------------------------------------------
-         CASE 1: ALL CLASS PRINT (সমস্ত ক্লাস একসাথে)
-         - বিষয় উপরে, টাইম নিচে
-         - সাধারণ / কম্প্যাক্ট ফন্ট সাইজ
-         --------------------------------------------------------- */
+      /* ALL CLASS PRINT */
       .all-class-print .subject-time-wrap {
         display: flex !important;
         flex-direction: column !important;
@@ -393,11 +411,7 @@
         font-size: 13pt !important;
       }
 
-      /* ---------------------------------------------------------
-         CASE 2: SINGLE CLASS & BATCH PRINT (একক ক্লাস বা ব্যাচ প্রিন্ট)
-         - বিষয় ও সময় পাশাপাশি (Horizontal Layout) & Middle Alignment
-         - ফন্ট সাইজ বড়
-         --------------------------------------------------------- */
+      /* SINGLE CLASS & BATCH PRINT */
       .single-class-print .subject-time-wrap,
       .batch-page .subject-time-wrap {
         display: flex !important;
@@ -409,7 +423,6 @@
         text-align: center !important;
       }
 
-      /* বিষয় */
       .single-class-print .subject-title,
       .batch-page .subject-title {
         font-size: 20pt !important;
@@ -419,7 +432,6 @@
         margin: 0 !important;
       }
 
-      /* সময় */
       .single-class-print .exam-time,
       .batch-page .exam-time {
         font-size: 16pt !important;
@@ -434,7 +446,6 @@
         white-space: nowrap !important;
       }
 
-      /* টেবিল সেল ও হেডার সাইজ বড় */
       .single-class-print th, .single-class-print td,
       .batch-page th, .batch-page td {
         font-size: 18pt !important;
@@ -446,16 +457,13 @@
         font-weight: 900 !important;
       }
 
-      /* তারিখ ও বারের জন্য আরও বড় ফন্ট */
       .single-class-print td:first-child, .single-class-print td:nth-child(2),
       .batch-page td:first-child, .batch-page td:nth-child(2) {
         font-size: 20pt !important;
         font-weight: 800 !important;
       }
 
-      /* ---------------------------------------------------------
-         MODE CONTROLS & BATCH PAGE BREAKS
-         --------------------------------------------------------- */
+      /* MODE CONTROLS & BATCH PAGE BREAKS */
       .single-print-area { display: block; }
       #batchPrintContainer { display: none; }
 
@@ -473,7 +481,7 @@
         page-break-after: avoid !important; 
       }
     }
-  </style>
+</style>
 </head>
 <body>
 
