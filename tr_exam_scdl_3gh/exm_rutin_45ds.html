@@ -59,18 +59,8 @@
     /* =========================================================
        1. BASE & RESET STYLES
        ========================================================= */
-    * {
-      box-sizing: border-box;
-      font-family: 'Tiro Bangla', serif, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 0;
-      color: #111;
-    }
+    * { box-sizing: border-box; font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
+    body { margin: 0; background: #f8fafc; color: #1e293b; }
 
     /* =========================================================
        2. CONTAINER & LAYOUT
@@ -87,26 +77,26 @@
 
     /* Header */
     .header {
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      color: #fff;
+      padding: 14px 10px;
       text-align: center;
-      border-bottom: 3px double #1a5f7a;
-      padding-bottom: 10px;
       margin-bottom: 16px;
     }
 
     .school-name {
-      font-size: clamp(22px, 4vw, 30px);
-      color: #1a5f7a;
       margin: 0;
+      font-size: 19px;
+      letter-spacing: 0.5px;
       font-weight: 900;
-      letter-spacing: 0.2px;
       line-height: 1.2;
     }
 
     .web-only-title {
-      font-size: 20px;
-      color: #333;
+      font-size: 13px;
+      font-weight: 400;
+      color: #93c5fd;
       margin: 4px 0 0 0;
-      font-weight: bold;
     }
 
     .sub-heading-badge {
@@ -330,7 +320,6 @@
       .header {
         margin-bottom: 4px !important;
         padding-bottom: 4px !important;
-        border-bottom: 2px solid #000 !important;
       }
 
       .school-name {
@@ -354,26 +343,26 @@
       table { border: 2px solid #000 !important; width: 100% !important; margin: 0 !important; }
       tr { page-break-inside: avoid !important; }
 
+       
       th, td {
         border: 1.5px solid #000 !important;
         padding: 6px 5px !important;
-        font-size: 13pt !important;
         line-height: 1.3 !important;
-        text-align: center !important;
-        vertical-align: middle !important;
       }
 
       td { font-weight: 600 !important; }
-      th {
-        background-color: #e0e0e0 !important;
-        color: #000 !important;
-        font-size: 15pt !important;
-        font-weight: 900 !important;
+
+      th { 
+        background-color: #e0e0e0 !important; 
+        color: #000 !important; 
+        font-size: 15pt !important; 
+        font-weight: 900 !important; 
       }
 
       /* ---------------------------------------------------------
-         CASE 1: সমস্ত ক্লাসের প্রিন্ট (All Classes Print)
-         -> বিষয় উপরে এবং টাইম নিচে থাকবে
+         CASE 1: ALL CLASS PRINT (সমস্ত ক্লাস একসাথে)
+         - বিষয় উপরে, টাইম নিচে
+         - সাধারণ / কম্প্যাক্ট ফন্ট সাইজ
          --------------------------------------------------------- */
       .all-class-print .subject-time-wrap {
         display: flex !important;
@@ -381,109 +370,107 @@
         align-items: center !important;
         justify-content: center !important;
         gap: 2px !important;
-        width: 100% !important;
       }
 
       .all-class-print .subject-title {
-        display: block !important;
-        font-size: 14pt !important;
-        font-weight: 900 !important;
+        font-size: 13pt !important;
+        font-weight: 800 !important;
         color: #000 !important;
         line-height: 1.2 !important;
       }
 
       .all-class-print .exam-time {
-        display: inline-flex !important;
-        font-size: 11pt !important;
-        font-weight: 800 !important;
+        font-size: 10.5pt !important;
         color: #000 !important;
         background: transparent !important;
-        border: 1px solid #000 !important;
+        border: 1px solid #444 !important;
         padding: 1px 5px !important;
         border-radius: 3px !important;
-        margin-top: 2px !important;
-        white-space: nowrap !important;
+        font-weight: 700 !important;
+      }
+
+      .all-class-print th, .all-class-print td {
+        font-size: 13pt !important;
       }
 
       /* ---------------------------------------------------------
-         CASE 2: একক ক্লাস ও ব্যাচ প্রিন্ট (Single Class / Batch Print)
-         -> বিষয় ও সময় পাশাপাশি থাকবে এবং মিডিল এলাইন হবে
+         CASE 2: SINGLE CLASS & BATCH PRINT (একক ক্লাস বা ব্যাচ প্রিন্ট)
+         - বিষয় ও সময় পাশাপাশি (Horizontal Layout) & Middle Alignment
+         - ফন্ট সাইজ বড়
          --------------------------------------------------------- */
       .single-class-print .subject-time-wrap,
       .batch-page .subject-time-wrap {
-        display: inline-flex !important;
+        display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
         justify-content: center !important;
         gap: 12px !important;
-        width: auto !important;
-        max-width: 100% !important;
-        margin: 0 auto !important;
+        width: 100% !important;
         text-align: center !important;
       }
 
+      /* বিষয় */
       .single-class-print .subject-title,
       .batch-page .subject-title {
-        display: inline-block !important;
-        font-size: 22pt !important;
+        font-size: 20pt !important;
         line-height: 1.2 !important;
         font-weight: 900 !important;
         color: #000 !important;
         margin: 0 !important;
-        vertical-align: middle !important;
       }
 
+      /* সময় */
       .single-class-print .exam-time,
       .batch-page .exam-time {
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 4px !important;
-        background: transparent !important;
-        color: #000 !important;
-        font-size: 18pt !important;
+        font-size: 16pt !important;
         line-height: 1.2 !important;
         font-weight: 800 !important;
+        color: #000 !important;
+        background: transparent !important;
         border: 1.5px solid #000 !important;
         border-radius: 4px !important;
         padding: 2px 8px !important;
         margin: 0 !important;
         white-space: nowrap !important;
-        vertical-align: middle !important;
       }
 
-      /* Single Class & Batch specific font scaling */
-      .single-class-print th, .batch-page th {
+      /* টেবিল সেল ও হেডার সাইজ বড় */
+      .single-class-print th, .single-class-print td,
+      .batch-page th, .batch-page td {
         font-size: 18pt !important;
-        font-weight: 900 !important;
-      }
-
-      .single-class-print td, .batch-page td {
-        font-size: 16pt !important;
         padding: 8px 6px !important;
       }
 
-      .single-class-print td:first-child, .batch-page td:first-child,
-      .single-class-print td:nth-child(2), .batch-page td:nth-child(2) {
+      .single-class-print th, .batch-page th {
+        font-size: 20pt !important;
+        font-weight: 900 !important;
+      }
+
+      /* তারিখ ও বারের জন্য আরও বড় ফন্ট */
+      .single-class-print td:first-child, .single-class-print td:nth-child(2),
+      .batch-page td:first-child, .batch-page td:nth-child(2) {
         font-size: 20pt !important;
         font-weight: 800 !important;
       }
 
-      /* Print Mode Control */
+      /* ---------------------------------------------------------
+         MODE CONTROLS & BATCH PAGE BREAKS
+         --------------------------------------------------------- */
       .single-print-area { display: block; }
       #batchPrintContainer { display: none; }
 
       body.batch-print-active .single-print-area { display: none !important; }
       body.batch-print-active #batchPrintContainer { display: block !important; }
 
-      .batch-page {
-        page-break-after: always;
+      .batch-page { 
+        page-break-after: always; 
         page-break-inside: avoid;
         margin: 0;
         padding: 0;
       }
 
-      .batch-page:last-child {
-        page-break-after: avoid !important;
+      .batch-page:last-child { 
+        page-break-after: avoid !important; 
       }
     }
   </style>
