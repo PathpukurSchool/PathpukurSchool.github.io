@@ -95,7 +95,7 @@
 <nav id="sidebar-menu" class="sidebar-menu">
   <ul class="menu-list">
 
-    <!-- ক্যাটাগরি ১ -->
+    <!-- ক্যাটাগরি 1: স্টুডেন্ট ইনফরমেশন -->
     <li class="menu-item dropdown">
       <div class="menu-header-wrapper">
         <a href="#marks-information-section" class="nav-link menu-header">Student Information</a>
@@ -104,19 +104,31 @@
       <ul class="submenu">
         <li><a href="#student-list-link" class="nav-link">Student Details</a></li>
         <li><a href="#upload-student-notice-link" class="nav-link">Upload Student Notice</a></li>
-        <li><a href="#exam-seat-plan-link" class="nav-link">Exam Seat Plan</a></li>
       </ul>
     </li>
 
-    <!-- ক্যাটাগরি ২ -->
+    <!-- ক্যাটাগরি 2: এক্সাম সিডিউল -->
+    <li class="menu-item dropdown">
+      <div class="menu-header-wrapper">
+        <a href="#exam-schedule-section" class="nav-link menu-header">Exam Schedule</a>
+        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+      </div>
+      <ul class="submenu">
+        <li><a href="#exam-routine-link" class="nav-link">Exam Routine</a></li>
+        <li><a href="#exam-seat-plan-link" class="nav-link">Exam Seat Plan</a></li>
+        <li><a href="#exam-sign-link" class="nav-link">Exam Attendance & Sign</a></li>
+        <li><a href="#score-sheet-link" class="nav-link">Score Sheet / Marks Foil</a></li>
+      </ul>
+    </li>
+
+    <!-- ক্যাটাগরি 3: আপলোড মার্কস-->
     <li class="menu-item dropdown">
       <div class="menu-header-wrapper">
         <a href="#upload-your-marks-section" class="nav-link menu-header">Upload Student Marks</a>
         <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
       </div>
       <ul class="submenu">
-        <li><a href="#score_sheet_section" class="nav-link">Score Sheet / Marks Foil</a></li>
-        <li><a href="#marks_uploading_report_section" class="nav-link">Marks Uploading Report</a></li>
+        <li><a href="#marks-uploading-report" class="nav-link">Marks Uploading Report</a></li>
 
         <li><a href="#upload_marks_v" class="nav-link">Class V</a></li>
         <li><a href="#upload_marks_vi" class="nav-link">Class VI</a></li>
@@ -125,12 +137,28 @@
         <li><a href="#upload_marks_ix" class="nav-link">Class IX</a></li>
         <li><a href="#upload_marks_x" class="nav-link">Class X</a></li>
         <li><a href="#upload_marks_xi" class="nav-link">Class XI</a></li>
-        
-        <li><a href="#student_rank_section" class="nav-link">Student Rank</a></li>
       </ul>
     </li>
 
-    <!-- ক্যাটাগরি ৩ -->
+    <!-- ক্যাটাগরি 4: মার্কশিট -->
+    <li class="menu-item dropdown">
+      <div class="menu-header-wrapper">
+        <a href="#print-marksheet-section" class="nav-link menu-header">Student Marksheet</a>
+        <span class="arrow-icon"><i class="fa-solid fa-chevron-down"></i></span>
+      </div>
+      <ul class="submenu">
+        <li><a href="#student-rank" class="nav-link">Student Rank</a></li>
+
+        <li><a href="#marksheet_v" class="nav-link">Marksheet V</a></li>
+        <li><a href="#marksheet_vi" class="nav-link">Marksheet VI</a></li>
+        <li><a href="#marksheet_vii" class="nav-link">Marksheet VII</a></li>
+        <li><a href="#marksheet_viii" class="nav-link">Marksheet VIII</a></li>
+        <li><a href="#marksheet_ix" class="nav-link">Marksheet IX</a></li>
+        <li><a href="#marksheet_xi" class="nav-link">Marksheet XI</a></li>
+      </ul>
+    </li>
+
+    <!-- ক্যাটাগরি 5: স্কুল রুটিন -->
     <li class="menu-item dropdown">
       <div class="menu-header-wrapper">
         <a href="#school-routine-section" class="nav-link menu-header">School Routine</a>
@@ -144,7 +172,7 @@
       </ul>
     </li>
 
-    <!-- ক্যাটাগরি ৪ -->
+    <!-- ক্যাটাগরি 6: স্টুডেন্ট বেনিফিট -->
     <li class="menu-item dropdown">
       <div class="menu-header-wrapper">
         <a href="#student-benefit-section" class="nav-link menu-header">Students' Benefit</a>
@@ -158,7 +186,7 @@
       </ul>
     </li>
 
-    <!-- ক্যাটাগরি ৫ (যার কোনো সাবমেনু নেই) -->
+    <!-- ক্যাটাগরি 7: ফুটার (যার কোনো সাবমেনু নেই) -->
     <li class="menu-item">
       <div class="menu-header-wrapper">
         <a href="#school-address-section" class="nav-link menu-header">School Details</a>
@@ -186,10 +214,23 @@
         <h2 class="section-heading">Student Information</h2>
       </div>
 
-      <div class="class-buttons-grid" id="student-list-section">
+      <div class="class-buttons-grid">
         <a id="student-list-link" href="https://pathpukurschool.github.io/tr_odr_d84e/std_dtl_curr_e9.html" class="exam-link">Student Details</a>
         <a id="upload-student-notice-link" href="https://pathpukurschool.github.io/tr_odr_d84e/std_ntc_25f4.html" class="exam-link">Upload Student Notice</a>
-        <a id="exam-seat-plan-link" href="https://pathpukurschool.github.io/tr_odr_d84e/exam_st_pln.html" class="exam-link">Exam Seat Plan</a>
+      </div>
+    </div>
+
+    <!-- ✅ পরীক্ষার সূচি -->
+    <div class="main-section-container" id="exam-schedule-section">
+      <div class="section-heading-wrapper">
+        <h2 class="section-heading">Exam Schedule</h2>
+      </div>
+
+      <div class="class-buttons-grid">
+        <a id="exam-routine-link" href="" class="exam-link">Exam Routine</a>
+        <a id="exam-seat-plan-link" href="" class="exam-link">Exam Seat Plan</a>
+        <a id="exam-sign-link" href="" class="exam-link">Exam Attendance & Sign</a>
+        <a id="score-sheet-link" href="" class="exam-link">Score Sheet / Marks Foil</a>
       </div>
     </div>
 
@@ -203,8 +244,7 @@
       </div>
       
       <div class="class-buttons-grid">
-        <a id="score_sheet_section" href="https://pathpukurschool.github.io/tr_odr_d84e/mks_fl_st51.html" class="exam-link" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #10b981 100%);">Score Sheet / Marks Foil</a>
-        <a id="marks_uploading_report_section" href="https://pathpukurschool.github.io/tr_odr_d84e/mks_up_st_91b4.html" class="exam-link" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #10b981 100%);" >Marks Uploading Report</a>
+        <a id="marks-uploading-report" href="https://pathpukurschool.github.io/tr_odr_d84e/mks_up_st_91b4.html" class="exam-link" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #10b981 100%);" >Marks Uploading Report</a>
 
         <a id="upload_marks_v" href="https://pathpukurschool.github.io/up_res_67f5/rj5_k07b_n.html" class="exam-link" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #10b981 100%);" >Class V</a>
         <a id="upload_marks_vi" href="https://pathpukurschool.github.io/up_res_67f5/rj6_ds2c_k.html" class="exam-link" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #10b981 100%);" >Class VI</a>
@@ -213,8 +253,24 @@
         <a id="upload_marks_ix" href="https://pathpukurschool.github.io/up_res_67f5/rj9_li5f_w.html" class="exam-link" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #10b981 100%);" >Class IX</a>
         <a id="upload_marks_x" href="https://pathpukurschool.github.io/up_res_67f5/rj10_b08a_y.html" class="exam-link" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #10b981 100%);" >Class X</a>
         <a id="upload_marks_xi" href="https://pathpukurschool.github.io/up_res_67f5/rj11_ew10b_z.html" class="exam-link" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #10b981 100%);" >Class XI</a>
+      </div>
+    </div>
 
-        <a id="student_rank_section" href="https://pathpukurschool.github.io/tr_odr_d84e/rnk_stu_9s8t.html" class="exam-link" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #10b981 100%);">Student Rank</a>
+    <!-- ✅ ছাত্র ছাত্রীর মার্কশিট -->
+    <div class="main-section-container" id="print-marksheet-section">
+      <div class="section-heading-wrapper">
+        <h2 class="section-heading">Student Marksheet</h2>
+      </div>
+
+      <div class="class-buttons-grid">
+        <a id="student-rank" href="" class="exam-link">Student Rank</a>
+        
+        <a id="marksheet_v" href="" class="exam-link">Marksheet V</a>
+        <a id="marksheet_vi" href="" class="exam-link">Marksheet VI</a>
+        <a id="marksheet_vii" href="" class="exam-link">Marksheet VII</a>
+        <a id="marksheet_viii" href="" class="exam-link">Marksheet VIII</a>
+        <a id="marksheet_ix" href="" class="exam-link">Marksheet IX</a>
+        <a id="marksheet_xi" href="" class="exam-link">Marksheet XI</a>
       </div>
     </div>
 
