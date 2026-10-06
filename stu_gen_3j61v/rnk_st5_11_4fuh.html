@@ -597,7 +597,6 @@
 
                 const pct = classTotalFullMarks > 0 ? ((grandTotal / classTotalFullMarks) * 100).toFixed(1) : 0;
 
-                // স্ট্যাটাস নির্ধারণ (Dropout, Absent, Unsuccessful, Passed)
                 let studentStatus = 'SUCCESS';
                 if (st.status && typeof st.status === 'string' && st.status.toLowerCase().includes('drop')) {
                     studentStatus = 'DROP_OUT';
@@ -752,7 +751,6 @@
 
             analyticsCard.classList.remove('hidden');
 
-            // সাধারণ তথ্যাদি রেন্ডার
             document.getElementById('stName').innerText = student.student_name;
             document.getElementById('stClass').innerText = student.class_name || classNameMap[document.getElementById('classSelect').value];
             document.getElementById('stSec').innerText = student.section;
@@ -760,7 +758,6 @@
             document.getElementById('stTotal').innerText = student.grandTotal;
             document.getElementById('stPercentage').innerText = `${student.percentage}%`;
 
-            // র‍্যাঙ্ক বা বিশেষ স্ট্যাটাস ব্যাজ ডাইনামিক প্রদর্শন
             const rankBadgeEl = document.getElementById('stRankBadge');
             if (student.calculatedRank) {
                 rankBadgeEl.className = "bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
@@ -781,12 +778,10 @@
                 }
             }
 
-            // পার্সেন্টাইল হিসেব
             const lowerRankCount = currentClassStudents.filter(s => s.grandTotal < student.grandTotal).length;
             const percentile = currentClassStudents.length > 0 ? ((lowerRankCount / currentClassStudents.length) * 100).toFixed(1) : 0;
             document.getElementById('stPercentile').innerText = `${percentile}%`;
 
-            // সর্বোচ্চ নম্বর ব্যাজ
             const highestDiv = document.getElementById('highestBadges');
             highestDiv.innerHTML = '';
 
@@ -804,12 +799,36 @@
             renderChart(student.subjectTotals);
         }
 
+        // কাস্টম প্লাগইনসহ Chart Render (বার-এর উপরে প্রাপ্ত নম্বর প্রদর্শনের ব্যবস্থা)
         function renderChart(subjectData) {
             const ctx = document.getElementById('studentChart').getContext('2d');
             const labels = Object.keys(subjectData).map(s => s.toUpperCase().replace('_', ' '));
             const dataValues = Object.values(subjectData);
 
             if (chartInstance) chartInstance.destroy();
+
+            // কাস্টম প্লাগইন: প্রতিটি বারের উপরে নম্বর প্রদর্শনের জন্য
+            const topBarValuePlugin = {
+                id: 'topBarValuePlugin',
+                afterDatasetsDraw(chart) {
+                    const { ctx } = chart;
+                    chart.data.datasets.forEach((dataset, i) => {
+                        const meta = chart.getDatasetMeta(i);
+                        meta.data.forEach((bar, index) => {
+                            const value = dataset.data[index];
+                            if (value !== undefined && value !== null) {
+                                ctx.save();
+                                ctx.font = 'bold 11px sans-serif';
+                                ctx.fillStyle = '#0284c7';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'bottom';
+                                ctx.fillText(value, bar.x, bar.y - 3);
+                                ctx.restore();
+                            }
+                        });
+                    });
+                }
+            };
 
             chartInstance = new Chart(ctx, {
                 type: 'bar',
@@ -827,17 +846,21 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 20 } // উপরে নম্বর লেখার জন্য জায়গা রাখা
+                    },
                     animation: { duration: 0 },
                     scales: {
                         y: { beginAtZero: true },
                         x: { grid: { display: false } }
                     },
                     plugins: { legend: { display: false } }
-                }
+                },
+                plugins: [topBarValuePlugin]
             });
         }
 
-        // সরাসরি A4 সাইজে প্রিন্ট করার জন্য উন্নত Print Function
+        // একক A4 পেজে প্রিন্ট করার জন্য সামঞ্জস্যপূর্ণ Print Function
         function printResultCard() {
             const element = document.getElementById('pdfPrintArea');
             if (!element) {
@@ -845,20 +868,17 @@
                 return;
             }
 
-            // Chart Canvas-কে ইমেজে রূপান্তর করা যাতে প্রিন্ট পেজে চার্ট দেখা যায়
             const canvas = document.getElementById('studentChart');
             let chartImageHtml = '';
             if (canvas) {
                 const chartImgData = canvas.toDataURL('image/png');
-                chartImageHtml = `<div style="text-align:center; margin-top:15px;"><img src="${chartImgData}" style="max-width:100%; height:auto;" /></div>`;
+                chartImageHtml = `<div style="text-align:center; margin-top:8px;"><img src="${chartImgData}" style="max-width:100%; max-height:220px; object-fit:contain;" /></div>`;
             }
 
-            // হেডারের প্রয়োজনীয় Style সিঙ্ক করা
             const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
                 .map(node => node.outerHTML)
                 .join('');
 
-            // হিডেন প্রিন্ট আইফ্রেমি (Iframe) তৈরি
             let printFrame = document.getElementById('printAreaIframe');
             if (printFrame) printFrame.remove();
 
@@ -884,14 +904,16 @@
                     <style>
                         @page {
                             size: A4 portrait;
-                            margin: 12mm;
+                            margin: 8mm;
                         }
-                        body {
+                        html, body {
+                            height: 100%;
                             background-color: #ffffff !important;
                             color: #000000 !important;
                             font-family: Arial, sans-serif;
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
+                            overflow: hidden !important;
                         }
                         .no-print {
                             display: none !important;
@@ -899,6 +921,24 @@
                         #pdfPrintArea {
                             display: block !important;
                             width: 100% !important;
+                            max-height: 100%;
+                            box-sizing: border-box;
+                            page-break-inside: avoid !important;
+                            page-break-after: avoid !important;
+                            page-break-before: avoid !important;
+                        }
+                        /* প্রিন্ট ফ্রেমে পেজ কমানোর জন্য প্যাডিং এবং মার্জিন কমানো */
+                        #pdfPrintArea * {
+                            page-break-inside: avoid !important;
+                        }
+                        #pdfPrintArea .p-6, #pdfPrintArea .p-4 {
+                            padding: 8px !important;
+                        }
+                        #pdfPrintArea .space-y-4 > * + * {
+                            margin-top: 6px !important;
+                        }
+                        #pdfPrintArea .mb-6 {
+                            margin-bottom: 8px !important;
                         }
                     </style>
                 </head>
@@ -917,6 +957,6 @@
                 printFrame.contentWindow.print();
             }, 500);
         }
-</script>  
+</script>
 </body>
 </html>
