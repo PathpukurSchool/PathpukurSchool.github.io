@@ -118,6 +118,118 @@
         background-color: #e0f2fe !important;
         border-left: 4px solid #0284c7 !important;
     }
+    /* =====================================================
+   RESULT CARD DIRECT A4 PRINT
+   ===================================================== */
+
+@media print {
+
+    /* Browser-এর default page margin */
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
+
+    /* পুরো webpage hide */
+    body {
+        display: block !important;
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* সবকিছু hide */
+    body > * {
+        display: none !important;
+    }
+
+    /* Main container শুধুমাত্র print হবে */
+    main {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* সব main-এর child hide */
+    main > * {
+        display: none !important;
+    }
+
+    /* শুধুমাত্র Result Card */
+    #studentAnalytics {
+        display: block !important;
+        visibility: visible !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        overflow: visible !important;
+    }
+
+    /* Result Card-এর ভিতরের print area */
+    #pdfPrintArea {
+        display: block !important;
+        visibility: visible !important;
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        overflow: visible !important;
+        border-radius: 0 !important;
+    }
+
+    /* Print button hide */
+    #studentAnalytics > div:last-child {
+        display: none !important;
+    }
+
+    /* Chart */
+    #studentChart {
+        display: block !important;
+        visibility: visible !important;
+        max-width: 100% !important;
+    }
+
+    /* Card elements */
+    #pdfPrintArea * {
+        visibility: visible !important;
+    }
+
+    /* Unnecessary interactive effects remove */
+    #pdfPrintArea .shadow,
+    #pdfPrintArea .shadow-sm,
+    #pdfPrintArea .shadow-md,
+    #pdfPrintArea .shadow-lg {
+        box-shadow: none !important;
+    }
+
+    /* Background graphics/gradient সমস্যা এড়ানো */
+    #pdfPrintArea .bg-slate-50 {
+        background: #f8fafc !important;
+    }
+
+    /* Page break control */
+    #pdfPrintArea {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* Chart-এর আগে page break যেন না হয় */
+    #pdfPrintArea canvas {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
 </style>
 </head>
 <body class="min-h-screen pb-12 text-slate-800">
@@ -255,7 +367,7 @@
             <div class="mt-4 flex justify-end">
                 <button onclick="downloadResultCardPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl transition-all shadow flex items-center space-x-2">
                     <i class="fa-solid fa-file-pdf"></i>
-                    <span>রেজাল্ট কার্ড ডাউনলোড (PDF)</span>
+                    <span>রেজাল্ট কার্ড প্রিন্ট করুন</span>
                 </button>
             </div>
         </div>
@@ -806,203 +918,29 @@
             });
         }
 
-        // Fixed HTML2PDF Download Functionality with Canvas Rendering Delay
-        async function downloadResultCardPDF() {
+        function printResultCard() {
 
-    const source = document.getElementById('pdfPrintArea');
+    const analyticsCard =
+        document.getElementById('studentAnalytics');
 
-    if (!source) {
-        alert('রেজাল্ট কার্ড পাওয়া যায়নি।');
+    const studentName =
+        document.getElementById('stName').innerText.trim();
+
+    // কোনো student নির্বাচন করা না থাকলে
+    if (!studentName || studentName === '--') {
+        alert('প্রথমে একজন শিক্ষার্থী নির্বাচন করুন।');
         return;
     }
 
-    const stName =
-        document.getElementById('stName').innerText.trim() || 'Student';
+    // নিশ্চিত করা হচ্ছে যে Result Card visible
+    analyticsCard.classList.remove('hidden');
 
+    // Browser-কে DOM render করার সামান্য সময় দেওয়া
+    setTimeout(function () {
 
-    // =====================================================
-    // 1. Temporary PDF Container
-    // =====================================================
-    const pdfContainer = document.createElement('div');
+        window.print();
 
-    pdfContainer.id = 'temporaryPdfContainer';
-
-    pdfContainer.style.position = 'fixed';
-    pdfContainer.style.left = '-10000px';
-    pdfContainer.style.top = '0';
-    pdfContainer.style.width = '190mm';
-    pdfContainer.style.background = '#ffffff';
-    pdfContainer.style.padding = '10mm';
-    pdfContainer.style.zIndex = '-9999';
-    pdfContainer.style.boxSizing = 'border-box';
-
-    document.body.appendChild(pdfContainer);
-
-
-    // =====================================================
-    // 2. Clone Result Card
-    // =====================================================
-    const clone = source.cloneNode(true);
-
-    clone.style.display = 'block';
-    clone.style.visibility = 'visible';
-    clone.style.opacity = '1';
-    clone.style.background = '#ffffff';
-    clone.style.width = '100%';
-    clone.style.height = 'auto';
-    clone.style.position = 'relative';
-
-    pdfContainer.appendChild(clone);
-
-
-    // =====================================================
-    // 3. Remove Interactive / Unnecessary Elements
-    // =====================================================
-    clone.querySelectorAll('button').forEach(btn => {
-        btn.remove();
-    });
-
-
-    // =====================================================
-    // 4. Chart Canvas → Image
-    // =====================================================
-    const originalCanvas =
-        document.getElementById('studentChart');
-
-    const clonedCanvas =
-        clone.querySelector('#studentChart');
-
-    if (originalCanvas && clonedCanvas) {
-
-        try {
-
-            const chartImage =
-                document.createElement('img');
-
-            chartImage.src =
-                originalCanvas.toDataURL('image/png');
-
-            chartImage.style.width = '100%';
-            chartImage.style.height = 'auto';
-            chartImage.style.display = 'block';
-
-            clonedCanvas.parentNode.replaceChild(
-                chartImage,
-                clonedCanvas
-            );
-
-        } catch (err) {
-
-            console.warn(
-                'Chart image conversion failed:',
-                err
-            );
-
-            if (clonedCanvas) {
-                clonedCanvas.remove();
-            }
-        }
-    }
-
-
-    // =====================================================
-    // 5. Wait for DOM/Image rendering
-    // =====================================================
-    await new Promise(resolve => {
-        setTimeout(resolve, 500);
-    });
-
-
-    // =====================================================
-    // 6. PDF Configuration
-    // =====================================================
-    const opt = {
-
-        margin: [8, 8, 8, 8],
-
-        filename:
-            `Result_Card_${stName
-                .replace(/[\\/:*?"<>|]/g, '')
-                .replace(/\s+/g, '_')}.pdf`,
-
-        image: {
-            type: 'jpeg',
-            quality: 0.98
-        },
-
-        html2canvas: {
-
-            scale: 2,
-
-            useCORS: true,
-
-            allowTaint: true,
-
-            backgroundColor: '#ffffff',
-
-            logging: false,
-
-            imageTimeout: 15000,
-
-            removeContainer: true,
-
-            foreignObjectRendering: false
-        },
-
-        jsPDF: {
-
-            unit: 'mm',
-
-            format: 'a4',
-
-            orientation: 'portrait',
-
-            compress: true
-        },
-
-        pagebreak: {
-            mode: ['css', 'legacy']
-        }
-    };
-
-
-    // =====================================================
-    // 7. Generate PDF
-    // =====================================================
-    try {
-
-        await html2pdf()
-            .set(opt)
-            .from(pdfContainer)
-            .save();
-
-    }
-
-    catch (err) {
-
-        console.error(
-            'PDF ডাউনলোডে ত্রুটি:',
-            err
-        );
-
-        alert(
-            'PDF তৈরি করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।'
-        );
-    }
-
-    finally {
-
-        // =================================================
-        // 8. Temporary Container Remove
-        // =================================================
-        if (pdfContainer &&
-            pdfContainer.parentNode) {
-
-            pdfContainer.parentNode.removeChild(
-                pdfContainer
-            );
-        }
-    }
+    }, 300);
 }
     </script>
 </body>
