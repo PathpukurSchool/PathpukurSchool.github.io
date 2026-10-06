@@ -1097,11 +1097,30 @@
               <button class="btn btn-primary btn-single-print" onclick="printSingleLandscapeCard('${cardId}')"><i class="fa-solid fa-print"></i> প্রিন্ট</button>
             </div>
             <div class="card-meta-grid">
-              <div class="card-meta-item">Exam: <strong>${examTitle}</strong></div>
-              <div class="card-meta-item">Class: <strong>Class ${clsName}</strong></div>
-              <div class="card-meta-item">Room No: <strong>${roomNo}</strong></div>
-              <div class="card-meta-item">মোট ছাত্র-ছাত্রী: <strong>${sortedStudents.length} জন</strong></div>
-            </div>
+  <div class="card-meta-item">
+    Exam: <strong>${examTitle}</strong>
+  </div>
+
+  <div class="card-meta-item">
+    Class: <strong>Class ${clsName}</strong>
+  </div>
+
+  <div class="card-meta-item">
+    Section: <strong>${[...new Set(sortedStudents.map(s => s.normSec).filter(Boolean))].join(', ') || 'ALL'}</strong>
+  </div>
+
+  <div class="card-meta-item">
+    Gender: <strong>${[...new Set(sortedStudents.map(s => normalizeGender(s.gender)).filter(g => g !== 'ALL'))].join(', ') || 'ALL'}</strong>
+  </div>
+
+  <div class="card-meta-item">
+    Room No: <strong>${roomNo}</strong>
+  </div>
+
+  <div class="card-meta-item">
+    মোট শিক্ষার্থী: <strong>${sortedStudents.length} জন</strong>
+  </div>
+</div>
             <div class="table-responsive">
               <table>
                 <thead>
