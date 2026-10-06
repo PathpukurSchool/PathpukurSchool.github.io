@@ -118,118 +118,6 @@
         background-color: #e0f2fe !important;
         border-left: 4px solid #0284c7 !important;
     }
-    /* =====================================================
-   RESULT CARD DIRECT A4 PRINT
-   ===================================================== */
-
-@media print {
-
-    /* Browser-এর default page margin */
-    @page {
-        size: A4 portrait;
-        margin: 10mm;
-    }
-
-    /* পুরো webpage hide */
-    body {
-        display: block !important;
-        background: #ffffff !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* সবকিছু hide */
-    body > * {
-        display: none !important;
-    }
-
-    /* Main container শুধুমাত্র print হবে */
-    main {
-        display: block !important;
-        width: 100% !important;
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* সব main-এর child hide */
-    main > * {
-        display: none !important;
-    }
-
-    /* শুধুমাত্র Result Card */
-    #studentAnalytics {
-        display: block !important;
-        visibility: visible !important;
-        position: static !important;
-        width: 100% !important;
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        box-shadow: none !important;
-        background: #ffffff !important;
-        overflow: visible !important;
-    }
-
-    /* Result Card-এর ভিতরের print area */
-    #pdfPrintArea {
-        display: block !important;
-        visibility: visible !important;
-        position: static !important;
-        width: 100% !important;
-        height: auto !important;
-        min-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        overflow: visible !important;
-        border-radius: 0 !important;
-    }
-
-    /* Print button hide */
-    #studentAnalytics > div:last-child {
-        display: none !important;
-    }
-
-    /* Chart */
-    #studentChart {
-        display: block !important;
-        visibility: visible !important;
-        max-width: 100% !important;
-    }
-
-    /* Card elements */
-    #pdfPrintArea * {
-        visibility: visible !important;
-    }
-
-    /* Unnecessary interactive effects remove */
-    #pdfPrintArea .shadow,
-    #pdfPrintArea .shadow-sm,
-    #pdfPrintArea .shadow-md,
-    #pdfPrintArea .shadow-lg {
-        box-shadow: none !important;
-    }
-
-    /* Background graphics/gradient সমস্যা এড়ানো */
-    #pdfPrintArea .bg-slate-50 {
-        background: #f8fafc !important;
-    }
-
-    /* Page break control */
-    #pdfPrintArea {
-        break-inside: avoid;
-        page-break-inside: avoid;
-    }
-
-    /* Chart-এর আগে page break যেন না হয় */
-    #pdfPrintArea canvas {
-        break-inside: avoid;
-        page-break-inside: avoid;
-    }
-}
 </style>
 </head>
 <body class="min-h-screen pb-12 text-slate-800">
@@ -366,7 +254,7 @@
             <!-- Download PDF Button -->
             <div class="mt-4 flex justify-end">
                 <button onclick="downloadResultCardPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm font-bold py-2.5 px-4 rounded-xl transition-all shadow flex items-center space-x-2">
-                    <i class="fa-solid fa-file-pdf"></i>
+                    <i class="fa-solid fa-print"></i>
                     <span>রেজাল্ট কার্ড প্রিন্ট করুন</span>
                 </button>
             </div>
@@ -423,8 +311,7 @@
 </div>
 
     </main>
-
-    <script>
+<script>
         const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -552,21 +439,19 @@
         window.onload = () => { loadClassData(); };
 
         async function loadClassData() {
-            // Spinner Trigger on Refresh Button
             const refreshIcon = document.getElementById('refreshIcon');
-            refreshIcon.classList.add('fa-spin');
+            if (refreshIcon) refreshIcon.classList.add('fa-spin');
 
             const selectedClass = document.getElementById('classSelect').value;
             const config = classRules[selectedClass];
 
-            // Set Title in Top 3 Podium
             document.getElementById('podiumClassTitle').innerText = classNameMap[selectedClass] || 'শ্রেণীর';
 
             const { data, error } = await _supabase.from(config.table).select('*');
 
             if (error) {
-                alert("ডাটা পেতে সমস্যা হয়েছে: " + error.message);
-                refreshIcon.classList.remove('fa-spin');
+                alert("ডাটা পেতে সমস্যা হয়েছে: " + error.message);
+                if (refreshIcon) refreshIcon.classList.remove('fa-spin');
                 return;
             }
 
@@ -576,7 +461,6 @@
                 document.getElementById('sessionDisplay').innerText = "--";
             }
 
-            // Process Active Exams & Rank Calculation
             currentClassStudents = processAndRankStudents(data || [], config, selectedClass);
 
             renderSubjectInfoBanner(config);
@@ -588,7 +472,7 @@
                 document.getElementById('podiumSection').classList.add('hidden');
                 document.getElementById('studentAnalytics').classList.add('hidden');
                 document.getElementById('tableSection').classList.add('hidden');
-                refreshIcon.classList.remove('fa-spin');
+                if (refreshIcon) refreshIcon.classList.remove('fa-spin');
                 return;
             }
 
@@ -598,16 +482,14 @@
 
             renderPodiumView(currentClassStudents);
             
-            // Sort Students by ROLL NUMBER for Display
             const rollSortedStudents = [...currentClassStudents].sort((a, b) => a.roll_no - b.roll_no);
             renderStudentTable(rollSortedStudents);
 
             highlightStudentByRoll();
 
-            setTimeout(() => { refreshIcon.classList.remove('fa-spin'); }, 500);
+            setTimeout(() => { if (refreshIcon) refreshIcon.classList.remove('fa-spin'); }, 500);
         }
 
-        // Processing dynamic uploaded exams & dynamic ranking
         function processAndRankStudents(rawData, config, classKey) {
             if (!rawData || rawData.length === 0) return [];
 
@@ -665,6 +547,7 @@
                 let grandTotal = 0;
                 let hasAbsent = false;
                 let failedPassRule = false;
+                let hasAnyData = false;
 
                 config.subjects.forEach(sub => {
                     let subSum = 0;
@@ -676,6 +559,7 @@
                         if (st[key] !== undefined && st[key] !== null) {
                             subSum += Number(st[key]);
                             subHasData = true;
+                            hasAnyData = true;
                         } else if (st.hasOwnProperty(key) && st[key] === null) {
                             hasAbsent = true;
                         }
@@ -713,12 +597,25 @@
 
                 const pct = classTotalFullMarks > 0 ? ((grandTotal / classTotalFullMarks) * 100).toFixed(1) : 0;
 
+                // স্ট্যাটাস নির্ধারণ (Dropout, Absent, Unsuccessful, Passed)
+                let studentStatus = 'SUCCESS';
+                if (st.status && typeof st.status === 'string' && st.status.toLowerCase().includes('drop')) {
+                    studentStatus = 'DROP_OUT';
+                } else if (!hasAnyData) {
+                    studentStatus = 'NO_DATA';
+                } else if (hasAbsent) {
+                    studentStatus = 'ABSENT';
+                } else if (failedPassRule) {
+                    studentStatus = 'UNSUCCESSFUL';
+                }
+
                 return {
                     ...st,
                     subjectTotals,
                     grandTotal,
                     hasAbsent,
-                    allPassed: !failedPassRule,
+                    studentStatus,
+                    allPassed: !failedPassRule && hasAnyData,
                     percentage: isNaN(pct) ? 0 : pct
                 };
             });
@@ -736,7 +633,6 @@
             }));
         }
 
-        // Subject details & dynamic full marks banner with marks per subject
         function renderSubjectInfoBanner(config) {
             const banner = document.getElementById('subjectInfoBanner');
             document.getElementById('dynamicFullMarksText').innerText = currentCalculatedFullMarks;
@@ -748,7 +644,6 @@
             });
         }
 
-        // Podium View for Top 3 Performers with Section
         function renderPodiumView(students) {
             const container = document.getElementById('podiumCards');
             container.innerHTML = '';
@@ -774,7 +669,6 @@
             });
         }
 
-        // Top 10 Specific Rank Icons Mapping
         function getRankBadgeWithIcon(rank) {
             let iconHtml = '';
             if (rank === 1) iconHtml = `<i class="fa-solid fa-crown text-amber-400 mr-1"></i>`;
@@ -788,7 +682,6 @@
             return `<span class="inline-flex items-center justify-center ${badgeBg} px-2.5 py-0.5 rounded-full font-bold text-xs">${iconHtml}#${rank}</span>`;
         }
 
-        // Render Student Table (Sorted by Roll Number & Top 10 Rank Highlighted)
         function renderStudentTable(students) {
             const tbody = document.getElementById('rankTableBody');
             document.getElementById('studentCountBadge').innerText = `মোট: ${students.length}`;
@@ -846,7 +739,7 @@
 
             const student = currentClassStudents.find(s => s.roll_no === rollVal);
 
-            if (!student || !student.calculatedRank) {
+            if (!student) {
                 analyticsCard.classList.add('hidden');
                 return;
             }
@@ -859,26 +752,54 @@
 
             analyticsCard.classList.remove('hidden');
 
-            document.getElementById('stRankBadge').innerHTML = `<i class="fa-solid fa-award mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
+            // সাধারণ তথ্যাদি রেন্ডার
             document.getElementById('stName').innerText = student.student_name;
-            document.getElementById('stClass').innerText = student.class_name;
+            document.getElementById('stClass').innerText = student.class_name || classNameMap[document.getElementById('classSelect').value];
             document.getElementById('stSec').innerText = student.section;
             document.getElementById('stRoll').innerText = student.roll_no;
             document.getElementById('stTotal').innerText = student.grandTotal;
             document.getElementById('stPercentage').innerText = `${student.percentage}%`;
 
+            // র‍্যাঙ্ক বা বিশেষ স্ট্যাটাস ব্যাজ ডাইনামিক প্রদর্শন
+            const rankBadgeEl = document.getElementById('stRankBadge');
+            if (student.calculatedRank) {
+                rankBadgeEl.className = "bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
+                rankBadgeEl.innerHTML = `<i class="fa-solid fa-award mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
+            } else {
+                if (student.studentStatus === 'DROP_OUT') {
+                    rankBadgeEl.className = "bg-rose-100 border border-rose-300 text-rose-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
+                    rankBadgeEl.innerHTML = `<i class="fa-solid fa-user-slash mr-1"></i> স্ট্যাটাস: Drop Out`;
+                } else if (student.studentStatus === 'ABSENT') {
+                    rankBadgeEl.className = "bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
+                    rankBadgeEl.innerHTML = `<i class="fa-solid fa-user-xmark mr-1"></i> স্ট্যাটাস: Absent (অনুপস্থিত)`;
+                } else if (student.studentStatus === 'UNSUCCESSFUL') {
+                    rankBadgeEl.className = "bg-orange-100 border border-orange-300 text-orange-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
+                    rankBadgeEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> স্ট্যাটাস: Unsuccessful`;
+                } else {
+                    rankBadgeEl.className = "bg-slate-100 border border-slate-300 text-slate-700 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
+                    rankBadgeEl.innerHTML = `<i class="fa-solid fa-circle-question mr-1"></i> স্ট্যাটাস: Result Not Found`;
+                }
+            }
+
+            // পার্সেন্টাইল হিসেব
             const lowerRankCount = currentClassStudents.filter(s => s.grandTotal < student.grandTotal).length;
-            const percentile = ((lowerRankCount / currentClassStudents.length) * 100).toFixed(1);
+            const percentile = currentClassStudents.length > 0 ? ((lowerRankCount / currentClassStudents.length) * 100).toFixed(1) : 0;
             document.getElementById('stPercentile').innerText = `${percentile}%`;
 
+            // সর্বোচ্চ নম্বর ব্যাজ
             const highestDiv = document.getElementById('highestBadges');
             highestDiv.innerHTML = '';
-            Object.keys(student.subjectTotals).forEach(sub => {
-                const maxInClass = Math.max(...currentClassStudents.map(s => s.subjectTotals[sub] || 0));
-                if (student.subjectTotals[sub] === maxInClass && maxInClass > 0) {
-                    highestDiv.innerHTML += `<span class="bg-amber-100 border border-amber-300 text-amber-800 text-xs px-2.5 py-1 rounded-full font-bold flex items-center shadow-sm"><i class="fa-solid fa-crown text-amber-500 mr-1"></i> ${sub.toUpperCase()}-এ সর্বোচ্চ (${maxInClass})</span>`;
-                }
-            });
+
+            if (Object.keys(student.subjectTotals).length > 0) {
+                Object.keys(student.subjectTotals).forEach(sub => {
+                    const maxInClass = Math.max(...currentClassStudents.map(s => s.subjectTotals[sub] || 0));
+                    if (student.subjectTotals[sub] === maxInClass && maxInClass > 0) {
+                        highestDiv.innerHTML += `<span class="bg-amber-100 border border-amber-300 text-amber-800 text-xs px-2.5 py-1 rounded-full font-bold flex items-center shadow-sm"><i class="fa-solid fa-crown text-amber-500 mr-1"></i> ${sub.toUpperCase()}-এ সর্বোচ্চ (${maxInClass})</span>`;
+                    }
+                });
+            } else {
+                highestDiv.innerHTML = `<span class="text-xs text-rose-500 font-semibold">কোনো বিষয়ভিত্তিক তথ্য পাওয়া যায়নি।</span>`;
+            }
 
             renderChart(student.subjectTotals);
         }
@@ -893,10 +814,10 @@
             chartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: labels,
+                    labels: labels.length > 0 ? labels : ['No Data'],
                     datasets: [{
                         label: 'প্রাপ্ত নম্বর',
-                        data: dataValues,
+                        data: dataValues.length > 0 ? dataValues : [0],
                         backgroundColor: 'rgba(14, 165, 233, 0.75)',
                         borderColor: 'rgba(2, 132, 199, 1)',
                         borderWidth: 1.5,
@@ -906,9 +827,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    animation: {
-                        duration: 0 // Disable animation for instant PDF capture
-                    },
+                    animation: { duration: 0 },
                     scales: {
                         y: { beginAtZero: true },
                         x: { grid: { display: false } }
@@ -918,30 +837,86 @@
             });
         }
 
+        // সরাসরি A4 সাইজে প্রিন্ট করার জন্য উন্নত Print Function
         function printResultCard() {
+            const element = document.getElementById('pdfPrintArea');
+            if (!element) {
+                alert("প্রিন্ট করার মতো কোনো ডাটা পাওয়া যায়নি।");
+                return;
+            }
 
-    const analyticsCard =
-        document.getElementById('studentAnalytics');
+            // Chart Canvas-কে ইমেজে রূপান্তর করা যাতে প্রিন্ট পেজে চার্ট দেখা যায়
+            const canvas = document.getElementById('studentChart');
+            let chartImageHtml = '';
+            if (canvas) {
+                const chartImgData = canvas.toDataURL('image/png');
+                chartImageHtml = `<div style="text-align:center; margin-top:15px;"><img src="${chartImgData}" style="max-width:100%; height:auto;" /></div>`;
+            }
 
-    const studentName =
-        document.getElementById('stName').innerText.trim();
+            // হেডারের প্রয়োজনীয় Style সিঙ্ক করা
+            const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+                .map(node => node.outerHTML)
+                .join('');
 
-    // কোনো student নির্বাচন করা না থাকলে
-    if (!studentName || studentName === '--') {
-        alert('প্রথমে একজন শিক্ষার্থী নির্বাচন করুন।');
-        return;
-    }
+            // হিডেন প্রিন্ট আইফ্রেমি (Iframe) তৈরি
+            let printFrame = document.getElementById('printAreaIframe');
+            if (printFrame) printFrame.remove();
 
-    // নিশ্চিত করা হচ্ছে যে Result Card visible
-    analyticsCard.classList.remove('hidden');
+            printFrame = document.createElement('iframe');
+            printFrame.id = 'printAreaIframe';
+            printFrame.style.position = 'fixed';
+            printFrame.style.right = '0';
+            printFrame.style.bottom = '0';
+            printFrame.style.width = '0';
+            printFrame.style.height = '0';
+            printFrame.style.border = '0';
+            document.body.appendChild(printFrame);
 
-    // Browser-কে DOM render করার সামান্য সময় দেওয়া
-    setTimeout(function () {
+            const frameDoc = printFrame.contentWindow || printFrame.contentDocument.document || printFrame.contentDocument;
 
-        window.print();
+            frameDoc.document.open();
+            frameDoc.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Result Card Print</title>
+                    ${styles}
+                    <style>
+                        @page {
+                            size: A4 portrait;
+                            margin: 12mm;
+                        }
+                        body {
+                            background-color: #ffffff !important;
+                            color: #000000 !important;
+                            font-family: Arial, sans-serif;
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                        }
+                        .no-print {
+                            display: none !important;
+                        }
+                        #pdfPrintArea {
+                            display: block !important;
+                            width: 100% !important;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="pdfPrintArea">
+                        ${element.innerHTML}
+                        ${chartImageHtml}
+                    </div>
+                </body>
+                </html>
+            `);
+            frameDoc.document.close();
 
-    }, 300);
-}
-    </script>
+            setTimeout(() => {
+                printFrame.contentWindow.focus();
+                printFrame.contentWindow.print();
+            }, 500);
+        }
+</script>  
 </body>
 </html>
