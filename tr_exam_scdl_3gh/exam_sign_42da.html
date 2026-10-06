@@ -78,54 +78,42 @@
       --radius-lg: 16px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      margin: 0;
-      padding: 24px 0;
-      font-family: "Noto Sans Bengali", "Segoe UI", Roboto, sans-serif;
-      line-height: 1.5;
-    }
+   * { box-sizing: border-box; font-family: 'Tiro Bangla', 'Poppins', sans-serif; }
+    body { margin: 0; background: #f8fafc; color: #1e293b; }
 
     /* সমগ্র ওয়েব পেজকে একটি মূল সেকশনে আবদ্ধ করার জন্য কন্টেইনার আপডেট */
     .container {
       width: min(1200px, calc(100% - 24px));
-      margin: 0 auto;
-      background: var(--card-bg);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-      overflow: hidden; /* ভেতরের হেডার ব্যাকগ্রাউন্ড সুন্দরভাবে ফিট হওয়ার জন্য */
+      margin: 20px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden; /* হেডার এবং কন্টেইনারের কর্নার সামঞ্জস্যের জন্য */
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(26, 95, 122, 0.15);
     }
 
     /* ==========================================
        2. HEADER & PAGE TITLE
        ========================================== */
     .header-card {
-      position: relative;
-      overflow: hidden;
       background: linear-gradient(135deg, #1e3a8a, #0f172a);
-      color: #fff;
+      color: #ffffff;
+      padding: 18px 16px;
       text-align: center;
-      padding: 30px 18px 26px;
-      /* নিচের কোণ গোল না করে সোজা রাখার জন্য */
-      border-radius: 0; 
+      margin-bottom: 20px;
+      border: none;
     }
 
     .header-card h1 {
       margin: 0;
-      font-size: clamp(1.35rem, 4vw, 2.15rem);
-      font-weight: 800;
-      letter-spacing: 0.3px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      font-size: 22px;
+      letter-spacing: 0.5px;
+      font-weight: 900;
+      line-height: 1.2;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
     }
 
     .header-card h2 {
@@ -156,16 +144,6 @@
       font-weight: 800;
     }
 
-    .page-title::after {
-      content: "";
-      display: block;
-      width: 70px;
-      height: 3px;
-      margin: 8px auto 0;
-      border-radius: 10px;
-      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-    }
-
     /* ==========================================
        3. INSTRUCTION CARD
        ========================================== */
@@ -177,6 +155,7 @@
       margin-bottom: 24px;
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-sm);
+      margin: 0 16px 18px 16px;
     }
 
     .instruction-title {
@@ -219,6 +198,7 @@
       padding: 20px;
       margin-bottom: 24px;
       box-shadow: var(--shadow-sm);
+      margin: 0 16px 18px 16px;
     }
 
     .filter-grid {
