@@ -807,41 +807,201 @@
         }
 
         // Fixed HTML2PDF Download Functionality with Canvas Rendering Delay
-async function downloadResultCardPDF() {
-    const element = document.getElementById('pdfPrintArea');
-    const stName = document.getElementById('stName').innerText || 'Student';
+        async function downloadResultCardPDF() {
 
-    // ১. প্রিন্ট এরিয়াটি সঠিকভাবে দৃশ্যমান হওয়া নিশ্চিত করা
-    element.style.background = "#ffffff";
+    const source = document.getElementById('pdfPrintArea');
 
-    // ২. Chart.js ক্যানভাস যাতে PDF-এ স্পষ্ট আসে তার জন্য ক্যানভাস ইমেজ রূপান্তর
-    const canvas = document.getElementById('studentChart');
-    let chartImageSrc = '';
-    if (canvas) {
-        chartImageSrc = canvas.toDataURL('image/png');
+    if (!source) {
+        alert('রেজাল্ট কার্ড পাওয়া যায়নি।');
+        return;
     }
 
-    // ৩. html2pdf সেটআপ
+    const stName =
+        document.getElementById('stName').innerText.trim() || 'Student';
+
+
+    // =====================================================
+    // 1. Temporary PDF Container
+    // =====================================================
+    const pdfContainer = document.createElement('div');
+
+    pdfContainer.id = 'temporaryPdfContainer';
+
+    pdfContainer.style.position = 'fixed';
+    pdfContainer.style.left = '-10000px';
+    pdfContainer.style.top = '0';
+    pdfContainer.style.width = '190mm';
+    pdfContainer.style.background = '#ffffff';
+    pdfContainer.style.padding = '10mm';
+    pdfContainer.style.zIndex = '-9999';
+    pdfContainer.style.boxSizing = 'border-box';
+
+    document.body.appendChild(pdfContainer);
+
+
+    // =====================================================
+    // 2. Clone Result Card
+    // =====================================================
+    const clone = source.cloneNode(true);
+
+    clone.style.display = 'block';
+    clone.style.visibility = 'visible';
+    clone.style.opacity = '1';
+    clone.style.background = '#ffffff';
+    clone.style.width = '100%';
+    clone.style.height = 'auto';
+    clone.style.position = 'relative';
+
+    pdfContainer.appendChild(clone);
+
+
+    // =====================================================
+    // 3. Remove Interactive / Unnecessary Elements
+    // =====================================================
+    clone.querySelectorAll('button').forEach(btn => {
+        btn.remove();
+    });
+
+
+    // =====================================================
+    // 4. Chart Canvas → Image
+    // =====================================================
+    const originalCanvas =
+        document.getElementById('studentChart');
+
+    const clonedCanvas =
+        clone.querySelector('#studentChart');
+
+    if (originalCanvas && clonedCanvas) {
+
+        try {
+
+            const chartImage =
+                document.createElement('img');
+
+            chartImage.src =
+                originalCanvas.toDataURL('image/png');
+
+            chartImage.style.width = '100%';
+            chartImage.style.height = 'auto';
+            chartImage.style.display = 'block';
+
+            clonedCanvas.parentNode.replaceChild(
+                chartImage,
+                clonedCanvas
+            );
+
+        } catch (err) {
+
+            console.warn(
+                'Chart image conversion failed:',
+                err
+            );
+
+            if (clonedCanvas) {
+                clonedCanvas.remove();
+            }
+        }
+    }
+
+
+    // =====================================================
+    // 5. Wait for DOM/Image rendering
+    // =====================================================
+    await new Promise(resolve => {
+        setTimeout(resolve, 500);
+    });
+
+
+    // =====================================================
+    // 6. PDF Configuration
+    // =====================================================
     const opt = {
-        margin:       [8, 8, 8, 8],
-        filename:     `Result_Card_${stName.replace(/\s+/g, '_')}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { 
-            scale: 2, 
-            useCORS: true, 
-            allowTaint: true,
-            logging: false,
-            backgroundColor: '#ffffff'
+
+        margin: [8, 8, 8, 8],
+
+        filename:
+            `Result_Card_${stName
+                .replace(/[\\/:*?"<>|]/g, '')
+                .replace(/\s+/g, '_')}.pdf`,
+
+        image: {
+            type: 'jpeg',
+            quality: 0.98
         },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+
+        html2canvas: {
+
+            scale: 2,
+
+            useCORS: true,
+
+            allowTaint: true,
+
+            backgroundColor: '#ffffff',
+
+            logging: false,
+
+            imageTimeout: 15000,
+
+            removeContainer: true,
+
+            foreignObjectRendering: false
+        },
+
+        jsPDF: {
+
+            unit: 'mm',
+
+            format: 'a4',
+
+            orientation: 'portrait',
+
+            compress: true
+        },
+
+        pagebreak: {
+            mode: ['css', 'legacy']
+        }
     };
 
-    // ৪. কিছু মিলিসেকেন্ড সময় দিয়ে রেন্ডার এবং ডাউনলোড শুরু
+
+    // =====================================================
+    // 7. Generate PDF
+    // =====================================================
     try {
-        await html2pdf().set(opt).from(element).save();
-    } catch (err) {
-        console.error("PDF ডাউনলোডে ত্রুটি:", err);
-        alert("PDF ডাউনলোডে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
+
+        await html2pdf()
+            .set(opt)
+            .from(pdfContainer)
+            .save();
+
+    }
+
+    catch (err) {
+
+        console.error(
+            'PDF ডাউনলোডে ত্রুটি:',
+            err
+        );
+
+        alert(
+            'PDF তৈরি করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।'
+        );
+    }
+
+    finally {
+
+        // =================================================
+        // 8. Temporary Container Remove
+        // =================================================
+        if (pdfContainer &&
+            pdfContainer.parentNode) {
+
+            pdfContainer.parentNode.removeChild(
+                pdfContainer
+            );
+        }
     }
 }
     </script>
