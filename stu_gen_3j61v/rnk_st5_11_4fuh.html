@@ -860,24 +860,48 @@
             });
         }
 
-        // একক A4 পেজে প্রিন্ট করার জন্য সামঞ্জস্যপূর্ণ Print Function
+        // প্রফেশনাল একক A4 রেজাল্ট কার্ড প্রিন্ট ফাংশন
         function printResultCard() {
-            const element = document.getElementById('pdfPrintArea');
-            if (!element) {
-                alert("প্রিন্ট করার মতো কোনো ডাটা পাওয়া যায়নি।");
+            const rollVal = parseInt(document.getElementById('rollInput').value);
+            const student = currentClassStudents.find(s => s.roll_no === rollVal);
+
+            if (!student) {
+                alert("শিক্ষার্থীর তথ্য পাওয়া যায়নি।");
                 return;
             }
 
+            const className = classNameMap[document.getElementById('classSelect').value] || '';
+            const session = document.getElementById('sessionDisplay').innerText || '2026';
+
+            // বার-গ্রাফের ইমেজ ডাটা
             const canvas = document.getElementById('studentChart');
             let chartImageHtml = '';
             if (canvas) {
                 const chartImgData = canvas.toDataURL('image/png');
-                chartImageHtml = `<div style="text-align:center; margin-top:8px;"><img src="${chartImgData}" style="max-width:100%; max-height:220px; object-fit:contain;" /></div>`;
+                chartImageHtml = `<img src="${chartImgData}" style="width:100%; max-height:210px; object-fit:contain;" />`;
             }
 
-            const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
-                .map(node => node.outerHTML)
-                .join('');
+            // বিষয়ভিত্তিক নম্বর টেবিল তৈরি
+            let subjectRowsHtml = '';
+            Object.entries(student.subjectTotals).forEach(([subKey, score]) => {
+                const subName = subKey.toUpperCase().replace('_', ' ');
+                const fm = activeFullMarksPerSubject[subKey] || '-';
+                subjectRowsHtml += `
+                    <tr>
+                        <td style="padding: 5px 8px; border: 1px solid #cbd5e1; font-weight: 600;">${subName}</td>
+                        <td style="padding: 5px 8px; border: 1px solid #cbd5e1; text-align: center;">${fm}</td>
+                        <td style="padding: 5px 8px; border: 1px solid #cbd5e1; text-align: center; font-weight: bold; color: #0284c7;">${score}</td>
+                    </tr>
+                `;
+            });
+
+            // স্ট্যাটাস বা র‍্যাঙ্ক টেক্সট
+            let statusText = '';
+            if (student.calculatedRank) {
+                statusText = `র‍্যাঙ্ক: #${student.calculatedRank}`;
+            } else {
+                statusText = `স্ট্যাটাস: ${student.studentStatus}`;
+            }
 
             let printFrame = document.getElementById('printAreaIframe');
             if (printFrame) printFrame.remove();
@@ -899,53 +923,185 @@
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>Result Card Print</title>
-                    ${styles}
+                    <title>Result Card - ${student.student_name}</title>
                     <style>
                         @page {
                             size: A4 portrait;
-                            margin: 8mm;
+                            margin: 10mm;
                         }
-                        html, body {
-                            height: 100%;
-                            background-color: #ffffff !important;
-                            color: #000000 !important;
-                            font-family: Arial, sans-serif;
+                        * {
+                            box-sizing: border-box;
                             -webkit-print-color-adjust: exact !important;
                             print-color-adjust: exact !important;
-                            overflow: hidden !important;
                         }
-                        .no-print {
-                            display: none !important;
+                        body {
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            color: #1e293b;
+                            margin: 0;
+                            padding: 0;
+                            background: #fff;
                         }
-                        #pdfPrintArea {
-                            display: block !important;
-                            width: 100% !important;
-                            max-height: 100%;
-                            box-sizing: border-box;
-                            page-break-inside: avoid !important;
-                            page-break-after: avoid !important;
-                            page-break-before: avoid !important;
+                        .card-container {
+                            border: 2px solid #0284c7;
+                            border-radius: 8px;
+                            padding: 18px;
+                            height: 270mm; /* A4 পেজের মাপ অনুযায়ী নির্দিষ্ট উচ্চতা */
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
                         }
-                        /* প্রিন্ট ফ্রেমে পেজ কমানোর জন্য প্যাডিং এবং মার্জিন কমানো */
-                        #pdfPrintArea * {
-                            page-break-inside: avoid !important;
+                        .header {
+                            text-align: center;
+                            border-bottom: 2px solid #e2e8f0;
+                            padding-bottom: 10px;
+                            margin-bottom: 15px;
                         }
-                        #pdfPrintArea .p-6, #pdfPrintArea .p-4 {
-                            padding: 8px !important;
+                        .school-title {
+                            font-size: 22px;
+                            font-weight: 800;
+                            color: #0369a1;
+                            margin: 0 0 4px 0;
+                            text-transform: uppercase;
                         }
-                        #pdfPrintArea .space-y-4 > * + * {
-                            margin-top: 6px !important;
+                        .sub-title {
+                            font-size: 13px;
+                            color: #475569;
+                            margin: 0;
+                            font-weight: 600;
                         }
-                        #pdfPrintArea .mb-6 {
-                            margin-bottom: 8px !important;
+                        .student-info-grid {
+                            display: grid;
+                            grid-template-columns: repeat(4, 1fr);
+                            gap: 8px;
+                            background: #f8fafc;
+                            padding: 10px;
+                            border-radius: 6px;
+                            border: 1px solid #e2e8f0;
+                            margin-bottom: 15px;
+                            font-size: 13px;
+                        }
+                        .info-item span {
+                            color: #64748b;
+                            display: block;
+                            font-size: 11px;
+                        }
+                        .info-item strong {
+                            color: #0f172a;
+                        }
+                        .main-content {
+                            display: flex;
+                            gap: 15px;
+                            margin-bottom: 15px;
+                        }
+                        .table-side {
+                            flex: 1.1;
+                        }
+                        .chart-side {
+                            flex: 1.1;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 6px;
+                            padding: 8px;
+                            background: #fafafa;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 12px;
+                        }
+                        th {
+                            background: #0284c7;
+                            color: #ffffff;
+                            padding: 6px 8px;
+                            border: 1px solid #0284c7;
+                            text-align: center;
+                            font-size: 12px;
+                        }
+                        .summary-box {
+                            display: flex;
+                            justify-content: space-between;
+                            background: #e0f2fe;
+                            border: 1px solid #bae6fd;
+                            padding: 10px 15px;
+                            border-radius: 6px;
+                            font-size: 13px;
+                            font-weight: bold;
+                            color: #0369a1;
+                            margin-bottom: 15px;
+                        }
+                        .footer-signatures {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-top: 30px;
+                            padding-top: 10px;
+                        }
+                        .sig-space {
+                            border-top: 1px dashed #94a3b8;
+                            width: 30%;
+                            text-align: center;
+                            font-size: 12px;
+                            font-weight: 600;
+                            color: #475569;
+                            padding-top: 5px;
                         }
                     </style>
                 </head>
                 <body>
-                    <div id="pdfPrintArea">
-                        ${element.innerHTML}
-                        ${chartImageHtml}
+                    <div class="card-container">
+                        <div>
+                            <!-- হেডার -->
+                            <div class="header">
+                                <h1 class="school-title">PATHPUKUR HIGH SCHOOL (H.S.)</h1>
+                                <p class="sub-title">STUDENT ACADEMIC PERFORMANCE CARD (SESSION: ${session})</p>
+                            </div>
+
+                            <!-- শিক্ষার্থীর তথ্য -->
+                            <div class="student-info-grid">
+                                <div class="info-item"><span>নাম:</span> <strong>${student.student_name}</strong></div>
+                                <div class="info-item"><span>শ্রেণী:</span> <strong>${className}</strong></div>
+                                <div class="info-item"><span>সেকশন & রোল:</span> <strong>${student.section} - ${student.roll_no}</strong></div>
+                                <div class="info-item"><span>মেধা / স্ট্যাটাস:</span> <strong>${statusText}</strong></div>
+                            </div>
+
+                            <!-- মেইন কনটেন্ট: টেবিল + বার চার্ট -->
+                            <div class="main-content">
+                                <div class="table-side">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: left;">বিষয় (Subject)</th>
+                                                <th>পূর্ণমান</th>
+                                                <th>প্রাপ্ত নম্বর</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${subjectRowsHtml}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="chart-side">
+                                    <div style="font-size: 12px; font-weight: bold; color: #334155; margin-bottom: 6px;">বিষয়ভিত্তিক প্রাপ্ত নম্বরের গ্রাফ</div>
+                                    ${chartImageHtml}
+                                </div>
+                            </div>
+
+                            <!-- সার্বিক ফলাফল সামারি -->
+                            <div class="summary-box">
+                                <div>মোট প্রাপ্ত নম্বর: ${student.grandTotal} / ${currentCalculatedFullMarks}</div>
+                                <div>শতকরা হার: ${student.percentage}%</div>
+                                <div>পার্সেন্টাইল: ${document.getElementById('stPercentile').innerText || '0%'}</div>
+                            </div>
+                        </div>
+
+                        <!-- স্বাক্ষর ব্লক (A4 পেজের একদম নিচে থাকবে) -->
+                        <div class="footer-signatures">
+                            <div class="sig-space">শ্রেণী শিক্ষকের স্বাক্ষর</div>
+                            <div class="sig-space">অভিভাবকের স্বাক্ষর</div>
+                            <div class="sig-space">প্রধান শিক্ষকের স্বাক্ষর</div>
+                        </div>
                     </div>
                 </body>
                 </html>
