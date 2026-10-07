@@ -196,29 +196,125 @@
 
         /* 🖨️ স্মার্ট প্রিন্ট CSS */
         @media print {
-            html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
-            .container { box-shadow: none !important; padding: 0 !important; margin: 0 !important; max-width: 100% !important; border: none !important; }
-            
-            /* যেসকল এলিমেন্ট প্রিন্ট পেজে দেখাবে না */
-            .section-card:first-child, .control-panel, #statusMessage, .summary-tracker-box, .col-check, td.col-check, th.col-check, .filter-group { 
-                display: none !important; 
-            }
-            
-            .section-card { border: none !important; margin: 0 !important; box-shadow: none !important; }
-            .section-header { background: transparent !important; border: none !important; padding: 0 0 10px 0 !important; }
-            .section-title { font-size: 16px !important; color: #000 !important; font-weight: bold; }
 
-            .table-container { max-height: none !important; overflow: visible !important; border: none !important; margin: 0 !important; }
-            table { border: 1px solid #000; width: 100%; page-break-after: auto; }
-            tr { page-break-inside: avoid; }
-            
-            /* টিক চিহ্ন দেওয়া (completed-row) সকল সারি প্রিন্ট পেজ থেকে হাইড করা হবে */
-            tr.completed-row { display: none !important; }
+    html, body {
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        min-height: 0 !important;
+    }
 
-            th, td { border: 1px solid #000 !important; font-size: 11px !important; padding: 6px !important; text-decoration: none !important; color: #000 !important; }
-            th { background-color: #f2f2f2 !important; }
-            @page { size: A4 portrait; margin: 12mm; }
-        }
+    body {
+        display: block !important;
+    }
+
+    .container {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+    }
+
+    /* Finalisation Status Tracker সম্পূর্ণ বাদ */
+    .section-card:first-child {
+        display: none !important;
+    }
+
+    /* Print-এর সময় অপ্রয়োজনীয় অংশ বাদ */
+    .control-panel,
+    #statusMessage,
+    .summary-tracker-box,
+    .col-check,
+    td.col-check,
+    th.col-check,
+    .filter-group {
+        display: none !important;
+    }
+
+    /* শুধু Re-print List section */
+    .section-card:nth-child(2) {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .section-header {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 0 8px 0 !important;
+    }
+
+    .section-title {
+        font-size: 16px !important;
+        color: #000 !important;
+        font-weight: bold !important;
+    }
+
+    .table-container {
+        display: block !important;
+        width: 100% !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    table {
+        width: 100% !important;
+        margin: 0 !important;
+        border-collapse: collapse !important;
+        page-break-after: auto !important;
+        break-after: auto !important;
+    }
+
+    thead {
+        display: table-header-group !important;
+    }
+
+    tbody {
+        display: table-row-group !important;
+    }
+
+    tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /* Printed/completed rows বাদ */
+    tr.completed-row {
+        display: none !important;
+    }
+
+    th,
+    td {
+        border: 1px solid #000 !important;
+        font-size: 11px !important;
+        padding: 5px 6px !important;
+        color: #000 !important;
+        text-decoration: none !important;
+    }
+
+    th {
+        background: #f2f2f2 !important;
+    }
+
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
+}
     </style>
 </head>
 <body>
@@ -330,6 +426,7 @@
                         <th>Roll No</th>
                         <th>Student Name</th>
                         <th>Updated Exam/Subject</th>
+                        <th>Revised Marks</th>
                         <th>Last Modified Time</th>
                     </tr>
                 </thead>
@@ -642,6 +739,7 @@ async function loadModifiedData() {
                     <td>${row.roll_no}</td>
                     <td style="text-align: left; padding-left: 12px;">${row.student_name}</td>
                     <td><span class="badge-col">${row.updated_column}</span></td>
+                    <td><strong style="color:#b91c1c; font-size:13px;">${row.updated_value ?? '-'}</strong></td>
                     <td style="font-family: monospace;">${time}</td>
                 </tr>
             `;
