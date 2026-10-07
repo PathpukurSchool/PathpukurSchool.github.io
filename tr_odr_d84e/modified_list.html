@@ -194,6 +194,26 @@
         .spinning { animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        .mark-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: bold;
+}
+
+.old-mark {
+    color: #64748b;
+}
+
+.new-mark {
+    color: #dc2626;
+}
+
+.mark-change i {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
         /* 🖨️ স্মার্ট প্রিন্ট CSS */
         @media print {
 
@@ -312,7 +332,7 @@
 
     @page {
         size: A4 portrait;
-        margin: 10mm;
+        margin: 8mm;
     }
 }
     </style>
@@ -739,7 +759,11 @@ async function loadModifiedData() {
                     <td>${row.roll_no}</td>
                     <td style="text-align: left; padding-left: 12px;">${row.student_name}</td>
                     <td><span class="badge-col">${row.updated_column}</span></td>
-                    <td><strong style="color:#b91c1c; font-size:13px;">${row.updated_value ?? '-'}</strong></td>
+                    <td><span class="mark-change">
+                     <span class="old-mark">${row.previous_value ?? '-'}</span>
+                     <i class="fa-solid fa-arrow-right"></i>
+                     <span class="new-mark">${row.updated_value ?? '-'}</span>
+                     </span></td>
                     <td style="font-family: monospace;">${time}</td>
                 </tr>
             `;
