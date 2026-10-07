@@ -57,7 +57,8 @@
 
   <style>
     * { 
-      box-sizing: border-box;
+      box-sizing: border-box; 
+      margin: 0;
       padding: 0;
       font-family: 'Tiro Bangla', 'Poppins', serif, Arial, sans-serif; 
       -webkit-tap-highlight-color: transparent; 
@@ -70,17 +71,18 @@
       min-height: 100vh;
       flex-direction: column;
       align-items: center;
-      margin: 0;
     }
     
     .container { 
-      width: min(1200px, calc(100% - 24px));
+      width: 100%;
+      max-width: 800px;
       background: #ffffff; 
       border-radius: 12px; 
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
       overflow: hidden;
+      margin-top: 10px;
       border: 1px solid #e2e8f0;
-      margin: 5px auto;
+      padding: 0;
     }
     
     /* Header Structure */
@@ -335,130 +337,86 @@
       }
       .school-name { font-size: 18px; }
       .page-title { font-size: 13px; }
+      .container { margin-top: 0; }
+      body { padding: 8px; }
     }
 
-    /* ================================
-   PRINT OPTIMIZATION
-   ================================ */
-@media print {
-
+  /* Print Optimization for Pure A4 Paper */
+  @media print {
     @page {
-        size: A4 portrait;
-        margin: 0;
+      size: A4 portrait;
+      margin: 0mm;
     }
 
-    html,
-    body {
-        width: 210mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #fff !important;
-        overflow: visible !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-
-    /* Screen UI hide */
-    .header,
-    .notice-box,
-    .filter-section,
-    .action-bar {
-        display: none !important;
+    html, body {
+      background: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      height: auto !important;
+      overflow: hidden !important;
+      -webkit-print-color-adjust: exact;
     }
 
     .container {
-        width: 100% !important;
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        background: #fff !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      background: white !important;
+      border: none !important;
+      border-radius: 0 !important;
+    }
+
+    .header, .notice-box, .filter-section, .action-bar {
+      display: none !important;
     }
 
     .pages-wrapper {
-        display: block !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: visible !important;
+      gap: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: block !important;
+      overflow: visible !important;
     }
 
-    /* ================================
-       EACH PRINT PAGE
-       ================================ */
     .a4-wrapper {
-        width: 210mm !important;
-
-        /*
-         * 297mm না দিয়ে সামান্য কম রাখা হয়েছে।
-         * এতে printer/browser rounding-এর কারণে
-         * পরবর্তী blank page হওয়ার সম্ভাবনা কমে।
-         */
-        height: 296mm !important;
-        max-height: 296mm !important;
-
-        margin: 0 auto !important;
-        padding: 3mm 4mm !important;
-
-        box-sizing: border-box !important;
-
-        overflow: hidden !important;
-
-        /*
-         * পুরনো page-break-after: always বাদ
-         */
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-
-        /*
-         * প্রতিটি page-এর পরে break হবে,
-         * কিন্তু শেষ page-এর পরে নয়।
-         */
-        break-after: page;
-        page-break-after: always;
+      box-shadow: none !important;
+      width: 210mm !important;
+      height: 297mm !important;
+      max-height: 297mm !important;
+      padding: 3mm 4mm !important;
+      margin: 0 auto !important;
+      page-break-after: always;
+      page-break-inside: avoid;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
     }
 
-    /* ================================
-       LAST PAGE — NO PAGE BREAK
-       ================================ */
-    .a4-wrapper:last-child {
-        break-after: auto !important;
-        page-break-after: auto !important;
-    }
-
-    /* Chrome compatibility */
+    .a4-wrapper:last-child,
     .a4-wrapper:last-of-type {
-        break-after: auto !important;
-        page-break-after: auto !important;
+      page-break-after: avoid !important;
+      break-after: avoid !important;
     }
 
     .columns-container {
-        width: 100% !important;
-        min-width: 0 !important;
-    }
-
-    .marks-table {
-        width: 100% !important;
+      min-width: 100% !important;
     }
 
     .marks-table th {
-        background-color: #eee !important;
-        color: #000 !important;
-        border: 1px solid #000 !important;
+      background-color: #eee !important;
+      color: #000 !important;
+      border: 1px solid #000 !important;
     }
 
     .marks-table td {
-        border: 1px solid #000 !important;
+      border: 1px solid #000 !important;
     }
 
     .marks-table tr.empty-row td {
-        border: none !important;
-        background: transparent !important;
+      border: none !important;
     }
-}
-    
+  }
   </style>
 </head>
 <body>
