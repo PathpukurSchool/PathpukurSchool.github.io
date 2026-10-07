@@ -688,14 +688,14 @@
       <div class="form-group">
         <label for="selectAttnClass"><i class="fa-solid fa-graduation-cap"></i> Class</label>
         <select id="selectAttnClass" class="form-control" onchange="onFilterChange()" disabled>
-          <option value="">-- সকল ক্লাস --</option>
+          <option value="">-- All Class --</option>
         </select>
       </div>
 
       <div class="form-group">
         <label for="selectAttnRoom"><i class="fa-solid fa-door-open"></i> Room No</label>
         <select id="selectAttnRoom" class="form-control" onchange="onFilterChange()" disabled>
-          <option value="">-- সকল রুম --</option>
+          <option value="">-- All Room --</option>
         </select>
       </div>
       
@@ -859,7 +859,7 @@
     const orderMap = {'V':1, 'VI':2, 'VII':3, 'VIII':4, 'IX':5, 'X':6, 'XI':7, 'XII':8};
     classes.sort((a, b) => (orderMap[a] || 99) - (orderMap[b] || 99));
 
-    let optionsHtml = '<option value="">-- সকল ক্লাস --</option>';
+    let optionsHtml = '<option value="">-- All Class --</option>';
     classes.forEach(c => {
       optionsHtml += `<option value="${c}">Class ${c}</option>`;
     });
@@ -873,7 +873,7 @@
     const activePlans = getFilteredSeatPlans();
     const rooms = [...new Set(activePlans.map(p => String(p.room_no).trim()))].sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
     
-    let optionsHtml = '<option value="">-- সকল রুম --</option>';
+    let optionsHtml = '<option value="">-- All Room --</option>';
     rooms.forEach(r => {
       optionsHtml += `<option value="${r}">Room No: ${r}</option>`;
     });
@@ -1085,7 +1085,7 @@
           <div class="printable-card" id="${cardId}">
             <div class="card-print-header">
               <h2>পাতপুকুর হাই স্কুল (উঃ মাঃ)</h2>
-              <h3>শিক্ষার্থীর স্বাক্ষর ও উপস্থিতি রেজিস্টার: ${currentSessionYear}</h3>
+              <h3>পরীক্ষায় শিক্ষার্থীর স্বাক্ষর ও উপস্থিতি রেজিস্টার: ${currentSessionYear}</h3>
             </div>
 
             <div class="card-header-title">
@@ -1098,31 +1098,28 @@
   </div>
 
   <div class="card-meta-item">
-    Class: <strong>Class ${clsName}</strong>
-  </div>
-
-  <div class="card-meta-item">
-    Section: <strong>${[...new Set(sortedStudents.map(s => s.normSec).filter(Boolean))].join(', ') || 'ALL'}</strong>
+    Class: <strong>${clsName} - 
+    ${[...new Set(sortedStudents.map(s => s.normSec).filter(Boolean))].join(', ') || 'ALL'}</strong>
   </div>
 
   <div class="card-meta-item">
     Gender: <strong>${[...new Set(sortedStudents.map(s => normalizeGender(s.gender)).filter(g => g !== 'ALL'))].join(', ') || 'ALL'}</strong>
   </div>
 
-  <div class="card-meta-item">
-    Room No: <strong>${roomNo}</strong>
+   <div class="card-meta-item">
+    Total: <strong>${sortedStudents.length}</strong>
   </div>
 
   <div class="card-meta-item">
-    মোট শিক্ষার্থী: <strong>${sortedStudents.length} জন</strong>
+    <strong>রুম নং: ${roomNo}</strong>
   </div>
 </div>
             <div class="table-responsive">
               <table>
                 <thead>
                   <tr>
-                    <th style="width: 8%;">রোল</th>
-                    <th style="width: 22%;">শিক্ষার্থীর নাম</th>
+                    <th style="width: auto;">রোল</th>
+                    <th style="width: auto;">শিক্ষার্থীর নাম</th>
                     ${headerColsHtml}
                   </tr>
                 </thead>
