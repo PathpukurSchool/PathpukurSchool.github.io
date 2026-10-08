@@ -242,8 +242,8 @@
     /* Compact Header on A4 Sheet */
     .foil-header {
       border: 1px solid #000;
-      padding: 3px 6px;
-      margin-bottom: 4px;
+      padding: 2px 4px; /* padding কমানো হলো */
+      margin-bottom: 3px;
     }
 
     .foil-meta-grid {
@@ -275,10 +275,10 @@
     }
 
     .marks-table th, .marks-table td {
-      border: 1px solid #111;
-      padding: 0px 3px;
+      border: 1.5px solid #111;
+      padding: 0px 2px;
       font-size: 9.5px;
-      height: 5.0mm;
+      height: 4.8mm; /* ৫.১ মিমি থেকে কমিয়ে ৪.৮ মিমি করা হলো */
       line-height: 1;
       vertical-align: middle;
     }
@@ -289,8 +289,8 @@
       text-align: center;
       font-size: 10px;
       font-weight: bold;
-      height: 5.5mm;
-    }
+      height: 5.0mm; /* ৫.৫ মিমি থেকে কমিয়ে ৫.০ মিমি করা হলো */
+}
 
     /* Empty Rows styling - Without Borders */
     .marks-table tr.empty-row td {
@@ -344,19 +344,20 @@
       body { padding: 8px; }
     }
 
-    /* Print Optimization for Pure A4 Paper */
+/* Print Optimization for Pure A4 Paper */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 0mm; /* পেজ মার্জিন শূন্য */
+    margin: 0mm; /* ব্রাউজারের মার্জিন শূন্য করা হয়েছে */
   }
 
   html, body {
     background: white !important;
     padding: 0 !important;
     margin: 0 !important;
-    height: 100% !important;
-    overflow: hidden !important;
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
     -webkit-print-color-adjust: exact;
   }
 
@@ -369,12 +370,14 @@
     background: white !important;
     border: none !important;
     border-radius: 0 !important;
+    display: block !important;
   }
 
   .header, .notice-box, .filter-section, .action-bar {
     display: none !important;
   }
 
+  /* Flexbox উঠিয়ে সাধারণ block করা হয়েছে যাতে পেজিং ঠিকমত গণনা হয় */
   .pages-wrapper {
     gap: 0 !important;
     margin: 0 !important;
@@ -385,24 +388,24 @@
   .a4-wrapper {
     box-shadow: none !important;
     width: 210mm !important;
-    /* উচ্চতা ২৯৭ মিমি এর থেকে সামান্য কমিয়ে ২৯৬ মিমি বা ১০০% ওভারফ্লো রোখা হয়েছে */
-    height: 296mm !important; 
-    max-height: 296mm !important;
-    padding: 3mm 4mm !important;
+    height: 295mm !important; /* নির্দিষ্ট নিখুঁত A4 উচ্চতা */
+    max-height: 295mm !important;
+    padding: 2mm 3mm !important;
     margin: 0 auto !important;
-    page-break-after: always;
-    break-after: page;
     box-sizing: border-box !important;
     overflow: hidden !important;
+    
+    /* পেজ ব্রেক ব্যবস্থাপনা */
+    break-after: page !important;
+    page-break-after: always !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
-  /* শেষ পেজের ক্ষেত্রে পেজ ব্রেক সম্পূর্ণ নিষ্ক্রিয় করা হলো */
-  .a4-wrapper:last-child,
-  .a4-wrapper:last-of-type {
-    page-break-after: auto !important;
+  /* শেষ A4 পেজের পর কোনো অতিরিক্ত পেজ ভাঙা বা স্পেস দেওয়া বন্ধ করবে */
+  .a4-wrapper:last-child {
     break-after: auto !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+    page-break-after: auto !important;
   }
 
   .columns-container {
