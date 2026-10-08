@@ -242,8 +242,8 @@
     /* Compact Header on A4 Sheet */
     .foil-header {
       border: 1px solid #000;
-      padding: 2px 4px; /* padding কমানো হলো */
-      margin-bottom: 3px;
+      padding: 3px 6px;
+      margin-bottom: 4px;
     }
 
     .foil-meta-grid {
@@ -275,21 +275,25 @@
     }
 
     .marks-table th, .marks-table td {
-      border: 1.5px solid #111;
-      padding: 0px 2px;
-      font-size: 9.5px;
-      height: 4.8mm; /* ৫.১ মিমি থেকে কমিয়ে ৪.৮ মিমি করা হলো */
-      line-height: 1;
-      vertical-align: middle;
-    }
+  border: 1.5px solid #111;
+  padding: 0px 4px;
+  /* ফন্ট সাইজ 9.5px থেকে বাড়িয়ে 11px এবং বোল্ড করা হয়েছে */
+  font-size: 11px; 
+  font-weight: 600;
+  /* রো-উচ্চতা 4.8mm থেকে বাড়িয়ে 5.15mm করা হলো যাতে পেজের নিচের অংশ ভরাট হয় */
+  height: 5.15mm; 
+  line-height: 1.1;
+  vertical-align: middle;
+}
 
-    .marks-table th {
-      background-color: #1e3a8a;
-      color: white;
-      text-align: center;
-      font-size: 10px;
-      font-weight: bold;
-      height: 5.0mm; /* ৫.৫ মিমি থেকে কমিয়ে ৫.০ মিমি করা হলো */
+.marks-table th {
+  background-color: #1e3a8a;
+  color: white;
+  text-align: center;
+  /* টেবিল হেডারের ফন্ট সাইজ 10px থেকে বাড়িয়ে 11.5px করা হলো */
+  font-size: 11.5px; 
+  font-weight: bold;
+  height: 5.5mm;
 }
 
     /* Empty Rows styling - Without Borders */
@@ -299,21 +303,21 @@
     }
 
     .col-roll {
-      width: 15%;
-      text-align: center;
-      font-weight: bold;
-    }
+  width: 14%;
+  text-align: center;
+  font-weight: bold;
+}
 
-    .col-name {
-      width: 57%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+.col-name {
+  width: 58%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-    .col-marks {
-      width: 28%;
-    }
+.col-marks {
+  width: 28%;
+}
 
     /* Hover effect on screen view */
     .marks-table tbody tr:not(.empty-row):hover {
@@ -348,7 +352,7 @@
 @media print {
   @page {
     size: A4 portrait;
-    margin: 0mm; /* ব্রাউজারের মার্জিন শূন্য করা হয়েছে */
+    margin: 0mm;
   }
 
   html, body {
@@ -377,7 +381,6 @@
     display: none !important;
   }
 
-  /* Flexbox উঠিয়ে সাধারণ block করা হয়েছে যাতে পেজিং ঠিকমত গণনা হয় */
   .pages-wrapper {
     gap: 0 !important;
     margin: 0 !important;
@@ -388,21 +391,20 @@
   .a4-wrapper {
     box-shadow: none !important;
     width: 210mm !important;
-    height: 295mm !important; /* নির্দিষ্ট নিখুঁত A4 উচ্চতা */
-    max-height: 295mm !important;
-    padding: 2mm 3mm !important;
+    /* A4 ফ্রেমের উচ্চতা ও প্যাডিং সামঞ্জস্য করা হয়েছে */
+    height: 297mm !important;
+    max-height: 297mm !important;
+    padding: 3mm 4mm !important;
     margin: 0 auto !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
     
-    /* পেজ ব্রেক ব্যবস্থাপনা */
     break-after: page !important;
     page-break-after: always !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
-  /* শেষ A4 পেজের পর কোনো অতিরিক্ত পেজ ভাঙা বা স্পেস দেওয়া বন্ধ করবে */
   .a4-wrapper:last-child {
     break-after: auto !important;
     page-break-after: auto !important;
@@ -412,14 +414,20 @@
     min-width: 100% !important;
   }
 
+  /* প্রিন্ট আউটে টেক্সট একদম স্পষ্ট ও গাঢ় করার জন্য */
   .marks-table th {
     background-color: #eee !important;
     color: #000 !important;
     border: 1px solid #000 !important;
+    font-size: 11.5px !important;
+    font-weight: bold !important;
   }
 
   .marks-table td {
     border: 1px solid #000 !important;
+    color: #000 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important; /* হালকা বোল্ড করায় পড়তে সহজ হবে */
   }
 
   .marks-table tr.empty-row td {
