@@ -5,48 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive">
 
-  <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
-  <style id="security-shield">
-    body { display: none !important; }
-  </style>
+    <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+    <style id="security-shield">
+        body { display: none !important; }
+    </style>
 
-  <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
-  <script>
-  (function() {
-      try {
-          var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+    <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+    <script>
+    (function() {
+        try {
+            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
 
-          var ref = document.referrer;
-          var isValidReferrer = false;
-          if (ref) {
-              var refUrl = new URL(ref);
-              // আপনার ডোমেন চেক
-              if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
-                  isValidReferrer = true;
-              }
-          }
+            var ref = document.referrer;
+            var isValidReferrer = false;
+            if (ref) {
+                var refUrl = new URL(ref);
+                if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
+                    isValidReferrer = true;
+                }
+            }
 
-          // সেশন না থাকলে বা অননুমোদিত উপায়ে আসলে হোম পেজে রিডাইরেক্ট
-          if (!isLoggedIn) {
-              sessionStorage.clear();
-              window.location.replace("https://pathpukurschool.github.io/");
-              return;
-          }
+            if (!isLoggedIn) {
+                sessionStorage.clear();
+                window.location.replace("https://pathpukurschool.github.io/");
+                return;
+            }
 
-          // ভ্যালিড ইউজার হলে পেজ দৃশ্যমান করা
-          document.addEventListener("DOMContentLoaded", function() {
-              var shield = document.getElementById("security-shield");
-              if (shield) shield.remove();
-          });
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
 
-      } catch (e) {
-          sessionStorage.clear();
-          window.location.replace("https://pathpukurschool.github.io/");
-      }
-  })();
-  </script>
+        } catch (e) {
+            sessionStorage.clear();
+            window.location.replace("https://pathpukurschool.github.io/");
+        }
+    })();
+    </script>
 
-    <!-- ফাইনাল সাবমিট স্ট্যাটাস এবং সংশোধিত মার্কশিট তালিকা -->
     <title>Pathpukur High School (H.S.)</title>
     
     <!-- 🟢 FontAwesome Icons library -->
@@ -180,7 +176,7 @@
         .status-inactive { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
 
         /* টেবিল স্টাইল */
-        .table-container { max-height: 480px; overflow-y: auto; overflow-x: auto; margin: 0 16px 16px 16px; border: 1px solid #cbd5e1; border-radius: 6px; }
+        .table-container { max-height: 520px; overflow-y: auto; overflow-x: auto; margin: 0 16px 16px 16px; border: 1px solid #cbd5e1; border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; background: white; white-space: nowrap; font-size: 12px; }
         th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: center; }
         th { background: #f8fafc; color: #334155; position: sticky; top: 0; z-index: 10; font-weight: bold; }
@@ -194,147 +190,164 @@
         .spinning { animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* 🎨 ২. নম্বর পরিবর্তন প্রদর্শনীয় নতুন স্টাইলিং (রঙিন ও স্পষ্ট) */
         .mark-change {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-weight: bold;
-}
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            font-size: 12px;
+        }
 
-.old-mark {
-    color: #64748b;
-}
+        .old-mark {
+            color: #b91c1c;
+            background-color: #fee2e2;
+            padding: 2px 7px;
+            border-radius: 4px;
+            text-decoration: line-through;
+            border: 1px solid #fca5a5;
+            font-weight: 600;
+        }
 
-.new-mark {
-    color: #dc2626;
-}
+        .new-mark {
+            color: #15803d;
+            background-color: #dcfce7;
+            padding: 2px 7px;
+            border-radius: 4px;
+            border: 1px solid #86efac;
+            font-weight: bold;
+        }
 
-.mark-change i {
-    color: #94a3b8;
-    font-size: 11px;
-}
+        .mark-change i {
+            color: #64748b;
+            font-size: 11px;
+        }
 
-        /* 🖨️ স্মার্ট প্রিন্ট CSS */
+        /* 🖨️ স্মার্ট প্রিন্ট CSS (সাদাকালো এবং কালার উভয় প্রিন্টেই নম্বর পরিবর্তন স্পষ্ট রাখা) */
         @media print {
+            html, body {
+                background: #fff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                min-height: 0 !important;
+            }
 
-    html, body {
-        background: #fff !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        min-height: 0 !important;
-    }
+            body { display: block !important; }
 
-    body {
-        display: block !important;
-    }
+            .container {
+                display: block !important;
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                min-height: 0 !important;
+                height: auto !important;
+            }
 
-    .container {
-        display: block !important;
-        width: 100% !important;
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        min-height: 0 !important;
-        height: auto !important;
-    }
+            .section-card:first-child { display: none !important; }
 
-    /* Finalisation Status Tracker সম্পূর্ণ বাদ */
-    .section-card:first-child {
-        display: none !important;
-    }
+            .control-panel,
+            #statusMessage,
+            .summary-tracker-box,
+            .col-check,
+            td.col-check,
+            th.col-check,
+            .filter-group {
+                display: none !important;
+            }
 
-    /* Print-এর সময় অপ্রয়োজনীয় অংশ বাদ */
-    .control-panel,
-    #statusMessage,
-    .summary-tracker-box,
-    .col-check,
-    td.col-check,
-    th.col-check,
-    .filter-group {
-        display: none !important;
-    }
+            .section-card:nth-child(2) {
+                display: block !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
 
-    /* শুধু Re-print List section */
-    .section-card:nth-child(2) {
-        display: block !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        box-shadow: none !important;
-    }
+            .section-header {
+                background: transparent !important;
+                border: none !important;
+                padding: 0 0 8px 0 !important;
+            }
 
-    .section-header {
-        background: transparent !important;
-        border: none !important;
-        padding: 0 0 8px 0 !important;
-    }
+            .section-title {
+                font-size: 16px !important;
+                color: #000 !important;
+                font-weight: bold !important;
+            }
 
-    .section-title {
-        font-size: 16px !important;
-        color: #000 !important;
-        font-weight: bold !important;
-    }
+            .table-container {
+                display: block !important;
+                width: 100% !important;
+                max-height: none !important;
+                height: auto !important;
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+            }
 
-    .table-container {
-        display: block !important;
-        width: 100% !important;
-        max-height: none !important;
-        height: auto !important;
-        overflow: visible !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-    }
+            table {
+                width: 100% !important;
+                margin: 0 !important;
+                border-collapse: collapse !important;
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
 
-    table {
-        width: 100% !important;
-        margin: 0 !important;
-        border-collapse: collapse !important;
-        page-break-after: auto !important;
-        break-after: auto !important;
-    }
+            thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
 
-    thead {
-        display: table-header-group !important;
-    }
+            tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
 
-    tbody {
-        display: table-row-group !important;
-    }
+            tr.completed-row { display: none !important; }
 
-    tr {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
+            th, td {
+                border: 1px solid #000 !important;
+                font-size: 11px !important;
+                padding: 5px 6px !important;
+                color: #000 !important;
+                text-decoration: none !important;
+            }
 
-    /* Printed/completed rows বাদ */
-    tr.completed-row {
-        display: none !important;
-    }
+            th { background: #f2f2f2 !important; }
 
-    th,
-    td {
-        border: 1px solid #000 !important;
-        font-size: 11px !important;
-        padding: 5px 6px !important;
-        color: #000 !important;
-        text-decoration: none !important;
-    }
+            /* 🖨️ প্রিন্ট আউটপুট স্টাইল (সাদাকালোতে স্টাইলিং ও প্রতীক স্পষ্ট থাকবে) */
+            .mark-change {
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 4px !important;
+            }
 
-    th {
-        background: #f2f2f2 !important;
-    }
+            .old-mark {
+                color: #444 !important;
+                background: #f0f0f0 !important;
+                text-decoration: line-through !important;
+                border: 1px dashed #666 !important;
+                padding: 1px 4px !important;
+            }
 
-    @page {
-        size: A4 portrait;
-        margin: 8mm;
-    }
-}
+            .new-mark {
+                color: #000 !important;
+                background: #fff !important;
+                font-weight: bold !important;
+                border: 1.5px solid #000 !important;
+                padding: 1px 4px !important;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 8mm;
+            }
+        }
     </style>
 </head>
 <body>
@@ -351,7 +364,6 @@
             <div class="section-title">
                 <i class="fa-solid fa-lock" style="color: #1e3a8a;"></i> Finalisation Status Tracker
             </div>
-            <!-- ফিল্টার বোতাম -->
             <div class="filter-group">
                 <button class="filter-btn active" onclick="filterTracker('all', this)">সব</button>
                 <button class="filter-btn" onclick="filterTracker('active', this)">Active</button>
@@ -457,7 +469,6 @@
 </div>
 
 <script>
-    // ⚡ সাব-পেজে অ্যাক্টিভিটি ট্র্যাকিং আপডেট রাখা (যাতে অহেতুক অটো-লগআউট না হয়)
     function updateActivityTime() {
         localStorage.setItem('lastActivityTime', Date.now().toString());
     }
@@ -470,13 +481,12 @@ const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, ANON_KEY);
 const CLASS_ORDER = { 'V': 1, 'VI': 2, 'VII': 3, 'VIII': 4, 'IX': 5, 'X': 6, 'XI': 7 };
-let trackerDataCache = {}; // ফিল্টারিংয়ের জন্য ক্যশ রিকর্ড
+let trackerDataCache = {}; 
 
 document.addEventListener("DOMContentLoaded", function() {
     startAutoRefreshLoop();
 });
 
-// 🟢 ১. পাসওয়ার্ড হাইড/শো করার ফাংশন
 function togglePasskeyVisibility() {
     const input = document.getElementById("passkey");
     const icon = document.getElementById("togglePasskey");
@@ -491,7 +501,6 @@ function togglePasskeyVisibility() {
     }
 }
 
-// 🟢 ২. পেজ হ্যাং প্রতিরোধে সেফ লুপ (Auto Refresh Safety Loop)
 let isFetching = false;
 async function startAutoRefreshLoop() {
     if (!isFetching) {
@@ -499,7 +508,7 @@ async function startAutoRefreshLoop() {
         await refreshAllData();
         isFetching = false;
     }
-    setTimeout(startAutoRefreshLoop, 100000); // একটি রিকোয়েস্ট শেষ হলে 1 মিনিট পর আবার রান হবে
+    setTimeout(startAutoRefreshLoop, 100000); 
 }
 
 async function refreshAllData() {
@@ -514,7 +523,6 @@ async function refreshAllData() {
     if (spinIcon) setTimeout(() => spinIcon.classList.remove("spinning"), 500);
 }
 
-// 🟢 ৩. ফাইনালাইজেশন স্ট্যাটাস ট্র্যাকার
 async function fetchFinalisationStatus() {
     const classes = ['v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi'];
 
@@ -551,7 +559,6 @@ async function fetchFinalisationStatus() {
     }
 }
 
-// 🟢 ৪. ট্র্যাকার ফিল্টার ফাংশন
 function filterTracker(filterType, btnElement) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btnElement.classList.add('active');
@@ -562,10 +569,7 @@ function filterTracker(filterType, btnElement) {
         const valueCell = document.querySelector(`.cls-val[data-class="${c}"]`);
         const status = trackerDataCache[c];
 
-        if (filterType === 'all') {
-            headerCell.style.display = '';
-            valueCell.style.display = '';
-        } else if (filterType === status) {
+        if (filterType === 'all' || filterType === status) {
             headerCell.style.display = '';
             valueCell.style.display = '';
         } else {
@@ -575,7 +579,6 @@ function filterTracker(filterType, btnElement) {
     });
 }
 
-// 🟢 ৫. ট্র্যাকিং মোড অন/অফ
 async function toggleMode(enable) {
     const passkey = document.getElementById('passkey').value.trim();
     if (!passkey) {
@@ -605,7 +608,6 @@ async function toggleMode(enable) {
     }
 }
 
-// 🟢 ৬. একক প্রিন্ট স্ট্যাটাস টগল ও ট্র্যাকার কাউন্ট আপডেট
 function togglePrintStatus(checkbox, key) {
     const row = checkbox.closest('tr');
     if (checkbox.checked) {
@@ -618,7 +620,6 @@ function togglePrintStatus(checkbox, key) {
     updateSummaryTracker();
 }
 
-// 🟢 ৭. সিলেক্ট অল / আনসিলেক্ট অল টগল ফাংশন
 function toggleSelectAll(masterCheckbox) {
     const checkboxes = document.querySelectorAll('#tableBody .row-checkbox');
     checkboxes.forEach(cb => {
@@ -636,7 +637,6 @@ function toggleSelectAll(masterCheckbox) {
     updateSummaryTracker();
 }
 
-// 🟢 ৮. ট্র্যাকার সামারি বক্স আপডেট (মোট / প্রিন্ট সম্পন্ন / নতুন বাকি)
 function updateSummaryTracker() {
     const totalRows = document.querySelectorAll('#tableBody tr').length;
     const printedRows = document.querySelectorAll('#tableBody tr.completed-row').length;
@@ -652,7 +652,6 @@ function updateSummaryTracker() {
     }
 }
 
-// 🟢 ৯. স্মার্ট প্রিন্ট লজিক (প্রিন্ট কমান্ড ও সাথে সাথে টিক চিহ্ন আপডেট)
 function triggerSmartPrint() {
     const pendingCheckboxes = document.querySelectorAll('#tableBody tr:not(.completed-row) .row-checkbox');
     
@@ -662,10 +661,8 @@ function triggerSmartPrint() {
         }
     }
 
-    // প্রিন্ট ডায়ালগ ওপেন করা
     window.print();
 
-    // প্রিন্ট অ্যাকশনের পরপরই যেসকল স্টুডেন্টের টিক ছিল না, তাদের টিক চিহ্ন যুক্ত ও লোকালস্টোরেজে সেভ করা
     pendingCheckboxes.forEach(cb => {
         cb.checked = true;
         const key = cb.getAttribute('data-key');
@@ -677,7 +674,7 @@ function triggerSmartPrint() {
     updateSummaryTracker();
 }
 
-// 🟢 ১০. সংশোধিত তথ্য লোড করা
+// ⚡ 🟢 ১০. ১০,০০০+ ডাটায় দ্রুত লোড হওয়ার হাই-পারফরম্যান্স ফাংশন
 async function loadModifiedData() {
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_modified_students_list`, {
@@ -717,9 +714,8 @@ async function loadModifiedData() {
         }
 
         statusDiv.innerHTML = `<div class="status-badge status-active"><i class="fa-solid fa-check-circle"></i> ট্র্যাকিং মোড চালু রয়েছে। মোট ${result.data.length}টি সংশোধন পাওয়া গেছে।</div>`;
-        tbody.innerHTML = "";
-
-        // ক্লাস ও রোল অনুসারে সাজানো (প্রিন্ট ও পেজ ভিউ দুই জায়গাতেই নিখুঁত দেখাবে)
+        
+        // ১. দ্রুত সাজানো
         result.data.sort((a, b) => {
             const classA = a.class_name.replace('result_', '').toUpperCase();
             const classB = b.class_name.replace('result_', '').toUpperCase();
@@ -727,13 +723,16 @@ async function loadModifiedData() {
             const orderA = CLASS_ORDER[classA] || 99;
             const orderB = CLASS_ORDER[classB] || 99;
 
-            if (orderA !== orderB) {
-                return orderA - orderB;
-            }
+            if (orderA !== orderB) return orderA - orderB;
             return (a.roll_no || 0) - (b.roll_no || 0);
         });
 
-        result.data.forEach(row => {
+        // ⚡ ২. মেমোরি এবংDOM রেন্ডারিং অপটিমাইজেশন (অ্যারে জয়েন ব্যবহার)
+        const rowsHtml = [];
+        const totalLen = result.data.length;
+
+        for (let i = 0; i < totalLen; i++) {
+            const row = result.data[i];
             const timeObj = new Date(row.modified_at);
             const time = timeObj.toLocaleString('en-GB', {
                 day: '2-digit',
@@ -749,7 +748,7 @@ async function loadModifiedData() {
             const printStorageKey = `print_${row.class_name}_${row.student_id}_${row.updated_column}`;
             const isPrinted = localStorage.getItem(printStorageKey) === 'true';
 
-            tbody.innerHTML += `
+            rowsHtml.push(`
                 <tr class="${isPrinted ? 'completed-row' : ''}">
                     <td class="col-check" style="text-align: center;">
                         <input type="checkbox" class="row-checkbox" data-key="${printStorageKey}" ${isPrinted ? 'checked' : ''} onchange="togglePrintStatus(this, '${printStorageKey}')" style="cursor: pointer; width: 16px; height: 16px;">
@@ -759,15 +758,20 @@ async function loadModifiedData() {
                     <td>${row.roll_no}</td>
                     <td style="text-align: left; padding-left: 12px;">${row.student_name}</td>
                     <td><span class="badge-col">${row.updated_column}</span></td>
-                    <td><span class="mark-change">
-                     <span class="old-mark">${row.previous_value ?? '-'}</span>
-                     <i class="fa-solid fa-arrow-right"></i>
-                     <span class="new-mark">${row.updated_value ?? '-'}</span>
-                     </span></td>
+                    <td>
+                        <span class="mark-change">
+                            <span class="old-mark" title="পূর্বের ভুল নম্বর">${row.previous_value ?? '-'}</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <span class="new-mark" title="সংশোধিত নতুন নম্বর">${row.updated_value ?? '-'}</span>
+                        </span>
+                    </td>
                     <td style="font-family: monospace;">${time}</td>
                 </tr>
-            `;
-        });
+            `);
+        }
+
+        // ⚡ ১ বারেই পুরো টেবিল DOM এ ইনসার্ট করা
+        tbody.innerHTML = rowsHtml.join('');
 
         tableWrapper.style.display = "block";
         summaryTrackerBox.style.display = "flex";
