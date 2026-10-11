@@ -20,14 +20,16 @@
             var isValidReferrer = false;
             if (ref) {
                 var refUrl = new URL(ref);
-                if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
+                // সংশোধন ১: পুরোনো গিটহাব ডোমেইনের পরিবর্তে নতুন ক্লাউডফ্লেয়ার ডোমেইন যুক্ত করা হলো
+                if (refUrl.hostname === "pathpukurschool.pages.dev" || refUrl.hostname === "localhost") {
                     isValidReferrer = true;
                 }
             }
 
             if (!isLoggedIn) {
                 sessionStorage.clear();
-                window.location.replace("https://pathpukurschool.github.io/");
+                // সংশোধন ২: রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
+                window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
 
@@ -38,11 +40,12 @@
 
         } catch (e) {
             sessionStorage.clear();
-            window.location.replace("https://pathpukurschool.github.io/");
+            // সংশোধন ৩: ক্যাচ ব্লকের রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
+            window.location.replace("https://pathpukurschool.pages.dev/");
         }
     })();
     </script>
-    <!-- স্টুডেন্টকে ভর্তি নেওয়া বা TC দেওয়ার সময় UDISE+ পরকালের স্ক্রিনশট যুক্ত ডকুমেন্ট তৈরি -->
+    <!-- স্টুডেন্টকে ভর্তি নেওয়া বা TC দেওয়ার সময় UDISE+ পোর্টালের স্ক্রিনশট যুক্ত ডকুমেন্ট তৈরি -->
     <title>Pathpukur High School (H.S.)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
     <style>
@@ -215,7 +218,7 @@
             display: flex;
             align-items: center;
             border-bottom: 2px solid #000;
-            padding-bottom: 8px;
+            padding-bottom: 8mm;
             margin-bottom: 12px;
         }
 
@@ -418,8 +421,8 @@
 
     <div class="no-print">
         <div class="header">
-          <h1>Pathpukur High School (H.S.)</h1>
-          <h2>Admission and Transfer Certificate</h2>
+            <h1>Pathpukur High School (H.S.)</h1>
+            <h2>Admission and Transfer Certificate</h2>
         </div>
         
         <div class="description-box">
@@ -437,7 +440,7 @@
             </div>
 
             <div class="control-group">
-                <label for="pageMode">🎨 ওয়েব পেজ মুড:</label>
+                <label for="pageMode">🎨 ওয়েব পেজ মুড:</label>
                 <select id="pageMode" onchange="applyModeFilter()">
                     <option value="light">☀️ Light Mode (সাদা)</option>
                     <option value="gray">🌦️ Gray Mode (ধূসর)</option>
@@ -577,7 +580,6 @@
             canvas.height = rawCroppedCanvas.height;
             const ctx = canvas.getContext('2d');
             
-            // ক্যানভাস রেন্ডারিং কোয়ালিটি স্মুথ করা
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             ctx.drawImage(rawCroppedCanvas, 0, 0);
@@ -704,14 +706,12 @@
         function applyCrop() {
             if (!cropper) return;
 
-            // উচ্চ পিক্সেল ডেনসিটি নিশ্চিত করতে স্কেল ২.৫ গুণ বাড়ানো হয়েছে
             const croppedCanvas = cropper.getCroppedCanvas({
                 fillColor: '#ffffff',
                 imageSmoothingEnabled: true,
                 imageSmoothingQuality: 'high'
             });
 
-            // HD Quality Canvas তৈরি
             const scaleFactor = 2.5;
             const hdCanvas = document.createElement('canvas');
             hdCanvas.width = croppedCanvas.width * scaleFactor;
