@@ -20,14 +20,16 @@
             var isValidReferrer = false;
             if (ref) {
                 var refUrl = new URL(ref);
-                if (refUrl.hostname === "pathpukurschool.github.io" || refUrl.hostname === "localhost") {
+                // সংশোধন ১: পুরোনো গিটহাব ডোমেইনের পরিবর্তে নতুন ক্লাউডফ্লেয়ার ডোমেইন যুক্ত করা হলো
+                if (refUrl.hostname === "pathpukurschool.pages.dev" || refUrl.hostname === "localhost") {
                     isValidReferrer = true;
                 }
             }
 
             if (!isLoggedIn) {
                 sessionStorage.clear();
-                window.location.replace("https://pathpukurschool.github.io/");
+                // সংশোধন ২: রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
+                window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
 
@@ -38,11 +40,12 @@
 
         } catch (e) {
             sessionStorage.clear();
-            window.location.replace("https://pathpukurschool.github.io/");
+            // সংশোধন ৩: ক্যাচ ব্লকের রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
+            window.location.replace("https://pathpukurschool.pages.dev/");
         }
     })();
     </script>
-
+<!-- সংশোধিত মার্কশিট প্রিন্টের জন্য কতজন স্টুডেন্টের নম্বর সংশোধন করা হয়েছে সেটি জানার ট্র্যাকার -->
     <title>Pathpukur High School (H.S.)</title>
     
     <!-- 🟢 FontAwesome Icons library -->
