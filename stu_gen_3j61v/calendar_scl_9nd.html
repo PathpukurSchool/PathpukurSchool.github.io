@@ -60,13 +60,21 @@
         body {
             font-family: 'Inter', 'Tiro Bangla', sans-serif;
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+        html, body {
+            height: 100% !important;
+            min-height: 100vh !important;
             margin: 0 !important;
             padding: 0 !important;
         }
-        html, body {
-            height: auto !important;
-            min-height: unset !important;
-            width: 100%;
+        main {
+            max-width: 800px; /* আপনার প্রয়োজনমতো সর্বোচ্চ উইডথ নিয়ন্ত্রণ করতে পারেন */
+            margin: 0 auto;
+            padding: 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: umn;
+            justify-content: center;
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.95);
@@ -103,7 +111,7 @@
 </head>
 <body class="bg-gradient-to-br from-sky-50 to-sky-100 text-slate-800 h-fit overflow-x-hidden">
     
-    <main class="w-full space-y-1">
+    <main class="w-full max-w-4xl mx-auto p-2 sm:p-6 space-y-3 flex flex-col justify-center min-h-screen">
 
         <!-- Legend Bar -->
         <div class="glass-card rounded-lg p-1.5 shadow-sm flex flex-wrap justify-center gap-2 md:gap-4 text-[10px] sm:text-xs font-bold">
