@@ -12,36 +12,37 @@
 
   <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট (লিংক সরাসরি কপি করে খোলা আটকাবে) -->
   <script>
-  (function() {
-      try {
-          var ref = document.referrer;
-          var isValidReferrer = false;
+    (function() {
+        try {
+            var ref = document.referrer;
+            var isValidReferrer = false;
 
-          // রিফারার চেক
-          if (ref) {
-              var refUrl = new URL(ref);
-              if (refUrl.hostname === "pathpukurschool.github.io") {
-                  isValidReferrer = true;
-              }
-          }
+            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
+            if (ref) {
+                var refUrl = new URL(ref);
+                if (refUrl.hostname === "pathpukurschool.pages.dev") {
+                    isValidReferrer = true;
+                }
+            }
 
-          // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয়
-          if (!isValidReferrer) {
-              window.location.replace("https://pathpukurschool.github.io/");
-              return;
-          }
+            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
+            if (!isValidReferrer) {
+                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
+                window.location.replace("https://pathpukurschool.pages.dev/");
+                return;
+            }
 
-          // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
-          document.addEventListener("DOMContentLoaded", function() {
-              var shield = document.getElementById("security-shield");
-              if (shield) shield.remove();
-          });
+            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
 
-      } catch (e) {
-          window.location.replace("https://pathpukurschool.github.io/");
-      }
-  })();
-  </script>
+        } catch (e) {
+            window.location.replace("https://pathpukurschool.pages.dev/");
+        }
+    })();
+    </script>
 
   <!-- স্কুল পরীক্ষার সিট প্ল্যান -->
   <title>Pathpukur High School (H.S.)</title>
