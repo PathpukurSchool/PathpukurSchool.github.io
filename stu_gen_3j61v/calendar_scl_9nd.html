@@ -68,13 +68,13 @@
             padding: 0 !important;
         }
         main {
-            max-width: 800px; /* আপনার প্রয়োজনমতো সর্বোচ্চ উইডথ নিয়ন্ত্রণ করতে পারেন */
+            max-width: 460px;
             margin: 0 auto;
             padding: 1rem;
             min-height: 100vh;
             display: flex;
-            flex-direction: umn;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.95);
@@ -110,8 +110,7 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-sky-50 to-sky-100 text-slate-800 h-fit overflow-x-hidden">
-    
-    <main class="w-full max-w-4xl mx-auto p-2 sm:p-6 space-y-3 flex flex-col justify-center min-h-screen">
+     <main class="w-full max-w-md mx-auto p-2 sm:p-4 space-y-2 flex flex-col justify-start min-h-screen">
 
         <!-- Legend Bar -->
         <div class="glass-card rounded-lg p-1.5 shadow-sm flex flex-wrap justify-center gap-2 md:gap-4 text-[10px] sm:text-xs font-bold">
