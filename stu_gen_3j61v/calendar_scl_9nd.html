@@ -68,8 +68,8 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 6px;
         }
+        
         #fullPageHeader {border-radius: 12px 12px 0 0;}
         
         /* একটিভ ডেট হাইলাইটের স্টাইল */
@@ -79,32 +79,30 @@
             z-index: 10;
         }
 
-        /* 🔄 ৩ডি পেজ ফ্লিপ / পাতা ওলটানোর স্পেশাল ইফেক্ট */
-        .grid-flip-next {
-            animation: flipNext 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        /* ✨ সুন্দর এবং স্পষ্ট স্লাইড অ্যানিমেশন (সামনে বা পিছনে যাওয়ার জন্য) */
+        .slide-in-right {
+            animation: slideInRight 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
-        .grid-flip-prev {
-            animation: flipPrev 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        @keyframes flipNext {
-            0% { transform: perspective(800px) rotateY(0deg); opacity: 1; }
-            50% { transform: perspective(800px) rotateY(-90deg); opacity: 0.3; }
-            100% { transform: perspective(800px) rotateY(0deg); opacity: 1; }
+        .slide-in-left {
+            animation: slideInLeft 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        @keyframes flipPrev {
-            0% { transform: perspective(800px) rotateY(0deg); opacity: 1; }
-            50% { transform: perspective(800px) rotateY(90deg); opacity: 0.3; }
-            100% { transform: perspective(800px) rotateY(0deg); opacity: 1; }
+        @keyframes slideInRight {
+            0% { transform: translateX(40px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            0% { transform: translateX(-40px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
         }
     </style>
 </head>
 <body class="text-slate-800 flex flex-col">
-    
-    <!-- মেইন কন্টেইনার: আইফ্রেমে পুরো জায়গা নেবে, আর ফুল স্ক্রিনে উপযুক্ত প্যাডিং ও সর্বোচ্চ প্রস্থ (max-width) বজায় রাখবে -->
+
+    <!-- মেইন কন্টেইনার -->
     <main id="mainContainer" class="w-full flex-1 flex flex-col justify-start space-y-2 sm:space-y-3">
-        
+
         <!-- ফুল স্ক্রিন হেডার (আইফ্রেমে স্বয়ংক্রিয়ভাবে লুকানো থাকবে) -->
     <header id="fullPageHeader" class="hidden bg-slate-900 text-white py-3 px-4 shadow-md text-center">
         <h1 class="text-base sm:text-xl font-bold tracking-wide">পাতপুকুর হাই স্কুল (উঃ মাঃ)</h1>
@@ -112,7 +110,7 @@
     </header>
 
         <!-- Legend Bar -->
-        <div class="glass-card rounded-none sm:rounded-lg p-2 shadow-sm flex flex-wrap justify-center gap-2 md:gap-4 text-xs sm:text-sm font-bold">
+        <div class="glass-card rounded-none sm:rounded-lg p-2 shadow-sm flex flex-wrap justify-center gap-3 md:gap-6 text-xs sm:text-sm font-bold">
             <div class="flex items-center space-x-1.5">
                 <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
                 <span>রবিবার / ছুটি</span>
@@ -504,22 +502,27 @@
             }
         }
 
-        // ✨ অ্যানিমেশন ট্রিগার করার সহায়ক ফাংশন
-        function triggerFlipAnimation(directionClass) {
+        // ✨ ডিরেকশন অনুযায়ী স্লাইড অ্যানিমেশন ট্রিগার করার ফাংশন (সামনে বা পিছনে যাওয়ার স্পষ্ট অনুভূতি দেবে)
+        function triggerSlideAnimation(direction) {
             const grid = document.getElementById('calendarGrid');
-            grid.classList.remove('grid-flip-next', 'grid-flip-prev');
+            grid.classList.remove('slide-in-right', 'slide-in-left');
             
             void grid.offsetWidth; 
             
-            grid.classList.add(directionClass);
+            if (direction === 'next') {
+                grid.classList.add('slide-in-right');
+            } else {
+                grid.classList.add('slide-in-left');
+            }
             
             setTimeout(() => {
-                grid.classList.remove(directionClass);
-            }, 450);
+                grid.classList.remove('slide-in-right', 'slide-in-left');
+            }, 350);
         }
 
         async function changeMonth(offset) {
-            triggerFlipAnimation(offset > 0 ? 'grid-flip-next' : 'grid-flip-prev');
+            const direction = offset > 0 ? 'next' : 'prev';
+            triggerSlideAnimation(direction);
             
             const oldYear = currentDate.getFullYear();
             currentDate.setMonth(currentDate.getMonth() + offset);
@@ -531,18 +534,19 @@
             
             setTimeout(() => {
                 renderCalendar();
-            }, 200);
+            }, 150);
         }
 
         async function changeYear(offset) {
-            triggerFlipAnimation(offset > 0 ? 'grid-flip-next' : 'grid-flip-prev');
+            const direction = offset > 0 ? 'next' : 'prev';
+            triggerSlideAnimation(direction);
             
             currentDate.setFullYear(currentDate.getFullYear() + offset);
             await fetchYearEvents(currentDate.getFullYear());
             
             setTimeout(() => {
                 renderCalendar();
-            }, 200);
+            }, 150);
         }
 
         async function resetToCurrentMonth() {
@@ -553,7 +557,7 @@
             icon.className = "fa-solid fa-spinner fa-spin";
 
             try {
-                triggerFlipAnimation('grid-flip-next');
+                triggerSlideAnimation('next');
                 const oldYear = currentDate.getFullYear();
                 currentDate = new Date();
                 const newYear = currentDate.getFullYear();
@@ -563,7 +567,7 @@
                 }
                 setTimeout(() => {
                     renderCalendar();
-                }, 200);
+                }, 150);
             } finally {
                 icon.className = "fa-solid fa-rotate-right";
                 btn.disabled = false;
