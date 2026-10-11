@@ -14,35 +14,37 @@
     <script>
     (function() {
         try {
-            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
-
             var ref = document.referrer;
             var isValidReferrer = false;
+
+            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
-                if (refUrl.hostname === "pathpukurschool.pages.dev" || refUrl.hostname === "localhost") {
+                if (refUrl.hostname === "pathpukurschool.pages.dev") {
                     isValidReferrer = true;
                 }
             }
 
-            if (!isLoggedIn) {
-                sessionStorage.clear();
+            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
+            if (!isValidReferrer) {
+                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
                 window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
 
+            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
             document.addEventListener("DOMContentLoaded", function() {
                 var shield = document.getElementById("security-shield");
                 if (shield) shield.remove();
             });
 
         } catch (e) {
-            sessionStorage.clear();
             window.location.replace("https://pathpukurschool.pages.dev/");
         }
     })();
     </script>
-
+    
+   <!-- বিশেষ দিবসের এনিমেশন পপ আপ -->
     <title>Pathpukur High School (HS)</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet">
@@ -313,9 +315,11 @@
 
     <script>
         const eventSchedule = [
+
+            // বিশেষ ইভেন্ট//
             { 
                 name: "📋 দ্বাদশ শ্রেণীর সেমিস্টার III পরীক্ষার এডমিট কার্ড ২০২৬", 
-                month: 6, 
+                month: 00, 
                 date: 00, 
                 durationDays: 0, 
                 styleClass: "style-result", 
@@ -323,6 +327,7 @@
                 title: "১লা সেপ্টেম্বর ২০২৬ মঙ্গলবার দ্বাদশ শ্রেণীর সেমিস্টার III পরীক্ষার এডমিট কার্ড দেওয়া হবে।", 
                 subtitle: "দ্বাদশ শ্রেণীর সকল ছাত্র-ছাত্রীকে নির্দিষ্ট সময়ে বিদ্যালয়ে উপস্থিত থাকতে বলা হচ্ছে।" 
             },
+            
             { name: "বিদ্যালয় প্রতিষ্ঠা দিবস", month: 0, date: 2, durationDays: 1, styleClass: "style-new-year", icon: "🏫", title: "আমাদের ঐতিহ্য ও জ্ঞানের পীঠস্থানের প্রতিষ্ঠা দিবস।", subtitle: "Pathpukur High School (HS)-এর প্রতিষ্ঠা দিবস।" },
             { name: "শুভ ইংরাজী নববর্ষ!", month: 0, date: 1, durationDays: 7, styleClass: "style-new-year", icon: "🎉", title: "নতুন বছর আপনার জীবনে বয়ে আনুক আনন্দ, শান্তি ও সাফল্য।", subtitle: "Happy New Year! ✨" },
             { name: "স্বামী বিবেকানন্দের জন্মজয়ন্তী", month: 0, date: 12, durationDays: 1, styleClass: "style-tagore", icon: "💡", title: '"জাগো, ওঠো, এবং লক্ষ্য পূরণ না হওয়া পর্যন্ত থেমো না!"', subtitle: "স্বামী বিবেকানন্দ (জাতীয় যুব দিবস)" },
