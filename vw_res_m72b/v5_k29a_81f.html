@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="robots" content="noindex, nofollow, noarchive">
 
     <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (অনুমোদিত না হলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
     <style id="security-shield">
@@ -17,18 +17,18 @@
             var ref = document.referrer;
             var isValidReferrer = false;
 
-            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
+            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
-                if (refUrl.hostname === "pathpukurschool.github.io") {
+                if (refUrl.hostname === "pathpukurschool.pages.dev") {
                     isValidReferrer = true;
                 }
             }
 
-            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
+            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
             if (!isValidReferrer) {
-                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
-                window.location.replace("https://pathpukurschool.github.io/");
+                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
+                window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
 
@@ -39,7 +39,7 @@
             });
 
         } catch (e) {
-            window.location.replace("https://pathpukurschool.github.io/");
+            window.location.replace("https://pathpukurschool.pages.dev/");
         }
     })();
     </script>
@@ -217,7 +217,7 @@
       transform: translateY(0);
     }
 
-    /* স্ট্যাটাস নোটিফিকেশন মেসেজ (Pop-up ছাড়া) */
+    /* স্ট্যাটাস নোটিফিকেশন মেসেজ (Pop-up ছাড়া) */
     .status-box {
       margin-top: 15px;
       padding: 12px 15px;
@@ -406,7 +406,7 @@
 
     <!-- বিবরণ কার্ড -->
     <div class="description-card">
-      <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীদের রোল নম্বর লিখে নিচের 'ফলাফল দেখুন' বাটনে ক্লিক করলে প্রথম, দ্বিতীয় ও তৃতীয় পর্যায়ক্রমিক মূল্যায়ন (Evaluations)-এর মোট নম্বর ও ফলাফল দেখা যাবে।
+      <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীদের রোল নম্বর লিখে নিচের 'ফলাফল দেখুন' বাটনে ক্লিক করলে প্রথম, দ্বিতীয় ও তৃতীয় পর্যায়ক্রমিক মূল্যায়ন (Evaluations)-এর মোট নম্বর ও ফলাফল দেখা যাবে।
     </div>
 
     <!-- রোল নম্বর সার্চ ইনপুট কার্ড -->
@@ -431,11 +431,11 @@
           </button>
         </div>
       </div>
-      <!-- স্ট্যাটাস মেসেজ ইন-লাইন ডায়ালগ -->
+      <!-- স্ট্যাটাস মেসেজ ইন-লাইন ডায়ালগ -->
       <div id="statusBox" class="status-box"></div>
     </div>
 
-    <!-- রেজাল্ট সেকশন (ফলাফল পাওয়া গেলে দৃশ্যমান হবে) -->
+    <!-- রেজাল্ট সেকশন (ফলাফল পাওয়া গেলে দৃশ্যমান হবে) -->
     <div id="resultContainer">
       
       <!-- স্টুডেন্ট ইনফরমেশন কার্ড -->
@@ -469,7 +469,7 @@
         </div>
       </div>
 
-      <!-- বিষয়ভিত্তিক নম্বর টেবিল -->
+      <!-- বিষয়ভিত্তিক নম্বর টেবিল -->
       <div class="table-card">
         <table class="result-table">
           <thead>
@@ -486,7 +486,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><span class="exam-badge badge-e1">১ম মূল্যায়ন (1st Exam)</span></td>
+              <td><span class="exam-badge badge-e1">১ম মূল্যায়ন (1st Exam)</span></td>
               <td id="e1_ben" class="mark-cell">-</td>
               <td id="e1_eng" class="mark-cell">-</td>
               <td id="e1_mat" class="mark-cell">-</td>
@@ -496,7 +496,7 @@
               <td id="e1_tot" class="mark-cell" style="color: #0f172a;">-</td>
             </tr>
             <tr>
-              <td><span class="exam-badge badge-e2">২য় মূল্যায়ন (2nd Exam)</span></td>
+              <td><span class="exam-badge badge-e2">২য় মূল্যায়ন (2nd Exam)</span></td>
               <td id="e2_ben" class="mark-cell">-</td>
               <td id="e2_eng" class="mark-cell">-</td>
               <td id="e2_mat" class="mark-cell">-</td>
@@ -506,7 +506,7 @@
               <td id="e2_tot" class="mark-cell" style="color: #0f172a;">-</td>
             </tr>
             <tr>
-              <td><span class="exam-badge badge-e3">৩য় মূল্যায়ন (3rd Exam)</span></td>
+              <td><span class="exam-badge badge-e3">৩য় মূল্যায়ন (3rd Exam)</span></td>
               <td id="e3_ben" class="mark-cell">-</td>
               <td id="e3_eng" class="mark-cell">-</td>
               <td id="e3_mat" class="mark-cell">-</td>
@@ -528,7 +528,7 @@
     const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
     
-    // Supabase Client ইনিশিয়ালাইজ
+    // Supabase Client ইনিশিয়ালাইজ
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // মেসেজ দেখানোর ফাংশন (No Pop-ups)
@@ -582,23 +582,23 @@
 
         if (error) {
           console.error(error);
-          showStatus("তথ্য আনতে সমস্যা হয়েছে! ইন্টারনেট সংযোগ পরীক্ষা করে পুনরায় চেষ্টা করুন।", "error");
+          showStatus("তথ্য আনতে সমস্যা হয়েছে! ইন্টারনেট সংযোগ পরীক্ষা করে পুনরায় চেষ্টা করুন।", "error");
           return;
         }
 
         if (!data) {
-          showStatus(`রোল নম্বর ${rollNo} এর কোনো ফলাফল পাওয়া যায়নি!`, "warning");
+          showStatus(`রোল নম্বর ${rollNo} এর কোনো ফলাফল পাওয়া যায়নি!`, "warning");
           return;
         }
 
-        // সফলভাবে তথ্য পাওয়া গেলে পেজে রেন্ডার করা
+        // সফলভাবে তথ্য পাওয়া গেলে পেজে রেন্ডার করা
         hideStatus();
         renderStudentData(data);
         resultContainer.style.display = 'block';
 
       } catch (err) {
         console.error(err);
-        showStatus("সার্ভারে সমস্যা দেখা দিয়েছে!", "error");
+        showStatus("সার্ভারে সমস্যা দেখা দিয়েছে!", "error");
       }
     }
 
@@ -611,7 +611,7 @@
       document.getElementById('resRoll').innerText = data.roll_no || '-';
       document.getElementById('resSession').innerText = data.session || '-';
 
-      // ২. বিষয়ভিত্তিক পরীক্ষাগুলোর মার্কস সেট
+      // ২. বিষয়ভিত্তিক পরীক্ষাগুলোর মার্কস সেট
       // Exam 1
       document.getElementById('e1_ben').innerHTML = formatMark(data.e1_bengali);
       document.getElementById('e1_eng').innerHTML = formatMark(data.e1_english);
@@ -636,7 +636,7 @@
       document.getElementById('e3_wrk').innerHTML = formatMark(data.e3_work_education);
       document.getElementById('e3_phy').innerHTML = formatMark(data.e3_physical_education);
 
-      // ৩. পর্যায়ক্রমিক মূল্যায়নভিত্তিক মোট নম্বর হিসাব (Exam Totals)
+      // ৩. পর্যায়ক্রমিক মূল্যায়নভিত্তিক মোট নম্বর হিসাব (Exam Totals)
       const e1Total = calculateSum([data.e1_bengali, data.e1_english, data.e1_math, data.e1_science, data.e1_work_education, data.e1_physical_education]);
       const e2Total = calculateSum([data.e2_bengali, data.e2_english, data.e2_math, data.e2_science, data.e2_work_education, data.e2_physical_education]);
       const e3Total = calculateSum([data.e3_bengali, data.e3_english, data.e3_math, data.e3_science, data.e3_work_education, data.e3_physical_education]);
