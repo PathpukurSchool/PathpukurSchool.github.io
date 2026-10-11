@@ -18,18 +18,18 @@
             var ref = document.referrer;
             var isValidReferrer = false;
 
-            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
+            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
-                if (refUrl.hostname === "pathpukurschool.github.io") {
+                if (refUrl.hostname === "pathpukurschool.pages.dev") {
                     isValidReferrer = true;
                 }
             }
 
-            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
+            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
             if (!isValidReferrer) {
-                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
-                window.location.replace("https://pathpukurschool.github.io/");
+                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
+                window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
 
@@ -40,7 +40,7 @@
             });
 
         } catch (e) {
-            window.location.replace("https://pathpukurschool.github.io/");
+            window.location.replace("https://pathpukurschool.pages.dev/");
         }
     })();
     </script>
