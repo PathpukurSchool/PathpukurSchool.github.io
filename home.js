@@ -8,48 +8,6 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =================================
-// 🛡️ BROWSER & DEVICE FINGERPRINTING
-// =================================
-function getDeviceFingerprint() {
-    let deviceId = localStorage.getItem('uniqueDeviceId');
-    if (!deviceId) {
-        // ব্রাউজার ও ডিভাইসের বিভিন্ন ইউনিক প্রপার্টি মিলিয়ে একটি শক্তিশালী ফিঙ্গারপ্রিন্ট তৈরি
-        const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        let glVendor = '';
-        let glRenderer = '';
-        if (gl) {
-            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-            if (debugInfo) {
-                glVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-                glRenderer = gl.getParameter(debugInfo.RENDERER_WEBGL);
-            }
-        }
-
-        const rawString = [
-            navigator.userAgent,
-            navigator.language,
-            screen.width + 'x' + screen.height,
-            new Date().getTimezoneOffset(),
-            navigator.hardwareConcurrency || 'unknown',
-            glVendor,
-            glRenderer
-        ].join('||');
-
-        // সহজ ও ইউনিক হ্যাশ জেনারেটর
-        let hash = 0;
-        for (let i = 0; i < rawString.length; i++) {
-            const char = rawString.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash |= 0; 
-        }
-        deviceId = 'dev_' + Math.abs(hash).toString(36) + '_' + Date.now().toString(36);
-        localStorage.setItem('uniqueDeviceId', deviceId);
-    }
-    return deviceId;
-}
-
-// =================================
 // 🔄 LOADER SHOW/HIDE UTILITY
 // =================================
 function showLoader() {
@@ -165,12 +123,13 @@ function setupLiveSearch() {
 }
 
 // =================================
-// 🔢 ক্যাপচা ফাংশনালিটি
+// 🔢 ক্যাপচা ফাংশনালিটি (Secure with Fallback)
 // =================================
 let currentCaptchaCode = "";
 let captchaTimer = null;
 const CAPTCHA_EXPIRE_TIME = 2 * 60 * 1000; // ২ মিনিট
 
+// 💡 window.crypto না থাকলে Safe Math.random Fallbacks
 function getRandomValuesFallback(array) {
     if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
         try {
@@ -185,6 +144,7 @@ function getRandomValuesFallback(array) {
     }
 }
 
+// 💡 ক্যাপচা জেনারেটর
 function generateCaptcha(clearError = true) {
     const canvas = document.getElementById('captchaCanvas');
     const userInput = document.getElementById('userCaptcha');
@@ -195,6 +155,7 @@ function generateCaptcha(clearError = true) {
     if (!ctx) return;
 
     if (captchaTimer) clearTimeout(captchaTimer);
+
     if (clearError && errorDiv) {
         errorDiv.innerText = "";
     }
@@ -248,6 +209,7 @@ function generateCaptcha(clearError = true) {
 
         captchaTimer = setTimeout(() => {
             currentCaptchaCode = "";
+            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "#ffe6e6";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -263,6 +225,10 @@ function generateCaptcha(clearError = true) {
 
     } catch (err) {
         console.error("CAPTCHA Generation Error:", err);
+        if (errorDiv) {
+            errorDiv.innerText = "⚠️ Failed to render CAPTCHA. Click refresh.";
+            errorDiv.style.color = "red";
+        }
     }
 }
 
@@ -286,7 +252,39 @@ function toggleMasterPasswordVisibility() {
     }
 }
 
+// চেক করুন অ্যাকাউন্ট লক আছে কিনা এবং ফর্ম হাইড করার লজিক
+function checkAccountLockStatus() {
+    let lockUntil = parseInt(localStorage.getItem('lockUntil') || '0', 10);
+    const loginFormContainer = document.getElementById('masterLoginFormContainer') || document.getElementById('masterLoginInputsArea') || document.querySelector('.login-form-box') || document.getElementById('masterLoginOverlay');
+    const errorDiv = document.getElementById('masterLoginError');
+
+    if (Date.now() < lockUntil) {
+        // অ্যাকাউন্ট লক থাকলে ইনপুট নেওয়ার জায়গা বা ফর্ম বন্ধ থাকবে এবং শুধুমাত্র লক মেসেজ দেখাবে
+        if (loginFormContainer) {
+            // ফর্মের ভেতরের ইনপুটগুলো হাইড বা ডিজেবল করার জন্য
+            const inputsAndLabels = loginFormContainer.querySelectorAll('input, button:not(#refreshCaptchaBtn), .input-group, label');
+            inputsAndLabels.forEach(el => {
+                if(el.id !== 'masterLoginError') el.style.display = 'none';
+            });
+        }
+        if (errorDiv) {
+            errorDiv.innerText = "⛔ Too many incorrect attempts. Account locked due to failed security checks.";
+            errorDiv.style.color = "red";
+            errorDiv.style.display = "block";
+        }
+        return true;
+    } else if (lockUntil > 0) {
+        // ২৪ ঘণ্টা পার হয়ে গেলে লক ক্লিয়ার করে দেওয়া
+        localStorage.removeItem('lockUntil');
+        localStorage.setItem('loginAttempts', '0');
+    }
+    return false;
+}
+
 async function submitMasterLogin() {
+    // যদি অলরেডি লক থাকে তবে আর প্রসিড করবে না
+    if (checkAccountLockStatus()) return;
+
     const idInput = document.getElementById('masterId');
     const passInput = document.getElementById('masterPass');
     const captchaInput = document.getElementById('userCaptcha');
@@ -295,23 +293,6 @@ async function submitMasterLogin() {
     const loginBtn = document.getElementById('masterLoginBtn');
 
     if (!idInput || !passInput || !captchaInput) return;
-
-    const deviceId = getDeviceFingerprint();
-
-    // 1. সাবমিট করার আগেই সুপাবেস থেকে ডিভাইস লক চেক করা যাক
-    try {
-        const { data: lockCheck } = await supabaseClient.rpc('check_and_update_device_lock', {
-            p_device_id: deviceId,
-            p_failed_action: false
-        });
-
-        if (lockCheck && lockCheck.length > 0 && lockCheck[0].is_locked) {
-            lockDeviceUI(errorDiv, idInput, passInput, captchaInput, loginBtn);
-            return;
-        }
-    } catch (e) {
-        console.error("Lock check error:", e);
-    }
 
     let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0', 10);
 
@@ -352,7 +333,7 @@ async function submitMasterLogin() {
 
     if (userCaptcha.toLowerCase() !== currentCaptchaCode.toLowerCase()) {
         loginAttempts++;
-        await handleFailedAttempt(loginAttempts, errorDiv, "❌ Invalid CAPTCHA code!", deviceId, idInput, passInput, captchaInput, loginBtn);
+        showAttemptStatus(loginAttempts, errorDiv, "❌ Invalid CAPTCHA code!");
         generateCaptcha(false);
         return;
     }
@@ -373,6 +354,7 @@ async function submitMasterLogin() {
         if (isValidUser) {
             if (captchaTimer) clearTimeout(captchaTimer);
             localStorage.removeItem('loginAttempts');
+            localStorage.removeItem('lockUntil');
 
             sessionStorage.setItem("userType", "teacher");
             sessionStorage.setItem("teacherLoggedIn", "true");
@@ -397,7 +379,8 @@ async function submitMasterLogin() {
 
         } else {
             loginAttempts++;
-            await handleFailedAttempt(loginAttempts, errorDiv, "❌ Incorrect ID or Password!", deviceId, idInput, passInput, captchaInput, loginBtn);
+            showAttemptStatus(loginAttempts, errorDiv, "❌ Incorrect ID or Password!");
+            
             generateCaptcha(false);
             if (loginBtn) {
                 loginBtn.innerText = "🔓 Login";
@@ -419,22 +402,16 @@ async function submitMasterLogin() {
     }
 }
 
-// 📌 ৪ বার ভুল হলে সুপাবেসে ডিভাইস লক করা এবং UI লক করা
-async function handleFailedAttempt(attempts, errorDiv, mainMsg, deviceId, idInput, passInput, captchaInput, loginBtn) {
+// 📌 Helper function to update login attempt counts & 24-hour lock status
+function showAttemptStatus(attempts, errorDiv, mainMsg) {
     if (attempts >= 4) {
-        // সুপাবেসে ২৪ ঘণ্টার জন্য ডিভাইস লক এন্ট্রি করা
-        try {
-            await supabaseClient.rpc('check_and_update_device_lock', {
-                p_device_id: deviceId,
-                p_failed_action: true,
-                p_lock_duration_hours: 24
-            });
-        } catch (e) {
-            console.error("Failed to update device lock in DB:", e);
-        }
+        // ৪ বার ভুল হলে সম্পূর্ণ একদিনের (২৪ ঘণ্টা) জন্য লক করা
+        let lockUntil = Date.now() + (24 * 60 * 60 * 1000); 
+        localStorage.setItem('lockUntil', lockUntil.toString());
+        localStorage.setItem('loginAttempts', '0'); 
 
-        localStorage.setItem('loginAttempts', '0');
-        lockDeviceUI(errorDiv, idInput, passInput, captchaInput, loginBtn);
+        // চেক স্ট্যাটাস ফাংশন কল করে ইনপুট হাইড ও লক মেসেজ প্রদর্শন নিশ্চিত করা
+        checkAccountLockStatus();
     } else {
         localStorage.setItem('loginAttempts', attempts.toString());
         let remainingAttempts = 4 - attempts;
@@ -445,30 +422,14 @@ async function handleFailedAttempt(attempts, errorDiv, mainMsg, deviceId, idInpu
     }
 }
 
-// 🔒 লক অবস্থায় ইনপুট ফিল্ড ও বাটন হাইড বা ডিজেবল করার ফাংশন
-function lockDeviceUI(errorDiv, idInput, passInput, captchaInput, loginBtn) {
-    if (errorDiv) {
-        errorDiv.innerText = `⛔ Account locked due to multiple failed login attempts!`;
-        errorDiv.style.color = "red";
-    }
-    if (idInput) idInput.style.display = 'none';
-    if (passInput) passInput.style.display = 'none';
-    if (captchaInput) captchaInput.style.display = 'none';
-    if (loginBtn) loginBtn.style.display = 'none';
-    
-    // পাসওয়ার্ড টগল বা লেবেল থাকলে তাও হাইড করতে পারেন
-    const passToggle = document.getElementById('masterPassToggle');
-    if (passToggle) passToggle.style.display = 'none';
-}
-
 // 🔒 স্ট্রং লগআউট সিস্টেম
 function logout() {
     sessionStorage.clear();
-    localStorage.removeItem('loginAttempts');
+    localStorage.clear();
     window.location.reload();
 }
 
-// 🚫 রাইট-ক্লিক, F12 নিষ্ক্রিয় করা
+// 🚫 রাইট-ক্লিক, F12 এবং সোর্স কোড দেখা নিষ্ক্রিয় করা
 document.addEventListener('contextmenu', event => event.preventDefault());
 
 document.addEventListener('keydown', function(event) {
@@ -529,8 +490,9 @@ function startAutoLogoutTimer() {
 }
 
 // =================================
-// 🔔 AVAILABLE SOON MESSAGE
+// 🔔 AVAILABLE SOON MESSAGE & CLICK HANDLER
 // =================================
+
 function showAvailableSoonMessage(button) {
     if (button.nextElementSibling && button.nextElementSibling.classList.contains('avail-msg')) return;
 
@@ -545,6 +507,7 @@ function showAvailableSoonMessage(button) {
     }, 3000);
 }
 
+// 🎯 ইউনিভার্সাল লিংক হ্যান্ডলার
 function setupUniversalLinkHandler() {
     document.querySelectorAll('a').forEach(a => {
         a.setAttribute('target', '_self');
@@ -573,12 +536,16 @@ function setupUniversalLinkHandler() {
 // =================================
 // 🧭 সাইড বার মেনু ও ড্রপডাউন ফাংশন
 // =================================
+
 function initializeSidebar() {
     const menuButton = document.getElementById('menu-toggle-button');
     const sidebar = document.getElementById('sidebar-menu');
     const overlay = document.getElementById('overlay');
 
-    if (!menuButton || !sidebar || !overlay) return;
+    if (!menuButton || !sidebar || !overlay) {
+        console.warn("Sidebar elements not found in DOM.");
+        return;
+    }
 
     menuButton.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -642,48 +609,29 @@ function initializeSidebar() {
 }
 
 // =================================
-// 🚀 ইনিশিয়ালাইজেশন (Page Load) ও ইনস্ট্যান্ট ডিভাইস লক চেক
+// 🚀 ইনিশিয়ালাইজেশন (Page Load)
 // =================================
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
     showLoader();
 
-    const deviceId = getDeviceFingerprint();
-    const overlay = document.getElementById('masterLoginOverlay');
-    const mainContent = document.getElementById('main-website-content');
-    const searchContainer = document.querySelector('.search-container');
-    const errorDiv = document.getElementById('masterLoginError');
-    const idInput = document.getElementById('masterId');
-    const passInput = document.getElementById('masterPass');
-    const captchaInput = document.getElementById('userCaptcha');
-    const loginBtn = document.getElementById('masterLoginBtn');
+    if (sessionStorage.getItem("teacherLoggedIn") === "true") {
+        const overlay = document.getElementById('masterLoginOverlay');
+        const mainContent = document.getElementById('main-website-content');
+        const searchContainer = document.querySelector('.search-container');
+        
+        if (overlay) overlay.style.display = "none";
+        if (mainContent) mainContent.style.display = "block";
+        if (searchContainer) searchContainer.style.display = "block";
 
-    try {
-        // পেজ ওপেন হওয়ার সাথেই সুপাবেস ডাটাবেস থেকে চেক করা যে এই ডিভাইসটি লক আছে কি না
-        const { data: lockCheck } = await supabaseClient.rpc('check_and_update_device_lock', {
-            p_device_id: deviceId,
-            p_failed_action: false
-        });
-
-        if (lockCheck && lockCheck.length > 0 && lockCheck[0].is_locked) {
-            // যদি লক করা থাকে, তবে সাথে সাথে ইনপুট ফিল্ড হাইড হয়ে যাবে এবং কোনো সময় দেখাবে না
-            if (overlay) overlay.style.display = "flex";
-            lockDeviceUI(errorDiv, idInput, passInput, captchaInput, loginBtn);
-        } else {
-            if (sessionStorage.getItem("teacherLoggedIn") === "true") {
-                if (overlay) overlay.style.display = "none";
-                if (mainContent) mainContent.style.display = "block";
-                if (searchContainer) searchContainer.style.display = "block";
-
-                startAutoLogoutTimer();
-            } else {
-                if (overlay) overlay.style.display = "flex";
-                generateCaptcha(true);
-            }
-        }
-    } catch (err) {
-        console.error("Initial load check error:", err);
+        startAutoLogoutTimer();
+    } else {
+        const overlay = document.getElementById('masterLoginOverlay');
         if (overlay) overlay.style.display = "flex";
-        generateCaptcha(true);
+        
+        // পেজ লোড হওয়ার সাথেই লক স্ট্যাটাস চেক করা হবে যাতে লক থাকলে ফর্ম ওপেন না হয়
+        if (!checkAccountLockStatus()) {
+            generateCaptcha(true);
+        }
     }
 
     initializeSidebar();
