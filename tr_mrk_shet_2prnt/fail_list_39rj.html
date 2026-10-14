@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="bn" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+  <style id="security-shield">
+    body { display: none !important; }
+  </style>
+
+  <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+  <script>
+    (function() {
+        try {
+            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+
+            var ref = document.referrer;
+            var isValidReferrer = false;
+            if (ref) {
+                var refUrl = new URL(ref);
+                // সংশোধন ১: পুরোনো গিটহাব ডোমেইনের পরিবর্তে নতুন ক্লাউডফ্লেয়ার ডোমেইন যুক্ত করা হলো
+                if (refUrl.hostname === "pathpukurschool.pages.dev" || refUrl.hostname === "localhost") {
+                    isValidReferrer = true;
+                }
+            }
+
+            if (!isLoggedIn) {
+                sessionStorage.clear();
+                // সংশোধন ২: রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
+                window.location.replace("https://pathpukurschool.pages.dev/");
+                return;
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
+
+        } catch (e) {
+            sessionStorage.clear();
+            // সংশোধন ৩: ক্যাচ ব্লকের রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
+            window.location.replace("https://pathpukurschool.pages.dev/");
+        }
+    })();
+    </script>
+
+    <!-- ড্রপ আউট, রেজিস্ট্রেশন ও এনরোলমেন্ট ফরম ফিলাপ না করা এবং ফেল করা ছাত্রছাত্রীদের তালিকা -->
+    <title>Pathpukur High School (HS)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-section, #printable-section * {
+                visibility: visible;
+            }
+            #printable-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-full flex flex-col justify-between font-sans">
+
+    <!-- 1) Header Section -->
+    <header class="bg-blue-700 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <div class="text-center sm:text-left">
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-wide">Pathpukur High School (HS)</h1>
+                <p class="text-blue-100 text-sm sm:text-base mt-1 flex items-center justify-center sm:justify-start gap-2">
+                    <i class="fa-solid fa-clipboard-list"></i> Fail List : <span id="session-display" class="font-semibold bg-blue-800 px-2 py-0.5 rounded animate-pulse">Loading Session...</span>
+                </p>
+            </div>
+            <div class="mt-3 sm:mt-0 text-xs sm:text-sm bg-blue-800 px-3 py-1.5 rounded-full border border-blue-600 flex items-center gap-2 shadow-inner">
+                <i class="fa-solid fa-shield-halved text-yellow-300"></i>
+                <span id="security-status-badge">Checking security...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl w-full mx-auto px-4 py-6 flex-grow space-y-6">
+
+        <!-- 2) Notice / Guidelines Box -->
+        <section id="guidelines-card" class="bg-white border-l-4 border-blue-600 p-4 sm:p-5 rounded-r-lg shadow-sm transition-all">
+            <div class="flex items-start gap-3">
+                <div class="text-blue-600 text-xl mt-0.5">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="flex-grow">
+                    <h2 class="font-bold text-gray-900 text-base sm:text-lg mb-1">নির্দেশিকা ও কার্যপ্রণালী (Guidelines)</h2>
+                    <div id="guidelines-content" class="text-sm text-gray-600 space-y-1">
+                        <p>১. প্রথমে ড্রপডাউন থেকে নির্দিষ্ট <strong>Class (V - XI)</strong> নির্বাচন করুন।</p>
+                        <p>২. ডাটা এন্ট্রি বা এডিট করার জন্য সঠিক <strong>Passkey</strong> দিয়ে ভেরিফাই করুন।</p>
+                        <p>৩. রিজন (Drop Out, Non Regi, Fail) সিলেক্ট করে রোল নম্বর দিন, স্টুডেন্ট নাম ও প্রাপ্ত নম্বর যাচাই করে সাবমিট করুন।</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Configuration & Setup Card (Hidden if edit_mode is false or until verified) -->
+        <div id="app-content-wrapper" class="space-y-6">
+
+            <!-- 3) Class Dropdown & 4) Passkey Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Class Selection Box -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                    <label for="class-select" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-blue-600"></i> ক্লাস নির্বাচন করুন (Select Class)
+                    </label>
+                    <select id="class-select" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-gray-900 font-medium transition-all">
+                        <option value="">-- ক্লাস সিলেক্ট করুন --</option>
+                        <option value="v">Class V</option>
+                        <option value="vi">Class VI</option>
+                        <option value="vii">Class VII</option>
+                        <option value="viii">Class VIII</option>
+                        <option value="ix">Class IX</option>
+                        <option value="x">Class X</option>
+                        <option value="xi">Class XI</option>
+                    </select>
+                </div>
+
+                <!-- Passkey Verification Box -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-key text-blue-600"></i> এডমিন পাসকি ভেরিফিকেশন (Passkey Verification)
+                    </label>
+                    <div class="flex gap-2 relative" id="passkey-container">
+                        <div class="relative flex-grow">
+                            <input type="password" id="passkey-input" placeholder="পাসকি প্রবেশ করান" class="w-full px-4 py-2.5 pr-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all">
+                            <button type="button" id="toggle-passkey" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 focus:outline-none">
+                                <i class="fa-solid fa-eye" id="eye-icon"></i>
+                            </button>
+                        </div>
+                        <button id="verify-btn" onclick="verifyPasskey()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg transition-all flex items-center gap-2 shadow-sm whitespace-nowrap">
+                            <i class="fa-solid fa-check-to-slot"></i> Verify
+                        </button>
+                    </div>
+                    <div id="verify-message" class="mt-2 text-xs font-medium"></div>
+                </div>
+
+            </div>
+
+            <!-- 5) Data Entry Input Field Section (Active only if verified) -->
+            <div id="entry-section" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 opacity-60 pointer-events-none transition-all">
+                <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2 border-b pb-2">
+                    <i class="fa-solid fa-user-plus text-blue-600"></i> একাধিক স্টুডেন্ট দ্রুত এন্ট্রি (Fast Multiple Student Data Entry)
+                </h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
+                    
+                    <!-- Reason Selection -->
+                    <div class="sm:col-span-4">
+                        <label for="reason-select" class="block text-xs font-semibold text-gray-600 mb-1">কারন (Reason):</label>
+                        <select id="reason-select" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm font-medium bg-gray-50">
+                            <!-- Options dynamically populated based on class -->
+                        </select>
+                    </div>
+
+                    <!-- Roll Input Box -->
+                    <div class="sm:col-span-4">
+                        <label for="roll-input" class="block text-xs font-semibold text-gray-600 mb-1">রোল নম্বর (Roll No):</label>
+                        <input type="number" id="roll-input" inputmode="numeric" pattern="[0-9]*" placeholder="রোল লিখে এন্টার বা ট্যাব দিন" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm font-medium">
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="sm:col-span-4 flex gap-2">
+                        <button onclick="stageStudentEntry()" type="button" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-lg text-sm shadow-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> অ্যাড লিস্টে যোগ করুন
+                        </button>
+                        <button onclick="submitBatchEntries()" type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg text-sm shadow-sm transition-all flex items-center gap-1">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Submit
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Student Verification Preview Box -->
+                <div id="student-preview" class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="font-bold text-blue-900" id="prev-name">---</span> | 
+                            রোল: <span class="font-semibold text-blue-800" id="prev-roll">---</span> | 
+                            সেকশন: <span class="font-semibold text-blue-800" id="prev-sec">---</span> | 
+                            মোট নম্বর: <span class="font-semibold text-blue-800" id="prev-marks">---</span>
+                        </div>
+                        <span class="text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded font-medium">যাচাইকৃত স্টুডেন্ট</span>
+                    </div>
+                </div>
+
+                <!-- Staged Entries Queue Table -->
+                <div id="staged-queue-container" class="mt-4 hidden">
+                    <p class="text-xs font-semibold text-gray-500 mb-2">সাবমিট করার জন্য অপেক্ষারত স্টুডেন্ট তালিকা:</p>
+                    <div class="overflow-x-auto border rounded-lg max-h-40 overflow-y-auto">
+                        <table class="min-w-full divide-y divide-gray-200 text-xs">
+                            <thead class="bg-gray-100 text-gray-700 sticky top-0">
+                                <tr>
+                                    <th class="px-3 py-2 text-left">রোল</th>
+                                    <th class="px-3 py-2 text-left">নাম</th>
+                                    <th class="px-3 py-2 text-left">কারণ</th>
+                                    <th class="px-3 py-2 text-right">মুছুন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staged-tbody" class="divide-y divide-gray-200 bg-white"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 6) Print & Export Excel Action Bar -->
+        <div class="flex flex-wrap justify-between items-center gap-3 bg-white p-4 rounded-xl shadow-sm border border-gray-200 no-print">
+            <div class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <i class="fa-solid fa-table-cells text-blue-600"></i> <span id="table-heading-title">দয়া করে ক্লাস সিলেক্ট করুন</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="printTable()" class="bg-gray-700 hover:bg-gray-800 text-white font-medium px-4 py-2 rounded-lg text-sm transition-all flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-print"></i> Print A4
+                </button>
+                <button onclick="downloadExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-all flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-file-excel"></i> Download Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- 7) Data Display Table Section -->
+        <div id="printable-section" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                <h3 id="table-box-title" class="font-bold text-gray-800 text-base">ফেল বা ড্রপআউট তালিকা</h3>
+                <span id="record-count" class="text-xs bg-gray-200 text-gray-700 px-2.5 py-1 rounded-full font-medium">0 records</span>
+            </div>
+
+            <!-- Loader State -->
+            <div id="table-loader" class="py-12 flex flex-col items-center justify-center space-y-3">
+                <div class="animate-spin rounded-full h-10 w-10 border-4 border-blue-600 border-t-transparent"></div>
+                <p class="text-sm text-gray-500 font-medium">ডাটা লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</p>
+            </div>
+
+            <!-- Table Container -->
+            <div id="table-container" class="overflow-x-auto hidden">
+                <table class="min-w-full divide-y divide-gray-200 text-sm">
+                    <thead class="bg-blue-50 text-blue-900 font-semibold">
+                        <tr>
+                            <th class="px-4 py-3 text-left">Sl</th>
+                            <th class="px-4 py-3 text-left">Section</th>
+                            <th class="px-4 py-3 text-left">Roll</th>
+                            <th class="px-4 py-3 text-left">Student Name</th>
+                            <th class="px-4 py-3 text-left">Total Marks</th>
+                            <th class="px-4 py-3 text-left">Reason</th>
+                            <th class="px-4 py-3 text-center no-print">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fail-list-tbody" class="divide-y divide-gray-200 bg-white">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-4 text-center text-xs text-gray-500">
+        <p>Pathpukur High School (HS) Result & Fail Management System &bull; Powered by Supabase</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+      // ⚡ সাব-পেজে অ্যাক্টিভিটি ট্র্যাকিং আপডেট রাখা (যাতে অহেতুক অটো-লগআউট না হয়)
+    function updateActivityTime() {
+        localStorage.setItem('lastActivityTime', Date.now().toString());
+     }
+     ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+         document.addEventListener(evt, updateActivityTime, { passive: true });
+     });
+    
+    // Supabase কনফিগারেশন
+        const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let isVerified = false;
+        let currentSession = '2026';
+        let stagedStudents = [];
+        let fetchedStudentsCache = []; // Caches student records for the selected class & session
+
+        // Class configuration mapping table names & keys
+        const classConfig = {
+            'v': { name: 'Class V', resultTable: 'result_v', rollCol: 'roll_v', reasonCol: 'reason_v' },
+            'vi': { name: 'Class VI', resultTable: 'result_vi', rollCol: 'roll_vi', reasonCol: 'reason_vi' },
+            'vii': { name: 'Class VII', resultTable: 'result_vii', rollCol: 'roll_vii', reasonCol: 'reason_vii' },
+            'viii': { name: 'Class VIII', resultTable: 'result_viii', rollCol: 'roll_viii', reasonCol: 'reason_viii' },
+            'ix': { name: 'Class IX', resultTable: 'result_ix', rollCol: 'roll_ix', reasonCol: 'reason_ix' },
+            'x': { name: 'Class X', resultTable: 'result_x', rollCol: 'roll_x', reasonCol: 'reason_x' },
+            'xi': { name: 'Class XI', resultTable: 'result_xi', rollCol: 'roll_xi', reasonCol: 'reason_xi' }
+        };
+
+        // Initialize App on Load
+        window.addEventListener('DOMContentLoaded', async () => {
+            await checkPageSecurity();
+            setupEventListeners();
+        });
+
+        // 1. Check Page Security & Edit Mode
+        async function checkPageSecurity() {
+            const statusBadge = document.getElementById('security-status-badge');
+            const guidelinesContent = document.getElementById('guidelines-content');
+            const appWrapper = document.getElementById('app-content-wrapper');
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('page_security')
+                    .select('*')
+                    .eq('page_name', 'fail_list')
+                    .single();
+
+                if (error || !data) {
+                    statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Security Config Missing';
+                    return;
+                }
+
+                if (data.edit_mode !== 'true' && data.edit_mode !== true) {
+                    appWrapper.style.display = 'none';
+                    guidelinesContent.innerHTML = `<div class="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg font-medium flex items-center gap-2">
+                        <i class="fa-solid fa-ban text-red-500"></i> এই কাজ বন্ধ রাখা হয়েছে (Edit mode is currently disabled by administrator).
+                    </div>`;
+                    statusBadge.innerHTML = 'Edit Mode: Disabled';
+                    document.getElementById('table-loader').style.display = 'none';
+                    document.getElementById('table-container').classList.remove('hidden');
+                    return;
+                }
+
+                statusBadge.innerHTML = 'Security Active';
+                // Automatically fetch active session from result_v table
+                await fetchActiveSession();
+            } catch (err) {
+                console.error("Security check failed:", err);
+                statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Connection Error';
+            }
+        }
+
+        // Fetch active session from result tables
+        async function fetchActiveSession() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('result_v')
+                    .select('session')
+                    .limit(1);
+
+                if (data && data.length > 0) {
+                    currentSession = data[0].session;
+                }
+                document.getElementById('session-display').innerText = currentSession;
+            } catch (e) {
+                document.getElementById('session-display').innerText = '2026';
+            }
+        }
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Toggle passkey visibility
+            document.getElementById('toggle-passkey').addEventListener('click', () => {
+                const input = document.getElementById('passkey-input');
+                const icon = document.getElementById('eye-icon');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
+
+            // Class selection change
+            document.getElementById('class-select').addEventListener('change', (e) => {
+                const selectedClass = e.target.value;
+                updateReasonDropdown(selectedClass);
+                if (selectedClass) {
+                    loadClassData(selectedClass);
+                } else {
+                    document.getElementById('table-loader').style.display = 'none';
+                    document.getElementById('table-container').classList.add('hidden');
+                    document.getElementById('table-heading-title').innerText = 'দয়া করে ক্লাস সিলেক্ট করুন';
+                    document.getElementById('record-count').innerText = '0 records';
+                }
+            });
+
+            // Roll input real-time student lookup preview
+            document.getElementById('roll-input').addEventListener('input', async (e) => {
+                const roll = e.target.value.trim();
+                const classKey = document.getElementById('class-select').value;
+                if (!classKey || !roll) {
+                    document.getElementById('student-preview').classList.add('hidden');
+                    return;
+                }
+                await lookupStudent(classKey, parseInt(roll));
+            });
+        }
+
+        // Update Reason Dropdown Options based on Class
+        function updateReasonDropdown(classKey) {
+            const reasonSelect = document.getElementById('reason-select');
+            reasonSelect.innerHTML = '';
+            
+            if (['v', 'vi', 'vii', 'viii'].includes(classKey)) {
+                reasonSelect.innerHTML = `<option value="Drop Out">Drop Out</option>`;
+            } else if (['ix', 'x', 'xi'].includes(classKey)) {
+                reasonSelect.innerHTML = `
+                    <option value="Drop Out">Drop Out</option>
+                    <option value="Non Regi">Non Regi</option>
+                    <option value="Fail">Fail</option>
+                `;
+            } else {
+                reasonSelect.innerHTML = `<option value="Drop Out">Drop Out</option>`;
+            }
+        }
+
+        // Verify Passkey
+        async function verifyPasskey() {
+            const passkeyInput = document.getElementById('passkey-input').value.trim();
+            const msgDiv = document.getElementById('verify-message');
+            const verifyBtnContainer = document.getElementById('passkey-container');
+
+            if (!passkeyInput) {
+                msgDiv.innerHTML = '<span class="text-red-600 font-semibold">দয়া করে পাসকি ইনপুট করুন!</span>';
+                return;
+            }
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('page_security')
+                    .select('passkey')
+                    .eq('page_name', 'fail_list')
+                    .single();
+
+                if (data && data.passkey === passkeyInput) {
+                    isVerified = true;
+                    msgDiv.innerHTML = '';
+                    // Replace Verify button with success badge
+                    const verifyBtn = document.getElementById('verify-btn');
+                    verifyBtn.outerHTML = `<div class="bg-emerald-100 text-emerald-800 px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 border border-emerald-300">
+                        <i class="fa-solid fa-circle-check text-emerald-600"></i> পাসকী ভেরিফিকেশন সম্পন্ন হয়েছে
+                    </div>`;
+                    document.getElementById('passkey-input').disabled = true;
+                    
+                    // Enable Entry section
+                    const entrySec = document.getElementById('entry-section');
+                    entrySec.classList.remove('opacity-60', 'pointer-events-none');
+                } else {
+                    msgDiv.innerHTML = '<span class="text-red-600 font-semibold">ভুল পাসকি! সঠিক পাসকি দিয়ে পুনরায় চেষ্টা করুন।</span>';
+                }
+            } catch (err) {
+                msgDiv.innerHTML = '<span class="text-red-600 font-semibold">ভেরিফিকেশনে ত্রুটি ঘটেছে।</span>';
+            }
+        }
+
+        // Calculate Total Marks dynamically from result record
+        function calculateTotalMarks(student, classKey) {
+            let total = 0;
+            let hasMark = false;
+            
+            for (let key in student) {
+                // Sum all columns starting with e1_, e2_, e3_, test_, sem1_, sem2_, proj_ (excluding text proj in X)
+                if ((key.startsWith('e1_') || key.startsWith('e2_') || key.startsWith('e3_') || 
+                     key.startsWith('test_') || key.startsWith('sem1_') || key.startsWith('sem2_') ||
+                     (key.startsWith('proj_') && classKey !== 'x')) && typeof student[key] === 'number') {
+                    total += student[key];
+                    hasMark = true;
+                }
+            }
+            return hasMark ? total : 'N/A';
+        }
+
+        // Lookup Student Data for Preview
+        async function lookupStudent(classKey, rollNo) {
+            const cfg = classConfig[classKey];
+            const previewBox = document.getElementById('student-preview');
+
+            try {
+                // If cache is empty for this class, fetch all students for this class & session
+                if (fetchedStudentsCache.length === 0) {
+                    const { data, error } = await supabaseClient
+                        .from(cfg.resultTable)
+                        .select('*')
+                        .eq('session', currentSession);
+                    
+                    if (data) fetchedStudentsCache = data;
+                }
+
+                const student = fetchedStudentsCache.find(s => s.roll_no === rollNo);
+                if (student) {
+                    document.getElementById('prev-name').innerText = student.student_name;
+                    document.getElementById('prev-roll').innerText = student.roll_no;
+                    document.getElementById('prev-sec').innerText = student.section;
+                    document.getElementById('prev-marks').innerText = calculateTotalMarks(student, classKey);
+                    previewBox.classList.remove('hidden');
+                } else {
+                    previewBox.classList.add('hidden');
+                }
+            } catch (err) {
+                console.error("Student lookup error:", err);
+            }
+        }
+
+        // Stage Student Entry to Queue
+        function stageStudentEntry() {
+            const roll = document.getElementById('roll-input').value.trim();
+            const reason = document.getElementById('reason-select').value;
+            const classKey = document.getElementById('class-select').value;
+
+            if (!classKey) {
+                alert('দয়া করে প্রথমে ক্লাস সিলেক্ট করুন।');
+                return;
+            }
+            if (!roll) {
+                alert('দয়া করে রোল নম্বর লিখুন।');
+                return;
+            }
+
+            const student = fetchedStudentsCache.find(s => s.roll_no === parseInt(roll));
+            const name = student ? student.student_name : 'Unknown Student';
+
+            // Check if already staged
+            if (stagedStudents.some(s => s.roll === parseInt(roll))) {
+                alert('এই রোল নম্বরটি ইতিমধ্যে তালিকায় যোগ করা হয়েছে।');
+                return;
+            }
+
+            stagedStudents.push({
+                roll: parseInt(roll),
+                name: name,
+                reason: reason
+            });
+
+            renderStagedQueue();
+            document.getElementById('roll-input').value = '';
+            document.getElementById('student-preview').classList.add('hidden');
+            document.getElementById('roll-input').focus();
+        }
+
+        // Render Staged Queue Table
+        function renderStagedQueue() {
+            const container = document.getElementById('staged-queue-container');
+            const tbody = document.getElementById('staged-tbody');
+            tbody.innerHTML = '';
+
+            if (stagedStudents.length === 0) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            stagedStudents.forEach((item, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="px-3 py-2 font-semibold">${item.roll}</td>
+                        <td class="px-3 py-2">${item.name}</td>
+                        <td class="px-3 py-2"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded">${item.reason}</span></td>
+                        <td class="px-3 py-2 text-right">
+                            <button onclick="removeStaged(${index})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function removeStaged(index) {
+            stagedStudents.splice(index, 1);
+            renderStagedQueue();
+        }
+
+        // Submit Batch Entries to Supabase fail_list table
+        async function batchSubmitEntries() {
+            const classKey = document.getElementById('class-select').value;
+            if (stagedStudents.length === 0) {
+                alert('সাবমিট করার জন্য কোনো স্টুডেন্ট যোগ করা হয়নি!');
+                return;
+            }
+
+            if (!confirm(`আপনি কি নিশ্চিতভাবে ${stagedStudents.length} জন স্টুডেন্টের ডাটা সেভ করতে চান?`)) {
+                return;
+            }
+
+            try {
+                // Insert each staged student as a row or packed record
+                // As per schema fail_v, reason_v etc.
+                for (let item of stagedStudents) {
+                    let insertObj = {
+                        class_key: classKey,
+                        session: currentSession
+                    };
+                    insertObj[`roll_${classKey}`] = item.roll;
+                    insertObj[`reason_${classKey}`] = item.reason;
+
+                    const { error } = await supabaseClient.from('fail_list').insert([insertObj]);
+                    if (error) console.error("Insert error:", error);
+                }
+
+                alert('সফলভাবে ডাটা সুপাবেসে সেভ করা হয়েছে!');
+                stagedStudents = [];
+                renderStagedQueue();
+                loadClassData(classKey);
+            } catch (err) {
+                alert('ডাটা সেভ করার সময় ত্রুটি ঘটেছে।');
+                console.error(err);
+            }
+        }
+
+        // Alias for Submit button click
+        function submitBatchEntries() {
+            batchSubmitEntries();
+        }
+
+        // Load and Display Class Fail Data Table
+        async function loadClassData(classKey) {
+            const loader = document.getElementById('table-loader');
+            const container = document.getElementById('table-container');
+            const tbody = document.getElementById('fail-list-tbody');
+            const titleBox = document.getElementById('table-box-title');
+            const headingTitle = document.getElementById('table-heading-title');
+            const recordCount = document.getElementById('record-count');
+
+            loader.style.display = 'flex';
+            container.classList.add('hidden');
+
+            const cfg = classConfig[classKey];
+            titleBox.innerText = `${cfg.name} Fail / Dropout List`;
+            headingTitle.innerHTML = `<i class="fa-solid fa-list-check text-blue-600"></i> ${cfg.name} এর Fail List দেখানো হচ্ছে`;
+
+            try {
+                // Fetch student result records for marks lookup
+                const { data: resData } = await supabaseClient
+                    .from(cfg.resultTable)
+                    .select('*')
+                    .eq('session', currentSession);
+                
+                fetchedStudentsCache = resData || [];
+
+                // Fetch fail_list records for this class & session
+                const { data: failData, error } = await supabaseClient
+                    .from('fail_list')
+                    .select('*')
+                    .eq('class_key', classKey)
+                    .eq('session', currentSession);
+
+                if (error) throw error;
+
+                // Extract flattened fail entries
+                let list = [];
+                if (failData) {
+                    failData.forEach(row => {
+                        const roll = row[`roll_${classKey}`];
+                        const reason = row[`reason_${classKey}`];
+                        if (roll !== null && roll !== undefined) {
+                            // Find matching student detail
+                            const student = fetchedStudentsCache.find(s => s.roll_no === roll);
+                            list.push({
+                                id: row.id,
+                                roll: roll,
+                                section: student ? student.section : 'N/A',
+                                name: student ? student.student_name : 'Unknown Student',
+                                totalMarks: student ? calculateTotalMarks(student, classKey) : 'N/A',
+                                reason: reason || 'Drop Out'
+                            });
+                        }
+                    });
+                }
+
+                // Sort by Roll number ascending
+                list.sort((a, b) => a.roll - b.roll);
+
+                tbody.innerHTML = '';
+                recordCount.innerText = `${list.length} records`;
+
+                if (list.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500">কোনো ডাটা পাওয়া যায়নি।</td></tr>`;
+                } else {
+                    list.forEach((item, index) => {
+                        tbody.innerHTML += `
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-3 font-medium text-gray-600">${index + 1}</td>
+                                <td class="px-4 py-3">${item.section}</td>
+                                <td class="px-4 py-3 font-semibold text-gray-900">${item.roll}</td>
+                                <td class="px-4 py-3 font-medium text-gray-900">${item.name}</td>
+                                <td class="px-4 py-3">${item.totalMarks}</td>
+                                <td class="px-4 py-3">
+                                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">${item.reason}</span>
+                                </td>
+                                <td class="px-4 py-3 text-center no-print">
+                                    <button onclick="deleteFailRecord(${item.id})" class="text-red-500 hover:text-red-700 p-1 rounded transition-all" title="Delete">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                loader.style.display = 'none';
+                container.classList.remove('hidden');
+
+            } catch (err) {
+                console.error("Error loading table data:", err);
+                loader.innerHTML = '<p class="text-red-500 text-sm font-medium">ডাটা লোড করতে সমস্যা হয়েছে।</p>';
+            }
+        }
+
+        // Delete Fail Record
+        async function deleteFailRecord(id) {
+            if (!isVerified) {
+                alert('সঠিক পাসকি দিয়ে প্রথমে ভেরিফাই করুন!');
+                return;
+            }
+
+            if (!confirm('আপনি কি নিশ্চিতভাবে এই রেকর্ডটি মুছে ফেলতে চান?')) {
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('fail_list')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                alert('রেকর্ড সফলভাবে মুছে ফেলা হয়েছে।');
+                const classKey = document.getElementById('class-select').value;
+                if (classKey) loadClassData(classKey);
+            } catch (err) {
+                alert('মুছে ফেলতে সমস্যা হয়েছে।');
+                console.error(err);
+            }
+        }
+
+        // Print A4 Function
+        function printTable() {
+            window.print();
+        }
+
+        // Download Excel Function (Downloads entire fail_list table)
+        async function downloadExcel() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('fail_list')
+                    .select('*');
+
+                if (error) throw error;
+                if (!data || data.length === 0) {
+                    alert('ডাউনলোড করার জন্য কোনো ডাটা নেই!');
+                    return;
+                }
+
+                const worksheet = XLSX.utils.json_to_sheet(data);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Fail List Full");
+                XLSX.writeFile(workbook, "pathpukur_fail_list.xlsx");
+            } catch (err) {
+                alert('এক্সেল ফাইল ডাউনলোড করতে সমস্যা হয়েছে।');
+                console.error(err);
+            }
+        }
+    </script>
+  <!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
+ <script src="home.js"></script>
+</body>
+</html>
