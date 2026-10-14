@@ -472,7 +472,7 @@
                 document.getElementById('sessionDisplay').innerText = "--";
             }
 
-            currentClassStudents = processAndRankStudents(data || [], config, selectedClass);
+            currentClassStudents = processAndRankStudents(data || [], config, selectedClass, failListData || []);
 
             renderSubjectInfoBanner(config);
 
@@ -501,7 +501,7 @@
             setTimeout(() => { if (refreshIcon) refreshIcon.classList.remove('fa-spin'); }, 500);
         }
 
-        function processAndRankStudents(rawData, config, classKey) {
+        function processAndRankStudents(rawData, config, classKey, failListData) {
             if (!rawData || rawData.length === 0) return [];
 
             let activeExamIndexes = [];
@@ -607,6 +607,8 @@
                 }
 
                 const pct = classTotalFullMarks > 0 ? ((grandTotal / classTotalFullMarks) * 100).toFixed(1) : 0;
+
+                let matchedFail = failListData ? failListData.find(f => f.roll_no === st.roll_no) : null;
 
                 let studentStatus = 'SUCCESS';
                 if (st.status && typeof st.status === 'string' && st.status.toLowerCase().includes('drop')) {
