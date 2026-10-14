@@ -580,6 +580,7 @@
             };
         });
 
+        // ১. প্রথমে সব ছাত্রকে সাধারণ ক্রমানুসারে সাজানো
         processed.sort((a, b) => {
             if (b.grandTotal !== a.grandTotal) return b.grandTotal - a.grandTotal;
             if (a.hasAbsent !== b.hasAbsent) return a.hasAbsent ? 1 : -1;
@@ -587,10 +588,22 @@
             return a.roll_no - b.roll_no;
         });
 
-        return processed.map((st, index) => ({
-            ...st,
-            calculatedRank: st.grandTotal > 0 ? index + 1 : null
-        }));
+        // ২. র্যাংক হিসাব করার সময় শুধুমাত্র পাস করা এবং ফেইল লিস্টে নেই এমন ছাত্রদের র্যাংক দেওয়া হবে
+        let currentRank = 1;
+        return processed.map((st) => {
+            // যদি ছাত্রটি fail_classMap এ থাকে (অর্থাৎ ফেইল লিস্টে নাম থাকে), তবে তার র‍্যাঙ্ক null হবে
+            const isFailed = classFailMap && classFailMap[st.roll_no];
+
+            let rankToAssign = null;
+            if (!isFailed && st.grandTotal > 0) {
+                rankToAssign = currentRank++; // শুধুমাত্র পাস করা ছাত্রদের জন্য র্যাংক ১, ২, ৩... বাড়বে
+            }
+
+            return {
+                ...st,
+                calculatedRank: rankToAssign
+            };
+        });
     }
 
     function renderSubjectInfoBanner(config) {
