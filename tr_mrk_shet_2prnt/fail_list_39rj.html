@@ -179,16 +179,21 @@
                 </div>
 
                 <!-- স্টুডেন্ট ভেরিফিকেশন প্রিভিউ ইনফো -->
-                <div id="studentPreview" class="bg-gray-50 p-3 rounded-lg border border-gray-200 text-sm hidden mb-4">
+            <div id="studentPreview" class="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm hidden mb-4 flex flex-wrap justify-between items-center gap-4">
+                
+                <!-- লেখা অংশ -->
+                <div class="flex-1 min-w-[200px]">
                     <span class="font-semibold text-gray-700">স্টুডেন্ট তথ্য: </span>
                     <span id="previewText" class="text-blue-900"></span>
-
-                    <div class="p-3 bg-gray-50 border-t flex justify-end">
-                        <button onclick="submitPendingData()" id="submitAllBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow disabled:opacity-50" disabled>
-                            <i class="fa-solid fa-cloud-arrow-up"></i> Submit
-                        </button>
-                    </div>
                 </div>
+            
+                <!-- বোতাম অংশ -->
+                <div>
+                    <button onclick="submitPendingData()" id="submitAllBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow disabled:opacity-50" disabled>
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Submit
+                    </button>
+                </div>
+            </div>
 
                 <!-- সাবমিটের অপেক্ষারত স্টুডেন্ট তালিকা (ডাইনামিক সাইজ) -->
                 <div class="mt-4 border border-gray-200 rounded-lg overflow-hidden">
