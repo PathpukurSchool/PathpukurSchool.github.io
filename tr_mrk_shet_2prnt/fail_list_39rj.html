@@ -75,6 +75,8 @@
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col justify-between">
 
     <div>
+        <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+            
         <!-- 1) হেডার সেকশন -->
         <header class="bg-blue-800 text-white shadow-md">
             <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
@@ -82,30 +84,34 @@
                     <h1 class="text-2xl font-bold flex items-center gap-2">
                         <i class="fa-solid fa-school"></i> Pathpukur High School (HS)
                     </h1>
-                    <p class="text-sm text-blue-200 mt-1">Fail List Management Portal</p>
-                </div>
-                <div class="mt-2 sm:mt-0 bg-blue-700 px-4 py-2 rounded-lg text-sm font-semibold shadow-inner">
-                    <span id="sessionDisplay">Session: Loading...</span>
+                    <p class="text-sm text-blue-200 mt-1">Fail List Management Portal: <span id="sessionDisplay" class="font-semibold bg-blue-800 px-2 py-0.5 rounded animate-pulse">Loading Session...</span>
+                    </p>
                 </div>
             </div>
         </header>
 
-        <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
-
             <!-- 2) নির্দেশিকা বক্স ও এডিট মোড চেক -->
             <div id="maintenanceAlert" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow" role="alert">
                 <p class="font-bold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> সার্ভিস বন্ধ আছে</p>
-                <p class="text-sm">বর্তমানে Fail List-এ ডাটা এন্ট্রি ও এডিট করার কাজ বন্ধ রাখা হয়েছে।</p>
+                <p class="text-sm">বর্তমানে Fail List-এর কাজ বন্ধ রাখা হয়েছে।</p>
             </div>
 
-            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg shadow-sm">
-                <h2 class="font-bold text-blue-900 flex items-center gap-2 text-base mb-1">
-                    <i class="fa-solid fa-circle-info text-blue-600"></i> নির্দেশিকা:
-                </h2>
-                <p class="text-sm text-blue-800 leading-relaxed">
-                    প্রথমে ক্লাস নির্বাচন করুন। পাসকি ভেরিফাই করার পর নির্দিষ্ট কারণ (Reason) সিলেক্ট করুন এবং স্টুডেন্টের রোল নম্বর ইনপুট দিন। স্টুডেন্ট সঠিক হলে সাবমিটের অপেক্ষার তালিকায় যুক্ত হবে এবং সাবমিট করলে সুপাবেসে সংরক্ষিত হবে।
-                </p>
+             <!-- 3) Notice / Guidelines Box -->
+        <section id="guidelines-card" class="bg-white border-l-4 border-blue-600 p-4 sm:p-5 rounded-r-lg shadow-sm transition-all">
+            <div class="flex items-start gap-3">
+                <div class="text-blue-600 text-xl mt-0.5">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="flex-grow">
+                    <h2 class="font-bold text-gray-900 text-base sm:text-lg mb-1">নির্দেশিকা:</h2>
+                    <div id="guidelines-content" class="text-sm text-gray-600 space-y-1">
+                        <p>১. প্রথমে ড্রপডাউন থেকে নির্দিষ্ট <strong>Class (V - XI)</strong> নির্বাচন করুন।</p>
+                        <p>২. ডাটা এন্ট্রি বা এডিট করার জন্য সঠিক <strong>Passkey</strong> দিয়ে ভেরিফাই করুন।</p>
+                        <p>৩. রিজন (Drop Out, Non Regi, Fail) সিলেক্ট করে রোল নম্বর দিন, স্টুডেন্ট নাম ও প্রাপ্ত নম্বর যাচাই করে সাবমিট করুন।</p>
+                    </div>
+                </div>
             </div>
+        </section>
 
             <!-- কন্ট্রোল প্যানেল: ক্লাস সিলেকশন ও পাসকি ভেরিফিকেশন -->
             <div class="bg-white p-5 rounded-xl shadow-md grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -115,6 +121,7 @@
                         <i class="fa-solid fa-layer-group text-blue-600"></i> Class:
                     </label>
                     <select id="classSelect" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">-- ক্লাস সিলেক্ট করুন --</option>
                         <option value="V">Class V</option>
                         <option value="VI">Class VI</option>
                         <option value="VII">Class VII</option>
@@ -230,7 +237,7 @@
             <div class="bg-white rounded-xl shadow-md overflow-hidden" id="printable-area">
                 <div class="p-4 bg-blue-900 text-white font-bold flex justify-between items-center">
                     <span id="tableMainTitle">ফেইল / ড্রপ-আউট তালিকা</span>
-                    <span id="tableSessionBadge" class="text-sm font-normal">সেশন: --</span>
+                    <span id="tableSessionBadge" class="text-sm font-normal">Session: --</span>
                 </div>
                 <div id="tableLoading" class="hidden p-8 text-center text-gray-500">
                     <i class="fa-solid fa-spinner fa-spin fa-2x mb-2 text-blue-600"></i>
@@ -320,10 +327,10 @@
 
                 if (resData && resData.length > 0) {
                     currentSession = resData[0].session;
-                    document.getElementById('sessionDisplay').innerText = `সেশন: ${currentSession}`;
+                    document.getElementById('sessionDisplay').innerText = `Session: ${currentSession}`;
                 } else {
                     currentSession = '2026';
-                    document.getElementById('sessionDisplay').innerText = `সেশন: ${currentSession}`;
+                    document.getElementById('sessionDisplay').innerText = `Session: ${currentSession}`;
                 }
             } catch (err) {
                 console.error("Error loading security/session:", err);
@@ -398,7 +405,7 @@
             updateReasonDropdown(selectedClass);
 
             document.getElementById('classHeaderTitle').innerText = `Class ${selectedClass} এর Fail List`;
-            document.getElementById('tableSessionBadge').innerText = `সেশন: ${currentSession}`;
+            document.getElementById('tableSessionBadge').innerText = `Session: ${currentSession}`;
 
             await loadClassDataAndFailList();
         });
