@@ -1,717 +1,693 @@
 <!DOCTYPE html>
-<html lang="bn" class="h-full">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
-    <style id="security-shield">
-        body { display: none !important; }
-    </style>
+    <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+  <style id="security-shield">
+    body { display: none !important; }
+  </style>
 
-    <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
-    <script>
-        (function() {
-            try {
-                var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+  <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+  <script>
+    (function() {
+        try {
+            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
 
-                var ref = document.referrer;
-                var isValidReferrer = false;
-                if (ref) {
-                    var refUrl = new URL(ref);
-                    if (refUrl.hostname === "pathpukurschool.pages.dev" || refUrl.hostname === "localhost") {
-                        isValidReferrer = true;
-                    }
+            var ref = document.referrer;
+            var isValidReferrer = false;
+            if (ref) {
+                var refUrl = new URL(ref);
+                // সংশোধন ১: পুরোনো গিটহাব ডোমেইনের পরিবর্তে নতুন ক্লাউডফ্লেয়ার ডোমেইন যুক্ত করা হলো
+                if (refUrl.hostname === "pathpukurschool.pages.dev" || refUrl.hostname === "localhost") {
+                    isValidReferrer = true;
                 }
-
-                if (!isLoggedIn) {
-                    sessionStorage.clear();
-                    window.location.replace("https://pathpukurschool.pages.dev/");
-                    return;
-                }
-
-                document.addEventListener("DOMContentLoaded", function() {
-                    var shield = document.getElementById("security-shield");
-                    if (shield) shield.remove();
-                });
-
-            } catch (e) {
-                sessionStorage.clear();
-                window.location.replace("https://pathpukurschool.pages.dev/");
             }
-        })();
+
+            if (!isLoggedIn) {
+                sessionStorage.clear();
+                // সংশোধন ২: রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
+                window.location.replace("https://pathpukurschool.pages.dev/");
+                return;
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
+
+        } catch (e) {
+            sessionStorage.clear();
+            // সংশোধন ৩: ক্যাচ ব্লকের রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
+            window.location.replace("https://pathpukurschool.pages.dev/");
+        }
+    })();
     </script>
 
+    <!-- ফেল লিস্ট: ড্রপ আউট, রেজিস্ট্রেশন ও এনরোলমেন্ট ফরম ফিলাপ না করা এবং ফেল করা ছাত্রছাত্রীদের তালিকা -->
     <title>Pathpukur High School (HS)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Client -->
+    <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- SheetJS for Excel export -->
+    <!-- SheetJS for Excel Download -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         @media print {
-            body * {
-                visibility: hidden;
-            }
-            #printable-section, #printable-section * {
-                visibility: visible;
-            }
-            #printable-section {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-            .no-print {
-                display: none !important;
-            }
+            body * { visibility: hidden; }
+            #printable-area, #printable-area * { visibility: visible; }
+            #printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none !important; }
+        }
+        /* ডাইনামিক পেন্ডিং টেবিল কন্টেইনার স্টাইল */
+        .pending-table-container {
+            max-height: 350px;
+            min-height: 60px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-full flex flex-col justify-between font-sans">
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- 1) Header Section -->
-    <header class="bg-blue-700 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
-            <div class="text-center sm:text-left">
-                <h1 class="text-2xl sm:text-3xl font-bold tracking-wide">Pathpukur High School (HS)</h1>
-                <p class="text-blue-100 text-sm sm:text-base mt-1 flex items-center justify-center sm:justify-start gap-2">
-                    <i class="fa-solid fa-clipboard-list"></i> Fail List : <span id="session-display" class="font-semibold bg-blue-800 px-2 py-0.5 rounded animate-pulse">Loading Session...</span>
+    <div>
+        <!-- 1) হেডার সেকশন -->
+        <header class="bg-blue-800 text-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-school"></i> Pathpukur High School (HS)
+                    </h1>
+                    <p class="text-sm text-blue-200 mt-1">Fail List Management Portal</p>
+                </div>
+                <div class="mt-2 sm:mt-0 bg-blue-700 px-4 py-2 rounded-lg text-sm font-semibold shadow-inner">
+                    <span id="sessionDisplay">Session: Loading...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+
+            <!-- 2) নির্দেশিকা বক্স ও এডিট মোড চেক -->
+            <div id="maintenanceAlert" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow" role="alert">
+                <p class="font-bold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> সার্ভিস বন্ধ আছে</p>
+                <p class="text-sm">বর্তমানে Fail List-এ ডাটা এন্ট্রি ও এডিট করার কাজ বন্ধ রাখা হয়েছে।</p>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg shadow-sm">
+                <h2 class="font-bold text-blue-900 flex items-center gap-2 text-base mb-1">
+                    <i class="fa-solid fa-circle-info text-blue-600"></i> নির্দেশিকা:
+                </h2>
+                <p class="text-sm text-blue-800 leading-relaxed">
+                    প্রথমে ক্লাস নির্বাচন করুন। পাসকি ভেরিফাই করার পর নির্দিষ্ট কারণ (Reason) সিলেক্ট করুন এবং স্টুডেন্টের রোল নম্বর ইনপুট দিন। স্টুডেন্ট সঠিক হলে সাবমিটের অপেক্ষার তালিকায় যুক্ত হবে এবং সাবমিট করলে সুপাবেসে সংরক্ষিত হবে।
                 </p>
             </div>
-            <div class="mt-3 sm:mt-0 text-xs sm:text-sm bg-blue-800 px-3 py-1.5 rounded-full border border-blue-600 flex items-center gap-2 shadow-inner">
-                <i class="fa-solid fa-shield-halved text-yellow-300"></i>
-                <span id="security-status-badge">Checking security...</span>
-            </div>
-        </div>
-    </header>
 
-    <!-- Main Container -->
-    <main class="max-w-7xl w-full mx-auto px-4 py-6 flex-grow space-y-6">
-
-        <!-- 2) Notice / Guidelines Box -->
-        <section id="guidelines-card" class="bg-white border-l-4 border-blue-600 p-4 sm:p-5 rounded-r-lg shadow-sm transition-all">
-            <div class="flex items-start gap-3">
-                <div class="text-blue-600 text-xl mt-0.5">
-                    <i class="fa-solid fa-circle-info"></i>
-                </div>
-                <div class="flex-grow">
-                    <h2 class="font-bold text-gray-900 text-base sm:text-lg mb-1">নির্দেশিকা ও কার্যপ্রণালী (Guidelines)</h2>
-                    <div id="guidelines-content" class="text-sm text-gray-600 space-y-1">
-                        <p>১. প্রথমে ড্রপডাউন থেকে নির্দিষ্ট <strong>Class (V - XI)</strong> নির্বাচন করুন।</p>
-                        <p>২. ডাটা এন্ট্রি বা এডিট করার জন্য সঠিক <strong>Passkey</strong> দিয়ে ভেরিফাই করুন।</p>
-                        <p>৩. রিজন (Drop Out, Non Regi, Fail) সিলেক্ট করে রোল নম্বর দিন, স্টুডেন্ট নাম ও প্রাপ্ত নম্বর যাচাই করে সাবমিট করুন। একই রোল পুনরায় এন্ট্রি নেওয়া হবে না।</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Configuration & Setup Card -->
-        <div id="app-content-wrapper" class="space-y-6">
-
-            <!-- 3) Class Dropdown & 4) Passkey Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <!-- Class Selection Box -->
-                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-                    <label for="class-select" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-graduation-cap text-blue-600"></i> ক্লাস নির্বাচন করুন (Select Class)
+            <!-- কন্ট্রোল প্যানেল: ক্লাস সিলেকশন ও পাসকি ভেরিফিকেশন -->
+            <div class="bg-white p-5 rounded-xl shadow-md grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <!-- 3) Class ড্রপ ডাউন -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fa-solid fa-layer-group text-blue-600"></i> Class:
                     </label>
-                    <select id="class-select" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-gray-900 font-medium transition-all">
-                        <option value="">-- ক্লাস সিলেক্ট করুন --</option>
-                        <option value="v">Class V</option>
-                        <option value="vi">Class VI</option>
-                        <option value="vii">Class VII</option>
-                        <option value="viii">Class VIII</option>
-                        <option value="ix">Class IX</option>
-                        <option value="x">Class X</option>
-                        <option value="xi">Class XI</option>
+                    <select id="classSelect" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="V">Class V</option>
+                        <option value="VI">Class VI</option>
+                        <option value="VII">Class VII</option>
+                        <option value="VIII">Class VIII</option>
+                        <option value="IX">Class IX</option>
+                        <option value="X">Class X</option>
+                        <option value="XI">Class XI</option>
                     </select>
                 </div>
 
-                <!-- Passkey Verification Box -->
-                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-key text-blue-600"></i> Passkey Verification
+                <!-- 4) Passkey ইনপুট বক্স ও ভেরিফিকেশন -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fa-solid fa-key text-blue-600"></i> Passkey:
                     </label>
-                    <div class="flex gap-2 relative" id="passkey-container">
-                        <div class="relative flex-grow">
-                            <input type="password" id="passkey-input" placeholder="পাসকি লিখুন" class="w-full px-4 py-2.5 pr-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all">
-                            <button type="button" id="toggle-passkey" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 focus:outline-none">
-                                <i class="fa-solid fa-eye" id="eye-icon"></i>
+                    <div class="flex items-center gap-2">
+                        <div class="relative flex-1">
+                            <input type="password" id="passkeyInput" placeholder="পাসকি লিখুন" class="w-full p-2.5 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <button type="button" onclick="togglePasskeyVisibility()" class="absolute right-3 top-3 text-gray-500 hover:text-gray-700">
+                                <i id="eyeIcon" class="fa-solid fa-eye"></i>
                             </button>
                         </div>
-                        <button id="verify-btn" onclick="verifyPasskey()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg transition-all flex items-center gap-2 shadow-sm whitespace-nowrap">
-                            <i class="fa-solid fa-check-to-slot"></i> Verify
-                        </button>
+                        <div id="verifyArea">
+                            <button onclick="verifyPasskey()" id="verifyBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium shadow transition flex items-center gap-2">
+                                <i class="fa-solid fa-check"></i> Verify
+                            </button>
+                        </div>
                     </div>
-                    <div id="verify-message" class="mt-2 text-xs font-medium"></div>
+                    <div id="passkeyMessage" class="text-xs mt-1 font-medium"></div>
                 </div>
-
             </div>
 
-            <!-- 5) Data Entry Input Field Section -->
-            <div id="entry-section" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 opacity-60 pointer-events-none transition-all">
-                <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2 border-b pb-2">
-                    <i class="fa-solid fa-user-plus text-blue-600"></i> Multiple Student Data Entry
+            <!-- 5) ইনপুট ফিল্ড ও ডাটা এন্ট্রি সেকশন (লকড থাকবে যতক্ষণ না পাসকি ভেরিফাই হয়) -->
+            <div id="entrySection" class="bg-white p-5 rounded-xl shadow-md opacity-50 pointer-events-none transition-all">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-blue-600"></i> স্টুডেন্ট এন্ট্রি ফর্ম
                 </h3>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
-                    
-                    <!-- Reason Selection -->
-                    <div class="sm:col-span-4">
-                        <label for="reason-select" class="block text-xs font-semibold text-gray-600 mb-1">Reason:</label>
-                        <select id="reason-select" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm font-medium bg-gray-50">
-                            <!-- Options dynamically populated based on class -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                    <!-- Reason Dropdown -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Reason:</label>
+                        <select id="reasonSelect" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="Drop Out">Drop Out</option>
                         </select>
                     </div>
-
-                    <!-- Roll Input Box -->
-                    <div class="sm:col-span-4">
-                        <label for="roll-input" class="block text-xs font-semibold text-gray-600 mb-1">Roll No:</label>
-                        <input type="number" id="roll-input" inputmode="numeric" pattern="[0-9]*" placeholder="রোল লিখে এন্টার বা ট্যাব দিন" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 text-sm font-medium">
+                    <!-- Roll Input -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Roll:</label>
+                        <input type="number" id="rollInput" inputmode="numeric" placeholder="রোল নম্বর দিন" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
-
-                    <!-- Action Buttons -->
-                    <div class="sm:col-span-4 flex gap-2">
-                        <button onclick="stageStudentEntry()" type="button" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-lg text-sm shadow-sm transition-all flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-plus"></i> অ্যাড লিস্টে যোগ করুন
+                    <!-- Action Add Button -->
+                    <div class="flex items-end">
+                        <button onclick="addStudentToPending()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-2 rounded-lg font-medium shadow transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> তালিকায় যুক্ত করুন
                         </button>
-                        <button onclick="batchSubmitEntries()" type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg text-sm shadow-sm transition-all flex items-center gap-1">
+                    </div>
+                </div>
+
+                <!-- স্টুডেন্ট ভেরিফিকেশন প্রিভিউ ইনফো -->
+                <div id="studentPreview" class="bg-gray-50 p-3 rounded-lg border border-gray-200 text-sm hidden mb-4">
+                    <span class="font-semibold text-gray-700">স্টুডেন্ট তথ্য: </span>
+                    <span id="previewText" class="text-blue-900"></span>
+                </div>
+
+                <!-- সাবমিটের অপেক্ষারত স্টুডেন্ট তালিকা (ডাইনামিক সাইজ) -->
+                <div class="mt-4 border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="bg-gray-100 px-4 py-2 font-semibold text-sm text-gray-700 flex justify-between items-center">
+                        <span><i class="fa-solid fa-list-check"></i> সাবমিটের অপেক্ষারত তালিকা (Pending List)</span>
+                        <span id="pendingCount" class="bg-blue-200 text-blue-800 text-xs px-2 py-0.5 rounded-full">0 জন</span>
+                    </div>
+                    <div class="pending-table-container bg-white">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead class="bg-gray-50 text-gray-600 sticky top-0">
+                                <tr>
+                                    <th class="p-2.5 border-b">Roll</th>
+                                    <th class="p-2.5 border-b">Name</th>
+                                    <th class="p-2.5 border-b">Section</th>
+                                    <th class="p-2.5 border-b">Reason</th>
+                                    <th class="p-2.5 border-b text-center">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center p-4 text-gray-400">কোনো স্টুডেন্ট যোগ করা হয়নি</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-3 bg-gray-50 border-t flex justify-end">
+                        <button onclick="submitPendingData()" id="submitAllBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow disabled:opacity-50" disabled>
                             <i class="fa-solid fa-cloud-arrow-up"></i> Submit
                         </button>
                     </div>
-
                 </div>
+            </div>
 
-                <!-- Student Verification Preview Box -->
-                <div id="student-preview" class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm hidden">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="font-bold text-blue-900" id="prev-name">---</span> | 
-                            রোল: <span class="font-semibold text-blue-800" id="prev-roll">---</span> | 
-                            সেকশন: <span class="font-semibold text-blue-800" id="prev-sec">---</span> | 
-                            মোট নম্বর: <span class="font-semibold text-blue-800" id="prev-marks">---</span>
-                        </div>
-                        <span class="text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded font-medium">যাচাইকৃত স্টুডেন্ট</span>
-                    </div>
+            <!-- 6) Print ও Excel Download বোতাম -->
+            <div class="flex flex-wrap justify-between items-center bg-white p-4 rounded-xl shadow-md gap-4 no-print">
+                <div id="classHeaderTitle" class="text-lg font-bold text-gray-800">
+                   অনুগ্রহ করে ক্লাস নির্বাচন করুন
                 </div>
-
-                <!-- Staged Entries Queue Table (Expanded Height / Size) -->
-                <div id="staged-queue-container" class="mt-4 hidden">
-                    <p class="text-xs font-semibold text-gray-500 mb-2">সাবমিট করার জন্য অপেক্ষারত স্টুডেন্ট তালিকা:</p>
-                    <div class="overflow-x-auto border rounded-lg max-h-96 overflow-y-auto shadow-inner">
-                        <table class="min-w-full divide-y divide-gray-200 text-xs">
-                            <thead class="bg-gray-100 text-gray-700 sticky top-0 z-10">
-                                <tr>
-                                    <th class="px-3 py-2 text-left">রোল</th>
-                                    <th class="px-3 py-2 text-left">নাম</th>
-                                    <th class="px-3 py-2 text-left">কারণ</th>
-                                    <th class="px-3 py-2 text-right">মুছুন</th>
-                                </tr>
-                            </thead>
-                            <tbody id="staged-tbody" class="divide-y divide-gray-200 bg-white"></tbody>
-                        </table>
-                    </div>
+                <div class="flex gap-3">
+                    <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i> Print
+                    </button>
+                    <button onclick="downloadExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium shadow flex items-center gap-2">
+                        <i class="fa-solid fa-file-excel"></i> Download Excel
+                    </button>
                 </div>
-
             </div>
 
-        </div>
-
-        <!-- 6) Print & Export Excel Action Bar -->
-        <div class="flex flex-wrap justify-between items-center gap-3 bg-white p-4 rounded-xl shadow-sm border border-gray-200 no-print">
-            <div class="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <i class="fa-solid fa-table-cells text-blue-600"></i> <span id="table-heading-title">অনুগ্রহ করে ক্লাস সিলেক্ট করুন</span>
+            <!-- 7) সিলেক্ট করা ক্লাসের ডাটা টেবিল -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden" id="printable-area">
+                <div class="p-4 bg-blue-900 text-white font-bold flex justify-between items-center">
+                    <span id="tableMainTitle">ফেইল / ড্রপ-আউট তালিকা</span>
+                    <span id="tableSessionBadge" class="text-sm font-normal">সেশন: --</span>
+                </div>
+                <div id="tableLoading" class="hidden p-8 text-center text-gray-500">
+                    <i class="fa-solid fa-spinner fa-spin fa-2x mb-2 text-blue-600"></i>
+                    <p>ডাটা লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100 text-gray-700 text-sm">
+                            <tr>
+                                <th class="p-3 border-b">Sl</th>
+                                <th class="p-3 border-b">Section</th>
+                                <th class="p-3 border-b">Roll</th>
+                                <th class="p-3 border-b">Student Name</th>
+                                <th class="p-3 border-b">Total Marks</th>
+                                <th class="p-3 border-b">Reason</th>
+                                <th class="p-3 border-b text-center no-print">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center p-6 text-gray-400">প্রথমে ক্লাস সিলেক্ট করুন</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="printTable()" class="bg-gray-700 hover:bg-gray-800 text-white font-medium px-4 py-2 rounded-lg text-sm transition-all flex items-center gap-2 shadow-sm">
-                    <i class="fa-solid fa-print"></i> Print
-                </button>
-                <button onclick="downloadExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-all flex items-center gap-2 shadow-sm">
-                    <i class="fa-solid fa-file-excel"></i> Download Excel
-                </button>
-            </div>
-        </div>
 
-        <!-- 7) Data Display Table Section -->
-        <div id="printable-section" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
-                <h3 id="table-box-title" class="font-bold text-gray-800 text-base">ফেল বা ড্রপআউট স্টুডেন্ট তালিকা</h3>
-                <span id="record-count" class="text-xs bg-gray-200 text-gray-700 px-2.5 py-1 rounded-full font-medium">0 records</span>
-            </div>
+        </main>
+    </div>
 
-            <!-- Loader State -->
-            <div id="table-loader" class="py-12 flex flex-col items-center justify-center space-y-3">
-                <div class="animate-spin rounded-full h-10 w-10 border-4 border-blue-600 border-t-transparent"></div>
-                <p class="text-sm text-gray-500 font-medium">ডাটা লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</p>
-            </div>
+    <!-- ফুটার -->
+    <footer class="bg-gray-800 text-gray-400 text-center py-4 mt-8 text-sm">
+        <p>&copy; 2026 Pathpukur High School. All rights reserved.</p>
+    </footer>
 
-            <!-- Table Container -->
-            <div id="table-container" class="overflow-x-auto hidden">
-                <table class="min-w-full divide-y divide-gray-200 text-sm">
-                    <thead class="bg-blue-50 text-blue-900 font-semibold">
-                        <tr>
-                            <th class="px-4 py-3 text-left">Sl</th>
-                            <th class="px-4 py-3 text-left">Section</th>
-                            <th class="px-4 py-3 text-left">Roll</th>
-                            <th class="px-4 py-3 text-left">Student Name</th>
-                            <th class="px-4 py-3 text-left">Total Marks</th>
-                            <th class="px-4 py-3 text-left">Reason</th>
-                            <th class="px-4 py-3 text-center no-print">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody id="fail-list-tbody" class="divide-y divide-gray-200 bg-white">
-                        <!-- Populated via JS -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- JavaScript Application Logic -->
+    <!-- JavaScript লজিক -->
     <script>
+        // ⚡ সাব-পেজে অ্যাক্টিভিটি ট্র্যাকিং আপডেট রাখা (যাতে অহেতুক অটো-লগআউট না হয়)
         function updateActivityTime() {
             localStorage.setItem('lastActivityTime', Date.now().toString());
-        }
-        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
-            document.addEventListener(evt, updateActivityTime, { passive: true });
-        });
-    
+         }
+         ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+             document.addEventListener(evt, updateActivityTime, { passive: true });
+         });
+        
+        // Supabase কনফিগারেশন
         const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let isVerified = false;
-        let currentSession = '2026';
-        let stagedStudents = [];
-        let fetchedStudentsCache = []; 
-        let existingFailRecordsCache = []; // Cache for already saved records in fail_list
+        let selectedClass = '';
+        let currentSession = '';
+        let classStudentsData = []; // ওই ক্লাসের সমস্ত স্টুডেন্টের রেজাল্ট ডাটা
+        let pendingList = []; // সাবমিটের অপেক্ষারত তালিকা
+        let savedFailList = []; // সুপাবেস থেকে ফেচ করা বর্তমান ফেইল তালিকা
 
-        const classConfig = {
-            'v': { name: 'Class V', resultTable: 'result_v', rollCol: 'roll_v', reasonCol: 'reason_v' },
-            'vi': { name: 'Class VI', resultTable: 'result_vi', rollCol: 'roll_vi', reasonCol: 'reason_vi' },
-            'vii': { name: 'Class VII', resultTable: 'result_vii', rollCol: 'roll_vii', reasonCol: 'reason_vii' },
-            'viii': { name: 'Class VIII', resultTable: 'result_viii', rollCol: 'roll_viii', reasonCol: 'reason_viii' },
-            'ix': { name: 'Class IX', resultTable: 'result_ix', rollCol: 'roll_ix', reasonCol: 'reason_ix' },
-            'x': { name: 'Class X', resultTable: 'result_x', rollCol: 'roll_x', reasonCol: 'reason_x' },
-            'xi': { name: 'Class XI', resultTable: 'result_xi', rollCol: 'roll_xi', reasonCol: 'reason_xi' }
-        };
-
+        // পেজ লোড হলে সিকিউরিটি ও সেশন চেক
         window.addEventListener('DOMContentLoaded', async () => {
-            await checkPageSecurity();
-            setupEventListeners();
+            await checkPageSecurityAndSession();
         });
 
-        async function checkPageSecurity() {
-            const statusBadge = document.getElementById('security-status-badge');
-            const guidelinesContent = document.getElementById('guidelines-content');
-            const appWrapper = document.getElementById('app-content-wrapper');
-
+        async function checkPageSecurityAndSession() {
             try {
-                const { data, error } = await supabaseClient
+                // 1. Check edit_mode from page_security
+                const { data: secData, error: secError } = await supabaseClient
                     .from('page_security')
                     .select('*')
                     .eq('page_name', 'fail_list')
                     .single();
 
-                if (error || !data) {
-                    statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Security Config Missing';
+                if (secError || !secData) {
+                    console.error("Security record not found");
                     return;
                 }
 
-                if (data.edit_mode !== 'true' && data.edit_mode !== true) {
-                    appWrapper.style.display = 'none';
-                    guidelinesContent.innerHTML = `<div class="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg font-medium flex items-center gap-2">
-                        <i class="fa-solid fa-ban text-red-500"></i> এই কাজ বন্ধ রাখা হয়েছে (Edit mode is currently disabled by administrator).
-                    </div>`;
-                    statusBadge.innerHTML = 'Edit Mode: Disabled';
-                    document.getElementById('table-loader').style.display = 'none';
-                    document.getElementById('table-container').classList.remove('hidden');
+                if (secData.edit_mode !== 'true') {
+                    document.getElementById('maintenanceAlert').classList.remove('hidden');
                     return;
                 }
 
-                statusBadge.innerHTML = 'Security Active';
-                await fetchActiveSession();
-            } catch (err) {
-                console.error("Security check failed:", err);
-                statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Connection Error';
-            }
-        }
-
-        async function fetchActiveSession() {
-            try {
-                const { data, error } = await supabaseClient
+                // 2. Fetch Session from result_v (assume result_v has active session)
+                const { data: resData, error: resError } = await supabaseClient
                     .from('result_v')
                     .select('session')
                     .limit(1);
 
-                if (data && data.length > 0) {
-                    currentSession = data[0].session;
+                if (resData && resData.length > 0) {
+                    currentSession = resData[0].session;
+                    document.getElementById('sessionDisplay').innerText = `সেশন: ${currentSession}`;
+                } else {
+                    currentSession = '2026';
+                    document.getElementById('sessionDisplay').innerText = `সেশন: ${currentSession}`;
                 }
-                document.getElementById('session-display').innerText = currentSession;
-            } catch (e) {
-                document.getElementById('session-display').innerText = '2026';
+            } catch (err) {
+                console.error("Error loading security/session:", err);
             }
         }
 
-        function setupEventListeners() {
-            document.getElementById('toggle-passkey').addEventListener('click', () => {
-                const input = document.getElementById('passkey-input');
-                const icon = document.getElementById('eye-icon');
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.replace('fa-eye', 'fa-eye-slash');
-                } else {
-                    input.type = 'password';
-                    icon.classList.replace('fa-eye-slash', 'fa-eye');
-                }
-            });
-
-            document.getElementById('class-select').addEventListener('change', async (e) => {
-                const selectedClass = e.target.value;
-                updateReasonDropdown(selectedClass);
-                stagedStudents = [];
-                renderStagedQueue();
-                document.getElementById('student-preview').classList.add('hidden');
-                document.getElementById('roll-input').value = '';
-
-                if (selectedClass) {
-                    await loadClassData(selectedClass);
-                } else {
-                    document.getElementById('table-loader').style.display = 'none';
-                    document.getElementById('table-container').classList.add('hidden');
-                    document.getElementById('table-heading-title').innerText = 'দয়া করে ক্লাস সিলেক্ট করুন';
-                    document.getElementById('record-count').innerText = '0 records';
-                }
-            });
-
-            document.getElementById('roll-input').addEventListener('input', async (e) => {
-                const roll = e.target.value.trim();
-                const classKey = document.getElementById('class-select').value;
-                if (!classKey || !roll) {
-                    document.getElementById('student-preview').classList.add('hidden');
-                    return;
-                }
-                await lookupStudent(classKey, parseInt(roll));
-            });
-
-            // Enter key shortcut in roll input
-            document.getElementById('roll-input').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    stageStudentEntry();
-                }
-            });
+        // Passkey Toggle
+        function togglePasskeyVisibility() {
+            const input = document.getElementById('passkeyInput');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
         }
 
-        function updateReasonDropdown(classKey) {
-            const reasonSelect = document.getElementById('reason-select');
+        // Verify Passkey
+        async function verifyPasskey() {
+            const passkeyVal = document.getElementById('passkeyInput').value.trim();
+            const msgDiv = document.getElementById('passkeyMessage');
+
+            if (!passkeyVal) {
+                msgDiv.innerHTML = '<span class="text-red-600">অনুগ্রহ করে পাসকি লিখুন!</span>';
+                return;
+            }
+
+            const { data, error } = await supabaseClient
+                .from('page_security')
+                .select('passkey')
+                .eq('page_name', 'fail_list')
+                .single();
+
+            if (error || !data) {
+                msgDiv.innerHTML = '<span class="text-red-600">যাচাই করতে সমস্যা হয়েছে।</span>';
+                return;
+            }
+
+            if (data.passkey === passkeyVal) {
+                isVerified = true;
+                msgDiv.innerHTML = '';
+                document.getElementById('verifyArea').innerHTML = `
+                    <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1 shadow-sm">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i> পাসকি ভেরিফিকেশন সম্পন্ন হয়েছে
+                    </span>
+                `;
+                document.getElementById('passkeyInput').disabled = true;
+                document.getElementById('entrySection').classList.remove('opacity-50', 'pointer-events-none');
+                
+                // রিফ্রেশ বা টেবিল রি-রেন্ডার করে ডিলিট বাটন এনাবল করা
+                renderFailTable();
+            } else {
+                msgDiv.innerHTML = '<span class="text-red-600">ভুল পাসকি! পুনরায় চেষ্টা করুন।</span>';
+            }
+        }
+
+        // Class selection change listener
+        document.getElementById('classSelect').addEventListener('change', async function() {
+            selectedClass = this.value;
+            pendingList = []; // ক্লাস বদলালে পেন্ডিং লিস্ট ক্লিয়ার
+            renderPendingList();
+
+            if (!selectedClass) {
+                document.getElementById('classHeaderTitle').innerText = 'অনুগ্রহ করে একটি ক্লাস নির্বাচন করুন';
+                document.getElementById('dataTableBody').innerHTML = '<tr><td colspan="7" class="text-center p-6 text-gray-400">প্রথমে ক্লাস সিলেক্ট করুন</td></tr>';
+                return;
+            }
+
+            // Reason dropdown options configure based on class
+            updateReasonDropdown(selectedClass);
+
+            document.getElementById('classHeaderTitle').innerText = `Class ${selectedClass} এর Fail List`;
+            document.getElementById('tableSessionBadge').innerText = `সেশন: ${currentSession}`;
+
+            await loadClassDataAndFailList();
+        });
+
+        function updateReasonDropdown(cls) {
+            const reasonSelect = document.getElementById('reasonSelect');
             reasonSelect.innerHTML = '';
-            
-            if (['v', 'vi', 'vii', 'viii'].includes(classKey)) {
+            if (['V', 'VI', 'VII', 'VIII'].includes(cls)) {
                 reasonSelect.innerHTML = `<option value="Drop Out">Drop Out</option>`;
-            } else if (['ix', 'x', 'xi'].includes(classKey)) {
+            } else {
                 reasonSelect.innerHTML = `
                     <option value="Drop Out">Drop Out</option>
                     <option value="Non Regi">Non Regi</option>
                     <option value="Fail">Fail</option>
                 `;
-            } else {
-                reasonSelect.innerHTML = `<option value="Drop Out">Drop Out</option>`;
             }
         }
 
-        async function verifyPasskey() {
-            const passkeyInput = document.getElementById('passkey-input').value.trim();
-            const msgDiv = document.getElementById('verify-message');
-
-            if (!passkeyInput) {
-                msgDiv.innerHTML = '<span class="text-red-600 font-semibold">দয়া করে পাসকি ইনপুট করুন!</span>';
-                return;
-            }
+        // Load Result table data and existing fail list from Supabase
+        async function loadClassDataAndFailList() {
+            document.getElementById('tableLoading').classList.remove('hidden');
+            const tableName = `result_${selectedClass.toLowerCase()}`;
 
             try {
-                const { data, error } = await supabaseClient
-                    .from('page_security')
-                    .select('passkey')
-                    .eq('page_name', 'fail_list')
-                    .single();
+                // 1. Fetch class students result table
+                const { data: resStudents, error: resErr } = await supabaseClient
+                    .from(tableName)
+                    .select('*');
 
-                if (data && data.passkey === passkeyInput) {
-                    isVerified = true;
-                    msgDiv.innerHTML = '';
-                    const verifyBtn = document.getElementById('verify-btn');
-                    verifyBtn.outerHTML = `<div class="bg-emerald-100 text-emerald-800 px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 border border-emerald-300">
-                        <i class="fa-solid fa-circle-check text-emerald-600"></i> পাসকী ভেরিফিকেশন সম্পন্ন হয়েছে
-                    </div>`;
-                    document.getElementById('passkey-input').disabled = true;
-                    
-                    const entrySec = document.getElementById('entry-section');
-                    entrySec.classList.remove('opacity-60', 'pointer-events-none');
+                if (resErr) {
+                    console.error(resErr);
+                    classStudentsData = [];
                 } else {
-                    msgDiv.innerHTML = '<span class="text-red-600 font-semibold">ভুল পাসকি! সঠিক পাসকি দিয়ে পুনরায় চেষ্টা করুন।</span>';
+                    classStudentsData = resStudents || [];
                 }
-            } catch (err) {
-                msgDiv.innerHTML = '<span class="text-red-600 font-semibold">ভেরিফিকেশনে ত্রুটি ঘটেছে।</span>';
-            }
-        }
 
-        function calculateTotalMarks(student, classKey) {
-            let total = 0;
-            let hasMark = false;
-            
-            for (let key in student) {
-                if ((key.startsWith('e1_') || key.startsWith('e2_') || key.startsWith('e3_') || 
-                     key.startsWith('test_') || key.startsWith('sem1_') || key.startsWith('sem2_') ||
-                     (key.startsWith('proj_') && classKey !== 'x')) && typeof student[key] === 'number') {
-                    total += student[key];
-                    hasMark = true;
-                }
-            }
-            return hasMark ? total : 'N/A';
-        }
-
-        async function loadClassData(classKey) {
-            const cfg = classConfig[classKey];
-            document.getElementById('table-loader').style.display = 'flex';
-            document.getElementById('table-container').classList.add('hidden');
-            document.getElementById('table-heading-title').innerText = `${cfg.name} - Fail / Drop Out List`;
-
-            try {
-                // Fetch student result cache
-                const resResult = await supabaseClient
-                    .from(cfg.resultTable)
-                    .select('*')
-                    .eq('session', currentSession);
-
-                fetchedStudentsCache = resResult.data || [];
-
-                // Fetch existing fail_list records for duplicate verification
-                const resFail = await supabaseClient
+                // 2. Fetch existing fail list for this class
+                const { data: failData, error: failErr } = await supabaseClient
                     .from('fail_list')
                     .select('*')
-                    .eq('class_key', classKey)
-                    .eq('session', currentSession);
+                    .eq('class_name', selectedClass);
 
-                existingFailRecordsCache = resFail.data || [];
+                savedFailList = failData || [];
+                renderFailTable();
 
-                renderFailTable(existingFailRecordsCache, classKey);
             } catch (err) {
-                console.error("Error loading class data:", err);
-                document.getElementById('table-loader').style.display = 'none';
+                console.error("Error loading data:", err);
+            } finally {
+                document.getElementById('tableLoading').classList.add('hidden');
             }
         }
 
-        function renderFailTable(records, classKey) {
-            const tbody = document.getElementById('fail-list-tbody');
-            tbody.innerHTML = '';
-            document.getElementById('table-loader').style.display = 'none';
-            document.getElementById('table-container').classList.remove('hidden');
-            document.getElementById('record-count').innerText = `${records.length} records`;
+        // Roll input validation & adding to pending list
+        document.getElementById('rollInput').addEventListener('keydown', async function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                await addStudentToPending();
+            }
+        });
 
-            if (records.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-gray-500 font-medium">কোনো রেকর্ড পাওয়া যায়নি।</td></tr>`;
+        async function addStudentToPending() {
+            const rollVal = parseInt(document.getElementById('rollInput').value);
+            const reasonVal = document.getElementById('reasonSelect').value;
+
+            if (!rollVal || isNaN(rollVal)) {
+                alert("অনুগ্রহ করে একটি সঠিক রোল নম্বর ইনপুট দিন!");
                 return;
             }
 
-            records.forEach((rec, idx) => {
-                const rollVal = rec[`roll_${classKey}`];
-                const reasonVal = rec[`reason_${classKey}`];
-                const student = fetchedStudentsCache.find(s => s.roll_no === rollVal);
-
-                const name = student ? student.student_name : 'N/A';
-                const section = student ? student.section : 'N/A';
-                const totalMarks = student ? calculateTotalMarks(student, classKey) : 'N/A';
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="px-4 py-3 font-semibold text-gray-600">${idx + 1}</td>
-                        <td class="px-4 py-3">${section}</td>
-                        <td class="px-4 py-3 font-bold text-blue-900">${rollVal}</td>
-                        <td class="px-4 py-3 font-medium">${name}</td>
-                        <td class="px-4 py-3">${totalMarks}</td>
-                        <td class="px-4 py-3"><span class="bg-red-100 text-red-800 px-2.5 py-1 rounded font-medium text-xs">${reasonVal}</span></td>
-                        <td class="px-4 py-3 text-center no-print">
-                            <button onclick="deleteRecord('${rec.id}', '${classKey}')" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        async function lookupStudent(classKey, rollNo) {
-            const previewBox = document.getElementById('student-preview');
-            const student = fetchedStudentsCache.find(s => s.roll_no === rollNo);
-
-            if (student) {
-                document.getElementById('prev-name').innerText = student.student_name;
-                document.getElementById('prev-roll').innerText = student.roll_no;
-                document.getElementById('prev-sec').innerText = student.section;
-                document.getElementById('prev-marks').innerText = calculateTotalMarks(student, classKey);
-                previewBox.classList.remove('hidden');
-            } else {
-                previewBox.classList.add('hidden');
-            }
-        }
-
-        // Stage Student Entry with Validation (Rule 1 & Rule 2)
-        async function stageStudentEntry() {
-            const rollVal = document.getElementById('roll-input').value.trim();
-            const reason = document.getElementById('reason-select').value;
-            const classKey = document.getElementById('class-select').value;
-
-            if (!classKey) {
-                alert('দয়া করে প্রথমে ক্লাস সিলেক্ট করুন।');
-                return;
-            }
-            if (!rollVal) {
-                alert('দয়া করে রোল নম্বর লিখুন।');
-                return;
-            }
-
-            const rollNum = parseInt(rollVal);
-
-            // Rule 2: Check if roll exists in the selected class result table
-            const student = fetchedStudentsCache.find(s => s.roll_no === rollNum);
+            // 1. Check if roll exists in result table
+            const student = classStudentsData.find(s => s.roll_no === rollVal);
             if (!student) {
-                alert(`সতর্কতা: সিলেক্ট করা ক্লাসের রেজাল্ট টেবিলে রোল নম্বর "${rollNum}" খুঁজে পাওয়া যায়নি। তাই এটি এন্ট্রি ও সেভ নেওয়া যাবে না।`);
+                alert("সতর্কতা: সিলেক্ট করা ক্লাসের রেজাল্ট টেবিলে এই রোল নম্বরটি খুঁজে পাওয়া যায়নি!");
+                document.getElementById('rollInput').value = '';
+                document.getElementById('rollInput').focus();
+                document.getElementById('studentPreview').classList.add('hidden');
                 return;
             }
 
-            // Rule 1: Check if already saved in Supabase table
-            const alreadySaved = existingFailRecordsCache.some(rec => rec[`roll_${classKey}`] === rollNum);
-            if (alreadySaved) {
-                alert(`সতর্কতা: রোল নম্বর "${rollNum}" ইতিপূর্বে সুপাবেস টেবিলে সেভ করা হয়েছে। পুনরায় এন্ট্রি করা যাবে না।`);
+            // 2. Check if already in DB fail_list or current pending list
+            const alreadyInDb = savedFailList.some(item => item.roll_no === rollVal);
+            const alreadyInPending = pendingList.some(item => item.roll_no === rollVal);
+
+            if (alreadyInDb || alreadyInPending) {
+                alert("সতর্কতা: এই রোল নম্বরটি ইতিপূর্বে এই ক্লাসের জন্য এন্ট্রি করা হয়েছে বা সেভ করা আছে। ডুপ্লিকেট এন্ট্রি সম্ভব নয়!");
+                document.getElementById('rollInput').value = '';
+                document.getElementById('rollInput').focus();
+                document.getElementById('studentPreview').classList.add('hidden');
                 return;
             }
 
-            // Check if already in local staging queue
-            if (stagedStudents.some(s => s.roll === rollNum)) {
-                alert('এই রোল নম্বরটি ইতিমধ্যে অপেক্ষারত তালিকায় যোগ করা হয়েছে।');
-                return;
-            }
+            // Calculate Total Marks for preview
+            const totalMarks = calculateTotalMarks(student, selectedClass);
 
-            stagedStudents.push({
-                roll: rollNum,
-                name: student.student_name,
-                reason: reason
+            // Show Preview briefly
+            document.getElementById('studentPreview').classList.remove('hidden');
+            document.getElementById('previewText').innerText = `রোল: ${student.roll_no} | নাম: ${student.student_name} | সেকশন: ${student.section} | মোট নম্বর: ${totalMarks}`;
+
+            // Add to pending list
+            pendingList.push({
+                roll_no: student.roll_no,
+                student_name: student.student_name,
+                section: student.section,
+                total_marks: totalMarks,
+                reason: reasonVal
             });
 
-            renderStagedQueue();
-            document.getElementById('roll-input').value = '';
-            document.getElementById('student-preview').classList.add('hidden');
-            document.getElementById('roll-input').focus();
+            renderPendingList();
+
+            // Clear roll input & focus back
+            document.getElementById('rollInput').value = '';
+            document.getElementById('rollInput').focus();
         }
 
-        function renderStagedQueue() {
-            const container = document.getElementById('staged-queue-container');
-            const tbody = document.getElementById('staged-tbody');
-            tbody.innerHTML = '';
+        function calculateTotalMarks(student, cls) {
+            // Simple total marks accumulator based on result table columns
+            let sum = 0;
+            let count = 0;
+            for (let key in student) {
+                if (key.includes('e1_') || key.includes('e2_') || key.includes('e3_') || key.includes('sem1_') || key.includes('sem2_') || key.includes('test_')) {
+                    if (typeof student[key] === 'number') {
+                        sum += student[key];
+                        count++;
+                    }
+                }
+            }
+            return count > 0 ? sum : 'N/A';
+        }
 
-            if (stagedStudents.length === 0) {
-                container.classList.add('hidden');
+        function renderPendingList() {
+            const tbody = document.getElementById('pendingTableBody');
+            document.getElementById('pendingCount').innerText = `${pendingList.length} জন`;
+            
+            if (pendingList.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4 text-gray-400">কোনো স্টুডেন্ট যোগ করা হয়নি</td></tr>';
+                document.getElementById('submitAllBtn').disabled = true;
                 return;
             }
 
-            container.classList.remove('hidden');
-            stagedStudents.forEach((item, index) => {
+            document.getElementById('submitAllBtn').disabled = false;
+            tbody.innerHTML = '';
+            pendingList.forEach((item, index) => {
                 tbody.innerHTML += `
-                    <tr>
-                        <td class="px-3 py-2 font-semibold">${item.roll}</td>
-                        <td class="px-3 py-2">${item.name}</td>
-                        <td class="px-3 py-2"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded">${item.reason}</span></td>
-                        <td class="px-3 py-2 text-right">
-                            <button onclick="removeStaged(${index})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash"></i></button>
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="p-2.5 font-medium">${item.roll_no}</td>
+                        <td class="p-2.5">${item.student_name}</td>
+                        <td class="p-2.5">${item.section}</td>
+                        <td class="p-2.5"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-xs">${item.reason}</span></td>
+                        <td class="p-2.5 text-center">
+                            <button onclick="removeFromPending(${index})" class="text-red-500 hover:text-red-700">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
             });
         }
 
-        function removeStaged(index) {
-            stagedStudents.splice(index, 1);
-            renderStagedQueue();
+        function removeFromPending(index) {
+            pendingList.splice(index, 1);
+            renderPendingList();
         }
 
-        async function batchSubmitEntries() {
-            const classKey = document.getElementById('class-select').value;
-            if (stagedStudents.length === 0) {
-                alert('সাবমিট করার জন্য কোনো স্টুডেন্ট যোগ করা হয়নি!');
+        // Submit pending data to Supabase fail_list table
+        async function submitPendingData() {
+            if (pendingList.length === 0) return;
+
+            if (!confirm("আপনি কি নিশ্চিতভাবে এই স্টুডেন্টদের ডাটা সাবমিট করতে চান?")) return;
+
+            const recordsToInsert = pendingList.map(item => ({
+                class_name: selectedClass,
+                session: currentSession,
+                roll_no: item.roll_no,
+                reason: item.reason
+            }));
+
+            const { error } = await supabaseClient
+                .from('fail_list')
+                .insert(recordsToInsert);
+
+            if (error) {
+                alert("ডাটা সেভ করার সময় ত্রুটি ঘটেছে: " + error.message);
                 return;
             }
 
-            if (!confirm(`আপনি কি নিশ্চিতভাবে ${stagedStudents.length} জন স্টুডেন্টের ডাটা সেভ করতে চান?`)) {
+            alert("সফলভাবে ডাটা সাবমিট ও সংরক্ষণ করা হয়েছে!");
+            pendingList = [];
+            renderPendingList();
+            document.getElementById('studentPreview').classList.add('hidden');
+            
+            // Reload data table
+            await loadClassDataAndFailList();
+        }
+
+        // Render Main Data Table (Saved Fail List sorted by roll)
+        function renderFailTable() {
+            const tbody = document.getElementById('dataTableBody');
+
+            if (!selectedClass) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center p-6 text-gray-400">প্রথমে ক্লাস সিলেক্ট করুন</td></tr>';
                 return;
             }
 
-            try {
-                for (let item of stagedStudents) {
-                    // Double check before final insert
-                    const alreadySaved = existingFailRecordsCache.some(rec => rec[`roll_${classKey}`] === item.roll);
-                    if (alreadySaved) continue;
-
-                    let insertObj = {
-                        class_key: classKey,
-                        session: currentSession
-                    };
-                    insertObj[`roll_${classKey}`] = item.roll;
-                    insertObj[`reason_${classKey}`] = item.reason;
-
-                    const { error } = await supabaseClient.from('fail_list').insert([insertObj]);
-                    if (error) console.error("Insert error:", error);
-                }
-
-                alert('সফলভাবে ডাটা সুপাবেসে সেভ করা হয়েছে!');
-                stagedStudents = [];
-                renderStagedQueue();
-                await loadClassData(classKey);
-            } catch (err) {
-                console.error("Batch submit error:", err);
-                alert('ডাটা সেভ করার সময় ত্রুটি ঘটেছে।');
+            if (savedFailList.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center p-6 text-gray-400">এই ক্লাসের কোনো ফেইল বা ড্রপ-আউট রেকর্ড নেই</td></tr>';
+                return;
             }
+
+            // Sort by roll ascending
+            savedFailList.sort((a, b) => a.roll_no - b.roll_no);
+
+            tbody.innerHTML = '';
+            savedFailList.forEach((failItem, idx) => {
+                // Find student detail from classStudentsData
+                const studentInfo = classStudentsData.find(s => s.roll_no === failItem.roll_no) || {
+                    student_name: 'অজ্ঞাত স্টুডেন্ট',
+                    section: 'N/A'
+                };
+                const totalMarks = calculateTotalMarks(studentInfo, selectedClass);
+
+                tbody.innerHTML += `
+                    <tr class="border-b hover:bg-gray-50 text-sm">
+                        <td class="p-3">${idx + 1}</td>
+                        <td class="p-3">${studentInfo.section}</td>
+                        <td class="p-3 font-bold">${failItem.roll_no}</td>
+                        <td class="p-3">${studentInfo.student_name}</td>
+                        <td class="p-3">${totalMarks}</td>
+                        <td class="p-3"><span class="bg-red-100 text-red-800 px-2.5 py-1 rounded-full text-xs font-medium">${failItem.reason}</span></td>
+                        <td class="p-3 text-center no-print">
+                            <button onclick="deleteFailRecord(${failItem.roll_no})" ${isVerified ? '' : 'disabled'} class="text-red-500 hover:text-red-700 disabled:opacity-30 disabled:cursor-not-allowed" title="ডিলিট করুন">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
         }
 
-        async function deleteRecord(recordId, classKey) {
+        // Delete single student record
+        async function deleteFailRecord(rollNo) {
             if (!isVerified) {
-                alert('ডাটা ডিলিট করার জন্য পাসকি ভেরিফাই করতে হবে।');
+                alert("প্রথমে পাসকি ভেরিফাই করুন!");
                 return;
             }
 
-            if (!confirm('আপনি কি নিশ্চিতভাবে এই রেকর্ডটি ডিলিট করতে চান?')) return;
+            if (!confirm(`আপনি কি নিশ্চিতভাবে রোল ${rollNo} কে এই তালিকা থেকে ডিলিট করতে চান?`)) return;
 
-            try {
-                const { error } = await supabaseClient
-                    .from('fail_list')
-                    .delete()
-                    .eq('id', recordId);
+            const { error } = await supabaseClient
+                .from('fail_list')
+                .delete()
+                .eq('class_name', selectedClass)
+                .eq('roll_no', rollNo);
 
-                if (error) {
-                    alert('ডিলিট করতে সমস্যা হয়েছে।');
-                    return;
-                }
-
-                alert('সফলভাবে ডিলিট করা হয়েছে!');
-                await loadClassData(classKey);
-            } catch (err) {
-                console.error("Delete error:", err);
+            if (error) {
+                alert("ডিলিট করতে সমস্যা হয়েছে: " + error.message);
+                return;
             }
+
+            alert("সফলভাবে ডিলিট করা হয়েছে।");
+            await loadClassDataAndFailList();
         }
 
-        function printTable() {
-            window.print();
-        }
-
+        // Download Excel function using SheetJS
         function downloadExcel() {
-            const table = document.getElementById('printable-section').querySelector('table');
-            const wb = XLSX.utils.table_to_book(table, { sheet: "Fail List" });
-            XLSX.writeFile(wb, "pathpukur_fail_list.xlsx");
+            if (savedFailList.length === 0) {
+                alert("ডাউনলোড করার মতো কোনো ডাটা নেই!");
+                return;
+            }
+
+            const exportData = savedFailList.map((item, idx) => {
+                const studentInfo = classStudentsData.find(s => s.roll_no === item.roll_no) || {};
+                return {
+                    "Sl": idx + 1,
+                    "Class": item.class_name,
+                    "Section": studentInfo.section || 'N/A',
+                    "Roll": item.roll_no,
+                    "Student Name": studentInfo.student_name || 'N/A',
+                    "Session": item.session,
+                    "Reason": item.reason
+                };
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(exportData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, `Fail_List_Class_${selectedClass}`);
+            XLSX.writeFile(workbook, `Fail_List_Class_${selectedClass}_${currentSession}.xlsx`);
         }
     </script>
+     <!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
+ <script src="home.js"></script>
 </body>
 </html>
