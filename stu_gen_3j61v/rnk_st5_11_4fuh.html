@@ -17,7 +17,6 @@
             var ref = document.referrer;
             var isValidReferrer = false;
 
-            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
                 if (refUrl.hostname === "pathpukurschool.pages.dev") {
@@ -25,14 +24,11 @@
                 }
             }
 
-            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
             if (!isValidReferrer) {
-                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
                 window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
 
-            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
             document.addEventListener("DOMContentLoaded", function() {
                 var shield = document.getElementById("security-shield");
                 if (shield) shield.remove();
@@ -43,7 +39,7 @@
         }
     })();
     </script>
-<!-- ছাত্র-ছাত্রীদের পরীক্ষার rank -->
+<!-- ছাত্র-ছাত্রীদের পরীক্ষার rank[cite: 5] -->
 <title>Pathpukur High School (H: S:)</title>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -119,7 +115,7 @@
         border-left: 4px solid #0284c7 !important;
     }
 
-    /* Fail: হালকা লাল রঙের হাইলাইট স্টাইল */
+    /* Fail: হালকা লাল রঙের হাইলাইট স্টাইল[cite: 2] */
     .fail-highlight-row {
         background-color: #ffeeec !important;
         border-left: 4px solid #ef4444 !important;
@@ -130,7 +126,7 @@
 
     <main class="max-w-5xl mx-auto px-4 pt-6 space-y-5">
         
-        <!-- Header (Code 2 Style) -->
+        <!-- Header -->
         <header class="header-card">
             <h1 class="text-2xl md:text-3xl font-bold mb-1 tracking-wide">পাতপুকুর হাই স্কুল (উ: মা:)</h1>
             <h2 class="text-base md:text-lg text-indigo-100 font-medium flex items-center justify-center gap-2">
@@ -143,16 +139,16 @@
             </div>
         </header>
 
-        <!-- Disclaimer Box (Code 2 Style) -->
+        <!-- Disclaimer Box -->
         <div class="description-card flex items-start space-x-3">
             <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg mt-0.5"></i>
             <div>
                 <strong class="text-slate-700">সতর্কবার্তা:</strong> 
-                এটি একটি অনলাইন সিস্টেম দ্বারা তৈরি <b><em>আনুমানিক মেধা তালিকা</em></b>। নম্বর সংশোধন/পুনর্মূল্যায়ন, শিক্ষার্থী স্থানান্তর (TC), ড্রপআউট, পরীক্ষায় অকৃতকার্য (fail) হিসাবে বিবেচিত হলে বা টেকনিক্যাল ত্রুটির কারণে যেকোনো সময় সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এটি <b>চূড়ান্ত বলে গণ্য নয়</b>।
+                এটি একটি অনলাইন সিস্টেম দ্বারা তৈরি <b><em>আনুমানিক মেধা তালিকা</em></b>। নম্বর সংশোধন/পুনর্মূল্যায়ন, শিক্ষার্থী স্থানান্তর (TC), ড্রপআউট, পরীক্ষায় অকৃতকার্য (fail) হিসাবে বিবেচিত হলে বা টেকনিক্যাল ত্রুটির কারণে যেকোনো সময় সম্পূর্ণ শ্রেণীর র‍্যাঙ্কে পরিবর্তন আসতে পারে। তাই এটি <b>চূড়ান্ত বলে গণ্য নয়</b>[cite: 1]।
             </div>
         </div>
 
-        <!-- Class Filter & Subject Info (Code 2 Style Form) -->
+        <!-- Class Filter & Subject Info -->
         <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-100">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
@@ -187,11 +183,10 @@
             </div>
         </div>
     
-            <!-- Subject & Full Marks Banner -->
-            <div class="mt-4 pt-4 border-t border-slate-200">
-                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider"><i class="fa-solid fa-book text-sky-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-sky-700">0</strong></span>
-                <div id="subjectInfoBanner" class="mt-2 flex flex-wrap gap-2"></div>
-            </div>
+        <!-- Subject & Full Marks Banner -->
+        <div class="mt-4 pt-4 border-t border-slate-200">
+            <span class="text-xs font-bold text-slate-600 uppercase tracking-wider"><i class="fa-solid fa-book text-sky-600 mr-1"></i> বর্তমানে প্রাপ্ত পরীক্ষার পূর্ণমান (Full Marks): <strong id="dynamicFullMarksText" class="text-sky-700">0</strong></span>
+            <div id="subjectInfoBanner" class="mt-2 flex flex-wrap gap-2"></div>
         </div>
 
         <!-- Top 3 Podium View -->
@@ -206,7 +201,7 @@
         <div id="noDataAlert" class="hidden bg-red-50 border-l-4 border-red-500 p-6 rounded-xl text-red-700 shadow-sm text-center">
             <i class="fa-solid fa-folder-open text-4xl text-red-400 mb-2"></i>
             <h4 class="text-lg font-bold">নম্বর তথ্য অনুপস্থিত!</h4>
-            <p class="text-sm mt-1">নির্বাচিত শ্রেণীর জন্য কোনো নম্বরের তথ্য পাওয়া যায়নি। এর অর্থ হতে পারে এখনও এই শ্রেনীর পরীক্ষা সম্পন্ন হয়নি অথবা শিক্ষকমণ্ডলী নম্বর আপলোড করেননি। ফলে এই মুহূর্তে মেধা র‍্যাঙ্ক নির্ণয় করা সম্ভব নয়।</p>
+            <p class="text-sm mt-1">নির্বাচিত শ্রেণীর জন্য কোনো নম্বরের তথ্য পাওয়া যায়নি। এর অর্থ হতে পারে এখনও এই শ্রেনীর পরীক্ষা সম্পন্ন হয়নি অথবা শিক্ষকমণ্ডলী নম্বর আপলোড করেননি। ফলে এই মুহূর্তে মেধা র‍্যাঙ্ক নির্ণয় করা সম্ভব নয়[cite: 1].</p>
         </div>
 
         <!-- Student Search & Analytics Card -->
@@ -267,54 +262,46 @@
         </div>
 
         <!-- Class Full Student Table (Sorted by Roll) -->
-<div id="tableSection" class="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-300 overflow-hidden">
-    <div class="flex justify-between items-center mb-4">
-        <h3 class="text-base md:text-lg font-bold text-slate-800 flex items-center">
-            <i class="fa-solid fa-list-numeric text-indigo-600 mr-2"></i> রোল অনুযায়ী শিক্ষার্থীর তালিকা
-        </h3>
-        <span id="studentCountBadge" class="bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold px-3 py-1 rounded-full">মোট: 0</span>
-    </div>
+        <div id="tableSection" class="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-300 overflow-hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-base md:text-lg font-bold text-slate-800 flex items-center">
+                    <i class="fa-solid fa-list-numeric text-indigo-600 mr-2"></i> রোল অনুযায়ী শিক্ষার্থীর তালিকা
+                </h3>
+                <span id="studentCountBadge" class="bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold px-3 py-1 rounded-full">মোট: 0</span>
+            </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse min-w-[600px] bg-white">
-            <thead>
-                <tr class="text-white text-xs uppercase tracking-wider">
-                    <!-- কলাম ১: রোল -->
-                    <th class="py-3.5 px-4 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600 rounded-tl-xl">
-                        রোল
-                    </th>
-                    <!-- কলাম ২: সেকশন -->
-                    <th class="py-3.5 px-4 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
-                        সেকশন
-                    </th>
-                    <!-- কলাম ৩: শিক্ষার্থীর নাম -->
-                    <th class="py-3.5 px-4 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
-                        শিক্ষার্থীর নাম
-                    </th>
-                    <!-- কলাম ৪: মেধা র‍্যাঙ্ক -->
-                    <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
-                        মেধা র‍্যাঙ্ক
-                    </th>
-                    <!-- কলাম ৫: প্রাপ্ত নম্বর -->
-                    <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
-                        প্রাপ্ত নম্বর
-                    </th>
-                    <!-- কলাম ৬: শতকরা (%) -->
-                    <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
-                        শতকরা (%)
-                    </th>
-                    <!-- কলাম ৭: অ্যাকশন -->
-                    <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 rounded-tr-xl">
-                        অ্যাকশন
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="rankTableBody" class="divide-y divide-slate-300 text-xs md:text-sm bg-white">
-                <!-- Dynamic Rows -->
-            </tbody>
-        </table>
-    </div>
-</div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[600px] bg-white">
+                    <thead>
+                        <tr class="text-white text-xs uppercase tracking-wider">
+                            <th class="py-3.5 px-4 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600 rounded-tl-xl">
+                                রোল
+                            </th>
+                            <th class="py-3.5 px-4 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                                সেকশন
+                            </th>
+                            <th class="py-3.5 px-4 bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                                শিক্ষার্থীর নাম
+                            </th>
+                            <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                                মেধা র‍্যাঙ্ক
+                            </th>
+                            <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                                প্রাপ্ত নম্বর
+                            </th>
+                            <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 border-r border-slate-600">
+                                শতকরা (%)
+                            </th>
+                            <th class="py-3.5 px-4 text-center bg-gradient-to-r from-slate-900 to-slate-700 rounded-tr-xl">
+                                অ্যাকশন
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankTableBody" class="divide-y divide-slate-300 text-xs md:text-sm bg-white">
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
     </main>
 <script>
@@ -640,10 +627,18 @@
                 return a.roll_no - b.roll_no;
             });
 
-            return processed.map((st, index) => ({
-                ...st,
-                calculatedRank: st.grandTotal > 0 ? index + 1 : null
-            }));
+            // 👉 ফেইল করা বা ফেইল লিস্টে থাকা শিক্ষার্থীদের বাদ দিয়ে শুধুমাত্র পাস করা শিক্ষার্থীদের sequential র‍্যাঙ্ক প্রদান করা
+            let currentRank = 1;
+            return processed.map((st) => {
+                let rankToAssign = null;
+                if (!st.failReason && st.grandTotal > 0) {
+                    rankToAssign = currentRank++;
+                }
+                return {
+                    ...st,
+                    calculatedRank: rankToAssign
+                };
+            });
         }
 
         function renderSubjectInfoBanner(config) {
@@ -705,11 +700,16 @@
                 tr.id = `row-roll-${st.roll_no}`;
                 
                 let highlightClass = 'hover:bg-sky-50';
-                    if (st.failReason) {
-                        highlightClass = 'fail-highlight-row font-semibold';
-                    } else if (st.calculatedRank && st.calculatedRank <= 10) {
-                        highlightClass = 'top10-highlight font-semibold';
-                    }
+                let rankColumnContent = '';
+
+                if (st.failReason) {
+                    highlightClass = 'fail-highlight-row font-semibold';
+                    rankColumnContent = `<span class="bg-red-700 text-white px-2.5 py-1 rounded-md text-xs font-bold shadow-sm inline-block">${st.failReason}</span>`;
+                } else {
+                    const isTop10 = st.calculatedRank && st.calculatedRank <= 10;
+                    if (isTop10) highlightClass = 'top10-highlight font-semibold';
+                    rankColumnContent = st.calculatedRank ? getRankBadgeWithIcon(st.calculatedRank) : '<span class="text-slate-400">N/A</span>';
+                }
                 
                 tr.className = `${highlightClass} transition-colors border-b border-slate-200`;
 
@@ -718,7 +718,7 @@
                     <td class="py-3 px-4 font-semibold text-slate-600">${st.section}</td>
                     <td class="py-3 px-4 font-bold text-slate-900">${st.student_name}</td>
                     <td class="py-3 px-4 text-center">
-                        ${st.calculatedRank ? getRankBadgeWithIcon(st.calculatedRank) : '<span class="text-slate-400">N/A</span>'}
+                        ${rankColumnContent}
                     </td>
                     <td class="py-3 px-4 text-center font-extrabold text-sky-600">${st.grandTotal}</td>
                     <td class="py-3 px-4 text-center font-bold text-emerald-600">${st.percentage}%</td>
@@ -777,13 +777,13 @@
             document.getElementById('stPercentage').innerText = `${student.percentage}%`;
 
             const rankBadgeEl = document.getElementById('stRankBadge');
-            if (student.calculatedRank) {
-                rankBadgeEl.className = "bg-rose-100 border border-rose-300 text-rose-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
-                rankBadgeEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Unsuccess Reason: ${student.failReason}`;
-                    } else if (student.calculatedRank) {
-                        rankBadgeEl.className = "bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
-                        rankBadgeEl.innerHTML = `<i class="fa-solid fa-award mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
-                    } else {
+            if (student.failReason) {
+                rankBadgeEl.className = "bg-red-700 text-white text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
+                rankBadgeEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> কারণ: ${student.failReason}`;
+            } else if (student.calculatedRank) {
+                rankBadgeEl.className = "bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
+                rankBadgeEl.innerHTML = `<i class="fa-solid fa-award mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
+            } else {
                 if (student.studentStatus === 'DROP_OUT') {
                     rankBadgeEl.className = "bg-rose-100 border border-rose-300 text-rose-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
                     rankBadgeEl.innerHTML = `<i class="fa-solid fa-user-slash mr-1"></i> স্ট্যাটাস: Drop Out`;
@@ -820,7 +820,6 @@
             renderChart(student.subjectTotals);
         }
 
-        // কাস্টম প্লাগইনসহ Chart Render (বার-এর উপরে প্রাপ্ত নম্বর প্রদর্শনের ব্যবস্থা)
         function renderChart(subjectData) {
             const ctx = document.getElementById('studentChart').getContext('2d');
             const labels = Object.keys(subjectData).map(s => s.toUpperCase().replace('_', ' '));
@@ -828,7 +827,6 @@
 
             if (chartInstance) chartInstance.destroy();
 
-            // কাস্টম প্লাগইন: প্রতিটি বারের উপরে নম্বর প্রদর্শনের জন্য
             const topBarValuePlugin = {
                 id: 'topBarValuePlugin',
                 afterDatasetsDraw(chart) {
@@ -868,7 +866,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 20 } // উপরে নম্বর লেখার জন্য জায়গা রাখা
+                        padding: { top: 20 }
                     },
                     animation: { duration: 0 },
                     scales: {
@@ -881,7 +879,6 @@
             });
         }
 
-       // A4 পেজের ওপরের অর্ধেক অংশে (A5 সাইজ) ফিট হওয়ার মতো প্রিন্ট ফাংশন
         function printResultCard() {
             const rollVal = parseInt(document.getElementById('rollInput').value);
             const student = currentClassStudents.find(s => s.roll_no === rollVal);
@@ -894,7 +891,6 @@
             const className = classNameMap[document.getElementById('classSelect').value] || '';
             const session = document.getElementById('sessionDisplay').innerText || '2026';
 
-            // বার-গ্রাফের ইমেজ ডাটা
             const canvas = document.getElementById('studentChart');
             let chartImageHtml = '';
             if (canvas) {
@@ -902,7 +898,6 @@
                 chartImageHtml = `<img src="${chartImgData}" style="width:100%; max-height:120px; object-fit:contain;" />`;
             }
 
-            // বিষয়ভিত্তিক নম্বর টেবিল তৈরি
             let subjectRowsHtml = '';
             Object.entries(student.subjectTotals).forEach(([subKey, score]) => {
                 const subName = subKey.toUpperCase().replace('_', ' ');
@@ -916,7 +911,6 @@
                 `;
             });
 
-            // স্ট্যাটাস বা র‍্যাঙ্ক টেক্সট
             let statusText = '';
             if (student.failReason) {
                 statusText = `কারণ: ${student.failReason}`;
@@ -964,12 +958,11 @@
                             padding: 0;
                             background: #fff;
                         }
-                        /* A4 Portrait পেজের ঠিক অর্ধেক উচ্চতায় ফিট করার জন্য বক্স রেডি */
                         .card-container {
                             border: 2px dashed #000;
                             border-radius: 6px;
                             padding: 10px 12px;
-                            max-height: 145mm; /* A4-এর অর্ধেক উচ্চতা */
+                            max-height: 145mm;
                             overflow: hidden;
                         }
                         .header {
@@ -1057,13 +1050,11 @@
                 </head>
                 <body>
                     <div class="card-container">
-                        <!-- হেডার -->
                         <div class="header">
                             <h1 class="school-title">PATHPUKUR HIGH SCHOOL (H.S.)</h1>
                             <p class="sub-title">STUDENT ACADEMIC PERFORMANCE CARD (SESSION: ${session})</p>
                         </div>
 
-                        <!-- শিক্ষার্থীর তথ্য -->
                         <div class="student-info-grid">
                             <div class="info-item"><span>নাম:</span> <strong>${student.student_name}</strong></div>
                             <div class="info-item"><span>শ্রেণী:</span> <strong>${className}</strong></div>
@@ -1071,7 +1062,6 @@
                             <div class="info-item"><span>মেধা / স্ট্যাটাস:</span> <strong>${statusText}</strong></div>
                         </div>
 
-                        <!-- মেইন কনটেন্ট: নম্বর টেবিল + বার চার্ট -->
                         <div class="main-content">
                             <div class="table-side">
                                 <table>
@@ -1093,7 +1083,6 @@
                             </div>
                         </div>
 
-                        <!-- সার্বিক ফলাফল সামারি -->
                         <div class="summary-box">
                             <div>মোট নম্বর: ${student.grandTotal} / ${currentCalculatedFullMarks}</div>
                             <div>শতকরা হার: ${student.percentage}%</div>
