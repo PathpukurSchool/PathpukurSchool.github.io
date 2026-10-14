@@ -779,7 +779,7 @@
             const rankBadgeEl = document.getElementById('stRankBadge');
             if (student.calculatedRank) {
                 rankBadgeEl.className = "bg-rose-100 border border-rose-300 text-rose-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
-                rankBadgeEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> কারণ (Reason): ${student.failReason}`;
+                rankBadgeEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Unsuccess Reason: ${student.failReason}`;
                     } else if (student.calculatedRank) {
                         rankBadgeEl.className = "bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
                         rankBadgeEl.innerHTML = `<i class="fa-solid fa-award mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
