@@ -20,7 +20,6 @@
             var isValidReferrer = false;
             if (ref) {
                 var refUrl = new URL(ref);
-                // সংশোধন ১: পুরোনো গিটহাব ডোমেইনের পরিবর্তে নতুন ক্লাউডফ্লেয়ার ডোমেইন যুক্ত করা হলো
                 if (refUrl.hostname === "pathpukurschool.pages.dev" || refUrl.hostname === "localhost") {
                     isValidReferrer = true;
                 }
@@ -28,7 +27,6 @@
 
             if (!isLoggedIn) {
                 sessionStorage.clear();
-                // সংশোধন ২: রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
                 window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
@@ -40,12 +38,10 @@
 
         } catch (e) {
             sessionStorage.clear();
-            // সংশোধন ৩: ক্যাচ ব্লকের রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
             window.location.replace("https://pathpukurschool.pages.dev/");
         }
     })();
     </script>
-<!-- সংশোধিত মার্কশিট প্রিন্টের জন্য কতজন স্টুডেন্টের নম্বর সংশোধন করা হয়েছে সেটি জানার ট্র্যাকার -->
     <title>Pathpukur High School (H.S.)</title>
     
     <!-- 🟢 FontAwesome Icons library -->
@@ -108,7 +104,7 @@
         .filter-btn.active { background: #ffffff; color: #1e3a8a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
         /* প্যাসকি ইনপুট গ্রুপ (Eye Icon) */
-        .passkey-wrapper {position: relative; display: flex; align-items: center; width: 100%; }
+        .passkey-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
 
         .passkey-wrapper input {
             padding: 9px 35px 9px 12px;
@@ -193,7 +189,6 @@
         .spinning { animation: spin 0.8s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* 🎨 ২. নম্বর পরিবর্তন প্রদর্শনীয় নতুন স্টাইলিং (রঙিন ও স্পষ্ট) */
         .mark-change {
             display: inline-flex;
             align-items: center;
@@ -226,7 +221,6 @@
             font-size: 11px;
         }
 
-        /* 🖨️ স্মার্ট প্রিন্ট CSS (সাদাকালো এবং কালার উভয় প্রিন্টেই নম্বর পরিবর্তন স্পষ্ট রাখা) */
         @media print {
             html, body {
                 background: #fff !important;
@@ -263,7 +257,7 @@
                 display: none !important;
             }
 
-            .section-card:nth-child(2) {
+            .section-card:nth-child(3) {
                 display: block !important;
                 width: 100% !important;
                 margin: 0 !important;
@@ -323,7 +317,6 @@
 
             th { background: #f2f2f2 !important; }
 
-            /* 🖨️ প্রিন্ট আউটপুট স্টাইল (সাদাকালোতে স্টাইলিং ও প্রতীক স্পষ্ট থাকবে) */
             .mark-change {
                 display: inline-flex !important;
                 align-items: center !important;
@@ -402,7 +395,35 @@
         </div>
     </div>
 
-    <!-- সেকশন ২: সংশোধিত মার্কশিটের তালিকা (Re-print List) -->
+    <!-- নতুন সেকশন: Fail List Summary Table (V থেকে XI) -->
+    <div class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fa-solid fa-users-slash" style="color: #dc2626;"></i> Fail List Summary (Class V to XI)
+            </div>
+        </div>
+        <div style="overflow-x: auto; padding: 12px;">
+            <table id="failListSummaryTable">
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Reason / Class</th>
+                        <th>Class V</th>
+                        <th>Class VI</th>
+                        <th>Class VII</th>
+                        <th>Class VIII</th>
+                        <th>Class IX</th>
+                        <th>Class X</th>
+                        <th>Class XI</th>
+                    </tr>
+                </thead>
+                <tbody id="failListSummaryBody">
+                    <tr><td colspan="8" style="text-align: center; color: #64748b;">লোড হচ্ছে...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- সেকশন ৩: সংশোধিত মার্কশিটের তালিকা (Re-print List) -->
     <div class="section-card">
         <div class="section-header">
             <div class="section-title">
@@ -520,6 +541,7 @@ async function refreshAllData() {
 
     await Promise.all([
         fetchFinalisationStatus(),
+        fetchFailListSummary(),
         loadModifiedData()
     ]);
 
@@ -559,6 +581,60 @@ async function fetchFinalisationStatus() {
 
     } catch (err) {
         console.error('Finalisation Status Error:', err);
+    }
+}
+
+async function fetchFailListSummary() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('fail_list')
+            .select('class_name, reason');
+
+        if (error) throw error;
+
+        const classes = ['V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'];
+        const reasons = ['Drop Out', 'Non Regi', 'Fail'];
+        
+        let counts = {};
+        classes.forEach(cls => {
+            counts[cls] = {};
+            reasons.forEach(r => counts[cls][r] = 0);
+        });
+
+        if (data) {
+            data.forEach(item => {
+                let cls = String(item.class_name || '').trim().toUpperCase();
+                let rsn = String(item.reason || '').trim();
+                if (counts[cls] && counts[cls][rsn] !== undefined) {
+                    counts[cls][rsn]++;
+                }
+            });
+        }
+
+        let tbodyHtml = '';
+        reasons.forEach(rsn => {
+            let rowHtml = `<tr><td style="text-align: left; font-weight: 600;">${rsn}</td>`;
+            classes.forEach(cls => {
+                let val = counts[cls][rsn];
+                rowHtml += `<td>${val > 0 ? val : '-'}</td>`;
+            });
+            rowHtml += `</tr>`;
+            tbodyHtml += rowHtml;
+        });
+
+        // Grand Total Row
+        let grandTotalHtml = `<tr style="font-weight: bold; background: #f1f5f9;"><td style="text-align: left;">গ্র্যান্ড টোটাল (Grand Total)</td>`;
+        classes.forEach(cls => {
+            let totalForClass = reasons.reduce((sum, rsn) => sum + counts[cls][rsn], 0);
+            grandTotalHtml += `<td>${totalForClass > 0 ? totalForClass : '-'}</td>`;
+        });
+        grandTotalHtml += `</tr>`;
+
+        document.getElementById('failListSummaryBody').innerHTML = tbodyHtml + grandTotalHtml;
+
+    } catch (err) {
+        console.error('Fail List Summary Error:', err);
+        document.getElementById('failListSummaryBody').innerHTML = `<tr><td colspan="8" style="text-align: center; color: #dc2626;">ডাটা লোড করতে সমস্যা হয়েছে।</td></tr>`;
     }
 }
 
@@ -677,7 +753,6 @@ function triggerSmartPrint() {
     updateSummaryTracker();
 }
 
-// ⚡ 🟢 ১০. ১০,০০০+ ডাটায় দ্রুত লোড হওয়ার হাই-পারফরম্যান্স ফাংশন
 async function loadModifiedData() {
     try {
         const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_modified_students_list`, {
@@ -718,7 +793,6 @@ async function loadModifiedData() {
 
         statusDiv.innerHTML = `<div class="status-badge status-active"><i class="fa-solid fa-check-circle"></i> ট্র্যাকিং মোড চালু রয়েছে। মোট ${result.data.length}টি সংশোধন পাওয়া গেছে।</div>`;
         
-        // ১. দ্রুত সাজানো
         result.data.sort((a, b) => {
             const classA = a.class_name.replace('result_', '').toUpperCase();
             const classB = b.class_name.replace('result_', '').toUpperCase();
@@ -730,7 +804,6 @@ async function loadModifiedData() {
             return (a.roll_no || 0) - (b.roll_no || 0);
         });
 
-        // ⚡ ২. মেমোরি এবংDOM রেন্ডারিং অপটিমাইজেশন (অ্যারে জয়েন ব্যবহার)
         const rowsHtml = [];
         const totalLen = result.data.length;
 
@@ -773,7 +846,6 @@ async function loadModifiedData() {
             `);
         }
 
-        // ⚡ ১ বারেই পুরো টেবিল DOM এ ইনসার্ট করা
         tbody.innerHTML = rowsHtml.join('');
 
         tableWrapper.style.display = "block";
@@ -783,10 +855,8 @@ async function loadModifiedData() {
     } catch (err) {
         console.error("Error fetching data:", err);
     }
-}
 </script>
 
-<!-- 💡 মূল ওয়েবসাইটের অটো-লগআউট ও শেয়ার্ড লজিক ফাইলের লিঙ্ক -->
 <script src="home.js"></script>
 </body>
 </html>
