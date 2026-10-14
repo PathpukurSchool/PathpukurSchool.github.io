@@ -70,6 +70,14 @@
             overflow-y: auto;
             transition: all 0.3s ease;
         }
+        .header { 
+          background: linear-gradient(135deg, #1e3a8a, #0f172a);
+          color: #ffffff;
+          padding: 20px 15px;
+          text-align: center; 
+          border-bottom: none;
+          margin-bottom: 0;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col justify-between">
@@ -78,8 +86,7 @@
         <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
             
         <!-- 1) হেডার সেকশন -->
-        <header class="bg-blue-800 text-white shadow-md">
-            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+        <div class="header">
                 <div>
                     <h1 class="text-2xl font-bold flex items-center gap-2">
                         <i class="fa-solid fa-school"></i> Pathpukur High School (HS)
@@ -88,7 +95,6 @@
                     </p>
                 </div>
             </div>
-        </header>
 
             <!-- 2) নির্দেশিকা বক্স ও এডিট মোড চেক -->
             <div id="maintenanceAlert" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow" role="alert">
