@@ -118,6 +118,12 @@
         background-color: #e0f2fe !important;
         border-left: 4px solid #0284c7 !important;
     }
+
+    /* Fail: হালকা লাল রঙের হাইলাইট স্টাইল */
+    .fail-highlight-row {
+        background-color: #ffeeec !important;
+        border-left: 4px solid #ef4444 !important;
+    }
 </style>
 </head>
 <body class="min-h-screen pb-12 text-slate-800">
@@ -449,6 +455,11 @@
 
             const { data, error } = await _supabase.from(config.table).select('*');
 
+            const { data: failListData, error: failErr } = await _supabase
+                .from('fail_list')
+                .select('*')
+                .eq('class_name', selectedClass.toUpperCase());
+
             if (error) {
                 alert("ডাটা পেতে সমস্যা হয়েছে: " + error.message);
                 if (refreshIcon) refreshIcon.classList.remove('fa-spin');
@@ -615,7 +626,8 @@
                     hasAbsent,
                     studentStatus,
                     allPassed: !failedPassRule && hasAnyData,
-                    percentage: isNaN(pct) ? 0 : pct
+                    percentage: isNaN(pct) ? 0 : pct,
+                    failReason: matchedFail ? matchedFail.reason : null
                 };
             });
 
@@ -690,9 +702,13 @@
                 const tr = document.createElement('tr');
                 tr.id = `row-roll-${st.roll_no}`;
                 
-                const isTop10 = st.calculatedRank && st.calculatedRank <= 10;
-                const highlightClass = isTop10 ? 'top10-highlight font-semibold' : 'hover:bg-sky-50';
-
+                let highlightClass = 'hover:bg-sky-50';
+                    if (st.failReason) {
+                        highlightClass = 'fail-highlight-row font-semibold';
+                    } else if (st.calculatedRank && st.calculatedRank <= 10) {
+                        highlightClass = 'top10-highlight font-semibold';
+                    }
+                
                 tr.className = `${highlightClass} transition-colors border-b border-slate-200`;
 
                 tr.innerHTML = `
@@ -760,9 +776,12 @@
 
             const rankBadgeEl = document.getElementById('stRankBadge');
             if (student.calculatedRank) {
-                rankBadgeEl.className = "bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
-                rankBadgeEl.innerHTML = `<i class="fa-solid fa-award mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
-            } else {
+                rankBadgeEl.className = "bg-rose-100 border border-rose-300 text-rose-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
+                rankBadgeEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> কারণ (Reason): ${student.failReason}`;
+                    } else if (student.calculatedRank) {
+                        rankBadgeEl.className = "bg-amber-100 border border-amber-300 text-amber-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
+                        rankBadgeEl.innerHTML = `<i class="fa-solid fa-award mr-1"></i> আনুমানিক র‍্যাঙ্ক #${student.calculatedRank}`;
+                    } else {
                 if (student.studentStatus === 'DROP_OUT') {
                     rankBadgeEl.className = "bg-rose-100 border border-rose-300 text-rose-800 text-xs px-3 py-1 rounded-full font-bold inline-flex items-center shadow-sm";
                     rankBadgeEl.innerHTML = `<i class="fa-solid fa-user-slash mr-1"></i> স্ট্যাটাস: Drop Out`;
@@ -897,7 +916,9 @@
 
             // স্ট্যাটাস বা র‍্যাঙ্ক টেক্সট
             let statusText = '';
-            if (student.calculatedRank) {
+            if (student.failReason) {
+                statusText = `কারণ: ${student.failReason}`;
+            } else if (student.calculatedRank) {
                 statusText = `র‍্যাঙ্ক: #${student.calculatedRank}`;
             } else {
                 statusText = `স্ট্যাটাস: ${student.studentStatus}`;
