@@ -57,48 +57,109 @@
     <!-- SheetJS for Excel Download -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        @media print {
-    /* পেজের আকার ও মার্জিন নির্ধারণ */
+        ```css
+@media print {
+
     @page {
         size: A4 portrait;
         margin: 10mm;
     }
 
-    body, html {
+    html,
+    body {
+        display: block !important;
+        width: auto !important;
         height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
         overflow: visible !important;
         background: #fff !important;
-        margin: 0 !important;
-        padding: 0 !important;
     }
 
-    body * {
-        visibility: hidden;
+    /* স্ক্রিনের Flex layout প্রিন্টে বন্ধ */
+    body {
+        flex: none !important;
     }
 
-    #printable-area, #printable-area * {
-        visibility: visible;
-    }
-
-    #printable-area {
-        position: absolute;
-        left: 0;
-        top: 0;
+    /* বাইরের wrapper এবং main-কে স্বাভাবিক রাখুন */
+    body > div {
+        display: block !important;
         width: 100% !important;
         height: auto !important;
+        min-height: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
     }
 
-    /* টেবিল বা রো গুলো যেন পেজের মাঝখানে ভেঙে না যায় (Page Break Control) */
-    tr {
+    body > div > main {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* প্রিন্টের সময় অন্য সেকশনগুলি বাদ দিন */
+    body > div > main > * {
+        display: none !important;
+    }
+
+    /* শুধু মূল ডেটার টেবিলটি প্রিন্ট হবে */
+    body > div > main > #printable-area {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        visibility: visible !important;
+        box-sizing: border-box !important;
+    }
+
+    #printable-area * {
+        visibility: visible !important;
+    }
+
+    /* প্রিন্টে অপ্রয়োজনীয় কন্ট্রোল ও বোতাম বাদ */
+    .no-print {
+        display: none !important;
+    }
+
+    /* স্ক্রলিং কন্টেইনার প্রিন্টে স্বাভাবিক করুন */
+    .pending-table-container {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    /* টেবিলের অতিরিক্ত পেজ ব্রেক বন্ধ */
+    #printable-area table {
+        width: 100% !important;
+        page-break-after: auto;
+        break-after: auto;
+    }
+
+    #printable-area thead {
+        display: table-header-group;
+    }
+
+    #printable-area tfoot {
+        display: table-footer-group;
+    }
+
+    #printable-area tr {
         page-break-inside: avoid;
         break-inside: avoid;
     }
 
-    .no-print {
-        display: none !important;
-    }
 }
         /* ডাইনামিক পেন্ডিং টেবিল কন্টেইনার স্টাইল */
         .pending-table-container {
