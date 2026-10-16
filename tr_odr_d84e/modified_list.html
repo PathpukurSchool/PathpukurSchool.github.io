@@ -42,6 +42,7 @@
         }
     })();
     </script>
+    <!-- ফাইনাল সাবমিট করা, ফেল লিস্ট পূরণ ও রেজাল্ট আউটের পর নম্বর সংশোধনের তালিকা -->
     <title>Pathpukur High School (H.S.)</title>
     
     <!-- 🟢 FontAwesome Icons library -->
@@ -56,7 +57,7 @@
         body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
         .container { width: 100%; max-width: 1000px; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); overflow: hidden; border: 1px solid #e2e8f0; }
         
-        .header-area { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #ffffff; padding: 22px 15px; text-align: center; position: relative; }
+        .header-area { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #ffffff; padding: 22px 15px; text-align: center; }
         h1 { font-size: 20px; margin-bottom: 4px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
 
@@ -65,9 +66,9 @@
             top: 8px;
             right: 12px;
             font-size: 9px;
-            color: #93c5fd;
+            color: #0000;
             font-weight: 500;
-            display: none;
+            display: none; /* স্ক্রিনে দেখাবে না, শুধুমাত্র প্রিন্টে দেখাবে */
         }
         
         /* 📊 লাইভ প্রিন্ট ট্র্যাকার সামারি বক্স */
@@ -255,8 +256,7 @@
                 height: auto !important;
             }
 
-            /* 👉 শুধুমাত্র Fail List Summary সেকশনটি প্রিন্ট থেকে বাদ দেওয়া হলো, Finalisation Status Tracker এখন প্রিন্ট হবে */
-            .section-card:nth-child(3) { display: none !important; }
+            .section-card:first-child { display: none !important; }
 
             .control-panel,
             #statusMessage,
@@ -268,43 +268,27 @@
                 display: none !important;
             }
 
-            .section-card:nth-child(2),
-            .section-card:nth-child(4) {
+            .section-card:nth-child(3) {
                 display: block !important;
                 width: 100% !important;
-                margin: 0 0 15px 0 !important;
+                margin: 0 !important;
                 padding: 0 !important;
                 border: none !important;
                 box-shadow: none !important;
             }
 
-            /* 👉 প্রিন্টে ব্যাকগ্রাউন্ড সাদা এবং টেক্সট কালার কালো রাখার সেটিংস */
+            /* 👉 ২ নং রিকোয়েস্ট অনুযায়ী: প্রিন্ট করার সময় স্কুলের নাম ও হেডারের ব্যাকগ্রাউন্ড এবং কালার স্পষ্ট রাখার জন্য সেটিংস */
             .header-area {
-                background: #ffffff !important;
-                color: #000000 !important;
+                background: #ffff !important;
+                color: #0000 !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                padding: 10px 0 !important;
-                border-bottom: 2px solid #000 !important;
-                text-align: center !important;
-            }
-
-            h1 {
-                font-size: 18px !important;
-                color: #000000 !important;
-                font-weight: bold !important;
-            }
-
-            h2 {
-                font-size: 13px !important;
-                color: #333333 !important;
-                font-weight: 600 !important;
+                padding: 12px 10px !important;
+                border: none !important;
             }
 
             .print-timestamp {
-                display: block !important;
-                color: #000000 !important;
-                font-size: 9px !important;
+                display: block !important; /* প্রিন্ট করার সময় টাইমস্ট্যাম্প দৃশ্যমান হবে */
             }
 
             .section-header {
@@ -314,8 +298,8 @@
             }
 
             .section-title {
-                font-size: 15px !important;
-                color: #000000 !important;
+                font-size: 16px !important;
+                color: #000 !important;
                 font-weight: bold !important;
             }
 
@@ -550,6 +534,7 @@ const CLASS_ORDER = { 'V': 1, 'VI': 2, 'VII': 3, 'VIII': 4, 'IX': 5, 'X': 6, 'XI
 let trackerDataCache = {}; 
 
 document.addEventListener("DOMContentLoaded", function() {
+    // 👉 প্রিন্ট টাইমস্ট্যাম্প সেট করার কোড
     const now = new Date();
     const timestampStr = "Printed: " + now.toLocaleString('en-GB', { 
         day: '2-digit', 
@@ -678,6 +663,7 @@ async function fetchFailListSummary() {
             tbodyHtml += rowHtml;
         });
 
+        // Grand Total Row
         let grandTotalHtml = `<tr style="font-weight: bold; background: #f1f5f9;"><td style="text-align: left;">গ্র্যান্ড টোটাল (Grand Total)</td>`;
         classes.forEach(cls => {
             let totalForClass = reasons.reduce((sum, rsn) => sum + counts[cls][rsn], 0);
