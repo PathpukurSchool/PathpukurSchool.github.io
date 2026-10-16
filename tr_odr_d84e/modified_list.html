@@ -42,7 +42,7 @@
         }
     })();
     </script>
-    <!-- ফাইনাল সাবমিট করা, ফেল লিস্ট পূরণ ও রেজাল্ট আউটের পর নম্বর সংশোধনের তালিকা -->
+     <!-- ফাইনাল সাবমিট করা, ফেল লিস্ট পূরণ ও রেজাল্ট আউটের পর নম্বর সংশোধনের তালিকা -->
     <title>Pathpukur High School (H.S.)</title>
     
     <!-- 🟢 FontAwesome Icons library -->
@@ -57,10 +57,10 @@
         body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
         .container { width: 100%; max-width: 1000px; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); overflow: hidden; border: 1px solid #e2e8f0; }
         
-        .header-area { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #ffffff; padding: 22px 15px; text-align: center; position: relative; }
+        .header-area { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #ffffff; padding: 22px 15px; text-align: center; }
         h1 { font-size: 20px; margin-bottom: 4px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
-        
+
         /* 👉 প্রিন্ট টাইমস্ট্যাম্পের স্টাইল */
         .print-timestamp {
             position: absolute;
@@ -71,7 +71,7 @@
             font-weight: 500;
             display: none; /* স্ক্রিনে দেখাবে না, শুধুমাত্র প্রিন্টে দেখাবে */
         }
-
+        
         /* 📊 লাইভ প্রিন্ট ট্র্যাকার সামারি বক্স */
         .summary-tracker-box {
             display: flex;
@@ -257,7 +257,6 @@
                 height: auto !important;
             }
 
-            /* 👉 ১ ও ৩ নং রিকোয়েস্ট অনুযায়ী: প্রথম দুটি সেকশন এবং রি-প্রিন্ট বক্সের বাইরের বর্ডার/অতিরিক্ত অংশ প্রিন্ট থেকে বাদ দেওয়া হলো */
             .section-card:first-child,
             .section-card:nth-child(2),
             .summary-tracker-box {
@@ -266,6 +265,7 @@
 
             .control-panel,
             #statusMessage,
+            .summary-tracker-box,
             .col-check,
             td.col-check,
             th.col-check,
@@ -282,7 +282,6 @@
                 box-shadow: none !important;
             }
 
-            /* 👉 ২ নং রিকোয়েস্ট অনুযায়ী: প্রিন্ট করার সময় স্কুলের নাম ও হেডারের ব্যাকগ্রাউন্ড এবং কালার স্পষ্ট রাখার জন্য সেটিংস */
             .header-area {
                 background: #1e3a8a !important; /* প্রিন্টেও গাঢ় নীল ব্যাকগ্রাউন্ড ঠিক রাখবে */
                 color: #ffffff !important;
@@ -312,8 +311,8 @@
             }
 
             .section-title {
-                font-size: 15px !important;
-                color: #1e3a8a !important;
+                font-size: 16px !important;
+                color: #000 !important;
                 font-weight: bold !important;
             }
 
@@ -354,11 +353,7 @@
                 text-decoration: none !important;
             }
 
-            th { 
-                background: #f1f5f9 !important; 
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+            th { background: #f2f2f2 !important; }
 
             .mark-change {
                 display: inline-flex !important;
@@ -367,23 +362,19 @@
             }
 
             .old-mark {
-                color: #b91c1c !important;
-                background: #fee2e2 !important;
+                color: #444 !important;
+                background: #f0f0f0 !important;
                 text-decoration: line-through !important;
-                border: 1px solid #fca5a5 !important;
+                border: 1px dashed #666 !important;
                 padding: 1px 4px !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
             }
 
             .new-mark {
-                color: #15803d !important;
-                background: #dcfce7 !important;
+                color: #000 !important;
+                background: #fff !important;
                 font-weight: bold !important;
-                border: 1px solid #86efac !important;
+                border: 1.5px solid #000 !important;
                 padding: 1px 4px !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
             }
 
             @page {
@@ -397,7 +388,6 @@
 
 <div class="container">
     <div class="header-area">
-        <!-- 👉 প্রিন্ট হেডার টাইমস্ট্যাম্প প্লেসহোল্ডার -->
         <div class="print-timestamp" id="printTimestamp"></div>
         <h1>Pathpukur High School (H.S.)</h1>
         <h2>রেজাল্ট প্যানেল ও ট্র্যাকিং ড্যাশবোর্ড</h2>
@@ -919,6 +909,7 @@ async function loadModifiedData() {
     } catch (err) {
         console.error("Error fetching data:", err);
     }
+}
 </script>
 
 <script src="home.js"></script>
