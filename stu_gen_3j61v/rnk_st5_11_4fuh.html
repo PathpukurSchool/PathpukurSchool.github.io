@@ -880,225 +880,248 @@
         }
 
         function printResultCard() {
-            const rollVal = parseInt(document.getElementById('rollInput').value);
-            const student = currentClassStudents.find(s => s.roll_no === rollVal);
+    const rollVal = parseInt(document.getElementById('rollInput').value);
+    const student = currentClassStudents.find(s => s.roll_no === rollVal);
 
-            if (!student) {
-                alert("শিক্ষার্থীর তথ্য পাওয়া যায়নি।");
-                return;
-            }
+    if (!student) {
+        alert("শিক্ষার্থীর তথ্য পাওয়া যায়নি।");
+        return;
+    }
 
-            const className = classNameMap[document.getElementById('classSelect').value] || '';
-            const session = document.getElementById('sessionDisplay').innerText || '2026';
+    const className = classNameMap[document.getElementById('classSelect').value] || '';
+    const session = document.getElementById('sessionDisplay').innerText || '2026';
 
-            const canvas = document.getElementById('studentChart');
-            let chartImageHtml = '';
-            if (canvas) {
-                const chartImgData = canvas.toDataURL('image/png');
-                chartImageHtml = `<img src="${chartImgData}" style="width:100%; max-height:120px; object-fit:contain;" />`;
-            }
+    // 👉 বর্তমান সময় ও তারিখ পাওয়ার জন্য টাইমস্ট্যাম্প তৈরি
+    const now = new Date();
+    const printTimestamp = now.toLocaleString('en-GB', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit'
+    });
 
-            let subjectRowsHtml = '';
-            Object.entries(student.subjectTotals).forEach(([subKey, score]) => {
-                const subName = subKey.toUpperCase().replace('_', ' ');
-                const fm = activeFullMarksPerSubject[subKey] || '-';
-                subjectRowsHtml += `
-                    <tr>
-                        <td style="padding: 3px 6px; border: 1px solid #cbd5e1; font-weight: 600;">${subName}</td>
-                        <td style="padding: 3px 6px; border: 1px solid #cbd5e1; text-align: center;">${fm}</td>
-                        <td style="padding: 3px 6px; border: 1px solid #cbd5e1; text-align: center; font-weight: bold; color: #0284c7;">${score}</td>
-                    </tr>
-                `;
-            });
+    const canvas = document.getElementById('studentChart');
+    let chartImageHtml = '';
+    if (canvas) {
+        const chartImgData = canvas.toDataURL('image/png');
+        chartImageHtml = `<img src="${chartImgData}" style="width:100%; max-height:120px; object-fit:contain;" />`;
+    }
 
-            let statusText = '';
-            if (student.failReason) {
-                statusText = `কারণ: ${student.failReason}`;
-            } else if (student.calculatedRank) {
-                statusText = `র‍্যাঙ্ক: #${student.calculatedRank}`;
-            } else {
-                statusText = `স্ট্যাটাস: ${student.studentStatus}`;
-            }
+    let subjectRowsHtml = '';
+    Object.entries(student.subjectTotals).forEach(([subKey, score]) => {
+        const subName = subKey.toUpperCase().replace('_', ' ');
+        const fm = activeFullMarksPerSubject[subKey] || '-';
+        subjectRowsHtml += `
+            <tr>
+                <td style="padding: 3px 6px; border: 1px solid #cbd5e1; font-weight: 600;">${subName}</td>
+                <td style="padding: 3px 6px; border: 1px solid #cbd5e1; text-align: center;">${fm}</td>
+                <td style="padding: 3px 6px; border: 1px solid #cbd5e1; text-align: center; font-weight: bold; color: #0284c7;">${score}</td>
+            </tr>
+        `;
+    });
 
-            let printFrame = document.getElementById('printAreaIframe');
-            if (printFrame) printFrame.remove();
+    let statusText = '';
+    if (student.failReason) {
+        statusText = `কারণ: ${student.failReason}`;
+    } else if (student.calculatedRank) {
+        statusText = `র‍্যাঙ্ক: #${student.calculatedRank}`;
+    } else {
+        statusText = `স্ট্যাটাস: ${student.studentStatus}`;
+    }
 
-            printFrame = document.createElement('iframe');
-            printFrame.id = 'printAreaIframe';
-            printFrame.style.position = 'fixed';
-            printFrame.style.right = '0';
-            printFrame.style.bottom = '0';
-            printFrame.style.width = '0';
-            printFrame.style.height = '0';
-            printFrame.style.border = '0';
-            document.body.appendChild(printFrame);
+    let printFrame = document.getElementById('printAreaIframe');
+    if (printFrame) printFrame.remove();
 
-            const frameDoc = printFrame.contentWindow || printFrame.contentDocument.document || printFrame.contentDocument;
+    printFrame = document.createElement('iframe');
+    printFrame.id = 'printAreaIframe';
+    printFrame.style.position = 'fixed';
+    printFrame.style.right = '0';
+    printFrame.style.bottom = '0';
+    printFrame.style.width = '0';
+    printFrame.style.height = '0';
+    printFrame.style.border = '0';
+    document.body.appendChild(printFrame);
 
-            frameDoc.document.open();
-            frameDoc.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Result Card - ${student.student_name}</title>
-                    <style>
-                        @page {
-                            size: A4 portrait;
-                            margin: 8mm;
-                        }
-                        * {
-                            box-sizing: border-box;
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                        }
-                        body {
-                            font-family: 'Segoe UI', Arial, sans-serif;
-                            color: #1e293b;
-                            margin: 0;
-                            padding: 0;
-                            background: #fff;
-                        }
-                        .card-container {
-                            border: 2px dashed #000;
-                            border-radius: 6px;
-                            padding: 10px 12px;
-                            max-height: 145mm;
-                            overflow: hidden;
-                        }
-                        .header {
-                            text-align: center;
-                            border-bottom: 1.5px solid #0284c7;
-                            padding-bottom: 4px;
-                            margin-bottom: 8px;
-                        }
-                        .school-title {
-                            font-size: 16px;
-                            font-weight: 800;
-                            color: #0369a1;
-                            margin: 0 0 2px 0;
-                            text-transform: uppercase;
-                        }
-                        .sub-title {
-                            font-size: 11px;
-                            color: #475569;
-                            margin: 0;
-                            font-weight: 600;
-                        }
-                        .student-info-grid {
-                            display: grid;
-                            grid-template-columns: repeat(4, 1fr);
-                            gap: 4px;
-                            background: #f8fafc;
-                            padding: 6px 8px;
-                            border-radius: 4px;
-                            border: 1px solid #e2e8f0;
-                            margin-bottom: 8px;
-                            font-size: 11px;
-                        }
-                        .info-item span {
-                            color: #64748b;
-                            display: block;
-                            font-size: 10px;
-                        }
-                        .info-item strong {
-                            color: #0f172a;
-                        }
-                        .main-content {
-                            display: flex;
-                            gap: 10px;
-                            margin-bottom: 8px;
-                        }
-                        .table-side {
-                            flex: 1;
-                        }
-                        .chart-side {
-                            flex: 1;
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            justify-content: center;
-                            border: 1px solid #e2e8f0;
-                            border-radius: 4px;
-                            padding: 4px;
-                            background: #fafafa;
-                        }
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            font-size: 11px;
-                        }
-                        th {
-                            background: #0284c7;
-                            color: #ffffff;
-                            padding: 4px 6px;
-                            border: 1px solid #0284c7;
-                            text-align: center;
-                            font-size: 11px;
-                        }
-                        .summary-box {
-                            display: flex;
-                            justify-content: space-between;
-                            background: #e0f2fe;
-                            border: 1px solid #bae6fd;
-                            padding: 6px 10px;
-                            border-radius: 4px;
-                            font-size: 11px;
-                            font-weight: bold;
-                            color: #0369a1;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="card-container">
-                        <div class="header">
-                            <h1 class="school-title">PATHPUKUR HIGH SCHOOL (H.S.)</h1>
-                            <p class="sub-title">STUDENT ACADEMIC PERFORMANCE CARD (SESSION: ${session})</p>
-                        </div>
+    const frameDoc = printFrame.contentWindow || printFrame.contentDocument.document || printFrame.contentDocument;
 
-                        <div class="student-info-grid">
-                            <div class="info-item"><span>নাম:</span> <strong>${student.student_name}</strong></div>
-                            <div class="info-item"><span>শ্রেণী:</span> <strong>${className}</strong></div>
-                            <div class="info-item"><span>সেকশন & রোল:</span> <strong>${student.section} - ${student.roll_no}</strong></div>
-                            <div class="info-item"><span>মেধা / স্ট্যাটাস:</span> <strong>${statusText}</strong></div>
-                        </div>
+    frameDoc.document.open();
+    frameDoc.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Result Card - ${student.student_name}</title>
+            <style>
+                @page {
+                    size: A4 portrait;
+                    margin: 8mm;
+                }
+                * {
+                    box-sizing: border-box;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                }
+                body {
+                    font-family: 'Segoe UI', Arial, sans-serif;
+                    color: #1e293b;
+                    margin: 0;
+                    padding: 0;
+                    background: #fff;
+                }
+                .card-container {
+                    border: 2px dashed #000;
+                    border-radius: 6px;
+                    padding: 10px 12px;
+                    max-height: 145mm;
+                    overflow: hidden;
+                }
+                .header {
+                    text-align: center;
+                    border-bottom: 1.5px solid #0284c7;
+                    padding-bottom: 4px;
+                    margin-bottom: 8px;
+                    position: relative; /* টাইমস্ট্যাম্প নিখুঁতভাবে বসানোর জন্য */
+                }
+                .school-title {
+                    font-size: 16px;
+                    font-weight: 800;
+                    color: #0369a1;
+                    margin: 0 0 2px 0;
+                    text-transform: uppercase;
+                }
+                .sub-title {
+                    font-size: 11px;
+                    color: #475569;
+                    margin: 0;
+                    font-weight: 600;
+                }
+                /* 👉 অতিরিক্ত জায়গা না নিয়ে ডান কোণায় টাইমস্ট্যাম্প সেট করার স্টাইল */
+                .print-timestamp {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    font-size: 8px;
+                    color: #64748b;
+                    font-weight: 500;
+                }
+                .student-info-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 4px;
+                    background: #f8fafc;
+                    padding: 6px 8px;
+                    border-radius: 4px;
+                    border: 1px solid #e2e8f0;
+                    margin-bottom: 8px;
+                    font-size: 11px;
+                }
+                .info-item span {
+                    color: #64748b;
+                    display: block;
+                    font-size: 10px;
+                }
+                .info-item strong {
+                    color: #0f172a;
+                }
+                .main-content {
+                    display: flex;
+                    gap: 10px;
+                    margin-bottom: 8px;
+                }
+                .table-side {
+                    flex: 1;
+                }
+                .chart-side {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 4px;
+                    padding: 4px;
+                    background: #fafafa;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 11px;
+                }
+                th {
+                    background: #0284c7;
+                    color: #ffffff;
+                    padding: 4px 6px;
+                    border: 1px solid #0284c7;
+                    text-align: center;
+                    font-size: 11px;
+                }
+                .summary-box {
+                    display: flex;
+                    justify-content: space-between;
+                    background: #e0f2fe;
+                    border: 1px solid #bae6fd;
+                    padding: 6px 10px;
+                    border-radius: 4px;
+                    font-size: 11px;
+                    font-weight: bold;
+                    color: #0369a1;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="card-container">
+                <div class="header">
+                    <!-- 👉 হেডার কার্ডের একদম উপরে ডান কোণায় টাইমস্ট্যাম্প যুক্ত করা হলো -->
+                    <div class="print-timestamp">Printed: ${printTimestamp}</div>
+                    <h1 class="school-title">PATHPUKUR HIGH SCHOOL (H.S.)</h1>
+                    <p class="sub-title">STUDENT ACADEMIC PERFORMANCE CARD (SESSION: ${session})</p>
+                </div>
 
-                        <div class="main-content">
-                            <div class="table-side">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align: left;">বিষয় (Subject)</th>
-                                            <th>পূর্ণমান</th>
-                                            <th>প্রাপ্ত নম্বর</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${subjectRowsHtml}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="chart-side">
-                                <div style="font-size: 10px; font-weight: bold; color: #334155; margin-bottom: 4px;">বিষয়ভিত্তিক প্রাপ্ত নম্বর</div>
-                                ${chartImageHtml}
-                            </div>
-                        </div>
+                <div class="student-info-grid">
+                    <div class="info-item"><span>নাম:</span> <strong>${student.student_name}</strong></div>
+                    <div class="info-item"><span>শ্রেণী:</span> <strong>${className}</strong></div>
+                    <div class="info-item"><span>সেকশন & রোল:</span> <strong>${student.section} - ${student.roll_no}</strong></div>
+                    <div class="info-item"><span>মেধা / স্ট্যাটাস:</span> <strong>${statusText}</strong></div>
+                </div>
 
-                        <div class="summary-box">
-                            <div>মোট নম্বর: ${student.grandTotal} / ${currentCalculatedFullMarks}</div>
-                            <div>শতকরা হার: ${student.percentage}%</div>
-                            <div>পার্সেন্টাইল: ${document.getElementById('stPercentile').innerText || '0%'}</div>
-                        </div>
+                <div class="main-content">
+                    <div class="table-side">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: left;">বিষয় (Subject)</th>
+                                    <th>পূর্ণমান</th>
+                                    <th>প্রাপ্ত নম্বর</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${subjectRowsHtml}
+                            </tbody>
+                        </table>
                     </div>
-                </body>
-                </html>
-            `);
-            frameDoc.document.close();
+                    <div class="chart-side">
+                        <div style="font-size: 10px; font-weight: bold; color: #334155; margin-bottom: 4px;">বিষয়ভিত্তিক প্রাপ্ত নম্বর</div>
+                        ${chartImageHtml}
+                    </div>
+                </div>
 
-            setTimeout(() => {
-                printFrame.contentWindow.focus();
-                printFrame.contentWindow.print();
-            }, 500);
-        }
+                <div class="summary-box">
+                    <div>মোট নম্বর: ${student.grandTotal} / ${currentCalculatedFullMarks}</div>
+                    <div>শতকরা হার: ${student.percentage}%</div>
+                    <div>পার্সেন্টাইল: ${document.getElementById('stPercentile').innerText || '0%'}</div>
+                </div>
+            </div>
+        </body>
+        </html>
+    `);
+    frameDoc.document.close();
+
+    setTimeout(() => {
+        printFrame.contentWindow.focus();
+        printFrame.contentWindow.print();
+    }, 500);
+}
 </script>
 </body>
 </html>
