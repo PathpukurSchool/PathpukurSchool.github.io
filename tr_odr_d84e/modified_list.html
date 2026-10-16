@@ -42,7 +42,7 @@
         }
     })();
     </script>
-     <!-- ফাইনাল সাবমিট করা, ফেল লিস্ট পূরণ ও রেজাল্ট আউটের পর নম্বর সংশোধনের তালিকা -->
+    <!-- ফাইনাল সাবমিট করা, ফেল লিস্ট পূরণ ও রেজাল্ট আউটের পর নম্বর সংশোধনের তালিকা -->
     <title>Pathpukur High School (H.S.)</title>
     
     <!-- 🟢 FontAwesome Icons library -->
@@ -61,13 +61,12 @@
         h1 { font-size: 20px; margin-bottom: 4px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
 
-        /* 👉 প্রিন্ট টাইমস্ট্যাম্পের স্টাইল */
         .print-timestamp {
             position: absolute;
             top: 8px;
             right: 12px;
             font-size: 9px;
-            color: #93c5fd;
+            color: #0000;
             font-weight: 500;
             display: none; /* স্ক্রিনে দেখাবে না, শুধুমাত্র প্রিন্টে দেখাবে */
         }
@@ -257,11 +256,7 @@
                 height: auto !important;
             }
 
-            .section-card:first-child,
-            .section-card:nth-child(2),
-            .summary-tracker-box {
-                display: none !important;
-            }
+            .section-card:first-child { display: none !important; }
 
             .control-panel,
             #statusMessage,
@@ -282,22 +277,12 @@
                 box-shadow: none !important;
             }
 
+            /* 👉 ২ নং রিকোয়েস্ট অনুযায়ী: প্রিন্ট করার সময় স্কুলের নাম ও হেডারের ব্যাকগ্রাউন্ড এবং কালার স্পষ্ট রাখার জন্য সেটিংস */
             .header-area {
-                background: #1e3a8a !important; /* প্রিন্টেও গাঢ় নীল ব্যাকগ্রাউন্ড ঠিক রাখবে */
-                color: #ffffff !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
                 padding: 12px 10px !important;
                 border: none !important;
-            }
-
-            h1 {
-                font-size: 18px !important;
-                color: #ffffff !important;
-            }
-
-            h2 {
-                color: #93c5fd !important;
             }
 
             .print-timestamp {
