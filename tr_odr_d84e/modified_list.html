@@ -57,7 +57,7 @@
         body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
         .container { width: 100%; max-width: 1000px; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); overflow: hidden; border: 1px solid #e2e8f0; }
         
-        .header-area { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #ffffff; padding: 22px 15px; text-align: center; }
+        .header-area { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #ffffff; padding: 22px 15px; text-align: center; position: relative; }
         h1 { font-size: 20px; margin-bottom: 4px; letter-spacing: 0.5px; }
         h2 { font-size: 14px; font-weight: 400; color: #93c5fd; }
 
@@ -66,7 +66,7 @@
             top: 8px;
             right: 12px;
             font-size: 9px;
-            color: #0000;
+            color: #93c5fd;
             font-weight: 500;
             display: none; /* স্ক্রিনে দেখাবে না, শুধুমাত্র প্রিন্টে দেখাবে */
         }
@@ -256,7 +256,8 @@
                 height: auto !important;
             }
 
-            .section-card:first-child { display: none !important; }
+            .section-card:first-child,
+            .section-card:nth-child(2) { display: none !important; }
 
             .control-panel,
             #statusMessage,
@@ -277,18 +278,33 @@
                 box-shadow: none !important;
             }
 
-            /* 👉 ২ নং রিকোয়েস্ট অনুযায়ী: প্রিন্ট করার সময় স্কুলের নাম ও হেডারের ব্যাকগ্রাউন্ড এবং কালার স্পষ্ট রাখার জন্য সেটিংস */
+            /* 👉 প্রিন্টে ব্যাকগ্রাউন্ড সাদা এবং টেক্সট/হেডার কালার কালো করার সেটিংস */
             .header-area {
-                background: #ffff !important;
-                color: #0000 !important;
+                background: #ffffff !important;
+                color: #000000 !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                padding: 12px 10px !important;
-                border: none !important;
+                padding: 10px 0 !important;
+                border-bottom: 2px solid #000 !important;
+                text-align: center !important;
+            }
+
+            h1 {
+                font-size: 18px !important;
+                color: #000000 !important;
+                font-weight: bold !important;
+            }
+
+            h2 {
+                font-size: 13px !important;
+                color: #333333 !important;
+                font-weight: 600 !important;
             }
 
             .print-timestamp {
                 display: block !important; /* প্রিন্ট করার সময় টাইমস্ট্যাম্প দৃশ্যমান হবে */
+                color: #000000 !important;
+                font-size: 9px !important;
             }
 
             .section-header {
@@ -298,8 +314,8 @@
             }
 
             .section-title {
-                font-size: 16px !important;
-                color: #000 !important;
+                font-size: 15px !important;
+                color: #000000 !important;
                 font-weight: bold !important;
             }
 
