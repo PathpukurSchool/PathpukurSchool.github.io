@@ -321,41 +321,87 @@
             .table-container {
                 display: block !important;
                 width: 100% !important;
+                max-width: 100% !important;
                 max-height: none !important;
                 height: auto !important;
+            
+                /* প্রিন্টের সময় স্ক্রল ও ক্লিপিং বন্ধ */
                 overflow: visible !important;
+            
                 margin: 0 !important;
                 padding: 0 !important;
+            
+                /* কন্টেইনারের বর্ডারের পরিবর্তে
+                   টেবিলের নিজস্ব বর্ডার ব্যবহার হবে */
                 border: none !important;
+                border-radius: 0 !important;
+            
+                box-shadow: none !important;
             }
-
-            table {
+            
+            /* সব টেবিলের জন্য */
+            table,
+            #statusTrackerTable,
+            #failListSummaryTable,
+            #studentTable {
+                display: table !important;
                 width: 100% !important;
+                max-width: 100% !important;
                 margin: 0 !important;
-                border-collapse: collapse !important;
+            
+                /* বর্ডার কেটে যাওয়ার ঝুঁকি কমাতে পৃথক বর্ডার */
+                border-collapse: separate !important;
+                border-spacing: 0 !important;
+            
+                border-top: 1px solid #000 !important;
+                border-left: 1px solid #000 !important;
+                border-right: 1px solid #000 !important;
+                border-bottom: 1px solid #000 !important;
+            
                 page-break-after: auto !important;
                 break-after: auto !important;
+            
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
-
-            thead { display: table-header-group !important; }
-            tbody { display: table-row-group !important; }
-
+            
+            /* টেবিলের হেডার ও বডি */
+            thead {
+                display: table-header-group !important;
+            }
+            
+            tbody {
+                display: table-row-group !important;
+            }
+            
+            /* প্রতিটি সারি একসঙ্গে রাখার চেষ্টা */
             tr {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
-
-            tr.completed-row { display: none !important; }
-
-            th, td {
-                border: 1px solid #000 !important;
+            
+            /* প্রতিটি ঘরের চারপাশে স্পষ্ট কালো বর্ডার */
+            th,
+            td {
+                border: 0 !important;
+                border-right: 1px solid #000 !important;
+                border-bottom: 1px solid #000 !important;
+            
                 font-size: 11px !important;
                 padding: 5px 6px !important;
                 color: #000 !important;
+            
                 text-decoration: none !important;
+                background-clip: padding-box !important;
+                vertical-align: middle !important;
+            }
+            
+            /* প্রিন্টে লুকানো সম্পন্ন সারি */
+            tr.completed-row {
+                display: none !important;
             }
 
-            th { background: #f2f2f2 !important; }
+            th { background: #f2f2f2 !important; font-weight: bold !important; }
 
             .mark-change {
                 display: inline-flex !important;
