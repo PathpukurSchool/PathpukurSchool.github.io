@@ -17,7 +17,6 @@
             var ref = document.referrer;
             var isValidReferrer = false;
 
-            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
                 if (refUrl.hostname === "pathpukurschool.pages.dev") {
@@ -25,14 +24,11 @@
                 }
             }
 
-            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
             if (!isValidReferrer) {
-                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
                 window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
 
-            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
             document.addEventListener("DOMContentLoaded", function() {
                 var shield = document.getElementById("security-shield");
                 if (shield) shield.remove();
@@ -44,7 +40,7 @@
     })();
     </script>
    <!-- Student Roll Strength Report -->
- <title>Pathpukur High School (H: S:)</title>
+  <title>Pathpukur High School (H: S:)</title>
 
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,6 +76,7 @@
       text-align: center;
       padding-bottom: 6px;
       margin-bottom: 8px;
+      position: relative; /* 👉 টাইমস্ট্যাম্প পজিশনিংয়ের জন্যrelative করা হলো */
     }
 
     .school-name {
@@ -104,6 +101,16 @@
       background-color: #e8f5e9; color: #2e7d32; padding: 8px 12px; border: 1px solid #a5d6a7;
       border-left: 4px solid #2e7d32; border-radius: 6px; font-size: 11px; margin-bottom: 12px;
       text-align: center; font-weight: bold; margin-top: 2px;
+    }
+
+    /* 👉 টাইমস্ট্যাম্পের স্টাইল (ডান কোণায় ছোট ফন্টে দেখানোর জন্য) */
+    .print-timestamp {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 9px;
+      color: #64748b;
+      font-weight: 500;
     }
 
     /* Top Action & Control Bar */
@@ -319,9 +326,11 @@
 <div class="container">
   <!-- Header -->
   <div class="header">
+    <!-- 👉 প্রিন্ট টাইমস্ট্যাম্পের জন্য প্লেসহোল্ডার -->
+    <div class="print-timestamp" id="printTimestamp"></div>
     <div class="school-name">Pathpukur High School (H.S.)</div>
     <div class="report-title" id="reportTitle"><i class="fa-solid fa-chart-pie"></i> Student Roll Strength Report</div>
-    <div class="subtitle">Categorized Breakdown: Boys & Girlt; SC & MINORITY (OBC, General, Minority)</div>
+    <div class="subtitle">Categorized Breakdown: Boys & Girls; SC & MINORITY (OBC, General, Minority)</div>
   </div>
 
   <!-- Control & Filter Bar -->
@@ -463,7 +472,6 @@
 
     try {
       while (hasMore) {
-        // session কলাম নিশ্চিত করা হয়েছে
         const response = await fetch(`${SUPABASE_URL}/rest/v1/current_students?select=class_name,section,gender,caste,session`, {
           headers: {
             'apikey': SUPABASE_ANON_KEY,
@@ -493,6 +501,21 @@
 
   // Process & Render Data Table
   function renderReport() {
+    // 👉 বর্তমান সময় ও তারিখ জেনারেট করে টাইমস্ট্যাম্প বসানো
+    const now = new Date();
+    const timestampStr = "Printed: " + now.toLocaleString('en-GB', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    const timestampEl = document.getElementById('printTimestamp');
+    if (timestampEl) {
+        timestampEl.innerText = timestampStr;
+    }
+
     const selectedFilter = document.getElementById('classFilter').value;
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
@@ -502,7 +525,6 @@
       return;
     }
 
-    // --- সেশন সংক্রান্ত সংশোধন ---
     const sessionItem = rawStudentData.find(item => item.session && String(item.session).trim() !== '');
     const detectedSession = sessionItem ? String(sessionItem.session).trim() : '';
 
@@ -514,7 +536,6 @@
         reportTitleEl.innerHTML = `<i class="fa-solid fa-chart-pie"></i> Student Roll Strength Report`;
       }
     }
-    // ----------------------------
 
     const matrix = {};
 
