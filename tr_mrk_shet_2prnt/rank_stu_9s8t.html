@@ -124,98 +124,87 @@
         }
 
         /* 🖨️ A4 প্রিন্ট সিএসএস */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #printSection, #printSection * {
-                visibility: visible;
-            }
-            #printSection {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-            #printHeading.print-only-heading {
-                display: grid !important;
-        
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: auto auto;
-        
-                column-gap: 12px;
-                row-gap: 5px;
-        
-                width: 100%;
-                box-sizing: border-box;
-        
-                padding: 0 0 8px 0;
-                margin: 0 0 8px 0;
-        
-                border-bottom: 1px solid #000;
-        
-                color: #000 !important;
-                background: #fff !important;
-        
-                font-family: 'Tiro Bangla', sans-serif !important;
-                font-size: 11px !important;
-                line-height: 1.5;
-            }
-        
-            .print-heading-title {
-                grid-column: 1;
-                grid-row: 1;
-        
-                font-size: 16px !important;
-                font-weight: bold !important;
-                text-align: left;
-            }
-        
-            .print-heading-session {
-                grid-column: 2;
-                grid-row: 1;
-        
-                text-align: right;
-                font-weight: bold;
-            }
-        
-            .print-heading-class {
-                grid-column: 1;
-                grid-row: 2;
-        
-                display: flex;
-                justify-content: space-between;
-                gap: 8px;
-        
-                font-weight: bold;
-            }
-        
-            .print-heading-sort {
-                grid-column: 2;
-                grid-row: 2;
-        
-                text-align: right;
-                font-weight: bold;
-            }
-            .no-print {
-                display: none !important;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse !important;
-                font-size: 11px !important;
-            }
-            th, td {
-                border: 1px solid #000 !important;
-                padding: 5px 3px !important;
-                text-align: center;
-            }
-            th {
-                background-color: #f2f2f2 !important;
-                color: #000 !important;
-                -webkit-print-color-adjust: exact;
-            }
-        }
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #printSection, #printSection * {
+        visibility: visible;
+    }
+    #printSection {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    #printHeading.print-only-heading {
+        display: grid !important;
+        visibility: visible !important;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        column-gap: 12px;
+        row-gap: 5px;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 0 8px 0;
+        margin: 0 0 8px 0;
+        border-bottom: 1px solid #000;
+        color: #000 !important;
+        background: #fff !important;
+        font-family: 'Tiro Bangla', sans-serif !important;
+        font-size: 11px !important;
+        line-height: 1.5;
+    }
+
+    .print-heading-title {
+        grid-column: 1;
+        grid-row: 1;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        text-align: left;
+    }
+
+    .print-heading-session {
+        grid-column: 2;
+        grid-row: 1;
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .print-heading-class {
+        grid-column: 1;
+        grid-row: 2;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-weight: bold;
+    }
+
+    .print-heading-sort {
+        grid-column: 2;
+        grid-row: 2;
+        text-align: right;
+        font-weight: bold;
+    }
+    .no-print {
+        display: none !important;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse !important;
+        font-size: 11px !important;
+    }
+    th, td {
+        border: 1px solid #000 !important;
+        padding: 5px 3px !important;
+        text-align: center;
+    }
+    th {
+        background-color: #f2f2f2 !important;
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+    }
+}
     </style>
 </head>
 <body class="min-h-screen pb-12 text-slate-800">
@@ -318,28 +307,28 @@
             </div>
 
             <!-- Print Section Container -->
-            <div id="printHeading" class="print-only-heading">
-            
-                <div class="print-heading-title">
-                    বার্ষিক মেধা তালিকা
-                </div>
-            
-                <div class="print-heading-session">
-                    শিক্ষাবর্ষ (Session):
-                    <span id="printSession">2026</span>
-                </div>
-            
-                <div class="print-heading-class">
-                    <span id="printClass">Class: V</span>
-                    <span id="printTotal">মোট: 144</span>
-                </div>
-            
-                <div class="print-heading-sort">
-                    <span id="printSort">ক্রম: রোল অনুযায়ী (১, ২, ৩...)</span>
-                </div>
-            
-            </div>
             <div id="printSection" class="overflow-x-auto">
+                
+                <div id="printHeading" class="print-only-heading">
+                    <div class="print-heading-title">
+                        বার্ষিক মেধা তালিকা
+                    </div>
+            
+                    <div class="print-heading-session">
+                        শিক্ষাবর্ষ (Session):
+                        <span id="printSession">2026</span>
+                    </div>
+            
+                    <div class="print-heading-class">
+                        <span id="printClass">Class: V</span>
+                        <span id="printTotal">মোট: 144</span>
+                    </div>
+            
+                    <div class="print-heading-sort">
+                        <span id="printSort">ক্রম: রোল অনুযায়ী (১, ২, ৩...)</span>
+                    </div>
+                </div>
+            
                 <table class="w-full text-left border-collapse min-w-[700px] bg-white">
                     <thead id="rankTableHead"></thead>
                     <tbody id="rankTableBody" class="divide-y divide-slate-300 text-xs md:text-sm bg-white"></tbody>
