@@ -119,6 +119,9 @@
         .fail-highlight-row:hover {
             background-color: #fecaca !important;
         }
+        .print-only-heading {
+            display: none;
+        }
 
         /* 🖨️ A4 প্রিন্ট সিএসএস */
         @media print {
@@ -133,6 +136,66 @@
                 left: 0;
                 top: 0;
                 width: 100%;
+            }
+            #printHeading.print-only-heading {
+                display: grid !important;
+        
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+        
+                column-gap: 12px;
+                row-gap: 5px;
+        
+                width: 100%;
+                box-sizing: border-box;
+        
+                padding: 0 0 8px 0;
+                margin: 0 0 8px 0;
+        
+                border-bottom: 1px solid #000;
+        
+                color: #000 !important;
+                background: #fff !important;
+        
+                font-family: 'Tiro Bangla', sans-serif !important;
+                font-size: 11px !important;
+                line-height: 1.5;
+            }
+        
+            .print-heading-title {
+                grid-column: 1;
+                grid-row: 1;
+        
+                font-size: 16px !important;
+                font-weight: bold !important;
+                text-align: left;
+            }
+        
+            .print-heading-session {
+                grid-column: 2;
+                grid-row: 1;
+        
+                text-align: right;
+                font-weight: bold;
+            }
+        
+            .print-heading-class {
+                grid-column: 1;
+                grid-row: 2;
+        
+                display: flex;
+                justify-content: space-between;
+                gap: 8px;
+        
+                font-weight: bold;
+            }
+        
+            .print-heading-sort {
+                grid-column: 2;
+                grid-row: 2;
+        
+                text-align: right;
+                font-weight: bold;
             }
             .no-print {
                 display: none !important;
@@ -255,6 +318,27 @@
             </div>
 
             <!-- Print Section Container -->
+            <div id="printHeading" class="print-only-heading">
+            
+                <div class="print-heading-title">
+                    বার্ষিক মেধা তালিকা
+                </div>
+            
+                <div class="print-heading-session">
+                    শিক্ষাবর্ষ (Session):
+                    <span id="printSession">2026</span>
+                </div>
+            
+                <div class="print-heading-class">
+                    <span id="printClass">Class: V</span>
+                    <span id="printTotal">মোট: 144</span>
+                </div>
+            
+                <div class="print-heading-sort">
+                    <span id="printSort">ক্রম: রোল অনুযায়ী (১, ২, ৩...)</span>
+                </div>
+            
+            </div>
             <div id="printSection" class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[700px] bg-white">
                     <thead id="rankTableHead"></thead>
@@ -746,10 +830,42 @@
             }
         });
     }
-
-    function printRankTable() {
-        window.print();
-    }
+    
+        function printRankTable() {
+        
+            // শিক্ষাবর্ষ
+            const session = document.getElementById('sessionDisplay')?.innerText.trim()
+                || '2026';
+        
+            document.getElementById('printSession').innerText = session;
+        
+            // নির্বাচিত শ্রেণি
+            const classSelect = document.getElementById('classSelect');
+            const selectedClassText =
+                classSelect.options[classSelect.selectedIndex].text;
+        
+            document.getElementById('printClass').innerText =
+                'Class: ' + selectedClassText.replace(/^Class\s*/i, '');
+        
+            // শিক্ষার্থীর মোট সংখ্যা
+            const totalText =
+                document.getElementById('studentCountBadge')?.innerText || 'মোট: 0';
+        
+            document.getElementById('printTotal').innerText = totalText;
+        
+            // নির্বাচিত ক্রম
+            const sortSelect = document.getElementById('sortSelect');
+            const selectedSortText =
+                sortSelect.options[sortSelect.selectedIndex].text;
+        
+            document.getElementById('printSort').innerText =
+                selectedSortText.startsWith('ক্রম:')
+                    ? selectedSortText
+                    : 'ক্রম: ' + selectedSortText;
+        
+            // প্রিন্ট
+            window.print();
+        }
 </script>
  <script src="home.js"></script>
 </body>
