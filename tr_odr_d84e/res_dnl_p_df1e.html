@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+    <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
   <style id="security-shield">
     body { display: none !important; }
   </style>
@@ -20,7 +20,6 @@
             var isValidReferrer = false;
             if (ref) {
                 var refUrl = new URL(ref);
-                // সংশোধন ১: পুরোনো গিটহাব ডোমেইনের পরিবর্তে নতুন ক্লাউডফ্লেয়ার ডোমেইন যুক্ত করা হলো
                 if (refUrl.hostname === "pathpukurschool.pages.dev" || refUrl.hostname === "localhost") {
                     isValidReferrer = true;
                 }
@@ -28,7 +27,6 @@
 
             if (!isLoggedIn) {
                 sessionStorage.clear();
-                // সংশোধন ২: রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
                 window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
@@ -40,7 +38,6 @@
 
         } catch (e) {
             sessionStorage.clear();
-            // সংশোধন ৩: ক্যাচ ব্লকের রিডাইরেক্ট লিংক নতুন ডোমেইনে আপডেট করা হলো
             window.location.replace("https://pathpukurschool.pages.dev/");
         }
     })();
@@ -621,6 +618,17 @@ body {
       
       const examSubjectKeys = Object.keys(sampleRow).filter(k => k.startsWith(prefix));
 
+      // 👉 বর্তমান সময় ও তারিখ পাওয়ার জন্য টাইমস্ট্যাম্প তৈরি
+      const now = new Date();
+      const printTimestamp = "Printed: " + now.toLocaleString('en-GB', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric', 
+          hour: '2-digit', 
+          minute: '2-digit',
+          second: '2-digit'
+      });
+
       doc.setFontSize(13);
       doc.setFont('helvetica', 'bold');
       doc.text("Pathpukur High School (H.S.)", 105, 10, { align: "center" });
@@ -630,6 +638,12 @@ body {
       const examLabelText = document.getElementById('examSelect').options[document.getElementById('examSelect').selectedIndex].text;
       doc.text(`Class: ${cls.toUpperCase()} | Section: ${section} | Exam: ${examLabelText} | Session: ${CURRENT_SESSION}`, 105, 15, { align: "center" });
       
+      // 👉 পিডিএফ ফাইলের হেডারে একদম ডান কোণায় টাইমস্ট্যাম্প যুক্ত করা হলো (X = 202, Y = 10)
+      doc.setFontSize(7.5);
+      doc.setTextColor(100, 100, 100);
+      doc.text(printTimestamp, 202, 10, { align: "right" });
+      doc.setTextColor(0, 0, 0); // কালার রিসেট করা হলো
+
       doc.setLineWidth(0.3);
       doc.line(8, 17, 202, 17);
 
