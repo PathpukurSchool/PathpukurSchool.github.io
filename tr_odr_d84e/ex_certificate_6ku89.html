@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+
+    <!-- 🛡️ ১. সিকিউরিটি শিল্ড (লগইন চেক হওয়া পর্যন্ত পেজ সম্পূর্ণ হাইড থাকবে) -->
+  <style id="security-shield">
+    body { display: none !important; }
+  </style>
+
+  <!-- 🛡️ ২. সেশন ও রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
+  <script>
+    (function() {
+        try {
+            var isLoggedIn = sessionStorage.getItem("teacherLoggedIn") === "true";
+
+            var ref = document.referrer;
+            var isValidReferrer = false;
+            if (ref) {
+                var refUrl = new URL(ref);
+                if (refUrl.hostname === "pathpukurschool.pages.dev" || refUrl.hostname === "localhost") {
+                    isValidReferrer = true;
+                }
+            }
+
+            if (!isLoggedIn) {
+                sessionStorage.clear();
+                window.location.replace("https://pathpukurschool.pages.dev/");
+                return;
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var shield = document.getElementById("security-shield");
+                if (shield) shield.remove();
+            });
+
+        } catch (e) {
+            sessionStorage.clear();
+            window.location.replace("https://pathpukurschool.pages.dev/");
+        }
+    })();
+    </script>
+  
+  <!-- প্রাক্তন ছাত্র ছাত্রীদের স্কুল সার্টিফিকেট -->
+  <title>Pathpukur High School (H.S.)</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- QR Code Generator Library (QRCode.js) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; font-family: 'Poppins', 'Tiro Bangla', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: #f0f2f5; margin: 0; padding: 8px; color: #111; }
+    
+    .container { 
+      max-width: 1350px; 
+      margin: 0 auto; 
+      background: #fff; 
+      padding: 12px; 
+      border-radius: 12px; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08); 
+    }
+    
+    /* Header */
+    .header { text-align: center; border-bottom: 2px solid #1a5f7a; padding-bottom: 8px; margin-bottom: 10px; position: relative; }
+    .school-name { font-size: 22px; color: #1a5f7a; margin: 0; font-weight: bold; line-height: 1.3; }
+    .page-title { font-size: 18px; color: #333; margin: 4px 0 0 0; font-weight: bold; }
+    
+    .print-timestamp { display: none; }
+
+    /* Dynamic Sub-Heading Badge & Instructions */
+    .sub-heading-badge {
+      background-color: #e8f5e9; color: #2e7d32; padding: 10px 14px; border: 1px solid #a5d6a7;
+      border-left: 4px solid #2e7d32; border-radius: 6px; font-size: 13.5px; margin-bottom: 12px;
+      text-align: left; line-height: 1.5;
+    }
+    .sub-heading-badge .main-heading-text {
+      font-weight: bold; text-align: center; display: block; font-size: 14.5px; margin-bottom: 4px;
+    }
+    .sub-heading-badge .instruction-text {
+      font-weight: normal; font-size: 13px; color: #1b5e20; border-top: 1px dashed #a5d6a7; padding-top: 6px; margin-top: 4px;
+    }
+
+    /* Filter Section Heading */
+    .filter-section-title {
+      font-size: 14.5px;
+      font-weight: bold;
+      color: #1a5f7a;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Filter Box Grid */
+    .filter-card {
+      background: #f9fbfd; border: 1px solid #d1e3f0; border-radius: 8px; padding: 10px; margin-bottom: 12px;
+    }
+    .filter-grid {
+      display: grid; grid-template-columns: 1fr; gap: 8px;
+    }
+    .filter-group { display: flex; flex-direction: column; }
+    .filter-group label { font-size: 12.5px; font-weight: bold; margin-bottom: 2px; color: #444; }
+    .filter-group input, .filter-group select {
+      padding: 8px 10px; font-size: 14px; border: 1.5px solid #888; border-radius: 6px; outline: none; background: #fff;
+    }
+    .filter-group input:focus, .filter-group select:focus { border-color: #1a5f7a; }
+    
+    .btn-reset {
+      background: #d32f2f; color: #fff; border: none; padding: 8px 12px; font-size: 13.5px;
+      border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 6px; width: 100%;
+    }
+
+    /* Info Bar */
+    .info-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; font-weight: bold; color: #555; margin-bottom: 8px; padding: 0 4px;
+    }
+
+    /* Responsive Table & Fixed Column Sizing */
+    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; border: 2px solid #222; min-width: 1050px; table-layout: auto; }
+    th, td { padding: 8px 6px; text-align: center; border: 1.5px solid #333; font-size: 13.5px; vertical-align: middle; }
+    th { background-color: #1a5f7a; color: white; font-size: 14px; white-space: nowrap; }
+    
+    tbody tr:nth-child(even) { background-color: #f9f9f9; }
+    tbody tr:active { background-color: #d0ebff; }
+    tbody tr.selected-row { background-color: #c8e6c9 !important; font-weight: bold; }
+
+    .col-name-group { width: 16%; min-width: 140px; white-space: nowrap; }
+    .col-date-group { width: 11%; min-width: 105px; white-space: nowrap; }
+    .col-nowrap { white-space: nowrap; }
+
+    /* View Button */
+    .btn-view {
+      background-color: #1a5f7a; color: white; border: none; padding: 6px 10px;
+      border-radius: 4px; cursor: pointer; font-size: 13px;
+    }
+    .btn-view:hover { background-color: #14495e; }
+
+    /* Modal Styles */
+    .modal {
+      display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; padding: 10px;
+    }
+    .modal-content {
+      background: #fff; border-radius: 10px; width: 100%; max-width: 780px; padding: 20px;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.3); max-height: 95vh; overflow-y: auto; position: relative;
+    }
+    .modal-header-actions {
+      display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 12px;
+    }
+    .btn-print { background: #2e7d32; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+    .btn-close { background: #d32f2f; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+    
+    /* Official School Certificate Card Styling */
+    .student-card-box {
+      border: 4px double #1a5f7a; border-radius: 8px; padding: 24px; background: #fff; position: relative;
+      overflow: hidden;
+    }
+    
+    /* Watermark Background */
+    .student-card-box::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 380px;
+      height: 380px;
+      background-image: url('../PHS-LOGO.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      opacity: 0.08;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .cert-inner-content { position: relative; z-index: 1; }
+
+    .cert-header {
+      display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #1a5f7a;
+      padding-bottom: 12px; margin-bottom: 15px; text-align: center;
+    }
+    .cert-logo { width: 75px; height: 75px; object-fit: contain; }
+    .cert-school-info h1 { font-size: 20px; color: #1a5f7a; margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .cert-school-info p { font-size: 10.5px; color: #444; margin: 2px 0; line-height: 1.3; }
+
+    .cert-title-badge {
+      text-align: center; margin: 15px 0;
+    }
+    .cert-title-badge h2 {
+      font-size: 16px; background: #1a5f7a; color: #fff; display: inline-block; padding: 6px 25px;
+      border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin: 0;
+    }
+
+    .cert-body-text {
+      font-size: 13.5px; line-height: 1.8; color: #222; text-align: justify; margin-top: 15px;
+    }
+    
+    .cert-footer-section {
+      display: flex; justify-content: space-between; align-items: flex-end; margin-top: 35px; padding-top: 10px;
+    }
+    
+    .cert-qr-area {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    #qrcode { padding: 4px; background: #fff; border: 1px solid #ccc; border-radius: 4px; }
+    #qrcode img { display: block; width: 85px !important; height: 85px !important; }
+    .qr-caption { font-size: 9.5px; color: #555; margin-top: 4px; font-weight: 500; }
+
+    .cert-signature-box {
+      text-align: center; min-width: 180px;
+    }
+    .sig-line { border-top: 1px solid #333; margin-top: 45px; padding-top: 4px; font-size: 12.5px; font-weight: 600; color: #222; }
+
+    /* Pagination */
+    .pagination {
+      display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 12px;
+    }
+    .btn-page {
+      background-color: #1a5f7a; color: white; border: none; padding: 6px 14px;
+      border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold;
+    }
+    .btn-page:disabled { background-color: #ccc; cursor: not-allowed; }
+
+    /* Desktop View */
+    @media (min-width: 600px) {
+      body { padding: 15px; }
+      .container { padding: 20px; }
+      .school-name { font-size: 26px; }
+      .page-title { font-size: 20px; }
+      .filter-grid { grid-template-columns: repeat(3, 1fr); }
+      .btn-reset { width: auto; grid-column: span 3; justify-self: end; padding: 8px 20px; }
+      th, td { padding: 8px; font-size: 14px; }
+    }
+
+    /* Print Optimization for Single A4 Page */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        overflow: hidden !important;
+      }
+      .container, .modal-header-actions, .filter-card, .pagination, .info-bar {
+        display: none !important;
+      }
+      .modal {
+        position: static !important;
+        display: block !important;
+        background: none !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .modal-content {
+        box-shadow: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        overflow: visible !important;
+      }
+      .student-card-box {
+        border: 4px double #000 !important;
+        padding: 20px !important;
+        margin: 0 auto !important;
+        width: 190mm !important;
+        height: 275mm !important;
+        background: #fff !important;
+        page-break-inside: avoid !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .cert-header { border-bottom: 2px solid #000 !important; }
+      .cert-school-info h1 { color: #000 !important; }
+      .cert-title-badge h2 { background: #000 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      
+      .print-timestamp {
+        display: block !important;
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 9.5px;
+        color: #444;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</div>
+    <div class="page-title">Alumni School & Character Certificate Portal</div>
+  </div>
+
+  <!-- Dynamic Sub Heading & Instructions Box -->
+  <div class="sub-heading-badge" id="subHeading">
+    <span class="main-heading-text">Loading alumni records...</span>
+  </div>
+
+  <!-- Filter Section Heading -->
+  <div class="filter-section-title">
+    <i class="fa-solid fa-filter"></i> Search & Filter Student Records:
+  </div>
+
+  <!-- Filter Card -->
+  <div class="filter-card">
+    <div class="filter-grid">
+      <div class="filter-group">
+        <label><i class="fa-solid fa-user"></i> Student Name:</label>
+        <input type="text" id="searchName" placeholder="Type name..." oninput="triggerSearch()">
+      </div>
+      <div class="filter-group">
+        <label><i class="fa-solid fa-user-group"></i> Father's Name:</label>
+        <input type="text" id="searchFather" placeholder="Type father's name..." oninput="triggerSearch()">
+      </div>
+      <div class="filter-group">
+        <label><i class="fa-solid fa-id-card"></i> Admission No:</label>
+        <input type="text" id="searchAdmNo" placeholder="e.g. 25/2021" oninput="triggerSearch()">
+      </div>
+      <div class="filter-group">
+        <label><i class="fa-solid fa-calendar-days"></i> Date of Birth:</label>
+        <input type="text" id="searchDob" placeholder="DD/MM/YYYY" oninput="triggerSearch()">
+      </div>
+      <div class="filter-group">
+        <label><i class="fa-solid fa-graduation-cap"></i> Admission Year (YYYY):</label>
+        <input type="number" id="searchYear" placeholder="e.g. 2021" oninput="triggerSearch()" min="1980" max="2026">
+      </div>
+      <button class="btn-reset" onclick="resetFilters()"><i class="fa-solid fa-rotate-right"></i> Reset Filters</button>
+    </div>
+  </div>
+
+  <div class="filter-section-title">
+    <i class="fa-solid fa-list"></i> Alumni Student List
+  </div>
+  
+  <!-- Info Bar -->
+  <div class="info-bar">
+    <span id="totalCount">Total Records: 0</span>
+    <span id="pageTracker">Page: 1/1</span>
+  </div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-nowrap">Sl. No.</th>
+          <th class="col-nowrap">Admission No</th>
+          <th class="col-name-group">Student Name</th>
+          <th class="col-name-group">Father's Name</th>
+          <th class="col-name-group">Mother's Name</th>
+          <th class="col-nowrap">Gender</th>
+          <th class="col-date-group">Date of Birth</th>
+          <th>Address</th>
+          <th class="col-nowrap">First Class</th>
+          <th class="col-date-group">Admission Date</th>
+          <th class="col-nowrap">Certificate</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="11" style="padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Loading records...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="pagination">
+    <button class="btn-page" id="prevBtn" onclick="changePage(-1)"><i class="fa-solid fa-angle-left"></i> Previous</button>
+    <button class="btn-page" id="nextBtn" onclick="changePage(1)">Next <i class="fa-solid fa-angle-right"></i></button>
+  </div>
+</div>
+
+<!-- Official School Certificate Modal Card -->
+<div id="studentModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header-actions">
+      <button class="btn-print" onclick="printStudentCard()"><i class="fa-solid fa-print"></i> Print Certificate</button>
+      <button class="btn-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+    </div>
+    
+    <div id="printableCard" class="student-card-box">
+      <div class="cert-inner-content">
+        <!-- Certificate Header with Logo -->
+        <div class="cert-header">
+          <img src="../PHS-LOGO.png" alt="School Logo" class="cert-logo" onerror="this.style.display='none'">
+          <div class="cert-school-info">
+            <h1>Pathpukur High School (H.S.)</h1>
+            <p>PO: Bakultala Hat, PS: Joynagar, DIST: South 24 Parganas, PIN: 743338</p>
+            <p>Govt. Sponsored, Estd: 1954 | Index No: C1-194 | UDISE Code: 19181600802</p>
+          </div>
+          <div style="width: 75px;"></div> <!-- Spacer for balance -->
+          <div class="print-timestamp" id="printTimestamp"></div>
+        </div>
+
+        <!-- Certificate Title -->
+        <div class="cert-title-badge">
+          <h2>School & Character Certificate</h2>
+        </div>
+
+        <!-- Official Certificate Body Text in English with Pronoun Logic -->
+        <div class="cert-body-text">
+          <p style="text-align: right; margin-bottom: 15px;"><strong>Date of Issue:</strong> <span id="c_issue_date"></span></p>
+          <p style="text-align: center; margin-bottom: 20px; font-weight: 600; font-size: 14.5px;">TO WHOM IT MAY CONCERN</p>
+          <p>
+            This is to certify that <strong><span id="c_student_name"></span></strong>, son/daughter of 
+            <strong><span id="c_father_name"></span></strong> and <strong><span id="c_mother_name"></span></strong>, 
+            residing at Village/Post: <strong><span id="c_address"></span></strong>, was a bona fide student of 
+            this institution in the academic session corresponding to admission year <strong><span id="c_adm_year"></span></strong>. 
+            <span id="c_pronoun_cap">He/She</span> was admitted to Class <strong><span id="c_first_class"></span></strong> on 
+            <strong><span id="c_admission_date"></span></strong> under Admission No. <strong><span id="c_admission_no"></span></strong>.
+          </p>
+          <p>
+            As per school records, <span id="c_pronoun_low">his/her</span> Date of Birth is <strong><span id="c_dob"></span></strong>.
+          </p>
+          <p>
+            During <span id="c_possessive">his/her</span> tenure at this school, <span id="c_pronoun_low">his/her</span> conduct and character were found to be good. 
+            <span id="c_pronoun_cap">He/She</span> bears a good moral character.
+          </p>
+          <p style="margin-top: 15px;">
+            I wish <span id="c_objective">him/her</span> every success in life.
+          </p>
+        </div>
+
+        <!-- Footer Section with QR Code and Signature -->
+        <div class="cert-footer-section">
+          <div class="cert-qr-area">
+            <div id="qrcode"></div>
+            <span class="qr-caption">Scan to Verify</span>
+          </div>
+          
+          <div class="cert-signature-box">
+            <div class="sig-line">Head of the Institute<br><span style="font-size: 11px; font-weight: normal;">Pathpukur High School (H.S.)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = "https://bjjwzgzjjcpnndbuelkh.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqand6Z3pqamNwbm5kYnVlbGtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MTk1NDMsImV4cCI6MjEwMjM5NTU0M30.ICT0pRA2GtlJhxKxo8ghp0x2pVLem1csBkq_hvNVGUs";
+
+  let currentPage = 1;
+  const pageSize = 50;
+  let debounceTimer;
+  let currentStudentsData = [];
+
+  function toBengaliNumeral(num) {
+    if (num === null || num === undefined) return '';
+    const digits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return num.toString().replace(/\d/g, x => digits[x]);
+  }
+
+  function cleanDateString(str) {
+    if (!str) return '';
+    return str.replace(/[^0-9]/g, '');
+  }
+
+  async function loadYearMeta() {
+    try {
+      let cachedMin = sessionStorage.getItem('min_year');
+      let cachedMax = sessionStorage.getItem('max_year');
+
+      if (cachedMin && cachedMax) {
+        updateSubHeading(cachedMin, cachedMax);
+        return;
+      }
+
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?select=adm_year&order=adm_year.asc&limit=1`, {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+      });
+      const minData = await res.json();
+
+      const resMax = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?select=adm_year&order=adm_year.desc&limit=1`, {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+      });
+      const maxData = await resMax.json();
+      
+      if (minData.length > 0 && maxData.length > 0) {
+        const minYear = minData[0].adm_year;
+        const maxYear = maxData[0].adm_year;
+
+        if (minYear && maxYear) {
+          sessionStorage.setItem('min_year', minYear);
+          sessionStorage.setItem('max_year', maxYear);
+          updateSubHeading(minYear, maxYear);
+        }
+      }
+    } catch (e) {
+      document.getElementById('subHeading').innerText = "Alumni Student Records Portal";
+    }
+  }
+
+  function updateSubHeading(minYear, maxYear) {
+    document.getElementById('subHeading').innerHTML = `
+      <span class="main-heading-text">Official Alumni Records from ${minYear} to ${maxYear}</span>
+      <div class="instruction-text">
+        <i class="fa-solid fa-circle-info"></i> <strong>Instructions:</strong> Type student name, father's name, admission number, DOB, or admission year in the filter boxes below to instantly search records. Click the <strong>Certificate Icon (View)</strong> to generate and print the official school certificate.
+      </div>
+    `;
+  }
+
+  function triggerSearch() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      currentPage = 1;
+      fetchStudents();
+    }, 250);
+  }
+
+  async function fetchStudents() {
+    const sName = document.getElementById('searchName').value.trim();
+    const sFather = document.getElementById('searchFather').value.trim();
+    const sAdm = document.getElementById('searchAdmNo').value.trim();
+    const rawDob = document.getElementById('searchDob').value.trim();
+    const sYear = document.getElementById('searchYear').value.trim();
+
+    const cleanDobInput = cleanDateString(rawDob);
+
+    let queryParams = [`select=*`];
+
+    if (sName) queryParams.push(`student_name=ilike.*${encodeURIComponent(sName)}*`);
+    if (sFather) queryParams.push(`father_name=ilike.*${encodeURIComponent(sFather)}*`);
+    if (sAdm) queryParams.push(`admission_no=ilike.*${encodeURIComponent(sAdm)}*`);
+    if (sYear) queryParams.push(`adm_year=eq.${sYear}`);
+
+    queryParams.push(`order=adm_year.asc,adm_sl.asc`);
+
+    let isDobFilteringOnClient = cleanDobInput.length > 0;
+
+    try {
+      let url = `${SUPABASE_URL}/rest/v1/ex_students?${queryParams.join('&')}`;
+      
+      let headers = {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer': 'count=exact'
+      };
+
+      if (!isDobFilteringOnClient) {
+        const from = (currentPage - 1) * pageSize;
+        const to = from + pageSize - 1;
+        headers['Range-Unit'] = 'items';
+        headers['Range'] = `${from}-${to}`;
+      }
+
+      const response = await fetch(url, { headers });
+
+      if (!response.ok) throw new Error("Error fetching data");
+
+      let data = await response.json();
+
+      if (isDobFilteringOnClient) {
+        data = data.filter(student => {
+          const dbDobClean = cleanDateString(student.dob);
+          return dbDobClean.includes(cleanDobInput);
+        });
+      }
+
+      let totalRecords = data.length;
+      if (!isDobFilteringOnClient) {
+        const contentRange = response.headers.get('content-range');
+        if (contentRange) {
+          totalRecords = parseInt(contentRange.split('/')[1]) || data.length;
+        }
+      }
+
+      let displayData = data;
+      if (isDobFilteringOnClient) {
+        const from = (currentPage - 1) * pageSize;
+        displayData = data.slice(from, from + pageSize);
+      }
+
+      currentStudentsData = displayData;
+      renderTable(displayData, (currentPage - 1) * pageSize, totalRecords);
+    } catch (err) {
+      document.getElementById('tableBody').innerHTML = 
+        `<tr><td colspan="11" style="color: red; padding: 15px;">Error loading records! Please check your network connection.</td></tr>`;
+    }
+  }
+
+  function renderTable(data, startIndex, totalRecords) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    const totalPages = Math.ceil(totalRecords / pageSize) || 1;
+    document.getElementById('totalCount').innerText = `Total Records: ${totalRecords}`;
+    document.getElementById('pageTracker').innerText = `Page: ${currentPage} / ${totalPages}`;
+
+    document.getElementById('prevBtn').disabled = (currentPage === 1);
+    document.getElementById('nextBtn').disabled = (currentPage >= totalPages);
+
+    if (data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="11" style="padding: 15px;">No student records found.</td></tr>`;
+      return;
+    }
+
+    data.forEach((item, index) => {
+      const row = document.createElement('tr');
+      row.onclick = function() {
+        document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('selected-row'));
+        this.classList.add('selected-row');
+      };
+
+      row.innerHTML = `
+        <td class="col-nowrap">${startIndex + index + 1}</td>
+        <td class="col-nowrap"><strong>${item.admission_no || '-'}</strong></td>
+        <td class="col-name-group">${item.student_name || '-'}</td>
+        <td class="col-name-group">${item.father_name || '-'}</td>
+        <td class="col-name-group">${item.mother_name || '-'}</td>
+        <td class="col-nowrap">${item.gender || '-'}</td>
+        <td class="col-date-group">${item.dob || '-'}</td>
+        <td>${item.address || '-'}</td>
+        <td class="col-nowrap">${item.first_class || '-'}</td>
+        <td class="col-date-group">${item.admission_date || '-'}</td>
+        <td class="col-nowrap"><button class="btn-view" onclick="openStudentModal(${index})" title="Generate Certificate"><i class="fa-solid fa-certificate"></i> Certificate</button></td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  function openStudentModal(index) {
+    const item = currentStudentsData[index];
+    if (!item) return;
+
+    // Populate certificate fields
+    document.getElementById('c_admission_no').innerText = item.admission_no || '-';
+    document.getElementById('c_adm_year').innerText = item.adm_year || '-';
+    document.getElementById('c_student_name').innerText = item.student_name || '-';
+    document.getElementById('c_father_name').innerText = item.father_name || '-';
+    document.getElementById('c_mother_name').innerText = item.mother_name || '-';
+    document.getElementById('c_dob').innerText = item.dob || '-';
+    document.getElementById('c_address').innerText = item.address || '-';
+    document.getElementById('c_first_class').innerText = item.first_class || '-';
+    document.getElementById('c_admission_date').innerText = item.admission_date || '-';
+
+    // Current Issue Date
+    const now = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('c_issue_date').innerText = now.toLocaleDateString('en-US', options);
+
+    // Gender-based Pronoun Handling (boys, male -> He/His/Him; girls, female -> She/Her/Her)
+    let genderStr = (item.gender || '').toLowerCase();
+    let isFemale = genderStr.includes('girl') || genderStr.includes('female') || genderStr === 'f';
+
+    document.getElementById('c_pronoun_cap').innerText = isFemale ? 'She' : 'He';
+    document.getElementById('c_pronoun_low').innerText = isFemale ? 'her' : 'his';
+    document.getElementById('c_possessive').innerText = isFemale ? 'her' : 'his';
+    document.getElementById('c_objective').innerText = isFemale ? 'her' : 'him';
+
+    // Generate QR Code containing essential student details
+    document.getElementById('qrcode').innerHTML = "";
+    let qrData = `School: Pathpukur High School (HS)\nName: ${item.student_name}\nFather: ${item.father_name}\nAdmission No: ${item.admission_no}\nDOB: ${item.dob}\nAdm Year: ${item.adm_year}`;
+    
+    new QRCode(document.getElementById("qrcode"), {
+      text: qrData,
+      width: 85,
+      height: 85,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+
+    document.getElementById('studentModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('studentModal').style.display = 'none';
+  }
+
+  function printStudentCard() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB');
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('printTimestamp').innerText = `Print Date: ${dateStr}, ${timeStr}`;
+    
+    window.print();
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById('studentModal');
+    if (event.target === modal) {
+      closeModal();
+    }
+  }
+
+  function changePage(delta) {
+    currentPage += delta;
+    fetchStudents();
+  }
+
+  function resetFilters() {
+    document.getElementById('searchName').value = '';
+    document.getElementById('searchFather').value = '';
+    document.getElementById('searchAdmNo').value = '';
+    document.getElementById('searchDob').value = '';
+    document.getElementById('searchYear').value = '';
+    currentPage = 1;
+    fetchStudents();
+  }
+
+  window.onload = async () => {
+    await Promise.all([
+      loadYearMeta(),
+      fetchStudents()
+    ]);
+  };
+</script>
+  
+</body>
+</html>
