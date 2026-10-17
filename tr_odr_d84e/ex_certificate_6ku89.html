@@ -45,7 +45,7 @@
   
   <!-- প্রাক্তন ছাত্র ছাত্রীদের স্কুল সার্টিফিকেট -->
   <title>Pathpukur High School (H.S.)</title>
-
+  
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,7 +63,7 @@
       max-width: 1350px; 
       margin: 0 auto; 
       background: #fff; 
-      padding: 12px; 
+      padding: 12px 12px 0 0; 
       border-radius: 12px; 
       box-shadow: 0 2px 10px rgba(0,0,0,0.08); 
     }
@@ -145,10 +145,10 @@
     .col-date-group { width: 11%; min-width: 105px; white-space: nowrap; }
     .col-nowrap { white-space: nowrap; }
 
-    /* View Button */
+    /* Print / Certificate Icon Button */
     .btn-view {
-      background-color: #1e3a8a; color: white; border: none; padding: 6px 12px;
-      border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500;
+      background-color: #1e3a8a; color: white; border: none; padding: 6px 10px;
+      border-radius: 4px; cursor: pointer; font-size: 14px;
     }
     .btn-view:hover { background-color: #172554; }
 
@@ -172,9 +172,11 @@
     .student-card-box {
       border: 6px double #1e3a8a; border-radius: 10px; padding: 30px 36px; background: #fff; position: relative;
       overflow: hidden; box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
     
-    /* Watermark Background Fix */
+    /* Watermark Background Fix for Print */
     .student-card-box::before {
       content: "";
       position: absolute;
@@ -190,6 +192,8 @@
       opacity: 0.08;
       z-index: 0;
       pointer-events: none;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
 
     .cert-inner-content { position: relative; z-index: 1; }
@@ -267,7 +271,7 @@
       th, td { padding: 8px; font-size: 14px; }
     }
 
-    /* Print Optimization for Single A4 Page (Removing default browser headers/footers) */
+    /* Print Optimization for Single A4 Page (Forcing background graphics / Watermark to appear) */
     @media print {
       @page {
         size: A4 portrait;
@@ -280,6 +284,8 @@
         padding: 0 !important;
         background: #fff !important;
         overflow: hidden !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
       .container, .modal-header-actions, .filter-card, .pagination, .info-bar {
         display: none !important;
@@ -318,6 +324,13 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .student-card-box::before {
+        opacity: 0.08 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
       .cert-header { border-bottom: 2.5px solid #000 !important; }
       .cert-school-info h1 { color: #000 !important; }
@@ -350,24 +363,24 @@
   <div class="filter-card">
     <div class="filter-grid">
       <div class="filter-group">
-        <label><i class="fa-solid fa-user"></i> ছাত্র-ছাত্রীর নাম:</label>
-        <input type="text" id="searchName" placeholder="নাম লিখুন..." oninput="triggerSearch()">
+        <label><i class="fa-solid fa-user"></i> Student Name:</label>
+        <input type="text" id="searchName" placeholder="Type name..." oninput="triggerSearch()">
       </div>
       <div class="filter-group">
-        <label><i class="fa-solid fa-user-group"></i> পিতার নাম:</label>
-        <input type="text" id="searchFather" placeholder="পিতার নাম লিখুন..." oninput="triggerSearch()">
+        <label><i class="fa-solid fa-user-group"></i> Father's Name:</label>
+        <input type="text" id="searchFather" placeholder="Type father's name..." oninput="triggerSearch()">
       </div>
       <div class="filter-group">
-        <label><i class="fa-solid fa-id-card"></i> এডমিশন নম্বর:</label>
-        <input type="text" id="searchAdmNo" placeholder="যেমন: 25/2021" oninput="triggerSearch()">
+        <label><i class="fa-solid fa-id-card"></i> Admission No:</label>
+        <input type="text" id="searchAdmNo" placeholder="e.g. 25/2021" oninput="triggerSearch()">
       </div>
       <div class="filter-group">
-        <label><i class="fa-solid fa-calendar-days"></i> জন্মতারিখ:</label>
+        <label><i class="fa-solid fa-calendar-days"></i> Date of Birth:</label>
         <input type="text" id="searchDob" placeholder="DD/MM/YYYY" oninput="triggerSearch()">
       </div>
       <div class="filter-group">
-        <label><i class="fa-solid fa-graduation-cap"></i> ভর্তির সাল (YYYY):</label>
-        <input type="number" id="searchYear" placeholder="যেমন: 2021" oninput="triggerSearch()" min="1980" max="2026">
+        <label><i class="fa-solid fa-graduation-cap"></i> Admission Year (YYYY):</label>
+        <input type="number" id="searchYear" placeholder="e.g. 2021" oninput="triggerSearch()" min="1980" max="2026">
       </div>
       <button class="btn-reset" onclick="resetFilters()"><i class="fa-solid fa-rotate-right"></i> ফিল্টার রিসেট করুন</button>
     </div>
@@ -383,22 +396,22 @@
     <span id="pageTracker">পৃষ্ঠা: ১/১</span>
   </div>
 
-  <!-- Table -->
+  <!-- Table (English Headers as requested) -->
   <div class="table-responsive">
     <table>
       <thead>
         <tr>
-          <th class="col-nowrap">ক্রম</th>
-          <th class="col-nowrap">এডমিশন নম্বর</th>
-          <th class="col-name-group">ছাত্র-ছাত্রীর নাম</th>
-          <th class="col-name-group">পিতার নাম</th>
-          <th class="col-name-group">মাতার নাম</th>
-          <th class="col-nowrap">লিঙ্গ</th>
-          <th class="col-date-group">জন্মতারিখ</th>
-          <th>ঠিকানা</th>
-          <th class="col-nowrap">প্রথম ভর্তি শ্রেণি</th>
-          <th class="col-date-group">ভর্তির তারিখ</th>
-          <th class="col-nowrap">সার্টিফিকেট</th>
+          <th class="col-nowrap">Sl. No.</th>
+          <th class="col-nowrap">Admission No</th>
+          <th class="col-name-group">Student Name</th>
+          <th class="col-name-group">Father's Name</th>
+          <th class="col-name-group">Mother's Name</th>
+          <th class="col-nowrap">Gender</th>
+          <th class="col-date-group">Date of Birth</th>
+          <th>Address</th>
+          <th class="col-nowrap">First Class</th>
+          <th class="col-date-group">Admission Date</th>
+          <th class="col-nowrap">Certificate</th>
         </tr>
       </thead>
       <tbody id="tableBody">
@@ -409,8 +422,8 @@
 
   <!-- Pagination Controls -->
   <div class="pagination">
-    <button class="btn-page" id="prevBtn" onclick="changePage(-1)"><i class="fa-solid fa-angle-left"></i> পূর্ববর্তী</button>
-    <button class="btn-page" id="nextBtn" onclick="changePage(1)">পরবর্তী <i class="fa-solid fa-angle-right"></i></button>
+    <button class="btn-page" id="prevBtn" onclick="changePage(-1)"><i class="fa-solid fa-angle-left"></i> Previous</button>
+    <button class="btn-page" id="nextBtn" onclick="changePage(1)">Next <i class="fa-solid fa-angle-right"></i></button>
   </div>
 </div>
 
@@ -441,12 +454,12 @@
           <h2>School & Character Certificate</h2>
         </div>
 
-        <!-- Official Certificate Body Text (Enlarged and professional) -->
+        <!-- Official Certificate Body Text with Dynamic Gender Pronouns -->
         <div class="cert-body-text">
           <p style="text-align: right; margin-bottom: 20px;"><strong>Date of Issue:</strong> <span id="c_issue_date"></span></p>
           <p style="text-align: center; margin-bottom: 25px; font-weight: 700; font-size: 16px; letter-spacing: 0.5px;">TO WHOM IT MAY CONCERN</p>
           <p style="margin-bottom: 18px;">
-            This is to certify that <strong><span id="c_student_name"></span></strong>, son/daughter of 
+            This is to certify that <strong><span id="c_student_name"></span></strong>, <span id="c_child_relation">son/daughter</span> of 
             <strong><span id="c_father_name"></span></strong> and <strong><span id="c_mother_name"></span></strong>, 
             residing at Village/Town: <strong><span id="c_address"></span></strong>, was a bona fide student of 
             this institution in the academic session corresponding to admission year <strong><span id="c_adm_year"></span></strong>. 
@@ -543,9 +556,9 @@
 
   function updateSubHeading(minYear, maxYear) {
     document.getElementById('subHeading').innerHTML = `
-      <span class="main-heading-text">বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের অফিশিয়াল তথ্য</span>
+      <span class="main-heading-text">কেবল বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের অফিশিয়াল তথ্য</span>
       <div class="instruction-text">
-        <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীর নাম, পিতার নাম, এডমিশন নম্বর, জন্মতারিখ বা ভর্তির সাল নিচের নির্দিষ্ট ঘরে টাইপ করলেই তাৎক্ষণিকভাবে তালিকা স্বয়ংক্রিয়ভাবে ফিল্টার হয়ে যাবে। সার্টিফিকেট তৈরি করতে ডানপাশের <strong>Certificate (ভিউ)</strong> বোতামে ক্লিক করুন।
+        <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীর নাম, পিতার নাম, এডমিশন নম্বর, জন্মতারিখ বা ভর্তির সাল নিচের নির্দিষ্ট ঘরে টাইপ করলেই তাৎক্ষণিকভাবে তালিকা স্বয়ংক্রিয়ভাবে ফিল্টার হয়ে যাবে। সার্টিফিকেট তৈরি করতে ডানপাশের <strong>প্রিন্ট আইকন</strong> এ ক্লিক করুন।
       </div>
     `;
   }
@@ -663,7 +676,7 @@
         <td>${item.address || '-'}</td>
         <td class="col-nowrap">${item.first_class || '-'}</td>
         <td class="col-date-group">${item.admission_date || '-'}</td>
-        <td class="col-nowrap"><button class="btn-view" onclick="openStudentModal(${index})" title="Certificate"><i class="fa-solid fa-certificate"></i> Certificate</button></td>
+        <td class="col-nowrap"><button class="btn-view" onclick="openStudentModal(${index})" title="Print Certificate"><i class="fa-solid fa-print"></i></button></td>
       `;
       tbody.appendChild(row);
     });
@@ -687,9 +700,11 @@
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById('c_issue_date').innerText = now.toLocaleDateString('en-US', options);
 
+    // Gender-based Pronoun Handling (Automatically adapts based on gender field)
     let genderStr = (item.gender || '').toLowerCase();
     let isFemale = genderStr.includes('girl') || genderStr.includes('female') || genderStr === 'f';
 
+    document.getElementById('c_child_relation').innerText = isFemale ? 'daughter' : 'son';
     document.getElementById('c_pronoun_cap').innerText = isFemale ? 'She' : 'He';
     document.getElementById('c_pronoun_low').innerText = isFemale ? 'her' : 'his';
     document.getElementById('c_possessive').innerText = isFemale ? 'her' : 'his';
