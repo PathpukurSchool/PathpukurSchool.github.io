@@ -346,7 +346,7 @@
   <!-- Header -->
   <div class="header">
     <div class="school-name">Pathpukur High School (HS)</div>
-    <div class="page-title">Alumni School & Character Certificate Portal</div>
+    <div class="page-title">Alumni (Old) Students & School Certificate</div>
   </div>
 
   <!-- Dynamic Sub Heading & Bengali Instructions Box -->
@@ -550,13 +550,13 @@
         }
       }
     } catch (e) {
-      document.getElementById('subHeading').innerText = "প্রাক্তন ছাত্র-ছাত্রীদের তথ্য পোর্টাল";
+      document.getElementById('subHeading').innerText = "প্রাক্তন ছাত্র-ছাত্রীদের তথ্য";
     }
   }
 
   function updateSubHeading(minYear, maxYear) {
     document.getElementById('subHeading').innerHTML = `
-      <span class="main-heading-text">কেবল বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের অফিশিয়াল তথ্য</span>
+      <span class="main-heading-text">বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের অফিশিয়াল তথ্য</span>
       <div class="instruction-text">
         <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীর নাম, পিতার নাম, এডমিশন নম্বর, জন্মতারিখ বা ভর্তির সাল নিচের নির্দিষ্ট ঘরে টাইপ করলেই তাৎক্ষণিকভাবে তালিকা স্বয়ংক্রিয়ভাবে ফিল্টার হয়ে যাবে। সার্টিফিকেট তৈরি করতে ডানপাশের <strong>প্রিন্ট আইকন</strong> এ ক্লিক করুন।
       </div>
