@@ -70,11 +70,28 @@
       display: none;
     }
 
-    /* Dynamic Sub-Heading Badge */
+    /* Dynamic Sub-Heading Badge & Instructions */
     .sub-heading-badge {
-      background-color: #e8f5e9; color: #2e7d32; padding: 8px 12px; border: 1px solid #a5d6a7;
-      border-left: 4px solid #2e7d32; border-radius: 6px; font-size: 14px; margin-bottom: 12px;
-      text-align: center; font-weight: bold;
+      background-color: #e8f5e9; color: #2e7d32; padding: 10px 14px; border: 1px solid #a5d6a7;
+      border-left: 4px solid #2e7d32; border-radius: 6px; font-size: 13.5px; margin-bottom: 12px;
+      text-align: left; line-height: 1.5;
+    }
+    .sub-heading-badge .main-heading-text {
+      font-weight: bold; text-align: center; display: block; font-size: 14.5px; margin-bottom: 4px;
+    }
+    .sub-heading-badge .instruction-text {
+      font-weight: normal; font-size: 13px; color: #1b5e20; border-top: 1px dashed #a5d6a7; padding-top: 6px; margin-top: 4px;
+    }
+
+    /* Filter Section Heading */
+    .filter-section-title {
+      font-size: 14.5px;
+      font-weight: bold;
+      color: #1a5f7a;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     /* Filter Box Grid */
@@ -260,9 +277,14 @@
     <div class="page-title">প্রাক্তন ছাত্র-ছাত্রীদের তথ্য পরিচিতি</div>
   </div>
 
-  <!-- Dynamic Sub Heading -->
+  <!-- Dynamic Sub Heading & Instructions Box -->
   <div class="sub-heading-badge" id="subHeading">
-    প্রাক্তন ছাত্র-ছাত্রীদের তথ্য লোড হচ্ছে...
+    <span class="main-heading-text">প্রাক্তন ছাত্র-ছাত্রীদের তথ্য লোড হচ্ছে...</span>
+  </div>
+
+  <!-- Filter Section Heading -->
+  <div class="filter-section-title">
+    <i class="fa-solid fa-filter"></i> ছাত্র-ছাত্রীর তথ্য অনুসন্ধান করুন:
   </div>
 
   <!-- Filter Card -->
@@ -292,6 +314,11 @@
     </div>
   </div>
 
+<!-- Filter Section Heading -->
+  <div class="filter-section-title">
+    <i class="fa-solid fa-filter"></i> প্রাক্তন ছাত্র-ছাত্রীর তালিকা
+  </div>
+  
   <!-- Info Bar -->
   <div class="info-bar">
     <span id="totalCount">মোট রেকর্ড: ০</span>
@@ -396,10 +423,13 @@
         const maxYear = maxData[0].adm_year;
 
         if (minYear && maxYear) {
-          document.getElementById('subHeading').innerText = 
-            `বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের তথ্য`;
+          document.getElementById('subHeading').innerHTML = `
+            <span class="main-heading-text">বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের তথ্য</span>
+            <div class="instruction-text">
+              <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীর নাম, পিতার নাম, এডমিশন নম্বর, জন্মতারিখ বা ভর্তির সাল নিচের নির্দিষ্ট ঘরে টাইপ করলেই তাৎক্ষণিকভাবে তালিকা স্বয়ংক্রিয়ভাবে ফিল্টার হয়ে যাবে।
+            </div>
+          `;
         }
-      }
     } catch (e) {
       document.getElementById('subHeading').innerText = "প্রাক্তন ছাত্র-ছাত্রীদের তথ্য পরিচিতি";
     }
