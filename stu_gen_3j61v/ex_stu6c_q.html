@@ -3,21 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="robots" content="noindex, nofollow, noarchive">
 
-    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড (অনুমোদিত না হলে পেজ সম্পূর্ণ অদৃশ্য থাকবে) -->
+    <!-- 🛡️ ১. কন্টেন্ট সিকিউরিটি শিল্ড -->
     <style id="security-shield">
         body { display: none !important; }
     </style>
 
-    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট (লিংক সরাসরি কপি করে খোলা আটকাবে) -->
+    <!-- 🛡️ ২. রিফারার ভ্যালিডেশন স্ক্রিপ্ট -->
     <script>
     (function() {
         try {
             var ref = document.referrer;
             var isValidReferrer = false;
 
-            // রিফারার চেক (লিংকটি সরাসরি কপি করে এড্রেসবারে দিয়ে ঢুকছে নাকি মূল পেজ থেকে আসছে)
             if (ref) {
                 var refUrl = new URL(ref);
                 if (refUrl.hostname === "pathpukurschool.pages.dev") {
@@ -25,14 +24,11 @@
                 }
             }
 
-            // যদি লিংক কপি করে সরাসরি ঢোকার চেষ্টা করা হয় (Referrer না থাকে বা ডোমেইন না মিলে)
             if (!isValidReferrer) {
-                // সরাসরি মূল ইনডেক্স পেজে পাঠিয়ে দেবে
                 window.location.replace("https://pathpukurschool.pages.dev/");
                 return;
             }
 
-            // মূল পেজ থেকে ক্লিকে এসে থাকলে কন্টেন্ট প্রদর্শন করো
             document.addEventListener("DOMContentLoaded", function() {
                 var shield = document.getElementById("security-shield");
                 if (shield) shield.remove();
@@ -43,8 +39,7 @@
         }
     })();
     </script>
-   <!-- প্রাক্তন স্টুডেন্ট তালিকা -->
- <title>Pathpukur High School (H: S:)</title>
+   <title>Pathpukur High School (H: S:)</title>
 
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,7 +52,7 @@
     body { background-color: #f0f2f5; margin: 0; padding: 8px; color: #111; }
     
     .container { 
-      max-width: 1200px; 
+      max-width: 1250px; 
       margin: 0 auto; 
       background: #fff; 
       padding: 12px; 
@@ -102,15 +97,20 @@
       font-size: 13px; font-weight: bold; color: #555; margin-bottom: 8px; padding: 0 4px;
     }
 
-    /* Responsive Table */
+    /* Responsive Table & Fixed Column Sizing */
     .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 6px; }
-    table { width: 100%; border-collapse: collapse; border: 2px solid #222; min-width: 900px; }
+    table { width: 100%; border-collapse: collapse; border: 2px solid #222; min-width: 1050px; table-layout: auto; }
     th, td { padding: 8px 6px; text-align: center; border: 1.5px solid #333; font-size: 13.5px; vertical-align: middle; }
-    th { background-color: #1a5f7a; color: white; font-size: 14px; }
+    th { background-color: #1a5f7a; color: white; font-size: 14px; white-space: nowrap; }
     
     tbody tr:nth-child(even) { background-color: #f9f9f9; }
     tbody tr:active { background-color: #d0ebff; }
     tbody tr.selected-row { background-color: #c8e6c9 !important; font-weight: bold; }
+
+    /* Specific Column Width Regulations */
+    .col-name-group { width: 16%; min-width: 140px; white-space: nowrap; }
+    .col-date-group { width: 11%; min-width: 105px; white-space: nowrap; }
+    .col-nowrap { white-space: nowrap; }
 
     /* View Button */
     .btn-view {
@@ -125,7 +125,7 @@
       background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; padding: 10px;
     }
     .modal-content {
-      background: #fff; border-radius: 10px; width: 100%; max-width: 650px; padding: 20px;
+      background: #fff; border-radius: 10px; width: 100%; max-width: 600px; padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; position: relative;
     }
     .modal-header-actions {
@@ -135,16 +135,16 @@
     .btn-close { background: #d32f2f; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
     
     .student-card-box {
-      border: 2px solid #1a5f7a; border-radius: 8px; padding: 18px; background: #f9fbfd;
+      border: 2px solid #1a5f7a; border-radius: 8px; padding: 16px; background: #fff;
     }
     .student-details-grid {
-      display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 15px; font-size: 14.5px;
+      display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 12px; font-size: 14px;
     }
-    @media (min-width: 500px) {
+    @media (min-width: 480px) {
       .student-details-grid { grid-template-columns: 1fr 1fr; }
     }
     .detail-item {
-      background: #fff; padding: 10px 12px; border: 1px solid #d1e3f0; border-radius: 6px; color: #333;
+      background: #f9fbfd; padding: 8px 10px; border: 1px solid #d1e3f0; border-radius: 6px; color: #333;
     }
     .detail-item strong { color: #1a5f7a; }
 
@@ -166,19 +166,70 @@
       .page-title { font-size: 20px; }
       .filter-grid { grid-template-columns: repeat(3, 1fr); }
       .btn-reset { width: auto; grid-column: span 3; justify-self: end; padding: 8px 20px; }
-      th, td { padding: 10px 8px; font-size: 14.5px; }
+      th, td { padding: 8px; font-size: 14px; }
     }
 
-    /* Print Optimization */
+    /* Print Optimization for A5 Paper (Single Page Fix) */
     @media print {
-      body * { visibility: hidden; }
-      #printableCard, #printableCard * { visibility: visible; }
-      #printableCard {
-        position: absolute; left: 0; top: 0; width: 100%; border: none; background: white; padding: 0;
+      @page {
+        size: A5 portrait;
+        margin: 8mm;
       }
-      .modal { background: white; position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: flex !important; }
-      .modal-content { box-shadow: none; max-width: 100%; width: 100%; padding: 0; }
-      .modal-header-actions { display: none !important; }
+      html, body {
+        width: 100%;
+        height: auto;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        overflow: visible !important;
+      }
+      .container, .modal-header-actions, .filter-card, .pagination, .info-bar {
+        display: none !important;
+      }
+      .modal {
+        position: static !important;
+        display: block !important;
+        background: none !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .modal-content {
+        box-shadow: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      .student-card-box {
+        border: 2px solid #000 !important;
+        padding: 12px !important;
+        margin: 0 !important;
+        background: #fff !important;
+        page-break-inside: avoid !important;
+      }
+      .header {
+        border-bottom: 2px solid #000 !important;
+        padding-bottom: 5px !important;
+        margin-bottom: 8px !important;
+      }
+      .school-name { color: #000 !important; font-size: 18px !important; }
+      .page-title { color: #000 !important; font-size: 14px !important; }
+      .student-details-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px !important;
+        font-size: 12px !important;
+      }
+      .detail-item {
+        border: 1px solid #666 !important;
+        background: #fff !important;
+        padding: 6px 8px !important;
+      }
+      .detail-item strong { color: #000 !important; }
     }
   </style>
 </head>
@@ -234,17 +285,17 @@
     <table>
       <thead>
         <tr>
-          <th>ক্রম</th>
-          <th>এডমিশন নম্বর</th>
-          <th>ছাত্র ছাত্রীর নাম</th>
-          <th>পিতার নাম</th>
-          <th>মাতার নাম</th>
-          <th>লিঙ্গ</th>
-          <th>জন্মতারিখ</th>
+          <th class="col-nowrap">ক্রম</th>
+          <th class="col-nowrap">এডমিশন নম্বর</th>
+          <th class="col-name-group">ছাত্র ছাত্রীর নাম</th>
+          <th class="col-name-group">পিতার নাম</th>
+          <th class="col-name-group">মাতার নাম</th>
+          <th class="col-nowrap">লিঙ্গ</th>
+          <th class="col-date-group">জন্মতারিখ</th>
           <th>ঠিকানা</th>
-          <th>প্রথম ভর্তি শ্রেণি</th>
-          <th>ভর্তির তারিখ</th>
-          <th>ভিউ</th>
+          <th class="col-nowrap">প্রথম ভর্তি শ্রেণি</th>
+          <th class="col-date-group">ভর্তির তারিখ</th>
+          <th class="col-nowrap">ভিউ</th>
         </tr>
       </thead>
       <tbody id="tableBody">
@@ -274,7 +325,6 @@
       </div>
       <div class="student-details-grid">
         <div class="detail-item"><strong>এডমিশন নম্বর:</strong> <span id="m_admission_no"></span></div>
-        <div class="detail-item"><strong>এডমিশন ক্রম:</strong> <span id="m_adm_sl"></span></div>
         <div class="detail-item"><strong>ভর্তির সাল:</strong> <span id="m_adm_year"></span></div>
         <div class="detail-item"><strong>ছাত্র/ছাত্রীর নাম:</strong> <span id="m_student_name"></span></div>
         <div class="detail-item"><strong>পিতার নাম:</strong> <span id="m_father_name"></span></div>
@@ -296,7 +346,7 @@
   let currentPage = 1;
   const pageSize = 50;
   let debounceTimer;
-  let currentStudentsData = []; // Store fetched records for modal view
+  let currentStudentsData = [];
 
   function toBengaliNumeral(num) {
     if (num === null || num === undefined) return '';
@@ -309,7 +359,6 @@
     return str.replace(/[^0-9]/g, '');
   }
 
-  // হেডিং-এ সর্বনিম্ন ও সর্বোচ্চ ভর্তির সাল দেখানোর জন্য
   async function loadYearMeta() {
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?select=adm_year&order=adm_year.asc&limit=1`, {
@@ -407,7 +456,7 @@
         displayData = data.slice(from, from + pageSize);
       }
 
-      currentStudentsData = displayData; // Keep reference for modal
+      currentStudentsData = displayData;
       renderTable(displayData, (currentPage - 1) * pageSize, totalRecords);
     } catch (err) {
       document.getElementById('tableBody').innerHTML = 
@@ -439,17 +488,17 @@
       };
 
       row.innerHTML = `
-        <td>${toBengaliNumeral(startIndex + index + 1)}</td>
-        <td><strong>${item.admission_no || '-'}</strong></td>
-        <td>${item.student_name || '-'}</td>
-        <td>${item.father_name || '-'}</td>
-        <td>${item.mother_name || '-'}</td>
-        <td>${item.gender || '-'}</td>
-        <td>${item.dob || '-'}</td>
+        <td class="col-nowrap">${toBengaliNumeral(startIndex + index + 1)}</td>
+        <td class="col-nowrap"><strong>${item.admission_no || '-'}</strong></td>
+        <td class="col-name-group">${item.student_name || '-'}</td>
+        <td class="col-name-group">${item.father_name || '-'}</td>
+        <td class="col-name-group">${item.mother_name || '-'}</td>
+        <td class="col-nowrap">${item.gender || '-'}</td>
+        <td class="col-date-group">${item.dob || '-'}</td>
         <td>${item.address || '-'}</td>
-        <td>${item.first_class || '-'}</td>
-        <td>${item.admission_date || '-'}</td>
-        <td><button class="btn-view" onclick="openStudentModal(${index})" title="ভিউ করুন"><i class="fa-solid fa-eye"></i></button></td>
+        <td class="col-nowrap">${item.first_class || '-'}</td>
+        <td class="col-date-group">${item.admission_date || '-'}</td>
+        <td class="col-nowrap"><button class="btn-view" onclick="openStudentModal(${index})" title="ভিউ করুন"><i class="fa-solid fa-eye"></i></button></td>
       `;
       tbody.appendChild(row);
     });
@@ -460,7 +509,6 @@
     if (!item) return;
 
     document.getElementById('m_admission_no').innerText = item.admission_no || '-';
-    document.getElementById('m_adm_sl').innerText = item.adm_sl !== null && item.adm_sl !== undefined ? toBengaliNumeral(item.adm_sl) : '-';
     document.getElementById('m_adm_year').innerText = item.adm_year ? toBengaliNumeral(item.adm_year) : '-';
     document.getElementById('m_student_name').innerText = item.student_name || '-';
     document.getElementById('m_father_name').innerText = item.father_name || '-';
