@@ -56,16 +56,17 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
-    * { box-sizing: border-box; font-family: 'Poppins', 'Tiro Bangla', sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: #f0f2f5; margin: 0; padding: 8px; color: #111; }
+    /* সার্বিক ফন্ট সাইজ ও বক্স সাইজিং একটু ছোট করা হলো */
+    * { box-sizing: border-box; font-family: 'Poppins', 'Tiro Bangla', sans-serif; -webkit-tap-highlight-color: transparent; font-size: 13.5px; }
+    body { background-color: #f0f2f5; margin: 0; padding: 6px; color: #111; }
     
     .container { 
-      max-width: 1350px; 
+      max-width: 1300px; 
       margin: 0 auto; 
       background: #fff; 
-      padding: 12px; 
-      border-radius: 12px; 
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08); 
+      padding: 10px; 
+      border-radius: 10px; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
     }
     
     /* Main Portal Header */
@@ -73,104 +74,104 @@
       text-align: center; 
       background: linear-gradient(135deg, #1e3a8a, #0f172a); 
       color: #ffffff; 
-      padding: 18px 10px;
-      border-radius: 12px 12px 0 0;
-      margin-bottom: 12px; 
+      padding: 14px 8px; 
+      border-radius: 6px;
+      margin-bottom: 10px; 
       position: relative; 
     }
-    .school-name { font-size: 24px; color: #ffffff; margin: 0; font-weight: bold; line-height: 1.3; letter-spacing: 0.5px; }
-    .page-title { font-size: 16px; color: #cbd5e1; margin: 6px 0 0 0; font-weight: 500; }
+    .school-name { font-size: 21px; color: #ffffff; margin: 0; font-weight: bold; line-height: 1.3; letter-spacing: 0.5px; }
+    .page-title { font-size: 14.5px; color: #cbd5e1; margin: 4px 0 0 0; font-weight: 500; }
 
     /* Dynamic Sub-Heading Badge & Instructions */
     .sub-heading-badge {
-      background-color: #f0fdf4; color: #166534; padding: 12px 16px; border: 1px solid #bbf7d0;
-      border-left: 5px solid #16a34a; border-radius: 6px; font-size: 13.5px; margin-bottom: 12px;
-      text-align: left; line-height: 1.6;
+      background-color: #f0fdf4; color: #166534; padding: 10px 12px; border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a; border-radius: 6px; font-size: 13px; margin-bottom: 10px;
+      text-align: left; line-height: 1.5;
     }
     .sub-heading-badge .main-heading-text {
-      font-weight: bold; text-align: center; display: block; font-size: 15px; margin-bottom: 4px; color: #14532d;
+      font-weight: bold; text-align: center; display: block; font-size: 14px; margin-bottom: 3px; color: #14532d;
     }
     .sub-heading-badge .instruction-text {
-      font-weight: normal; font-size: 13px; color: #166534; border-top: 1px dashed #bbf7d0; padding-top: 6px; margin-top: 4px;
+      font-weight: normal; font-size: 12.5px; color: #166534; border-top: 1px dashed #bbf7d0; padding-top: 5px; margin-top: 3px;
     }
 
     /* Filter Section Heading */
     .filter-section-title {
-      font-size: 14.5px;
+      font-size: 13.5px;
       font-weight: bold;
       color: #1e3a8a;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     /* Filter Box Grid */
     .filter-card {
-      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 12px;
+      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 10px;
     }
     .filter-grid {
-      display: grid; grid-template-columns: 1fr; gap: 8px;
+      display: grid; grid-template-columns: 1fr; gap: 6px;
     }
     .filter-group { display: flex; flex-direction: column; }
-    .filter-group label { font-size: 12.5px; font-weight: bold; margin-bottom: 2px; color: #334155; }
+    .filter-group label { font-size: 12px; font-weight: bold; margin-bottom: 2px; color: #334155; }
     .filter-group input, .filter-group select {
-      padding: 8px 10px; font-size: 14px; border: 1.5px solid #cbd5e1; border-radius: 6px; outline: none; background: #fff;
+      padding: 6px 8px; font-size: 13px; border: 1.5px solid #cbd5e1; border-radius: 5px; outline: none; background: #fff;
     }
     .filter-group input:focus, .filter-group select:focus { border-color: #1e3a8a; }
     
     .btn-reset {
-      background: #dc2626; color: #fff; border: none; padding: 8px 12px; font-size: 13.5px;
-      border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 6px; width: 100%;
+      background: #dc2626; color: #fff; border: none; padding: 7px 10px; font-size: 13px;
+      border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 4px; width: 100%;
     }
     .btn-reset:hover { background: #b91c1c; }
 
     /* Info Bar */
     .info-bar {
       display: flex; justify-content: space-between; align-items: center;
-      font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 8px; padding: 0 4px;
+      font-size: 12.5px; font-weight: bold; color: #475569; margin-bottom: 6px; padding: 0 2px;
     }
 
     /* Responsive Table */
     .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 6px; }
-    table { width: 100%; border-collapse: collapse; border: 2px solid #334155; min-width: 1050px; table-layout: auto; }
-    th, td { padding: 8px 6px; text-align: center; border: 1.5px solid #cbd5e1; font-size: 13.5px; vertical-align: middle; }
-    th { background-color: #1e3a8a; color: white; font-size: 14px; white-space: nowrap; }
+    table { width: 100%; border-collapse: collapse; border: 1.5px solid #334155; min-width: 1000px; table-layout: auto; }
+    th, td { padding: 6px 5px; text-align: center; border: 1px solid #cbd5e1; font-size: 13px; vertical-align: middle; }
+    th { background-color: #1e3a8a; color: white; font-size: 13.5px; white-space: nowrap; }
     
     tbody tr:nth-child(even) { background-color: #f8fafc; }
     tbody tr:hover { background-color: #f1f5f9; }
     tbody tr.selected-row { background-color: #dbeafe !important; font-weight: bold; }
 
-    .col-name-group { width: 16%; min-width: 140px; white-space: nowrap; }
-    .col-date-group { width: 11%; min-width: 105px; white-space: nowrap; }
+    .col-name-group { width: 16%; min-width: 130px; white-space: nowrap; }
+    .col-date-group { width: 11%; min-width: 95px; white-space: nowrap; }
     .col-nowrap { white-space: nowrap; }
 
     /* Print / Certificate Icon Button */
     .btn-view {
-      background-color: #1e3a8a; color: white; border: none; padding: 6px 10px;
-      border-radius: 4px; cursor: pointer; font-size: 14px;
+      background-color: #1e3a8a; color: white; border: none; padding: 5px 8px;
+      border-radius: 4px; cursor: pointer; font-size: 13px;
     }
     .btn-view:hover { background-color: #172554; }
 
     /* Modal Styles */
     .modal {
       display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; padding: 10px;
+      background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; padding: 8px;
     }
     .modal-content {
-      background: #fff; border-radius: 10px; width: 100%; max-width: 840px; padding: 20px;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.3); max-height: 95vh; overflow-y: auto; position: relative;
+      background: #fff; border-radius: 8px; width: 100%; max-width: 780px; padding: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-height: 95vh; overflow-y: auto; position: relative;
     }
     .modal-header-actions {
-      display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 12px;
+      display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 10px;
     }
-    .btn-print { background: #16a34a; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+    .btn-print { background: #16a34a; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
     .btn-print:hover { background: #15803d; }
-    .btn-close { background: #dc2626; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+    .btn-close { background: #dc2626; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
     
     /* Professional Official School Certificate Card Styling */
     .student-card-box {
-      border: 6px double #1e3a8a; border-radius: 10px; padding: 30px 36px; background: #fff; position: relative;
+      border: 5px double #1e3a8a; border-radius: 8px; padding: 24px 28px; background: #fff; position: relative;
       overflow: hidden; box-sizing: border-box;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
@@ -183,8 +184,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 480px;
-      height: 480px;
+      width: 420px;
+      height: 420px;
       background-image: url('../PHS-LOGO.png');
       background-repeat: no-repeat;
       background-position: center;
@@ -199,79 +200,78 @@
     .cert-inner-content { position: relative; z-index: 1; }
 
     .cert-header {
-      display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid #1e3a8a;
-      padding-bottom: 15px; margin-bottom: 16px; text-align: center;
+      display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 12px; margin-bottom: 14px; text-align: center;
     }
-    .cert-logo { width: 85px; height: 85px; object-fit: contain; }
-    .cert-school-info h1 { font-size: 23px; color: #1e3a8a; margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .cert-school-info p { font-size: 9.5px; color: #1e293b; margin: 2px 0; line-height: 1.35; font-weight: 500; }
+    .cert-logo { width: 75px; height: 75px; object-fit: contain; }
+    .cert-school-info h1 { font-size: 20px; color: #1e3a8a; margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .cert-school-info p { font-size: 9px; color: #1e293b; margin: 2px 0; line-height: 1.3; font-weight: 500; }
 
-    /* Certificate Title (No Background) */
+    /* Certificate Title */
     .cert-title-badge {
-      text-align: center; margin: 16px 0 20px 0;
+      text-align: center; margin: 12px 0 16px 0;
     }
     .cert-title-badge h2 {
-      font-size: 19px; color: #1e3a8a; display: inline-block; padding: 0;
-      text-transform: uppercase; letter-spacing: 1.5px; margin: 0; font-weight: 700;
-      border-bottom: 2px solid #1e3a8a; padding-bottom: 4px;
+      font-size: 17px; color: #1e3a8a; display: inline-block; padding: 0;
+      text-transform: uppercase; letter-spacing: 1.2px; margin: 0; font-weight: 700;
+      border-bottom: 2px solid #1e3a8a; padding-bottom: 3px;
     }
 
     .cert-body-text {
-      font-size: 15px; line-height: 2.2; color: #0f172a; text-align: justify; margin-top: 15px; font-weight: 400;
+      font-size: 14px; line-height: 2.0; color: #0f172a; text-align: justify; margin-top: 10px; font-weight: 400;
     }
     
     .cert-footer-section {
-      display: flex; justify-content: space-between; align-items: flex-end; margin-top: 35px; padding-top: 10px;
+      display: flex; justify-content: space-between; align-items: flex-end; margin-top: 28px; padding-top: 8px;
     }
     
     .cert-qr-area {
       display: flex; flex-direction: column; align-items: center; text-align: center;
     }
-    #qrcode { padding: 4px; background: #fff; border: 1px solid #cbd5e1; border-radius: 4px; }
-    #qrcode img { display: block; width: 85px !important; height: 85px !important; }
-    .qr-caption { font-size: 9px; color: #475569; margin-top: 4px; font-weight: 500; }
+    #qrcode { padding: 3px; background: #fff; border: 1px solid #cbd5e1; border-radius: 4px; }
+    #qrcode img { display: block; width: 75px !important; height: 75px !important; }
+    .qr-caption { font-size: 8.5px; color: #475569; margin-top: 3px; font-weight: 500; }
 
-    /* Bottom Signature layout with Photo Box beside signature */
     .cert-bottom-right-group {
       display: flex;
       align-items: flex-end;
-      gap: 20px;
+      gap: 15px;
     }
 
     /* Student Photo Box */
     .cert-photo-box {
-      width: 75px; height: 95px; border: 1.5px dashed #64748b; border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 9.5px; color: #64748b; text-align: center; padding: 4px; line-height: 1.2;
+      width: 70px; height: 85px; border: 1.5px dashed #64748b; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center; background: #f8fafc;
+      font-size: 9px; color: #64748b; text-align: center; padding: 4px; line-height: 1.2;
     }
 
     .cert-signature-box {
-      text-align: center; min-width: 220px;
+      text-align: center; min-width: 200px;
     }
-    .sig-line { border-top: 1.5px solid #0f172a; margin-top: 40px; padding-top: 6px; font-size: 12.5px; font-weight: 600; color: #0f172a; line-height: 1.4; }
+    .sig-line { border-top: 1.5px solid #0f172a; margin-top: 35px; padding-top: 5px; font-size: 12px; font-weight: 600; color: #0f172a; line-height: 1.3; }
 
     /* Pagination */
     .pagination {
-      display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 12px;
+      display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px;
     }
     .btn-page {
-      background-color: #1e3a8a; color: white; border: none; padding: 6px 14px;
-      border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold;
+      background-color: #1e3a8a; color: white; border: none; padding: 5px 12px;
+      border-radius: 5px; cursor: pointer; font-size: 12.5px; font-weight: bold;
     }
     .btn-page:disabled { background-color: #cbd5e1; cursor: not-allowed; }
 
     /* Desktop View */
     @media (min-width: 600px) {
-      body { padding: 15px; }
-      .container { padding: 20px; }
-      .school-name { font-size: 26px; }
-      .page-title { font-size: 18px; }
+      body { padding: 10px; }
+      .container { padding: 15px; }
+      .school-name { font-size: 23px; }
+      .page-title { font-size: 15px; }
       .filter-grid { grid-template-columns: repeat(3, 1fr); }
-      .btn-reset { width: auto; grid-column: span 3; justify-self: end; padding: 8px 20px; }
-      th, td { padding: 8px; font-size: 14px; }
+      .btn-reset { width: auto; grid-column: span 3; justify-self: end; padding: 7px 16px; }
+      th, td { padding: 7px 6px; font-size: 13px; }
     }
 
-    /* Print Optimization for Single A4 Page (Forcing background graphics / Watermark to appear) */
+    /* Print Optimization for Single A4 Page */
     @media print {
       @page {
         size: A4 portrait;
@@ -314,8 +314,8 @@
         background: #fff !important;
       }
       .student-card-box {
-        border: 6px double #000 !important;
-        padding: 26px 32px !important;
+        border: 5px double #000 !important;
+        padding: 24px 28px !important;
         margin: 10mm auto !important;
         width: 190mm !important;
         height: 277mm !important;
@@ -332,10 +332,10 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-      .cert-header { border-bottom: 2.5px solid #000 !important; }
+      .cert-header { border-bottom: 2px solid #000 !important; }
       .cert-school-info h1 { color: #000 !important; }
       .cert-title-badge h2 { color: #000 !important; border-bottom: 2px solid #000 !important; }
-      .cert-photo-box { border: 1.5px dashed #000 !important; }
+      .cert-photo-box { border: 1.5px dashed #000 !important; background: #fff !important; }
       .sig-line { border-top: 1.5px solid #000 !important; }
     }
   </style>
@@ -396,7 +396,7 @@
     <span id="pageTracker">পৃষ্ঠা: ১/১</span>
   </div>
 
-  <!-- Table (English Headers as requested) -->
+  <!-- Table -->
   <div class="table-responsive">
     <table>
       <thead>
@@ -415,7 +415,7 @@
         </tr>
       </thead>
       <tbody id="tableBody">
-        <tr><td colspan="11" style="padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>
+        <tr><td colspan="11" style="padding: 15px;"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>
       </tbody>
     </table>
   </div>
@@ -446,19 +446,19 @@
             <p>BLOCK: Joynagar II, CIRCLE: Joynagar, STATE: West Bengal</p>
             <p>Govt. Sponsored, Estd: 1954, Index No: C1-194, H.S. Code: 102376, UDISE Code: 19181600802</p>
           </div>
-          <div style="width: 85px;"></div>
+          <div style="width: 75px;"></div>
         </div>
 
-        <!-- Certificate Title (No Background) -->
+        <!-- Certificate Title -->
         <div class="cert-title-badge">
           <h2>School & Character Certificate</h2>
         </div>
 
-        <!-- Official Certificate Body Text with Dynamic Gender Pronouns -->
+        <!-- Official Certificate Body Text -->
         <div class="cert-body-text">
-          <p style="text-align: right; margin-bottom: 20px;"><strong>Date of Issue:</strong> <span id="c_issue_date"></span></p>
-          <p style="text-align: center; margin-bottom: 25px; font-weight: 700; font-size: 16px; letter-spacing: 0.5px;">TO WHOM IT MAY CONCERN</p>
-          <p style="margin-bottom: 18px;">
+          <p style="text-align: right; margin-bottom: 15px;"><strong>Date of Issue:</strong> <span id="c_issue_date"></span></p>
+          <p style="text-align: center; margin-bottom: 20px; font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">TO WHOM IT MAY CONCERN</p>
+          <p style="margin-bottom: 14px;">
             This is to certify that <strong><span id="c_student_name"></span></strong>, <span id="c_child_relation">son/daughter</span> of 
             <strong><span id="c_father_name"></span></strong> and <strong><span id="c_mother_name"></span></strong>, 
             residing at Village/Town: <strong><span id="c_address"></span></strong>, was a bona fide student of 
@@ -466,14 +466,14 @@
             <span id="c_pronoun_cap">He/She</span> was admitted to Class <strong><span id="c_first_class"></span></strong> on 
             <strong><span id="c_admission_date"></span></strong> under Admission No. <strong><span id="c_admission_no"></span></strong>.
           </p>
-          <p style="margin-bottom: 18px;">
+          <p style="margin-bottom: 14px;">
             As per school records, <span id="c_pronoun_low">his/her</span> Date of Birth is <strong><span id="c_dob"></span></strong>.
           </p>
-          <p style="margin-bottom: 18px;">
+          <p style="margin-bottom: 14px;">
             During <span id="c_possessive">his/her</span> tenure at this school, <span id="c_pronoun_low">his/her</span> conduct and character were found to be good. 
             <span id="c_pronoun_cap">He/She</span> bears a good moral character.
           </p>
-          <p style="margin-top: 18px;">
+          <p style="margin-top: 14px;">
             I wish <span id="c_objective">him/her</span> every success in life.
           </p>
         </div>
@@ -490,7 +490,7 @@
               <span>Affix Photo Here</span>
             </div>
             <div class="cert-signature-box">
-              <div class="sig-line">Signature of Head of The Institute<br><span style="font-size: 11px; font-weight: normal; color: #333;">(With Seal and Date)</span></div>
+              <div class="sig-line">Signature of Head of The Institute<br><span style="font-size: 10.5px; font-weight: normal; color: #333;">(With Seal and Date)</span></div>
             </div>
           </div>
         </div>
@@ -700,7 +700,6 @@
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById('c_issue_date').innerText = now.toLocaleDateString('en-US', options);
 
-    // Gender-based Pronoun Handling (Automatically adapts based on gender field)
     let genderStr = (item.gender || '').toLowerCase();
     let isFemale = genderStr.includes('girl') || genderStr.includes('female') || genderStr === 'f';
 
@@ -715,8 +714,8 @@
     
     new QRCode(document.getElementById("qrcode"), {
       text: qrData,
-      width: 85,
-      height: 85,
+      width: 75,
+      height: 75,
       colorDark: "#000000",
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.M
