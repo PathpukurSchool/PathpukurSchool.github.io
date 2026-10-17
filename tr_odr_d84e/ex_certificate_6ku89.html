@@ -60,7 +60,7 @@
     body { background-color: #f0f2f5; margin: 0; padding: 8px; color: #111; }
     
     .container { 
-      max-width: 1350px; 
+      max-width: 1400px; 
       margin: 0 auto; 
       background: #fff; 
       padding: 12px; 
@@ -68,12 +68,10 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.08); 
     }
     
-    /* Header */
+    /* Main Portal Header */
     .header { text-align: center; border-bottom: 2px solid #1a5f7a; padding-bottom: 8px; margin-bottom: 10px; position: relative; }
     .school-name { font-size: 22px; color: #1a5f7a; margin: 0; font-weight: bold; line-height: 1.3; }
     .page-title { font-size: 18px; color: #333; margin: 4px 0 0 0; font-weight: bold; }
-    
-    .print-timestamp { display: none; }
 
     /* Dynamic Sub-Heading Badge & Instructions */
     .sub-heading-badge {
@@ -124,7 +122,7 @@
       font-size: 13px; font-weight: bold; color: #555; margin-bottom: 8px; padding: 0 4px;
     }
 
-    /* Responsive Table & Fixed Column Sizing */
+    /* Responsive Table */
     .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 6px; }
     table { width: 100%; border-collapse: collapse; border: 2px solid #222; min-width: 1050px; table-layout: auto; }
     th, td { padding: 8px 6px; text-align: center; border: 1.5px solid #333; font-size: 13.5px; vertical-align: middle; }
@@ -151,7 +149,7 @@
       background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; padding: 10px;
     }
     .modal-content {
-      background: #fff; border-radius: 10px; width: 100%; max-width: 780px; padding: 20px;
+      background: #fff; border-radius: 10px; width: 100%; max-width: 820px; padding: 20px;
       box-shadow: 0 4px 25px rgba(0,0,0,0.3); max-height: 95vh; overflow-y: auto; position: relative;
     }
     .modal-header-actions {
@@ -160,10 +158,10 @@
     .btn-print { background: #2e7d32; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
     .btn-close { background: #d32f2f; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
     
-    /* Official School Certificate Card Styling */
+    /* Professional Official School Certificate Card Styling */
     .student-card-box {
-      border: 4px double #1a5f7a; border-radius: 8px; padding: 24px; background: #fff; position: relative;
-      overflow: hidden;
+      border: 6px double #1a5f7a; border-radius: 10px; padding: 32px 36px; background: #fff; position: relative;
+      overflow: hidden; box-sizing: border-box;
     }
     
     /* Watermark Background */
@@ -173,13 +171,13 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 380px;
-      height: 380px;
+      width: 450px;
+      height: 450px;
       background-image: url('../PHS-LOGO.png');
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
-      opacity: 0.08;
+      opacity: 0.07;
       z-index: 0;
       pointer-events: none;
     }
@@ -187,40 +185,47 @@
     .cert-inner-content { position: relative; z-index: 1; }
 
     .cert-header {
-      display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #1a5f7a;
-      padding-bottom: 12px; margin-bottom: 15px; text-align: center;
+      display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid #1a5f7a;
+      padding-bottom: 15px; margin-bottom: 18px; text-align: center;
     }
-    .cert-logo { width: 75px; height: 75px; object-fit: contain; }
-    .cert-school-info h1 { font-size: 20px; color: #1a5f7a; margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .cert-school-info p { font-size: 10.5px; color: #444; margin: 2px 0; line-height: 1.3; }
+    .cert-logo { width: 85px; height: 85px; object-fit: contain; }
+    .cert-school-info h1 { font-size: 23px; color: #1a5f7a; margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .cert-school-info p { font-size: 10px; color: #333; margin: 2px 0; line-height: 1.35; font-weight: 500; }
+
+    /* Student Photo Box */
+    .cert-photo-box {
+      width: 85px; height: 100px; border: 1.5px dashed #1a5f7a; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center; background: #fdfdfd;
+      font-size: 10px; color: #666; text-align: center; padding: 4px; line-height: 1.2;
+    }
 
     .cert-title-badge {
-      text-align: center; margin: 15px 0;
+      text-align: center; margin: 18px 0 22px 0;
     }
     .cert-title-badge h2 {
-      font-size: 16px; background: #1a5f7a; color: #fff; display: inline-block; padding: 6px 25px;
-      border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin: 0;
+      font-size: 18px; background: #1a5f7a; color: #fff; display: inline-block; padding: 8px 30px;
+      border-radius: 25px; text-transform: uppercase; letter-spacing: 1.2px; margin: 0; font-weight: 600;
     }
 
     .cert-body-text {
-      font-size: 13.5px; line-height: 1.8; color: #222; text-align: justify; margin-top: 15px;
+      font-size: 15px; line-height: 2.1; color: #111; text-align: justify; margin-top: 15px; font-weight: 400;
     }
     
     .cert-footer-section {
-      display: flex; justify-content: space-between; align-items: flex-end; margin-top: 35px; padding-top: 10px;
+      display: flex; justify-content: space-between; align-items: flex-end; margin-top: 45px; padding-top: 10px;
     }
     
     .cert-qr-area {
       display: flex; flex-direction: column; align-items: center; text-align: center;
     }
     #qrcode { padding: 4px; background: #fff; border: 1px solid #ccc; border-radius: 4px; }
-    #qrcode img { display: block; width: 85px !important; height: 85px !important; }
+    #qrcode img { display: block; width: 90px !important; height: 90px !important; }
     .qr-caption { font-size: 9.5px; color: #555; margin-top: 4px; font-weight: 500; }
 
     .cert-signature-box {
-      text-align: center; min-width: 180px;
+      text-align: center; min-width: 230px;
     }
-    .sig-line { border-top: 1px solid #333; margin-top: 45px; padding-top: 4px; font-size: 12.5px; font-weight: 600; color: #222; }
+    .sig-line { border-top: 1.5px solid #222; margin-top: 50px; padding-top: 6px; font-size: 13px; font-weight: 600; color: #111; line-height: 1.4; }
 
     /* Pagination */
     .pagination {
@@ -243,7 +248,7 @@
       th, td { padding: 8px; font-size: 14px; }
     }
 
-    /* Print Optimization for Single A4 Page */
+    /* Print Optimization for Single A4 Page (Header & Footer removed natively via browser print settings, clean fit) */
     @media print {
       @page {
         size: A4 portrait;
@@ -280,29 +285,21 @@
         overflow: visible !important;
       }
       .student-card-box {
-        border: 4px double #000 !important;
-        padding: 20px !important;
+        border: 6px double #000 !important;
+        padding: 28px 32px !important;
         margin: 0 auto !important;
         width: 190mm !important;
-        height: 275mm !important;
+        height: 277mm !important;
         background: #fff !important;
         page-break-inside: avoid !important;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
       }
-      .cert-header { border-bottom: 2px solid #000 !important; }
+      .cert-header { border-bottom: 2.5px solid #000 !important; }
       .cert-school-info h1 { color: #000 !important; }
       .cert-title-badge h2 { background: #000 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      
-      .print-timestamp {
-        display: block !important;
-        position: absolute;
-        right: 0;
-        top: 0;
-        font-size: 9.5px;
-        color: #444;
-      }
+      .cert-photo-box { border: 1.5px dashed #000 !important; }
     }
   </style>
 </head>
@@ -403,16 +400,18 @@
     
     <div id="printableCard" class="student-card-box">
       <div class="cert-inner-content">
-        <!-- Certificate Header with Logo -->
+        <!-- Certificate Header with Logo, School Info and Student Photo Box -->
         <div class="cert-header">
           <img src="../PHS-LOGO.png" alt="School Logo" class="cert-logo" onerror="this.style.display='none'">
           <div class="cert-school-info">
-            <h1>Pathpukur High School (H.S.)</h1>
-            <p>PO: Bakultala Hat, PS: Joynagar, DIST: South 24 Parganas, PIN: 743338</p>
-            <p>Govt. Sponsored, Estd: 1954 | Index No: C1-194 | UDISE Code: 19181600802</p>
+            <h1>PATHPUKUR HIGH SCHOOL (H.S.)</h1>
+            <p>PO: Bakultala Hat, PS: Bakultala, DIST: 24 Pgs (S), PIN: 743338</p>
+            <p>BLOCK: Joynagar II, CIRCLE: Joynagar, STATE: West Bengal</p>
+            <p>Govt. Sponsored, Estd: 1954, Index No: C1-194, H.S. Code: 102376, UDISE Code: 19181600802</p>
           </div>
-          <div style="width: 75px;"></div> <!-- Spacer for balance -->
-          <div class="print-timestamp" id="printTimestamp"></div>
+          <div class="cert-photo-box">
+            <span>Affix Photo Here</span>
+          </div>
         </div>
 
         <!-- Certificate Title -->
@@ -420,26 +419,26 @@
           <h2>School & Character Certificate</h2>
         </div>
 
-        <!-- Official Certificate Body Text in English with Pronoun Logic -->
+        <!-- Official Certificate Body Text (Enlarged font & spacing for perfect A4 balance) -->
         <div class="cert-body-text">
-          <p style="text-align: right; margin-bottom: 15px;"><strong>Date of Issue:</strong> <span id="c_issue_date"></span></p>
-          <p style="text-align: center; margin-bottom: 20px; font-weight: 600; font-size: 14.5px;">TO WHOM IT MAY CONCERN</p>
-          <p>
+          <p style="text-align: right; margin-bottom: 20px;"><strong>Date of Issue:</strong> <span id="c_issue_date"></span></p>
+          <p style="text-align: center; margin-bottom: 25px; font-weight: 700; font-size: 16px; letter-spacing: 0.5px;">TO WHOM IT MAY CONCERN</p>
+          <p style="margin-bottom: 18px;">
             This is to certify that <strong><span id="c_student_name"></span></strong>, son/daughter of 
             <strong><span id="c_father_name"></span></strong> and <strong><span id="c_mother_name"></span></strong>, 
-            residing at Village/Post: <strong><span id="c_address"></span></strong>, was a bona fide student of 
+            residing at Village/Town: <strong><span id="c_address"></span></strong>, was a bona fide student of 
             this institution in the academic session corresponding to admission year <strong><span id="c_adm_year"></span></strong>. 
             <span id="c_pronoun_cap">He/She</span> was admitted to Class <strong><span id="c_first_class"></span></strong> on 
             <strong><span id="c_admission_date"></span></strong> under Admission No. <strong><span id="c_admission_no"></span></strong>.
           </p>
-          <p>
+          <p style="margin-bottom: 18px;">
             As per school records, <span id="c_pronoun_low">his/her</span> Date of Birth is <strong><span id="c_dob"></span></strong>.
           </p>
-          <p>
+          <p style="margin-bottom: 18px;">
             During <span id="c_possessive">his/her</span> tenure at this school, <span id="c_pronoun_low">his/her</span> conduct and character were found to be good. 
             <span id="c_pronoun_cap">He/She</span> bears a good moral character.
           </p>
-          <p style="margin-top: 15px;">
+          <p style="margin-top: 18px;">
             I wish <span id="c_objective">him/her</span> every success in life.
           </p>
         </div>
@@ -452,7 +451,7 @@
           </div>
           
           <div class="cert-signature-box">
-            <div class="sig-line">Head of the Institute<br><span style="font-size: 11px; font-weight: normal;">Pathpukur High School (H.S.)</span></div>
+            <div class="sig-line">Signature of Head of The Institute<br><span style="font-size: 11.5px; font-weight: normal; color: #444;">(With Seal and Date)</span></div>
           </div>
         </div>
       </div>
@@ -678,8 +677,8 @@
     
     new QRCode(document.getElementById("qrcode"), {
       text: qrData,
-      width: 85,
-      height: 85,
+      width: 90,
+      height: 90,
       colorDark: "#000000",
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.M
@@ -693,11 +692,6 @@
   }
 
   function printStudentCard() {
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('en-GB');
-    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-    document.getElementById('printTimestamp').innerText = `Print Date: ${dateStr}, ${timeStr}`;
-    
     window.print();
   }
 
