@@ -45,7 +45,7 @@
   
   <!-- প্রাক্তন ছাত্র ছাত্রীদের স্কুল সার্টিফিকেট -->
   <title>Pathpukur High School (H.S.)</title>
-  
+
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +56,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
-    /* সার্বিক ফন্ট সাইজ ও বক্স সাইজিং একটু ছোট করা হলো */
     * { box-sizing: border-box; font-family: 'Poppins', 'Tiro Bangla', sans-serif; -webkit-tap-highlight-color: transparent; font-size: 13.5px; }
     body { background-color: #f0f2f5; margin: 0; padding: 6px; color: #111; }
     
@@ -153,39 +152,40 @@
     }
     .btn-view:hover { background-color: #172554; }
 
-    /* Modal Styles */
+    /* Modal Styles (Fully Responsive for small & large screens) */
     .modal {
       display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; padding: 8px;
+      background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; padding: 10px;
+      overflow-y: auto;
     }
     .modal-content {
-      background: #fff; border-radius: 8px; width: 100%; max-width: 780px; padding: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-height: 95vh; overflow-y: auto; position: relative;
+      background: #fff; border-radius: 8px; width: 100%; max-width: 860px; padding: 15px;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.3); max-height: 96vh; overflow-y: auto; position: relative;
     }
     .modal-header-actions {
       display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 10px;
     }
-    .btn-print { background: #16a34a; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
+    .btn-print { background: #16a34a; color: #fff; border: none; padding: 6px 14px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
     .btn-print:hover { background: #15803d; }
-    .btn-close { background: #dc2626; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
+    .btn-close { background: #dc2626; color: #fff; border: none; padding: 6px 14px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
     
     /* Professional Official School Certificate Card Styling */
     .student-card-box {
-      border: 5px double #1e3a8a; border-radius: 8px; padding: 24px 28px; background: #fff; position: relative;
-      overflow: hidden; box-sizing: border-box;
+      border: 6px double #1e3a8a; border-radius: 10px; padding: 32px 38px; background: #fff; position: relative;
+      overflow: hidden; box-sizing: border-box; width: 100%; max-width: 800px; margin: 0 auto;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
     
-    /* Watermark Background Fix for Print */
+    /* Watermark Background */
     .student-card-box::before {
       content: "";
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 420px;
-      height: 420px;
+      width: 480px;
+      height: 480px;
       background-image: url('../PHS-LOGO.png');
       background-repeat: no-repeat;
       background-position: center;
@@ -200,55 +200,55 @@
     .cert-inner-content { position: relative; z-index: 1; }
 
     .cert-header {
-      display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #1e3a8a;
-      padding-bottom: 12px; margin-bottom: 14px; text-align: center;
+      display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid #1e3a8a;
+      padding-bottom: 15px; margin-bottom: 18px; text-align: center;
     }
-    .cert-logo { width: 75px; height: 75px; object-fit: contain; }
-    .cert-school-info h1 { font-size: 20px; color: #1e3a8a; margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .cert-school-info p { font-size: 9px; color: #1e293b; margin: 2px 0; line-height: 1.3; font-weight: 500; }
+    .cert-logo { width: 85px; height: 85px; object-fit: contain; }
+    .cert-school-info h1 { font-size: 22px; color: #1e3a8a; margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .cert-school-info p { font-size: 9.5px; color: #1e293b; margin: 2px 0; line-height: 1.35; font-weight: 500; }
 
     /* Certificate Title */
     .cert-title-badge {
-      text-align: center; margin: 12px 0 16px 0;
+      text-align: center; margin: 16px 0 22px 0;
     }
     .cert-title-badge h2 {
-      font-size: 17px; color: #1e3a8a; display: inline-block; padding: 0;
-      text-transform: uppercase; letter-spacing: 1.2px; margin: 0; font-weight: 700;
-      border-bottom: 2px solid #1e3a8a; padding-bottom: 3px;
+      font-size: 18px; color: #1e3a8a; display: inline-block; padding: 0;
+      text-transform: uppercase; letter-spacing: 1.5px; margin: 0; font-weight: 700;
+      border-bottom: 2px solid #1e3a8a; padding-bottom: 4px;
     }
 
     .cert-body-text {
-      font-size: 14px; line-height: 2.0; color: #0f172a; text-align: justify; margin-top: 10px; font-weight: 400;
+      font-size: 14.5px; line-height: 2.1; color: #0f172a; text-align: justify; margin-top: 12px; font-weight: 400;
     }
     
     .cert-footer-section {
-      display: flex; justify-content: space-between; align-items: flex-end; margin-top: 28px; padding-top: 8px;
+      display: flex; justify-content: space-between; align-items: flex-end; margin-top: 35px; padding-top: 10px;
     }
     
     .cert-qr-area {
       display: flex; flex-direction: column; align-items: center; text-align: center;
     }
-    #qrcode { padding: 3px; background: #fff; border: 1px solid #cbd5e1; border-radius: 4px; }
-    #qrcode img { display: block; width: 75px !important; height: 75px !important; }
-    .qr-caption { font-size: 8.5px; color: #475569; margin-top: 3px; font-weight: 500; }
+    #qrcode { padding: 4px; background: #fff; border: 1px solid #cbd5e1; border-radius: 4px; }
+    #qrcode img { display: block; width: 85px !important; height: 85px !important; }
+    .qr-caption { font-size: 9px; color: #475569; margin-top: 4px; font-weight: 500; }
 
     .cert-bottom-right-group {
       display: flex;
       align-items: flex-end;
-      gap: 15px;
+      gap: 18px;
     }
 
-    /* Student Photo Box */
+    /* Student Photo Box with Transparent Background to show watermark clearly */
     .cert-photo-box {
-      width: 70px; height: 85px; border: 1.5px dashed #64748b; border-radius: 4px;
-      display: flex; align-items: center; justify-content: center; background: #f8fafc;
-      font-size: 9px; color: #64748b; text-align: center; padding: 4px; line-height: 1.2;
+      width: 75px; height: 95px; border: 1.5px dashed #64748b; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center; background: transparent;
+      font-size: 9.5px; color: #64748b; text-align: center; padding: 4px; line-height: 1.2;
     }
 
     .cert-signature-box {
-      text-align: center; min-width: 200px;
+      text-align: center; min-width: 210px;
     }
-    .sig-line { border-top: 1.5px solid #0f172a; margin-top: 35px; padding-top: 5px; font-size: 12px; font-weight: 600; color: #0f172a; line-height: 1.3; }
+    .sig-line { border-top: 1.5px solid #0f172a; margin-top: 40px; padding-top: 5px; font-size: 12.5px; font-weight: 600; color: #0f172a; line-height: 1.3; }
 
     /* Pagination */
     .pagination {
@@ -271,7 +271,7 @@
       th, td { padding: 7px 6px; font-size: 13px; }
     }
 
-    /* Print Optimization for Single A4 Page */
+    /* Print Optimization for Full-Sized A4 Page */
     @media print {
       @page {
         size: A4 portrait;
@@ -314,11 +314,11 @@
         background: #fff !important;
       }
       .student-card-box {
-        border: 5px double #000 !important;
-        padding: 24px 28px !important;
-        margin: 10mm auto !important;
-        width: 190mm !important;
-        height: 277mm !important;
+        border: 6px double #000 !important;
+        padding: 28px 34px !important;
+        margin: 8mm auto !important;
+        width: 194mm !important;
+        height: 281mm !important;
         background: #fff !important;
         page-break-inside: avoid !important;
         display: flex;
@@ -332,10 +332,10 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-      .cert-header { border-bottom: 2px solid #000 !important; }
+      .cert-header { border-bottom: 2.5px solid #000 !important; }
       .cert-school-info h1 { color: #000 !important; }
       .cert-title-badge h2 { color: #000 !important; border-bottom: 2px solid #000 !important; }
-      .cert-photo-box { border: 1.5px dashed #000 !important; background: #fff !important; }
+      .cert-photo-box { border: 1.5px dashed #000 !important; background: transparent !important; }
       .sig-line { border-top: 1.5px solid #000 !important; }
     }
   </style>
@@ -415,7 +415,7 @@
         </tr>
       </thead>
       <tbody id="tableBody">
-        <tr><td colspan="11" style="padding: 15px;"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>
+        <tr><td colspan="11" style="padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> ডাটা লোড হচ্ছে...</td></tr>
       </tbody>
     </table>
   </div>
@@ -457,8 +457,8 @@
         <!-- Official Certificate Body Text -->
         <div class="cert-body-text">
           <p style="text-align: right; margin-bottom: 15px;"><strong>Date of Issue:</strong> <span id="c_issue_date"></span></p>
-          <p style="text-align: center; margin-bottom: 20px; font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">TO WHOM IT MAY CONCERN</p>
-          <p style="margin-bottom: 14px;">
+          <p style="text-align: center; margin-bottom: 20px; font-weight: 700; font-size: 15.5px; letter-spacing: 0.5px;">TO WHOM IT MAY CONCERN</p>
+          <p style="margin-bottom: 16px;">
             This is to certify that <strong><span id="c_student_name"></span></strong>, <span id="c_child_relation">son/daughter</span> of 
             <strong><span id="c_father_name"></span></strong> and <strong><span id="c_mother_name"></span></strong>, 
             residing at Village/Town: <strong><span id="c_address"></span></strong>, was a bona fide student of 
@@ -466,19 +466,19 @@
             <span id="c_pronoun_cap">He/She</span> was admitted to Class <strong><span id="c_first_class"></span></strong> on 
             <strong><span id="c_admission_date"></span></strong> under Admission No. <strong><span id="c_admission_no"></span></strong>.
           </p>
-          <p style="margin-bottom: 14px;">
+          <p style="margin-bottom: 16px;">
             As per school records, <span id="c_pronoun_low">his/her</span> Date of Birth is <strong><span id="c_dob"></span></strong>.
           </p>
-          <p style="margin-bottom: 14px;">
+          <p style="margin-bottom: 16px;">
             During <span id="c_possessive">his/her</span> tenure at this school, <span id="c_pronoun_low">his/her</span> conduct and character were found to be good. 
             <span id="c_pronoun_cap">He/She</span> bears a good moral character.
           </p>
-          <p style="margin-top: 14px;">
+          <p style="margin-top: 16px;">
             I wish <span id="c_objective">him/her</span> every success in life.
           </p>
         </div>
 
-        <!-- Footer Section with QR Code, Photo Box and Seal-Signature Box -->
+        <!-- Footer Section with QR Code, Transparent Photo Box and Seal-Signature Box -->
         <div class="cert-footer-section">
           <div class="cert-qr-area">
             <div id="qrcode"></div>
@@ -490,7 +490,7 @@
               <span>Affix Photo Here</span>
             </div>
             <div class="cert-signature-box">
-              <div class="sig-line">Signature of Head of The Institute<br><span style="font-size: 10.5px; font-weight: normal; color: #333;">(With Seal and Date)</span></div>
+              <div class="sig-line">Signature of Head of The Institute<br><span style="font-size: 11px; font-weight: normal; color: #333;">(With Seal and Date)</span></div>
             </div>
           </div>
         </div>
@@ -714,8 +714,8 @@
     
     new QRCode(document.getElementById("qrcode"), {
       text: qrData,
-      width: 75,
-      height: 75,
+      width: 85,
+      height: 85,
       colorDark: "#000000",
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.M
