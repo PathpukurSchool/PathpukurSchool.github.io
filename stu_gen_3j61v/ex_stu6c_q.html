@@ -242,7 +242,6 @@
       .school-name { color: #000 !important; font-size: 16px !important; }
       .page-title { color: #000 !important; font-size: 12.5px !important; }
       
-      /* Show and Position Timestamp on Right Corner of Header */
       .print-timestamp {
         display: block !important;
         position: absolute;
@@ -314,9 +313,8 @@
     </div>
   </div>
 
-<!-- Filter Section Heading -->
   <div class="filter-section-title">
-    <i class="fa-solid fa-filter"></i> প্রাক্তন ছাত্র-ছাত্রীর তালিকা
+    <i class="fa-solid fa-list"></i> প্রাক্তন ছাত্র-ছাত্রীর তালিকা
   </div>
   
   <!-- Info Bar -->
@@ -367,7 +365,6 @@
       <div class="header">
         <div class="school-name">পাতপুকুর হাই স্কুল (উঃ মাঃ)</div>
         <div class="page-title">প্রাক্তন ছাত্র-ছাত্রীর সম্পূর্ণ তথ্য বিবরণী</div>
-        <!-- Print Timestamp (Right side of header during print) -->
         <div class="print-timestamp" id="printTimestamp"></div>
       </div>
       <div class="student-details-grid">
@@ -406,8 +403,17 @@
     return str.replace(/[^0-9]/g, '');
   }
 
+  // ফাস্ট লোডিংয়ের জন্য ইয়ার মেটা ক্যাশ (Session Storage) ব্যবহার করা হয়েছে
   async function loadYearMeta() {
     try {
+      let cachedMin = sessionStorage.getItem('min_year');
+      let cachedMax = sessionStorage.getItem('max_year');
+
+      if (cachedMin && cachedMax) {
+        updateSubHeading(cachedMin, cachedMax);
+        return;
+      }
+
       const res = await fetch(`${SUPABASE_URL}/rest/v1/ex_students?select=adm_year&order=adm_year.asc&limit=1`, {
         headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
       });
@@ -423,16 +429,23 @@
         const maxYear = maxData[0].adm_year;
 
         if (minYear && maxYear) {
-          document.getElementById('subHeading').innerHTML = `
-            <span class="main-heading-text">বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের তথ্য</span>
-            <div class="instruction-text">
-              <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীর নাম, পিতার নাম, এডমিশন নম্বর, জন্মতারিখ বা ভর্তির সাল নিচের নির্দিষ্ট ঘরে টাইপ করলেই তাৎক্ষণিকভাবে তালিকা স্বয়ংক্রিয়ভাবে ফিল্টার হয়ে যাবে।
-            </div>
-          `;
+          sessionStorage.setItem('min_year', minYear);
+          sessionStorage.setItem('max_year', maxYear);
+          updateSubHeading(minYear, maxYear);
         }
+      }
     } catch (e) {
       document.getElementById('subHeading').innerText = "প্রাক্তন ছাত্র-ছাত্রীদের তথ্য পরিচিতি";
     }
+  }
+
+  function updateSubHeading(minYear, maxYear) {
+    document.getElementById('subHeading').innerHTML = `
+      <span class="main-heading-text">বিদ্যালয়ের ${toBengaliNumeral(minYear)} সাল থেকে ${toBengaliNumeral(maxYear)} সালের সমস্ত প্রাক্তন ছাত্র-ছাত্রীদের তথ্য</span>
+      <div class="instruction-text">
+        <i class="fa-solid fa-circle-info"></i> <strong>নির্দেশিকা:</strong> ছাত্র-ছাত্রীর নাম, পিতার নাম, এডমিশন নম্বর, জন্মতারিখ বা ভর্তির সাল নিচের নির্দিষ্ট ঘরে টাইপ করলেই তাৎক্ষণিকভাবে তালিকা স্বয়ংক্রিয়ভাবে ফিল্টার হয়ে যাবে।
+      </div>
+    `;
   }
 
   function triggerSearch() {
@@ -440,7 +453,7 @@
     debounceTimer = setTimeout(() => {
       currentPage = 1;
       fetchStudents();
-    }, 300);
+    }, 250); // টাইপিং স্পিড দ্রুত করার জন্য ডিবাউন্স টাইম ২৫০ মিলি-সেকেন্ড করা হয়েছে
   }
 
   async function fetchStudents() {
@@ -526,7 +539,7 @@
     document.getElementById('nextBtn').disabled = (currentPage >= totalPages);
 
     if (data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="11" style="padding: 15px;">কোনো প্রাক্তন ছাত্র-ছাত্রীর তথ্য পাওয়া যায়নি।</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="11" style="padding: 15px;">কোনো প্রাক্তন ছাত্র-ছাত্রীর তথ্য পাওয়া যায়নি।</td></tr>`;
       return;
     }
 
@@ -577,11 +590,10 @@
   }
 
   function printStudentCard() {
-    // Generate current timestamp in Bengali or standard readable format
     const now = new Date();
     const dateStr = now.toLocaleDateString('bn-BD');
     const timeStr = now.toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' });
-    document.getElementById('printTimestamp').innerText = `প্রিন্ট সময়: ${dateStr}, ${timeStr}`;
+    document.getElementById('printTimestamp').innerText = `প্রিন্ট সময়: ${dateStr}, ${timeStr}`;
     
     window.print();
   }
@@ -609,8 +621,11 @@
   }
 
   window.onload = async () => {
-    await loadYearMeta();
-    fetchStudents();
+    // এক সাথে সমান্তরালভাবে মেটা ও স্টুডেন্ট ডাটা ফেচ করার ব্যবস্থা করা হয়েছে যাতে গতি বহুগুণ বৃদ্ধি পায়
+    await Promise.all([
+      loadYearMeta(),
+      fetchStudents()
+    ]);
   };
 </script>
   
